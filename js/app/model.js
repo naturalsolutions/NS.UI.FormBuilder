@@ -65,7 +65,7 @@ $(document).ready(function() {
                 value   : val,
                 selected: select
             });
-            this.trigger('change')
+            this.trigger('change');
         },
         removeOption: function(index) {
             this.get('options').splice(index, 1);

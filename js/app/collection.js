@@ -43,7 +43,7 @@ $(document).ready(function() {
             $.ajax({
                 url         : 'xml/NS_Schema.xsd',
                 dataType    : 'html',
-                async       : false,
+                async       : false
             }).done(function(data) {
                 var Module = {
                     xml         : xmlContent,
@@ -128,11 +128,11 @@ $(document).ready(function() {
                            checkbox.push({
                                label    : $(each).find('label').text(),
                                value    : $(each).find('value').text(),
-                               selected : $(each).find('selected').text()
+                               selected : $(each).find('selected').text() === 'true'
                            });
                         });
                         element = new app.CheckBoxField({
-                            checkboxs: checkbox
+                            options: checkbox
                         });
                         break;
                     case 'field_select':
@@ -141,11 +141,11 @@ $(document).ready(function() {
                            options.push({
                                label    : $(each).find('label').text(),
                                value    : $(each).find('value').text(),
-                               selected : $(each).find('selected').text()
+                               selected : $(each).find('selected').text() === 'true'
                            });
                         });
                         element = new app.OptionsField({
-                            select: options
+                            options: options
                         });
                         break;
                     case 'field_radio':
@@ -154,11 +154,11 @@ $(document).ready(function() {
                            radios.push({
                                label    : $(each).find('label').text(),
                                value    : $(each).find('value').text(),
-                               selected : $(each).find('selected').text()
+                               selected : $(each).find('selected').text() === 'true'
                            });
                         });
                         element = new app.RadioField({
-                            radio: radios
+                            options: radios
                         });
                         break;
                 }
@@ -171,7 +171,7 @@ $(document).ready(function() {
                 return parseInt(a.get('order')) - parseInt(b.get('order'));
             });
             _.each(elements, function(el, idx) {
-                form.add(el)
+                form.add(el);
             });
         }
     });

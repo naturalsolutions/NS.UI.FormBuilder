@@ -13,8 +13,8 @@ function appendToDrop(type, form) {
                 name        : "textField[" + form.getSize() + "]",
                 placeholder : "Write some text...",
                 label       : 'My Text field',
-                value       : 'aa',
-                order       :   form.getSize()
+                order       : form.getSize(),
+                required    : true
             });
             form.add(f);
             break;
@@ -49,6 +49,7 @@ function appendToDrop(type, form) {
                 name        : "numericField[" + form.getSize() + "]",
                 placeholder : "My numeric field ",
                 label       : 'My numeric field',
+                required    : true
             });
             form.add(f);
             break;

@@ -27,7 +27,7 @@ $(document).ready(function() {
         events: {
             'click  .fa-trash-o' : 'removeView',
             'click .fa-wrench'   : 'setting',
-            'focus input'        : 'updateSetting',
+            'focus input'        : 'updateSetting'
         },
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -69,7 +69,7 @@ $(document).ready(function() {
     app.TextFieldView = app.BaseView.extend({
         events: function() {
             return _.extend({}, app.BaseView.prototype.events, {
-                'change input[type="text"]': 'updateModel',
+                'change input[type="text"]': 'updateModel'
             });
         },
         initialize : function() {
@@ -83,8 +83,8 @@ $(document).ready(function() {
             this.model.set('value', $(e.target).val());
         }
     }, {
-        templateSrc:    '<label class="span3"><%= label %></label> '+
-                        '<input type="text" class="span8 <% if (required) { %> required <% } %> <%= cssclass %>" name="<%= name %>" readonly="readonly"  id="<%= id%>" placeholder="<%= placeholder %>" value="<%= value %>" /> '+
+        templateSrc:    '<label class="span3 <% if (required === true) { %> required <% } %>"><%= label %></label> '+
+                        '<input type="text" class="span8 <%= cssclass %>" name="<%= name %>" readonly="readonly"  id="<%= id%>" placeholder="<%= placeholder %>" value="<%= value %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div>'
@@ -103,8 +103,8 @@ $(document).ready(function() {
             });
         }
     }, {
-        templateSrc :   '<label class="span3"><%= label %></label> '+
-                        '<input type="number" class="span8 <% if (required) { %> required <% } %> <%= cssclass %> spin" name="<%= name %>" step="<%= step %>" id="<%= id%>" placeholder="<%= placeholder %>" min="<%= minValue %>" max="<%= maxValue %>" /> '+
+        templateSrc :   '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
+                        '<input type="number" class="span8 <%= cssclass %> spin" name="<%= name %>" step="<%= step %>" id="<%= id%>" placeholder="<%= placeholder %>" min="<%= minValue %>" max="<%= maxValue %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div>'
@@ -117,11 +117,11 @@ $(document).ready(function() {
             });
         }
     }, {
-        templateSrc:    '<label class="span3"><%= label %></label>'+
+        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;" id="<%= id %>">'+
                             '<% _.each(options, function(el) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input type="radio" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (el.selected) {%> checked="checked" <% } %> /> '+
+                                    '<input type="radio" class="<%= cssclass %>" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (el.selected) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
                                 '</label> '+
                             '<% }); %>'+
@@ -138,10 +138,10 @@ $(document).ready(function() {
             });
         },
     }, {
-        templateSrc:    '<label class="span3"><%= label %></label> '+
-                        '<select name="<% name %>" class="span8"> '+
+        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
+                        '<select name="<% name %>" class="span8 <%= cssclass %>"> '+
                             '<% _.each(options, function(el) { %>' +
-                                '<option value="<%= el.value %>" <% if (el.selected) {%> selected="selected" <% } %> ><%= el.label %></option>'+
+                                '<option value="<%= el.value %>" <% if (el.selected) {%> selected <% } %> ><%= el.label %></option>'+
                             '<% }) %>' +
                         '</select> '+
                         '<div class="span1 .pull-right"> '+
@@ -155,18 +155,18 @@ $(document).ready(function() {
             });
         },
     }, {
-        templateSrc:    '<label class="span3"><%= label %></label>'+
+        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;">'+
                             '<% _.each(options, function(el) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (el.selected) {%> checked="checked" <% } %> /> '+
+                                    '<input type="checkbox" class="<%= cssclass %>" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (el.selected) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
                                 '</label> '+
                             '<% }); %>'+
                         '</div>'+
                         '<div class="span1 .pull-right"> '+
                             '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div>',
+                        '</div>'
     });
 
     app.longTextView = app.BaseView.extend({
@@ -176,12 +176,12 @@ $(document).ready(function() {
             });
         },
         initialize : function() {
-            app.BaseView.prototype.initialize.apply(this, arguments)
+            app.BaseView.prototype.initialize.apply(this, arguments);
             $(this.el).addClass('textArea');
         }
     }, {
-        templateSrc:    '<label class="span3"><%= label %></label>'+
-                        '<textarea style="<% if(!resizable){ %>resize: none<%}%>" class="span8"  name="<%= name %>" id="<%= id%>" placeholder="<%= placeholder %>"><%= value %></textarea>'+
+        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>" ><%= label %></label>'+
+                        '<textarea class="span8 <%= cssclass %>" style="<% if(!resizable){ %>resize: none<%}%>" class="span8"  name="<%= name %>" id="<%= id%>" placeholder="<%= placeholder %>"><%= value %></textarea>'+
                         '<div class="span1"> '+
                             '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div> '
@@ -199,7 +199,7 @@ $(document).ready(function() {
            });
        }
     }, {
-        templateSrc:    '<label class="span3"><%= label %></label> '+
+        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
                         '<input type="text" class="span8 <%= cssclass %>" name="<%= name %>" id="<%= id%>" placeholder="<%= placeholder %>" value="<%= value %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
@@ -241,7 +241,7 @@ $(document).ready(function() {
                 case 'longText':
                     vue = new app.longTextView({
                         el      : $("#"+id),
-                        model   : el,
+                        model   : el
                     });
                     break;
                 case "numeric" :
@@ -269,7 +269,7 @@ $(document).ready(function() {
                     });
                     break;
             }
-            if (vue != null) {
+            if (vue !== null) {
                 vue.render();
                 this._view[id] = vue;
             }
@@ -288,7 +288,7 @@ $(document).ready(function() {
                 containement: '.dropArea',
                 stop: function(event, ui) {
                     for (var v in _vues) {
-                        _vues[v].updateIndex($('#' + v).index())
+                        _vues[v].updateIndex($('#' + v).index());
                     }
                 }
             }).disableSelection();
@@ -317,14 +317,14 @@ $(document).ready(function() {
                                         {type: "application/xml;charset=utf-8"}
                                 );
                                 saveAs(blob, $(parent).find('input[type="text"]').val() + '.xml');
-                                $(parent).dialog('close')
+                                $(parent).dialog('close');
                             } catch (e) {
-                                console.log("error : ", e)
+                                console.log("error : ", e);
                             }
                         } else {
-                            alert ("You need to enter a name for your file")
+                            alert ("You need to enter a name for your file");
                         }
-                    })
+                    });
                 }
             });
         },
@@ -342,15 +342,15 @@ $(document).ready(function() {
                     $(this).find('input[type="file"]').change( function() {
                         var split = $(this).val().split('\\');
                         $(parent).find('#fileToImport').val( split[ split.length - 1] );
-                    })
+                    });
                     $(this).find('#findButton').click( function() {
-                        $(parent).find('#fileToImportHide').trigger('click')
+                        $(parent).find('#fileToImportHide').trigger('click');
                     });
                     $(this).find('#fileToImport').bind('click', function() {
-                        $(parent).find('#fileToImportHide').trigger('click')
+                        $(parent).find('#fileToImportHide').trigger('click');
                     });
                     $(this).find('#importButton').bind('click', function() {
-                        $(parent).dialog('close')
+                        $(parent).dialog('close');
                         var file = $(parent).find('#fileToImportHide')[0].files[0];
 
                         if (file) {
@@ -374,12 +374,11 @@ $(document).ready(function() {
                                     coll.displayError("An error was occured", 'An error was occure during reading file');
                                 };
                             } else {
-                                coll.displayError("File type error", 'Your have to give an XML file.')
+                                coll.displayError("File type error", 'Your have to give an XML file.');
                             }
                         } else {
                             coll.displayError("An error was occured", 'An error was occure during reading file');
                         }
-
                     });
                 }
             });
@@ -405,7 +404,7 @@ $(document).ready(function() {
                     }
                 }
             });
-        },
+        }
     }, {
         templateSrc:    '<div class="row-fluid">'+
                             '<input type="text" id="protocolName" name="protocolName" value="<%= this.collection.name %>" />'+
@@ -478,13 +477,15 @@ $(document).ready(function() {
             if ($('.dropArea').hasClass('span7')) {
                 $('.dropArea').switchClass('span7', 'span9', 100);
                 $('.widgetsPanel').toggle(100);
+                this._op = true;
             }
         },
         updateModel: function(e) {
+
             if (this.model !== null && $(e.target).data('attr') !== "") {
                 this._op = true;
                 if ($(e.target).data('attr') === "required") {
-                    this.model.set('required', $(e.target).val() === "on" ? true : false);
+                    this.model.set('required', $(e.target).is(":checked"));
                 } else {
                     this.model.set($(e.target).data('attr'), $(e.target).val());
                 }
@@ -499,7 +500,7 @@ $(document).ready(function() {
                 '   <td><input type="checkbox" class="selectOp" /></td>' +
                 '   <td class="center"><a href="#" class="saveOp">  Save</a> / <a href="#" class="cancelOp">cancel</a></td>'+
                 '</tr>'
-            )
+            );
         },
         accordion: function(e) {
             $(e.target).next('div').siblings('div').slideUp();
@@ -509,14 +510,14 @@ $(document).ready(function() {
             var parent = $(e.target).closest('tr');
             var label = $(parent).find('.labelOp').val(),
                 value = $(parent).find('.valueOp').val(),
-                select = $(parent).find('.selectOp').val();
+                select = $(parent).find('.selectOp').is(':checked');
             this._op = false;
             this.model.addOption(label, value, select);
         },
         cancelOption : function(e) {
             $(e.target).closest('tr').fadeOut(500, function() {
                 $(this).remove();
-            })
+            });
         },
         removeOption: function(e) {
             if (confirm("Are you sur ?")) {
@@ -544,7 +545,7 @@ $(document).ready(function() {
                 '   <td class="center selectOp">' + (obj.selected ? "Yes" : "No") + '</td>'+
                 '   <td class="center"><a href="#" class="removeOp">Remove</a>&nbsp; / &nbsp;<a href="#" class="editOp">edit</a></td>'+
                 '</tr>'
-            )
+            );
         },
         editOption : function(e) {
             var parent = $(e.target).closest('tr');
@@ -562,7 +563,7 @@ $(document).ready(function() {
                 str +
                 '   <td class="center"><a href="#" class="saveChangeOp">  Save</a> / <a href="#" class="cancelChangeOp">cancel</a></td>'+
                 '</tr>'
-            )
+            );
         }
     });
     app.set = new app.SettingView({
