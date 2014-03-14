@@ -1,0 +1,126 @@
+<div id="accordion">
+    <h1>Settings</h1>
+
+    <div style="background : #eee" id="settingsPanel">
+        <h2>
+            <a href="#" id="simple" class="selected">Simple options</a> / <a href="#" id="advanced">Advanced options</a>
+        </h2>
+        <% var fName = this.model.constructor.type; %>
+
+        <div class="row-fluid">
+            <label class="span10 offset1">Field label</label>
+        </div>
+        <div class="row-fluid">
+            <input class="span10 offset1" type="text" id="fieldLabel" data-attr="label" placeholder="Field label" value="<%= label || '' %>" />
+        </div>
+
+        <% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>
+        <div class="row-fluid">
+            <label class="span10 offset1">Field placeholder value</label>
+        </div>
+        <div class="row-fluid">
+            <input class="span10 offset1" type="text" id="fieldPlaceholder" data-attr="placeholder" placeholder="Placeholder" value="<%= placeholder || '' %>" />
+        </div>
+        <% } %>
+
+        <% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>
+        <div class="row-fluid">
+            <label class="span10 offset1">Field default value</label>
+        </div>
+        <div class="row-fluid">
+            <input class="span10 offset1" type="text" id="fieldValue" data-attr="value" placeholder="Default value" value='<%= value %>' />
+        </div>
+        <% } %>
+
+        <div class="row-fluid hide">
+            <label class="span10 offset1">Field HTML Id</label>
+        </div>
+        <div class="row-fluid hide">
+            <input class="span10 offset1" type="text" id="fieldId" data-attr="id" placeholder="Field ID" value="<%= id %>"/>
+        </div>
+
+        <div class="row-fluid hide">
+            <label class="span10 offset1">Field HTML name</label>
+        </div>
+        <div class="row-fluid hide">
+            <input class="span10 offset1" type="text" id="fieldName" data-attr="name" placeholder="Field name" value="<%= name %>" />
+        </div>
+
+        <div class="row-fluid hide">
+            <label class="span10 offset1">Field HTML class</label>
+        </div>
+        <div class="row-fluid hide">
+            <input class="span10 offset1" type="text" id="fieldcssClass" data-attr="cssclass" placeholder="CSS class" value="<%= cssclass %>" />
+        </div>
+
+        <% if(fName == "date") { %>
+        <div class="row-fluid">
+            <label class="span10 offset1">Field date format</label>
+        </div>
+        <div class="row-fluid">
+            <input class="span10 offset1" type="text" id="fieldDateFormat" data-attr="format" placeholder="Field format (ex : 21/12/2012)" />
+        </div>
+        <% } %>
+
+        <% if(fName == "numeric") { %>
+        <div class="row-fluid">
+            <label class="span10 offset1">Min and max values</label>
+        </div>
+        <div class="row-fluid minMax" >
+            <input class="span4 offset1" type="number" data-attr="minValue" id="fielMinValue" placeholder="Min value" />
+            <label class="span2">And</label>
+            <input class="span4" type="number" id="fielMaxValue" data-attr="maxValue" placeholder="Max value" />
+        </div>
+        <% } %>
+
+        <% if( _.contains(["date", "text", "longtext"], fName) ) { %>
+        <div class="row-fluid">
+            <label class="span10 offset1">Field size</label>
+        </div>    
+        <div class="row-fluid">
+            <input type="number" class="span10 offset1" id="fieldSizeValue" data-attr="size" value='<%= size %>' />
+        </div>
+        <% } %>
+
+        <div class="row-fluid">&nbsp;</div>
+        <div class="row-fluid">
+            <label class="span3 offset1">Required : </label> <input class="span2" data-attr="required" type="checkbox" id="fieldRequire" />
+        </div>
+        <br />
+    </div>
+
+    <% if( _.contains(["radio", "checkbox", "options"], fName) ) { %>
+    <h1>Options</h1>
+    <div id="optionsPanel">
+        <div class="row-fluid">
+            <br />
+            <table class="table table-striped span11 offset1">
+                <thead>
+                    <tr>
+                        <th>Label</th>
+                        <th>Value</th>
+                        <th>Default</th>
+                        <th>Option</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% _.each(options, function(el, idx) { %> 
+                    <tr data-index="<%= idx %>">
+                        <td class="labelOp"><%= el.label %></td>
+                        <td class="valueOp"><%= el.value %></td>
+                        <td class="center selectOp"><%= el.selected ? "Yes" : "No" %></td>
+                        <td class="center"><a href="#" class="removeOp">Remove</a>&nbsp; / &nbsp;<a href="#" class="editOp">edit</a></td>
+                    </tr> 
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+        <br />
+        <button class="addOp center" style="width: 100%" >Add an option</button>
+        <br/>
+    </div>
+    <% } %>
+
+    <br />
+    <button class="close center" style="width: 100%">Save</button>
+</div>

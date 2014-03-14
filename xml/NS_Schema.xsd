@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<xs:schema  xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://www.w3schools.com" xmlns="http://www.w3schools.com" elementFormDefault="qualified">
+    
+    <!-- 
+        Type declaration
+    -->
+    
+    <xs:complexType name="fieldType">
+        <xs:sequence> 
+            <xs:element name="id" type="xs:string" />
+            <xs:element name="label" type="xs:string" />
+            <xs:element name="name" type="xs:string" />
+            <xs:element type="xs:boolean" name="required"/>
+            <xs:element name="order" type="xs:integer" />
+            <xs:element name="cssclass" type="xs:string" nillable="true" />
+        </xs:sequence>
+        <xs:attribute type="xs:byte" name="id"/>
+    </xs:complexType>   <!-- base field type -->
+    
+    <xs:complexType name="field_textType">
+        <xs:complexContent>
+            <xs:extension base="fieldType">
+                <xs:sequence>
+                    <xs:element name="value" type="xs:string" />
+                    <xs:element name="placeholder" type="xs:string" />
+                    <xs:element name="size" type="xs:integer" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>   <!-- text field type (to extend) -->
+    
+    <xs:complexType name="options">
+        <xs:sequence>
+            <xs:element name="label" type="xs:string" />
+            <xs:element name="value" type="xs:string" />
+            <xs:element name="selected" type="xs:boolean" />
+        </xs:sequence>
+    </xs:complexType>
+    
+    <xs:element name="form">
+        <xs:complexType>     
+            <!-- name -->
+                  
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="name" type="xs:string" />
+                
+                <!-- fields -->
+                <xs:element name="fields">
+                    <xs:complexType>
+                        <xs:choice minOccurs="0" maxOccurs="unbounded">
+                            
+                            <!-- field date, extend field_textType -->
+                            <xs:element name="field_date" minOccurs="0" >
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="field_textType">
+                                            <xs:sequence>
+                                                <xs:element name="format" type="xs:string" />
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- field text -->
+                            <xs:element name="field_text" minOccurs="0" type="field_textType" />
+                            
+                            <!-- numeric field, extend field_textType -->
+                            <xs:element name="field_numeric" minOccurs="0" >
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="field_textType">
+                                            <xs:sequence>
+                                                <xs:element name="min" type="xs:integer" />
+                                                <xs:element name="max" type="xs:integer" />
+                                                <xs:element name="step" type="xs:positiveInteger" />
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- field radio -->
+                            <xs:element name="field_radio" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="fieldType">
+                                            <xs:sequence>
+                                                <xs:element name="radio" minOccurs="2" maxOccurs="unbounded" type="options" />
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- radio button field -->
+                            <xs:element name="field_checkbox" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="fieldType">
+                                            <xs:sequence>
+                                                <xs:element name="checkbox" minOccurs="1" maxOccurs="unbounded" type="options" />
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- radio button field -->
+                            <xs:element name="field_select" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="fieldType">
+                                            <xs:sequence>
+                                                <xs:element name="option" minOccurs="1" maxOccurs="unbounded" type="options" />
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                            <!-- longtext field type -->
+                            <xs:element name="field_longText" minOccurs="0">
+                                <xs:complexType>
+                                    <xs:complexContent>
+                                        <xs:extension base="field_textType">
+                                            <xs:sequence>
+                                                <xs:element name="resizable" type="xs:boolean" />
+                                            </xs:sequence>
+                                        </xs:extension>
+                                    </xs:complexContent>
+                                </xs:complexType>
+                            </xs:element>
+                            
+                        </xs:choice>
+                    </xs:complexType>
+                </xs:element>
+            </xs:choice>
+
+            <xs:attribute type="xs:string" name="id"/>
+        </xs:complexType>
+    </xs:element>
+</xs:schema>

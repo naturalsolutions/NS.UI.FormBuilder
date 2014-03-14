@@ -1,0 +1,265 @@
+html, body {
+    width       : 100%;
+    height      : 100%;
+    margin      : 0;
+    padding     : 0;
+    overflow    : hidden;
+    background  : #ddd;
+}
+
+//  ---------------------------------------------------------------------
+//  Main classes
+//  ---------------------------------------------------------------------
+
+.noMarginLeft   { margin-left : 0 !important; }
+
+.navbar         { margin-bottom : 0 !important; }
+
+.span0          { width : 0px !important; overflow: hidden;}
+
+.left           { text-align: left !important;}
+
+.right          { text-align: right !important; }
+
+.center         { text-align: center; }
+
+.ui-sortable-helper { cursor : move !important; * { cursor : move !important; }}
+
+.toggle {
+    background-color    : rgb(238, 238, 238); 
+    display             : none; 
+    background-position : initial initial; 
+    background-repeat   : initial initial;
+}
+
+.required {
+    &:before {
+        content : "*";
+    }
+}
+.input {
+    box-shadow      : 0 0 3px #ccc;
+    border          : 1px #ddd solid;
+    border-radius   : 0!important;
+    padding-left    : 15px;
+}
+
+.text {
+    line-height     : 30px; 
+    font-size       : 20px; 
+    text-align      : right
+}
+
+//  ---------------------------------------------------------------------
+//  Spécific classes
+//  ---------------------------------------------------------------------
+
+section {
+    height      : 100%;
+    overflow    : hidden; 
+    .content {
+        background  : #fff;
+        height      : 100%;
+        .widgetsPanel {
+            background  : #ddd;
+            height      : 100%;     
+            .fields {
+                height          : 50px;
+                background      : white;
+                border          : 2px #aaa solid;
+                color           : #555;
+                font-size       : 18px;
+                text-align      : center;
+                padding         : 10px;
+                margin-bottom   : 10px;
+                margin-top      : 10px;
+                transition      : all 0.3s ease-in-out;
+                &:hover { 
+                    cursor  : pointer; 
+                    outline : 5px #aaa solid;
+                }
+            }
+        }
+        .dropArea {
+            overflow-y : scroll;
+            height : 100%;
+            input[type="text"]:first-child {
+                width           : 100%;
+                border          : none;
+                outline         : none;
+                height          : 70px;
+                text-align      : right;
+                font-size       : 45px;
+                color           : #555;
+                padding-right   : 30px;
+            }
+            hr {
+                border      : 1px #ccc solid;
+                width       : 95%;
+                padding     : 10px auto;
+                text-align  : center;
+                &:after {
+                    content     : "\275D \ Double click on a field to add it in the area \275E";
+                    height      : 0;
+                    color       : #aaa;
+                    text-align  : center;
+                    font-size   : 30px;
+                }
+            }
+            .row-fluid:last-child {
+                margin-top  : 25px;
+                height      : 70%;
+                .drop {
+                    min-height      : 70%;
+                    border          : 1px #aaa solid !important;
+                    margin-bottom   : 100px;
+
+                }
+            }
+            .dropField {
+                margin-top      : 5px;
+                margin-bottom   : 5px;
+                margin-left     : 0!important;
+                background : #fff;
+                &.textArea {
+                    textarea {
+                        padding-left    : 10px;
+                        border          : 2px #aaa solid;
+                    }
+                    .span1:last-child {
+                        height      : 48px;
+                    }
+                }
+                input[type="text"], .spin {
+                    padding-left: 10px;
+                }
+                label { .text(); }
+                i { 
+                    .text(); 
+                    &:first-child { 
+                        margin-right : 10px; 
+                    } 
+                }
+                input[type="text"], .picker, select {
+                    .input();
+                }
+                .checkbox {
+                    text-align      : left;
+                    padding-left    : 0 !important;
+                    margin-top      : 0 !important;
+                    margin-left     : 12px !important;
+                    margin-right    : 22px;
+                }
+                input[type="checkbox"] {
+                    margin-left : 10px;
+                }
+            }
+        }
+        .settings {
+            .widgetsPanel();
+            background-color    : #eee;
+            margin-left         : 0;
+            overflow-x          : scroll;
+            padding-bottom      : 50px;
+            border-left         : 1px #333 solid;
+            h1 {
+                text-align          : center;
+                border-bottom       : 2px #ccc solid;
+                padding-bottom      : 31px;
+                margin-bottom       : 0 !important;
+                margin-top          : 0 !important;
+                color               : #333;
+                background-color    : #e6dddd;
+                height              : 70px;
+                line-height         : 60px;
+                &:hover {
+                    cursor: pointer;
+                }
+                &:before {
+                    content: "\25B8"
+                }
+            }
+            h2 {
+                text-align  : center;
+                font-size   : 18px;
+                a {
+                    color           : #08c;
+                    text-decoration : none;
+                    &.selected {
+                        color       : #555;
+                    }
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+            label { 
+                .text(); 
+                font-size   : 18px;
+                line-height : 50px;
+                height      : 40px;
+                text-align  : left;
+            }
+            input, select {
+                .input();
+                border      : 2px #aaa solid;
+                font-size   : 18px;
+                line-height : 25px;
+                height      : 40px;
+            }
+            #fieldRequire { .left(); margin-left: -15px; }
+            .close, .addOp {
+                background  : none !important;
+                color       : #111 !important;
+                opacity     : 0.5 !important;
+                transition  : all 0.1s !important;
+                border      : none !important;
+                box-shadow  : none !important;
+                font-size   : 20px;
+                
+            }
+            .close { 
+                font-size   : 30px; 
+                font-size   : 28px;
+            }
+            .minMax {
+                label { 
+                    text-align  : center !important;
+                    line-height : 40px;
+                }
+            }
+            #optionsPanel {
+                table {
+                    border-collapse : collapse;
+                    thead {
+                        tr {
+                            border          : 2px #ccc solid;
+                            border-collapse : collapse;
+                        }
+                    }
+                    tbody {
+                        tr {
+                            border          : 2px #ccc solid;
+                            border-collapse : collapse;
+                            height          : 40px;
+                            line-height     : 40px;
+                            td {
+                                height  : 40px;
+                            line-height : 40px;
+                                input {
+                                    width       : 120px;
+                                    box-shadow  : none;
+                                    border       : 1px #aaa solid;
+                                    &[type="checkbox"] {
+                                        width   : 15px;
+                                        height  : 15px;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

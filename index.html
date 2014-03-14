@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>FormBuilder</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <!-- Less   -->
+        <link rel="stylesheet/less" type="text/css" href="stylesheet/styles.less" />
+        <script src="js/libs/less/less.min.js" type="text/javascript"></script>
+
+        <!-- metro bootstrap -->
+        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" type="text/css" href="metro-bootstrap/css/metro-bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="metro-bootstrap/docs/font-awesome.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+
+        <script src="js/libs/jquery/jquery.min.js" type="text/javascript"></script>
+        <script src="js/libs/jquery/jquery-ui.min.js" type="text/javascript"></script>
+        <script src="bootstrap/js/bootstrap.min.js" type="text/javascript"></script>
+        <script src="js/libs/backbone/underscore/underscore-min.js" type="text/javascript"></script>
+        <script src="js/libs/backbone/backbone-min.js" type="text/javascript"></script>
+        <script src="js/libs/blob/Blob.js" type="text/javascript"></script>
+        <script src="js/libs/filesaver/FileSaver.js" type="text/javascript"></script>
+        <script src="js/libs/xmljs/xmllint.js" type="text/javascript"></script>
+        <script type="text/javascript" src="js/app/model.js" ></script>
+        <script type="text/javascript" src="js/app/collection.js" ></script>
+        <script type="text/javascript" src="js/app/views.js" ></script>
+        <script type="text/javascript" src="js/app/brain.js" ></script>
+    </head>
+    <body>      
+
+        <nav class="navbar navbar-default" role="navigation">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">FormBuilder</a>
+            </div>
+            <div class="collapse navbar-collapse navbar-ex1-collapse">
+                <ul class="nav navbar-nav">
+                    <li>
+                        <a href="#" id="export" ><i class="fa fa-envelope"></i> Export as XML</a>
+                    </li>
+                    <li>
+                        <a href="#" id="import" ><i class="fa fa-cloud"></i> Import XML</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+
+        <section class="container-fluid">
+
+            <div class="row-fluid content">
+
+                <div class="span3 widgetsPanel">
+                    <h1>Fields : </h1>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="text">
+                            Text
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="longText">
+                            Long Text
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="radio">
+                            Radio buttons
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="check">
+                            <i class="fa fa-check-square-o"></i>&nbsp;Checkboxes
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="options">
+                            Options
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="numeric">
+                            Numéric
+                        </div>
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span10 offset1 fields" data-type="date">
+                            Date
+                        </div>
+                    </div>
+                </div>
+
+                <div class="span9 dropArea">
+                    <!-- for template -->
+                </div>
+
+                <div class="settings span5">
+                    <!-- for template -->
+                </div>
+
+            </div>
+
+        </section>
+
+        <div id="popup" class="row-fluid">
+            <h2 class="offset1">Your XML will be validate after import</h2><br />
+            <div class="row-fluid">
+                <input type="file" id="fileToImportHide"  class="hide" />
+                <label class="span2 offset1">XML file</label>
+                <input type="text" class="span5" id="fileToImport" placeholder="Your XML File" />
+                <button type="button" class="span3" id="findButton" style="margin-left: 10px;">Find</button>
+            </div>
+            <div class="row-fluid">
+                <br />
+                <button class="span4 offset3" id="importButton">Import</button>
+            </div>
+        </div>
+
+        <div id="popupDownload" class="row-fluid">
+            <div class="row-fluid">
+                <h2 class="offset1 span10 center">Now you can download your XML File</h2>
+            </div>
+            <br />
+            <div class="row-fluid">
+                <label class="span4 offset1 right" style="line-height: 30px;">XML file name</label>
+                <input type="text" class="span5" id="fileName" placeholder="Your XML filename" />
+            </div>
+            <br />
+            <div class="row-fluid">
+                <button type="button" class="span10 offset1" id="downloadButton">Dowload</button>
+            </div>
+            <br />
+        </div>
+        
+    </body>
+</html>
