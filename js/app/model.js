@@ -71,6 +71,12 @@ $(document).ready(function() {
             this.get('options').splice(index, 1);
             this.trigger('change');
         },
+        updateSelectedOption: function(index, select) {
+            _.each (this.get('options'), function(el, idx) {
+                el['selected'] = false;
+            });
+            this.get('options')[index]['selected'] = select;
+        },
         updateOption : function(index, lab, val, select) {
           this.get('options')[index] = {
               label     : lab,
@@ -104,6 +110,9 @@ $(document).ready(function() {
         getXML: function() {
             var xml =   app.OptionsField.prototype.getXML.apply(this, arguments);
             return xml;
+        },
+        updateSelectedOption : function(index, select) {
+            this.get('options')[index]['selected'] = select;
         }
     }, {
         type    : 'checkbox',
@@ -115,6 +124,9 @@ $(document).ready(function() {
         getXML: function() {
             var xml =   app.OptionsField.prototype.getXML.apply(this, arguments);
             return xml;
+        },
+        updateSelectedOption : function(index, select) {
+            this.get('options')[index]['selected'] = select;
         }
     }, {
         type    : 'radio',

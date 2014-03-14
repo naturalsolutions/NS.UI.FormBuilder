@@ -134,14 +134,17 @@ $(document).ready(function() {
     app.OptionsFieldView = app.BaseView.extend({
         events: function() {
             return _.extend({}, app.BaseView.prototype.events, {
-                'click select'        : 'updateSetting'
+                'change select'        : 'updateSelected'
             });
+        },
+        updateSelected : function(e) {
+            this.model.updateSelectedOption($(e.target).find(':selected').data('idx'), true);
         },
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
                         '<select name="<% name %>" class="span8 <%= cssclass %>"> '+
-                            '<% _.each(options, function(el) { %>' +
-                                '<option value="<%= el.value %>" <% if (el.selected) {%> selected <% } %> ><%= el.label %></option>'+
+                            '<% _.each(options, function(el, idx) { %>' +
+                                '<option data-idx=<%= idx %> value="<%= el.value %>" <% if (el.selected) {%> selected <% } %> ><%= el.label %></option>'+
                             '<% }) %>' +
                         '</select> '+
                         '<div class="span1 .pull-right"> '+
@@ -152,14 +155,18 @@ $(document).ready(function() {
     app.checkboxView = app.BaseView.extend({
         events: function() {
             return _.extend({}, app.BaseView.prototype.events, {
+                'change input[type="checkbox"]' : 'updateSelected'
             });
+        },
+        updateSelected : function(e) {
+            this.model.updateSelectedOption($(e.target).data('idx'), $(e.target).is(':checked'));
         },
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;">'+
-                            '<% _.each(options, function(el) { %>' +
+                            '<% _.each(options, function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input type="checkbox" class="<%= cssclass %>" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (el.selected) {%> checked <% } %> /> '+
+                                    '<input data-idx=<%= idx %> type="checkbox" class="<%= cssclass %>" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (el.selected) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
                                 '</label> '+
                             '<% }); %>'+
