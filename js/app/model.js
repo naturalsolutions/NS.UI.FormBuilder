@@ -9,9 +9,7 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-$(document).ready(function() {
-
-    app = {};
+var formBuilder = (function(app) {
 
     /**
      * Basic field model, it's only used for inheritance
@@ -194,4 +192,6 @@ $(document).ready(function() {
     _.defaults(app.DateField.prototype.defaults,        app.TextField.prototype.defaults);
     _.defaults(app.LongTextField.prototype.defaults,    app.TextField.prototype.defaults);
 
-});
+    return app;
+
+})(formBuilder);

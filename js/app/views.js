@@ -17,7 +17,7 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-$(document).ready(function() {
+var formBuilder = (function(app) {
 
     /**
      * It's the basiv views for all field view.
@@ -61,7 +61,7 @@ $(document).ready(function() {
         },
         setting: function() {
             if ($('.dropArea').hasClass('span9')) {
-                app.set.changeModel(this.model);
+                app.settingsView.changeModel(this.model);
             }
         }
     });
@@ -305,7 +305,7 @@ $(document).ready(function() {
             this.collection.name = $('#protocolName').val();
         },
         downloadXML: function() {
-            var str = '<div id="popup">' + $('#popupDownload').html() + '</div>';
+            var str = '<div id="popup">' + this.constructor.popupDwSrc + '</div>';
             var coll = this;
             $(str).dialog({
                 modal       : true,
@@ -315,7 +315,7 @@ $(document).ready(function() {
                 position    : 'center',
                 create: function() {
                     var parent = $(this);
-                    $(this).find('button').click(function() {
+                    $(this).find('button').bind('click',function() {
                         if ($(parent).find('input[type="text"]').val() !== "") {
                             try {
                                 var isFileSaverSupported = !!new Blob();
@@ -336,7 +336,7 @@ $(document).ready(function() {
             });
         },
         importXML: function() {
-            var str = '<div id="popup">' + $('#popup').html() + '</div>';
+            var str = '<div id="popup">' + this.constructor.popupSrc + '</div>';
             var coll = this;
             $(str).dialog({
                 modal       : true,
@@ -346,11 +346,11 @@ $(document).ready(function() {
                 position    : 'center',
                 create : function() {
                     var parent = $(this);
-                    $(this).find('input[type="file"]').change( function() {
+                    $(this).find('input[type="file"]').bind("change", function() {
                         var split = $(this).val().split('\\');
                         $(parent).find('#fileToImport').val( split[ split.length - 1] );
                     });
-                    $(this).find('#findButton').click( function() {
+                    $(this).find('#findButton').bind('click', function() {
                         $(parent).find('#fileToImportHide').trigger('click');
                     });
                     $(this).find('#fileToImport').bind('click', function() {
@@ -419,7 +419,37 @@ $(document).ready(function() {
                         '</div>'+
                         '<div class="row-fluid">'+
                             '<div class="span10 offset1 drop"></div>'+
-                        '</div>'
+                        '</div>',
+
+        popupSrc:   '<div id="popup" class="row-fluid">'+
+                        '<h2 class="offset1">Your XML will be validate after import</h2><br />'+
+                        '<div class="row-fluid">'+
+                            '<input type="file" id="fileToImportHide"  class="hide" />'+
+                            '<label class="span2 offset1">XML file</label>'+
+                            '<input type="text" class="span5" id="fileToImport" placeholder="Your XML File" />'+
+                            '<button type="button" class="span3" id="findButton" style="margin-left: 10px;">Find</button>'+
+                        '</div>'+
+                        '<div class="row-fluid">'+
+                            '<br />'+
+                            '<button class="span4 offset3" id="importButton">Import</button>'+
+                        '</div>'+
+                    '</div>',
+
+        popupDwSrc: '<div id="popupDownload" class="row-fluid">'+
+                        '<div class="row-fluid">'+
+                            '<h2 class="offset1 span10 center">Now you can download your XML File</h2>'+
+                        '</div>'+
+                        '<br />'+
+                        '<div class="row-fluid">'+
+                            '<label class="span4 offset1 right" style="line-height: 30px;">XML file name</label>'+
+                            '<input type="text" class="span5" id="fileName" placeholder="Your XML filename" />'+
+                        '</div>'+
+                        '<br />'+
+                        '<div class="row-fluid">'+
+                            '<button type="button" class="span10 offset1" id="downloadButton">Dowload</button>'+
+                        '</div>'+
+                        '<br />'+
+                    '</div>'
     });
 
     app.SettingView = Backbone.View.extend({
@@ -573,7 +603,183 @@ $(document).ready(function() {
             );
         }
     });
-    app.set = new app.SettingView({
+
+   /* app.set = new app.SettingView({
         el: $('.settings')
+    });*/
+
+    app.MainView = Backbone.View.extend({
+        initialize: function() {
+            this.panel = new app.PanelView({
+                el: $(".widgetsPanel")
+            });
+        },
+        render : function() {
+
+        }
+    }, {
+        templateSrc:    '<nav class="navbar navbar-default" role="navigation">'+
+                            '<div class="navbar-header">'+
+                                '<a class="navbar-brand" href="#">FormBuilder</a>'+
+                            '</div>'+
+                            '<div class="collapse navbar-collapse navbar-ex1-collapse">'+
+                                '<ul class="nav navbar-nav">'+
+                                    '<li>'+
+                                        '<a href="#" id="export" ><i class="fa fa-envelope"></i> Export as XML</a>'+
+                                    '</li>'+
+                                    '<li>'+
+                                        '<a href="#" id="import" ><i class="fa fa-cloud"></i> Import XML</a>'+
+                                    '</li>'+
+                                '</ul>'+
+                            '</div>'+
+                        '</nav>' +
+                        '<section class="container-fluid">'+
+                            '<div class="row-fluid content">' +
+                            '   <div class="span3 widgetsPanel"></div>'+
+                            '</div>'+
+                        '</section>'
     });
-});
+
+    app.PanelView = Backbone.View.extend({
+        events: {
+            'dblclick .fields': 'appendToDrop'
+        },
+        initialize: function(collection) {
+            this._collection = collection;
+            _.bindAll(this, 'appendToDrop');
+        },
+        appendToDrop : function(e) {
+            $(e.target).disableSelection();
+            var form = this._collection;
+            switch ($(e.target).data("type")) {
+                case "text" :
+                    var f = new app.TextField({
+                        id: "textField[" + form.collection.length + "]",
+                        name: "textField[" + form.collection.length + "]",
+                        placeholder: "Write some text...",
+                        label: 'My Text field',
+                        order: form.collection.length,
+                        required: true
+                    });
+                    form.collection.add(f);
+                    break;
+
+                case "options" :
+                    var f = new app.OptionsField({
+                        id: "optionsField[" + form.collection.length + "]",
+                        name: "optionsField[" + form.collection.length + "]",
+                        label: 'My options field',
+                        options: [
+                            {value: "1", label: "My first option", selected: false},
+                            {value: "2", label: "My second option", selected: true}
+                        ]
+                    });
+                    form.collection.add(f);
+                    break;
+
+                case "longText" :
+                    var f = new app.LongTextField({
+                        id: "longTextField[" + form.collection.length + "]",
+                        name: "longTextField[" + form.collection.length + "]",
+                        placeholder: "My long text field",
+                        label: 'My long text',
+                        resizable: false
+                    });
+                    form.collection.add(f);
+                    break;
+
+                case "numeric" :
+                    var f = new app.NumericField({
+                        id: "numericField[" + form.collection.length + "]",
+                        name: "numericField[" + form.collection.length + "]",
+                        placeholder: "My numeric field ",
+                        label: 'My numeric field',
+                        required: true
+                    });
+                    form.collection.add(f);
+                    break;
+
+                case "check" :
+                    var f = new app.CheckBoxField({
+                        id: "checkboxField[" + form.collection.length + "]",
+                        name: "checkboxField[" + form.collection.length + "]",
+                        label: 'My checkbox',
+                        options: [
+                            {value: "1", label: "My first checkbox", selected: false},
+                            {value: "2", label: "My second checkbox", selected: true}
+                        ]
+                    });
+                    form.collection.add(f);
+                    break;
+
+                case "radio" :
+                    var f = new app.RadioField({
+                        id: "radioField[" + form.collection.length + "]",
+                        name: "radioField[" + form.collection.length + "]",
+                        label: 'My radio field',
+                        options: [
+                            {value: "1", label: "First radio", selected: true},
+                            {value: "2", label: "Second radio", selected: false}
+                        ]
+                    });
+                    form.collection.add(f);
+                    break;
+
+                case "date" :
+                    var f = new app.DateField({
+                        id: "dateField[" + form.collection.length + "]",
+                        name: "dateField[" + form.collection.length + "]",
+                        placeholder: "Click to choose a date",
+                        label: 'My date',
+                        format: "dd/mm/yyy"
+                    });
+                    form.collection.add(f);
+                    break;
+            }
+        },
+        render: function() {
+            $(this.el).html(this.constructor.templateSrc);
+            $('.fields').disableSelection();
+            return this;
+        },
+    }, {
+        templateSrc :   '<h1>Fields : </h1>' +
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="text">' +
+                                'Text' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="longText">' +
+                                'Long Text' +
+                            '</div>' +
+                        '</div>'+
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="radio">' +
+                                'Radio buttons'+
+                            '</div>' +
+                        '</div>'+
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="check">' +
+                                '<i class="fa fa-check-square-o"></i>&nbsp;Checkboxes' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="options">' +
+                                'Options' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="numeric">' +
+                                'Numéric' +
+                            '</div>' +
+                        '</div>' +
+                        '<div class="row-fluid">' +
+                            '<div class="span10 offset1 fields" data-type="date">' +
+                                'Date' +
+                            '</div>' +
+                        '</div>'
+    });
+
+    return app;
+})(formBuilder);

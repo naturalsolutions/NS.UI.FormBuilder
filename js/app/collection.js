@@ -14,7 +14,7 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-$(document).ready(function() {
+var formBuilder = (function(app) {
     app.Form = Backbone.Collection.extend({
         model: app.BaseField,
         initialize: function(models, options) {
@@ -175,4 +175,7 @@ $(document).ready(function() {
             });
         }
     });
-});
+
+    return app;
+    
+})(formBuilder);
