@@ -9,12 +9,12 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-var formBuilder = (function(app) {
+var formBuilder = (function(formBuild) {
 
     /**
      * Basic field model, it's only used for inheritance
      */
-    app.BaseField       = Backbone.Model.extend({
+    formBuild.BaseField  = Backbone.Model.extend({
         defaults: {
             id          : "basefield",
             label       : "My label",
@@ -33,7 +33,7 @@ var formBuilder = (function(app) {
         }
     });
 
-    app.TextField       = app.BaseField.extend({
+    formBuild.TextField = formBuild.BaseField.extend({
         defaults: {
             value       : "",
             placeholder : "Write some text",
@@ -41,7 +41,7 @@ var formBuilder = (function(app) {
         },
         initialize: function() {},
         getXML: function() {
-            var xml =   app.BaseField.prototype.getXML.apply(this, arguments);
+            var xml =   formBuild.BaseField.prototype.getXML.apply(this, arguments);
             xml     += '<value>'        + this.get('value')         + '</value>';
             xml     += '<placeholder>'  + this.get('placeholder')   + '</placeholder>';
             xml     += '<size>'         + this.get('size')          + '</size>';
@@ -52,7 +52,7 @@ var formBuilder = (function(app) {
         xmlTag  : 'field_text'
     });
 
-    app.OptionsField    = app.BaseField.extend({
+    formBuild.OptionsField  = formBuild.BaseField.extend({
         defaults: {
             options: []
         },
@@ -87,7 +87,7 @@ var formBuilder = (function(app) {
             return this.get('options')[index];
         },
         getXML: function() {
-            var xml =   app.BaseField.prototype.getXML.apply(this, arguments);
+            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
             var tag = this.constructor.subTag;
             _.each(this.get('options'), function(el) {
                 xml += '<' + tag + '>';
@@ -104,9 +104,9 @@ var formBuilder = (function(app) {
         subTag  : 'option'
     });
 
-    app.CheckBoxField   = app.OptionsField.extend({
+    formBuild.CheckBoxField = formBuild.OptionsField.extend({
         getXML: function() {
-            var xml =   app.OptionsField.prototype.getXML.apply(this, arguments);
+            var xml =   formBuild.OptionsField.prototype.getXML.apply(this, arguments);
             return xml;
         },
         updateSelectedOption : function(index, select) {
@@ -118,9 +118,9 @@ var formBuilder = (function(app) {
         subTag  : 'checkbox'
     });
 
-    app.RadioField      = app.OptionsField.extend({
+    formBuild.RadioField  = formBuild.OptionsField.extend({
         getXML: function() {
-            var xml =   app.OptionsField.prototype.getXML.apply(this, arguments);
+            var xml =   formBuild.OptionsField.prototype.getXML.apply(this, arguments);
             return xml;
         },
         updateSelectedOption : function(index, select) {
@@ -133,18 +133,18 @@ var formBuilder = (function(app) {
     });
 
     //  Copy Basefield properties to model who extends it
-    _.defaults(app.TextField.prototype.defaults,        app.BaseField.prototype.defaults);
-    _.defaults(app.OptionsField.prototype.defaults,     app.BaseField.prototype.defaults);
-    _.defaults(app.RadioField.prototype.defaults,       app.BaseField.prototype.defaults);
-    _.defaults(app.CheckBoxField.prototype.defaults,    app.BaseField.prototype.defaults);
+    _.defaults(formBuild.TextField.prototype.defaults,        formBuild.BaseField.prototype.defaults);
+    _.defaults(formBuild.OptionsField.prototype.defaults,     formBuild.BaseField.prototype.defaults);
+    _.defaults(formBuild.RadioField.prototype.defaults,       formBuild.BaseField.prototype.defaults);
+    _.defaults(formBuild.CheckBoxField.prototype.defaults,    formBuild.BaseField.prototype.defaults);
 
-    app.DateField       = app.TextField.extend({
+    formBuild.DateField       = formBuild.TextField.extend({
         defaults: {
             format: "dd/mm/yyyy"
         },
         initialize: function() {},
         getXML: function() {
-            var xml =   app.TextField.prototype.getXML.apply(this, arguments);
+            var xml =   formBuild.TextField.prototype.getXML.apply(this, arguments);
             xml += '<format>' + this.get("format") + '</format>';
             return xml;
         }
@@ -153,7 +153,7 @@ var formBuilder = (function(app) {
         xmlTag: 'field_date'
     });
 
-    app.NumericField    = app.TextField.extend({
+    formBuild.NumericField    = formBuild.TextField.extend({
         defaults: {
             minValue    : 0,
             maxValue    : 100,
@@ -161,7 +161,7 @@ var formBuilder = (function(app) {
         },
         initialize : function() {},
         getXML : function() {
-            var xml =   app.TextField.prototype.getXML.apply(this, arguments);
+            var xml =   formBuild.TextField.prototype.getXML.apply(this, arguments);
             xml += '<min>' + this.get("minValue") + '</min>';
             xml += '<max>' + this.get("maxValue") + '</max>';
             xml += '<step>' + this.get("step") + '</step>';
@@ -172,13 +172,13 @@ var formBuilder = (function(app) {
         xmlTag: 'field_numeric'
     });
 
-    app.LongTextField = app.TextField.extend({
+    formBuild.LongTextField = formBuild.TextField.extend({
         defaults: {
             resizable: false
         },
         initialize : function() {},
         getXML : function() {
-            var xml =   app.TextField.prototype.getXML.apply(this, arguments);
+            var xml =   formBuild.TextField.prototype.getXML.apply(this, arguments);
             xml += '<resizable>' + this.get("resizable") + '</resizable>';
             return xml;
         }
@@ -188,10 +188,10 @@ var formBuilder = (function(app) {
     });
 
     //  Copy Textfield properties to model who extends it
-    _.defaults(app.NumericField.prototype.defaults,     app.TextField.prototype.defaults);
-    _.defaults(app.DateField.prototype.defaults,        app.TextField.prototype.defaults);
-    _.defaults(app.LongTextField.prototype.defaults,    app.TextField.prototype.defaults);
+    _.defaults(formBuild.NumericField.prototype.defaults,     formBuild.TextField.prototype.defaults);
+    _.defaults(formBuild.DateField.prototype.defaults,        formBuild.TextField.prototype.defaults);
+    _.defaults(formBuild.LongTextField.prototype.defaults,    formBuild.TextField.prototype.defaults);
 
-    return app;
+    return formBuild;
 
 })(formBuilder);

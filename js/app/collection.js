@@ -14,9 +14,10 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-var formBuilder = (function(app) {
-    app.Form = Backbone.Collection.extend({
-        model: app.BaseField,
+var formBuilder = (function(formBuild) {
+
+    formBuild.Form = Backbone.Collection.extend({
+        model: formBuild.BaseField,
         initialize: function(models, options) {
             this.name           = options.name || 'My form';
             _.bindAll(this, 'updateWithXml');
@@ -90,14 +91,14 @@ var formBuilder = (function(app) {
 
                 switch ($(el).prop('tagName')) {
                     case 'field_text':
-                        element = new app.TextField({
+                        element = new formBuild.TextField({
                             value       : $(el).find('value').text(),
                             size        : $(el).find('size').text(),
                             placeholder : $(el).find('placeholder').text()
                         });
                         break;
                     case 'field_date':
-                        element = new app.DateField({
+                        element = new formBuild.DateField({
                             value       : $(el).find('value').text(),
                             size        : $(el).find('size').text(),
                             placeholder : $(el).find('placeholder').text(),
@@ -105,7 +106,7 @@ var formBuilder = (function(app) {
                         });
                         break;
                     case 'field_longText':
-                        element = new app.LongTextField({
+                        element = new formBuild.LongTextField({
                             value       : $(el).find('value').text(),
                             size        : $(el).find('size').text(),
                             placeholder : $(el).find('placeholder').text(),
@@ -113,7 +114,7 @@ var formBuilder = (function(app) {
                         });
                         break;
                     case 'field_numeric':
-                        element = new app.NumericField({
+                        element = new formBuild.NumericField({
                             value       : $(el).find('value').text(),
                             size        : $(el).find('size').text(),
                             placeholder : $(el).find('placeholder').text(),
@@ -131,7 +132,7 @@ var formBuilder = (function(app) {
                                selected : $(each).find('selected').text() === 'true'
                            });
                         });
-                        element = new app.CheckBoxField({
+                        element = new formBuild.CheckBoxField({
                             options: checkbox
                         });
                         break;
@@ -144,7 +145,7 @@ var formBuilder = (function(app) {
                                selected : $(each).find('selected').text() === 'true'
                            });
                         });
-                        element = new app.OptionsField({
+                        element = new formBuild.OptionsField({
                             options: options
                         });
                         break;
@@ -157,7 +158,7 @@ var formBuilder = (function(app) {
                                selected : $(each).find('selected').text() === 'true'
                            });
                         });
-                        element = new app.RadioField({
+                        element = new formBuild.RadioField({
                             options: radios
                         });
                         break;
@@ -176,6 +177,6 @@ var formBuilder = (function(app) {
         }
     });
 
-    return app;
-    
+    return formBuild;
+
 })(formBuilder);

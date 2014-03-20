@@ -17,13 +17,13 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-var formBuilder = (function(app) {
+var formBuilder = (function(formBuild) {
 
     /**
      * It's the basiv views for all field view.
      * Each view listen its model changes and readjust itself
      */
-    app.BaseView = Backbone.View.extend({
+    formBuild.BaseView = Backbone.View.extend({
         events: {
             'click  .fa-trash-o' : 'removeView',
             'click .fa-wrench'   : 'setting',
@@ -53,7 +53,7 @@ var formBuilder = (function(app) {
         },
         updateSetting : function() {
             if (!$('.dropArea').hasClass('span9')) {
-                app.set = new app.SettingView({
+                formBuild.set = new formBuild.SettingView({
                     model: this.model,
                     el: $('.settings')
                 }).render();
@@ -61,22 +61,22 @@ var formBuilder = (function(app) {
         },
         setting: function() {
             if ($('.dropArea').hasClass('span9')) {
-                app.settingsView.changeModel(this.model);
+                formBuild.settingsView.changeModel(this.model);
             }
         }
     });
 
-    app.TextFieldView = app.BaseView.extend({
+    formBuild.TextFieldView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
         initialize : function() {
-          app.BaseView.prototype.initialize.apply(this, arguments);
+          formBuild.BaseView.prototype.initialize.apply(this, arguments);
         },
         render : function() {
-           app.BaseView.prototype.render.apply(this, arguments);
+           formBuild.BaseView.prototype.render.apply(this, arguments);
            $(this.el).find('input[type="text"]').enableSelection();
        },
         updateModel: function(e) {
@@ -90,13 +90,13 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.NumericView = app.BaseView.extend({
+    formBuild.NumericView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
             });
         },
         render: function() {
-            app.BaseView.prototype.render.apply(this, arguments);
+            formBuild.BaseView.prototype.render.apply(this, arguments);
             $(this.model.id).spinner({
                 step: this.model.step,
                 min: this.model.minValue
@@ -110,9 +110,9 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.radioFieldView = app.BaseView.extend({
+    formBuild.radioFieldView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
                 'click input[type="radio"]'        : 'updateSetting'
             });
         }
@@ -131,9 +131,9 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.OptionsFieldView = app.BaseView.extend({
+    formBuild.OptionsFieldView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
                 'change select'        : 'updateSelected'
             });
         },
@@ -152,9 +152,9 @@ var formBuilder = (function(app) {
                         '</div> '
     });
 
-    app.checkboxView = app.BaseView.extend({
+    formBuild.checkboxView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
                 'change input[type="checkbox"]' : 'updateSelected'
             });
         },
@@ -176,14 +176,14 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.longTextView = app.BaseView.extend({
+    formBuild.longTextView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
                 'focus textarea'        : 'updateSetting'
             });
         },
         initialize : function() {
-            app.BaseView.prototype.initialize.apply(this, arguments);
+            formBuild.BaseView.prototype.initialize.apply(this, arguments);
             $(this.el).addClass('textArea');
         }
     }, {
@@ -194,13 +194,13 @@ var formBuilder = (function(app) {
                         '</div> '
     });
 
-    app.DateView = app.BaseView.extend({
+    formBuild.DateView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, app.BaseView.prototype.events, {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
             });
         },
        render : function() {
-           app.BaseView.prototype.render.apply(this, arguments);
+           formBuild.BaseView.prototype.render.apply(this, arguments);
            $(this.el).find('input').datepicker({
                format: this.model.get('format')
            });
@@ -213,14 +213,13 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.FormView = Backbone.View.extend({
+    formBuild.FormView = Backbone.View.extend({
         events: {
             'change #protocolName' : 'changeFormName'
         },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
             _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML');
-            //this.collection.bind("change", this.render);
             this.collection.bind('add', this.addElement);
             this._view = [];
         },
@@ -234,43 +233,43 @@ var formBuilder = (function(app) {
 
             switch (classe) {
                 case 'text':
-                    vue = new app.TextFieldView({
+                    vue = new formBuild.TextFieldView({
                         el      : $("#"+id),
                         model   : el
                     });
                     break;
                 case 'options':
-                    vue = new app.OptionsFieldView({
+                    vue = new formBuild.OptionsFieldView({
                         el      : $("#"+id),
                         model   : el
                     });
                     break;
                 case 'longText':
-                    vue = new app.longTextView({
+                    vue = new formBuild.longTextView({
                         el      : $("#"+id),
                         model   : el
                     });
                     break;
                 case "numeric" :
-                    vue = new app.NumericView({
+                    vue = new formBuild.NumericView({
                         el      : $("#"+id),
                         model   : el
                     });
                     break;
                 case "checkbox" :
-                    vue = new app.checkboxView({
+                    vue = new formBuild.checkboxView({
                         el      : $("#"+id),
                         model   : el
                     });
                     break;
                 case "radio":
-                    vue = new app.radioFieldView({
+                    vue = new formBuild.radioFieldView({
                         el      : $("#"+id),
                         model   : el
                     });
                     break;
                 case "date":
-                    vue = new app.DateView({
+                    vue = new formBuild.DateView({
                         el      : $("#"+id),
                         model   : el
                     });
@@ -452,7 +451,7 @@ var formBuilder = (function(app) {
                     '</div>'
     });
 
-    app.SettingView = Backbone.View.extend({
+    formBuild.SettingView = Backbone.View.extend({
         events: {
             'click .close'          : 'hidePannel',
             'change input'          : 'updateModel',
@@ -467,7 +466,7 @@ var formBuilder = (function(app) {
             'click #accordion h1'   : 'accordion'
         },
         initialize: function() {
-            this.template = _.template( $.ajax({url: "templates/settingsTemplate.html", async: false }).responseText);
+            this.template = _.template(this.constructor.templateSrc)
             _.bindAll(this, 'render', 'hidePannel', 'removePanel', 'changeModel', 'addOption');
             this.model = null;
             this._op = true;
@@ -602,45 +601,123 @@ var formBuilder = (function(app) {
                 '</tr>'
             );
         }
-    });
-
-   /* app.set = new app.SettingView({
-        el: $('.settings')
-    });*/
-
-    app.MainView = Backbone.View.extend({
-        initialize: function() {
-            this.panel = new app.PanelView({
-                el: $(".widgetsPanel")
-            });
-        },
-        render : function() {
-
-        }
     }, {
-        templateSrc:    '<nav class="navbar navbar-default" role="navigation">'+
-                            '<div class="navbar-header">'+
-                                '<a class="navbar-brand" href="#">FormBuilder</a>'+
+        templateSrc:    '<div id="accordion">'+
+                            '<h1>Settings</h1>'+
+                            '<div style="background : #eee" id="settingsPanel">'+
+                                '<h2>'+
+                                    '<a href="#" id="simple" class="selected">Simple options</a> / <a href="#" id="advanced">Advanced options</a>'+
+                                '</h2>'+
+                                '<% var fName = this.model.constructor.type; %>'+
+                                '<div class="row-fluid">'+
+                                    '<label class="span10 offset1">Field label</label>'+
+                                '</div>'+
+                                '<div class="row-fluid">'+
+                                    '<input class="span10 offset1" type="text" id="fieldLabel" data-attr="label" placeholder="Field label" value="<%= label || "" %>" />'+
+                                '</div>'+
+                                '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
+                                    '<div class="row-fluid">'+
+                                        '<label class="span10 offset1">Field placeholder value</label>'+
+                                    '</div>'+
+                                    '<div class="row-fluid">'+
+                                        '<input class="span10 offset1" type="text" id="fieldPlaceholder" data-attr="placeholder" placeholder="Placeholder" value="<%= placeholder || "" %>" />'+
+                                    '</div>'+
+                                '<% } %>'+
+                                '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
+                                    '<div class="row-fluid">'+
+                                        '<label class="span10 offset1">Field default value</label>'+
+                                    '</div>'+
+                                    '<div class="row-fluid">'+
+                                        '<input class="span10 offset1" type="text" id="fieldValue" data-attr="value" placeholder="Default value" value="<%= value %>" />'+
+                                    '</div>'+
+                                '<% } %>'+
+                                '<div class="row-fluid hide">'+
+                                    '<label class="span10 offset1">Field HTML Id</label>'+
+                                '</div>'+
+                                '<div class="row-fluid hide">'+
+                                    '<input class="span10 offset1" type="text" id="fieldId" data-attr="id" placeholder="Field ID" value="<%= id %>"/>'+
+                                '</div>'+
+                                '<div class="row-fluid hide">'+
+                                    '<label class="span10 offset1">Field HTML name</label>'+
+                                '</div>'+
+                                '<div class="row-fluid hide">'+
+                                    '<input class="span10 offset1" type="text" id="fieldName" data-attr="name" placeholder="Field name" value="<%= name %>" />'+
+                                '</div>'+
+                                '<div class="row-fluid hide">'+
+                                    '<label class="span10 offset1">Field HTML class</label>'+
+                                '</div>'+
+                                '<div class="row-fluid hide">'+
+                                    '<input class="span10 offset1" type="text" id="fieldcssClass" data-attr="cssclass" placeholder="CSS class" value="<%= cssclass %>" />'+
+                                '</div>'+
+                                '<% if(fName == "date") { %>'+
+                                    '<div class="row-fluid">'+
+                                        '<label class="span10 offset1">Field date format</label>'+
+                                    '</div>'+
+                                    '<div class="row-fluid">'+
+                                        '<input class="span10 offset1" type="text" id="fieldDateFormat" data-attr="format" placeholder="Field format (ex : 21/12/2012)" />'+
+                                    '</div>'+
+                                '<% } %>'+
+                                '<% if(fName == "numeric") { %>'+
+                                    '<div class="row-fluid">'+
+                                        '<label class="span10 offset1">Min and max values</label>'+
+                                    '</div>'+
+                                    '<div class="row-fluid minMax" >'+
+                                        '<input class="span4 offset1" type="number" data-attr="minValue" id="fielMinValue" placeholder="Min value" />'+
+                                        '<label class="span2">And</label>'+
+                                        '<input class="span4" type="number" id="fielMaxValue" data-attr="maxValue" placeholder="Max value" />'+
+                                    '</div>'+
+                                '<% } %>'+
+                                '<% if( _.contains(["date", "text", "longtext"], fName) ) { %>'+
+                                    '<div class="row-fluid">'+
+                                        '<label class="span10 offset1">Field size</label>'+
+                                    '</div>    '+
+                                    '<div class="row-fluid">'+
+                                        '<input type="number" class="span10 offset1" id="fieldSizeValue" data-attr="size" value="<%= size %>" />'+
+                                    '</div>'+
+                                '<% } %>'+
+                                '<div class="row-fluid">&nbsp;</div>'+
+                                '<div class="row-fluid">'+
+                                    '<label class="span3 offset1">Required : </label> <input class="span2" data-attr="required" type="checkbox" id="fieldRequire" <% if ( required === true) { %> checked <% } %> />'+
+                                '</div>'+
+                                '<br />'+
                             '</div>'+
-                            '<div class="collapse navbar-collapse navbar-ex1-collapse">'+
-                                '<ul class="nav navbar-nav">'+
-                                    '<li>'+
-                                        '<a href="#" id="export" ><i class="fa fa-envelope"></i> Export as XML</a>'+
-                                    '</li>'+
-                                    '<li>'+
-                                        '<a href="#" id="import" ><i class="fa fa-cloud"></i> Import XML</a>'+
-                                    '</li>'+
-                                '</ul>'+
-                            '</div>'+
-                        '</nav>' +
-                        '<section class="container-fluid">'+
-                            '<div class="row-fluid content">' +
-                            '   <div class="span3 widgetsPanel"></div>'+
-                            '</div>'+
-                        '</section>'
+                            '<% if( _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
+                                '<h1>Options</h1>'+
+                                '<div id="optionsPanel">'+
+                                    '<div class="row-fluid">'+
+                                        '<br />'+
+                                        '<table class="table table-striped span11 offset1">'+
+                                            '<thead>'+
+                                                '<tr>'+
+                                                    '<th>Label</th>'+
+                                                    '<th>Value</th>'+
+                                                    '<th>Default</th>'+
+                                                    '<th>Option</th>'+
+                                                '</tr>'+
+                                            '</thead>'+
+                                            '<tbody>'+
+                                                '<% _.each(options, function(el, idx) { %> '+
+                                                '<tr data-index="<%= idx %>">'+
+                                                    '<td class="labelOp"><%= el.label %></td>'+
+                                                    '<td class="valueOp"><%= el.value %></td>'+
+                                                    '<td class="center selectOp"><%= el.selected ? "Yes" : "No" %></td>'+
+                                                    '<td class="center"><a href="#" class="removeOp">Remove</a>&nbsp; / &nbsp;<a href="#" class="editOp">edit</a></td>'+
+                                                '</tr> '+
+                                                '<% }); %>'+
+                                            '</tbody>'+
+                                        '</table>'+
+                                    '</div>'+
+                                    '<br />'+
+                                    '<button class="addOp center" style="width: 100%" >Add an option</button>'+
+                                    '<br/>'+
+                                '</div>'+
+                            '<% } %>'+
+                            '<br />'+
+                            '<button class="close center" style="width: 100%">Save</button>'+
+                        '</div>'
     });
 
-    app.PanelView = Backbone.View.extend({
+    formBuild.PanelView = Backbone.View.extend({
         events: {
             'dblclick .fields': 'appendToDrop'
         },
@@ -653,7 +730,7 @@ var formBuilder = (function(app) {
             var form = this._collection;
             switch ($(e.target).data("type")) {
                 case "text" :
-                    var f = new app.TextField({
+                    var f = new formBuild.TextField({
                         id: "textField[" + form.collection.length + "]",
                         name: "textField[" + form.collection.length + "]",
                         placeholder: "Write some text...",
@@ -665,7 +742,7 @@ var formBuilder = (function(app) {
                     break;
 
                 case "options" :
-                    var f = new app.OptionsField({
+                    var f = new formBuild.OptionsField({
                         id: "optionsField[" + form.collection.length + "]",
                         name: "optionsField[" + form.collection.length + "]",
                         label: 'My options field',
@@ -678,7 +755,7 @@ var formBuilder = (function(app) {
                     break;
 
                 case "longText" :
-                    var f = new app.LongTextField({
+                    var f = new formBuild.LongTextField({
                         id: "longTextField[" + form.collection.length + "]",
                         name: "longTextField[" + form.collection.length + "]",
                         placeholder: "My long text field",
@@ -689,7 +766,7 @@ var formBuilder = (function(app) {
                     break;
 
                 case "numeric" :
-                    var f = new app.NumericField({
+                    var f = new formBuild.NumericField({
                         id: "numericField[" + form.collection.length + "]",
                         name: "numericField[" + form.collection.length + "]",
                         placeholder: "My numeric field ",
@@ -700,7 +777,7 @@ var formBuilder = (function(app) {
                     break;
 
                 case "check" :
-                    var f = new app.CheckBoxField({
+                    var f = new formBuild.CheckBoxField({
                         id: "checkboxField[" + form.collection.length + "]",
                         name: "checkboxField[" + form.collection.length + "]",
                         label: 'My checkbox',
@@ -713,7 +790,7 @@ var formBuilder = (function(app) {
                     break;
 
                 case "radio" :
-                    var f = new app.RadioField({
+                    var f = new formBuild.RadioField({
                         id: "radioField[" + form.collection.length + "]",
                         name: "radioField[" + form.collection.length + "]",
                         label: 'My radio field',
@@ -726,7 +803,7 @@ var formBuilder = (function(app) {
                     break;
 
                 case "date" :
-                    var f = new app.DateField({
+                    var f = new formBuild.DateField({
                         id: "dateField[" + form.collection.length + "]",
                         name: "dateField[" + form.collection.length + "]",
                         placeholder: "Click to choose a date",
@@ -781,5 +858,5 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    return app;
+    return formBuild;
 })(formBuilder);

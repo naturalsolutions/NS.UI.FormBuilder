@@ -8,7 +8,7 @@
 
 $(document).ready(function() {
 
-    formBuilder.init("#formbuilder");
+    formBuilder.init();
 
     $('#export').click (function() {
         formBuilder.formView.downloadXML();

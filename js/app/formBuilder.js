@@ -1,6 +1,17 @@
-var formBuilder = (function(app) {
+/**
+ * @fileOverview formBuilder.js
+ * Implemente main formbuilder object
+ *
+ * Depandencies :   undersoore
+ *                  jquery
+ *                  backbone
+ *
+ * @author          MICELI Antoine (miceli.antoine@gmail.com)
+ * @version         1.0
+ */
+var formBuilder = (function(formBuild) {
 
-    app = {
+    formBuild = {
         init: function() {
                 $("#formBuilder").html(
                     '<div class="row-fluid content">' +
@@ -10,29 +21,29 @@ var formBuilder = (function(app) {
                     '</div>'
                 );
 
-                this.form = new app.Form({}, {
+                this.form = new formBuild.Form({}, {
                     name: "My form"
                 });
 
-                this.panelView = new app.PanelView({
+                this.panelView = new formBuild.PanelView({
                     el: $('.widgetsPanel'),
                     collection: this.form,
                 });
                 this.panelView.render();
 
-                this.formView = new app.FormView({
+                this.formView = new formBuild.FormView({
                     collection: this.form,
                     el: $('.dropArea')
                 });
                 this.formView.render();
 
-                this.settingsView = new app.SettingView({
+                this.settingsView = new formBuild.SettingView({
                     el: $('.settings')
                 });
                 this.settingsView.render();
         }
     };
 
-    return app;
+    return formBuild;
 
 })(formBuilder);
