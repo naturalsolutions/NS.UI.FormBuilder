@@ -15,7 +15,7 @@ var formBuilder = (function(formBuild) {
         init: function() {
                 $("#formBuilder").html(
                     '<div class="row-fluid content">' +
-                        '<div class="span3 widgetsPanel"></div>' +
+                        '<div class="span3 widgetsPanel nano"></div>' +
                         '<div class="span9 dropArea"></div>' +
                         '<div class="settings span5"></div>' +
                     '</div>'
@@ -41,6 +41,9 @@ var formBuilder = (function(formBuild) {
                     el: $('.settings')
                 });
                 this.settingsView.render();
+        },
+        clear : function() {
+            this.form.clearAll();
         }
     };
 

@@ -4,34 +4,24 @@ html, body {
     margin      : 0;
     padding     : 0;
     overflow    : hidden;
-    background  : #ddd;
 }
 
 //  ---------------------------------------------------------------------
 //  Main classes
 //  ---------------------------------------------------------------------
-
 .noMarginLeft   { margin-left : 0 !important; }
-
 .navbar         { margin-bottom : 0 !important; }
-
 .span0          { width : 0px !important; overflow: hidden;}
-
 .left           { text-align: left !important;}
-
 .right          { text-align: right !important; }
-
 .center         { text-align: center; }
-
 .ui-sortable-helper { cursor : move !important; * { cursor : move !important; }}
-
 .toggle {
     background-color    : rgb(238, 238, 238); 
     display             : none; 
     background-position : initial initial; 
     background-repeat   : initial initial;
 }
-
 .required {
     &:before {
         content : "*";
@@ -43,27 +33,40 @@ html, body {
     border-radius   : 0!important;
     padding-left    : 15px;
 }
-
 .text {
     line-height     : 30px; 
     font-size       : 20px; 
     text-align      : right
 }
-
-//  ---------------------------------------------------------------------
-//  Spécific classes
-//  ---------------------------------------------------------------------
-
-section {
+    
+.font { font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif !important; }
+#formBuilder {   
     height      : 100%;
     overflow    : hidden; 
+    margin      : 0 !important;
+    padding     : 0 !important;
+    
+    //  ---------------------------------------------------------------------
+    //  Children classes
+    //  ---------------------------------------------------------------------
     .content {
         background  : #fff;
         height      : 100%;
         .widgetsPanel {
+            .nano-pane {
+                background : #aaa;
+                .nano-slider {
+                    background : #ddd;
+                    border-radius: 0 !important;
+                }
+            }
+            .nano-content {
+                padding-bottom: 100px;
+            }
             background  : #ddd;
             height      : 100%;     
             .fields {
+                .font();
                 height          : 50px;
                 background      : white;
                 border          : 2px #aaa solid;
@@ -84,6 +87,7 @@ section {
             overflow-y : scroll;
             height : 100%;
             input[type="text"]:first-child {
+                .font();
                 width           : 100%;
                 border          : none;
                 outline         : none;
@@ -94,13 +98,14 @@ section {
                 padding-right   : 30px;
             }
             hr {
+                .font();
                 border      : 1px #ccc solid;
                 width       : 95%;
                 padding     : 10px auto;
                 text-align  : center;
                 &:after {
                     content     : "\275D \ Double click on a field to add it in the area \275E";
-                    height      : 0;
+                    height      : 0 !important;
                     color       : #aaa;
                     text-align  : center;
                     font-size   : 30px;
@@ -113,7 +118,6 @@ section {
                     min-height      : 70%;
                     border          : 1px #aaa solid !important;
                     margin-bottom   : 100px;
-
                 }
             }
             .dropField {
@@ -133,7 +137,7 @@ section {
                 input[type="text"], .spin {
                     padding-left: 10px;
                 }
-                label { .text(); }
+                label { .text(); .font();}
                 i { 
                     .text(); 
                     &:first-child { 
@@ -156,6 +160,7 @@ section {
             }
         }
         .settings {
+            * { .font(); }
             .widgetsPanel();
             background-color    : #eee;
             margin-left         : 0;
@@ -215,8 +220,7 @@ section {
                 transition  : all 0.1s !important;
                 border      : none !important;
                 box-shadow  : none !important;
-                font-size   : 20px;
-                
+                font-size   : 20px;                
             }
             .close { 
                 font-size   : 30px; 

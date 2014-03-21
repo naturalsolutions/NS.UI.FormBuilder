@@ -19,11 +19,22 @@ var formBuilder = (function(formBuild) {
     formBuild.Form = Backbone.Collection.extend({
         model: formBuild.BaseField,
         initialize: function(models, options) {
-            this.name           = options.name || 'My form';
-            _.bindAll(this, 'updateWithXml');
+            this.name   = options.name || 'My form';
+            this.count  = 0;
+            _.bindAll(this, 'updateWithXml', 'clearAll');
+            this.bind('add', function() {
+                this.count++;
+            })
         },
         getSize : function() {
-            return this.models.length;
+            return this.count;
+        },
+        clearAll: function() {
+            while (this.models.length > 0) {
+                var el = this.at(this.models.length-1);
+                el.trigger('destroy', el);
+            }
+            this.count = 0;
         },
         getXML: function() {
             var arr     = this.models.slice(1, this.models.length);
@@ -174,6 +185,7 @@ var formBuilder = (function(formBuild) {
             _.each(elements, function(el, idx) {
                 form.add(el);
             });
+            form.trigger('change')
         }
     });
 

@@ -31,8 +31,9 @@ var formBuilder = (function(formBuild) {
         },
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'removeView', 'setting', 'updateSetting', 'getHtml');
+            _.bindAll(this, 'render', 'removeView', 'setting', 'updateSetting', 'getHtml', 'deleteView');
             this.model.bind('change', this.render);
+            this.model.bind('destroy', this.deleteView)
         },
         updateIndex: function(idx) {
             this.model.set('order', idx);
@@ -46,9 +47,14 @@ var formBuilder = (function(formBuild) {
             var renderedContent = this.html(this.model.toJSON());
             return renderedContent;
         },
+        deleteView : function() {
+            $(this.el).remove()
+            this.remove();
+        },
         removeView: function() {
             this.model.collection.remove(this.model);
             this.model.trigger('destroy');
+            $(this.el).remove()
             this.remove();
         },
         updateSetting : function() {
@@ -219,16 +225,19 @@ var formBuilder = (function(formBuild) {
         },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML');
+            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView');
             this.collection.bind('add', this.addElement);
+            this.collection.bind('change', this.updateView)
             this._view = [];
+        },
+        updateView : function() {
+          $(this.el).find('#protocolName').val(this.collection.name)
         },
         addElement: function(el) {
             var classe = el.constructor.type,
                 idx = this.collection.length,
                 vue = null,
-                id = "dropField" + idx;
-
+                id = $("#dropField" + idx).length > 0 ? "dropField" + (idx+1) : "dropField" + idx;
             $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
 
             switch (classe) {
@@ -731,11 +740,11 @@ var formBuilder = (function(formBuild) {
             switch ($(e.target).data("type")) {
                 case "text" :
                     var f = new formBuild.TextField({
-                        id: "textField[" + form.collection.length + "]",
-                        name: "textField[" + form.collection.length + "]",
+                        id: "textField[" + form.collection.getSize() + "]",
+                        name: "textField[" + form.collection.getSize() + "]",
                         placeholder: "Write some text...",
                         label: 'My Text field',
-                        order: form.collection.length,
+                        order: form.collection.getSize(),
                         required: true
                     });
                     form.collection.add(f);
@@ -743,8 +752,8 @@ var formBuilder = (function(formBuild) {
 
                 case "options" :
                     var f = new formBuild.OptionsField({
-                        id: "optionsField[" + form.collection.length + "]",
-                        name: "optionsField[" + form.collection.length + "]",
+                        id: "optionsField[" + form.collection.getSize() + "]",
+                        name: "optionsField[" + form.collection.getSize() + "]",
                         label: 'My options field',
                         options: [
                             {value: "1", label: "My first option", selected: false},
@@ -756,8 +765,8 @@ var formBuilder = (function(formBuild) {
 
                 case "longText" :
                     var f = new formBuild.LongTextField({
-                        id: "longTextField[" + form.collection.length + "]",
-                        name: "longTextField[" + form.collection.length + "]",
+                        id: "longTextField[" + form.collection.getSize() + "]",
+                        name: "longTextField[" + form.collection.getSize() + "]",
                         placeholder: "My long text field",
                         label: 'My long text',
                         resizable: false
@@ -767,8 +776,8 @@ var formBuilder = (function(formBuild) {
 
                 case "numeric" :
                     var f = new formBuild.NumericField({
-                        id: "numericField[" + form.collection.length + "]",
-                        name: "numericField[" + form.collection.length + "]",
+                        id: "numericField[" + form.collection.getSize() + "]",
+                        name: "numericField[" + form.collection.getSize() + "]",
                         placeholder: "My numeric field ",
                         label: 'My numeric field',
                         required: true
@@ -778,8 +787,8 @@ var formBuilder = (function(formBuild) {
 
                 case "check" :
                     var f = new formBuild.CheckBoxField({
-                        id: "checkboxField[" + form.collection.length + "]",
-                        name: "checkboxField[" + form.collection.length + "]",
+                        id: "checkboxField[" + form.collection.getSize() + "]",
+                        name: "checkboxField[" + form.collection.getSize() + "]",
                         label: 'My checkbox',
                         options: [
                             {value: "1", label: "My first checkbox", selected: false},
@@ -791,8 +800,8 @@ var formBuilder = (function(formBuild) {
 
                 case "radio" :
                     var f = new formBuild.RadioField({
-                        id: "radioField[" + form.collection.length + "]",
-                        name: "radioField[" + form.collection.length + "]",
+                        id: "radioField[" + form.collection.getSize() + "]",
+                        name: "radioField[" + form.collection.getSize() + "]",
                         label: 'My radio field',
                         options: [
                             {value: "1", label: "First radio", selected: true},
@@ -804,8 +813,8 @@ var formBuilder = (function(formBuild) {
 
                 case "date" :
                     var f = new formBuild.DateField({
-                        id: "dateField[" + form.collection.length + "]",
-                        name: "dateField[" + form.collection.length + "]",
+                        id: "dateField[" + form.collection.getSize() + "]",
+                        name: "dateField[" + form.collection.getSize() + "]",
                         placeholder: "Click to choose a date",
                         label: 'My date',
                         format: "dd/mm/yyy"
@@ -817,10 +826,11 @@ var formBuilder = (function(formBuild) {
         render: function() {
             $(this.el).html(this.constructor.templateSrc);
             $('.fields').disableSelection();
+            $(this.el).nanoScroller();
             return this;
-        },
+        }
     }, {
-        templateSrc :   '<h1>Fields : </h1>' +
+        templateSrc :   '<div class="nano-content"><h1 class="center">Fields</h1>' +
                         '<div class="row-fluid">' +
                             '<div class="span10 offset1 fields" data-type="text">' +
                                 'Text' +
@@ -835,7 +845,6 @@ var formBuilder = (function(formBuild) {
                             '<div class="span10 offset1 fields" data-type="radio">' +
                                 'Radio buttons'+
                             '</div>' +
-                        '</div>'+
                         '<div class="row-fluid">' +
                             '<div class="span10 offset1 fields" data-type="check">' +
                                 '<i class="fa fa-check-square-o"></i>&nbsp;Checkboxes' +
@@ -855,8 +864,9 @@ var formBuilder = (function(formBuild) {
                             '<div class="span10 offset1 fields" data-type="date">' +
                                 'Date' +
                             '</div>' +
-                        '</div>'
+                        '</div></div>'
     });
 
     return formBuild;
+
 })(formBuilder);
