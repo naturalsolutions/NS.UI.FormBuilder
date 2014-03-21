@@ -72,6 +72,19 @@ var formBuilder = (function(formBuild) {
         }
     });
 
+    formBuild.HiddenView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
+            });
+        },
+    }, {
+        templateSrc :   '<label class="span3 grey">My hidden field</label> '+
+                        '<input type="text" disabled class="span8" name="<%= name %>" id="<%= id%>" value="<%= value %>" /> '+
+                        '<div class="span1"> '+
+                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
+                        '</div>'
+    });
+
     formBuild.TextFieldView = formBuild.BaseView.extend({
         events: function() {
             return _.extend({}, formBuild.BaseView.prototype.events, {
@@ -235,12 +248,18 @@ var formBuilder = (function(formBuild) {
         },
         addElement: function(el) {
             var classe = el.constructor.type,
-                idx = this.collection.length,
+                idx = this.collection.getSize(),
                 vue = null,
-                id = $("#dropField" + idx).length > 0 ? "dropField" + (idx+1) : "dropField" + idx;
+                id = "dropField" + idx;
             $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
 
             switch (classe) {
+                case 'hidden' :
+                    vue = new formBuild.HiddenView({
+                        el      : $("#"+id),
+                        model   : el
+                    });
+                    break;
                 case 'text':
                     vue = new formBuild.TextFieldView({
                         el      : $("#"+id),
@@ -618,20 +637,25 @@ var formBuilder = (function(formBuild) {
                                     '<a href="#" id="simple" class="selected">Simple options</a> / <a href="#" id="advanced">Advanced options</a>'+
                                 '</h2>'+
                                 '<% var fName = this.model.constructor.type; %>'+
-                                '<div class="row-fluid">'+
-                                    '<label class="span10 offset1">Field label</label>'+
-                                '</div>'+
-                                '<div class="row-fluid">'+
-                                    '<input class="span10 offset1" type="text" id="fieldLabel" data-attr="label" placeholder="Field label" value="<%= label || "" %>" />'+
-                                '</div>'+
-                                '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
+
+                                '<% if (fName != "hidden") { %>'+
+                                    //  only if field is not a hidden field
                                     '<div class="row-fluid">'+
-                                        '<label class="span10 offset1">Field placeholder value</label>'+
+                                        '<label class="span10 offset1">Field label</label>'+
                                     '</div>'+
                                     '<div class="row-fluid">'+
-                                        '<input class="span10 offset1" type="text" id="fieldPlaceholder" data-attr="placeholder" placeholder="Placeholder" value="<%= placeholder || "" %>" />'+
+                                        '<input class="span10 offset1" type="text" id="fieldLabel" data-attr="label" placeholder="Field label" value="<%= label || "" %>" />'+
                                     '</div>'+
+                                    '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
+                                        '<div class="row-fluid">'+
+                                            '<label class="span10 offset1">Field placeholder value</label>'+
+                                        '</div>'+
+                                        '<div class="row-fluid">'+
+                                            '<input class="span10 offset1" type="text" id="fieldPlaceholder" data-attr="placeholder" placeholder="Placeholder" value="<%= placeholder || "" %>" />'+
+                                        '</div>'+
+                                    '<% } %>'+
                                 '<% } %>'+
+
                                 '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
                                     '<div class="row-fluid">'+
                                         '<label class="span10 offset1">Field default value</label>'+
@@ -652,12 +676,16 @@ var formBuilder = (function(formBuild) {
                                 '<div class="row-fluid hide">'+
                                     '<input class="span10 offset1" type="text" id="fieldName" data-attr="name" placeholder="Field name" value="<%= name %>" />'+
                                 '</div>'+
-                                '<div class="row-fluid hide">'+
-                                    '<label class="span10 offset1">Field HTML class</label>'+
-                                '</div>'+
-                                '<div class="row-fluid hide">'+
-                                    '<input class="span10 offset1" type="text" id="fieldcssClass" data-attr="cssclass" placeholder="CSS class" value="<%= cssclass %>" />'+
-                                '</div>'+
+
+                                '<% if(fName != "hidden") { %>'+
+                                    '<div class="row-fluid hide">'+
+                                        '<label class="span10 offset1">Field HTML class</label>'+
+                                    '</div>'+
+                                    '<div class="row-fluid hide">'+
+                                        '<input class="span10 offset1" type="text" id="fieldcssClass" data-attr="cssclass" placeholder="CSS class" value="<%= cssclass %>" />'+
+                                    '</div>'+
+                                '<% } %>'+
+
                                 '<% if(fName == "date") { %>'+
                                     '<div class="row-fluid">'+
                                         '<label class="span10 offset1">Field date format</label>'+
@@ -684,10 +712,12 @@ var formBuilder = (function(formBuild) {
                                         '<input type="number" class="span10 offset1" id="fieldSizeValue" data-attr="size" value="<%= size %>" />'+
                                     '</div>'+
                                 '<% } %>'+
-                                '<div class="row-fluid">&nbsp;</div>'+
-                                '<div class="row-fluid">'+
-                                    '<label class="span3 offset1">Required : </label> <input class="span2" data-attr="required" type="checkbox" id="fieldRequire" <% if ( required === true) { %> checked <% } %> />'+
-                                '</div>'+
+                                '<% if(fName != "hidden") { %>'+
+                                    '<div class="row-fluid">&nbsp;</div>'+
+                                    '<div class="row-fluid">'+
+                                        '<label class="span3 offset1">Required : </label> <input class="span2" data-attr="required" type="checkbox" id="fieldRequire" <% if ( required === true) { %> checked <% } %> />'+
+                                    '</div>'+
+                                '<% } %>'+
                                 '<br />'+
                             '</div>'+
                             '<% if( _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
@@ -738,6 +768,14 @@ var formBuilder = (function(formBuild) {
             $(e.target).disableSelection();
             var form = this._collection;
             switch ($(e.target).data("type")) {
+                case "hidden" :
+                    var f = new formBuild.HiddenField({
+                        id      : "hiddenField[" + form.collection.getSize() + "]",
+                        name    : "hiddenField[" + form.collection.getSize() + "]",
+                        value   : ""
+                    });
+                    form.collection.add(f);
+                    break;
                 case "text" :
                     var f = new formBuild.TextField({
                         id: "textField[" + form.collection.getSize() + "]",
@@ -830,41 +868,59 @@ var formBuilder = (function(formBuild) {
             return this;
         }
     }, {
-        templateSrc :   '<div class="nano-content"><h1 class="center">Fields</h1>' +
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="text">' +
-                                'Text' +
+        templateSrc :   '<div class="nano-content">'+
+                            '<h1 class="center">Fields</h1>' +
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="text">' +
+                                    'Text' +
+                                '</div>' +
                             '</div>' +
-                        '</div>' +
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="longText">' +
-                                'Long Text' +
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="longText">' +
+                                    'Long Text' +
+                                '</div>' +
+                            '</div>'+
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="radio">' +
+                                    'Radio buttons'+
+                                '</div>' +
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="check">' +
+                                    '<i class="fa fa-check-square-o"></i>&nbsp;Checkboxes' +
+                                '</div>' +
                             '</div>' +
-                        '</div>'+
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="radio">' +
-                                'Radio buttons'+
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="options">' +
+                                    'Options' +
+                                '</div>' +
                             '</div>' +
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="check">' +
-                                '<i class="fa fa-check-square-o"></i>&nbsp;Checkboxes' +
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="numeric">' +
+                                    'Numéric' +
+                                '</div>' +
                             '</div>' +
-                        '</div>' +
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="options">' +
-                                'Options' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="numeric">' +
-                                'Numéric' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="row-fluid">' +
-                            '<div class="span10 offset1 fields" data-type="date">' +
-                                'Date' +
-                            '</div>' +
-                        '</div></div>'
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="date">' +
+                                    'Date' +
+                                '</div>' +
+                            '</div>'+
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="hidden">' +
+                                    'Hidden' +
+                                '</div>' +
+                            '</div>'+
+                            '<h1 class="center">Layouts</h1>'+
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="hr">' +
+                                    'Horizontal line' +
+                                '</div>' +
+                            '</div>'+
+                            '<div class="row-fluid">' +
+                                '<div class="span10 offset1 fields" data-type="fieldset">' +
+                                    'Fieldset' +
+                                '</div>' +
+                            '</div>'+
+                        '</div>'
     });
 
     return formBuild;

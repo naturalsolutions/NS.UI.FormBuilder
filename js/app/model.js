@@ -33,6 +33,22 @@ var formBuilder = (function(formBuild) {
         }
     });
 
+    formBuild.HiddenField = Backbone.Model.extend({
+        id: 'hiddenField',
+        name: 'hiddenField',
+        value: "",
+        getXml : function() {
+            var xml = "<field_hidden>", obj = this;
+            _.each(['id', 'name', 'value'], function(el) {
+                xml += '<' + el + '>' + obj.get(el) + '</' + el + '>';
+            });
+            return xml + '</field_hidden>';
+        }
+    }, {
+        type: 'hidden',
+        xmlTag: 'field_hidden'
+    });
+
     formBuild.TextField = formBuild.BaseField.extend({
         defaults: {
             value       : "",
