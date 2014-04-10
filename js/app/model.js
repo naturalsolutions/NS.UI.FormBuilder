@@ -14,35 +14,63 @@ var formBuilder = (function(formBuild) {
     /**
      * Basic field model, it's only used for inheritance
      */
-    formBuild.BaseField  = Backbone.Model.extend({
+    formBuild.BaseField = Backbone.Model.extend({
         defaults: {
-            id          : "basefield",
-            label       : "My label",
-            name        : "basefield",
-            cssclass    : "",
-            required    : false,
-            order       : 1
+            id: "",
+            label: "My label",
+            name: {
+                label: {
+                    value: "",
+                    lang: "en"
+                },
+                displayLabel: ""
+            },
+            required: false,
+            readOnly: false
         },
-        initialize: function() {},
+        initialize: function() {
+        },
         getXML: function() {
-            var xml = "", obj = this;
-            _.each(['id', 'label', 'name', 'required', 'order', 'cssclass'], function(el) {
-                xml += '<' + el + '>' + obj.get(el) + '</' + el + '>';
-            });
-            return xml;
+            return  "<label>" + this.get('label') + '</label>' +
+                    "<name>" +
+                    "   <label lang='" + this.get('name')['label']['lang'] + "'>" + this.get('name')['label']['value'] + '</label>' +
+                    "   <display_label>" + this.get('name')['displayLabel'] + '</display_label>' +
+                    "</name>" +
+                    "<required>" + this.get('required') + '</required>' +
+                    "<readOnly>" + this.get('readOnly') + '</readOnly>';
         }
     });
 
+    formBuilder.HorizontalLine = Backbone.Model.extend({
+        defaults: {
+            order: 1
+        },
+        getXML: function() {
+            return '<order>' + this.get('order') + '</order>';
+        }
+    }, {
+        type: 'hr',
+        xmlTag: 'field_horizontalLine'
+    });
+
     formBuild.HiddenField = Backbone.Model.extend({
-        id: 'hiddenField',
-        name: 'hiddenField',
-        value: "",
-        getXml : function() {
-            var xml = "<field_hidden>", obj = this;
-            _.each(['id', 'name', 'value'], function(el) {
-                xml += '<' + el + '>' + obj.get(el) + '</' + el + '>';
-            });
-            return xml + '</field_hidden>';
+        defaults: {
+            id: 1,
+            name: {
+                label: {
+                    value: "",
+                    lang: "en"
+                },
+                displayLabel: ""
+            },
+            defaultValue: ""
+        },
+        getXML: function() {
+            return  "<name>" +
+                    "   <label lang='" + this.get('name')['label']['lang'] + "'>" + this.get('name')['label']['value'] + '</label>' +
+                    "   <display_label>" + this.get('name')['displayLabel'] + '</display_label>' +
+                    "</name>" +
+                    "<value>" + this.get('value') + '</value>';
         }
     }, {
         type: 'hidden',
@@ -51,137 +79,124 @@ var formBuilder = (function(formBuild) {
 
     formBuild.TextField = formBuild.BaseField.extend({
         defaults: {
-            value       : "",
-            placeholder : "Write some text",
+            defaultValue: "",
+            hint        : "Write some text",
             size        : 255
         },
-        initialize: function() {},
         getXML: function() {
-            var xml =   formBuild.BaseField.prototype.getXML.apply(this, arguments);
-            xml     += '<value>'        + this.get('value')         + '</value>';
-            xml     += '<placeholder>'  + this.get('placeholder')   + '</placeholder>';
-            xml     += '<size>'         + this.get('size')          + '</size>';
+            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
+            xml += '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
+                    '<hint>' + this.get('hint') + '</hint>' +
+                    '<size>' + this.get('size') + '</size>';
             return xml;
         }
     }, {
-        type    : "text",
-        xmlTag  : 'field_text'
+        type: "text",
+        xmlTag: 'field_text'
     });
 
-    formBuild.OptionsField  = formBuild.BaseField.extend({
+    formBuild.EnumerationField = formBuild.BaseField.extend({
         defaults: {
-            options: []
+            options: [],
+            defaultValue: 0
         },
-        initialize: function() {},
-        addOption : function(lab, val, select) {
+        addOption: function(lab, val, select) {
             this.get('options').push({
-                label   : lab,
-                value   : val,
-                selected: select
+                label: lab,
+                value: val
             });
+            this.set('defaultValue', select);
             this.trigger('change');
         },
         removeOption: function(index) {
             this.get('options').splice(index, 1);
             this.trigger('change');
         },
-        updateSelectedOption: function(index, select) {
-            _.each (this.get('options'), function(el, idx) {
-                el['selected'] = false;
-            });
-            this.get('options')[index]['selected'] = select;
+        updateSelectedOption: function(select) {
+            this.set('defaultValue', select);
         },
-        updateOption : function(index, lab, val, select) {
-          this.get('options')[index] = {
-              label     : lab,
-              value     : val,
-              selected  : select
-          };
-          this.trigger('change');
+        updateOption: function(index, lab, val) {
+            this.get('options')[index] = {
+                label: lab,
+                value: val
+            };
+            this.trigger('change');
         },
-        getOption : function(index) {
+        getOption: function(index) {
             return this.get('options')[index];
         },
         getXML: function() {
-            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
-            var tag = this.constructor.subTag;
+            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments) + '<defaultValue>' + this.get('defaultValue') + '</defaultValue>';
             _.each(this.get('options'), function(el) {
-                xml += '<' + tag + '>';
-                xml += '<label>'    + el["label"]    + '</label>';
-                xml += '<value>'    + el["value"]    + '</value>';
-                xml += '<selected>' + el["selected"] + '</selected>';
-                xml += '</' + tag + '>';
+                xml +=  '<option>' +
+                        '   <label>' + el["label"] + '</label>' +
+                        '   <value>' + el["value"] + '</value>' +
+                        '</option>';
             });
             return xml;
         }
     }, {
-        type    : 'options',
-        xmlTag  : 'field_select',
-        subTag  : 'option'
+        type: 'options',
+        xmlTag: 'field_enum'
     });
 
-    formBuild.CheckBoxField = formBuild.OptionsField.extend({
+    formBuild.CheckBoxField = formBuild.EnumerationField.extend({
         getXML: function() {
-            var xml =   formBuild.OptionsField.prototype.getXML.apply(this, arguments);
-            return xml;
-        },
-        updateSelectedOption : function(index, select) {
-            this.get('options')[index]['selected'] = select;
+            return formBuild.EnumerationField.prototype.getXML.apply(this, arguments);
         }
     }, {
-        type    : 'checkbox',
-        xmlTag  : 'field_checkbox',
-        subTag  : 'checkbox'
+        type: 'checkbox',
+        xmlTag: 'field_checkbox',
     });
 
-    formBuild.RadioField  = formBuild.OptionsField.extend({
+    formBuild.RadioField = formBuild.EnumerationField.extend({
         getXML: function() {
-            var xml =   formBuild.OptionsField.prototype.getXML.apply(this, arguments);
-            return xml;
-        },
-        updateSelectedOption : function(index, select) {
-            this.get('options')[index]['selected'] = select;
+            return formBuild.EnumerationField.prototype.getXML.apply(this, arguments);
         }
     }, {
-        type    : 'radio',
-        xmlTag  : 'field_radio',
-        subTag  : 'radio'
+        type: 'radio',
+        xmlTag: 'field_radio'
+    });
+
+    formBuild.SelectField = formBuild.EnumerationField.extend({
+        getXML: function() {
+            return formBuild.EnumerationField.prototype.getXML.apply(this, arguments);
+        }
+    }, {
+        type: 'select',
+        xmlTag: 'field_select'
     });
 
     //  Copy Basefield properties to model who extends it
-    _.defaults(formBuild.TextField.prototype.defaults,        formBuild.BaseField.prototype.defaults);
-    _.defaults(formBuild.OptionsField.prototype.defaults,     formBuild.BaseField.prototype.defaults);
-    _.defaults(formBuild.RadioField.prototype.defaults,       formBuild.BaseField.prototype.defaults);
-    _.defaults(formBuild.CheckBoxField.prototype.defaults,    formBuild.BaseField.prototype.defaults);
+    _.defaults(formBuild.TextField.prototype.defaults,          formBuild.BaseField.prototype.defaults);
+    _.defaults(formBuild.EnumerationField.prototype.defaults,   formBuild.BaseField.prototype.defaults);
+    _.defaults(formBuild.RadioField.prototype.defaults,         formBuild.EnumerationField.prototype.defaults);
+    _.defaults(formBuild.CheckBoxField.prototype.defaults,      formBuild.EnumerationField.prototype.defaults);
+    _.defaults(formBuild.SelectField.prototype.defaults,        formBuild.EnumerationField.prototype.defaults);
 
-    formBuild.DateField       = formBuild.TextField.extend({
+    formBuild.DateField = formBuild.TextField.extend({
         defaults: {
             format: "dd/mm/yyyy"
         },
-        initialize: function() {},
         getXML: function() {
-            var xml =   formBuild.TextField.prototype.getXML.apply(this, arguments);
-            xml += '<format>' + this.get("format") + '</format>';
-            return xml;
+            return formBuild.TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
         }
     }, {
         type: "date",
         xmlTag: 'field_date'
     });
 
-    formBuild.NumericField    = formBuild.TextField.extend({
+    formBuild.NumericField = formBuild.TextField.extend({
         defaults: {
-            minValue    : 0,
-            maxValue    : 100,
-            step        : 1
+            minValue: 0,
+            maxValue: 100,
+            step: 1
         },
-        initialize : function() {},
-        getXML : function() {
-            var xml =   formBuild.TextField.prototype.getXML.apply(this, arguments);
-            xml += '<min>' + this.get("minValue") + '</min>';
-            xml += '<max>' + this.get("maxValue") + '</max>';
-            xml += '<step>' + this.get("step") + '</step>';
-            return xml;
+        getXML: function() {
+            return  formBuild.TextField.prototype.getXML.apply(this, arguments) +
+                    '<min>' + this.get("minValue") + '</min>' +
+                    '<max>' + this.get("maxValue") + '</max>' +
+                    '<step>' + this.get("step") + '</step>';
         }
     }, {
         type: 'numeric',
@@ -192,11 +207,8 @@ var formBuilder = (function(formBuild) {
         defaults: {
             resizable: false
         },
-        initialize : function() {},
-        getXML : function() {
-            var xml =   formBuild.TextField.prototype.getXML.apply(this, arguments);
-            xml += '<resizable>' + this.get("resizable") + '</resizable>';
-            return xml;
+        getXML: function() {
+            return formBuild.TextField.prototype.getXML.apply(this, arguments) + '<resizable>' + this.get("resizable") + '</resizable>';
         }
     }, {
         type: 'longText',
@@ -204,9 +216,9 @@ var formBuilder = (function(formBuild) {
     });
 
     //  Copy Textfield properties to model who extends it
-    _.defaults(formBuild.NumericField.prototype.defaults,     formBuild.TextField.prototype.defaults);
-    _.defaults(formBuild.DateField.prototype.defaults,        formBuild.TextField.prototype.defaults);
-    _.defaults(formBuild.LongTextField.prototype.defaults,    formBuild.TextField.prototype.defaults);
+    _.defaults(formBuild.NumericField.prototype.defaults,   formBuild.TextField.prototype.defaults);
+    _.defaults(formBuild.DateField.prototype.defaults,      formBuild.TextField.prototype.defaults);
+    _.defaults(formBuild.LongTextField.prototype.defaults,  formBuild.TextField.prototype.defaults);
 
     return formBuild;
 
