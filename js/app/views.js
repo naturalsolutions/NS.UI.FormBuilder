@@ -72,14 +72,28 @@ var formBuilder = (function(formBuild) {
         }
     });
 
+    formBuild.HorizontalLineView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {});
+        },
+        render : function() {
+            formBuild.BaseView.prototype.render.apply(this, arguments);
+            $(this.el).addClass('min')
+        }
+    }, {
+        templateSrc:    '<hr class="span10 offset1" />' +
+                        '<div class="span1"> '+
+                        '   <i class="fa fa-trash-o"></i> '+
+                        '</div>'
+    });
+
     formBuild.HiddenView = formBuild.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
-            });
-        },
+            return _.extend({}, formBuild.BaseView.prototype.events, {});
+        }
     }, {
         templateSrc :   '<label class="span3 grey">My hidden field</label> '+
-                        '<input type="text" disabled class="span8" name="<%= name %>" id="<%= id%>" value="<%= value %>" /> '+
+                        '<input type="text" disabled class="span8" name="<%= name %>" id="<%= id%>" value="<%= defaultValue %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div>'
@@ -103,7 +117,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         templateSrc:    '<label class="span3 <% if (required === true) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="text" class="span8 <%= cssclass %>" name="<%= name %>" readonly="readonly"  id="<%= id%>" placeholder="<%= placeholder %>" value="<%= value %>" /> '+
+                        '<input type="text" class="span8" name="<%= name %>" readonly="<%= readOnly %>"  id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div>'
@@ -123,7 +137,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         templateSrc :   '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="number" class="span8 <%= cssclass %> spin" name="<%= name %>" step="<%= step %>" id="<%= id%>" placeholder="<%= placeholder %>" min="<%= minValue %>" max="<%= maxValue %>" /> '+
+                        '<input type="number" class="span8 spin" name="<%= name %>" step="<%= step %>" id="<%= id%>" placeholder="<%= hint %>" min="<%= minValue %>" max="<%= maxValue %>" value="<% defaultValue || 0 %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div>'
@@ -138,9 +152,9 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;" id="<%= id %>">'+
-                            '<% _.each(options, function(el) { %>' +
+                            '<% _.each(options, function(el, index) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input type="radio" class="<%= cssclass %>" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (el.selected) {%> checked <% } %> /> '+
+                                    '<input type="radio" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (defaultValue == index) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
                                 '</label> '+
                             '<% }); %>'+
@@ -161,9 +175,9 @@ var formBuilder = (function(formBuild) {
         },
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
-                        '<select name="<% name %>" class="span8 <%= cssclass %>"> '+
+                        '<select name="<% name %>" class="span8"> '+
                             '<% _.each(options, function(el, idx) { %>' +
-                                '<option data-idx=<%= idx %> value="<%= el.value %>" <% if (el.selected) {%> selected <% } %> ><%= el.label %></option>'+
+                                '<option data-idx=<%= idx %> value="<%= el.value %>" <% if (defaultValue == idx) {%> selected <% } %> ><%= el.label %></option>'+
                             '<% }) %>' +
                         '</select> '+
                         '<div class="span1 .pull-right"> '+
@@ -185,7 +199,7 @@ var formBuilder = (function(formBuild) {
                         '<div class="span8" style="border : 2px #eee solid;">'+
                             '<% _.each(options, function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input data-idx=<%= idx %> type="checkbox" class="<%= cssclass %>" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (el.selected) {%> checked <% } %> /> '+
+                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (defaultValue == idx) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
                                 '</label> '+
                             '<% }); %>'+
@@ -207,7 +221,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>" ><%= label %></label>'+
-                        '<textarea class="span8 <%= cssclass %>" style="<% if(!resizable){ %>resize: none<%}%>" class="span8"  name="<%= name %>" id="<%= id%>" placeholder="<%= placeholder %>"><%= value %></textarea>'+
+                        '<textarea class="span8" style="<% if(!resizable){ %>resize: none<%}%>" class="span8"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
                         '<div class="span1"> '+
                             '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div> '
@@ -226,7 +240,7 @@ var formBuilder = (function(formBuild) {
        }
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="text" class="span8 <%= cssclass %>" name="<%= name %>" id="<%= id%>" placeholder="<%= placeholder %>" value="<%= value %>" /> '+
+                        '<input type="text" class="span8" name="<%= name %>" id="<%= id%>" placeholder="<%= placeholder %>" value="<%= defaultValue %>" /> '+
                         '<div class="span1"> '+
                         '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
                         '</div>'
@@ -254,6 +268,12 @@ var formBuilder = (function(formBuild) {
             $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
 
             switch (classe) {
+                case 'hr':
+                    vue = new formBuild.HorizontalLineView({
+                        el      : $("#"+id),
+                        model   : el
+                    });
+                    break;
                 case 'hidden' :
                     vue = new formBuild.HiddenView({
                         el      : $("#"+id),
@@ -266,7 +286,7 @@ var formBuilder = (function(formBuild) {
                         model   : el
                     });
                     break;
-                case 'options':
+                case 'select':
                     vue = new formBuild.OptionsFieldView({
                         el      : $("#"+id),
                         model   : el
@@ -442,7 +462,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<div class="row-fluid">'+
                             '<input type="text" id="protocolName" name="protocolName" value="<%= this.collection.name %>" />'+
-                            '<hr/><br />' +
+                            '<hr class="mainHr"/><br />' +
                         '</div>'+
                         '<div class="row-fluid">'+
                             '<div class="span10 offset1 drop"></div>'+
@@ -638,57 +658,48 @@ var formBuilder = (function(formBuild) {
                                 '</h2>'+
                                 '<% var fName = this.model.constructor.type; %>'+
 
-                                '<% if (fName != "hidden") { %>'+
+                                '<% if (! _.contains(["hidden"], fName)) { %>'+
                                     //  only if field is not a hidden field
                                     '<div class="row-fluid">'+
-                                        '<label class="span10 offset1">Field label</label>'+
+                                        '<label class="span10 offset1">Label</label>'+
                                     '</div>'+
                                     '<div class="row-fluid">'+
-                                        '<input class="span10 offset1" type="text" id="fieldLabel" data-attr="label" placeholder="Field label" value="<%= label || "" %>" />'+
+                                        '<input class="span10 offset1" type="text" id="fieldLabel" data-attr="label" placeholder="Label" value="<%= label || "" %>" />'+
                                     '</div>'+
                                     '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
                                         '<div class="row-fluid">'+
-                                            '<label class="span10 offset1">Field placeholder value</label>'+
+                                            '<label class="span10 offset1">Hint value</label>'+
                                         '</div>'+
                                         '<div class="row-fluid">'+
-                                            '<input class="span10 offset1" type="text" id="fieldPlaceholder" data-attr="placeholder" placeholder="Placeholder" value="<%= placeholder || "" %>" />'+
+                                            '<input class="span10 offset1" type="text" id="fieldPlaceholder" data-attr="hint" placeholder="Hint value" value="<%= hint || "" %>" />'+
                                         '</div>'+
                                     '<% } %>'+
                                 '<% } %>'+
 
                                 '<% if(! _.contains(["radio", "checkbox", "options"], fName) ) { %>'+
                                     '<div class="row-fluid">'+
-                                        '<label class="span10 offset1">Field default value</label>'+
+                                        '<label class="span10 offset1">Default value</label>'+
                                     '</div>'+
                                     '<div class="row-fluid">'+
-                                        '<input class="span10 offset1" type="text" id="fieldValue" data-attr="value" placeholder="Default value" value="<%= value %>" />'+
+                                        '<input class="span10 offset1" type="text" id="fieldValue" data-attr="defaultValue" placeholder="Default value" value="<%= defaultValue %>" />'+
                                     '</div>'+
                                 '<% } %>'+
                                 '<div class="row-fluid hide">'+
-                                    '<label class="span10 offset1">Field HTML Id</label>'+
+                                    '<label class="span10 offset1">Id</label>'+
                                 '</div>'+
                                 '<div class="row-fluid hide">'+
-                                    '<input class="span10 offset1" type="text" id="fieldId" data-attr="id" placeholder="Field ID" value="<%= id %>"/>'+
+                                    '<input class="span10 offset1" type="text" id="fieldId" data-attr="id" placeholder="Id" value="<%= id %>"/>'+
                                 '</div>'+
                                 '<div class="row-fluid hide">'+
-                                    '<label class="span10 offset1">Field HTML name</label>'+
+                                    '<label class="span10 offset1">Name</label>'+
                                 '</div>'+
                                 '<div class="row-fluid hide">'+
-                                    '<input class="span10 offset1" type="text" id="fieldName" data-attr="name" placeholder="Field name" value="<%= name %>" />'+
+                                    '<input class="span10 offset1" type="text" id="fieldName" data-attr="name" placeholder="Name" value="<%= name %>" />'+
                                 '</div>'+
-
-                                '<% if(fName != "hidden") { %>'+
-                                    '<div class="row-fluid hide">'+
-                                        '<label class="span10 offset1">Field HTML class</label>'+
-                                    '</div>'+
-                                    '<div class="row-fluid hide">'+
-                                        '<input class="span10 offset1" type="text" id="fieldcssClass" data-attr="cssclass" placeholder="CSS class" value="<%= cssclass %>" />'+
-                                    '</div>'+
-                                '<% } %>'+
 
                                 '<% if(fName == "date") { %>'+
                                     '<div class="row-fluid">'+
-                                        '<label class="span10 offset1">Field date format</label>'+
+                                        '<label class="span10 offset1">Date format</label>'+
                                     '</div>'+
                                     '<div class="row-fluid">'+
                                         '<input class="span10 offset1" type="text" id="fieldDateFormat" data-attr="format" placeholder="Field format (ex : 21/12/2012)" />'+
@@ -706,7 +717,7 @@ var formBuilder = (function(formBuild) {
                                 '<% } %>'+
                                 '<% if( _.contains(["date", "text", "longtext"], fName) ) { %>'+
                                     '<div class="row-fluid">'+
-                                        '<label class="span10 offset1">Field size</label>'+
+                                        '<label class="span10 offset1">Character size</label>'+
                                     '</div>    '+
                                     '<div class="row-fluid">'+
                                         '<input type="number" class="span10 offset1" id="fieldSizeValue" data-attr="size" value="<%= size %>" />'+
@@ -768,6 +779,10 @@ var formBuilder = (function(formBuild) {
             $(e.target).disableSelection();
             var form = this._collection;
             switch ($(e.target).data("type")) {
+                case 'hr' :
+                    var f = new formBuild.HorizontalLine();
+                    form.collection.add(f);
+                    break;
                 case "hidden" :
                     var f = new formBuild.HiddenField({
                         id      : "hiddenField[" + form.collection.getSize() + "]",
@@ -788,8 +803,8 @@ var formBuilder = (function(formBuild) {
                     form.collection.add(f);
                     break;
 
-                case "options" :
-                    var f = new formBuild.OptionsField({
+                case "select" :
+                    var f = new formBuild.SelectField({
                         id: "optionsField[" + form.collection.getSize() + "]",
                         name: "optionsField[" + form.collection.getSize() + "]",
                         label: 'My options field',
@@ -890,7 +905,7 @@ var formBuilder = (function(formBuild) {
                                 '</div>' +
                             '</div>' +
                             '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="options">' +
+                                '<div class="span10 offset1 fields" data-type="select">' +
                                     'Options' +
                                 '</div>' +
                             '</div>' +
