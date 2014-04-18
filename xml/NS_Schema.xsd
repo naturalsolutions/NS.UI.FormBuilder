@@ -30,6 +30,20 @@
     </xs:complexType>
     
     <!--
+        treeview node element type
+    -->
+    <xs:complexType name="node">
+        <xs:sequence>
+            <xs:element name="title" type="xs:string" />
+            <xs:element name="key" type="xs:string" />
+            <xs:element name="isParent" type="xs:boolean" />
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="children" type="node" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+    
+    <!--
         Base field type declaration
     -->
     <xs:complexType name="fieldType">
@@ -52,6 +66,50 @@
                     <xs:element name="defaultValue" type="xs:string" />
                     <xs:element name="hint"         type="xs:string" />
                     <xs:element name="size"         type="xs:integer" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!--
+        file field type
+    -->
+    <xs:complexType name="field_fileType">
+        <xs:complexContent>
+            <xs:extension base="fieldType">
+                <xs:sequence>
+                    <xs:element name="defaultValue" type="xs:string" />
+                    <xs:element name="file"         type="xs:string" />
+                    <xs:element name="mimeType"     type="xs:string" />
+                    <xs:element name="size"         type="xs:integer" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!--
+        file field type
+    -->
+    <xs:complexType name="field_treeViewType">
+        <xs:complexContent>
+            <xs:extension base="fieldType">
+                <xs:sequence>
+                    <xs:element name="defaultNode" type="xs:integer" />
+                    <xs:element name="multipleSelection" type="xs:boolean" />
+                    <xs:element name="hierarchicSelection" type="xs:boolean" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
+    <!--
+        Pattern field type
+    -->
+    <xs:complexType name="field_patternType">
+        <xs:complexContent>
+            <xs:extension base="field_textType">
+                <xs:sequence>
+                    <xs:element name="pattern" type="xs:string" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -148,6 +206,10 @@
                         <xs:choice minOccurs="0" maxOccurs="unbounded">
                             
                             <xs:element name="field_text"       minOccurs="0" type="field_textType"     />
+                            
+                            <xs:element name="field_pattern"    minOccurs="0" type="field_patternType"     />
+                            
+                            <xs:element name="field_file"       minOccurs="0" type="field_fileType"     />
                             
                             <xs:element name="field_date"       minOccurs="0" type="field_dateType"     />
                             
