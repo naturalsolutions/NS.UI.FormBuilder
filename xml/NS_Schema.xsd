@@ -34,12 +34,10 @@
     -->
     <xs:complexType name="node">
         <xs:sequence>
-            <xs:element name="title" type="xs:string" />
-            <xs:element name="key" type="xs:string" />
+            <xs:element name="title"    type="xs:string" />
+            <xs:element name="key"      type="xs:string" />
             <xs:element name="isParent" type="xs:boolean" />
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="children" type="node" />
-            </xs:choice>
+            <xs:element name="node"     type="node" minOccurs="0" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     
@@ -78,8 +76,8 @@
         <xs:complexContent>
             <xs:extension base="fieldType">
                 <xs:sequence>
-                    <xs:element name="defaultValue" type="xs:string" />
                     <xs:element name="file"         type="xs:string" />
+                    <xs:element name="defaultValue" type="xs:string" />
                     <xs:element name="mimeType"     type="xs:string" />
                     <xs:element name="size"         type="xs:integer" />
                 </xs:sequence>
@@ -94,9 +92,10 @@
         <xs:complexContent>
             <xs:extension base="fieldType">
                 <xs:sequence>
-                    <xs:element name="defaultNode" type="xs:integer" />
-                    <xs:element name="multipleSelection" type="xs:boolean" />
-                    <xs:element name="hierarchicSelection" type="xs:boolean" />
+                    <xs:element name="defaultNode"          type="xs:integer" />
+                    <xs:element name="multipleSelection"    type="xs:boolean" />
+                    <xs:element name="hierarchicSelection"  type="xs:boolean" />
+                    <xs:element name="node"                 type="node" minOccurs="1" maxOccurs="unbounded" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -123,7 +122,7 @@
             <xs:extension base="fieldType">
                 <xs:sequence>
                     <xs:element name="defaultValue" type="xs:string" />
-                    <xs:element name="option" minOccurs="1" maxOccurs="unbounded" type="option" />
+                    <xs:element name="option"       type="option" minOccurs="1" maxOccurs="unbounded"/>
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -226,6 +225,8 @@
                             <xs:element name="field_longText"   minOccurs="0" type="field_longTextType" />
                             
                             <xs:element name="field_mask"       minOccurs="0" type="field_maskType"     />
+                            
+                            <xs:element name="field_tree"       minOccurs="0" type="field_treeViewType" />
                             
                         </xs:choice>
                     </xs:complexType>
