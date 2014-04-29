@@ -63,7 +63,7 @@ var formBuilder = (function(formBuild) {
         changePropertyValue : function(index, value) {
             
             if (index.indexOf("/") > 0) {
-                var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")'
+                var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")';
                 
                 for (var i = 1 ; i < split.length ; i++) {
                     str += '["' + split[i] + '"]';
@@ -511,7 +511,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         type    : 'CheckBox',
-        xmlTag  : 'field_checkbox',
+        xmlTag  : 'field_checkbox'
     });
 
     /**
