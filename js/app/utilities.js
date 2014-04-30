@@ -7,7 +7,7 @@ var formBuilder = (function(formBuild) {
      * @returns {array|Boolean} a boolean if everything is ok or an array with the errors
      */
     formBuild.XMLValidation = function(xmlContent) {
-            
+            var result;
             $.ajax({                
                 url         : 'xml/NS_Schema.xsd',
                 dataType    : 'html',
@@ -52,24 +52,16 @@ var formBuilder = (function(formBuild) {
     formBuild.GetXMLDiff = function (baseText, newText, baseTextName, newTextName, inline, contextSize) {
         
         var base    = difflib.stringAsLines(baseText), 
-            newtxt  = difflib.stringAsLines(newText);
-        var sm      = new difflib.SequenceMatcher(base, newtxt);
-
-        var opcodes         = sm.get_opcodes();
-            /*diffoutputdiv   = $(selector);
-        
-        while (diffoutputdiv.firstChild) {
-            diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-        }*/
+            newtxt  = difflib.stringAsLines(newText),
+            sm      = new difflib.SequenceMatcher(base, newtxt),
+            opcodes = sm.get_opcodes();
 
         // build the diff view and add it to the current DOM
         return diffview.buildView({
             baseTextLines   : base,
             newTextLines    : newtxt,
             opcodes         : opcodes,
-
             // set the display titles for each resource
-
             baseTextName    : baseTextName  || 'Source file',
             newTextName     : newTextName   || 'Updated file',
             contextSize     : contextSize   || null,
