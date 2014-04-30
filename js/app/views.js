@@ -326,7 +326,7 @@ var formBuilder = (function(formBuild) {
         },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView', 'showVersionning');
+            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView');
             this.collection.bind('add', this.addElement);
             this.collection.bind('change', this.updateView);
             this._view = [];
