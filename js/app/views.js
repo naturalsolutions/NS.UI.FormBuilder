@@ -19,7 +19,7 @@
  */
 
 var formBuilder = (function(formBuild) {
-
+    
     /**
      * It's the basic views for all field view.
      */
@@ -51,8 +51,9 @@ var formBuilder = (function(formBuild) {
             this.remove();
         },
         removeView: function() {
-            this.model.collection.remove(this.model);
-            this.model.trigger('destroy');
+            //this.model.collection.remove(this.model);
+            //this.model.trigger('destroy');
+            this.model.set('state', 'delete');
             $(this.el).remove();
             this.remove();
         },
@@ -185,7 +186,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;" id="<%= id %>">'+
-                            '<% _.each(options, function(el, index) { %>' +
+                            '<% _.each(option, function(el, index) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
                                     '<input type="radio" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (defaultValue == index) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
@@ -212,7 +213,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
                         '<select name="<% name %>" class="span8"> '+
-                            '<% _.each(options, function(el, idx) { %>' +
+                            '<% _.each(option, function(el, idx) { %>' +
                                 '<option data-idx=<%= idx %> value="<%= el.value %>" <% if (defaultValue == idx) {%> selected <% } %> ><%= el.label %></option>'+
                             '<% }) %>' +
                         '</select> '+
@@ -236,7 +237,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;">'+
-                            '<% _.each(options, function(el, idx) { %>' +
+                            '<% _.each(option, function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
                                     '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (defaultValue == idx) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
@@ -279,7 +280,7 @@ var formBuilder = (function(formBuild) {
         },
         render : function() {
             formBuild.BaseView.prototype.render.apply(this, arguments);
-            var src = this.model.get('nodes'), self = this.el;
+            var src = this.model.get('node');
             $(this.el).find('#tree').fancytree({
                 source: src,
                 checkbox : true,
@@ -325,14 +326,16 @@ var formBuilder = (function(formBuild) {
         },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView');
+            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView', 'showVersionning');
             this.collection.bind('add', this.addElement);
             this.collection.bind('change', this.updateView);
             this._view = [];
         },
+        
         updateView : function() {
           $(this.el).find('#protocolName').val(this.collection.name);
         },
+        
         addElement: function(el) {
             
             var id = "dropField" + this.collection.length;
@@ -350,7 +353,7 @@ var formBuilder = (function(formBuild) {
                     this._view[id] = vue;
                 }
             } else {
-                this.displayError("Error", "Can't create view for this field");
+                formBuilder.displayError("Error", "Can't create view for this field");
             }
             
         },
@@ -399,10 +402,11 @@ var formBuilder = (function(formBuild) {
                                 saveAs(blob, $(parent).find('input[type="text"]').val() + '.xml');
                                 $(parent).dialog('close');
                             } catch (e) {
-                                coll.displayError("Error", "Can't create file");
+                                console.log (e)
+                                formBuild.displayError("Error", "Can't create file");
                             }
                         } else {
-                            coll.displayError("Error", "You need to enter a name for your file");
+                            formBuild.displayError("Error", "You need to enter a name for your file");
                         }
                     });
                 }
@@ -439,49 +443,30 @@ var formBuilder = (function(formBuild) {
                                 reader.readAsText(file, "UTF-8");
                                 reader.onload = function(evt) {
                                     try {
-                                        var result = coll.collection.validateXML(evt.target.result);
+                                        
+                                        var result = formBuild.XMLValidation(evt.target.result);
                                         if (result !== true) {
                                             var str = 'There is a error on the ' + result['element'] + '<br />';
                                             str += result['message'] + '<br />Please check your XML file';
-                                            coll.displayError(result['error'], str);
+                                            formBuild.displayError(result['error'], str);
+                                        } else {
+                                            coll.collection.updateWithXml(evt.target.result);
                                         }
                                     } catch (err) {
                                         var str = "Your XML File can't be validated.<br />The specific error is : " + err;
-                                        coll.displayError('Error during XML validation', str);
+                                        formBuild.displayError('Error during XML validation', str);
                                     }
                                 };
                                 reader.onerror = function(evt) {
-                                    coll.displayError("An error was occured", 'An error was occure during reading file');
+                                    formBuild.displayError("An error was occured", 'An error was occure during reading file');
                                 };
                             } else {
-                                coll.displayError("File type error", 'Your have to give an XML file.');
+                                formBuild.displayError("File type error", 'Your have to give an XML file.');
                             }
                         } else {
-                            coll.displayError("An error was occured", 'An error was occure during reading file');
+                            formBuild.displayError("An error was occured", 'An error was occure during reading file');
                         }
                     });
-                }
-            });
-        },
-        displayError: function(title, msg) {
-            var modal = $(
-                            '<div id="dialog-message" title="' + title + '">' +
-                                '<p>' +
-                                    '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>' +
-                                    msg +
-                                '</p>' +
-                            '</div>'
-                        );
-            $(modal).dialog({
-                modal       : true,
-                width       : 500,
-                height      : 250,
-                position    : 'center',
-                draggable   : false,
-                buttons: {
-                    Ok: function() {
-                        $(this).dialog("close");
-                    }
                 }
             });
         }
@@ -633,6 +618,7 @@ var formBuilder = (function(formBuild) {
             } else {
                 this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
             }
+            this.model.set('state', 'change');
         },
         
         /**

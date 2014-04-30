@@ -20,8 +20,7 @@ var formBuilder = (function(formBuild) {
      * Basic field model
      * Establishes common field attributes
      */
-    formBuild.BaseField         = Backbone.Model.extend({
-        
+    formBuild.BaseField         = Backbone.Model.extend({        
         defaults: {
             id      : 0,
             label   : "My label",
@@ -48,7 +47,7 @@ var formBuilder = (function(formBuild) {
         
         getSchemaProperty: function(index, property) {            
             if (index.indexOf("/") > 0) {
-                //  Complex index
+                //  Complex index like : /name/label/lang -> ['name']['label']['lang']
                 var split = index.split('/'), str = "this.constructor.schema";                
                 for (var each in split) {                
                     str += (parseInt(each) === split.length - 1) ? '["' + split[each] + '"]' : '["' + split[each] + '"]["elements"]';                    
@@ -58,10 +57,9 @@ var formBuilder = (function(formBuild) {
                 //  Simple index
                 return this.constructor.schema[index][property];
             }
-        }
-        ,
-        changePropertyValue : function(index, value) {
-            
+        },
+        
+        changePropertyValue : function(index, value) {            
             if (index.indexOf("/") > 0) {
                 var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")';
                 
@@ -74,39 +72,26 @@ var formBuilder = (function(formBuild) {
                 this.set(index, value);
             }
         }
+
     }, {
         schema : {
-            id      : { 
-                type    : "integer", 
-                section : "advanced"
-            },
-            label   : { 
-                type    : "string", 
-                section : "simple" 
-            },
+            id      : { type    : "integer", section : "advanced" },
+            label   : { type    : "string", section : "simple" },
             name : {
                 type : "object",
                 elements: {
                     label: {
                         type : "object",
                         elements : {
-                            value: {
-                                type: "string"
-                            },
-                            lang: {
-                                type: "string"
-                            }
+                            value   : { type: "string" },
+                            lang    : { type: "string" }
                         }
                     },                    
                     displayLabel    : {type : "string" }
                 }
             },
-            required : {
-                type : "boolean", section : "advanced"
-            },
-            readOnly : {
-                type : "boolean"
-            }
+            required : { type : "boolean", section : "advanced" },
+            readOnly : { type : "boolean"}
         }
     });
     
@@ -173,7 +158,10 @@ var formBuilder = (function(formBuild) {
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>';
         },
-        initialize : function() {
+        XMLToObject : function(xml) {
+            formBuild.BaseField.prototype.XMLToObject.apply(this, arguments);
+        },
+        initialize : function(options) {
             formBuild.BaseField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.BaseField.schema);
         }
@@ -224,7 +212,7 @@ var formBuilder = (function(formBuild) {
      */
     formBuild.TreeViewField     = formBuild.BaseField.extend({
        defaults : {
-            nodes: [
+            node: [
                 {
                     title   : "Node 1", 
                     key     : "1"
@@ -234,15 +222,16 @@ var formBuilder = (function(formBuild) {
                     key     : "2", 
                     folder  : true, 
                     children: [
-                    {
-                        title   : "Node 2.1", 
-                        key     : "3"
-                    },
-                    {
-                        title   : "Node 2.2", 
-                        key     : "4"
-                    }
-                ]}
+                        {
+                            title: "Node 2.1",
+                            key: "3"
+                        },
+                        {
+                            title: "Node 2.2",
+                            key: "4"
+                        }
+                    ]
+                }
             ],
            defaultNode          : 0,
            multipleSelection    : true,
@@ -253,18 +242,33 @@ var formBuilder = (function(formBuild) {
            formBuild.BaseField.prototype.initialize.apply(this, arguments);
            _.extend(this.constructor.schema, formBuild.BaseField.schema);
            _.bindAll(this, 'getNodeXml', 'getXML');
+           
+           /*_.each(this.get('node'), function(el, idx) {
+               
+               if (el['children'] !== undefined) {
+                   var ch = el['children'];
+                   el['children'] = [];
+                   _.each(ch['node'], function(sub, id) {
+                       sub['folder'] = false;
+                       el['children'][id] = sub;
+                   })   
+               } 
+
+           });           */
        },
        
        getNodeXml : function(node) {
            var str =    '<node>' + 
                         '   <title>'    + node['title']     + '</title>' + 
                         '   <key>'      + node['key']       + '</key>'  +
-                        '   <isParent>' + (node['folder'] === undefined ? "false" : node['folder'])    + '</isParent>';
+                        '   <folder>' + (node['folder'] === undefined ? "false" : node['folder'])    + '</folder>';
                 
                         if (node['folder'] === true) {
+                            str += "<children>";
                             _.each(node['children'], _.bind(function(subNode) {
                                 str +=  this.getNodeXml(subNode);
                             }, this));
+                            str += "</children>";
                         }
                         
            return str + '</node>';
@@ -276,8 +280,7 @@ var formBuilder = (function(formBuild) {
            xml +=   '<defaultNode>'         + this.get('defaultNode')           + '</defaultNode>' + 
                     '<multipleSelection>'   + this.get('multipleSelection')     + '</multipleSelection>' + 
                     '<hierarchicSelection>' + this.get('hierarchicSelection')   + '</hierarchicSelection>';
-            
-           _.each(this.get('nodes'), _.bind(function(el) {
+           _.each(this.get('node'), _.bind(function(el) {
                xml +=   this.getNodeXml(el);
            }, this));
            
@@ -286,17 +289,19 @@ var formBuilder = (function(formBuild) {
        }
     }, {
         type    : 'TreeView',
-        xmlTag  : 'field_tree',
+        xmlTag  : 'field_treeView',
         schema : {
             defaultNode         : { type : "integer" },
             multipleSelection   : { type : "boolean" },
             hierarchicSelection : { type : "boolean" },
-            nodes : {
-                title   : { type : "string"     },
-                key     : { type : "integer"    },
-                folder  : { type : "boolean"    },
-                children: { type : [{ type : "node"}] }
-            }
+            node : [
+                {
+                    title   : { type : "string"     },
+                    key     : { type : "integer"    },
+                    folder  : { type : "boolean"    },
+                    children: [ { type : "node" } ]
+                }
+            ]
         }
     });
 
@@ -305,7 +310,7 @@ var formBuilder = (function(formBuild) {
      */
     formBuild.EnumerationField  = formBuild.BaseField.extend({
         defaults: {
-            options     : [
+            option     : [
                 {
                     label : "My first option", value : 0
                 },
@@ -328,7 +333,7 @@ var formBuilder = (function(formBuild) {
          * @returns {undefined}
          */
         addOption: function(element, select) {
-            this.get('options').push(element);
+            this.get('option').push(element);
             if (select === true) {
                 this.set('defaultValue', element['value']);
             };            
@@ -342,12 +347,12 @@ var formBuilder = (function(formBuild) {
          * @returns {undefined}
          */
         removeOption: function(index) {
-            this.get('options').splice(index, 1);
+            this.get('option').splice(index, 1);
             this.trigger('change');
         },
         
         saveOption: function(index, obj, select) {
-            this.get('options')[index] = obj;
+            this.get('option')[index] = obj;
             if (select === true) {
                 this.set('defaultValue', obj['value']);
             };
@@ -355,12 +360,12 @@ var formBuilder = (function(formBuild) {
         },
         
         getOption: function(index) {
-            return this.get('options')[index];
+            return this.get('option')[index];
         },
         
         getXML: function() {
             var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments) + '<defaultValue>' + this.get('defaultValue') + '</defaultValue>';
-            _.each(this.get('options'), function(el) {
+            _.each(this.get('option'), function(el) {
                 xml +=  '<option>' +
                         '   <label>' + el["label"] + '</label>' +
                         '   <value>' + el["value"] + '</value>' +
@@ -374,13 +379,12 @@ var formBuilder = (function(formBuild) {
         xmlTag  : 'field_enum',
         schema: {
             defaultValue: {type: "integer"},
-            options: {
-                type: "array",
-                values: {
+            option: [
+                {
                     label: {type: "string"},
                     value: {type: "string"}
                 }
-            }
+            ]
         }
     });
     
@@ -511,7 +515,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         type    : 'CheckBox',
-        xmlTag  : 'field_checkbox'
+        xmlTag  : 'field_checkBox'
     });
 
     /**
