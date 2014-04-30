@@ -10,6 +10,7 @@ html, body {
 //  Main classes
 //  ---------------------------------------------------------------------
 .noMarginLeft   { margin-left : 0 !important; }
+.noMarginTop    {margin-top: 0 !important;}
 .navbar         { margin-bottom : 0 !important; }
 .span0          { width : 0px !important; overflow: hidden;}
 .left           { text-align: left !important;}
@@ -98,7 +99,13 @@ html, body {
                 color           : #555;
                 padding-right   : 30px;
             }
+            .min { height: 40px; }
             hr {
+                border-top : #333 1px solid;
+                margin-bottom: 0;
+                padding-bottom: 0px;
+            }
+            .mainHr {
                 .font();
                 border      : 1px #ccc solid;
                 width       : 95%;
@@ -122,7 +129,8 @@ html, body {
                 }
             }
             .dropField {
-                margin-top      : 5px;
+                .noMarginTop();
+                padding-top      : 5px;
                 margin-bottom   : 5px;
                 margin-left     : 0!important;
                 background : #fff;
@@ -259,6 +267,7 @@ html, body {
                                         width   : 15px;
                                         height  : 15px;
                                     }
+                                    
                                 }
                             }
                         }
@@ -267,4 +276,35 @@ html, body {
             }
         }
     }
+}
+
+.table {
+    tr {
+        background : white;
+    }
+}
+
+.bordered {
+    border : 2px #aaa solid;
+    background : #fff;
+}
+
+.modal {
+    background: #fff;
+    height : 350px;
+    margin-top: 100px;
+}
+
+.new { background : rgba(0, 255, 0, 0.5) !important; }
+
+.change { background : rgba(255, 165, 0, 0.5); }
+
+.delete { background : rgba(255, 0, 0, 0.5); }
+
+.grey { background : #aaa; }
+
+.transparent { background : transparent !important; }
+
+.diff {
+    margin-bottom: 150px;
 }
