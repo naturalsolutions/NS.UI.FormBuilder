@@ -18,72 +18,117 @@ $(document).ready(function() {
         formBuilder.formView.importXML();
     });
 
-    
-    
     $('#clear').click (function() {
         formBuilder.clear();
-    })
-
-    $('#run').click (function() {
-        gremlins.createHorde()
-            .gremlin(gremlins.species.formFiller())
-            .gremlin(gremlins.species.clicker().clickTypes(['click']))
-            .gremlin(gremlins.species.scroller())
-            .gremlin(function() {
-                $('.fields').each(function(el, idx) {
-                    $(idx).dblclick();
-                });
-                var things = $('.fa-trash-o');
-                $(things[Math.floor(Math.random()*things.length)]).click()
-                things = $('.fa-wrench');
-                $(things[Math.floor(Math.random()*things.length)]).click()
-            })
-            .unleash();
-    });
-    
-    function diffUsingJS() {
-        
-        // get the baseText and newText values from the two textboxes, and split them into lines
-        var base    = difflib.stringAsLines('<form>\n<element><name>A</name></element>\n</form>');
-        var newtxt  = difflib.stringAsLines('<form>\n<element><name>A</name></element>\n<element><name>b</name></eloement>\n</form>');
-
-        // create a SequenceMatcher instance that diffs the two sets of lines
-        var sm = new difflib.SequenceMatcher(base, newtxt);
-
-        // get the opcodes from the SequenceMatcher instance
-        // opcodes is a list of 3-tuples describing what changes should be made to the base text
-        // in order to yield the new text
-        var opcodes         = sm.get_opcodes();
-        var diffoutputdiv   = $(".dropArea");
-        while (diffoutputdiv.firstChild) {
-            diffoutputdiv.removeChild(diffoutputdiv.firstChild);
-        }
-        var contextSize     = $("contextSize").value;
-        contextSize         = contextSize ? contextSize : null;
-
-        // build the diff view and add it to the current DOM
-        diffoutputdiv.append(
-            diffview.buildView({
-
-                baseTextLines   : base,
-                newTextLines    : newtxt,
-                opcodes         : opcodes,
-
-                // set the display titles for each resource
-
-                baseTextName    : "Base Text",
-                newTextName     : "New Text",
-                contextSize     : contextSize,
-                viewType        : $("inline").checked ? 1 : 0
-            })
-        );
-
-        // scroll down to the diff view window.
-        //location = url + "#diff";
-    }
+    });    
     
     $('#show').click(function() {
-        diffUsingJS();
+        var html =  '<div id="popup" class="row-fluid">'+
+                        '<h2 class="offset1">Your XMLs will be validated after import</h2><br />'+
+                        '<div class="row-fluid">'+
+                        '   <input type="file" id="sourceHide"  class="hide" />'+
+                        '   <label class="span2 offset1">Source XML file</label>'+
+                        '   <input type="text" class="span5" id="source" placeholder="Your XML File" />'+
+                        '   <button type="button" class="span3" id="findSource" style="margin-left: 10px;">Find</button>'+
+                        '</div>' + 
+                        '<div class="row-fluid">'+
+                        '   <input type="file" id="updateHide"  class="hide" />'+
+                        '   <label class="span2 offset1">Updated XML file</label>'+
+                        '   <input type="text" class="span5" id="update" placeholder="Your XML File" />'+
+                        '   <button type="button" class="span3" id="findUpdate" style="margin-left: 10px;">Find</button>'+
+                        '</div>'+
+                        '<div class="row-fluid">'+
+                            '<br />'+
+                            '<button class="span4 offset3" id="versionningButton">Run versionning</button>'+
+                        '</div>'+
+                    '</div>';
+            
+        $(html).dialog({
+            
+            modal       : true,
+            width       : 750,
+            resizable   : false,
+            draggable   : false,
+            position    : 'center',
+            
+            create: function() {
+                
+                $(this).find('#findSource, #findUpdate').bind('click', function() {
+                    $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide' ).trigger('click');
+                });
+                
+                $(this).find('input[type="file"]').bind('change', function() {
+                    var id      = $(this).prop('id').replace('Hide', '');
+                    var split   = $(this).val().split('\\');                    
+                    $('#' + id).val( split[ split.length - 1] );
+                });
+                
+                $(this).find('#versionningButton').bind('click', _.bind(function() {
+                    
+                    $(this).dialog('close');
+                    
+                    var source = $(this).find('#sourceHide')[0].files[0];
+                    var update = $(this).find('#updateHide')[0].files[0];
+                    
+                    var srcName = source['name'], updName = update['name'];
+                    
+                    if (source !== null && update !== null) {
+                        
+                        if (source.type === "text/xml" && update.type === "text/xml") {
+                            
+                            var reader = new FileReader();
+                            
+                            reader.readAsText(source, "UTF-8");
+                            
+                            reader.onload = function(evt) {
+                                    
+                                try {
+                                    
+                                    var result = formBuilder.XMLValidation(evt.target.result);
+                                    
+                                    if (result !== true) {
+                                        //  error
+                                    } else {
+                                        source = evt.target.result;
+                                        
+                                        reader = new FileReader();
+                                        reader.readAsText(update, "UTF-8");
+                                        
+                                        reader.onload = function(evt) {
+                                            
+                                           result = formBuilder.XMLValidation(evt.target.result);
+                                            if (result === true) {
+                                                update = evt.target.result;
+                                               
+                                               $('.widgetsPanel').switchClass('span3', 'span0', 250, function() {
+                                                   $('.dropArea').append ( formBuilder.GetXMLDiff(source, update, srcName, updName)).switchClass('span9', 'span12', 250).find('.diff').addClass('span11');
+                                               })
+                                            }
+                                                
+                                        };
+                                    }
+                                    
+                                } catch(exp) {
+                                    formBuilder.displayError("Error");
+                                }
+                            };
+                            
+                            reader.onerror = function(evt) {
+                                formBuilder.displayError ("Reading error", 'An error was occure during reading file');
+                            };
+                            
+                        } else {
+                            formBuilder.displayError ('File mime type error', "You must choose only XML files");
+                        }
+                        
+                    } else {
+                        formBuilder.displayError ("Error durring XML loading ! ");
+                    }
+
+                }, this));
+            }
+        });
+
     });
 
 
@@ -113,13 +158,19 @@ var formBuilder = (function(formBuild) {
      */
     formBuild.Form = Backbone.Collection.extend({
         model: formBuild.BaseField,
-        
+
         initialize: function(models, options) {
             this.name   = options.name || 'My form';
             this.count  = 0;
-            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'validateXML');
+            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'readXSD');
         },
 
+        /**
+         * Allow to arrange the collection through model id
+         * 
+         * @param {formBuild.BaseModel} model  model
+         * @returns {integer} comparaison between id
+         */
         comparator: function(model) {
             return model.get(model.id);
         },
@@ -128,6 +179,9 @@ var formBuilder = (function(formBuild) {
             return this.length;
         },
 
+        /**
+         * Clear form collection
+         */
         clearAll: function() {
             while (this.models.length > 0) {
                 var el = this.at(this.models.length - 1);
@@ -136,6 +190,10 @@ var formBuilder = (function(formBuild) {
             this.count = 0;
         },
 
+        /**
+         * Extract XML code from models values
+         * @returns {string} XML code
+         */
         getXML: function() {
             var arr     = this.models.slice(1, this.models.length);
             var xml     = $.parseXML('<?xml version="1.0" ?><form id="test attribute"   xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com note.xsd"></form>');
@@ -150,156 +208,54 @@ var formBuilder = (function(formBuild) {
             });
 
             return (new XMLSerializer()).serializeToString(xml);
+        },        
+        
+        /**
+         * 
+         * @param {type} tag
+         * @returns {unresolved}
+         */
+        tagNameToClassName: function(tag) {
+            var split = tag.split('_');
+            split[1] = split[1][0].toUpperCase() + split[1].slice(1);
+            split[0] = split[0][0].toUpperCase() + split[0].slice(1);
+            return split.reverse().join("");
         },
-
-        validateXML: function(xmlContent) {
-            var result = "";
-            
-            $.ajax({
-                
-                url         : 'xml/NS_Schema.xsd',
-                dataType    : 'html',
-                async       : false
-                
-            }).done(_.bind(function(data) {
-                
-                var Module = {
-                    xml         : xmlContent,
-                    schema      : data,
-                    arguments   : ["--noout", "--schema", 'NS_Schema.xsd', 'output.xml']
-                }, xmllint = validateXML(Module);
-
-                if (xmllint.indexOf('validates') > 0) {
-                    this.reset();
-                    this.updateWithXml(xmlContent);
-                    result = true;
-                } else {
-                    var split   = xmllint.split(':');
-                    result      = {
-                        error   : split[3],
-                        element : split[2],
-                        message : split[split.length - 1].split('.', 1)[0]
-                    };
-                }
-
-            }, this)).error(function(jqXHR, textStatus, errorThrown) {
-                throw errorThrown.message;
-            });
-
-            return result;
+        
+        addElement: function(element, nameType) {
+            var el = new formBuild[nameType](element);
+            if (el !== null) {
+                this.add(el);
+            }
         },
-
+        
+        /**
+         * 
+         * @param {type} content
+         * @returns {undefined}
+         */
         updateWithXml: function(content) {
             this.reset();
-            var xmlDoc = $.parseXML(content), xml = $(xmlDoc);
             
-            this.name = xml.find('form').find('name').first().text();
+            var xmlDoc = $.parseXML(content), element = null, fieldNameType = "", array = null;
+            
+            var form = $.xml2json(xmlDoc);
+            delete form['xmlns'];
+            delete form['xmlns:xsi'];
+            delete form['xsi:schemaLocation'];
+            
+            _.each(form['fields'], _.bind(function(el, idx) {               
 
-            xml.find('form').find('fields').children().each( _.bind(function(idx, el) {
-
-                var array = {
-                    id: $(el).prop('id'),
-                    name: {
-                        label: {
-                            value   : $(el).find('name').find('label').text(),
-                            lang    : $(el).find('name').find('label').prop('lang')
-                        },
-                        displayLabel: $(el).find('name').find('display_label').text()
-                    },
-                    label   : $(el).find('label').first().text(),
-                    required: $(el).find('required').text()
-                }, element = null;
-
-                switch ($(el).prop('tagName')) {
-                    
-                    case 'field_hidden' :
-                        element = new formBuild.HiddenField({
-                            value: $(el).find('value').text()
-                        });
-                        break;
-                        
-                    case 'field_text':
-                        element = new formBuild.TextField({
-                            defaultValue: $(el).find('defaultValue').text(),
-                            size        : $(el).find('size').text(),
-                            hint        : $(el).find('hint').text()
-                        });
-                        break;
-                        
-                    case 'field_date':
-                        element = new formBuild.DateField({
-                            defaultValue: $(el).find('defaultValue').text(),
-                            size        : $(el).find('size').text(),
-                            hint        : $(el).find('hint').text(),
-                            format      : $(el).find('format').text(),
-                        });
-                        break;
-                    case 'field_longText':
-                        element = new formBuild.LongTextField({
-                            defaultValue: $(el).find('defaultValue').text(),
-                            size        : $(el).find('size').text(),
-                            hint        : $(el).find('hint').text(),
-                            resizable   : $(el).find('resizable').text()
-                        });
-                        break;
-                    case 'field_numeric':
-                        element = new formBuild.NumericField({
-                            defaultValue: $(el).find('defaultValue').text(),
-                            size        : $(el).find('size').text(),
-                            hint        : $(el).find('hint').text(),
-                            min         : $(el).find('min').text(),
-                            max         : $(el).find('max').text(),
-                            step        : $(el).find('step').text()
-                        });
-                        break;
-                    case 'field_checkbox':
-                        var checkbox = [];
-                        $(el).find('checkbox').each(function(index, each) {
-                            checkbox.push({
-                                label: $(each).find('label').text(),
-                                value: $(each).find('value').text()
-                            });
-                        });
-                        element = new formBuild.CheckBoxField({
-                            options     : checkbox,
-                            defaultValue: $(el).find('defaultValue').text(),
-                        });
-                        break;
-                    case 'field_select':
-                        var options = [];
-                        $(el).find('option').each(function(index, each) {
-                            options.push({
-                                label: $(each).find('label').text(),
-                                value: $(each).find('value').text()
-                            });
-                        });
-                        element = new formBuild.OptionsField({
-                            options     : options,
-                            defaultValue: $(el).find('defaultValue').text(),
-                        });
-                        break;
-                    case 'field_radio':
-                        var radios = [];
-                        $(el).find('radio').each(function(index, each) {
-                            radios.push({
-                                label: $(each).find('label').text(),
-                                value: $(each).find('value').text()
-                            });
-                        });
-                        element = new formBuild.RadioField({
-                            options     : radios,
-                            defaultValue: $(el).find('defaultValue').text()
-                        });
-                        break;
+                fieldNameType = this.tagNameToClassName(idx);                
+                if (el.length > 1) {
+                    _.each(el, _.bind(function(subElement, subIndex) {
+                        this.addElement(subElement, fieldNameType);                        
+                    }, this));
+                } else {
+                    this.addElement(el, fieldNameType);
                 }
 
-                if (element !== null) {
-                    element.set(array);
-                    this.add(element);
-                    element.set('state', 'none');
-                }
             }, this));
-
         }
     });
 
@@ -335,7 +291,7 @@ var formBuilder = (function(formBuild) {
 
                 this.panelView = new formBuild.PanelView({
                     el: $('.widgetsPanel'),
-                    collection: this.form
+                    collection: this.form,
                 });
                 this.panelView.render();
 
@@ -380,8 +336,7 @@ var formBuilder = (function(formBuild) {
      * Basic field model
      * Establishes common field attributes
      */
-    formBuild.BaseField         = Backbone.Model.extend({
-        
+    formBuild.BaseField         = Backbone.Model.extend({        
         defaults: {
             id      : 0,
             label   : "My label",
@@ -393,8 +348,7 @@ var formBuilder = (function(formBuild) {
                 displayLabel: "field"
             },
             required: false,
-            readOnly: false,
-            state : "new"
+            readOnly: false
         },
         
         getXML: function() {
@@ -409,7 +363,7 @@ var formBuilder = (function(formBuild) {
         
         getSchemaProperty: function(index, property) {            
             if (index.indexOf("/") > 0) {
-                //  Complex index
+                //  Complex index like : /name/label/lang -> ['name']['label']['lang']
                 var split = index.split('/'), str = "this.constructor.schema";                
                 for (var each in split) {                
                     str += (parseInt(each) === split.length - 1) ? '["' + split[each] + '"]' : '["' + split[each] + '"]["elements"]';                    
@@ -419,12 +373,11 @@ var formBuilder = (function(formBuild) {
                 //  Simple index
                 return this.constructor.schema[index][property];
             }
-        }
-        ,
-        changePropertyValue : function(index, value) {
-            
+        },
+        
+        changePropertyValue : function(index, value) {            
             if (index.indexOf("/") > 0) {
-                var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")'
+                var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")';
                 
                 for (var i = 1 ; i < split.length ; i++) {
                     str += '["' + split[i] + '"]';
@@ -435,39 +388,26 @@ var formBuilder = (function(formBuild) {
                 this.set(index, value);
             }
         }
+
     }, {
         schema : {
-            id      : { 
-                type    : "integer", 
-                section : "advanced"
-            },
-            label   : { 
-                type    : "string", 
-                section : "simple" 
-            },
+            id      : { type    : "integer", section : "advanced" },
+            label   : { type    : "string", section : "simple" },
             name : {
                 type : "object",
                 elements: {
                     label: {
                         type : "object",
                         elements : {
-                            value: {
-                                type: "string"
-                            },
-                            lang: {
-                                type: "string"
-                            }
+                            value   : { type: "string" },
+                            lang    : { type: "string" }
                         }
                     },                    
                     displayLabel    : {type : "string" }
                 }
             },
-            required : {
-                type : "boolean", section : "advanced"
-            },
-            readOnly : {
-                type : "boolean"
-            }
+            required : { type : "boolean", section : "advanced" },
+            readOnly : { type : "boolean"}
         }
     });
     
@@ -534,7 +474,10 @@ var formBuilder = (function(formBuild) {
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>';
         },
-        initialize : function() {
+        XMLToObject : function(xml) {
+            formBuild.BaseField.prototype.XMLToObject.apply(this, arguments);
+        },
+        initialize : function(options) {
             formBuild.BaseField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.BaseField.schema);
         }
@@ -585,7 +528,7 @@ var formBuilder = (function(formBuild) {
      */
     formBuild.TreeViewField     = formBuild.BaseField.extend({
        defaults : {
-            nodes: [
+            node: [
                 {
                     title   : "Node 1", 
                     key     : "1"
@@ -595,15 +538,16 @@ var formBuilder = (function(formBuild) {
                     key     : "2", 
                     folder  : true, 
                     children: [
-                    {
-                        title   : "Node 2.1", 
-                        key     : "3"
-                    },
-                    {
-                        title   : "Node 2.2", 
-                        key     : "4"
-                    }
-                ]}
+                        {
+                            title: "Node 2.1",
+                            key: "3"
+                        },
+                        {
+                            title: "Node 2.2",
+                            key: "4"
+                        }
+                    ]
+                }
             ],
            defaultNode          : 0,
            multipleSelection    : true,
@@ -614,18 +558,33 @@ var formBuilder = (function(formBuild) {
            formBuild.BaseField.prototype.initialize.apply(this, arguments);
            _.extend(this.constructor.schema, formBuild.BaseField.schema);
            _.bindAll(this, 'getNodeXml', 'getXML');
+           
+           /*_.each(this.get('node'), function(el, idx) {
+               
+               if (el['children'] !== undefined) {
+                   var ch = el['children'];
+                   el['children'] = [];
+                   _.each(ch['node'], function(sub, id) {
+                       sub['folder'] = false;
+                       el['children'][id] = sub;
+                   })   
+               } 
+
+           });           */
        },
        
        getNodeXml : function(node) {
            var str =    '<node>' + 
                         '   <title>'    + node['title']     + '</title>' + 
                         '   <key>'      + node['key']       + '</key>'  +
-                        '   <isParent>' + (node['folder'] === undefined ? "false" : node['folder'])    + '</isParent>';
+                        '   <folder>' + (node['folder'] === undefined ? "false" : node['folder'])    + '</folder>';
                 
                         if (node['folder'] === true) {
+                            str += "<children>";
                             _.each(node['children'], _.bind(function(subNode) {
                                 str +=  this.getNodeXml(subNode);
                             }, this));
+                            str += "</children>";
                         }
                         
            return str + '</node>';
@@ -637,8 +596,7 @@ var formBuilder = (function(formBuild) {
            xml +=   '<defaultNode>'         + this.get('defaultNode')           + '</defaultNode>' + 
                     '<multipleSelection>'   + this.get('multipleSelection')     + '</multipleSelection>' + 
                     '<hierarchicSelection>' + this.get('hierarchicSelection')   + '</hierarchicSelection>';
-            
-           _.each(this.get('nodes'), _.bind(function(el) {
+           _.each(this.get('node'), _.bind(function(el) {
                xml +=   this.getNodeXml(el);
            }, this));
            
@@ -647,17 +605,19 @@ var formBuilder = (function(formBuild) {
        }
     }, {
         type    : 'TreeView',
-        xmlTag  : 'field_tree',
+        xmlTag  : 'field_treeView',
         schema : {
             defaultNode         : { type : "integer" },
             multipleSelection   : { type : "boolean" },
             hierarchicSelection : { type : "boolean" },
-            nodes : {
-                title   : { type : "string"     },
-                key     : { type : "integer"    },
-                folder  : { type : "boolean"    },
-                children: { type : [{ type : "node"}] }
-            }
+            node : [
+                {
+                    title   : { type : "string"     },
+                    key     : { type : "integer"    },
+                    folder  : { type : "boolean"    },
+                    children: [ { type : "node" } ]
+                }
+            ]
         }
     });
 
@@ -666,7 +626,7 @@ var formBuilder = (function(formBuild) {
      */
     formBuild.EnumerationField  = formBuild.BaseField.extend({
         defaults: {
-            options     : [
+            option     : [
                 {
                     label : "My first option", value : 0
                 },
@@ -689,7 +649,7 @@ var formBuilder = (function(formBuild) {
          * @returns {undefined}
          */
         addOption: function(element, select) {
-            this.get('options').push(element);
+            this.get('option').push(element);
             if (select === true) {
                 this.set('defaultValue', element['value']);
             };            
@@ -703,12 +663,12 @@ var formBuilder = (function(formBuild) {
          * @returns {undefined}
          */
         removeOption: function(index) {
-            this.get('options').splice(index, 1);
+            this.get('option').splice(index, 1);
             this.trigger('change');
         },
         
         saveOption: function(index, obj, select) {
-            this.get('options')[index] = obj;
+            this.get('option')[index] = obj;
             if (select === true) {
                 this.set('defaultValue', obj['value']);
             };
@@ -716,12 +676,14 @@ var formBuilder = (function(formBuild) {
         },
         
         getOption: function(index) {
-            return this.get('options')[index];
+            return this.get('option')[index];
         },
         
         getXML: function() {
             var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments) + '<defaultValue>' + this.get('defaultValue') + '</defaultValue>';
-            _.each(this.get('options'), function(el) {
+            console.log (this)
+            console.log ("OP : ", this.get('option'))
+            _.each(this.get('option'), function(el) {
                 xml +=  '<option>' +
                         '   <label>' + el["label"] + '</label>' +
                         '   <value>' + el["value"] + '</value>' +
@@ -735,13 +697,12 @@ var formBuilder = (function(formBuild) {
         xmlTag  : 'field_enum',
         schema: {
             defaultValue: {type: "integer"},
-            options: {
-                type: "array",
-                values: {
+            option: [
+                {
                     label: {type: "string"},
                     value: {type: "string"}
                 }
-            }
+            ]
         }
     });
     
@@ -872,7 +833,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         type    : 'CheckBox',
-        xmlTag  : 'field_checkbox',
+        xmlTag  : 'field_checkBox'
     });
 
     /**
@@ -914,26 +875,109 @@ var formBuilder = (function(formBuild) {
     return formBuild;
 
 })(formBuilder);
-$(document).ready ( function() {
-   
-    xmlComparator = function() {
-    
-        this.compare = function(source, update, mainObject) {
-            
-            var src = $(source), upd = $(update);
-            
-            //console.log ( $(src).find(mainObject) )
-            $(update).find(mainObject).children().each( function(index, element) {
-               
-                //console.log (index, " : ", element);
-                console.log ( $(src, (element)).size() );
+var formBuilder = (function(formBuild) {
+
+    /**
+     * Return if the XML Content is valid
+     * 
+     * @param {string} xmlContent xml content to check
+     * @returns {array|Boolean} a boolean if everything is ok or an array with the errors
+     */
+    formBuild.XMLValidation = function(xmlContent) {
+            var result;
+            $.ajax({                
+                url         : 'xml/NS_Schema.xsd',
+                dataType    : 'html',
+                async       : false                
+            }).done(function(data) {
                 
+                var Module = {
+                    xml         : xmlContent,
+                    schema      : data,
+                    arguments   : ["--noout", "--schema", 'NS_Schema.xsd', 'output.xml']
+                }, xmllint = validateXML(Module);
+
+                if (xmllint.indexOf('validates') > 0) {
+                    result = true;
+                } else {
+                    var split   = xmllint.split(':');
+                    result      = {
+                        error   : split[3],
+                        element : split[2],
+                        message : split[split.length - 1].split('.', 1)[0]
+                    };
+                }
+
+            }).error(function(jqXHR, textStatus, errorThrown) {
+                throw errorThrown.message;
             });
-        };
-        
+
+            return result;
     };
     
-});
+    /**
+     * 
+     * @param {type} baseTText
+     * @param {type} newText
+     * @param {type} selector
+     * @param {type} contextSize
+     * @param {type} baseTextName
+     * @param {type} newTextName
+     * @param {type} inline
+     * @returns {diffview.buildView.ctelt.e|Element|diffview.buildView.celt.e}
+     */
+    formBuild.GetXMLDiff = function (baseText, newText, baseTextName, newTextName, inline, contextSize) {
+        
+        var base    = difflib.stringAsLines(baseText), 
+            newtxt  = difflib.stringAsLines(newText),
+            sm      = new difflib.SequenceMatcher(base, newtxt),
+            opcodes = sm.get_opcodes();
+
+        // build the diff view and add it to the current DOM
+        return diffview.buildView({
+            baseTextLines   : base,
+            newTextLines    : newtxt,
+            opcodes         : opcodes,
+            // set the display titles for each resource
+            baseTextName    : baseTextName  || 'Source file',
+            newTextName     : newTextName   || 'Updated file',
+            contextSize     : contextSize   || null,
+            viewType        : inline        ||  0
+        });
+    };
+    
+    /**
+     * 
+     * @param {type} title
+     * @param {type} msg
+     * @returns {undefined}
+     */
+    formBuild.displayError = function(title, msg) {
+        var modal = $(
+                        '<div id="dialog-message" title="' + title + '">' +
+                            '<p>' +
+                                '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>' +
+                                msg +
+                            '</p>' +
+                        '</div>'
+                    );
+        $(modal).dialog({
+            modal       : true,
+            width       : 500,
+            height      : 250,
+            position    : 'center',
+            draggable   : false,
+            buttons: {
+                Ok: function() {
+                    $(this).dialog("close");
+                }
+            }
+        });
+    };
+    
+    return formBuild;
+
+})(formBuilder);
 /**
  * @fileOverview view.js
  * This file implements all field and specific views
@@ -955,7 +999,7 @@ $(document).ready ( function() {
  */
 
 var formBuilder = (function(formBuild) {
-
+    
     /**
      * It's the basic views for all field view.
      */
@@ -1122,7 +1166,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;" id="<%= id %>">'+
-                            '<% _.each(options, function(el, index) { %>' +
+                            '<% _.each(option, function(el, index) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
                                     '<input type="radio" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (defaultValue == index) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
@@ -1149,7 +1193,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
                         '<select name="<% name %>" class="span8"> '+
-                            '<% _.each(options, function(el, idx) { %>' +
+                            '<% _.each(option, function(el, idx) { %>' +
                                 '<option data-idx=<%= idx %> value="<%= el.value %>" <% if (defaultValue == idx) {%> selected <% } %> ><%= el.label %></option>'+
                             '<% }) %>' +
                         '</select> '+
@@ -1173,7 +1217,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
                         '<div class="span8" style="border : 2px #eee solid;">'+
-                            '<% _.each(options, function(el, idx) { %>' +
+                            '<% _.each(option, function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
                                     '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (defaultValue == idx) {%> checked <% } %> /> '+
                                     '<%= el.label %>'+
@@ -1216,7 +1260,8 @@ var formBuilder = (function(formBuild) {
         },
         render : function() {
             formBuild.BaseView.prototype.render.apply(this, arguments);
-            var src = this.model.get('nodes'), self = this.el;
+            var src = this.model.get('node');
+            //console.log (src)
             $(this.el).find('#tree').fancytree({
                 source: src,
                 checkbox : true,
@@ -1374,7 +1419,7 @@ var formBuilder = (function(formBuild) {
                     this._view[id] = vue;
                 }
             } else {
-                this.displayError("Error", "Can't create view for this field");
+                formBuilder.displayError("Error", "Can't create view for this field");
             }
             
         },
@@ -1423,10 +1468,11 @@ var formBuilder = (function(formBuild) {
                                 saveAs(blob, $(parent).find('input[type="text"]').val() + '.xml');
                                 $(parent).dialog('close');
                             } catch (e) {
-                                coll.displayError("Error", "Can't create file");
+                                console.log (e)
+                                formBuild.displayError("Error", "Can't create file");
                             }
                         } else {
-                            coll.displayError("Error", "You need to enter a name for your file");
+                            formBuild.displayError("Error", "You need to enter a name for your file");
                         }
                     });
                 }
@@ -1462,50 +1508,31 @@ var formBuilder = (function(formBuild) {
                                 var reader = new FileReader();
                                 reader.readAsText(file, "UTF-8");
                                 reader.onload = function(evt) {
-                                    try {
-                                        var result = coll.collection.validateXML(evt.target.result);
+                                    //try {
+                                        
+                                        var result = formBuild.XMLValidation(evt.target.result);
                                         if (result !== true) {
                                             var str = 'There is a error on the ' + result['element'] + '<br />';
                                             str += result['message'] + '<br />Please check your XML file';
-                                            coll.displayError(result['error'], str);
+                                            formBuild.displayError(result['error'], str);
+                                        } else {
+                                            coll.collection.updateWithXml(evt.target.result);
                                         }
-                                    } catch (err) {
+                                    /*} catch (err) {
                                         var str = "Your XML File can't be validated.<br />The specific error is : " + err;
-                                        coll.displayError('Error during XML validation', str);
-                                    }
+                                        formBuild.displayError('Error during XML validation', str);
+                                    }*/
                                 };
                                 reader.onerror = function(evt) {
-                                    coll.displayError("An error was occured", 'An error was occure during reading file');
+                                    formBuild.displayError("An error was occured", 'An error was occure during reading file');
                                 };
                             } else {
-                                coll.displayError("File type error", 'Your have to give an XML file.');
+                                formBuild.displayError("File type error", 'Your have to give an XML file.');
                             }
                         } else {
-                            coll.displayError("An error was occured", 'An error was occure during reading file');
+                            formBuild.displayError("An error was occured", 'An error was occure during reading file');
                         }
                     });
-                }
-            });
-        },
-        displayError: function(title, msg) {
-            var modal = $(
-                            '<div id="dialog-message" title="' + title + '">' +
-                                '<p>' +
-                                    '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>' +
-                                    msg +
-                                '</p>' +
-                            '</div>'
-                        );
-            $(modal).dialog({
-                modal       : true,
-                width       : 500,
-                height      : 250,
-                position    : 'center',
-                draggable   : false,
-                buttons: {
-                    Ok: function() {
-                        $(this).dialog("close");
-                    }
                 }
             });
         }

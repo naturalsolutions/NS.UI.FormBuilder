@@ -359,3 +359,6 @@ body {
 .transparent {
   background: transparent !important;
 }
+.diff {
+  margin-bottom: 150px;
+}
