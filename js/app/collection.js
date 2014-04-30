@@ -27,7 +27,7 @@ var formBuilder = (function(formBuild) {
         initialize: function(models, options) {
             this.name   = options.name || 'My form';
             this.count  = 0;
-            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'readXSD');
+            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement');
         },
 
         /**
