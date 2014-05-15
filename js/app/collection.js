@@ -104,10 +104,7 @@ var formBuilder = (function(formBuild) {
             
             var xmlDoc = $.parseXML(content), element = null, fieldNameType = "", array = null;
             
-            var form = $.xml2json(xmlDoc);
-            delete form['xmlns'];
-            delete form['xmlns:xsi'];
-            delete form['xsi:schemaLocation'];
+            var form = formBuild.XmlToJson($(xmlDoc).find('form'));
             
             _.each(form['fields'], _.bind(function(el, idx) {               
 

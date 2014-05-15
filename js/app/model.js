@@ -29,7 +29,7 @@ var formBuilder = (function(formBuild) {
                     value: "field",
                     lang : "en"
                 },
-                displayLabel: "field"
+                display_label: "field"
             },
             required: false,
             readOnly: false
@@ -45,7 +45,7 @@ var formBuilder = (function(formBuild) {
                     "<readOnly>" + this.get('readOnly') + '</readOnly>';
         },
         
-        getSchemaProperty: function(index, property) {            
+        getSchemaProperty: function(index, property) {        
             if (index.indexOf("/") > 0) {
                 //  Complex index like : /name/label/lang -> ['name']['label']['lang']
                 var split = index.split('/'), str = "this.constructor.schema";                
@@ -59,7 +59,7 @@ var formBuilder = (function(formBuild) {
             }
         },
         
-        changePropertyValue : function(index, value) {            
+        changePropertyValue : function(index, value) {
             if (index.indexOf("/") > 0) {
                 var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")';
                 
@@ -75,7 +75,7 @@ var formBuilder = (function(formBuild) {
 
     }, {
         schema : {
-            id      : { type    : "integer", section : "advanced" },
+            id      : { type    : "integer", section : "advanced", display: "ID"},
             label   : { type    : "string", section : "simple" },
             name : {
                 type : "object",
@@ -87,7 +87,7 @@ var formBuilder = (function(formBuild) {
                             lang    : { type: "string" }
                         }
                     },                    
-                    displayLabel    : {type : "string" }
+                    display_label    : {type : "string", display: "Real displayed value" }
                 }
             },
             required : { type : "boolean", section : "advanced" },
@@ -98,9 +98,9 @@ var formBuilder = (function(formBuild) {
     /**
      * graphical horizontal line field model
      */
-    formBuild.HorizontalLine    = Backbone.Model.extend({
+    formBuild.HorizontalLineField    = Backbone.Model.extend({
     }, {
-        type    : 'hr',
+        type    : 'HorizontalLine',
         xmlTag  : 'field_horizontalLine'
     });
 
@@ -110,11 +110,17 @@ var formBuilder = (function(formBuild) {
     formBuild.HiddenField       = Backbone.Model.extend({
         defaults: {
             id  : 0,
-            name: {
-                label: { value: "", lang: "en" },
-                displayLabel: ""
+            name    : {
+                label: {
+                    value: "field",
+                    lang : "en"
+                },
+                displayLabel: "field"
             },
             value: ""
+        },
+        getSchemaProperty: function(index, property) {  
+            formBuild.BaseField.prototype.getSchemaProperty.apply(this, arguments);
         },
         getXML: function() {
             return  "<name>" +
@@ -128,12 +134,18 @@ var formBuilder = (function(formBuild) {
         xmlTag  : 'field_hidden',
         schema: {
             id: {type: "integer"},
-            name: {
-                label: {
-                    value: {type: "string"},
-                    lang: {type: "string"}
-                },
-                displayLebel: {type: "string"}
+            name : {
+                type : "object",
+                elements: {
+                    label: {
+                        type : "object",
+                        elements : {
+                            value   : { type: "string" },
+                            lang    : { type: "string" }
+                        }
+                    },                    
+                    displayLabel    : {type : "string" }
+                }
             },
             value: {type: "string"}
         }
@@ -158,9 +170,6 @@ var formBuilder = (function(formBuild) {
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>';
         },
-        XMLToObject : function(xml) {
-            formBuild.BaseField.prototype.XMLToObject.apply(this, arguments);
-        },
         initialize : function(options) {
             formBuild.BaseField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.BaseField.schema);
@@ -169,7 +178,7 @@ var formBuilder = (function(formBuild) {
         type    : "Text",
         xmlTag  : 'field_text',
         schema : {
-            defaultValue: { type : "string" },
+            defaultValue: { type : "string", display: "Default value" },
             hint        : { type : "string" },
             size        : { type : "integer"}
         }
@@ -203,7 +212,7 @@ var formBuilder = (function(formBuild) {
             defaultValue: { type : "string" },
             file        : { type : "string" },
             mimeType    : { type : "string" },
-            size        : { type : "integer"}
+            size        : { type : "integer", display: "Maximum size"}
         }
     });
     
@@ -375,16 +384,17 @@ var formBuilder = (function(formBuild) {
         }
         
     }, {
-        type    : 'options',
-        xmlTag  : 'field_enum',
+        /*type    : 'options',
+        xmlTag  : 'field_enum',*/
         schema: {
             defaultValue: {type: "integer"},
-            option: [
-                {
+            option : {
+                type: "array",
+                values : {
                     label: {type: "string"},
                     value: {type: "string"}
                 }
-            ]
+            }
         }
     });
     
@@ -554,6 +564,15 @@ var formBuilder = (function(formBuild) {
     _.defaults(formBuild.CheckBoxField.prototype.defaults,      formBuild.EnumerationField.prototype.defaults);
     _.defaults(formBuild.SelectField.prototype.defaults,        formBuild.EnumerationField.prototype.defaults);    
     
+    _.each(formBuild, function(el, idx) {
+        if (idx, el.type !== undefined) {
+            formBuild['model'].push( idx );
+        }
+    });
+    
+    
+    
     return formBuild;
 
+    
 })(formBuilder);
