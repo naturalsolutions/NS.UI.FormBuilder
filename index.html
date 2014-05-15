@@ -3,85 +3,62 @@
     <head>
         <title>FormBuilder</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        
+        <!--
+            metro bootstrap 
+        -->
+        <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap-responsive.min.css" />
+        <link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/css/metro-bootstrap.css" />
+        <link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/docs/font-awesome.css" />
+        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">      
+
         <!--
             LESS files
         -->
         <link rel="stylesheet/less" type="text/css" href="stylesheet/styles.less" />
-        <script src="js/libs/less/less.min.js" type="text/javascript"></script>
-        <!--
-            metro bootstrap 
-        -->
-        <link rel="stylesheet" type="text/css" href="bootstrap/css/bootstrap-responsive.min.css" />
-        <link rel="stylesheet" type="text/css" href="metro-bootstrap/css/metro-bootstrap.css" />
-        <link rel="stylesheet" type="text/css" href="metro-bootstrap/docs/font-awesome.css" />
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">
+        <script src="libs/less/less.min.js" type="text/javascript"></script>
+        
         <!--
             JS libraries
         -->
-        <script src="js/libs/jquery/jquery.min.js"                  type="text/javascript"></script>
-        <script src="js/libs/jquery/jquery-ui.min.js"               type="text/javascript"></script>
-        <script src="bootstrap/js/bootstrap.min.js"                 type="text/javascript"></script>
-        <script src="js/libs/backbone/underscore/underscore-min.js" type="text/javascript"></script>
-        <script src="js/libs/backbone/backbone-min.js"              type="text/javascript"></script>
-        <script src="js/libs/blob/Blob.js"                          type="text/javascript"></script>
-        <script src="js/libs/filesaver/FileSaver.js"                type="text/javascript"></script>
-        <script src="js/libs/xmljs/xmllint.js"                      type="text/javascript"></script>
-        <link rel="stylesheet" href="js/libs/nanoScroller/nanoscroller.css" />
-        <script type="text/javascript" src="js/libs/nanoScroller/jquery.nanoscroller.min.js"></script>
-        <!--
-            Fancy tree
-        -->
-        <link rel="stylesheet" href="js/libs/fancytree/skin-win8/ui.fancytree.min.css" type="text/css" />
-        <script src="js/libs/fancytree/jquery.fancytree-all.min.js" type="text/javascript"></script>
-        <!-- 
-            js diff lib 
-        -->
-        <script type="text/javascript" src="js/libs/jsdifflib/diffview.js"></script>
-        <script type="text/javascript" src="js/libs/jsdifflib/difflib.js"></script>
-        <link rel="stylesheet" href="js/libs/jsdifflib/diffview.css" type="text/css" />
-
-        <script type="text/javascript" src="js/libs/jquery.xml2json.js"></script>
+        <script src="libs/jquery/jquery.min.js"                  type="text/javascript"></script>
+        <script src="libs/jquery/jquery-ui.min.js"               type="text/javascript"></script>
+        <!--<script src="bootstrap/js/bootstrap.min.js"                 type="text/javascript"></script>-->
+        <script src="libs/backbone/underscore/underscore-min.js" type="text/javascript"></script>
+        <script src="libs/backbone/backbone-min.js"              type="text/javascript"></script>
+        <script src="libs/blob/Blob.js"                          type="text/javascript"></script>
+        <script src="libs/filesaver/FileSaver.js"                type="text/javascript"></script>
+        <script src="libs/xmljs/xmllint.js"                      type="text/javascript"></script>
+        <link rel="stylesheet" href="libs/nanoScroller/nanoscroller.css" />
+        <script type="text/javascript" src="libs/nanoScroller/jquery.nanoscroller.min.js"></script>
         
-        <!--
-            Formbuilder scripts
-        -->
+        <!-- Fancy tree -->
+        <link rel="stylesheet" href="libs/fancytree/skin-win8/ui.fancytree.min.css" type="text/css" />
+        <script src="libs/fancytree/jquery.fancytree-all.min.js" type="text/javascript"></script>
+        
+        <!--  js diff lib  -->
+        <script type="text/javascript" src="libs/jsdifflib/diffview.js"></script>
+        <script type="text/javascript" src="libs/jsdifflib/difflib.js"></script>
+        <link rel="stylesheet" href="libs/jsdifflib/diffview.css" type="text/css" />
+        
+        <!--    navbar  -->
+        <link rel="stylesheet" href="libs/navbar/navbar.css" type="text/css" />
+        <link rel="stylesheet" href="libs/navbar/navbar-modernui.css" type="text/css" />
+        <script src="libs/navbar/navbar.js" type="text/javascript"></script>
+        
+        <!-- Formbuilder scripts -->
         <script type="text/javascript" src="js/app/formBuilder.js"  ></script>        
         <script type="text/javascript" src="js/app/utilities.js"    ></script>        
         <script type="text/javascript" src="js/app/model.js"        ></script>
         <script type="text/javascript" src="js/app/collection.js"   ></script>
-        <script type="text/javascript" src="js/app/views.js"        ></script>       
+        <script type="text/javascript" src="js/app/views.js"        ></script>
+        <script type="text/javascript" src="js/app/router.js"       ></script>
         <script type="text/javascript" src="js/app/brain.js"        ></script>
+        
     </head>
-    <body >
-        <nav class="navbar navbar-default" role="navigation">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">FormBuilder</a>
-            </div>
-            <div class="collapse navbar-collapse navbar-ex1-collapse">
-                <ul class="nav navbar-nav">
-                    <li>
-                        <a href="#" id="export" ><i class="fa fa-envelope"></i> Export as XML</a>
-                    </li>
-                    <li>
-                        <a href="#" id="import" ><i class="fa fa-cloud"></i> Import XML</a>
-                    </li>
-                    <li>
-                        <a href="#" id="clear"><i class="fa fa-android"></i> Clear form</a>
-                    </li>
-                    <li>
-                        <a href="#" id="show"><i class="fa fa-files-o"></i> Compare XML Files</a>
-                    </li>
-                </ul>
-                <!--<ul class="nav navbar-nav pull-right">
-                    <li class="pull-right">
-                        <a href="#" id="run"><i class="fa fa-android"></i> Run Gremlins</a>
-                    </li>
-                </ul>-->
-            </div>
-        </nav>
+    <body>
         <section class="container-fluid" id="formBuilder">
         </section>
-        
-        
     </body>
 </html>
