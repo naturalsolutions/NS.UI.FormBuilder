@@ -98,6 +98,39 @@ var formBuilder = (function(formBuild) {
         });
     };
     
+    formBuild.XmlToJson = function(element, index) {
+        
+        var jsonObject = {};
+        
+        _.each($(element).children(), function(el, idx) {
+            
+            jsonObject[$(el).prop('tagName')] = {};
+            
+            if ($(el).get(0).attributes.length > 0) {
+                $.each($(el).get(0).attributes, function(index, attr) {
+                    jsonObject[$(el).prop('tagName')][attr.nodeName] = attr.nodeValue;
+                });
+            }         
+            
+           if ($(el).children().length > 0) {
+               //   recursive
+               _.each(formBuild.XmlToJson(el, idx), function(subEl, subId) {
+                   jsonObject[$(el).prop('tagName')][subId] = subEl;
+               })
+           } else {
+               //   simple text
+               if (_.isEmpty(jsonObject[$(el).prop('tagName')])) {
+                   jsonObject[$(el).prop('tagName')] = $(el).text();
+               } else {
+                   jsonObject[$(el).prop('tagName')]['value'] = $(el).text();
+               }
+           }
+           
+        });
+
+        return jsonObject;        
+    };
+    
     return formBuild;
 
 })(formBuilder);
