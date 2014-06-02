@@ -45,6 +45,10 @@ var formBuilder = (function(formBuild) {
                     "<readOnly>" + this.get('readOnly') + '</readOnly>';
         },
         
+        isAdvanced : function(index) {
+            return this.getSchemaProperty(index, 'advanced') === "advanced";
+        },
+        
         getSchemaProperty: function(index, property) {        
             if (index.indexOf("/") > 0) {
                 //  Complex index like : /name/label/lang -> ['name']['label']['lang']
@@ -55,7 +59,7 @@ var formBuilder = (function(formBuild) {
                 return eval(str + '["' + property + '"]');
             } else {
                 //  Simple index
-                return this.constructor.schema[index][property];
+                return this.constructor.schema[index] !== undefined ? this.constructor.schema[index][property] : "";
             }
         },
         
@@ -178,7 +182,7 @@ var formBuilder = (function(formBuild) {
         type    : "Text",
         xmlTag  : 'field_text',
         schema : {
-            defaultValue: { type : "string", display: "Default value" },
+            defaultValue: { type : "string", display: "Default value", section : "advanced" },
             hint        : { type : "string" },
             size        : { type : "integer"}
         }
@@ -251,19 +255,6 @@ var formBuilder = (function(formBuild) {
            formBuild.BaseField.prototype.initialize.apply(this, arguments);
            _.extend(this.constructor.schema, formBuild.BaseField.schema);
            _.bindAll(this, 'getNodeXml', 'getXML');
-           
-           /*_.each(this.get('node'), function(el, idx) {
-               
-               if (el['children'] !== undefined) {
-                   var ch = el['children'];
-                   el['children'] = [];
-                   _.each(ch['node'], function(sub, id) {
-                       sub['folder'] = false;
-                       el['children'][id] = sub;
-                   })   
-               } 
-
-           });           */
        },
        
        getNodeXml : function(node) {
@@ -318,83 +309,126 @@ var formBuilder = (function(formBuild) {
      * enumeration field type
      */
     formBuild.EnumerationField  = formBuild.BaseField.extend({
+        
         defaults: {
-            option     : [
-                {
-                    label : "My first option", value : 0
+            items: [
+                {   //  itemList
+                    items: [
+                        {label: "My Firsta Option", value: "1", id: 0},
+                        {label: "My second Option", value: "2", id: 1}
+                    ],
+                    lang: "en",
+                    defaultValue: 1 //  default value corresponds to item id
                 },
-                {
-                    label : "My second option", value : 1
+                {   //  ItemList
+                    items: [
+                        {label: "Ma premiere option", value: "1", id: 150},
+                        {label: "Ma seconde Option", value: "2", id: 151}
+                    ],
+                    lang: "fr",
+                    defaultValue: 151
                 }
             ],
-            defaultValue: 0
+            multiple : false, 
+            expanded : false
         },
+        
+        /**
+         * Constructor
+         * 
+         * Get BaseField schema and add it on EnumerationField schema
+         */
         initialize : function() {
             formBuild.BaseField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.BaseField.schema);
         },
+
+        /**
+         * Add an item on an itemList
+         * 
+         * @param {integer} listIndex  itemList index
+         * @param {object} element    element to add
+         * @param {boolean} selected   if this element is the defaultValue
+         */
+        addOption: function(listIndex, element, selected) {
+            this.get('items')[listIndex]['items'].push(element);            
+            if (selected) {
+                this.get('items')[listIndex]['defaultValue'] = element['id'];
+            }
+            
+            this.trigger('change');
+        },
         
         /**
-         * Add an option to the model
+         * Remove an item from an itemList
          * 
-         * @param {type} element
-         * @param {type} select
-         * @returns {undefined}
+         * @param {integer} listIndex  index of the itemList
+         * @param {integer} index      index of element to remove
          */
-        addOption: function(element, select) {
-            this.get('option').push(element);
-            if (select === true) {
-                this.set('defaultValue', element['value']);
-            };            
+        removeOption: function(listIndex, index) {
+            this.get("items")[listIndex].splice(index, 1);
             this.trigger('change');
         },
         
         /**
-         * Remove an option from the model
+         * Return choosen item list elements
          * 
-         * @param {type} index
-         * @returns {undefined}
+         * @param {integer} itemListIndex  itemList index
+         * @returns {array} itemList
          */
-        removeOption: function(index) {
-            this.get('option').splice(index, 1);
-            this.trigger('change');
+        getOption: function(itemListIndex) {
+            return this.get('items')[itemListIndex];
         },
         
-        saveOption: function(index, obj, select) {
-            this.get('option')[index] = obj;
-            if (select === true) {
-                this.set('defaultValue', obj['value']);
-            };
-            this.trigger('change');
-        },
-        
-        getOption: function(index) {
-            return this.get('option')[index];
-        },
-        
-        getXML: function() {
-            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments) + '<defaultValue>' + this.get('defaultValue') + '</defaultValue>';
-            _.each(this.get('option'), function(el) {
-                xml +=  '<option>' +
-                        '   <label>' + el["label"] + '</label>' +
-                        '   <value>' + el["value"] + '</value>' +
-                        '</option>';
+        /**
+         * Return XML content for all itemList
+         * 
+         * @returns {String} XML content
+         */
+        getItemListXML : function() {
+            var xml = "";
+            _.each(this.get('items'), function(el, idx) {
+                xml +=  '<itemList lang="' + el['lang'] + '" >';
+                _.each(el['items'], function(item, id) {
+                    xml +=  '<item id="' + item['id'] + '">' + 
+                            '   <label>' + item['label'] + '</label>' +
+                            '   <value>' + item['value'] + '</value>' + 
+                            '</item>';
+                });
+                xml +=  '<defaultValue>' + el['defaultValue'] + '</defaultValue>';
+                xml +=  '</itemList>';
             });
             return xml;
+        },
+        
+        /**
+         * Return object XML content
+         * 
+         * @returns {String} XML content
+         */
+        getXML: function() {
+            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
+            return xml +    '<items>' + this.getItemListXML() + '</items>' + 
+                            '<expanded>' +  this.get('expanded') + '</expanded>'+ 
+                            '<multiple>' +  this.get('multiple') + '</multiple>';
         }
         
     }, {
-        /*type    : 'options',
-        xmlTag  : 'field_enum',*/
-        schema: {
-            defaultValue: {type: "integer"},
-            option : {
-                type: "array",
-                values : {
-                    label: {type: "string"},
-                    value: {type: "string"}
+        schema: {            
+            items : {
+                type : "array",
+                itemList : {
+                    defaultValue    : { type : "string" },
+                    lang            : { type : "string" },
+                    type: "array",
+                    items : {
+                        label   : { type : "string" },
+                        value   : { type : "string" }
+                    }
                 }
-            }
+            },            
+            expanded : { type : "boolean" },
+            multiple : { type : "boolean" }
         }
     });
     
@@ -458,26 +492,30 @@ var formBuilder = (function(formBuild) {
         defaults: {
             minValue    : 0,
             maxValue    : 100,
-            step        : 1
+            precision   : 1,
+            unity       : "meters"
         },
         initialize : function() {
             formBuild.TextField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.TextField.schema);
+            this.set('hint', 'Enter a numeric value');
         },
 
         getXML: function() {
             return  formBuild.TextField.prototype.getXML.apply(this, arguments) +
                     '<min>' + this.get("minValue")  + '</min>' +
                     '<max>' + this.get("maxValue")  + '</max>' +
-                    '<step>'+ this.get("step")      + '</step>';
+                    '<precision>'+ this.get("precision")      + '</precision>' +
+                    '<unity>' + this.get("unity")  + '</unity>';
         }
     }, {
         type    : 'Numeric',
         xmlTag  : 'field_numeric',
         schema : {
-            minValue: { type : "integer" },
-            maxValue: { type : "integer" },
-            step    : { type : "integer" }
+            minValue    : { type : "integer" },
+            maxValue    : { type : "integer" },
+            precision   : { type : "integer" },
+            unity       : { type : "string"  }
         }
     });
 
@@ -522,10 +560,12 @@ var formBuilder = (function(formBuild) {
         initialize : function() {
             formBuild.EnumerationField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.EnumerationField.schema);
+            this.set('multiple', true);
+            this.set('expanded', true);
         }
     }, {
         type    : 'CheckBox',
-        xmlTag  : 'field_checkBox'
+        xmlTag  : 'field_list'
     });
 
     /**
@@ -538,10 +578,12 @@ var formBuilder = (function(formBuild) {
         initialize : function() {
             formBuild.EnumerationField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.EnumerationField.schema);
+            this.set('multiple', false);
+            this.set('expanded', true);
         }
     }, {
         type    : 'Radio',
-        xmlTag  : 'field_radio'
+        xmlTag  : 'field_list'
     });
 
     /**
@@ -557,22 +599,13 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         type    : 'Select',
-        xmlTag  : 'field_select'
+        xmlTag  : 'field_list'
     });
 
     _.defaults(formBuild.RadioField.prototype.defaults,         formBuild.EnumerationField.prototype.defaults);
     _.defaults(formBuild.CheckBoxField.prototype.defaults,      formBuild.EnumerationField.prototype.defaults);
     _.defaults(formBuild.SelectField.prototype.defaults,        formBuild.EnumerationField.prototype.defaults);    
-    
-    _.each(formBuild, function(el, idx) {
-        if (idx, el.type !== undefined) {
-            formBuild['model'].push( idx );
-        }
-    });
-    
-    
-    
-    return formBuild;
 
+    return formBuild;
     
 })(formBuilder);
