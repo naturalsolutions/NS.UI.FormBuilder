@@ -20,43 +20,119 @@
 
 var formBuilder = (function(formBuild) {
     
+    //  ----------------------------------------------------------------------------------
+    //  Base views
+    
     /**
      * It's the basic views for all field view.
      */
     formBuild.BaseView = Backbone.View.extend({
+        
+        /**
+         * Events for the intercepted by the view
+         */
         events: {
-            'click  .fa-trash-o' : 'removeView',
-            'click .fa-wrench'   : 'setting',
-            'focus input'        : 'updateSetting'
+            'click  .trash'         : 'removeView',
+            'click .wrench'         : 'setting',
+            'click .copy'           : 'copyModel',
+            'focus input'           : 'updateSetting',
+            'mouseenter .element'   : 'displayOption',
+            'mouseleave .element'   : 'hideOption'
         },
+        
+        /**
+         * Constructor
+         */
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'removeView', 'setting', 'updateSetting', 'getHtml', 'deleteView');
+            _.bindAll(this, 'render', 'removeView', 'setting', 'updateSetting', 'deleteView');
             this.model.bind('change', this.render);
             this.model.bind('destroy', this.deleteView);
         },
-        updateIndex: function(idx) {
-            this.model.id = parseInt(idx);
+        
+        /**
+         * Display allowed options for this element
+         * 
+         * @param {object} e jQuery event
+         */
+        hideOption : function(e) {
+            $(e.delegateTarget).find('.right').addClass('hide');
         },
-        render: function() {
-            var renderedContent = this.template(this.model.toJSON());
-            $(this.el).html(renderedContent);
-            return this;
+        
+        /**
+         * Hide displayed options
+         * 
+         * @param {object} e jQuery event
+         */
+        displayOption : function(e) {
+            $(e.delegateTarget).find('.right').removeClass('hide');
         },
-        getHtml : function() {
-            return this.html(this.model.toJSON());
+        
+        /**
+         * Copy model of this view
+         */
+        copyModel : function() {
+            var cl = this.model.clone();
+            cl.set('id', formBuild.mainView.formView.collection.length);    //  change id otherwise element replaced copied element
+            formBuild.mainView.formView.collection.add(cl);                 //  Add element to the collection
         },
-        deleteView : function() {
-            $(this.el).remove();
-            this.remove();
+        
+        /**
+         * Display edition view for model
+         */
+        setting: function() {
+            if ($('.dropArea').hasClass('span9')) {
+                var edit = new formBuild.BaseEditView({
+                    el: $('.settings'),
+                    model : this.model
+                });
+                $('.dropArea').switchClass('span9', 'span7', 500);
+                $('.widgetsPanel').switchClass('span3', 'span0', 500);
+                edit.render();
+            }
         },
+        
+        /**
+         * Remove view
+         */
         removeView: function() {
-            //this.model.collection.remove(this.model);
-            //this.model.trigger('destroy');
             this.model.set('state', 'delete');
             $(this.el).remove();
             this.remove();
         },
+        
+        /**
+         * Render view 
+         * 
+         * @returns {formBuild.BaseView} view
+         */
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            
+            return this;
+        },        
+        
+        /**
+         * Update view index, sortable callback
+         * 
+         * @param {interger} idx new index of the view
+         */
+        updateIndex: function(idx) {
+            this.model.id = parseInt(idx);
+        },     
+        
+        /**
+         * Remove the view
+         */
+        deleteView : function() {
+            $(this.el).remove();
+            this.remove();
+        },
+        
+        /**
+         * Update setting view
+         */
         updateSetting : function() {
             if (!$('.dropArea').hasClass('span9')) {
                 formBuild.set = new formBuild.SettingView({
@@ -64,191 +140,574 @@ var formBuilder = (function(formBuild) {
                     el: $('.settings')
                 }).render();
             }
-        },
-        setting: function() {
-            if ($('.dropArea').hasClass('span9')) {
-                formBuild.settingsView.changeModel(this.model);
-            }
         }
+        
     });
     
     /**
+     * Basic edition view for all field edition view
+     */
+    formBuild.BaseEditView = Backbone.View.extend({
+        
+        /**
+         * Evenet intercepted by the view
+         */
+        events : {
+            'click .close'                  : 'hidePanel',
+            'click h2 > a:not(.selected)'   : 'displayOptions',
+            'change .property'              : 'updateModel'
+        },
+        
+        /**
+         * Constructor
+         */
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 'render', 'updateModel');
+            this.model.bind('change', this.render);
+            this.model.bind('destroy', this.deleteView);
+        },
+        
+        /**
+         * Hide panel edition and remove edition view
+         */
+        hidePanel: function() {
+            if ($('.dropArea').hasClass('span7')) {
+                $('.dropArea').switchClass('span7', 'span9', 100);
+                $('.widgetsPanel').switchClass('span0', 'span3', 200, _.bind(function() {
+                    $(this.el).remove();
+                    this.remove();
+                }, this));
+            }
+        },
+        
+        /**
+         * Display options by section level (simple or advanced)
+         * 
+         * @param {object} e jQuery event
+         */
+        displayOptions: function(e) {
+            $(".settings h2 > a").toggleClass('selected');
+            if ($(e.target).prop('id') === "simple") {
+                $('.advanced').addClass('hide', 500);
+            } else {
+                $('.advanced').removeClass('hide', 500);
+            }
+        },
+        
+        /**
+         * Update model property when input value has changed
+         * 
+         * @param {object} e jQuery event
+         */
+        updateModel: function(e) {
+            //  this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
+            this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
+        },
+        
+
+        /**
+         * Render view 
+         * 
+         * @returns {formBuild.BaseView} view
+         */
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            
+            //  subView
+            var subView = new formBuild[this.model.constructor.type + 'FieldEditView']({
+               el : $('#subView') ,
+               model : this.model
+            });
+            subView.render();
+            
+            return this;
+        }
+    
+    }, {
+        templateSrc : '<div>'+
+                        '   <h1>Settings</h1>'+
+                        '   <div>'+
+                        '       <h2>'+
+                        '           <a href="#" id="simple" class="selected">Simple options</a> / <a href="#" id="advanced">Advanced options</a>'+
+                        '       </h2>'+
+                        //  Edition of common attribute like name (label and displayLabel)
+                        '   <div class="hide advanced">' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">ID</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="number" data-attr="id" placeholder="Id" value="<%= id %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">Label</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="label" placeholder="Label" value="<%= label %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">Name label</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="name/label/value" placeholder="Name label" value="<%= name["label"]["value"] %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">Name label lang</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="name/label/lang" placeholder="Name label lang" value="<%= name["label"]["lang"] %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '   <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
+                        '       <label class="span4 offset1">Required</label>' +
+                        '           <input class="span2 property" data-attr="required" type="checkbox" <% if (required) { %> checked <% } %> />' +
+                        '   </div>' +
+                        '   <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
+                        '       <label class="span4 offset1">Read only</label>' +
+                        '           <input class="span2 property" data-attr="readOnly" type="checkbox" <% if (readOnly) { %> checked <% } %> />' +
+                        '   </div>' +
+                        //  end
+                        '       <div id="subView"></div>' +
+                        '       <div class="row-fluid">&nbsp;</div>'+
+                        '   </div>' +
+                        '   <div class="row-fluid">&nbsp;</div>'+
+                        '   <button class="close center" style="width: 100%">Save</button>'+
+                        '</div>'
+    }); 
+    
+    
+    
+    //  ----------------------------------------------------------------------------------
+    //  TextField views
+    
+    /**
      * View for text field element
-     * Herited from base view
      */
     formBuild.TextFieldView = formBuild.BaseView.extend({
+        
+        /**
+         * Get BaseView events and add sepecific TextFieldView event
+         */
         events: function() {
             return _.extend({}, formBuild.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
+        
+        /**
+         * Render view
+         */
         render : function() {
            formBuild.BaseView.prototype.render.apply(this, arguments);
-           $(this.el).find('input[type="text"]').enableSelection();
        },
+       
+       /**
+        * Change model value when text input value changed
+        * 
+        * @param {object} jQuery event
+        */
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
+        
     }, {
-        templateSrc:    '<label class="span3 <% if (required === true) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="text" class="span8" name="<%= name %>" readonly="<%= readOnly %>"  id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div>'
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
+                        '   <label class="span4">' + 
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '   <div class="span7 right hide">'+
+                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   </div>'+
+                        '</div>' +
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '   <input type="text" class="span11" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
+                        '</div></div>'
     });
 
+    formBuild.TextFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            return this;
+        }
+        
+    }, {
+        templateSrc :   '<% _.each(["defaultValue", "hint", "size"], function(el) { %>' +
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1"><%= el %></label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="<%= el %>" placeholder="<%= el %>" value="<%= eval(el) %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '<% }) %>'
+    });
+
+
+    
+    //  ----------------------------------------------------------------------------------
+    //  Pattern views
+    
     /**
      * View for pattern field
      */
     formBuild.PatternFieldView = formBuild.BaseView.extend({
+        
         events: function() {
             return _.extend({}, formBuild.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
+        
         initialize : function() {
           formBuild.BaseView.prototype.initialize.apply(this, arguments);
         },
-        render : function() {
-           formBuild.BaseView.prototype.render.apply(this, arguments);
-           $(this.el).find('input[type="text"]').enableSelection();
-       },
+        
+        render: function() {
+            formBuild.BaseView.prototype.render.apply(this, arguments);
+        },
+        
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
+        
     }, {
-        templateSrc:    '<label class="span3 <% if (required === true) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="text" class="span8" name="<%= name["displayLabel"] %>" readonly="<%= readOnly %>"  id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" pattern="<%= pattern %>" /> '+
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
+        templateSrc:    '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <label class="span4">' + 
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '       <div class="span7 right hide">'+
+                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <input type="text" class="span11" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" pattern="<%= pattern %>" /> '+
+                        '   </div>'+
                         '</div>'
     });
+    
+    formBuild.PatternFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        /**
+         * Render Pattern field edition view, the view contains an text field edition view
+         * 
+         * @returns {PatternFieldEditView} current view
+         */
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            
+            var textView = new formBuild.TextFieldEditView({
+                el      : $('#subTextView'),
+                model   : this.model
+            });
+            textView.render();
+            
+            return this;
+        }
+        
+    }, {
+        templateSrc :   '   <div id="subTextView"></div>' + 
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">Pattern</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="pattern" placeholder="Pattern" value="<%= pattern %>" />' +
+                        '       </div>' +
+                        '   </div>'
+    });
+
+
+
+
+    //  ----------------------------------------------------------------------------------
+    //  File field views
     
     /**
      * file field view
      */
     formBuild.FileFieldView = formBuild.BaseView.extend({
+        
+        /**
+         * Events of the view
+         */
         events: function() {
             return _.extend({}, formBuild.BaseView.prototype.events, {
-                'change input[type="text"]': 'updateModel'
+                'change input[type="text"]'     : 'updateModel',
+                'click input[type="submit"]'    : 'triggerFile',
+                'click input[type="text"]'      : 'triggerFile',
+                'change input[type="file"]'     : 'fileChange'
             });
         },
+        
         initialize : function() {
           formBuild.BaseView.prototype.initialize.apply(this, arguments);
         },
-        render : function() {
-           formBuild.BaseView.prototype.render.apply(this, arguments);
-           $(this.el).find('input[type="text"]').enableSelection();
-       },
+        
+        triggerFile : function() {
+            $(this.el).find('input[type="file"]').trigger('click');
+        },
+        
+        render: function() {
+            formBuild.BaseView.prototype.render.apply(this, arguments);
+            $(this.el).find('input[type="text"]').enableSelection();
+        },
+        
+        /**
+         * Set text input value vhen file input value changes
+         * 
+         * @param {type} e jQuery event
+         */
+        fileChange: function(e) {
+            $(this.el).find('input[type="text"]').val($(e.target).val().replace("C:\\fakepath\\", ""))
+        },
+        
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
     }, {
-        templateSrc:    '<label class="span3 <% if (required === true) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="file" class="span8" name="<%= name["displayLabel"] %>"  id="<%= id%>" value="<%= defaultValue %>" /> '+
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
+        templateSrc:    '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <label class="span4">' + 
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '       <div class="span7 right hide">'+
+                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <input type="file" class="hide" />' +
+                        '       <input type="text" class="span10" name="<%= name %>" id="<%= id%>" value="<%= defaultValue %>" /> '+
+                        '       <input type="submit" value="Find" class="span2" />'+
+                        '   </div>' +
                         '</div>'
     });
+    
+    /**
+     * File field edition view
+     */
+    formBuild.FileFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            return this;
+        }
+        
+    }, {
+        templateSrc :   '   <% _.each(["defaultValue", "file", "mimeType"], function(el) {%> '+
+                        '       <div >' +
+                        '           <div class="row-fluid">'+
+                        '               <label class="span10 offset1"><%= el %></label>' +
+                        '           </div>' +
+                        '           <div class="row-fluid">' +
+                        '               <input class="span10 offset1 property" type="text" data-attr="<%= el %>" placeholder="<%= el %>" value="<%= eval(el) %>" />' +
+                        '           </div>' +
+                        '       </div>' +
+                        '   <% }); %>' +
+                        '       <div >' +
+                        '           <div class="row-fluid">'+
+                        '               <label class="span10 offset1">File max size</label>' +
+                        '           </div>' +
+                        '           <div class="row-fluid">' +
+                        '               <input class="span10 offset1 property" type="number" data-attr="size" placeholder="Max file size" value="<%= size %>" />' +
+                        '           </div>' +
+                        '       </div>' 
+    });
+
+
+
+    //  ----------------------------------------------------------------------------------
+    //  Numeriv field views
     
     /**
      * NumericFieldView
      */
     formBuild.NumericFieldView = formBuild.BaseView.extend({
+        
         events: function() {
             return _.extend({}, formBuild.BaseView.prototype.events, {
             });
         },
+        
         render: function() {
             formBuild.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input').spinner({
                 step: this.model.step,
-                min : this.model.minValue
-            }).parent('span').addClass('span8')
+                min: this.model.minValue
+            }).parent('span').addClass('span10');
         }
     }, {
-        templateSrc :   '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
-                        '<input class="span12 spin" name="<%= name %>" step="<%= step %>" id="<%= id%>" placeholder="<%= hint %>" min="<%= minValue %>" max="<%= maxValue %>" value="<% defaultValue || 0 %>" /> '+
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
+        templateSrc :   '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <label class="span4">' + 
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '       <div class="span7 right hide">'+
+                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <input class="span12 spin" name="<%= name %>" step="<%= precision %>" id="<%= id%>" placeholder="<%= hint %>" min="<%= minValue %>" max="<%= maxValue %>" value="<% defaultValue || 0 %>" /> '+
+                        '       <label>&nbsp;<%= unity %></label>' +
+                        '   </div>'+
+                        '</div>'
+    
+    });
+    
+    /**
+     * Numeric field edition view
+     */
+    formBuild.NumericFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        /**
+         * Render Pattern field edition view, the view contains an text field edition view
+         * 
+         * @returns {PatternFieldEditView} current view
+         */
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            
+            var textView = new formBuild.TextFieldEditView({
+                el      : $('#subTextView'),
+                model   : this.model
+            });
+            textView.render();
+            
+            return this;
+        }
+        
+    }, {
+        templateSrc :   '   <div id="subTextView"></div>' + 
+                        '   <% _.each(["minValue", "maxValue", "precision", "unity"], function(idx) { %>' +
+                        '       <div >' +
+                        '           <div class="row-fluid">'+
+                        '               <label class="span10 offset1"><%= idx %></label>' +
+                        '           </div>' +
+                        '           <div class="row-fluid">' +
+                        '               <input class="span10 offset1 property" type="text" data-attr="<%= idx %>" placeholder="<%= idx %>" value="<%= eval(idx) %>" />' +
+                        '           </div>' +
+                        '       </div>'+
+                        '   <% }) %>'
+    });
+
+
+
+    //  ----------------------------------------------------------------------------------
+    //  Date field views
+    
+    /**
+     * date field view
+     */
+    formBuild.DateFieldView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
+            });
+        },
+       render : function() {
+           formBuild.BaseView.prototype.render.apply(this, arguments);
+           $(this.el).find('input').datepicker({
+               format: this.model.get('format')
+           });
+       }
+    }, {
+        templateSrc:    '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <label class="span4">' + 
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '       <div class="span7 right hide">'+
+                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <input type="text" class="span11" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
+                        '   </div>' +
                         '</div>'
     });
 
     /**
-     * Radio field view
+     * Date field edition view
      */
-    formBuild.RadioFieldView = formBuild.BaseView.extend({
-        events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
-                'click input[type="radio"]'        : 'updateSetting'
+    formBuild.DateFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        /**
+         * Render Pattern field edition view, the view contains an text field edition view
+         * 
+         * @returns {PatternFieldEditView} current view
+         */
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            
+            var textView = new formBuild.TextFieldEditView({
+                el      : $('#subTextView'),
+                model   : this.model
             });
+            textView.render();
+            
+            return this;
         }
+        
     }, {
-        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
-                        '<div class="span8" style="border : 2px #eee solid;" id="<%= id %>">'+
-                            '<% _.each(option, function(el, index) { %>' +
-                                '<label class="span12 noMarginLeft left"> '+
-                                    '<input type="radio" style="margin-left: 10px;" name="<%= name %>" value="<%= el.value%>" <% if (defaultValue == index) {%> checked <% } %> /> '+
-                                    '<%= el.label %>'+
-                                '</label> '+
-                            '<% }); %>'+
-                        '</div>'+
-                        '<div class="span1 .pull-right"> '+
-                            '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div>'
+        templateSrc :   '   <div id="subTextView"></div>' + 
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">Format</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="format" placeholder="Date format" value="<%= format %>" />' +
+                        '       </div>' +
+                        '   </div>'
     });
 
-    /**
-     * Options field vue
-     */
-    formBuild.SelectFieldView = formBuild.BaseView.extend({
-        events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
-                'change select'        : 'updateSelected'
-            });
-        },
-        updateSelected : function(e) {
-            this.model.updateSelectedOption($(e.target).find(':selected').data('idx'), true);
-        }
-    }, {
-        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
-                        '<select name="<% name %>" class="span8"> '+
-                            '<% _.each(option, function(el, idx) { %>' +
-                                '<option data-idx=<%= idx %> value="<%= el.value %>" <% if (defaultValue == idx) {%> selected <% } %> ><%= el.label %></option>'+
-                            '<% }) %>' +
-                        '</select> '+
-                        '<div class="span1 .pull-right"> '+
-                            '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div> '
-    });
 
-    /**
-     * Checkbox field view
-     */
-    formBuild.CheckBoxFieldView = formBuild.BaseView.extend({
-        events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
-                'change input[type="checkbox"]' : 'updateSelected'
-            });
-        },
-        updateSelected : function(e) {
-            this.model.updateSelectedOption($(e.target).data('idx'), $(e.target).is(':checked'));
-        },
-    }, {
-        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label>'+
-                        '<div class="span8" style="border : 2px #eee solid;">'+
-                            '<% _.each(option, function(el, idx) { %>' +
-                                '<label class="span12 noMarginLeft left"> '+
-                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (defaultValue == idx) {%> checked <% } %> /> '+
-                                    '<%= el.label %>'+
-                                '</label> '+
-                            '<% }); %>'+
-                        '</div>'+
-                        '<div class="span1 .pull-right"> '+
-                            '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div>'
-    });
 
+    //  ----------------------------------------------------------------------------------
+    //  Long text views
+    
     /**
      * Long text view
      */
@@ -263,12 +722,66 @@ var formBuilder = (function(formBuild) {
             $(this.el).addClass('textArea');
         }
     }, {
-        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>" ><%= label %></label>'+
-                        '<textarea class="span8" style="<% if(!resizable){ %>resize: none<%}%>" class="span8"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
-                        '<div class="span1"> '+
-                            '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div> '
+        templateSrc:    '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <label class="span4">' + 
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '       <div class="span7 right hide">'+
+                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <textarea style="<% if(!resizable){ %>resize: none<%}%>" class="span11"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
+                        '   </div>' +
+                        '</div>'
     });
+    
+    /**
+     * Long text field edition view
+     */
+    formBuild.LongTextFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        /**
+         * Render Pattern field edition view, the view contains an text field edition view
+         * 
+         * @returns {PatternFieldEditView} current view
+         */
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            
+            var textView = new formBuild.TextFieldEditView({
+                el      : $('#subTextView'),
+                model   : this.model
+            });
+            textView.render();
+            
+            return this;
+        }
+        
+    }, {
+        templateSrc :   '   <div id="subTextView"></div>' + 
+                        '   <div >' +
+                        '       <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
+                        '           <label class="span4 offset1">Resizable</label>' +
+                        '               <input class="span2 property" data-attr="resizable" type="checkbox" <% if (resizable) { %> checked <% } %> />' +
+                        '       </div>' +
+                        '   </div>'
+    });
+
+
+
+    //  ----------------------------------------------------------------------------------
+    //  TreeView views
+    
+    //  FIX edition view
     
     /**
      * Tree view field view
@@ -288,35 +801,203 @@ var formBuilder = (function(formBuild) {
             });
         }
     }, {
-        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>" ><%= label %></label>'+
-                        '<div class="span8" id="tree"></div>' + 
-                        '<div class="span1"> '+
-                            '<i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div> '
-    });
-
-    /**
-     * date field view
-     */
-    formBuild.DateFieldView = formBuild.BaseView.extend({
-        events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
-            });
-        },
-       render : function() {
-           formBuild.BaseView.prototype.render.apply(this, arguments);
-           $(this.el).find('input').datepicker({
-               format: this.model.get('format')
-           });
-       }
-    }, {
-        templateSrc:    '<label class="span3 <% if (required) { %> required <% } %>"><%= label %></label> '+
-                        '<input type="text" class="span8" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
+        templateSrc:    '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <label class="span4">' + 
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '           <% if (required === true) { %> * <% } %> <%= label %>'+
+                        '       </label> '+
+                        '       <div class="span7 right hide">'+
+                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '       <div class="span11" id="tree"></div>' +
+                        '   </div>' +
                         '</div>'
     });
 
+    /**
+     * Tree view field edition view
+     */
+    formBuild.TreeViewFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template = _.template(this.constructor.templateSrc);
+        },
+        
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            return this;
+        }
+        
+    }, {
+        templateSrc : ''
+    });
+
+
+
+
+    //  ----------------------------------------------------------------------------------
+    //  Enumeration field view
+    
+    /**
+     * Radio field view
+     */
+    formBuild.RadioFieldView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
+                'click input[type="radio"]'        : 'updateSetting'
+            });
+        }
+    }, {
+        templateSrc:    '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '      <label class="span4">' + 
+                        '          <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '          <% if (required === true) { %> * <% } %> <%= label %>'+
+                        '      </label>'+
+                        '      <div class="span7 right hide">'+
+                        '          <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '          <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '          <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '      </div>'+
+                        '   </div>'+
+                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '      <div class="span11" style="border : 2px #eee solid;" id="<%= id %>">'+
+                        '          <% _.each(items[0]["items"], function(el, index) { %>' +
+                        '              <label class="span12 noMarginLeft left"> '+
+                        '              <input type="radio" style="margin-left: 10px;" name="<%= name %>" <% if (items[0]["defaultValue"] == el["id"]){ %> checked <% } %> value="<%= el.value %>"  /> '+
+                        '                  <%= el.label %>'+
+                        '              </label> '+
+                        '          <% }); %>'+
+                        '      </div>'+
+                        '   </div>'    +
+                        '</div>'
+    });
+
+    /**
+     * Options field vue
+     */
+    formBuild.SelectFieldView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
+                'change select'        : 'updateSelected'
+            });
+        },
+        updateSelected : function(e) {
+            this.model.updateSelectedOption($(e.target).find(':selected').data('idx'), true);
+        }
+    }, {
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
+                        '   <label class="span4">' + 
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '   <div class="span7 right hide">'+
+                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   </div>'+
+                        '</div>' +
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '   <select name="<% name %>" class="span11"> '+
+                        '       <% _.each(items[0]["items"], function(el, idx) { %>' +
+                        '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (items[0]["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.label %></option>'+
+                        '       <% }) %>' +
+                        '   </select> '+
+                        '</div></div>'
+    });
+
+    /**
+     * Checkbox field view
+     */
+    formBuild.CheckBoxFieldView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {
+                'change input[type="checkbox"]' : 'updateSelected'
+            });
+        },
+        updateSelected : function(e) {
+            this.model.updateSelectedOption($(e.target).data('idx'), $(e.target).is(':checked'));
+        },
+    }, {
+        templateSrc:    '<div class="element">'+
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '   <label class="span4">' + 
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '       <% if (required === true) { %> * <% } %> <%= label %>'+
+                        '   </label>'+
+                        '   <div class="span7 right hide">'+
+                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   </div>'+
+                        '</div>'+
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="span11" style="border : 2px #eee solid;">'+
+                            '<% _.each(items[0]["items"], function(el, idx) { %>' +
+                                '<label class="span12 noMarginLeft left"> '+
+                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (items[0]["defaultValue"] == el["id"]){ %> checked <% } %> /> '+
+                                    '<%= el.label %>'+
+                                '</label> '+
+                            '<% }); %>'+
+                        '</div>'+
+                        '</div>' + 
+                        '</div>'
+    });
+
+    /**
+     * Common edition view for enumeration field
+     */
+    formBuild.RadioFieldEditView = formBuild.CheckboxFieldEditView = formBuild.SelectFieldEditView = Backbone.View.extend({
+        initialize: function() {
+            this.template = _.template(this.constructor.templateSrc);
+        },
+        
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            return this;
+        }
+        
+    }, {
+        templateSrc:    '<% _.each( items, function(list, index) { %>' +
+                        '   <div class="row-fluid"><div class="block span10 offset1">' + 
+                        '       <table class=" table table-striped">' +
+                        '           <caption><h2>'+
+                        '               <%= list["lang"] %> list / Default value : <b><%= list["defaultValue"] %>'+
+                        '           </h2></caption>'+
+                        '           <thead>' +
+                        '               <tr>'+ 
+                        '                   <th>Id</th>'+
+                        '                   <th>Label</th>'+
+                        '                   <th>Value</th>'+
+                        '               </tr>'+ 
+                        '           </thead>' +
+                        '           <tbody>' +
+                        '               <% _.each( list["items"], function(item, idx) { %>' +
+                        '                   <tr>' + 
+                        '                       <td><%= item["id"] %></td>'+
+                        '                       <td><%= item["label"] %></td>'+
+                        '                       <td><%= item["value"] %></td>' +
+                        '                   </tr>' +
+                        '               <% }); %>' +    
+                        '           </tbody>'+
+                        '       </table>' +
+                        '   </div></div>'+
+                        '   <div class="row-fluid">' + 
+                        '       <label class="span10 offset1"></label>' +
+                        '   </div>'+
+                        '<% }); %>'        
+    });
+    
+
+    //  ----------------------------------------------------------------------------------
+    //  Main views
+    
     /**
      * Main form view
      */
@@ -326,7 +1007,7 @@ var formBuilder = (function(formBuild) {
         },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView');
+            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView', 'getModel');
             this.collection.bind('add', this.addElement);
             this.collection.bind('change', this.updateView);
             this._view = [];
@@ -337,7 +1018,6 @@ var formBuilder = (function(formBuild) {
         },
         
         addElement: function(el) {
-            
             var id = "dropField" + this.collection.length;
         
             $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');            
@@ -357,6 +1037,7 @@ var formBuilder = (function(formBuild) {
             }
             
         },
+        
         render: function() {
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
@@ -374,12 +1055,18 @@ var formBuilder = (function(formBuild) {
                         _vues[v].updateIndex($('#' + v).index());
                     }
                 }
-            }).disableSelection();
+            })//.disableSelection();
             return this;
         },
+        
+        getModel : function() {
+            return this.collection.length;
+        },
+        
         changeFormName: function() {
             this.collection.name = $('#protocolName').val();
         },
+        
         downloadXML: function() {
             var str = '<div id="popup">' + this.constructor.popupDwSrc + '</div>';
             var coll = this;
@@ -402,7 +1089,6 @@ var formBuilder = (function(formBuild) {
                                 saveAs(blob, $(parent).find('input[type="text"]').val() + '.xml');
                                 $(parent).dialog('close');
                             } catch (e) {
-                                console.log (e)
                                 formBuild.displayError("Error", "Can't create file");
                             }
                         } else {
@@ -412,6 +1098,7 @@ var formBuilder = (function(formBuild) {
                 }
             });
         },
+        
         importXML: function() {
             var str = '<div id="popup">' + this.constructor.popupSrc + '</div>';
             var coll = this;
@@ -442,8 +1129,7 @@ var formBuilder = (function(formBuild) {
                                 var reader = new FileReader();
                                 reader.readAsText(file, "UTF-8");
                                 reader.onload = function(evt) {
-                                    try {
-                                        
+                                    try {                                        
                                         var result = formBuild.XMLValidation(evt.target.result);
                                         if (result !== true) {
                                             var str = 'There is a error on the ' + result['element'] + '<br />';
@@ -472,7 +1158,7 @@ var formBuilder = (function(formBuild) {
         }
     }, {
         templateSrc:    '<div class="row-fluid">'+
-                            '<input type="text" id="protocolName" name="protocolName" value="<%= this.collection.name %>" />'+
+                            '<input type="text" id="protocolName" name="protocolName" class="firstText" value="<%= this.collection.name %>" />'+
                             '<hr class="mainHr"/><br />' +
                         '</div>'+
                         '<div class="row-fluid">'+
@@ -510,489 +1196,56 @@ var formBuilder = (function(formBuild) {
                     '</div>'
     });
 
-    /**
-     * Settings field view
-     */
-    formBuild.SettingView = Backbone.View.extend({
-        
-        events: {
-            'click .close'          : 'hidePannel',
-            'change .property'      : 'updateModel',
-            'click .addOption'      : "addOption",
-            'click h2 > a'          : 'displayOptions',
-            /*'click .saveOp'         : 'saveOption',
-            'click .cancelOp'       : 'cancelOption',
-            'click .removeOp'       : 'removeOption',
-            'click .editOp'         : 'editOption',
-            'click .saveChangeOp'   : 'saveChangeOption',
-            'click .cancelChangeOp' : 'cancelChangeOption',*/
-            'click #accordion h1'   : 'accordion',
-            
-            'click .edit' : 'editOption',
-            'click .remove' : 'removeOption'
-        },
-        
-        initialize: function() {
-            this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 
-                            'hidePannel', 
-                            'removePanel', 
-                            'changeModel', 
-                            'addOption', 
-                            'getSubTemplateForArray', 
-                            'getSubTemplateForObject'
-                        );
-            this.model = null;
-            this._op = true;
-        },
-        
-        /**
-         * Display advanced model field
-         */
-        displayOptions: function(e) {
-            if (!$(e.target).hasClass('selected')) {
-                $(".settings h2 > a").toggleClass('selected');
-                if ($(e.target).prop('id') === "simple") {
-                    $('.advanced').addClass('hide', 500);
-                } else {
-                    $('.advanced').removeClass('hide', 500);
-                }
-            }
-        },
-            
-        /**
-         * Change the view's model
-         * @param {type} model new model
-         */
-        changeModel : function(model) {
-            if (! this.model === null) {
-                this.model.off( null, null, this );
-                this.model = null;
-            }
-            this.model = model;
-            this.model.bind('change', this.render);
-            this.model.bind('destroy', this.removePanel);
-
-            $('.dropArea').switchClass('span9', 'span7', 100);
-            $('.widgetsPanel').toggle(100);
-            this.render();
-        },
-        
-        removePanel: function() {
-          this.hidePannel();
-        },
-        
-        /**
-         * Render the view in HTML
-         */
-        render: function() {
-            if (this.model !== null) {
-                var renderedContent = this.template(this.model.toJSON());
-                $(this.el).html(renderedContent);
-                if (this._op) {
-                    $('#optionsPanel').addClass('toggle');
-                } else {
-                    $('#settingsPanel').addClass('toggle');
-                }
-                return this;
-            }
-        },
-        
-        /**
-         * Hide the panel using jquery ui effect
-         */
-        hidePannel : function() {
-            if ($('.dropArea').hasClass('span7')) {
-                $('.dropArea').switchClass('span7', 'span9', 100);
-                $('.widgetsPanel').toggle(100);
-                this._op = true;
-            }
-        },
-        
-        /**
-         * Update model property when input value has changed
-         */
-        updateModel: function(e) {
-            if ($(e.target).prop("type") === "checkbox") {
-                this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
-            } else {
-                this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
-            }
-            this.model.set('state', 'change');
-        },
-        
-        /**
-         * Run graphic effects when accordion event is send by the view
-         */
-        accordion: function(e) {
-            $(e.target).next('div').siblings('div').slideUp();
-            $(e.target).next('div').slideToggle();
-        },
-        
-        /**
-         * Remove option for an array field in the model (like "options" field)
-         */
-        removeOption: function(e) {
-            if (confirm("Are you sur ?")) {
-                this._op = false;
-                this.model.removeOption( $(e.target).parents('tr').prop("id") );
-            }
-        },
-        
-        
-        addOption : function(e) {
-            
-            var html =  '<div id="myModal" class="modal span8 offset2 fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' + 
-                        '   <div class="modal-header">'+
-                        '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
-                        '       <h3 id="myModalLabel">Add an option</h3>'+
-                        '   </div>'+
-                        '   <div class="modal-body">';
-                _.each(this.model.constructor.schema['options']['values'], function(element, index) {
-                    html +=     '<div class="row-fluid">'+
-                                '   <input type="text" class="span8 offset2 object" data-index="'+index+'" placeholder="' + index + '"' + ' />'+
-                                '</div><br />';
-                });
-                html += '       <div class="row-fluid"><label class="span3 offset2">Is the default value ? </label><input type="checkbox" /></div>'+
-                        '   </div>'+
-                        '   <div class="modal-footer">'+
-                        '       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>'+
-                        '       <button class="btn btn-primary saveChange">Save changes</button>'+
-                        '   </div>'+
-                        '</div>';
-                
-            var popup = $(html);
-            $(popup).modal();
-            $(popup).find('.saveChange').bind('click', _.bind(function(e) {
-                var newOption = {};
-                
-                $(popup).find('.object').each( function(index, element) {
-                   newOption[ $(element).data('index') ] = $(element).val();
-                });
-                
-                this.model.addOption(newOption, $(popup).find('input[type="checkbox"]').is(':checked'));
-            }, this));
-        },
-        
-        editOption : function(e) {
-            var parent  = $(e.target).closest('tr'),
-                select  = $(parent).find('[data-index="default"]').text() === "Yes" ? true : false,
-                index   = $(parent).prop('id'),
-                obj     = {};
-                $(parent).find('.object').each(function(index, element) {
-                    obj[ $(element).data('index') ] = $(element).text();
-                });
-        
-            var html =  '<div id="myModal" class="modal span8 offset2 fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">' + 
-                        '   <div class="modal-header">'+
-                        '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>'+
-                        '       <h3 id="myModalLabel">Add an option</h3>'+
-                        '   </div>'+
-                        '   <div class="modal-body">';
-                _.each(this.model.constructor.schema['options']['values'], function(element, index) {
-                    html +=     '<div class="row-fluid">'+
-                                '   <input type="text" class="span8 offset2 object" data-index="'+index+'" placeholder="' + index + '"' + ' value="' + obj[index] + '" />'+
-                                '</div><br />';
-                });
-                html += '       <div class="row-fluid"><label class="span3 offset2">Is the default value ? </label><input type="checkbox"' +(select ? "checked" : "") + '/></div>'+
-                        '   </div>'+
-                        '   <div class="modal-footer">'+
-                        '       <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>'+
-                        '       <button class="btn btn-primary saveChange">Save changes</button>'+
-                        '   </div>'+
-                        '</div>';
-                
-            var popup = $(html);
-            
-            $(popup).modal();
-            
-            $(popup).find('.saveChange').bind('click', _.bind(function(e) {
-                
-                obj = {};
-                
-                $(popup).find('.object').each( function(index, element) {
-                   obj[ $(element).data('index') ] = $(element).val();
-                });
-                
-                this.model.saveOption(index, obj, $(popup).find('input[type="checkbox"]').is(':checked'));
-                $(popup).modal('hide');
-                
-            }, this));
-        },
-        
-        
-        /**
-         * Get HTML template for an element
-         * 
-         * @param {type} element
-         * @param {type} idx
-         * @param {type} type
-         * @param {type} section
-         * @returns {String}
-         */
-        getSubTemplateHTML : function(element, idx, type, section) {
-            
-            switch (type) {
-                
-                case "integer" : 
-                    var str = (section === "advanced") ? '<div class="advanced hide">' : '<div>';
-
-                    return  str + '<div class="row-fluid">' +
-                            '   <label class="span10 offset1">' + idx + '</label>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                            '   <input class="span10 offset1 property" type="number" data-attr="' + idx + '" placeholder="' + idx + '" value="' + element + '" />' +
-                            '</div></div>';
-                    
-                case "string":
-                default : 
-                    var str = (section === "advanced") ? '<div class="advanced hide">' : '<div>';
-
-                    return  str + '<div class="row-fluid">' +
-                            '   <label class="span10 offset1">' + idx + '</label>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                            '   <input class="span10 offset1 property" type="text" data-attr="' + idx + '" placeholder="' + idx + '" value="' + element + '" />' +
-                            '</div></div>';
-
-                    case "boolean" :
-                        if (section === "advanced") {
-                            var str = '<div class="row-fluid advanced hide">&nbsp;</div><div class="row-fluid advanced hide">';
-                        } else {
-                            var str = '<div class="row-fluid">&nbsp;</div><div class="row-fluid">';
-                        }
-
-                        str += '   <label class="span4 offset1">' + idx + ' : </label>' +
-                                '   <input class="span2 property" data-attr="' + idx + '" type="checkbox" ' + (element === true ? 'checked' : ' ') + ' />' +
-                                '</div>';
-                        return str;
-            }
-        },
-
-        /**
-         * Run through an object field and return the HTML
-         * 
-         * @param {type} element
-         * @param {type} idx
-         * @returns {String}
-         */
-        getSubTemplateForObject: function(element, idx) {
-
-            var str = "", type = "", section = "";
-
-            _.each(element, _.bind(function(subElement, index) {
-
-                type    = this.model.getSchemaProperty(idx + "/" + index, 'type');
-                section = this.model.getSchemaProperty(idx + "/" + index, 'section');
-
-                str     += (type === "object") ? this.getSubTemplateForObject(subElement, idx + "/" + index) : this.getSubTemplateHTML(subElement, idx + "/" + index, type, section);
-
-            }, this));
-
-            return str;
-        },
-        
-        /**
-         * Return a table html template for array type element
-         * 
-         * @param {type} element
-         * @param {type} idx
-         * @returns {String}
-         */
-        getSubTemplateForArray : function(element, idx) {
-            
-            var i   = 0;
-            var str =   '<div class="row-fluid">'+
-                        '   <label class="span10 offset1">' + idx + '</label>'+
-                        '</div>'+
-                        '<table class="table table-stripped span10 offset1">' +
-                        '   <thead>' +
-                        '       <tr>';
-            _.each (this.model.constructor.schema[idx]['values'], function(subHead, index) {
-                str += '        <th>' + index + '</th>';
-            });
-            str +=      '       <th>Default value</th>'+
-                        '       <th>Action</th>'+
-                        '       </tr>' +
-                        '   </thead>'+
-                        '   <tbody>';
-                
-            _.each(element, _.bind(function(subElement, index) {
-                str +=  '       <tr id="' + i + '">';
-                _.each(subElement, function(values, id) {
-                    str += '        <td data-index="'+ id + '" class="object">' + values + '</td>';
-                });                
-                str +=  '           <td data-index="default">' + ((subElement['value'] === this.model.get('defaultValue') ? "Yes" : "No")) + '</td>' +
-                        '           <td><a href="#" class="edit">Edit</a> / <a href="#" class="remove">Remove</td>' +
-                        '       </tr>';
-                i++;
-            }, this));            
-            str +=      '       <tr>' + 
-                        '           <td colspan="' + (_.size(element) + 2) + '" class="center">' +
-                        '               <a href="#" class="addOption">Add an option</a>' + 
-                        '           </td>'+
-                        '       </tr>' +
-                        '   </tbody>' +
-                        '</table>';
-                
-            return str;
-        },
-        
-        /**
-         * Return field element HTML template
-         * 
-         * @param {type} element the element field
-         * @param {type} idx the element field name
-         * @returns {String} HTML template for model fields
-         */
-        getTemplate : function(element, idx, type) {    
-            
-            var el = this.model.constructor.schema[idx];
-
-            if (el !== undefined) {
-                
-                var section = this.model.constructor.schema[idx];
-                type    = type !== undefined ? type : this.model.constructor.schema[idx]['type'];
-
-                switch (type) {
-                    case "integer":
-                    case "string" :
-                    case "boolean":
-                        return this.getSubTemplateHTML(element, idx, type, section);
-                        break;
-
-                    case "array" :
-                        return this.getSubTemplateForArray(element, idx);
-                        break;
-
-                    case "object":
-                        return this.getSubTemplateForObject(element, idx);
-                        break;
-                    
-                    default : 
-                        return "none";
-                        break;
-                }
-            }
-
-        }
-        
-    }, {
-        templateSrc:    '<div id="accordion">'+
-                        '   <h1>Settings</h1>'+
-                        '   <div>'+
-                        '       <h2>'+
-                        '           <a href="#" id="simple" class="selected">Simple options</a> / <a href="#" id="advanced">Advanced options</a>'+
-                        '       </h2>'+
-                        '       <% _.each(this.model.attributes, _.bind(function(el, idx) { %> ' +
-                        '           <%= this.getTemplate(el, idx) %>' +
-                        '       <%}, this)); %>' +
-                        '       <div class="row-fluid">&nbsp;</div>'+
-                        '   </div>' +
-                        '   <div class="row-fluid">&nbsp;</div>'+
-                        '   <button class="close center" style="width: 100%">Save</button>'+
-                        '</div>'
-    });
 
     /**
      * Panel view
      */
     formBuild.PanelView = Backbone.View.extend({
         events: {
-            'dblclick .fields': 'appendToDrop'
+            'click .fields': 'appendToDrop'
         },
         initialize: function(collection) {
             this._collection = collection;
             _.bindAll(this, 'appendToDrop');
         },
         appendToDrop : function(e) {
-            $(e.target).disableSelection();
             
             if (formBuild[$(e.target).data("type") + 'Field'] !== undefined) {
+                
                 var f = new formBuild[$(e.target).data("type") + 'Field']({
                     id: this.collection.getSize()
                 });
+                
                 this.collection.add(f);
             } else {
                 alert ("Can't create field object");
             }            
         },
-        render: function() {
-            $(this.el).html(this.constructor.templateSrc);
-            $('.fields').disableSelection();
+        render: function() {            
+            var renderedContent = _.template(this.constructor.templateSrc);
+            $(this.el).html(renderedContent);
             $(this.el).nanoScroller();
             return this;
         }
     }, {
         templateSrc :   '<div class="nano-content">'+
                             '<h1 class="center">Fields</h1>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Text">' +
-                                    'Text' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Pattern">' +
-                                    'Pattern' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="File">' +
-                                    'File picker' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="LongText">' +
-                                    'Long Text' +
-                                '</div>' +
-                            '</div>'+
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="TreeView">' +
-                                    'Tree view' +
-                                '</div>' +
-                            '</div>'+
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Radio">' +
-                                    'Radio buttons'+
-                                '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="CheckBox">' +
-                                    '<i class="fa fa-check-square-o"></i>&nbsp;Checkboxes' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Select">' +
-                                    'Options' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Numeric">' +
-                                    'Numéric' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Date">' +
-                                    'Date' +
-                                '</div>' +
-                            '</div>'+
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="Hidden">' +
-                                    'Hidden' +
-                                '</div>' +
-                            '</div>'+
-                            '<h1 class="center">Layouts</h1>'+
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="hr">' +
-                                    'Horizontal line' +
-                                '</div>' +
-                            '</div>'+
-                            '<div class="row-fluid">' +
-                                '<div class="span10 offset1 fields" data-type="fieldset">' +
-                                    'Fieldset' +
-                                '</div>' +
-                            '</div>'+
+                            '<% _.each(formBuilder, function(el, idx) { %>' + 
+                            '   <% if (el.type != undefined) { %>' + 
+                            '       <div class="row-fluid">' +
+                            '           <div class="span10 offset1 fields" data-type="<%= idx.replace("Field", "") %>">' +
+                            '               <%= idx.replace("Field", " Field") %>' +
+                            '           </div>' +
+                            '       </div>' +
+                            '   <% } %>' +
+                            ' <%}); %>'+
                         '</div>'
     });
+
+
+
+
+
 
     /**
      * Hidden field view
@@ -1002,31 +1255,44 @@ var formBuilder = (function(formBuild) {
             return _.extend({}, formBuild.BaseView.prototype.events, {});
         }
     }, {
-        templateSrc :   '<label class="span3 grey">My hidden field</label> '+
-                        '<input type="text" disabled class="span8" name="<%= name %>" id="<%= id%>" value="<%= value %>" /> '+
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i><i class="fa fa-wrench"></i> '+
-                        '</div>'
+        templateSrc :   '<div class="element"><div class="row" style="margin-left : 10px;">' + 
+                        '   <label class="span4">' + 
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '       &nbsp;</label> '+
+                        '   <div class="span7 right hide">'+
+                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   </div>'+
+                        '</div>' +
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '   <input type="text"  class="span11" name="<%= name %>" id="<%= id%>" value="<%= value %>" disabled="disabled" /> '+
+                        '</div></div>'
     });
-    
-    //  -------------------------------------------------------
-    //  Only graphical value
-    //  -------------------------------------------------------
     
     /**
      * Display an horizontal line in the form
      */
-    formBuild.HorizontalLineView = formBuild.BaseView.extend({
+    formBuild.HorizontalLineFieldView = formBuild.BaseView.extend({
         render : function() {
             formBuild.BaseView.prototype.render.apply(this, arguments);
             $(this.el).addClass('min');
         }
     }, {
-        templateSrc:    '<hr class="span10 offset1" />' +
-                        '<div class="span1"> '+
-                        '   <i class="fa fa-trash-o"></i> '+
+        templateSrc:    '<div class="row-fluid" style="margin-left : 10px;">' + 
+                        '   <label class="span4">' + 
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '       &nbsp;</label> '+
+                        '   <div class="span7 right hide">'+
+                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
+                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   </div>'+
+                        '</div>' +
+                        '<div class="row-fluid" style="margin-left : 10px;">' + 
+                        '   <hr class="span11" />' +
                         '</div>'
     });
+    
     
     return formBuild;
 
