@@ -22,10 +22,28 @@
     <!--
         Enum field sub element type
     -->
-    <xs:complexType name="option">
+    <xs:complexType name="item">
         <xs:sequence>
             <xs:element name="label" type="xs:string" />
             <xs:element name="value" type="xs:string" />
+        </xs:sequence>
+        <xs:attribute type="xs:integer" name="id"/>
+    </xs:complexType>
+    
+    <!--
+        Complex List of item element
+    -->
+    <xs:complexType name="itemList">
+        <xs:sequence>
+            <xs:element name="item" type="item" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element type="xs:integer" name="defaultValue"/>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="lang"/>
+    </xs:complexType>
+    
+    <xs:complexType name="items">
+        <xs:sequence>
+            <xs:element name="itemList" type="itemList" minOccurs="1" maxOccurs="unbounded" />
         </xs:sequence>
     </xs:complexType>
     
@@ -127,8 +145,9 @@
         <xs:complexContent>
             <xs:extension base="fieldType">
                 <xs:sequence>
-                    <xs:element name="defaultValue" type="xs:string" />
-                    <xs:element name="option"      type="option" minOccurs="1" maxOccurs="unbounded"/>
+                    <xs:element name="items" type="items" />
+                    <xs:element name="expanded" type="xs:boolean" />
+                    <xs:element name="multiple" type="xs:boolean" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -193,7 +212,8 @@
                 <xs:sequence>
                     <xs:element name="min"  type="xs:integer" />
                     <xs:element name="max"  type="xs:integer" />
-                    <xs:element name="step" type="xs:positiveInteger" />
+                    <xs:element name="precision" type="xs:positiveInteger" />
+                    <xs:element name="unity" type="xs:string" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -222,11 +242,7 @@
                             
                             <xs:element name="field_numeric"    minOccurs="0" type="field_numericType"  />
                             
-                            <xs:element name="field_radio"      minOccurs="0" type="field_enumType"     />
-                            
-                            <xs:element name="field_checkBox"   minOccurs="0" type="field_enumType"     />
-                            
-                            <xs:element name="field_select"     minOccurs="0" type="field_enumType"     />
+                            <xs:element name="field_list"      minOccurs="0" type="field_enumType"     />
                             
                             <xs:element name="field_longText"   minOccurs="0" type="field_longTextType" />
                             
