@@ -166,13 +166,15 @@ var formBuilder = (function(formBuild) {
         defaults: {
             defaultValue: "",
             hint        : "Write some text",
-            size        : 255
+            size        : 255,
+            multiline   : false
         },
         getXML: function() {
             var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>'    + this.get('defaultValue')  + '</defaultValue>' +
                             '<hint>'            + this.get('hint')          + '</hint>' +
-                            '<size>'            + this.get('size')          + '</size>';
+                            '<size>'            + this.get('size')          + '</size>' +
+                            '<multiline>'       + this.get('multiline')     + '</multiline>';
         },
         initialize : function(options) {
             formBuild.BaseField.prototype.initialize.apply(this, arguments);
@@ -523,22 +525,17 @@ var formBuilder = (function(formBuild) {
      * long text field type
      */
     formBuild.LongTextField     = formBuild.TextField.extend({
-        defaults: {
-            resizable: false
-        },
         initialize : function() {
             formBuild.TextField.prototype.initialize.apply(this, arguments);
             _.extend(this.constructor.schema, formBuild.TextField.schema);
+            this.set('multiline', true);
         },
         getXML: function() {
-            return formBuild.TextField.prototype.getXML.apply(this, arguments) + '<resizable>' + this.get("resizable") + '</resizable>';
+            return formBuild.TextField.prototype.getXML.apply(this, arguments);
         }
     }, {
         type    : 'LongText',
-        xmlTag  : 'field_longText',
-        schema : {
-            resizable : { type : "boolean" }
-        }
+        xmlTag  : 'field_text'
     });
 
     _.defaults(formBuild.NumericField.prototype.defaults,   formBuild.TextField.prototype.defaults);
