@@ -16,57 +16,61 @@ html, body {
 .left           { text-align: left !important;}
 .right          { text-align: right !important; }
 .center         { text-align: center; }
+.new            { background : rgba(0, 255, 0, 0.5) !important; }
+.change         { background : rgba(255, 165, 0, 0.5); }
+.delete         { background : rgba(255, 0, 0, 0.5); }
+.grey           { background : #aaa; }
+.transparent    { background : transparent !important; }
+.diff           { margin-bottom: 150px; }
+.text           { line-height : 30px; font-size : 20px; }
+
+.table      { tr { background : white; } }
+.bordered   { border : 2px #aaa solid; background : #fff; }
+.required   { color : red; &:before { content : "*"; } }
+.font       { font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif !important; }
+
 .ui-sortable-helper { cursor : move !important; * { cursor : move !important; }}
+
 .toggle {
     background-color    : rgb(238, 238, 238); 
     display             : none; 
     background-position : initial initial; 
     background-repeat   : initial initial;
 }
-.required {
-    &:before {
-        content : "*";
-    }
-}
+
 .input {
     box-shadow      : 0 0 3px #ccc;
     border          : 1px #ddd solid;
     border-radius   : 0!important;
     padding-left    : 15px;
 }
-.text {
-    line-height     : 30px; 
-    font-size       : 20px; 
-    text-align      : right
-}
-    
-.font { font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif !important; }
+
+
 #formBuilder {   
     height      : 100%;
     overflow    : hidden; 
     margin      : 0 !important;
     padding     : 0 !important;
-    
+
     //  ---------------------------------------------------------------------
     //  Children classes
     //  ---------------------------------------------------------------------
+    .copy, .trash, .wrench { text-decoration: none; }
     .content {
         background  : #fff;
         height      : 100%;
+        
         .widgetsPanel {
             height : 100%;
+            background  : #ddd;
+            height      : 100%;
+            
             .nano-pane {
                 background : #aaa;
-                .nano-slider {
-                    background : #ddd;
-                    border-radius: 0 !important;
-                }
+                .nano-slider { background : #ddd; border-radius: 0 !important; }
             }
-            .nano-content {
-                padding-bottom: 60px;
-            }
-            background  : #ddd;
-            height      : 100%;     
+            .nano-content { padding-top: 50px; padding-bottom: 60px; }
+                             
             .fields {
                 .font();
                 height          : 50px;
@@ -79,16 +83,14 @@ html, body {
                 margin-bottom   : 10px;
                 margin-top      : 10px;
                 transition      : all 0.3s ease-in-out;
-                &:hover { 
-                    cursor  : pointer; 
-                    outline : 5px #aaa solid;
-                }
+                &:hover { cursor  : pointer; outline : 5px #aaa solid; }
             }
         }
         .dropArea {
             overflow-y : scroll;
             height : 100%;
-            input[type="text"]:first-child {
+            padding-top : 50px;
+            .firstText {
                 .font();
                 width           : 100%;
                 border          : none;
@@ -97,7 +99,10 @@ html, body {
                 text-align      : right;
                 font-size       : 45px;
                 color           : #555;
-                padding-right   : 30px;
+                padding-right   : 48px;
+                &:focus {
+                    box-shadow: none;
+                }
             }
             .min { height: 40px; }
             hr {
@@ -112,7 +117,7 @@ html, body {
                 padding     : 10px auto;
                 text-align  : center;
                 &:after {
-                    content     : "\275D \ Double click on a field to add it in the area \275E";
+                    content     : "\275D \ Click on a field to add it in the area \275E";
                     height      : 0 !important;
                     color       : #aaa;
                     text-align  : center;
@@ -130,10 +135,16 @@ html, body {
             }
             .dropField {
                 .noMarginTop();
-                padding-top      : 5px;
+                padding-top      : 0px;
+                padding-bottom : 5px;
                 margin-bottom   : 5px;
                 margin-left     : 0!important;
                 background : #fff;
+                transition : background 0.2s ease-in-out;
+                &:hover {
+                    
+                    background : beige;
+                }
                 &.textArea {
                     textarea {
                         padding-left    : 10px;
@@ -150,7 +161,7 @@ html, body {
                 i { 
                     .text(); 
                     &:first-child { 
-                        margin-right : 10px; 
+                        margin-right : 5px; 
                     } 
                 }
                 input[type="text"], .picker, select {
@@ -176,22 +187,23 @@ html, body {
             overflow-x          : scroll;
             padding-bottom      : 50px;
             border-left         : 1px #333 solid;
+            padding-top         : 50px;
             h1 {
                 text-align          : center;
-                border-bottom       : 2px #ccc solid;
-                padding-bottom      : 31px;
+                //border-bottom       : 2px #ccc solid;
+                padding-bottom      : 0 !important ;
                 margin-bottom       : 0 !important;
                 margin-top          : 0 !important;
                 color               : #333;
-                background-color    : #e6dddd;
+                //background-color    : #e6dddd;
                 height              : 70px;
                 line-height         : 60px;
                 &:hover {
                     cursor: pointer;
                 }
-                &:before {
+                /*&:before {
                     content: "\25B8"
-                }
+                }*/
             }
             h2 {
                 text-align  : center;
@@ -258,7 +270,7 @@ html, body {
                             line-height     : 40px;
                             td {
                                 height  : 40px;
-                            line-height : 40px;
+                                line-height : 40px;
                                 input {
                                     width       : 120px;
                                     box-shadow  : none;
@@ -267,26 +279,27 @@ html, body {
                                         width   : 15px;
                                         height  : 15px;
                                     }
-                                    
+
                                 }
                             }
                         }
                     }
                 }
             }
+            .block {
+                background : white;
+                margin-top : 10px;  
+                box-shadow: 0 0 3px #aaa;
+                table {
+                    margin-bottom : 0;
+                    caption {
+                        box-shadow: 0 0 3px #aaa;
+                        border-bottom: 1px #aaa solid;
+                    }
+                }
+            }
         }
     }
-}
-
-.table {
-    tr {
-        background : white;
-    }
-}
-
-.bordered {
-    border : 2px #aaa solid;
-    background : #fff;
 }
 
 .modal {
@@ -295,16 +308,17 @@ html, body {
     margin-top: 100px;
 }
 
-.new { background : rgba(0, 255, 0, 0.5) !important; }
-
-.change { background : rgba(255, 165, 0, 0.5); }
-
-.delete { background : rgba(255, 0, 0, 0.5); }
-
-.grey { background : #aaa; }
-
-.transparent { background : transparent !important; }
-
-.diff {
-    margin-bottom: 150px;
+.navbar {
+    width           : 100%;
+    position        : fixed;
+    z-index         : 255;
+    height          : 45px !important;
+    overflow        : hidden !important;
+    margin-bottom   : 0;
+    .navbar-inner {
+        background : #0aC !important;
+        height :  45px !important;
+        p { margin-top:  7px; }
+    }
+    li > a { height : 45px; }
 }
