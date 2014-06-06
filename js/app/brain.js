@@ -119,8 +119,10 @@ function show() {
 
 $(document).ready(function() {
 
-    formBuilder.init();
-
+    formBuilder.mainView = new formBuilder.MainView({
+        el : '#formBuilder'
+    });
+    
     var users = {
         anonymous: {roles: ['reader']},
         roger: {nickname: 'Roger', roles: ['reader', 'writer']},
@@ -141,22 +143,21 @@ $(document).ready(function() {
     var actions = {
         export: new NS.UI.NavBar.Action({
             handler: function() {
-                formBuilder.formView.downloadXML();
+                formBuilder.mainView.formView.downloadXML();
             },
             allowedRoles: ["reader"],
             title: "Export in XML",
         }),
         import: new NS.UI.NavBar.Action({
             handler: function() {
-                formBuilder.formView.importXML();
-                ;
+                formBuilder.mainView.formView.importXML();
             },
             allowedRoles: ["reader"],
             title: "Import XML File",
         }),
         clear: new NS.UI.NavBar.Action({
             handler: function() {
-                formBuilder.clear();
+                formBuilder.mainView.clear();
             },
             allowedRoles: ["reader"],
             title: "Clear protocol",
@@ -167,6 +168,15 @@ $(document).ready(function() {
             },
             allowedRoles: ["reader"],
             title: "Compare XML Files",
+        }),
+        save : new NS.UI.NavBar.Action({
+            handler : function() {
+                
+                //  Fix me Implement save to the web service
+                
+            },
+            allowedRoles : ['reader'],
+            title: "Save to the repo"
         })
         
     };
@@ -175,5 +185,10 @@ $(document).ready(function() {
 
     navbar.$el.prependTo('body');
     navbar.render();
+    
+    $('[data-key="export"]').prepend('<i class="fa fa-file"></i>'   );
+    $('[data-key="import"]').prepend('<i class="fa fa-upload"></i>' );
+    $('[data-key="clear"]').prepend ('<i class="fa fa-trash-o"></i>');
+    $('[data-key="show"]').prepend  ('<i class="fa fa-bars"></i>'   );
 
 });
