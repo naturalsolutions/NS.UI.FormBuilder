@@ -734,7 +734,7 @@ var formBuilder = (function(formBuild) {
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <textarea style="<% if(!resizable){ %>resize: none<%}%>" class="span11"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
+                        '       <textarea style="resize: none" class="span11"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
                         '   </div>' +
                         '</div>'
     });
@@ -742,39 +742,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Long text field edition view
      */
-    formBuild.LongTextFieldEditView = Backbone.View.extend({
-        
-        initialize: function() {
-            this.template   = _.template(this.constructor.templateSrc);
-        },
-        
-        /**
-         * Render Pattern field edition view, the view contains an text field edition view
-         * 
-         * @returns {PatternFieldEditView} current view
-         */
-        render: function() {
-            var renderedContent = this.template(this.model.toJSON());
-            $(this.el).html(renderedContent);
-            
-            var textView = new formBuild.TextFieldEditView({
-                el      : $('#subTextView'),
-                model   : this.model
-            });
-            textView.render();
-            
-            return this;
-        }
-        
-    }, {
-        templateSrc :   '   <div id="subTextView"></div>' + 
-                        '   <div >' +
-                        '       <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
-                        '           <label class="span4 offset1">Resizable</label>' +
-                        '               <input class="span2 property" data-attr="resizable" type="checkbox" <% if (resizable) { %> checked <% } %> />' +
-                        '       </div>' +
-                        '   </div>'
-    });
+    formBuild.LongTextFieldEditView = formBuild.TextFieldEditView.extend({})
 
 
 
@@ -1007,7 +975,15 @@ var formBuilder = (function(formBuild) {
         },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'addElement', 'changeFormName', 'importXML', 'downloadXML', 'updateView', 'getModel');
+            _.bindAll(this, 'render', 
+                            'addElement', 
+                            'changeFormName', 
+                            'importXML', 
+                            'downloadXML', 
+                            'updateView', 
+                            'getModel',
+                            'getXML'
+                    );
             this.collection.bind('add', this.addElement);
             this.collection.bind('change', this.updateView);
             this._view = [];
@@ -1097,6 +1073,10 @@ var formBuilder = (function(formBuild) {
                     });
                 }
             });
+        },
+        
+        getXML : function() {
+            return this.collection.getXML();
         },
         
         importXML: function() {
