@@ -88,6 +88,7 @@
                     <xs:element name="defaultValue" type="xs:string" />
                     <xs:element name="hint"         type="xs:string" />
                     <xs:element name="size"         type="xs:integer" />
+                    <xs:element name="multiline"    type="xs:boolean" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
@@ -191,19 +192,6 @@
     </xs:complexType>
     
     <!--
-        Long text field type
-    -->
-    <xs:complexType name="field_longTextType">
-        <xs:complexContent>
-            <xs:extension base="field_textType">
-                <xs:sequence>
-                    <xs:element name="resizable" type="xs:boolean" />
-                </xs:sequence>
-            </xs:extension>
-        </xs:complexContent>
-    </xs:complexType>
-    
-    <!--
         Numeric field type
     -->
     <xs:complexType name="field_numericType">
@@ -243,8 +231,6 @@
                             <xs:element name="field_numeric"    minOccurs="0" type="field_numericType"  />
                             
                             <xs:element name="field_list"      minOccurs="0" type="field_enumType"     />
-                            
-                            <xs:element name="field_longText"   minOccurs="0" type="field_longTextType" />
                             
                             <xs:element name="field_mask"       minOccurs="0" type="field_maskType"     />
                             
