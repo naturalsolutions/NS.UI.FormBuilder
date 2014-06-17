@@ -1,3 +1,4 @@
+
 var formBuilder = (function(formBuild) {
 
     /**
@@ -69,35 +70,6 @@ var formBuilder = (function(formBuild) {
         });
     };
     
-    /**
-     * 
-     * @param {type} title
-     * @param {type} msg
-     * @returns {undefined}
-     */
-    formBuild.displayError = function(title, msg) {
-        var modal = $(
-                        '<div id="dialog-message" title="' + title + '">' +
-                            '<p>' +
-                                '<span class="ui-icon ui-icon-alert" style="float:left; margin:0 7px 50px 0;"></span>' +
-                                msg +
-                            '</p>' +
-                        '</div>'
-                    );
-        $(modal).dialog({
-            modal       : true,
-            width       : 500,
-            height      : 250,
-            position    : 'center',
-            draggable   : false,
-            buttons: {
-                Ok: function() {
-                    $(this).dialog("close");
-                }
-            }
-        });
-    };
-    
     formBuild.XmlToJson = function(element, index) {
         
         var jsonObject = {};
@@ -116,7 +88,7 @@ var formBuilder = (function(formBuild) {
                //   recursive
                _.each(formBuild.XmlToJson(el, idx), function(subEl, subId) {
                    jsonObject[$(el).prop('tagName')][subId] = subEl;
-               })
+               });
            } else {
                //   simple text
                if (_.isEmpty(jsonObject[$(el).prop('tagName')])) {
@@ -130,7 +102,8 @@ var formBuilder = (function(formBuild) {
 
         return jsonObject;        
     };
-    
+
+
     return formBuild;
 
 })(formBuilder);

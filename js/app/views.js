@@ -19,7 +19,8 @@
  */
 
 var formBuilder = (function(formBuild) {
-    
+
+//
     //  ----------------------------------------------------------------------------------
     //  Base views
     
@@ -65,6 +66,7 @@ var formBuilder = (function(formBuild) {
          * @param {object} e jQuery event
          */
         displayOption : function(e) {
+            console.log ("ici")
             $(e.delegateTarget).find('.right').removeClass('hide');
         },
         
@@ -322,14 +324,14 @@ var formBuilder = (function(formBuild) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '   <div class="span7 right hide">'+
+                        '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
-                        '   <input type="text" class="span11" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
+                        '   <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
                         '</div></div>'
     });
 
@@ -392,14 +394,14 @@ var formBuilder = (function(formBuild) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span7 right hide">'+
+                        '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <input type="text" class="span11" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" pattern="<%= pattern %>" /> '+
+                        '       <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" pattern="<%= pattern %>" /> '+
                         '   </div>'+
                         '</div>'
     });
@@ -494,7 +496,7 @@ var formBuilder = (function(formBuild) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span7 right hide">'+
+                        '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
@@ -572,7 +574,7 @@ var formBuilder = (function(formBuild) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span7 right hide">'+
+                        '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
@@ -652,14 +654,14 @@ var formBuilder = (function(formBuild) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span7 right hide">'+
+                        '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
-                        '   <input type="text" class="span11" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
+                        '   <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
                         '   </div>' +
                         '</div>'
     });
@@ -727,14 +729,14 @@ var formBuilder = (function(formBuild) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span7 right hide">'+
+                        '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <textarea style="resize: none" class="span11"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
+                        '       <textarea style="resize: none" class="span12"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
                         '   </div>' +
                         '</div>'
     });
@@ -742,7 +744,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Long text field edition view
      */
-    formBuild.LongTextFieldEditView = formBuild.TextFieldEditView.extend({})
+    formBuild.LongTextFieldEditView = formBuild.TextFieldEditView.extend({});
 
 
 
@@ -775,14 +777,14 @@ var formBuilder = (function(formBuild) {
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %>'+
                         '       </label> '+
-                        '       <div class="span7 right hide">'+
+                        '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <div class="span11" id="tree"></div>' +
+                        '       <div class="span12" id="tree"></div>' +
                         '   </div>' +
                         '</div>'
     });
@@ -828,14 +830,14 @@ var formBuilder = (function(formBuild) {
                         '          <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '          <% if (required === true) { %> * <% } %> <%= label %>'+
                         '      </label>'+
-                        '      <div class="span7 right hide">'+
+                        '      <div class="span8 right hide">'+
                         '          <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '          <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '          <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '      </div>'+
                         '   </div>'+
                         '   <div class="row" style="margin-left : 10px;">' + 
-                        '      <div class="span11" style="border : 2px #eee solid;" id="<%= id %>">'+
+                        '      <div class="span12" style="border : 2px #eee solid;" id="<%= id %>">'+
                         '          <% _.each(items[0]["items"], function(el, index) { %>' +
                         '              <label class="span12 noMarginLeft left"> '+
                         '              <input type="radio" style="margin-left: 10px;" name="<%= name %>" <% if (items[0]["defaultValue"] == el["id"]){ %> checked <% } %> value="<%= el.value %>"  /> '+
@@ -864,14 +866,14 @@ var formBuilder = (function(formBuild) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '   <div class="span7 right hide">'+
+                        '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
-                        '   <select name="<% name %>" class="span11"> '+
+                        '   <select name="<% name %>" class="span12"> '+
                         '       <% _.each(items[0]["items"], function(el, idx) { %>' +
                         '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (items[0]["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.label %></option>'+
                         '       <% }) %>' +
@@ -898,14 +900,14 @@ var formBuilder = (function(formBuild) {
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       <% if (required === true) { %> * <% } %> <%= label %>'+
                         '   </label>'+
-                        '   <div class="span7 right hide">'+
+                        '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>'+
                         '<div class="row" style="margin-left : 10px;">' + 
-                        '<div class="span11" style="border : 2px #eee solid;">'+
+                        '<div class="span12" style="border : 2px #eee solid;">'+
                             '<% _.each(items[0]["items"], function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
                                     '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (items[0]["defaultValue"] == el["id"]){ %> checked <% } %> /> '+
@@ -970,9 +972,11 @@ var formBuilder = (function(formBuild) {
      * Main form view
      */
     formBuild.FormView = Backbone.View.extend({
+        
         events: {
             'change #protocolName' : 'changeFormName'
         },
+        
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
             _.bindAll(this, 'render', 
@@ -1003,13 +1007,16 @@ var formBuilder = (function(formBuild) {
                     el      : $("#" + id),
                     model   : el
                 });
-
                 if (vue !== null) {
                     vue.render();
                     this._view[id] = vue;
                 }
             } else {
-                formBuilder.displayError("Error", "Can't create view for this field");
+                new NS.UI.Notification({
+                    type    : 'error',
+                    title   : 'An error occured :',
+                    message : "Can't create view for this field"
+                });
             }
             
         },
@@ -1031,7 +1038,7 @@ var formBuilder = (function(formBuild) {
                         _vues[v].updateIndex($('#' + v).index());
                     }
                 }
-            })//.disableSelection();
+            });
             return this;
         },
         
@@ -1044,135 +1051,180 @@ var formBuilder = (function(formBuild) {
         },
         
         downloadXML: function() {
-            var str = '<div id="popup">' + this.constructor.popupDwSrc + '</div>';
-            var coll = this;
-            $(str).dialog({
-                modal       : true,
-                width       : 700,
-                resizable   : false,
-                draggable   : false,
-                position    : 'center',
-                create: function() {
-                    var parent = $(this);
-                    $(this).find('button').bind('click',function() {
-                        if ($(parent).find('input[type="text"]').val() !== "") {
-                            try {
-                                var isFileSaverSupported = !!new Blob();
-                                var blob = new Blob(
-                                        [coll.collection.getXML()],
-                                        {type: "application/xml;charset=utf-8"}
-                                );
-                                saveAs(blob, $(parent).find('input[type="text"]').val() + '.xml');
-                                $(parent).dialog('close');
-                            } catch (e) {
-                                formBuild.displayError("Error", "Can't create file");
-                            }
-                        } else {
-                            formBuild.displayError("Error", "You need to enter a name for your file");
-                        }
-                    });
-                }
-            });
+            $( $(this.constructor.popupDwSrc) ).modal({
+                
+            }).on('click', '.btn-primary', _.bind(function() {
+                
+                $('#exportProtocolFileName')[ $('#exportProtocolFileName').val() === "" ? 'addClass' : 'removeClass']('error');
+                
+                if (!$('#exportProtocolFileName').hasClass('error')) {
+                    try {
+                        var isFileSaverSupported = !!new Blob();
+                        var blob = new Blob(
+                                [this.collection.getXML()],
+                                {type: "application/xml;charset=utf-8"}
+                        );
+                        saveAs(blob, $('#exportProtocolFileName').val() + '.xml');
+                        $('#exportProtocolModal').modal('hide').removeData();
+                        new NS.UI.Notification({
+                            type    : 'success',
+                            title   : 'Protocol export :',
+                            message : "XML file correctly created"
+                        });
+                    } catch (e) {
+                        $('#exportProtocolModal').modal('hide').removeData();
+                        new NS.UI.Notification({
+                            type    : 'error',
+                            title   : 'An error occured :',
+                            message : "Can't create your XML file"
+                        });
+                    }
+                }                
+            }, this));
         },
         
         getXML : function() {
             return this.collection.getXML();
         },
         
+        
         importXML: function() {
-            var str = '<div id="popup">' + this.constructor.popupSrc + '</div>';
-            var coll = this;
-            $(str).dialog({
-                modal       : true,
-                width       : 700,
-                resizable   : false,
-                draggable   : false,
-                position    : 'center',
-                create : function() {
-                    var parent = $(this);
-                    $(this).find('input[type="file"]').bind("change", function() {
-                        var split = $(this).val().split('\\');
-                        $(parent).find('#fileToImport').val( split[ split.length - 1] );
-                    });
-                    $(this).find('#findButton').bind('click', function() {
-                        $(parent).find('#fileToImportHide').trigger('click');
-                    });
-                    $(this).find('#fileToImport').bind('click', function() {
-                        $(parent).find('#fileToImportHide').trigger('click');
-                    });
-                    $(this).find('#importButton').bind('click', function() {
-                        $(parent).dialog('close');
-                        var file = $(parent).find('#fileToImportHide')[0].files[0];
+            $( $(this.constructor.popupSrc) ).modal({
+                
+            }).on('click', '#importProtocolFileText, #importProtocolFind', function() {
+                
+                $('#importProtocolFile').trigger ('click');
+                
+            }).on('change', '#importProtocolFile', function() {
+                
+                $('#importProtocolFileText').val( $('#importProtocolFile').val() );
+                
+            }).on('click', '.btn-primary', _.bind(function() {                
+            
+                $('#importProtocolFileText')[ $('#importProtocolFile').val() === "" ? 'addClass' : 'removeClass']('error');
+                
+                $('#importProtocolName')[ $('#importProtocolName').val() === "" ? 'addClass' : 'removeClass']('error');
+                                    
+                if (!$('#importProtocolFile').hasClass('error') && !$('#importProtocolName').hasClass('error')) {
+                    var file = $('#importProtocolFile')[0].files[0];
+                    
+                    if (file) {
+                        if (file.type === "text/xml") {
 
-                        if (file) {
-                            if (file.type === "text/xml") {
-                                var reader = new FileReader();
-                                reader.readAsText(file, "UTF-8");
-                                reader.onload = function(evt) {
-                                    try {                                        
-                                        var result = formBuild.XMLValidation(evt.target.result);
-                                        if (result !== true) {
-                                            var str = 'There is a error on the ' + result['element'] + '<br />';
-                                            str += result['message'] + '<br />Please check your XML file';
-                                            formBuild.displayError(result['error'], str);
-                                        } else {
-                                            coll.collection.updateWithXml(evt.target.result);
-                                        }
-                                    } catch (err) {
-                                        var str = "Your XML File can't be validated.<br />The specific error is : " + err;
-                                        formBuild.displayError('Error during XML validation', str);
+                            var reader = new FileReader();
+                            reader.readAsText(file, "UTF-8");
+
+                            reader.onload = _.bind(function(evt) {
+                                try {
+                                    var result = formBuild.XMLValidation(evt.target.result);
+                                    if (result !== true) {
+                                        $('#importProtocolModal').modal('hide').removeData();
+                                        new NS.UI.Notification({
+                                            type    : 'error',
+                                            title   : 'An error occured :',
+                                            message : 'There is a error on the ' + result['element'] + '<br />' + result['message'] + '<br />Please check your XML file'
+                                        });
+                                    } else {
+                                        this.collection.updateWithXml(evt.target.result, $('#importProtocolName').val());
+                                        $('#importProtocolModal').modal('hide').removeData();
+                                        new NS.UI.Notification({
+                                            type    : 'success',
+                                            title   : 'Porotocol imported :',
+                                            message : 'Your protocol was correctly imported'
+                                        });
                                     }
-                                };
-                                reader.onerror = function(evt) {
-                                    formBuild.displayError("An error was occured", 'An error was occure during reading file');
-                                };
-                            } else {
-                                formBuild.displayError("File type error", 'Your have to give an XML file.');
-                            }
+                                } catch (err) {
+                                    $('#importProtocolModal').modal('hide').removeData();
+                                    new NS.UI.Notification({
+                                        type    : 'error',
+                                        title   : 'An error occured :',
+                                        message : "Your XML File can't be validated.<br />The specific error is : " + err
+                                    });
+                                }
+                            }, this);
+                            reader.onerror = function(evt) {
+                                $('#importProtocolModal').modal('hide').removeData();
+                                new NS.UI.Notification({
+                                    type    : 'error',
+                                    title   : 'An error occured :',
+                                    message : "An error was occure during reading file"
+                                });
+                            };
                         } else {
-                            formBuild.displayError("An error was occured", 'An error was occure during reading file');
+                            $('#importProtocolModal').modal('hide').removeData();
+                            new NS.UI.Notification({
+                                type    : 'error',
+                                title   : 'File type error :',
+                                message : "Your have to give an XML file."
+                            });
                         }
+                    } else {
+                        $('#importProtocolModal').modal('hide').removeData();
+                        new NS.UI.Notification({
+                            type    : 'error',
+                            title   : 'File type error :',
+                            message : "An error was occure during reading file."
+                        });
+                    }                    
+                }
+                
+            }, this)).find('#formName').typeahead({
+                source: function(query, process) {
+                    return $.getJSON('/protocols', {query : query}, function(data) {
+                        return process(data.options);
                     });
                 }
             });
         }
     }, {
-        templateSrc:    '<div class="row-fluid">'+
-                            '<input type="text" id="protocolName" name="protocolName" class="firstText" value="<%= this.collection.name %>" />'+
-                            '<hr class="mainHr"/><br />' +
-                        '</div>'+
+        templateSrc:    '<div class="row-fluid notification-container"><ul class="notification-list span12"></ul></div>'+
                         '<div class="row-fluid">'+
-                            '<div class="span10 offset1 drop"></div>'+
+                            '<input type="text" id="protocolName" class="firstText span12" value="<%= this.collection.name %>" />'+
+                        '</div>'+
+                        '<div class="row-fluid"><h2 class="center">Click on a field to add it in the aera</h2></div>'+
+                        '<div class="row-fluid">'+
+                            '<div class="span12 drop"></div>'+
                         '</div>',
 
-        popupSrc:   '<div id="popup" class="row-fluid">'+
-                        '<h2 class="offset1">Your XML will be validate after import</h2><br />'+
-                        '<div class="row-fluid">'+
-                            '<input type="file" id="fileToImportHide"  class="hide" />'+
-                            '<label class="span2 offset1">XML file</label>'+
-                            '<input type="text" class="span5" id="fileToImport" placeholder="Your XML File" />'+
-                            '<button type="button" class="span3" id="findButton" style="margin-left: 10px;">Find</button>'+
-                        '</div>'+
-                        '<div class="row-fluid">'+
-                            '<br />'+
-                            '<button class="span4 offset3" id="importButton">Import</button>'+
-                        '</div>'+
+        popupSrc:   '<div class="modal hide fade" id="importProtocolModal">'+
+                    '   <div class="modal-header">'+
+                    '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                    '       <h3>Import protocol</h3>'+
+                    '   </div>'+
+                    '   <div class="modal-body">'+
+                    '       <div class="row-fluid">'+
+                    '           <label>Enter a protocol name and import your file</label>'+
+                    '       </div>'+
+                    '       <div class="row-fluid">'+
+                    '           <input type="text" id="importProtocolName" class="span12" placeholder="Protocol name" data-provide="typeahead" />'+
+                    '       </div><br />'+
+                    '       <div class="row-fluid">'+
+                    '           <input type="file" id="importProtocolFile" class="hide" />'+
+                    '           <input type="text" id="importProtocolFileText" class="span10" placeholder="Protocol file" style="margin-left : 0" />'+
+                    '           <button type="button" class="span2" id="importProtocolFind">Find</button>'+
+                    '       </div>'+
+                    '   </div>'+
+                    '   <div class="modal-footer">'+
+                    '       <a href="#" class="btn btn-primary">Import</a>'+
+                    '   </div>'+
                     '</div>',
 
-        popupDwSrc: '<div id="popupDownload" class="row-fluid">'+
-                        '<div class="row-fluid">'+
-                            '<h2 class="offset1 span10 center">Now you can download your XML File</h2>'+
-                        '</div>'+
-                        '<br />'+
-                        '<div class="row-fluid">'+
-                            '<label class="span4 offset1 right" style="line-height: 30px;">XML file name</label>'+
-                            '<input type="text" class="span5" id="fileName" placeholder="Your XML filename" />'+
-                        '</div>'+
-                        '<br />'+
-                        '<div class="row-fluid">'+
-                            '<button type="button" class="span10 offset1" id="downloadButton">Dowload</button>'+
-                        '</div>'+
-                        '<br />'+
+        popupDwSrc: '<div id="exportProtocolModal" class="modal hide fade">'+
+                    '   <div class="modal-header">'+
+                    '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                    '       <h3>Protocol export</h3>'+
+                    '   </div>'+
+                    '   <div class="modal-body">'+
+                    '       <div class="row-fluid">'+
+                    '           <label>Enter a name for XML File</label>'+
+                    '       </div>'+
+                    '       <div class="row-fluid">'+
+                    '           <input type="text" class="span12" id="exportProtocolFileName" placeholder="Your XML filename" />'+
+                    '       </div>'+
+                    '   </div>'+
+                    '   <div class="modal-footer">'+
+                    '       <a href="#" class="btn btn-primary">Import</a>'+
+                    '   </div>'+
                     '</div>'
     });
 
@@ -1198,7 +1250,11 @@ var formBuilder = (function(formBuild) {
                 
                 this.collection.add(f);
             } else {
-                alert ("Can't create field object");
+                new NS.UI.Notification({
+                    type    : 'error',
+                    title   : 'An error occured :',
+                    message : "Can't create field object"
+                });
             }            
         },
         render: function() {            
@@ -1222,11 +1278,6 @@ var formBuilder = (function(formBuild) {
                         '</div>'
     });
 
-
-
-
-
-
     /**
      * Hidden field view
      */
@@ -1239,14 +1290,14 @@ var formBuilder = (function(formBuild) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       &nbsp;</label> '+
-                        '   <div class="span7 right hide">'+
+                        '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
-                        '   <input type="text"  class="span11" name="<%= name %>" id="<%= id%>" value="<%= value %>" disabled="disabled" /> '+
+                        '   <input type="text"  class="span12" name="<%= name %>" id="<%= id%>" value="<%= value %>" disabled="disabled" /> '+
                         '</div></div>'
     });
     
@@ -1254,26 +1305,27 @@ var formBuilder = (function(formBuild) {
      * Display an horizontal line in the form
      */
     formBuild.HorizontalLineFieldView = formBuild.BaseView.extend({
+        events: function() {
+            return _.extend({}, formBuild.BaseView.prototype.events, {});
+        },
         render : function() {
             formBuild.BaseView.prototype.render.apply(this, arguments);
-            $(this.el).addClass('min');
         }
     }, {
-        templateSrc:    '<div class="row-fluid" style="margin-left : 10px;">' + 
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       &nbsp;</label> '+
-                        '   <div class="span7 right hide">'+
+                        '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
-                        '<div class="row-fluid" style="margin-left : 10px;">' + 
-                        '   <hr class="span11" />' +
-                        '</div>'
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '   <hr class="span12" />' +
+                        '</div></div>'
     });
     
-    
-    return formBuild;
 
+    return formBuild;
 })(formBuilder);
