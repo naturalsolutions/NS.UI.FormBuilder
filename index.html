@@ -3,13 +3,14 @@
     <head>
         <title>FormBuilder</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
         <!--
             metro bootstrap 
         -->
         <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css" />
         <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap-responsive.min.css" />
-        <link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/css/metro-bootstrap.css" />
+        <!--<link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/css/metro-bootstrap.css" />-->
+        
         <link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/docs/font-awesome.css" />
         <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">      
 
@@ -18,13 +19,13 @@
         -->
         <link rel="stylesheet/less" type="text/css" href="stylesheet/styles.less" />
         <script src="libs/less/less.min.js" type="text/javascript"></script>
-        
+
         <!--
             JS libraries
         -->
         <script src="libs/jquery/jquery.min.js"                  type="text/javascript"></script>
         <script src="libs/jquery/jquery-ui.min.js"               type="text/javascript"></script>
-        <!--<script src="bootstrap/js/bootstrap.min.js"                 type="text/javascript"></script>-->
+        <script src="libs/bootstrap/js/bootstrap.min.js"         type="text/javascript"></script>
         <script src="libs/backbone/underscore/underscore-min.js" type="text/javascript"></script>
         <script src="libs/backbone/backbone-min.js"              type="text/javascript"></script>
         <script src="libs/blob/Blob.js"                          type="text/javascript"></script>
@@ -32,21 +33,25 @@
         <script src="libs/xmljs/xmllint.js"                      type="text/javascript"></script>
         <link rel="stylesheet" href="libs/nanoScroller/nanoscroller.css" />
         <script type="text/javascript" src="libs/nanoScroller/jquery.nanoscroller.min.js"></script>
-        
+
         <!-- Fancy tree -->
         <link rel="stylesheet" href="libs/fancytree/skin-win8/ui.fancytree.min.css" type="text/css" />
         <script src="libs/fancytree/jquery.fancytree-all.min.js" type="text/javascript"></script>
-        
+
         <!--  js diff lib  -->
         <script type="text/javascript" src="libs/jsdifflib/diffview.js"></script>
         <script type="text/javascript" src="libs/jsdifflib/difflib.js"></script>
         <link rel="stylesheet" href="libs/jsdifflib/diffview.css" type="text/css" />
-        
+
         <!--    navbar  -->
         <link rel="stylesheet" href="libs/navbar/navbar.css" type="text/css" />
         <link rel="stylesheet" href="libs/navbar/navbar-modernui.css" type="text/css" />
         <script src="libs/navbar/navbar.js" type="text/javascript"></script>
         
+        <!-- ns ui notification -->
+        <link rel="stylesheet" href="libs/NS.UI.Notification-master/notification.css" type="text/css" />
+        <script type="text/javascript" src="libs/NS.UI.Notification-master/notification.js"></script>
+
         <!-- Formbuilder scripts -->
         <script type="text/javascript" src="js/app/formBuilder.js"  ></script>        
         <script type="text/javascript" src="js/app/utilities.js"    ></script>        
@@ -55,10 +60,61 @@
         <script type="text/javascript" src="js/app/views.js"        ></script>
         <script type="text/javascript" src="js/app/router.js"       ></script>
         <script type="text/javascript" src="js/app/brain.js"        ></script>
-        
+
     </head>
     <body>
         <section class="container-fluid" id="formBuilder">
         </section>
+
+        <!-- modal -->
+        <div class="modal hide fade" id="saveModal">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h3>Save protocol</h3>
+            </div>
+            <div class="modal-body">
+                <div class="row-fluid">
+                    <label>Protocol name</label>
+                </div>
+                <div class="row-fluid">
+                    <input type="text" id="formName" class="span10" placeholder="Protocol name" data-provide="typeahead" />
+                </div>
+                <div class="row-fluid">
+                    <label>Your comment</label>
+                </div>
+                <div class="row-fluid">
+                    <input type="text" id="commentText" class="span10" placeholder="Your comment" />
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn">Close</a>
+                <a href="#" class="btn btn-primary">Save changes</a>
+            </div>
+        </div>
+    
+        <div id="compareModal" class="modal hide fade">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                <h2>XML File versionning</h2>
+            </div>
+            <br />
+            <div class="row-fluid"> 
+                <input type="file" id="sourceHide"  class="hide" /> 
+                <label class="span2 offset1">Source XML</label> 
+                <input type="text" class="span5" id="source" placeholder="Your XML File" /> 
+                <button type="button" class="span3 btn" id="findSource" style="margin-left: 10px;">Find</button> 
+            </div> 
+            
+            <div class="row-fluid"> 
+                <input type="file" id="updateHide"  class="hide" /> 
+                <label class="span2 offset1">Updated XML</label> 
+                <input type="text" class="span5" id="update" placeholder="Your XML File" /> 
+                <button type="button" class="span3 btn" id="findUpdate" style="margin-left: 10px;">Find</button> 
+            </div> 
+            
+            <div class="modal-footer">
+                <a href="#" class="btn btn-primary">Run versionning</a>
+            </div>
+        </div>
     </body>
 </html>
