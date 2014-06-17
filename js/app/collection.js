@@ -99,10 +99,10 @@ var formBuilder = (function(formBuild) {
          * @param {type} content
          * @returns {undefined}
          */
-        updateWithXml: function(content) {
+        updateWithXml: function(content, name) {
             this.reset();
-            
-            var xmlDoc = $.parseXML(content), element = null, fieldNameType = "", array = null;
+            this.name = name;
+            var xmlDoc = $.parseXML(content), fieldNameType = "";
             
             var form = formBuild.XmlToJson($(xmlDoc).find('form'));
             
@@ -122,5 +122,4 @@ var formBuilder = (function(formBuild) {
     });
 
     return formBuild;
-
 })(formBuilder);
