@@ -23,6 +23,7 @@ html, body {
 .transparent    { background : transparent !important; }
 .diff           { margin-bottom: 150px; }
 .text           { line-height : 30px; font-size : 20px; }
+.error          { box-shadow: 0 0 3px #c80000 inset !important; }
 
 .table      { tr { background : white; } }
 .bordered   { border : 2px #aaa solid; background : #fff; }
@@ -45,30 +46,40 @@ html, body {
     padding-left    : 15px;
 }
 
+.notification-container {
+    height : 0;
+    .notification-list {
+        height : 0;
+        min-width: 0;
+        margin-bottom : 5px;
+    }
+}
 
-#formBuilder {   
+#formBuilder {
+    
     height      : 100%;
     overflow    : hidden; 
     margin      : 0 !important;
     padding     : 0 !important;
 
-    //  ---------------------------------------------------------------------
-    //  Children classes
-    //  ---------------------------------------------------------------------
     .copy, .trash, .wrench { text-decoration: none; }
+    
     .content {
         background  : #fff;
         height      : 100%;
         
         .widgetsPanel {
-            height : 100%;
+            height      : 100%;
             background  : #ddd;
             height      : 100%;
+            
+            h1 { font-weight: lighter; font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif !important}
             
             .nano-pane {
                 background : #aaa;
                 .nano-slider { background : #ddd; border-radius: 0 !important; }
             }
+            
             .nano-content { padding-top: 50px; padding-bottom: 60px; }
                              
             .fields {
@@ -86,10 +97,13 @@ html, body {
                 &:hover { cursor  : pointer; outline : 5px #aaa solid; }
             }
         }
+        
         .dropArea {
-            overflow-y : scroll;
-            height : 100%;
-            padding-top : 50px;
+            overflow-y      : scroll;
+            height          : 100%;
+            padding-top     : 50px;
+            padding-right   : 2.564102564102564%;
+            
             .firstText {
                 .font();
                 width           : 100%;
@@ -99,31 +113,24 @@ html, body {
                 text-align      : right;
                 font-size       : 45px;
                 color           : #555;
-                padding-right   : 48px;
+                border-bottom   : 1px #ddd solid;
+                box-shadow       : none;
                 &:focus {
                     box-shadow: none;
-                }
+                }                
             }
-            .min { height: 40px; }
+            
             hr {
-                border-top : #333 1px solid;
-                margin-bottom: 0;
-                padding-bottom: 0px;
+                border-top      : #333 1px solid;
+                margin-bottom   : 0;
+                padding-bottom  : 0px;
             }
-            .mainHr {
-                .font();
-                border      : 1px #ccc solid;
-                width       : 95%;
-                padding     : 10px auto;
-                text-align  : center;
-                &:after {
-                    content     : "\275D \ Click on a field to add it in the area \275E";
-                    height      : 0 !important;
-                    color       : #aaa;
-                    text-align  : center;
-                    font-size   : 30px;
-                }
+            h2 {
+                color       : #ddd;
+                font-weight : 100;
+                font-size   : 22px;
             }
+
             .row-fluid:last-child {
                 margin-top  : 25px;
                 height      : 70%;
@@ -141,8 +148,7 @@ html, body {
                 margin-left     : 0!important;
                 background : #fff;
                 transition : background 0.2s ease-in-out;
-                &:hover {
-                    
+                &:hover {                    
                     background : beige;
                 }
                 &.textArea {
@@ -154,8 +160,24 @@ html, body {
                         height      : 48px;
                     }
                 }
+                .row {
+                    padding-right: 2.564102564102564%;
+                }
+                hr {
+                    height: 1px;
+                    margin-top: 0;
+                    min-height: 0;
+                }
+                .element {
+                    .hide {
+                        padding-right: 3px;
+                    }
+                }
                 input[type="text"], .spin {
                     padding-left: 10px;
+                    &.span10 {
+                        margin-left: 0;
+                    }
                 }
                 label { .text(); .font();}
                 i { 
@@ -166,6 +188,7 @@ html, body {
                 }
                 input[type="text"], .picker, select {
                     .input();
+                    padding : 15px;
                 }
                 .checkbox {
                     text-align      : left;
@@ -190,20 +213,15 @@ html, body {
             padding-top         : 50px;
             h1 {
                 text-align          : center;
-                //border-bottom       : 2px #ccc solid;
                 padding-bottom      : 0 !important ;
                 margin-bottom       : 0 !important;
                 margin-top          : 0 !important;
                 color               : #333;
-                //background-color    : #e6dddd;
                 height              : 70px;
                 line-height         : 60px;
                 &:hover {
                     cursor: pointer;
                 }
-                /*&:before {
-                    content: "\25B8"
-                }*/
             }
             h2 {
                 text-align  : center;
@@ -304,8 +322,14 @@ html, body {
 
 .modal {
     background: #fff;
-    height : 350px;
+    //height : 350px;
     margin-top: 100px;
+    input {
+        padding : 15px;
+    }
+    button {
+        padding : 4px;
+    }
 }
 
 .navbar {
@@ -321,4 +345,17 @@ html, body {
         p { margin-top:  7px; }
     }
     li > a { height : 45px; }
+}
+
+.modal {
+    h2 {
+        font-weight: 100;
+    }
+    input {
+        float : left;
+        margin-left : 10px;
+    }
+    label {
+        padding-top: 5px;
+    }
 }
