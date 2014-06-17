@@ -6,58 +6,29 @@
  * @version         1.0
  */
 
-function getDialogHtml() {
-    return  '<div id="popup" class="row-fluid">' +
-            '   <h2 class="offset1">Your XMLs will be validated after import</h2><br />' +
-            '   <div class="row-fluid">' +
-            '       <input type="file" id="sourceHide"  class="hide" />' +
-            '       <label class="span2 offset1">Source XML file</label>' +
-            '       <input type="text" class="span5" id="source" placeholder="Your XML File" />' +
-            '       <button type="button" class="span3" id="findSource" style="margin-left: 10px;">Find</button>' +
-            '   </div>' +
-            '   <div class="row-fluid">' +
-            '       <input type="file" id="updateHide"  class="hide" />' +
-            '       <label class="span2 offset1">Updated XML file</label>' +
-            '       <input type="text" class="span5" id="update" placeholder="Your XML File" />' +
-            '       <button type="button" class="span3" id="findUpdate" style="margin-left: 10px;">Find</button>' +
-            '   </div>' +
-            '   <div class="row-fluid">' +
-            '       <br />' +
-            '       <button class="span4 offset3" id="versionningButton">Run versionning</button>' +
-            '   </div>' +
-            '</div>';
-}
-
 function show() {
-    var html = getDialogHtml();
-
-    $(html).dialog({
-        modal: true,
-        width: 750,
-        resizable: false,
-        draggable: false,
-        position: 'center',
-        create: function() {
-
-            $(this).find('#findSource, #findUpdate').bind('click', function() {
-                $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
-            });
-
-            $(this).find('input[type="file"]').bind('change', function() {
-                var id = $(this).prop('id').replace('Hide', '');
-                var split = $(this).val().split('\\');
-                $('#' + id).val(split[ split.length - 1]);
-            });
-
-            $(this).find('#versionningButton').bind('click', _.bind(function() {
-
-                $(this).dialog('close');
-
-                var source = $(this).find('#sourceHide')[0].files[0];
-                var update = $(this).find('#updateHide')[0].files[0];
-
-                var srcName = source['name'], updName = update['name'];
-
+    
+     $('#compareModal').modal('show')
+             
+        .on('click', '.btn-primary', function() {        
+            //  run versionning        
+        })        
+        .on('click', '#findSource, #findUpdate', function() {
+            $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
+        })
+        .on('change', 'input[type="file"]', function() {
+            var id = $(this).prop('id').replace('Hide', ''), 
+                split = $(this).val().split('\\');
+            $('#' + id).val(split[ split.length - 1]);
+        })
+        .on('click', '.btn-primary', function() {
+            
+            $('#compareModal').modal ('hide');
+            var source  = $('#compareModal').find('#sourceHide')[0].files[0], 
+                update  = $('#compareModal').find('#updateHide')[0].files[0],
+                srcName = source['name'], 
+                updName = update['name'];
+                
                 if (source !== null && update !== null) {
 
                     if (source.type === "text/xml" && update.type === "text/xml") {
@@ -110,19 +81,54 @@ function show() {
                 } else {
                     formBuilder.displayError("Error durring XML loading ! ");
                 }
-
-            }, this));
-        }
-    });
+        })
+        
+    .removeClass('hide').css('width', '700px');
 
 }
 
 $(document).ready(function() {
-
+      
+    //  Create main view
     formBuilder.mainView = new formBuilder.MainView({
         el : '#formBuilder'
     });
     
+    //  init modal windows
+    $('#saveModal').modal({
+        show: false
+    }).on('click', '.btn-primary', function() {
+        var dataS = JSON.stringify({
+            name    : $('#formName').val(),
+            content : formBuilder.mainView.formView.getXML(),
+            comment : $('#commentText').val()
+        }, null, 2);
+
+        $.ajax({
+            url         : '/protocols',
+            contentType : 'application/json',
+            type        : 'POST',
+            data        : dataS,
+            success: function(res) {
+                $('#saveModal').modal('hide').removeData();
+                new NS.UI.Notification({
+                    type: 'success',
+                    title: 'Protocol saved : ',
+                    message: 'your protocol has been saved correctly !'
+                });
+            },
+            error: function( jqXHR,  textStatus,  errorThrown) {
+                $('#saveModal').modal('hide').removeData();
+                new NS.UI.Notification({
+                    type: 'error',
+                    title: 'An error occured :',
+                    message: jqXHR.responseText,
+                    delay : 15
+                });
+            }
+        });
+    });
+                
     var users = {
         anonymous: {roles: ['reader']},
         roger: {nickname: 'Roger', roles: ['reader', 'writer']},
@@ -141,43 +147,47 @@ $(document).ready(function() {
     });
 
     var actions = {
+        save : new NS.UI.NavBar.Action({
+            handler : function() {
+                $('#saveModal').modal('show').find('#formName').val ( $('#protocolName').val() ).typeahead({
+                    source: function(query, process) {
+                        return $.getJSON('/protocols', {query : query}, function(data) {
+                            return process(data.options);
+                        });
+                    }
+                });              
+            },
+            allowedRoles : ['reader'],
+            title: "Save to the repo"
+        }),
         export: new NS.UI.NavBar.Action({
             handler: function() {
                 formBuilder.mainView.formView.downloadXML();
             },
             allowedRoles: ["reader"],
-            title: "Export in XML",
+            title: "Export in XML"
         }),
         import: new NS.UI.NavBar.Action({
             handler: function() {
                 formBuilder.mainView.formView.importXML();
             },
             allowedRoles: ["reader"],
-            title: "Import XML File",
+            title: "Import XML File"
         }),
         clear: new NS.UI.NavBar.Action({
             handler: function() {
                 formBuilder.mainView.clear();
             },
             allowedRoles: ["reader"],
-            title: "Clear protocol",
+            title: "Clear protocol"
         }),
         show: new NS.UI.NavBar.Action({
             handler: function() {
-                show()
+                show();
             },
             allowedRoles: ["reader"],
-            title: "Compare XML Files",
-        }),
-        save : new NS.UI.NavBar.Action({
-            handler : function() {
-                
-                //  Fix me Implement save to the web service
-                
-            },
-            allowedRoles : ['reader'],
-            title: "Save to the repo"
-        })
+            title: "Compare XML Files"
+        })       
         
     };
 
