@@ -3,36 +3,33 @@
     <head>
         <title>FormBuilder</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
-        <!--
-            metro bootstrap 
-        -->
-        <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap.min.css" />
-        <link rel="stylesheet" type="text/css" href="libs/bootstrap/css/bootstrap-responsive.min.css" />
-        <!--<link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/css/metro-bootstrap.css" />-->
         
-        <link rel="stylesheet" type="text/css" href="libs/metro-bootstrap/docs/font-awesome.css" />
-        <link rel="stylesheet" href="//code.jquery.com/ui/1.10.4/themes/smoothness/jquery-ui.css">      
-
-        <!--
-            LESS files
-        -->
-        <link rel="stylesheet/less" type="text/css" href="stylesheet/styles.less" />
-        <script src="libs/less/less.min.js" type="text/javascript"></script>
-
-        <!--
-            JS libraries
-        -->
+        <!-- jquery -->
         <script src="libs/jquery/jquery.min.js"                  type="text/javascript"></script>
         <script src="libs/jquery/jquery-ui.min.js"               type="text/javascript"></script>
-        <script src="libs/bootstrap/js/bootstrap.min.js"         type="text/javascript"></script>
+        
+        <!-- backbone underscore -->
         <script src="libs/backbone/underscore/underscore-min.js" type="text/javascript"></script>
         <script src="libs/backbone/backbone-min.js"              type="text/javascript"></script>
-        <script src="libs/blob/Blob.js"                          type="text/javascript"></script>
-        <script src="libs/filesaver/FileSaver.js"                type="text/javascript"></script>
-        <script src="libs/xmljs/xmllint.js"                      type="text/javascript"></script>
+        
+        <!-- bootstrap -->
+        <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css"              type="text/css"/>
+        <link rel="stylesheet" href="libs/bootstrap/css/bootstrap-responsive.min.css"   type="text/css"/>
+        <script src="libs/bootstrap/js/bootstrap.min.js"                                type="text/javascript"></script>
+        
+        <!-- font awesome -->
+        <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"        type="text/css" />
+        
+        <!-- Nano scroll -->
         <link rel="stylesheet" href="libs/nanoScroller/nanoscroller.css" />
         <script type="text/javascript" src="libs/nanoScroller/jquery.nanoscroller.min.js"></script>
+                
+        <!-- Blob and filesaver -->
+        <script src="libs/blob/Blob.js"                          type="text/javascript"></script>
+        <script src="libs/filesaver/FileSaver.js"                type="text/javascript"></script>
+        
+        <!-- XMLlint -->
+        <script src="libs/xmljs/xmllint.js"                      type="text/javascript"></script>
 
         <!-- Fancy tree -->
         <link rel="stylesheet" href="libs/fancytree/skin-win8/ui.fancytree.min.css" type="text/css" />
@@ -52,20 +49,36 @@
         <link rel="stylesheet" href="libs/NS.UI.Notification-master/notification.css" type="text/css" />
         <script type="text/javascript" src="libs/NS.UI.Notification-master/notification.js"></script>
 
-        <!-- Formbuilder scripts -->
-        <script type="text/javascript" src="js/app/formBuilder.js"  ></script>        
-        <script type="text/javascript" src="js/app/utilities.js"    ></script>        
-        <script type="text/javascript" src="js/app/model.js"        ></script>
-        <script type="text/javascript" src="js/app/collection.js"   ></script>
-        <script type="text/javascript" src="js/app/views.js"        ></script>
-        <script type="text/javascript" src="js/app/router.js"       ></script>
-        <script type="text/javascript" src="js/app/brain.js"        ></script>
+        <!-- Formbuilder  -->
+        <link rel="stylesheet" type="text/css" href="dist/stylesheet/formbuilder.min.css" />
+        <script type="text/javascript" src="js//formBuilder.js"  ></script>        
+        <script type="text/javascript" src="js//utilities.js"    ></script>        
+        <script type="text/javascript" src="js//model.js"        ></script>
+        <script type="text/javascript" src="js//collection.js"   ></script>
+        <script type="text/javascript" src="js//views.js"        ></script>
+        <script type="text/javascript" src="js//brain.js"        ></script>
 
     </head>
     <body>
+        <!--<ul id="ul">
+            <li>Man</li>
+            <li>
+                Redman
+                <button type="button" class="close">×</button>
+            </li>
+            <li>
+                MethodMan
+                <button type="button" class="close">×</button>
+            </li>
+            <li>
+                Little big planet
+                <button type="button" class="close">×</button>
+            </li>
+        </ul>-->        
+        
         <section class="container-fluid" id="formBuilder">
         </section>
-
+        
         <!-- modal -->
         <div class="modal hide fade" id="saveModal">
             <div class="modal-header">
@@ -77,17 +90,29 @@
                     <label>Protocol name</label>
                 </div>
                 <div class="row-fluid">
-                    <input type="text" id="formName" class="span10" placeholder="Protocol name" data-provide="typeahead" />
+                    <input type="text" id="saveProtocolName" class="span10" placeholder="Protocol name" data-provide="typeahead" />
                 </div>
                 <div class="row-fluid">
                     <label>Your comment</label>
                 </div>
                 <div class="row-fluid">
-                    <input type="text" id="commentText" class="span10" placeholder="Your comment" />
+                    <input type="text" id="saveProtocolComment" class="span10" placeholder="Your comment" />
                 </div>
+                <div class="row-fluid">
+                    <label>Protocol description</label>
+                </div>
+                <div class="row-fluid">
+                    <textarea id="saveProtocolDescription" class="span10" placeholder="Describe this protocol in some words"></textarea>
+                </div>
+                <div class="row-fluid">
+                    <label>Keywords <i>(Separated by a comma)</i></label>
+                </div>
+                <div class='row-fluid'>
+                    <input type="text" id='saveProtocolKeywords' placeholder="Enter keywords" class="span10" data-provider="typeahead" />
+                </div>
+                <div class="row-fluid">&nbsp;</div>
             </div>
             <div class="modal-footer">
-                <a href="#" class="btn">Close</a>
                 <a href="#" class="btn btn-primary">Save changes</a>
             </div>
         </div>
