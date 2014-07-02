@@ -15,6 +15,7 @@ var formBuilder = (function(formBuild) {
     formBuild = {};
     
     formBuild.MainView = Backbone.View.extend({
+        
         initialize : function(options) {
             
             $(this.el).append(
@@ -36,19 +37,27 @@ var formBuilder = (function(formBuild) {
             this.formView = new formBuild.FormView({
                 collection: this.form,
                 el: $('.dropArea')
-            });
-            
-            /*this.settingsView = new formBuild.SettingView({
-                el: $('.settings')
-            });*/
+            });            
             
             this.panelView.render();
             this.formView.render();
-            //this.settingsView.render();
         },
+        
         clear: function() {
             this.form.clearAll();
         },
+        
+        getFormXML : function() {
+            return this.formView.getXML();
+        },
+        
+        downloadXML : function() {
+            return this.formView.downloadXML();
+        },
+        
+        importXML : function() {
+            return this.formView.importXML();
+        }
     });   
 
     return formBuild;
