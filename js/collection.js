@@ -17,16 +17,24 @@
 
 var formBuilder = (function(formBuild) {
 
-
     /**
      * Implement form object as a fields collection
      */
     formBuild.Form = Backbone.Collection.extend({
         model: formBuild.BaseField,
 
+        /**
+         * Init form collection
+         * 
+         * @param {type} models
+         * @param {type} options
+         */
         initialize: function(models, options) {
-            this.name   = options.name || 'My form';
-            this.count  = 0;
+            this.name           = options.name || 'My form';
+            this.count          = 0;
+            this.description    = options.description || "";
+            this.keywords       = options.keywords || [];
+            //  Bind
             _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement');
         },
 
@@ -40,6 +48,10 @@ var formBuilder = (function(formBuild) {
             return model.get(model.id);
         },
 
+        /**
+         * Return collection size
+         * @returns {integer} collection size
+         */
         getSize: function( ) {
             return this.length;
         },
@@ -54,22 +66,33 @@ var formBuilder = (function(formBuild) {
             }
             this.count = 0;
         },
+        
+        getKeywords : function() {
+          var xml = "";
+          _.each(this.keywords, function(el, idx) {
+              xml += '<keyword>' + el + '</keyword>';
+          });
+          return '<keywords>' + xml + '</keywords>';
+        },
 
         /**
          * Extract XML code from models values
          * @returns {string} XML code
          */
         getXML: function() {
-            var arr     = this.models.slice(1, this.models.length);
-            var xml     = $.parseXML('<?xml version="1.0" ?><form id="test attribute"   xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com note.xsd"></form>');
-            var xmlDoc  = $(xml);
+            var arr     = this.models.slice(1, this.models.length),
+                xml     = $.parseXML('<?xml version="1.0" ?><form id="test attribute"   xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com note.xsd"></form>'),
+                xmlDoc  = $(xml);
 
-            xmlDoc.find('form').append('<name>' + this.name + '</name>');
-            xmlDoc.find('form').append("<fields></fields>");
+            xmlDoc.find('form').append(
+                '<name>' + this.name + '</name><description>' + this.description + '</description>' + this.getKeywords() + '<fields></fields>'
+            );
             this.sort();
 
             _.each(arr, function(el, idx) {
-                xmlDoc.find('fields').append('<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>');
+                xmlDoc.find('fields').append(
+                    '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
+                );
             });
 
             return (new XMLSerializer()).serializeToString(xml);
@@ -87,6 +110,13 @@ var formBuilder = (function(formBuild) {
             return split.reverse().join("");
         },
         
+        /**
+         * Add a new field on the form collection
+         * 
+         * @param {type} element
+         * @param {type} nameType
+         * @returns {undefined}
+         */
         addElement: function(element, nameType) {
             var el = new formBuild[nameType](element);
             if (el !== null) {
@@ -95,16 +125,18 @@ var formBuilder = (function(formBuild) {
         },
         
         /**
+         * Update form with XML content
          * 
          * @param {type} content
+         * @param {type} name
          * @returns {undefined}
          */
         updateWithXml: function(content, name) {
             this.reset();
             this.name = name;
-            var xmlDoc = $.parseXML(content), fieldNameType = "";
-            
-            var form = formBuild.XmlToJson($(xmlDoc).find('form'));
+            var xmlDoc          = $.parseXML(content), 
+                fieldNameType   = "",
+                form            = formBuild.XmlToJson( $(xmlDoc).find('form') );
             
             _.each(form['fields'], _.bind(function(el, idx) {               
 

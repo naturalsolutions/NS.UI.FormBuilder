@@ -154,6 +154,12 @@
         </xs:complexContent>
     </xs:complexType>
     
+    <xs:complexType name="keywords">
+        <xs:sequence>
+            <xs:element name="keyword" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+    
     <!--
         Hidden field type
     -->
@@ -205,7 +211,7 @@
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
-    </xs:complexType>    
+    </xs:complexType>
     
     <!--
         form element schema declaration
@@ -213,36 +219,38 @@
     <xs:element name="form">
         <xs:complexType>
             <xs:sequence>
+                <!-- protocol elements -->
                 <xs:element name="name" type="xs:string" />
+                <xs:element name="description" type="xs:string" />
+                <xs:element name="keywords" type="keywords" />
+                <!-- fields description -->
                 <xs:element name="fields"> 
                     <xs:complexType>
                         <xs:choice minOccurs="0" maxOccurs="unbounded">
                             
-                            <xs:element name="field_text"       minOccurs="0" type="field_textType"     />
+                            <xs:element name="field_text"       minOccurs="0"   type="field_textType"     />
                             
-                            <xs:element name="field_pattern"    minOccurs="0" type="field_patternType"     />
+                            <xs:element name="field_pattern"    minOccurs="0"   type="field_patternType"  />
                             
-                            <xs:element name="field_file"       minOccurs="0" type="field_fileType"     />
+                            <xs:element name="field_file"       minOccurs="0"   type="field_fileType"     />
                             
-                            <xs:element name="field_date"       minOccurs="0" type="field_dateType"     />
+                            <xs:element name="field_date"       minOccurs="0"   type="field_dateType"     />
                             
-                            <xs:element name="field_hidden"     minOccurs="0" type="field_hiddenType"   />
+                            <xs:element name="field_hidden"     minOccurs="0"   type="field_hiddenType"   />
                             
-                            <xs:element name="field_numeric"    minOccurs="0" type="field_numericType"  />
+                            <xs:element name="field_numeric"    minOccurs="0"   type="field_numericType"  />
                             
-                            <xs:element name="field_list"      minOccurs="0" type="field_enumType"     />
+                            <xs:element name="field_list"       minOccurs="0"   type="field_enumType"     />
                             
-                            <xs:element name="field_mask"       minOccurs="0" type="field_maskType"     />
+                            <xs:element name="field_mask"       minOccurs="0"   type="field_maskType"     />
                             
-                            <xs:element name="field_treeView"   minOccurs="0" type="field_treeViewType" />
+                            <xs:element name="field_treeView"   minOccurs="0"   type="field_treeViewType" />
                             
                         </xs:choice>
                     </xs:complexType>
                 </xs:element>  
             </xs:sequence>
-            <!--
-                Attributes
-            -->
+            <!-- attribute -->
             <xs:attribute type="xs:string" name="id"/>
         </xs:complexType>
     </xs:element>
