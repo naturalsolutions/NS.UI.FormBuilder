@@ -66,7 +66,6 @@ var formBuilder = (function(formBuild) {
          * @param {object} e jQuery event
          */
         displayOption : function(e) {
-            console.log ("ici")
             $(e.delegateTarget).find('.right').removeClass('hide');
         },
         
@@ -176,10 +175,7 @@ var formBuilder = (function(formBuild) {
         hidePanel: function() {
             if ($('.dropArea').hasClass('span7')) {
                 $('.dropArea').switchClass('span7', 'span9', 100);
-                $('.widgetsPanel').switchClass('span0', 'span3', 200, _.bind(function() {
-                    $(this.el).remove();
-                    this.remove();
-                }, this));
+                $('.widgetsPanel').switchClass('span0', 'span3', 200);
             }
         },
         
@@ -203,8 +199,11 @@ var formBuilder = (function(formBuild) {
          * @param {object} e jQuery event
          */
         updateModel: function(e) {
-            //  this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
-            this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
+            if ($(e.target).prop("type") === "checkbox") {
+                this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
+            } else {
+                this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
+            }
         },
         
 
@@ -280,7 +279,9 @@ var formBuilder = (function(formBuild) {
                         '       <div class="row-fluid">&nbsp;</div>'+
                         '   </div>' +
                         '   <div class="row-fluid">&nbsp;</div>'+
-                        '   <button class="close center" style="width: 100%">Save</button>'+
+                        '   <div class="row-fluid">' +
+                        '   <button class="close center span10 offset1">Save</button>'+
+                        '   </div>'+
                         '</div>'
     }); 
     
@@ -1079,7 +1080,7 @@ var formBuilder = (function(formBuild) {
                             message : "Can't create your XML file"
                         });
                     }
-                }                
+                }
             }, this));
         },
         
