@@ -199,6 +199,38 @@ And now if you click and modify on the view you can see your edit view :
 
 You can find all this code in puglings directory in fullNameField.js
 
+## XML Export
+
+You can export your current form definition as an XML file, for example with only a fullName field we cant have : 
+
+    <?xml version="1.0"?>
+    <form xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="test attribute" xsi:schemaLocation="http://www.w3schools.com note.xsd">
+        <name>My protocol</name>
+        <description>My first form</description>
+        </keywords>
+        <fields>
+            <field_fullName id="1">
+                <label>Your fullname</label>
+                <name>   
+                    <label lang="en">field</label>   
+                    <display_label>undefined</display_label>
+                </name>
+                <required>true</required>
+                <readOnly>false</readOnly>
+                <firstName>   
+                    <defaultValue/>   
+                    <hint>Write your name</hint>   
+                    <size>255</size>
+                </firstName>
+                <lastName>   
+                    <defaultValue/>   
+                    <hint>Write your firstname</hint>   
+                    <size>255</size>
+                </lastName>
+            </field_fullName>
+        </fields>
+    </form>
+
 
 
 
