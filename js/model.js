@@ -10,7 +10,7 @@
  * @version         1.0
  */
 
-var formBuilder = (function(formBuild) {
+var formBuilder = (function(app) {
 
     //  --------------------------------------------
     //  Basic models herited from Backbone model
@@ -20,7 +20,7 @@ var formBuilder = (function(formBuild) {
      * Basic field model
      * Establishes common field attributes
      */
-    formBuild.BaseField         = Backbone.Model.extend({        
+    app.models.BaseField = Backbone.Model.extend({        
         defaults: {
             id      : 0,
             label   : "My label",
@@ -102,7 +102,7 @@ var formBuilder = (function(formBuild) {
     /**
      * graphical horizontal line field model
      */
-    formBuild.HorizontalLineField    = Backbone.Model.extend({
+    app.models.HorizontalLineField    = Backbone.Model.extend({
     }, {
         type    : 'HorizontalLine',
         xmlTag  : 'field_horizontalLine'
@@ -111,7 +111,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Hidden field model
      */
-    formBuild.HiddenField       = Backbone.Model.extend({
+    app.models.HiddenField       = Backbone.Model.extend({
         defaults: {
             id  : 0,
             name    : {
@@ -124,7 +124,7 @@ var formBuilder = (function(formBuild) {
             value: ""
         },
         getSchemaProperty: function(index, property) {  
-            formBuild.BaseField.prototype.getSchemaProperty.apply(this, arguments);
+            app.models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
         },
         getXML: function() {
             return  "<name>" +
@@ -162,7 +162,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Text field model
      */
-    formBuild.TextField         = formBuild.BaseField.extend({
+    app.models.TextField = app.models.BaseField.extend({
         defaults: {
             defaultValue: "",
             hint        : "Write some text",
@@ -170,15 +170,15 @@ var formBuilder = (function(formBuild) {
             multiline   : false
         },
         getXML: function() {
-            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
+            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>'    + this.get('defaultValue')  + '</defaultValue>' +
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>' +
                             '<multiline>'       + this.get('multiline')     + '</multiline>';
         },
         initialize : function(options) {
-            formBuild.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.BaseField.schema);
+            app.models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.BaseField.schema);
         }
     }, {
         type    : "Text",
@@ -193,7 +193,7 @@ var formBuilder = (function(formBuild) {
     /**
      * File field model
      */
-    formBuild.FileField         = formBuild.BaseField.extend({
+    app.models.FileField         = app.models.BaseField.extend({
         defaults: {
             defaultValue: "",
             file        : "",
@@ -201,11 +201,11 @@ var formBuilder = (function(formBuild) {
             size        : 200    //  specify max file size in ko
         },
         initialize : function() {
-            formBuild.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.BaseField.schema);
+            app.models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.BaseField.schema);
         },
        getXML : function () {
-           var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
+           var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
            return xml + "<file>"            + this.get('file')          + '</file>' + 
                         "<defaultValue>"    + this.get('defaultValue')  + '</defaultValue>' + 
                         "<mimeType>"        + this.get('mimeType')      + '</mimeType>' + 
@@ -225,7 +225,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Tree view model
      */
-    formBuild.TreeViewField     = formBuild.BaseField.extend({
+    app.models.TreeViewField     = app.models.BaseField.extend({
        defaults : {
             node: [
                 {
@@ -254,8 +254,8 @@ var formBuilder = (function(formBuild) {
        },
        
        initialize : function() {
-           formBuild.BaseField.prototype.initialize.apply(this, arguments);
-           _.extend(this.constructor.schema, formBuild.BaseField.schema);
+           app.models.BaseField.prototype.initialize.apply(this, arguments);
+           _.extend(this.constructor.schema, app.models.BaseField.schema);
            _.bindAll(this, 'getNodeXml', 'getXML');
        },
        
@@ -277,7 +277,7 @@ var formBuilder = (function(formBuild) {
        },
        
        getXML : function() {
-           var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
+           var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
            
            xml +=   '<defaultNode>'         + this.get('defaultNode')           + '</defaultNode>' + 
                     '<multipleSelection>'   + this.get('multipleSelection')     + '</multipleSelection>' + 
@@ -310,7 +310,7 @@ var formBuilder = (function(formBuild) {
     /**
      * enumeration field type
      */
-    formBuild.EnumerationField  = formBuild.BaseField.extend({
+    app.models.EnumerationField  = app.models.BaseField.extend({
         
         defaults: {
             items: [
@@ -341,8 +341,8 @@ var formBuilder = (function(formBuild) {
          * Get BaseField schema and add it on EnumerationField schema
          */
         initialize : function() {
-            formBuild.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.BaseField.schema);
+            app.models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.BaseField.schema);
         },
 
         /**
@@ -409,7 +409,7 @@ var formBuilder = (function(formBuild) {
          * @returns {String} XML content
          */
         getXML: function() {
-            var xml = formBuild.BaseField.prototype.getXML.apply(this, arguments);
+            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<items>' + this.getItemListXML() + '</items>' + 
                             '<expanded>' +  this.get('expanded') + '</expanded>'+ 
                             '<multiple>' +  this.get('multiple') + '</multiple>';
@@ -434,10 +434,10 @@ var formBuilder = (function(formBuild) {
         }
     });
     
-    _.defaults(formBuild.TextField.prototype.defaults,          formBuild.BaseField.prototype.defaults);
-    _.defaults(formBuild.FileField.prototype.defaults,          formBuild.BaseField.prototype.defaults);
-    _.defaults(formBuild.TreeViewField.prototype.defaults,      formBuild.BaseField.prototype.defaults);
-    _.defaults(formBuild.EnumerationField.prototype.defaults,   formBuild.BaseField.prototype.defaults);
+    _.defaults(app.models.TextField.prototype.defaults,          app.models.BaseField.prototype.defaults);
+    _.defaults(app.models.FileField.prototype.defaults,          app.models.BaseField.prototype.defaults);
+    _.defaults(app.models.TreeViewField.prototype.defaults,      app.models.BaseField.prototype.defaults);
+    _.defaults(app.models.EnumerationField.prototype.defaults,   app.models.BaseField.prototype.defaults);
     
     //  --------------------------------------------
     //  Models herited from text field model
@@ -446,16 +446,16 @@ var formBuilder = (function(formBuild) {
     /**
      * Pattern field model
      */
-    formBuild.PatternField      = formBuild.TextField.extend({
+    app.models.PatternField      = app.models.TextField.extend({
         defaults : {
             pattern : ""
         } ,
         initialize : function() {
-            formBuild.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.TextField.schema);
+            app.models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.TextField.schema);
         },
         getXML : function() {
-            return formBuild.TextField.prototype.getXML.apply(this, arguments) + "<pattern>" + this.get('pattern') + '</pattern>';
+            return app.models.TextField.prototype.getXML.apply(this, arguments) + "<pattern>" + this.get('pattern') + '</pattern>';
         }
     }, {
         type: "Pattern",
@@ -468,16 +468,16 @@ var formBuilder = (function(formBuild) {
     /**
      * date pickear field type
      */
-    formBuild.DateField         = formBuild.TextField.extend({
+    app.models.DateField         = app.models.TextField.extend({
         defaults: {
             format: "dd/mm/yyyy"
         },
         initialize : function() {
-            formBuild.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.TextField.schema);
+            app.models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.TextField.schema);
         },
         getXML: function() {
-            return formBuild.TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
+            return app.models.TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
         }
     }, {
         type    : "Date",
@@ -490,7 +490,7 @@ var formBuilder = (function(formBuild) {
     /**
      * numeric field type
      */
-    formBuild.NumericField      = formBuild.TextField.extend({
+    app.models.NumericField      = app.models.TextField.extend({
         defaults: {
             minValue    : 0,
             maxValue    : 100,
@@ -498,13 +498,13 @@ var formBuilder = (function(formBuild) {
             unity       : "meters"
         },
         initialize : function() {
-            formBuild.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.TextField.schema);
+            app.models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.TextField.schema);
             this.set('hint', 'Enter a numeric value');
         },
 
         getXML: function() {
-            return  formBuild.TextField.prototype.getXML.apply(this, arguments) +
+            return  app.models.TextField.prototype.getXML.apply(this, arguments) +
                     '<min>' + this.get("minValue")  + '</min>' +
                     '<max>' + this.get("maxValue")  + '</max>' +
                     '<precision>'+ this.get("precision")      + '</precision>' +
@@ -524,24 +524,24 @@ var formBuilder = (function(formBuild) {
     /**
      * long text field type
      */
-    formBuild.LongTextField     = formBuild.TextField.extend({
+    app.models.LongTextField     = app.models.TextField.extend({
         initialize : function() {
-            formBuild.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.TextField.schema);
+            app.models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.TextField.schema);
             this.set('multiline', true);
         },
         getXML: function() {
-            return formBuild.TextField.prototype.getXML.apply(this, arguments);
+            return app.models.TextField.prototype.getXML.apply(this, arguments);
         }
     }, {
         type    : 'LongText',
         xmlTag  : 'field_text'
     });
 
-    _.defaults(formBuild.NumericField.prototype.defaults,   formBuild.TextField.prototype.defaults);
-    _.defaults(formBuild.PatternField.prototype.defaults,   formBuild.TextField.prototype.defaults);
-    _.defaults(formBuild.DateField.prototype.defaults,      formBuild.TextField.prototype.defaults);
-    _.defaults(formBuild.LongTextField.prototype.defaults,  formBuild.TextField.prototype.defaults);
+    _.defaults(app.models.NumericField.prototype.defaults,   app.models.TextField.prototype.defaults);
+    _.defaults(app.models.PatternField.prototype.defaults,   app.models.TextField.prototype.defaults);
+    _.defaults(app.models.DateField.prototype.defaults,      app.models.TextField.prototype.defaults);
+    _.defaults(app.models.LongTextField.prototype.defaults,  app.models.TextField.prototype.defaults);
     
     //  --------------------------------------------
     //  Models herited from enumeration field model
@@ -550,13 +550,13 @@ var formBuilder = (function(formBuild) {
     /**
      * Checkbox field type
      */
-    formBuild.CheckBoxField     = formBuild.EnumerationField.extend({
+    app.models.CheckBoxField     = app.models.EnumerationField.extend({
         getXML: function() {
-            return formBuild.EnumerationField.prototype.getXML.apply(this, arguments);
+            return app.models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
         initialize : function() {
-            formBuild.EnumerationField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.EnumerationField.schema);
+            app.models.EnumerationField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.EnumerationField.schema);
             this.set('multiple', true);
             this.set('expanded', true);
         }
@@ -568,13 +568,13 @@ var formBuilder = (function(formBuild) {
     /**
      * radio field type
      */
-    formBuild.RadioField        = formBuild.EnumerationField.extend({
+    app.models.RadioField        = app.models.EnumerationField.extend({
         getXML: function() {
-            return formBuild.EnumerationField.prototype.getXML.apply(this, arguments);
+            return app.models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
         initialize : function() {
-            formBuild.EnumerationField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.EnumerationField.schema);
+            app.models.EnumerationField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.EnumerationField.schema);
             this.set('multiple', false);
             this.set('expanded', true);
         }
@@ -586,23 +586,23 @@ var formBuilder = (function(formBuild) {
     /**
      * select field type
      */
-    formBuild.SelectField       = formBuild.EnumerationField.extend({
+    app.models.SelectField       = app.models.EnumerationField.extend({
         getXML: function() {
-            return formBuild.EnumerationField.prototype.getXML.apply(this, arguments);
+            return app.models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
         initialize : function() {
-            formBuild.EnumerationField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, formBuild.EnumerationField.schema);
+            app.models.EnumerationField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.EnumerationField.schema);
         }
     }, {
         type    : 'Select',
         xmlTag  : 'field_list'
     });
 
-    _.defaults(formBuild.RadioField.prototype.defaults,         formBuild.EnumerationField.prototype.defaults);
-    _.defaults(formBuild.CheckBoxField.prototype.defaults,      formBuild.EnumerationField.prototype.defaults);
-    _.defaults(formBuild.SelectField.prototype.defaults,        formBuild.EnumerationField.prototype.defaults);    
+    _.defaults(app.models.RadioField.prototype.defaults,         app.models.EnumerationField.prototype.defaults);
+    _.defaults(app.models.CheckBoxField.prototype.defaults,      app.models.EnumerationField.prototype.defaults);
+    _.defaults(app.models.SelectField.prototype.defaults,        app.models.EnumerationField.prototype.defaults);    
 
-    return formBuild;
+    return app;
     
 })(formBuilder);

@@ -18,7 +18,7 @@
  * @version         1.0
  */
 
-var formBuilder = (function(formBuild) {
+var formBuilder = (function(app) {
 
 //
     //  ----------------------------------------------------------------------------------
@@ -27,7 +27,7 @@ var formBuilder = (function(formBuild) {
     /**
      * It's the basic views for all field view.
      */
-    formBuild.BaseView = Backbone.View.extend({
+    app.views.BaseView = Backbone.View.extend({
         
         /**
          * Events for the intercepted by the view
@@ -74,23 +74,23 @@ var formBuilder = (function(formBuild) {
          */
         copyModel : function() {
             var cl = this.model.clone();
-            cl.set('id', formBuild.mainView.formView.collection.length);    //  change id otherwise element replaced copied element
-            formBuild.mainView.formView.collection.add(cl);                 //  Add element to the collection
+            cl.set('id', app.views.mainView.formView.collection.length);    //  change id otherwise element replaced copied element
+            app.views.mainView.formView.collection.add(cl);                 //  Add element to the collection
         },
         
         /**
          * Display edition view for model
          */
         setting: function() {
-            if ($('.dropArea').hasClass('span9')) {
-                var edit = new formBuild.BaseEditView({
+            /*if ($('.dropArea').hasClass('span9')) {
+                var edit = new app.views.BaseEditView({
                     el: $('.settings'),
                     model : this.model
                 });
                 $('.dropArea').switchClass('span9', 'span7', 500);
                 $('.widgetsPanel').switchClass('span3', 'span0', 500);
                 edit.render();
-            }
+            }*/
         },
         
         /**
@@ -105,7 +105,7 @@ var formBuilder = (function(formBuild) {
         /**
          * Render view 
          * 
-         * @returns {formBuild.BaseView} view
+         * @returns {app.views.BaseView} view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
@@ -136,7 +136,7 @@ var formBuilder = (function(formBuild) {
          */
         updateSetting : function() {
             if (!$('.dropArea').hasClass('span9')) {
-                formBuild.set = new formBuild.SettingView({
+                app.views.set = new app.views.SettingView({
                     model: this.model,
                     el: $('.settings')
                 }).render();
@@ -148,13 +148,12 @@ var formBuilder = (function(formBuild) {
     /**
      * Basic edition view for all field edition view
      */
-    formBuild.BaseEditView = Backbone.View.extend({
+    app.views.BaseEditView = Backbone.View.extend({
         
         /**
          * Evenet intercepted by the view
          */
         events : {
-            'click .close'                  : 'hidePanel',
             'click h2 > a:not(.selected)'   : 'displayOptions',
             'change .property'              : 'updateModel'
         },
@@ -167,16 +166,6 @@ var formBuilder = (function(formBuild) {
             _.bindAll(this, 'render', 'updateModel');
             this.model.bind('change', this.render);
             this.model.bind('destroy', this.deleteView);
-        },
-        
-        /**
-         * Hide panel edition and remove edition view
-         */
-        hidePanel: function() {
-            if ($('.dropArea').hasClass('span7')) {
-                $('.dropArea').switchClass('span7', 'span9', 100);
-                $('.widgetsPanel').switchClass('span0', 'span3', 200);
-            }
         },
         
         /**
@@ -210,20 +199,41 @@ var formBuilder = (function(formBuild) {
         /**
          * Render view 
          * 
-         * @returns {formBuild.BaseView} view
+         * @returns {app.views.BaseView} view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             
             //  subView
-            var subView = new formBuild[this.model.constructor.type + 'FieldEditView']({
+            var subView = new app.views[this.model.constructor.type + 'FieldEditView']({
                el : $('#subView') ,
                model : this.model
             });
             subView.render();
+            //  Animate panel
+            $('.dropArea').switchClass('span9', 'span7', 500);
+            $('.widgetsPanel').switchClass('span3', 'span0', 500);
             
             return this;
+        },
+        
+        getActions : function() {
+            return {
+                'save' : new NS.UI.NavBar.Action({
+                    handler : function() {
+                        if ($('.dropArea').hasClass('span7')) {
+                            $('.dropArea').switchClass('span7', 'span9', 100);
+                            $('.widgetsPanel').switchClass('span0', 'span3', 200);
+                            app.instances.router.navigate("#", {
+                                trigger : true
+                            });
+                        }
+                    },
+                    allowedRoles: ["reader"],
+                    title: '<i class="fa fa-bars"></i> Save changes'
+                })
+            }
         }
     
     }, {
@@ -279,9 +289,6 @@ var formBuilder = (function(formBuild) {
                         '       <div class="row-fluid">&nbsp;</div>'+
                         '   </div>' +
                         '   <div class="row-fluid">&nbsp;</div>'+
-                        '   <div class="row-fluid">' +
-                        '   <button class="close center span10 offset1">Save</button>'+
-                        '   </div>'+
                         '</div>'
     }); 
     
@@ -293,13 +300,13 @@ var formBuilder = (function(formBuild) {
     /**
      * View for text field element
      */
-    formBuild.TextFieldView = formBuild.BaseView.extend({
+    app.views.TextFieldView = app.views.BaseView.extend({
         
         /**
          * Get BaseView events and add sepecific TextFieldView event
          */
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
@@ -308,7 +315,7 @@ var formBuilder = (function(formBuild) {
          * Render view
          */
         render : function() {
-           formBuild.BaseView.prototype.render.apply(this, arguments);
+           app.views.BaseView.prototype.render.apply(this, arguments);
        },
        
        /**
@@ -327,7 +334,7 @@ var formBuilder = (function(formBuild) {
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
@@ -336,7 +343,7 @@ var formBuilder = (function(formBuild) {
                         '</div></div>'
     });
 
-    formBuild.TextFieldEditView = Backbone.View.extend({
+    app.views.TextFieldEditView = Backbone.View.extend({
         
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -369,20 +376,20 @@ var formBuilder = (function(formBuild) {
     /**
      * View for pattern field
      */
-    formBuild.PatternFieldView = formBuild.BaseView.extend({
+    app.views.PatternFieldView = app.views.BaseView.extend({
         
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
         
         initialize : function() {
-          formBuild.BaseView.prototype.initialize.apply(this, arguments);
+          app.views.BaseView.prototype.initialize.apply(this, arguments);
         },
         
         render: function() {
-            formBuild.BaseView.prototype.render.apply(this, arguments);
+            app.views.BaseView.prototype.render.apply(this, arguments);
         },
         
         updateModel: function(e) {
@@ -397,7 +404,7 @@ var formBuilder = (function(formBuild) {
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
@@ -407,7 +414,7 @@ var formBuilder = (function(formBuild) {
                         '</div>'
     });
     
-    formBuild.PatternFieldEditView = Backbone.View.extend({
+    app.views.PatternFieldEditView = Backbone.View.extend({
         
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -422,7 +429,7 @@ var formBuilder = (function(formBuild) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             
-            var textView = new formBuild.TextFieldEditView({
+            var textView = new app.views.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
@@ -452,13 +459,13 @@ var formBuilder = (function(formBuild) {
     /**
      * file field view
      */
-    formBuild.FileFieldView = formBuild.BaseView.extend({
+    app.views.FileFieldView = app.views.BaseView.extend({
         
         /**
          * Events of the view
          */
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'change input[type="text"]'     : 'updateModel',
                 'click input[type="submit"]'    : 'triggerFile',
                 'click input[type="text"]'      : 'triggerFile',
@@ -467,7 +474,7 @@ var formBuilder = (function(formBuild) {
         },
         
         initialize : function() {
-          formBuild.BaseView.prototype.initialize.apply(this, arguments);
+          app.views.BaseView.prototype.initialize.apply(this, arguments);
         },
         
         triggerFile : function() {
@@ -475,7 +482,7 @@ var formBuilder = (function(formBuild) {
         },
         
         render: function() {
-            formBuild.BaseView.prototype.render.apply(this, arguments);
+            app.views.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input[type="text"]').enableSelection();
         },
         
@@ -499,7 +506,7 @@ var formBuilder = (function(formBuild) {
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
@@ -514,7 +521,7 @@ var formBuilder = (function(formBuild) {
     /**
      * File field edition view
      */
-    formBuild.FileFieldEditView = Backbone.View.extend({
+    app.views.FileFieldEditView = Backbone.View.extend({
         
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -555,15 +562,15 @@ var formBuilder = (function(formBuild) {
     /**
      * NumericFieldView
      */
-    formBuild.NumericFieldView = formBuild.BaseView.extend({
+    app.views.NumericFieldView = app.views.BaseView.extend({
         
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
             });
         },
         
         render: function() {
-            formBuild.BaseView.prototype.render.apply(this, arguments);
+            app.views.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input').spinner({
                 step: this.model.step,
                 min: this.model.minValue
@@ -577,7 +584,7 @@ var formBuilder = (function(formBuild) {
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
@@ -592,7 +599,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Numeric field edition view
      */
-    formBuild.NumericFieldEditView = Backbone.View.extend({
+    app.views.NumericFieldEditView = Backbone.View.extend({
         
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -607,7 +614,7 @@ var formBuilder = (function(formBuild) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             
-            var textView = new formBuild.TextFieldEditView({
+            var textView = new app.views.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
@@ -638,13 +645,13 @@ var formBuilder = (function(formBuild) {
     /**
      * date field view
      */
-    formBuild.DateFieldView = formBuild.BaseView.extend({
+    app.views.DateFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
             });
         },
        render : function() {
-           formBuild.BaseView.prototype.render.apply(this, arguments);
+           app.views.BaseView.prototype.render.apply(this, arguments);
            $(this.el).find('input').datepicker({
                format: this.model.get('format')
            });
@@ -657,7 +664,7 @@ var formBuilder = (function(formBuild) {
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
@@ -670,7 +677,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Date field edition view
      */
-    formBuild.DateFieldEditView = Backbone.View.extend({
+    app.views.DateFieldEditView = Backbone.View.extend({
         
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -685,7 +692,7 @@ var formBuilder = (function(formBuild) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             
-            var textView = new formBuild.TextFieldEditView({
+            var textView = new app.views.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
@@ -714,14 +721,14 @@ var formBuilder = (function(formBuild) {
     /**
      * Long text view
      */
-    formBuild.LongTextFieldView = formBuild.BaseView.extend({
+    app.views.LongTextFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'focus textarea'        : 'updateSetting'
             });
         },
         initialize : function() {
-            formBuild.BaseView.prototype.initialize.apply(this, arguments);
+            app.views.BaseView.prototype.initialize.apply(this, arguments);
             $(this.el).addClass('textArea');
         }
     }, {
@@ -732,7 +739,7 @@ var formBuilder = (function(formBuild) {
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
@@ -745,7 +752,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Long text field edition view
      */
-    formBuild.LongTextFieldEditView = formBuild.TextFieldEditView.extend({});
+    app.views.LongTextFieldEditView = app.views.TextFieldEditView.extend({});
 
 
 
@@ -757,13 +764,13 @@ var formBuilder = (function(formBuild) {
     /**
      * Tree view field view
      */
-    formBuild.TreeViewFieldView = formBuild.BaseView.extend({
+    app.views.TreeViewFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
             });
         },
         render : function() {
-            formBuild.BaseView.prototype.render.apply(this, arguments);
+            app.views.BaseView.prototype.render.apply(this, arguments);
             var src = this.model.get('node');
             $(this.el).find('#tree').fancytree({
                 source: src,
@@ -780,7 +787,7 @@ var formBuilder = (function(formBuild) {
                         '       </label> '+
                         '       <div class="span8 right hide">'+
                         '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '       </div>'+
                         '   </div>' +
@@ -793,7 +800,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Tree view field edition view
      */
-    formBuild.TreeViewFieldEditView = Backbone.View.extend({
+    app.views.TreeViewFieldEditView = Backbone.View.extend({
         
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
@@ -818,9 +825,9 @@ var formBuilder = (function(formBuild) {
     /**
      * Radio field view
      */
-    formBuild.RadioFieldView = formBuild.BaseView.extend({
+    app.views.RadioFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'click input[type="radio"]'        : 'updateSetting'
             });
         }
@@ -833,7 +840,7 @@ var formBuilder = (function(formBuild) {
                         '      </label>'+
                         '      <div class="span8 right hide">'+
                         '          <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '          <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '          <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '          <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '      </div>'+
                         '   </div>'+
@@ -853,9 +860,9 @@ var formBuilder = (function(formBuild) {
     /**
      * Options field vue
      */
-    formBuild.SelectFieldView = formBuild.BaseView.extend({
+    app.views.SelectFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'change select'        : 'updateSelected'
             });
         },
@@ -869,7 +876,7 @@ var formBuilder = (function(formBuild) {
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
@@ -885,9 +892,9 @@ var formBuilder = (function(formBuild) {
     /**
      * Checkbox field view
      */
-    formBuild.CheckBoxFieldView = formBuild.BaseView.extend({
+    app.views.CheckBoxFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseView.prototype.events, {
                 'change input[type="checkbox"]' : 'updateSelected'
             });
         },
@@ -903,7 +910,7 @@ var formBuilder = (function(formBuild) {
                         '   </label>'+
                         '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>'+
@@ -923,7 +930,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Common edition view for enumeration field
      */
-    formBuild.RadioFieldEditView = formBuild.CheckboxFieldEditView = formBuild.SelectFieldEditView = Backbone.View.extend({
+    app.views.RadioFieldEditView = app.views.CheckboxFieldEditView = app.views.SelectFieldEditView = Backbone.View.extend({
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
         },
@@ -972,7 +979,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Main form view
      */
-    formBuild.FormView = Backbone.View.extend({
+    app.views.FormView = Backbone.View.extend({
         
         events: {
             'change #protocolName' : 'changeFormName'
@@ -991,20 +998,24 @@ var formBuilder = (function(formBuild) {
                     );
             this.collection.bind('add', this.addElement);
             this.collection.bind('change', this.updateView);
+            this.collection.bind('change:name', function() {
+                console.log ("name change")
+            })
             this._view = [];
         },
         
         updateView : function() {
+            console.log ("ici")
           $(this.el).find('#protocolName').val(this.collection.name);
         },
         
         addElement: function(el) {
-            var id = "dropField" + this.collection.length;
+            var id = "dropField" + this.collection.length, viewClassName = el.constructor.type + "FieldView";
         
             $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');            
             
-            if (formBuild[el.constructor.type + "FieldView"] !== undefined) {
-                var vue = new formBuild[el.constructor.type + "FieldView"]({
+            if (app.views[viewClassName] !== undefined) {
+                var vue = new app.views[viewClassName]({
                     el      : $("#" + id),
                     model   : el
                 });
@@ -1117,7 +1128,7 @@ var formBuilder = (function(formBuild) {
 
                             reader.onload = _.bind(function(evt) {
                                 try {
-                                    var result = formBuild.XMLValidation(evt.target.result);
+                                    var result = app.views.XMLValidation(evt.target.result);
                                     if (result !== true) {
                                         $('#importProtocolModal').modal('hide').removeData();
                                         new NS.UI.Notification({
@@ -1233,7 +1244,7 @@ var formBuilder = (function(formBuild) {
     /**
      * Panel view
      */
-    formBuild.PanelView = Backbone.View.extend({
+    app.views.PanelView = Backbone.View.extend({
         events: {
             'click .fields': 'appendToDrop'
         },
@@ -1243,9 +1254,11 @@ var formBuilder = (function(formBuild) {
         },
         appendToDrop : function(e) {
             
-            if (formBuild[$(e.target).data("type") + 'Field'] !== undefined) {
+            var elementClassName = $(e.target).data("type") + 'Field';
+            
+            if (app.models[elementClassName] !== undefined) {
                 
-                var f = new formBuild[$(e.target).data("type") + 'Field']({
+                var f = new app.models[elementClassName]({
                     id: this.collection.getSize()
                 });
                 
@@ -1267,7 +1280,7 @@ var formBuilder = (function(formBuild) {
     }, {
         templateSrc :   '<div class="nano-content">'+
                             '<h1 class="center">Fields</h1>' +
-                            '<% _.each(formBuilder, function(el, idx) { %>' + 
+                            '<%  _.each(formBuilder.models, function(el, idx) { %>' + 
                             '   <% if (el.type != undefined) { %>' + 
                             '       <div class="row-fluid">' +
                             '           <div class="span10 offset1 fields" data-type="<%= idx.replace("Field", "") %>">' +
@@ -1282,9 +1295,9 @@ var formBuilder = (function(formBuild) {
     /**
      * Hidden field view
      */
-    formBuild.HiddenFieldView = formBuild.BaseView.extend({
+    app.views.HiddenFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {});
+            return _.extend({}, app.views.BaseView.prototype.events, {});
         }
     }, {
         templateSrc :   '<div class="element"><div class="row" style="margin-left : 10px;">' + 
@@ -1293,7 +1306,7 @@ var formBuilder = (function(formBuild) {
                         '       &nbsp;</label> '+
                         '   <div class="span8 right hide">'+
                         '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
                         '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
                         '   </div>'+
                         '</div>' +
@@ -1305,12 +1318,12 @@ var formBuilder = (function(formBuild) {
     /**
      * Display an horizontal line in the form
      */
-    formBuild.HorizontalLineFieldView = formBuild.BaseView.extend({
+    app.views.HorizontalLineFieldView = app.views.BaseView.extend({
         events: function() {
-            return _.extend({}, formBuild.BaseView.prototype.events, {});
+            return _.extend({}, app.views.BaseView.prototype.events, {});
         },
         render : function() {
-            formBuild.BaseView.prototype.render.apply(this, arguments);
+            app.views.BaseView.prototype.render.apply(this, arguments);
         }
     }, {
         templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
@@ -1328,5 +1341,517 @@ var formBuilder = (function(formBuild) {
     });
     
 
-    return formBuild;
+    //  ----------------------------------------------------------------------------------
+    //  Modal view
+    
+    app.views.SaveProtocolModalView = Backbone.View.extend({
+        
+        events : {
+            'keyup #saveProtocolKeywords'               : 'validateProtocolValue',
+            'click #saveProtocolKeywordsList .close'    : 'removeKeyword',
+            'click .btn-primary'                        : 'validateProtocolSave',
+        },
+        
+        initialize : function(options) {
+            this.template   = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 
+                'render', 
+                'validateProtocolValue', 
+                'removeKeyword', 
+                'appendKeywordValue'
+            );
+            
+            this.keywordList = [];
+        },
+        
+        render : function() {
+            var renderedContent = this.template();
+            $(this.el).html(renderedContent);
+            $(this.el).modal({ show: true });
+            
+            //  ----------------------------------------------------------
+            
+            $(this.el).find('#saveProtocolName').typeahead({
+                source: function(query, process) {
+                    return $.getJSON('/protocols', {query: query}, function(data) {
+                        return process(data.options);
+                    });
+                }
+            });
+            
+            $(this.el).find('#saveProtocolKeywords').typeahead({
+                source: function(query, process) {
+                    return $.getJSON('/keywords', {query: query}, function(data) {
+                        return process(data.options);
+                    });
+                },
+                updater: _.bind(function(item) {                    
+                    this.appendKeywordValue(item);
+                }, this)
+            });
+
+            return this;
+        },
+        
+        validateProtocolValue : function(e) {
+            if (e.keyCode === 13) {
+                this.appendKeywordValue( $(e.target).val() );
+            }
+        },
+        
+        /**
+         * Add the keyword value in the list and check if the keyword not exists yet
+         * 
+         * @param {type} keywordValue
+         */
+        appendKeywordValue : function(keywordValue) {
+            if (this.keywordList.indexOf(keywordValue) > -1) {
+                $('li[data-value="' + keywordValue + '"]').css('background', 'red');
+                setTimeout( function() {
+                    $('li[data-value="' + keywordValue + '"]').css('background', '#0ac');
+                }, 1500);
+            } else {
+                $(this.el).find('#saveProtocolKeywordsList').append(
+                    '<li data-value="' + keywordValue + '" >' + keywordValue + '<button class="close">x</button></li>'
+                );
+                this.keywordList.push(keywordValue);
+                $('#saveProtocolKeywords').val("");
+            }
+        },
+
+        /**
+         * Remove keyword from the list
+         * 
+         * @param {type} e clicked li on the keyword list
+         */
+        removeKeyword: function(e) {
+            this.keywordList.splice($(e.target).parent('li').index(), 1);
+            $(e.target).parent('li').remove();
+        },
+        
+        /**
+         * Validate information and send protocol to the repository
+         * 
+         * @param {type} e primary button clicked event
+         */
+        validateProtocolSave : function (e){
+            var saveProtocolName        = $('#saveProtocolName').val()          === "",
+                saveProtocolDescription = $('#saveProtocolDescription').val()   === "",
+                saveProtocolKeywords    = $('#saveProtocolKeywords').val()      === "",
+                saveProtocolComment     = $('#saveProtocolComment').val()       === "";
+        
+            $('#saveProto, #saveProtocolDescription, #saveProtocolKeywords, #saveProtocolComment, #saveProtocolName').each( function() {
+                $(this)[ eval($(this).prop('id')) === true ? 'addClass' : 'removeClass']("error");
+            });          
+
+            if (!saveProtocolName && !saveProtocolDescription && !saveProtocolKeywords && !saveProtocolComment) {
+                var dataS = JSON.stringify({
+                    content: mainView.getFormXML(),
+                    name: $('#saveProtocolName').val(),
+                    comment: $('#saveProtocolComment').val(),
+                    keywords: $('#saveProtocolKeywords').val(),
+                    description: $('#saveProtocolDescription').val()
+                }, null, 2);
+
+                $.ajax({
+                    data: dataS,
+                    type: 'POST',
+                    url: '/protocols',
+                    contentType: 'application/json',
+                    success: function(res) {
+                        $('#saveModal').modal('hide').removeData();
+                        new NS.UI.Notification({
+                            type: 'success',
+                            title: 'Protocol saved : ',
+                            message: 'your protocol has been saved correctly !'
+                        });
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        $('#saveModal').modal('hide').removeData();
+                        new NS.UI.Notification({
+                            delay: 15,
+                            type: 'error',
+                            message: jqXHR.responseText,
+                            title: 'An error occured :'
+                        });
+                    }
+                });
+            }
+        }
+        
+    }, {
+        templateSrc :   '<div>'+
+                        '   <div class="modal-header">' +
+                        '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                        '       <h3>Save protocol</h3>'+
+                        '   </div>'+
+                        '   <div class="modal-body">'+
+                        '       <div class="row-fluid">'+
+                        '           <label>Protocol name</label>'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <input type="text" id="saveProtocolName" class="span10" placeholder="Protocol name" data-provide="typeahead" />'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <label>Your comment</label>'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <input type="text" id="saveProtocolComment" class="span10" placeholder="Your comment" />'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <label>Protocol description</label>'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <textarea id="saveProtocolDescription" class="span10" placeholder="Describe this protocol in some words"></textarea>'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <label>Keywords <i>(Taped enter for validate)</i></label>'+
+                        '       </div>'+
+                        '       <div class="row-fluid">'+
+                        '           <input type="text" id="saveProtocolKeywords" placeholder="Enter keywords" class="span10" data-provider="typeahead" />'+
+                        "       </div>"+
+                        '       <ul class="row-fluid" id="saveProtocolKeywordsList">'+                    
+                        '       </ul>'+
+                        '       <div class="row-fluid">&nbsp;</div>'+
+                        '   </div>'+
+                        '   <div class="modal-footer">'+
+                        '       <a href="#" class="btn btn-primary">Save changes</a>'+
+                        '   </div>'+
+                        '</div>'
+    });
+    
+    app.views.DiffProtocolModalView = Backbone.View.extend({
+        
+        events : {
+            'click .btn-primary' : 'showDiff',
+            'click #findSource, #findUpdate' : 'triggerInputFile',
+            'change input[type="file"]' : 'inputFileValueChange'
+        },
+        
+        initialize : function (options) {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        render : function() {
+            var renderedContent = this.template();
+            $(this.el).html(renderedContent);
+            $(this.el).modal({ show: true });
+            
+            return this;
+        },
+        
+        showDiff: function() {
+            $('#compareModal').modal('hide');
+
+            var source  = $('#compareModal').find('#sourceHide')[0].files[0],
+                update  = $('#compareModal').find('#updateHide')[0].files[0],
+                srcName = source['name'],
+                updName = update['name'],
+                reader  = null;
+
+            if (source === null || update === null) {
+                formBuilder.displayNotification("Reading error", 'error', 'Error durring XML loading ! ');
+                return;
+            }
+
+            if (source.type !== "text/xml" || update.type !== "text/xml") {
+                formBuilder.displayNotification("File mime type error", 'error', 'You must choose only XML files');
+                return;
+            }
+
+                    reader = new FileReader();
+            reader.readAsText(source, "UTF-8");
+
+            reader.onload = function(evt) {
+                try {
+                    if (formBuilder.XMLValidation(evt.target.result) !== true) {
+                        formBuilder.displayNotification(result.error, 'error', 'Your XML don\'t matches with XML Schema');
+                        return;
+                    }
+                    
+                    source = evt.target.result;
+                    reader = new FileReader();
+                    reader.readAsText(update, "UTF-8");
+
+                    reader.onload = function(evt) {
+
+                        if (formBuilder.XMLValidation(evt.target.result) === true) {
+                            update = evt.target.result;
+                            $('.widgetsPanel').switchClass('span3', 'span0', 250, function() {
+                                $('.dropArea').append(formBuilder.GetXMLDiff(source, update, srcName, updName));
+                                $('.dropArea').switchClass('span9', 'span12', 250).find('.diff').addClass('span11');
+                                var acts = {
+                                    quit: new NS.UI.NavBar.Action({
+                                        handler: function() {
+                                            $('.widgetsPanel').switchClass('span0', 'span3', 250, function() {
+                                                $('.dropArea').switchClass('span2', 'span9', 250).find('table').remove();
+                                                navbar.setActions(actions);
+                                                addIcon();
+                                            });
+                                        },
+                                        allowedRoles: ["reader"],
+                                        title: "Quit"
+                                    })
+                                };
+                                navbar.setActions(acts);
+                            });
+                        }
+                    };
+
+                } catch (exp) {
+                    new NS.UI.Notification({
+                        type: 'error',
+                        title: "An error occured",
+                        message: 'One of giles can\'t be read'
+                    });
+                }
+            };
+            reader.onerror = function(evt) {
+                new NS.UI.Notification({
+                    type: 'error',
+                    title: "Reading error",
+                    message: 'An error was occure during reading file'
+                });
+            };
+        },
+        
+        inputFileValueChange: function(e) {
+            var id      = $(e.target).prop('id').replace('Hide', ''), 
+                split    = $(this).val().split('\\');
+            //  Set input text value from input file value
+            $('#' + id).val(split[ split.length - 1]);
+        },
+        
+        triggerInputFile : function (e) {
+            $('#' + $(e.target).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
+        }
+        
+    }, {
+        templateSrc :   '<div>'+
+                        '   <div class="modal-header">'+
+                        '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                        '       <h2>XML File versionning</h2>'+
+                        '   </div>'+
+                        '   <br />'+
+                        '   <div class="row-fluid"> '+
+                        '       <input type="file" id="sourceHide"  class="hide" /> '+
+                        '       <label class="span2 offset1">Source XML</label> '+
+                        '       <input type="text" class="span5" id="source" placeholder="Your XML File" /> '+
+                        '       <button type="button" class="span3 btn" id="findSource" style="margin-left: 10px;">Find</button> '+
+                        '   </div> '+
+                        '   <div class="row-fluid"> '+
+                        '       <input type="file" id="updateHide"  class="hide" /> '+
+                        '       <label class="span2 offset1">Updated XML</label> '+
+                        '       <input type="text" class="span5" id="update" placeholder="Your XML File" /> '+
+                        '       <button type="button" class="span3 btn" id="findUpdate" style="margin-left: 10px;">Find</button> '+
+                        '   </div> '+
+                        '   <div class="modal-footer">'+
+                        '       <a href="#" class="btn btn-primary">Run versionning</a>'+
+                        '   </div>'+
+                        '</div>'
+    });
+    
+    app.views.MainView = Backbone.View.extend({
+        
+        initialize : function(options) {
+            this.el = options.el;
+            $(this.el).append(
+                '<div class="row-fluid content">'+
+                '   <div class="span3 widgetsPanel nano"></div>'+
+                '   <div class="span9 dropArea"></div>'+
+                '   <div class="settings span5"></div>'+
+                '</div>'
+            );
+            
+            this.form = options.form || new app.views.Form({}, {
+                name: "My form"
+            });
+
+            this.panelView = new app.views.PanelView({
+                el: $('.widgetsPanel'),
+                collection: this.form,
+            });
+
+            this.formView = new app.views.FormView({
+                collection: this.form,
+                el: $('.dropArea')
+            });            
+            
+            this.panelView.render();
+            this.formView.render();
+            
+            _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getActions');
+        },
+        
+        clear: function() {
+            this.form.clearAll();
+        },
+        
+        getFormXML : function() {
+            return this.formView.getXML();
+        },
+        
+        downloadXML : function() {
+            return this.formView.downloadXML();
+        },
+        
+        importXML : function() {
+            return this.formView.importXML();
+        },
+        
+        getActions : function() {
+            return {
+                save : new NS.UI.NavBar.Action({
+                    title           : '<i class="fa fa-cloud"></i> Save protocol',
+                    allowedRoles    : ["reader"],
+                    actions: {
+                        'save.repo' : new NS.UI.NavBar.Action({
+                            //  Display modal window for save the protocol in the repository
+                            title       : 'Save on the cloud',
+                            allowedRoles: ['reader'],                    
+                            handler: function() {
+                                var modalView = new app.views.SaveProtocolModalView({el: '#saveModal'});
+                                modalView.render();
+                            }
+                        }),
+                        'save.xport': new NS.UI.NavBar.Action({
+                            //  Allow to export protocol as a XML file
+                            handler: function() {
+                                app.instances.mainView.downloadXML();
+                            },
+                            allowedRoles    : ["reader"],
+                            title           : "Export as XML"
+                        })
+                    }
+                }),
+                
+                'import' : new NS.UI.NavBar.Action({
+                    actions : {
+                        'import.XML' : new NS.UI.NavBar.Action({
+                            handler: function() {
+                                app.instances.mainView.importXML();
+                            },
+                            allowedRoles: ["reader"],
+                            title       : "Import XML File"
+                        }),
+                        'import.load' : new NS.UI.NavBar.Action({
+                            title       : 'load from cloud',
+                            allowedRoles: ["reader"],
+                            handler : function () {
+                                alert ('I\'m working on it !');
+                            }
+                        })
+                    },
+                    title       : '<i class="fa fa-upload"></i> Import a protocol',
+                    allowedRoles: ["reader"],
+                }),
+                
+                clear: new NS.UI.NavBar.Action({
+                    handler: function() {
+                        app.instances.mainView.clear();
+                    },
+                    allowedRoles: ["reader"],
+                    title       : '<i class="fa fa-trash-o"></i> Clear protocol'
+                }),
+                
+                show: new NS.UI.NavBar.Action({
+                    handler: function() {
+                        $('#compareModal').modal('show')
+                        .on('click', '#findSource, #findUpdate', function() {
+                            $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
+                        })
+                        .on('change', 'input[type="file"]', function() {
+                            var id = $(this).prop('id').replace('Hide', ''), split = $(this).val().split('\\');
+                            $('#' + id).val(split[ split.length - 1]);
+                        })
+                        .on('click', '.btn-primary', function() {
+                            $('#compareModal').modal('hide');
+                            var source  = $('#compareModal').find('#sourceHide')[0].files[0],
+                                update  = $('#compareModal').find('#updateHide')[0].files[0], 
+                                srcName = source['name'], 
+                                updName = update['name'],
+                                reader  = null;
+
+                            if (source !== null && update !== null) {
+                                 if (source.type === "text/xml" && update.type === "text/xml") {
+                                    reader = new FileReader();
+                                    reader.readAsText(source, "UTF-8");
+                                    reader.onload = function(evt) {
+                                        try {
+                                            if (formBuilder.XMLValidation(evt.target.result) !== true) {
+                                                new NS.UI.Notification ({
+                                                    title : result.error,
+                                                    type : 'error',
+                                                    message : 'Your XML don\'t matches with XML Schema'
+                                                });
+                                            } else {
+                                                source = evt.target.result;
+                                                reader = new FileReader();
+                                                reader.readAsText(update, "UTF-8");
+                                                reader.onload = function(evt) {
+                                                    if (formBuilder.XMLValidation(evt.target.result) === true) {
+                                                        update = evt.target.result;
+                                                        $('.widgetsPanel').switchClass('span3', 'span0', 250, function() {
+                                                            $('.dropArea').append(
+                                                                formBuilder.GetXMLDiff(source, update, srcName, updName)
+                                                            ).switchClass('span9', 'span12', 250).find('.diff').addClass('span11');
+                                                            var acts = {
+                                                                quit: new NS.UI.NavBar.Action({
+                                                                    handler: function() {
+                                                                        $('.widgetsPanel').switchClass('span0', 'span3', 250, function() {
+                                                                            $('.dropArea').switchClass('span2', 'span9', 250).find('table').remove();
+                                                                            navbar.setActions(actions);
+                                                                            addIcon();
+                                                                        });                                                                
+                                                                    },
+                                                                    allowedRoles: ["reader"],
+                                                                    title: "Quit"
+                                                                })
+                                                            };
+                                                            navbar.setActions(acts);
+                                                        })
+                                                    }
+                                                };
+                                            }
+                                        } catch (exp) {
+                                            new NS.UI.Notification({
+                                                type: 'error',
+                                                title: "An error occured",
+                                                message: 'One of giles can\'t be read'
+                                            });
+                                        }
+                                    };
+                                    reader.onerror = function(evt) {
+                                        new NS.UI.Notification({
+                                            type: 'error',
+                                            title: "Reading error",
+                                            message: 'An error was occure during reading file'
+                                        });
+                                    };
+
+                                } else {
+                                    new NS.UI.Notification({
+                                        type: 'error',
+                                        title: "File mime type error",
+                                        message: 'You must choose only XML files'
+                                    });
+                                }
+                            } else {
+                                new NS.UI.Notification({
+                                    type: 'error',
+                                    title: "Reading error",
+                                    message: 'Error durring XML loading ! '
+                                });
+                            }
+                        }).removeClass('hide').css('width', '700px');
+                    },
+                    allowedRoles: ["reader"],
+                    title: '<i class="fa fa-bars"></i> Compare XML Files'
+                })        
+            };
+        }
+    });
+    
+    return app;
+    
 })(formBuilder);

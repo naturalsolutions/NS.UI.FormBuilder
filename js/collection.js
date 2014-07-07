@@ -15,13 +15,13 @@
  * @version         1.0
  */
 
-var formBuilder = (function(formBuild) {
-
+var formBuilder = (function(app) {
+    
     /**
      * Implement form object as a fields collection
      */
-    formBuild.Form = Backbone.Collection.extend({
-        model: formBuild.BaseField,
+    app.collections.Form = Backbone.Collection.extend({
+        model: app.models.BaseField,
 
         /**
          * Init form collection
@@ -118,7 +118,7 @@ var formBuilder = (function(formBuild) {
          * @returns {undefined}
          */
         addElement: function(element, nameType) {
-            var el = new formBuild[nameType](element);
+            var el = new app.models[nameType](element);
             if (el !== null) {
                 this.add(el);
             }
@@ -136,7 +136,7 @@ var formBuilder = (function(formBuild) {
             this.name = name;
             var xmlDoc          = $.parseXML(content), 
                 fieldNameType   = "",
-                form            = formBuild.XmlToJson( $(xmlDoc).find('form') );
+                form            = app.utilities.XmlToJson( $(xmlDoc).find('form') );
             
             _.each(form['fields'], _.bind(function(el, idx) {               
 
@@ -151,7 +151,9 @@ var formBuilder = (function(formBuild) {
 
             }, this));
         }
+    
     });
 
-    return formBuild;
+    return app;
+    
 })(formBuilder);

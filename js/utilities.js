@@ -1,5 +1,5 @@
 
-var formBuilder = (function(formBuild) {
+var formBuilder = (function(app) {
 
     /**
      * Return if the XML Content is valid
@@ -7,7 +7,7 @@ var formBuilder = (function(formBuild) {
      * @param {string} xmlContent xml content to check
      * @returns {array|Boolean} a boolean if everything is ok or an array with the errors
      */
-    formBuild.XMLValidation = function(xmlContent) {
+    app.utilities.XMLValidation = function(xmlContent) {
             var result;
             $.ajax({                
                 url         : 'xml/NS_Schema.xsd',
@@ -50,7 +50,7 @@ var formBuilder = (function(formBuild) {
      * @param {type} inline
      * @returns {diffview.buildView.ctelt.e|Element|diffview.buildView.celt.e}
      */
-    formBuild.GetXMLDiff = function (baseText, newText, baseTextName, newTextName, inline, contextSize) {
+    app.utilities.GetXMLDiff = function (baseText, newText, baseTextName, newTextName, inline, contextSize) {
         
         var base    = difflib.stringAsLines(baseText), 
             newtxt  = difflib.stringAsLines(newText),
@@ -70,7 +70,7 @@ var formBuilder = (function(formBuild) {
         });
     };
     
-    formBuild.XmlToJson = function(element, index) {
+    app.utilities.XmlToJson = function(element, index) {
         
         var jsonObject = {};
         
@@ -86,7 +86,7 @@ var formBuilder = (function(formBuild) {
             
            if ($(el).children().length > 0) {
                //   recursive
-               _.each(formBuild.XmlToJson(el, idx), function(subEl, subId) {
+               _.each(app.utilities.XmlToJson(el, idx), function(subEl, subId) {
                    jsonObject[$(el).prop('tagName')][subId] = subEl;
                });
            } else {
@@ -103,7 +103,10 @@ var formBuilder = (function(formBuild) {
         return jsonObject;        
     };
 
-
-    return formBuild;
+    app.utilities.displayNotification = function(title, type, message, delay) {
+        new NS.UI.Notification(arguments);
+    };
+    
+    return app;
 
 })(formBuilder);

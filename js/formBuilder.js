@@ -9,57 +9,42 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-var formBuilder = (function(formBuild) {
+var formBuilder = (function(app) {
 
-    //  Fix me
-    formBuild = {};
-    
-    formBuild.MainView = Backbone.View.extend({
+    app = {
+        views       : {},
+        models      : {},
+        collections : {},
+        instances   : {
+            user : {
+                anonymous   : {roles: ['reader']},
+                roger       : {nickname: 'Roger', roles: ['reader', 'writer']},
+                gaston      : {nickname: 'Gaston', roles: ['reader', 'writer', 'moderator']}
+            },
+            tiles: [
+                {title: 'Home', tileClass: 'tile-home', url: '#', allowedRoles: ['reader']},
+                {title: 'Forum', tileClass: 'tile-forum', url: '#forum', allowedRoles: ['reader']},
+                {title: 'Administration', tileClass: 'tile-admin tile-double', url: '#admin', allowedRoles: ['moderator']}
+            ]
+        },
+        utilities   : {},
         
-        initialize : function(options) {
+        init : function() {
+            app.instances.router = new app.Router();
             
-            $(this.el).append(
-                '<div class="row-fluid content">'+
-                '   <div class="span3 widgetsPanel nano"></div>'+
-                '   <div class="span9 dropArea"></div>'+
-                '   <div class="settings span5"></div>'+
-                '</div>'
-            );
-            this.form = new formBuild.Form({}, {
-                name: "My form"
+            app.instances.navbar = new NS.UI.NavBar({
+                roles       : app.instances.user.gaston.roles,
+                username    : app.instances.user.gaston.nickname,
+                title       : 'Form Builder'
             });
-
-            this.panelView = new formBuild.PanelView({
-                el: $('.widgetsPanel'),
-                collection: this.form,
-            });
-
-            this.formView = new formBuild.FormView({
-                collection: this.form,
-                el: $('.dropArea')
-            });            
             
-            this.panelView.render();
-            this.formView.render();
-        },
-        
-        clear: function() {
-            this.form.clearAll();
-        },
-        
-        getFormXML : function() {
-            return this.formView.getXML();
-        },
-        
-        downloadXML : function() {
-            return this.formView.downloadXML();
-        },
-        
-        importXML : function() {
-            return this.formView.importXML();
+            app.instances.navbar.$el.prependTo('body');
+            app.instances.navbar.render();
+            
+            Backbone.history.start();
         }
-    });   
-
-    return formBuild;
+    }; 
+   
+    return app;
 
 })(formBuilder);
