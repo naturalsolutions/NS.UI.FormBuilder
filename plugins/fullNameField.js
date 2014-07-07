@@ -28,12 +28,12 @@ var formBuilder = (function(app) {
                             '   <defaultValue>'    + this.get('firstName')['defaultValue']  + '</defaultValue>' +
                             '   <hint>'            + this.get('firstName')['hint']          + '</hint>' +
                             '   <size>'            + this.get('firstName')['size']          + '</size>' +
-                            '</name>'+
+                            '</firstName>'+
                             '<lastName>' + 
                             '   <defaultValue>'    + this.get('lastName')['defaultValue']  + '</defaultValue>' +
                             '   <hint>'            + this.get('lastName')['hint']          + '</hint>' +
                             '   <size>'            + this.get('lastName')['size']          + '</size>' +
-                            '</firstName>'
+                            '</lastName>'
         }
     }, {
         type    : "FullName",
