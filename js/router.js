@@ -18,8 +18,7 @@ var formBuilder = (function(app) {
                 });
             }
             
-            app.instances.navbar.setActions (app.instances.mainView.getActions());
-            
+            app.instances.navbar.setActions (app.instances.mainView.getActions());            
         },
         
         saveProtocol : function (options) {
