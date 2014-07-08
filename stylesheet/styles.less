@@ -10,7 +10,7 @@ html, body {
 //  Main classes
 //  ---------------------------------------------------------------------
 .noMarginLeft   { margin-left : 0 !important; }
-.noMarginTop    {margin-top: 0 !important;}
+.noMarginTop    { margin-top: 0 !important;}
 .navbar         { margin-bottom : 0 !important; }
 .span0          { width : 0px !important; overflow: hidden;}
 .left           { text-align: left !important;}
@@ -24,6 +24,7 @@ html, body {
 .diff           { margin-bottom: 150px; }
 .text           { line-height : 30px; font-size : 20px; }
 .error          { box-shadow: 0 0 3px #c80000 inset !important; }
+.marginLeft10   { margin-left: 10px !important; }
 
 .table      { tr { background : white; } }
 .bordered   { border : 2px #aaa solid; background : #fff; }
@@ -48,11 +49,7 @@ html, body {
 
 .notification-container {
     height : 0;
-    .notification-list {
-        height : 0;
-        min-width: 0;
-        margin-bottom : 5px;
-    }
+    .notification-list { height : 0; min-width: 0; margin-bottom : 5px; margin-top : 10px; }
 }
 
 #formBuilder {
@@ -114,17 +111,12 @@ html, body {
                 font-size       : 45px;
                 color           : #555;
                 border-bottom   : 1px #ddd solid;
-                box-shadow       : none;
-                &:focus {
-                    box-shadow: none;
-                }                
+                box-shadow      : none;
+                &:focus { box-shadow: none; }                
             }
             
-            hr {
-                border-top      : #333 1px solid;
-                margin-bottom   : 0;
-                padding-bottom  : 0px;
-            }
+            hr { border-top : #333 1px solid; margin-bottom : 0; padding-bottom : 0px; }
+            
             h2 {
                 color       : #ddd;
                 font-weight : 100;
@@ -261,10 +253,7 @@ html, body {
                 box-shadow  : none !important;
                 font-size   : 20px;                
             }
-            .close { 
-                font-size   : 30px; 
-                font-size   : 28px;
-            }
+            .close { font-size : 28px; }
             .minMax {
                 label { 
                     text-align  : center !important;
@@ -275,10 +264,7 @@ html, body {
                 table {
                     border-collapse : collapse;
                     thead {
-                        tr {
-                            border          : 2px #ccc solid;
-                            border-collapse : collapse;
-                        }
+                        tr { border : 2px #ccc solid; border-collapse : collapse; }
                     }
                     tbody {
                         tr {
@@ -322,40 +308,107 @@ html, body {
 
 .modal {
     background: #fff;
-    //height : 350px;
     margin-top: 100px;
-    input {
-        padding : 15px;
-    }
-    button {
-        padding : 4px;
-    }
+    
+    input   { padding : 15px;   }
+    button  { padding : 4px;    }
+    
 }
 
 .navbar {
-    width           : 100%;
     position        : fixed;
     z-index         : 255;
-    height          : 45px !important;
-    overflow        : hidden !important;
-    margin-bottom   : 0;
-    .navbar-inner {
-        background : #0aC !important;
-        height :  45px !important;
-        p { margin-top:  7px; }
+    width : 100%;
+    
+    .dropdown-menu {
+        border-radius   : 0 !important;
+        box-shadow      : none;
+        left            : 5px;
+        top             : 95%;
+        min-width       : 94%;
     }
-    li > a { height : 45px; }
+    
+    .navbar-inner { background : #0aC !important; }
+    
+    li {
+        height : 50px;
+        
+        a { 
+            height          : 50px !important;
+            max-height      : 50px;
+            margin-top      : 0;
+            padding-top     : 0 !important;
+            padding-bottom  : 0 !important;
+            line-height     : 45px;
+        }
+    }
+    .navbar-switcher {
+        overflow    : hidden;
+        margin-top  : -4px;
+        height      : 55px;
+        li {
+            overflow : hidden; a { height : 50px !important; }
+        }
+    }
 }
 
-.modal {
-    h2 {
-        font-weight: 100;
+.navbar-search, .navbar-user { display : none; }
+
+#importProtocolFileText { float : left;}
+
+
+
+#saveModal {
+    textarea { resize: none; height : 60px; max-height: 60px; }
+    label > i { color : #888; }
+    .modal-body {
+        padding-bottom: 25px;
+        .row-fluid:nth-child(even){
+            margin-bottom: 5px;
+        }
     }
-    input {
+    #saveProtocolKeywordsList {
+        list-style-type: none;
+        .noMarginLeft();
+        li {
+            float : left;
+            height: 30px;
+            line-height: 30px;
+            background : #0aC;
+            color : white;
+            padding : 5px 0px 5px 10px;
+            margin-left : 5px;
+            button {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+    }
+}
+
+#ul {
+    box-shadow: 0 0 4px #555inset;
+    margin-top: 250px;
+    min-width: 350px;
+    box-shadow: 0 0 4px #999 inset;
+    background: #eee;
+    min-height: 30px;
+    list-style-type: none;
+    padding: 5px;
+    overflow: hidden;
+    li {
+        height : 30px;
+        background: red;
+        color : white;
         float : left;
-        margin-left : 10px;
-    }
-    label {
-        padding-top: 5px;
+        margin : 0 2px;
+        line-height: 30px;
+        padding-left: 5px;
+        padding-right: 15px;
+        button {
+            position: relative;
+            top : -24px;
+            left : 10px;
+        }
     }
 }
