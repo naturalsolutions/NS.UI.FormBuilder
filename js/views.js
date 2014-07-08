@@ -34,7 +34,6 @@ var formBuilder = (function(app) {
          */
         events: {
             'click  .trash'         : 'removeView',
-            'click .wrench'         : 'setting',
             'click .copy'           : 'copyModel',
             'focus input'           : 'updateSetting',
             'mouseenter .element'   : 'displayOption',
@@ -46,7 +45,7 @@ var formBuilder = (function(app) {
          */
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'removeView', 'setting', 'updateSetting', 'deleteView');
+            _.bindAll(this, 'render', 'removeView', 'updateSetting', 'deleteView');
             this.model.bind('change', this.render);
             this.model.bind('destroy', this.deleteView);
         },
@@ -76,21 +75,6 @@ var formBuilder = (function(app) {
             var cl = this.model.clone();
             cl.set('id', app.views.mainView.formView.collection.length);    //  change id otherwise element replaced copied element
             app.views.mainView.formView.collection.add(cl);                 //  Add element to the collection
-        },
-        
-        /**
-         * Display edition view for model
-         */
-        setting: function() {
-            /*if ($('.dropArea').hasClass('span9')) {
-                var edit = new app.views.BaseEditView({
-                    el: $('.settings'),
-                    model : this.model
-                });
-                $('.dropArea').switchClass('span9', 'span7', 500);
-                $('.widgetsPanel').switchClass('span3', 'span0', 500);
-                edit.render();
-            }*/
         },
         
         /**
@@ -187,7 +171,7 @@ var formBuilder = (function(app) {
          * 
          * @param {object} e jQuery event
          */
-        updateModel: function(e) {
+        updateModel: function(e) {            
             if ($(e.target).prop("type") === "checkbox") {
                 this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
             } else {
@@ -265,7 +249,7 @@ var formBuilder = (function(app) {
                         '           <label class="span10 offset1">Name label</label>' +
                         '       </div>' +
                         '       <div class="row-fluid">' +
-                        '           <input class="span10 offset1 property" type="text" data-attr="name/label/value" placeholder="Name label" value="<%= name["label"]["value"] %>" />' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="name[label][value]" placeholder="Name label" value="<%= name["label"]["value"] %>" />' +
                         '       </div>' +
                         '   </div> ' +
                         '   <div >' +
@@ -273,7 +257,7 @@ var formBuilder = (function(app) {
                         '           <label class="span10 offset1">Name label lang</label>' +
                         '       </div>' +
                         '       <div class="row-fluid">' +
-                        '           <input class="span10 offset1 property" type="text" data-attr="name/label/lang" placeholder="Name label lang" value="<%= name["label"]["lang"] %>" />' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="name[label][lang]" placeholder="Name label lang" value="<%= name["label"]["lang"] %>" />' +
                         '       </div>' +
                         '   </div> ' +
                         '   <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
@@ -998,14 +982,10 @@ var formBuilder = (function(app) {
                     );
             this.collection.bind('add', this.addElement);
             this.collection.bind('change', this.updateView);
-            this.collection.bind('change:name', function() {
-                console.log ("name change")
-            })
             this._view = [];
         },
         
         updateView : function() {
-            console.log ("ici")
           $(this.el).find('#protocolName').val(this.collection.name);
         },
         

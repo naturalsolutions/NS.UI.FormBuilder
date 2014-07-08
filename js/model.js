@@ -64,14 +64,19 @@ var formBuilder = (function(app) {
         },
         
         changePropertyValue : function(index, value) {
-            if (index.indexOf("/") > 0) {
-                var split = index.split('/'), str = 'this.get' + '("' + split[0] + '")';
+            if (index.indexOf("[") > 0) {
+                //  Complexe attribute
+                var split = index.split('['), firstSelector = split.shift(), currentObject = this.get(firstSelector);
                 
-                for (var i = 1 ; i < split.length ; i++) {
-                    str += '["' + split[i] + '"]';
-                }
+                split.forEach(function(element, idx, array) {
+                    if (idx === array.length - 1) {
+                        currentObject[ element.substr(0, element.length - 1) ] = value;
+                    } else {
+                        currentObject = currentObject[ element.substr(1, element.length - 1) ];
+                    }
+                });
                 
-                eval(str + ' = "' + value + '"');
+                this.trigger('change');
             } else {
                 this.set(index, value);
             }
