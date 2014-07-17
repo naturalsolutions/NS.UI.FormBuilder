@@ -26,7 +26,8 @@
 
 ## Demo
 
-I work on it !
+You can try the formBuilder on [this page](http://naturalsolutions.github.io/NS.UI.FormBuilder/)
+That page is static, so some functionnalities like "save on the cloud" will not work completely
 
 ## Create a plugin
 
