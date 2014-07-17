@@ -25,6 +25,7 @@ html, body {
 .text           { line-height : 30px; font-size : 20px; }
 .error          { box-shadow: 0 0 3px #c80000 inset !important; }
 .marginLeft10   { margin-left: 10px !important; }
+.fa             { font-family: FontAwesome; }
 
 .table      { tr { background : white; } }
 .bordered   { border : 2px #aaa solid; background : #fff; }
@@ -195,7 +196,17 @@ html, body {
             }
         }
         .settings {
-            * { .font(); }
+            * {
+                font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
+                &.fa {
+                    font-family: FontAwesome !important;
+                }
+            }
+            .listEdit {
+                &:hover {
+                    cursor : pointer;
+                }
+            }
             .widgetsPanel();
             background-color    : #eee;
             margin-left         : 0;
@@ -306,14 +317,7 @@ html, body {
     }
 }
 
-.modal {
-    background: #fff;
-    margin-top: 100px;
-    
-    input   { padding : 15px;   }
-    button  { padding : 4px;    }
-    
-}
+
 
 .navbar {
     position        : fixed;
@@ -354,61 +358,5 @@ html, body {
 
 .navbar-search, .navbar-user { display : none; }
 
-#importProtocolFileText { float : left;}
+@import 'modal.less';
 
-
-
-#saveModal {
-    textarea { resize: none; height : 60px; max-height: 60px; }
-    label > i { color : #888; }
-    .modal-body {
-        padding-bottom: 25px;
-        .row-fluid:nth-child(even){
-            margin-bottom: 5px;
-        }
-    }
-    #saveProtocolKeywordsList {
-        list-style-type: none;
-        .noMarginLeft();
-        li {
-            float : left;
-            height: 30px;
-            line-height: 30px;
-            background : #0aC;
-            color : white;
-            padding : 5px 0px 5px 10px;
-            margin-left : 5px;
-            button {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-        }
-    }
-}
-
-#ul {
-    box-shadow: 0 0 4px #555inset;
-    margin-top: 250px;
-    min-width: 350px;
-    box-shadow: 0 0 4px #999 inset;
-    background: #eee;
-    min-height: 30px;
-    list-style-type: none;
-    padding: 5px;
-    overflow: hidden;
-    li {
-        height : 30px;
-        background: red;
-        color : white;
-        float : left;
-        margin : 0 2px;
-        line-height: 30px;
-        padding-left: 5px;
-        padding-right: 15px;
-        button {
-            position: relative;
-            top : -24px;
-            left : 10px;
-        }
-    }
-}

@@ -1,0 +1,52 @@
+.modal {
+    background: #fff;
+    margin-top: 100px;
+    
+    //input   { padding : 15px;   }
+    button  { padding : 4px;   }
+}
+
+#saveModal {
+    textarea { resize: none; height : 60px; max-height: 60px; }
+    label > i { color : #888; }
+    .modal-body {
+        padding-bottom: 25px;
+        .row-fluid:nth-child(even){
+            margin-bottom: 5px;
+        }
+    }
+    #saveProtocolKeywordsList {
+        list-style-type: none;
+        .noMarginLeft();
+        li {
+            float : left;
+            height: 30px;
+            line-height: 30px;
+            background : #0aC;
+            color : white;
+            padding : 5px 0px 5px 10px;
+            margin-left : 5px;
+            button {
+                padding-left: 10px;
+                padding-right: 10px;
+            }
+        }
+    }
+}
+
+#importProtocolFileText { float : left;}
+
+#editListModal {
+	//	Modal dialog for enumeration field list edition
+	//	Backbone view : EditListModal
+	width : 800px;
+	left : 40%;
+	.modal-header {
+		text-align : center;
+		background : #eee;
+		font-weight: 100;
+	}
+	h2 {
+		font-size : 20px;
+	}
+}
