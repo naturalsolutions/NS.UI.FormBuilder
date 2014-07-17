@@ -1074,7 +1074,7 @@ var formBuilder = (function(app) {
                         '       </div>'+
                         '   </div>'+
                         '   <div class="modal-footer">'+
-                        '       <a href="#" class="btn btn-primary">Save changes</a>'+
+                        '       <button class="btn btn-primary">Save changes</button>'+
                         '   </div>'+
                         '</div>'
     });
