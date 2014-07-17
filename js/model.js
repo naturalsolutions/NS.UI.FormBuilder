@@ -318,10 +318,10 @@ var formBuilder = (function(app) {
     app.models.EnumerationField  = app.models.BaseField.extend({
         
         defaults: {
-            items: [
+            itemLists: [
                 {   //  itemList
                     items: [
-                        {label: "My Firsta Option", value: "1", id: 0},
+                        {label: "My First Option", value: "1", id: 0},
                         {label: "My second Option", value: "2", id: 1}
                     ],
                     lang: "en",

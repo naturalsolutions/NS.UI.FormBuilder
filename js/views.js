@@ -830,9 +830,9 @@ var formBuilder = (function(app) {
                         '   </div>'+
                         '   <div class="row" style="margin-left : 10px;">' + 
                         '      <div class="span12" style="border : 2px #eee solid;" id="<%= id %>">'+
-                        '          <% _.each(items[0]["items"], function(el, index) { %>' +
+                        '          <% _.each(itemLists[0]["items"], function(el, index) { %>' +
                         '              <label class="span12 noMarginLeft left"> '+
-                        '              <input type="radio" style="margin-left: 10px;" name="<%= name %>" <% if (items[0]["defaultValue"] == el["id"]){ %> checked <% } %> value="<%= el.value %>"  /> '+
+                        '              <input type="radio" style="margin-left: 10px;" name="<%= name %>" <% if (itemLists[0]["defaultValue"] == el["id"]){ %> checked <% } %> value="<%= el.value %>"  /> '+
                         '                  <%= el.label %>'+
                         '              </label> '+
                         '          <% }); %>'+
@@ -866,8 +866,8 @@ var formBuilder = (function(app) {
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
                         '   <select name="<% name %>" class="span12"> '+
-                        '       <% _.each(items[0]["items"], function(el, idx) { %>' +
-                        '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (items[0]["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.label %></option>'+
+                        '       <% _.each(itemLists[0]["items"], function(el, idx) { %>' +
+                        '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (itemLists[0]["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.label %></option>'+
                         '       <% }) %>' +
                         '   </select> '+
                         '</div></div>'
@@ -900,9 +900,9 @@ var formBuilder = (function(app) {
                         '</div>'+
                         '<div class="row" style="margin-left : 10px;">' + 
                         '<div class="span12" style="border : 2px #eee solid;">'+
-                            '<% _.each(items[0]["items"], function(el, idx) { %>' +
+                            '<% _.each(itemLists[0]["items"], function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (items[0]["defaultValue"] == el["id"]){ %> checked <% } %> /> '+
+                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (itemLists[0]["defaultValue"] == el["id"]){ %> checked <% } %> /> '+
                                     '<%= el.label %>'+
                                 '</label> '+
                             '<% }); %>'+
@@ -914,23 +914,48 @@ var formBuilder = (function(app) {
     /**
      * Common edition view for enumeration field
      */
-    app.views.RadioFieldEditView = app.views.CheckboxFieldEditView = app.views.SelectFieldEditView = Backbone.View.extend({
+    app.views.RadioFieldEditView = app.views.CheckBoxFieldEditView = app.views.SelectFieldEditView = Backbone.View.extend({
+        events: function() {
+            return _.extend({}, app.views.BaseView.prototype.events, {
+                'click .listEdit' : 'editList'
+            });
+        },
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 'editList');
         },
         
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
+        },
+
+        copyeItemList  : function(listIndex) {
+            return _.pick(this.model.get('itemLists')[listIndex], "items", "lang", "defaultValue");
+        },
+        
+        editList : function(e) {
+            var modal = new app.views.EditListModal({
+                el      : '#editListModal',
+                model   : this.copyeItemList( $(e.target).data('list') )
+            });
+            modal.render();
+
+            modal.bind('saved', _.bind(function() {
+                this.model.get('itemLists')[$(e.target).data('list')] = modal.model;
+                modal.unbind();
+                delete modal;
+                this.model.trigger('change');
+            }, this))
         }
         
     }, {
-        templateSrc:    '<% _.each( items, function(list, index) { %>' +
+        templateSrc:    '<% _.each( itemLists, function(list, index) { %>' +
                         '   <div class="row-fluid"><div class="block span10 offset1">' + 
                         '       <table class=" table table-striped">' +
                         '           <caption><h2>'+
-                        '               <%= list["lang"] %> list / Default value : <b><%= list["defaultValue"] %>'+
+                        '               <%= list["lang"] %> list / Default value : <b><%= list["defaultValue"] %>  <i class="fa fa-wrench listEdit" data-list="<%= index %>"></i>'+
                         '           </h2></caption>'+
                         '           <thead>' +
                         '               <tr>'+ 
@@ -956,6 +981,103 @@ var formBuilder = (function(app) {
                         '<% }); %>'        
     });
     
+    app.views.EditListModal = Backbone.View.extend({
+
+        events : {
+            'click #addItem'                : 'addItem',
+            'click .btn-primary'            : 'saveChanges',
+            'change input[type="text"]'     : 'propertyChanged',
+            'change input[type="radio"]'    : 'defaultValueChanged'
+        },
+
+        initialize : function (){
+            this.template = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 'saveChanges', 'propertyChanged', 'defaultValueChanged');
+        },
+        
+        render: function() {
+            var renderedContent = this.template(this.model);
+            $(this.el).html(renderedContent);
+            $(this.el).modal({ show: true });
+            return this;
+        },
+
+        addItem : function(e) {
+            var index = this.model['items'].length;
+            this.model['items'].push({
+                label : "", value : "", id : index
+            });
+            $(e.target).parents('tr').before(
+                '<tr>'+
+                '   <td>'+
+                '       <input type="text" data-attr="label" placeholder="New item label" data-index="' + index + '" />'+
+                '   </td>'+
+                '   <td>'+
+                '       <input type="text" data-attr="value" placeholder="New item value"  data-index="' + index + '" />'+
+                '   </td>'+
+                '   <td>'+
+                '       <input type="radio"  data-index="' + index + '" name="defaultValue" />'+
+                '   </td>'+
+                '</tr>'
+            )
+        },
+
+        saveChanges : function() {
+            $(this.el).modal('hide');
+            this.trigger('saved');
+        },
+
+        propertyChanged : function(e) {
+            var itemIndex       = $(e.target).data('index'), 
+                itemAttribute   = $(e.target).data('attr'), 
+                attributeValue  = $(e.target).val();
+
+            this.model["items"][itemIndex][itemAttribute] = attributeValue;
+        },
+
+        defaultValueChanged : function(e) {
+            this.model['defaultValue'] = $(e.target).data('index');
+        }
+
+    }, {
+        templateSrc :   '<div>'+
+                        '   <div class="modal-header">' +
+                        '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
+                        '       <h3><%= lang %> list</h3>'+
+                        '   </div>'+
+                        '   <div class="modal-body">'+
+                        '       <div class="row-fluid">'+
+                        '           <div class="block span10 offset1">' + 
+                        '               <table class=" table table-striped">' +
+                        '                   <thead>' +
+                        '                       <tr>'+ 
+                        '                           <th>Label</th>'+
+                        '                           <th>Value</th>'+
+                        '                           <th>Is the default value ?</th>'+
+                        '                       </tr>'+ 
+                        '                   </thead>' +
+                        '                   <tbody>' +
+                        '                   <% _.each( items, function(item, idx) { %>' +
+                        '                       <tr>' + 
+                        '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["label"] %>" /></td>'+
+                        '                           <td><input type="text" data-index="<%= idx %>" data-attr="value" value="<%= item["value"] %>" /></td>' +
+                        '                           <td><input type="radio" name="defaultValue" data-index="<%= idx %>" <% if (defaultValue === item["id"]) { %> checked <% } %> /></td>'+
+                        '                       </tr>' +
+                        '                   <% }); %>' + 
+                        '                       <tr><td rowspan="3"><button id="addItem" type="button">Add item</button></td></tr>'   +
+                        '                   </tbody>'+
+                        '               </table>' +
+                        '           </div>'+
+                        '       </div>'+
+                        '       <div class="row-fluid">' + 
+                        '           <label class="span10 offset1"></label>' +
+                        '       </div>'+
+                        '   </div>'+
+                        '   <div class="modal-footer">'+
+                        '       <a href="#" class="btn btn-primary">Save changes</a>'+
+                        '   </div>'+
+                        '</div>'
+    });
 
     //  ----------------------------------------------------------------------------------
     //  Main views
