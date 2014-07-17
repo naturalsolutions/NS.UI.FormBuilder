@@ -56,6 +56,9 @@ body {
 .marginLeft10 {
   margin-left: 10px !important;
 }
+.fa {
+  font-family: FontAwesome;
+}
 .table tr {
   background: white;
 }
@@ -270,7 +273,13 @@ body {
   padding-top: 50px;
 }
 #formBuilder .content .settings * {
-  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif !important;
+  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif;
+}
+#formBuilder .content .settings *.fa {
+  font-family: FontAwesome !important;
+}
+#formBuilder .content .settings .listEdit:hover {
+  cursor: pointer;
 }
 #formBuilder .content .settings h1 {
   font-weight: lighter;
@@ -408,16 +417,6 @@ body {
   box-shadow: 0 0 3px #aaa;
   border-bottom: 1px #aaa solid;
 }
-.modal {
-  background: #fff;
-  margin-top: 100px;
-}
-.modal input {
-  padding: 15px;
-}
-.modal button {
-  padding: 4px;
-}
 .navbar {
   position: fixed;
   z-index: 255;
@@ -459,8 +458,12 @@ body {
 .navbar-user {
   display: none;
 }
-#importProtocolFileText {
-  float: left;
+.modal {
+  background: #fff;
+  margin-top: 100px;
+}
+.modal button {
+  padding: 4px;
 }
 #saveModal textarea {
   resize: none;
@@ -493,29 +496,18 @@ body {
   padding-left: 10px;
   padding-right: 10px;
 }
-#ul {
-  box-shadow: 0 0 4px #555inset;
-  margin-top: 250px;
-  min-width: 350px;
-  box-shadow: 0 0 4px #999 inset;
-  background: #eee;
-  min-height: 30px;
-  list-style-type: none;
-  padding: 5px;
-  overflow: hidden;
-}
-#ul li {
-  height: 30px;
-  background: red;
-  color: white;
+#importProtocolFileText {
   float: left;
-  margin: 0 2px;
-  line-height: 30px;
-  padding-left: 5px;
-  padding-right: 15px;
 }
-#ul li button {
-  position: relative;
-  top: -24px;
-  left: 10px;
+#editListModal {
+  width: 800px;
+  left: 45%;
+}
+#editListModal .modal-header {
+  text-align: center;
+  background: #eee;
+  font-weight: 100;
+}
+#editListModal h2 {
+  font-size: 20px;
 }
