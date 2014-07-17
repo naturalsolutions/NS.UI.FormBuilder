@@ -394,7 +394,7 @@ var formBuilder = (function(app) {
          */
         getItemListXML : function() {
             var xml = "";
-            _.each(this.get('items'), function(el, idx) {
+            _.each(this.get('itemLists'), function(el, idx) {
                 xml +=  '<itemList lang="' + el['lang'] + '" >';
                 _.each(el['items'], function(item, id) {
                     xml +=  '<item id="' + item['id'] + '">' + 
