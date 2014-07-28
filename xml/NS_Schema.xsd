@@ -24,10 +24,17 @@
     -->
     <xs:complexType name="item">
         <xs:sequence>
-            <xs:element name="label" type="xs:string" />
+            <xs:element name="en" type="xs:string" />
+            <xs:element name="fr" type="xs:string" />
             <xs:element name="value" type="xs:string" />
         </xs:sequence>
         <xs:attribute type="xs:integer" name="id"/>
+    </xs:complexType>
+    
+    <xs:complexType name="items">
+        <xs:sequence>
+            <xs:element name="item" type="item" minOccurs="1" maxOccurs="unbounded" />
+        </xs:sequence>
     </xs:complexType>
     
     <!--
@@ -35,17 +42,12 @@
     -->
     <xs:complexType name="itemList">
         <xs:sequence>
-            <xs:element name="item" type="item" minOccurs="1" maxOccurs="unbounded" />
+            <xs:element name="items" type="items" />
             <xs:element type="xs:integer" name="defaultValue"/>
         </xs:sequence>
-        <xs:attribute type="xs:string" name="lang"/>
     </xs:complexType>
     
-    <xs:complexType name="items">
-        <xs:sequence>
-            <xs:element name="itemList" type="itemList" minOccurs="1" maxOccurs="unbounded" />
-        </xs:sequence>
-    </xs:complexType>
+    
     
     <!--
         treeview node element type
@@ -75,7 +77,7 @@
             <xs:element name="required" type="xs:boolean" />
             <xs:element name="readOnly" type="xs:boolean" />
         </xs:sequence>
-        <xs:attribute type="xs:byte" name="id"/>
+        <xs:attribute type="xs:integer" name="id"/>
     </xs:complexType>
 
     <!--
@@ -94,7 +96,6 @@
         </xs:complexContent>
     </xs:complexType>
     
-    <!-- BEGIN : =============================================== -->
     <!-- XML Definition for fullName plugin demo example -->
     
     <xs:complexType name="simpleTextType">
@@ -109,13 +110,12 @@
         <xs:complexContent>
             <xs:extension base="fieldType">
                 <xs:sequence>
-                    <xs:element name="name" type="simpleTextType" />
+                    <xs:element name="lastname" type="simpleTextType" />
                     <xs:element name="firstName" type="simpleTextType" />
                 </xs:sequence>
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <!-- END : =============================================== -->
     <!--
         file field type
     -->
@@ -168,7 +168,7 @@
         <xs:complexContent>
             <xs:extension base="fieldType">
                 <xs:sequence>
-                    <xs:element name="items" type="items" />
+                    <xs:element name="itemList" type="itemList" />
                     <xs:element name="expanded" type="xs:boolean" />
                     <xs:element name="multiple" type="xs:boolean" />
                 </xs:sequence>

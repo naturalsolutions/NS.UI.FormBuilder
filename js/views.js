@@ -894,10 +894,10 @@ var formBuilder = (function(app) {
                         '   </div>'+
                         '   <div class="row" style="margin-left : 10px;">' + 
                         '      <div class="span12" style="border : 2px #eee solid;" id="<%= id %>">'+
-                        '          <% _.each(itemLists[0]["items"], function(el, index) { %>' +
+                        '          <% _.each(itemList["items"], function(el, index) { %>' +
                         '              <label class="span12 noMarginLeft left"> '+
-                        '              <input type="radio" style="margin-left: 10px;" name="<%= name %>" <% if (itemLists[0]["defaultValue"] == el["id"]){ %> checked <% } %> value="<%= el.value %>"  /> '+
-                        '                  <%= el.label %>'+
+                        '              <input type="radio" style="margin-left: 10px;" name="<%= name %>" <% if (itemList["defaultValue"] == el["id"]){ %> checked <% } %> value="<%= el.value %>"  /> '+
+                        '                  <%= el.en %>'+
                         '              </label> '+
                         '          <% }); %>'+
                         '      </div>'+
@@ -937,8 +937,8 @@ var formBuilder = (function(app) {
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
                         '   <select name="<% name %>" class="span12"> '+
-                        '       <% _.each(itemLists[0]["items"], function(el, idx) { %>' +
-                        '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (itemLists[0]["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.label %></option>'+
+                        '       <% _.each(itemList["items"], function(el, idx) { %>' +
+                        '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (itemList["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.en %></option>'+
                         '       <% }) %>' +
                         '   </select> '+
                         '</div></div>'
@@ -978,10 +978,10 @@ var formBuilder = (function(app) {
                         '</div>'+
                         '<div class="row" style="margin-left : 10px;">' + 
                         '<div class="span12" style="border : 2px #eee solid;">'+
-                            '<% _.each(itemLists[0]["items"], function(el, idx) { %>' +
+                            '<% _.each(itemList["items"], function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
-                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (itemLists[0]["defaultValue"] == el["id"]){ %> checked <% } %> /> '+
-                                    '<%= el.label %>'+
+                                    '<input data-idx=<%= idx %> type="checkbox" style="margin-left: 10px;" name="<%= name %>" id="<%= id %>" value="<%= el.value%>" <% if (itemList["defaultValue"] == el["id"]){ %> checked <% } %> /> '+
+                                    '<%= el.en %>'+
                                 '</label> '+
                             '<% }); %>'+
                         '</div>'+
@@ -1009,19 +1009,19 @@ var formBuilder = (function(app) {
             return this;
         },
 
-        copyeItemList  : function(listIndex) {
-            return _.pick(this.model.get('itemLists')[listIndex], "items", "lang", "defaultValue");
+        copyeItemList  : function() {
+            return _.pick(this.model.get('itemList'), "items", "defaultValue");
         },
         
         editList : function(e) {
             var modal = new app.views.EditListModal({
                 el      : '#editListModal',
-                model   : this.copyeItemList( $(e.target).data('list') )
+                model   : this.copyeItemList()
             });
             modal.render();
 
             modal.bind('saved', _.bind(function() {
-                this.model.get('itemLists')[$(e.target).data('list')] = modal.model;
+                this.model.set('itemList', modal.model);
                 modal.unbind();
                 delete modal;
                 this.model.trigger('change');
@@ -1029,24 +1029,25 @@ var formBuilder = (function(app) {
         }
         
     }, {
-        templateSrc:    '<% _.each( itemLists, function(list, index) { %>' +
-                        '   <div class="row-fluid"><div class="block span10 offset1">' + 
+        templateSrc:    '   <div class="row-fluid"><div class="block span10 offset1">' + 
                         '       <table class=" table table-striped">' +
                         '           <caption><h2>'+
-                        '               <%= list["lang"] %> list / Default value : <b><%= list["defaultValue"] %>  <i class="fa fa-wrench listEdit" data-list="<%= index %>"></i>'+
+                        '               Item list / Default value : <b><%= itemList["defaultValue"] %>  <i class="fa fa-wrench listEdit"></i>'+
                         '           </h2></caption>'+
                         '           <thead>' +
                         '               <tr>'+ 
                         '                   <th>Id</th>'+
-                        '                   <th>Label</th>'+
+                        '                   <th>Label en</th>'+
+                        '                   <th>Label fr</th>'+
                         '                   <th>Value</th>'+
                         '               </tr>'+ 
                         '           </thead>' +
                         '           <tbody>' +
-                        '               <% _.each( list["items"], function(item, idx) { %>' +
+                        '               <% _.each( itemList["items"], function(item, idx) { %>' +
                         '                   <tr>' + 
                         '                       <td><%= item["id"] %></td>'+
-                        '                       <td><%= item["label"] %></td>'+
+                        '                       <td><%= item["en"] %></td>'+
+                        '                       <td><%= item["fr"] %></td>'+
                         '                       <td><%= item["value"] %></td>' +
                         '                   </tr>' +
                         '               <% }); %>' +    
@@ -1055,8 +1056,7 @@ var formBuilder = (function(app) {
                         '   </div></div>'+
                         '   <div class="row-fluid">' + 
                         '       <label class="span10 offset1"></label>' +
-                        '   </div>'+
-                        '<% }); %>'        
+                        '   </div>'    
     });
     
     app.views.EditListModal = Backbone.View.extend({
@@ -1085,11 +1085,18 @@ var formBuilder = (function(app) {
             var index = this.model['items'].length, check = true;
 
             
-            if (this.model['items'][index - 1]["label"] === "" ) {
-                check &= false;
-                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="label"]').addClass('error')
+            if (this.model['items'][index - 1]["en"] === "" ) {
+                check &= false;;
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="en"]').addClass('error');
             } else {
-                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="label"]').removeClass('error')
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="en"]').removeClass('error');
+            }
+            
+            if (this.model['items'][index - 1]["fr"] === "" ) {
+                check &= false;;
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="fr"]').addClass('error');
+            } else {
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="fr"]').removeClass('error');
             }
 
             if (this.model['items'][index - 1]["value"] === "" ) {
@@ -1101,12 +1108,15 @@ var formBuilder = (function(app) {
 
             if (check) {
                 this.model['items'].push({
-                    label : "", value : "", id : index
+                    en : "", value : "", id : index, fr : ""
                 });
                 $(e.target).parents('tr').before(
                     '<tr>'+
                     '   <td>'+
-                    '       <input type="text" data-attr="label" placeholder="New item label" data-index="' + index + '" />'+
+                    '       <input type="text" data-attr="en" placeholder="New item label" data-index="' + index + '" />'+
+                    '   </td>'+
+                    '   <td>'+
+                    '       <input type="text" data-attr="fr" placeholder="New item label" data-index="' + index + '" />'+
                     '   </td>'+
                     '   <td>'+
                     '       <input type="text" data-attr="value" placeholder="New item value"  data-index="' + index + '" />'+
@@ -1136,14 +1146,18 @@ var formBuilder = (function(app) {
                     $(this.el).modal('hide');
                     this.trigger('saved');
                 }
-            }, this)
+            }, this);
 
             var checkValues = _.bind(function(callback) {
                 var check = true;
                 _.each( this.model['items'], function(el, idx) {
-                    if (el['label'] === "") {
+                    if (el['en'] === "") {
                         check = false;
-                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="label"]').addClass('error');
+                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="en"]').addClass('error');
+                    }
+                    if (el['fr'] === "") {
+                        check = false;
+                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="fr"]').addClass('error');
                     }
                     if (el['value'] === "") {
                         check = false;
@@ -1151,7 +1165,7 @@ var formBuilder = (function(app) {
                     }
                 });
                 callback(check);
-            }, this)
+            }, this);
 
             checkValues(end);            
         },
@@ -1177,15 +1191,16 @@ var formBuilder = (function(app) {
         templateSrc :   '<div>'+
                         '   <div class="modal-header">' +
                         '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                        '       <h3><%= lang %> list</h3>'+
+                        '       <h3>Items list</h3>'+
                         '   </div>'+
                         '   <div class="modal-body">'+
                         '       <div class="row-fluid">'+
-                        '           <div class="block span10 offset1">' + 
+                        '           <div class="block span12">' + 
                         '               <table class=" table table-striped">' +
                         '                   <thead>' +
                         '                       <tr>'+ 
-                        '                           <th>Label</th>'+
+                        '                           <th>Label en</th>'+
+                        '                           <th>Label fr</th>'+
                         '                           <th>Value</th>'+
                         '                           <th>Is the default value ?</th>'+
                         '                       </tr>'+ 
@@ -1193,7 +1208,8 @@ var formBuilder = (function(app) {
                         '                   <tbody>' +
                         '                   <% _.each( items, function(item, idx) { %>' +
                         '                       <tr>' + 
-                        '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["label"] %>" /></td>'+
+                        '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["en"] %>" /></td>'+
+                        '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["fr"] %>" /></td>'+
                         '                           <td><input type="text" data-index="<%= idx %>" data-attr="value" value="<%= item["value"] %>" /></td>' +
                         '                           <td><input type="radio" name="defaultValue" data-index="<%= idx %>" <% if (defaultValue === item["id"]) { %> checked <% } %> /> <% if (idx > 0) { %> <button type="button" data-index="<%= idx %>" class="close">&times;</button> <% } %></td>'+
                         '                       </tr>' +
@@ -1246,7 +1262,6 @@ var formBuilder = (function(app) {
             console.log (this.collection);
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
-            console.log (renderedContent);
             $(this.el).find('#protocolName').val(this.collection.name);
         },
         
@@ -1974,7 +1989,7 @@ var formBuilder = (function(app) {
                                 app.instances.mainView.downloadXML();
                             },
                             allowedRoles    : ["reader"],
-                            title           : '<span data-i18n="nav.save.export"></span>'
+                            title           : 'Export as XML'
                         })
                     }
                 }),

@@ -323,24 +323,17 @@ var formBuilder = (function(app) {
     app.models.EnumerationField  = app.models.BaseField.extend({
         
         defaults: {
-            itemLists: [
-                {   //  itemList
-                    items: [
-                        {label: "My First Option", value: "1", id: 0},
-                        {label: "My second Option", value: "2", id: 1}
-                    ],
-                    lang: "en",
-                    defaultValue: 1 //  default value corresponds to item id
-                },
-                {   //  ItemList
-                    items: [
-                        {label: "Ma premiere option", value: "1", id: 150},
-                        {label: "Ma seconde Option", value: "2", id: 151}
-                    ],
-                    lang: "fr",
-                    defaultValue: 151
-                }
-            ],
+            itemList : {
+                items : [
+                    {
+                        id : 0, value : "0", en : "My first Option", fr : 'Mon option'
+                    },
+                    {
+                        id : 1, value : "1", en : "My second Option", fr : 'Mon option 2'
+                    }
+                ],
+                defaultValue : 1
+            },
             multiple : false, 
             expanded : false
         },
@@ -393,36 +386,25 @@ var formBuilder = (function(app) {
         },
         
         /**
-         * Return XML content for all itemList
-         * 
-         * @returns {String} XML content
-         */
-        getItemListXML : function() {
-            var xml = "";
-            _.each(this.get('itemLists'), function(el, idx) {
-                xml +=  '<itemList lang="' + el['lang'] + '" >';
-                _.each(el['items'], function(item, id) {
-                    xml +=  '<item id="' + item['id'] + '">' + 
-                            '   <label>' + item['label'] + '</label>' +
-                            '   <value>' + item['value'] + '</value>' + 
-                            '</item>';
-                });
-                xml +=  '<defaultValue>' + el['defaultValue'] + '</defaultValue>';
-                xml +=  '</itemList>';
-            });
-            return xml;
-        },
-        
-        /**
          * Return object XML content
          * 
          * @returns {String} XML content
          */
         getXML: function() {
             var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
-            return xml +    '<items>' + this.getItemListXML() + '</items>' + 
-                            '<expanded>' +  this.get('expanded') + '</expanded>'+ 
-                            '<multiple>' +  this.get('multiple') + '</multiple>';
+            
+            xml +=  '<itemList>'+
+                    '<items>';
+            _.each(this.get('itemList')['items'], function(el, idx) {
+                xml += '<item id="' + el['id'] + '"><en>' + el['en'] + '</en><fr>' + el['fr'] + '</fr><value>' + el['value'] + '</value></item>';
+            });
+            xml +=  '</items>';
+            xml +=  '<defaultValue>'    + this.get('itemList')['defaultValue']  + '</defaultValue>';
+            xml +=  '</itemList>';
+            xml += '<expanded>' + this.get('expanded') + '</expanded>';
+            xml += '<multiple>' + this.get('multiple') + '</multiple>';
+            
+            return xml;
         }
         
     }, {
