@@ -24,7 +24,7 @@ var formBuilder = (function(app) {
         
         home : function() {            
             app.instances.navbar.setActions (app.instances.mainView.getActions());
-            i18n.init({lng: "en"}, function(t) {
+            i18n.init(function(t) {
                 // translate nav
                 $("body").i18n();
             });

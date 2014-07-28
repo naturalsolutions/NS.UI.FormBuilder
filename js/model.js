@@ -110,7 +110,8 @@ var formBuilder = (function(app) {
     app.models.HorizontalLineField    = Backbone.Model.extend({
     }, {
         type    : 'HorizontalLine',
-        xmlTag  : 'field_horizontalLine'
+        xmlTag  : 'field_horizontalLine',
+        i18n    : 'line'
     });
 
     /**
@@ -141,6 +142,7 @@ var formBuilder = (function(app) {
     }, {
         type    : 'Hidden',
         xmlTag  : 'field_hidden',
+        i18n    : 'hidden',
         schema: {
             id: {type: "integer"},
             name : {
@@ -188,6 +190,7 @@ var formBuilder = (function(app) {
     }, {
         type    : "Text",
         xmlTag  : 'field_text',
+        i18n    : 'text',
         schema : {
             defaultValue: { type : "string", display: "Default value", section : "advanced" },
             hint        : { type : "string" },
@@ -219,6 +222,7 @@ var formBuilder = (function(app) {
     }, {
         type    : "File",
         xmlTag  : 'field_file',
+        i18n    : 'file',
         schema : {
             defaultValue: { type : "string" },
             file        : { type : "string" },
@@ -297,6 +301,7 @@ var formBuilder = (function(app) {
     }, {
         type    : 'TreeView',
         xmlTag  : 'field_treeView',
+        i18n    : 'tree',
         schema : {
             defaultNode         : { type : "integer" },
             multipleSelection   : { type : "boolean" },
@@ -465,6 +470,7 @@ var formBuilder = (function(app) {
     }, {
         type: "Pattern",
         xmlTag : 'field_pattern',
+        i18n    : 'mask',
         schema : {
             pattern : { type : "string" }
         }
@@ -487,6 +493,7 @@ var formBuilder = (function(app) {
     }, {
         type    : "Date",
         xmlTag  : 'field_date',
+        i18n    : 'date',
         schema : {
             format : { type : "string" }
         }
@@ -518,6 +525,7 @@ var formBuilder = (function(app) {
     }, {
         type    : 'Numeric',
         xmlTag  : 'field_numeric',
+        i18n    : 'numeric',
         schema : {
             minValue    : { type : "integer" },
             maxValue    : { type : "integer" },
@@ -540,7 +548,8 @@ var formBuilder = (function(app) {
         }
     }, {
         type    : 'LongText',
-        xmlTag  : 'field_text'
+        xmlTag  : 'field_text',
+        i18n    : 'long'
     });
 
     _.defaults(app.models.NumericField.prototype.defaults,   app.models.TextField.prototype.defaults);
@@ -567,7 +576,8 @@ var formBuilder = (function(app) {
         }
     }, {
         type    : 'CheckBox',
-        xmlTag  : 'field_list'
+        xmlTag  : 'field_list',
+        i18n    : 'checkbox'
     });
 
     /**
@@ -585,7 +595,8 @@ var formBuilder = (function(app) {
         }
     }, {
         type    : 'Radio',
-        xmlTag  : 'field_list'
+        xmlTag  : 'field_list',
+        i18n    : 'radio'
     });
 
     /**
@@ -601,7 +612,8 @@ var formBuilder = (function(app) {
         }
     }, {
         type    : 'Select',
-        xmlTag  : 'field_list'
+        xmlTag  : 'field_list',
+        i18n    : 'select'
     });
 
     _.defaults(app.models.RadioField.prototype.defaults,         app.models.EnumerationField.prototype.defaults);
