@@ -33,7 +33,7 @@ var formBuilder = (function(app) {
             this.name           = options.name || 'My form';
             this.count          = 0;
             this.description    = options.description || "";
-            this.keywords       = options.keywords || [];
+            this.keywords       = options.keywords || ["protocol"];
             //  Bind
             _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement');
         },
