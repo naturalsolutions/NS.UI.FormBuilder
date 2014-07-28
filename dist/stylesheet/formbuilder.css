@@ -56,12 +56,9 @@ body {
 .marginLeft10 {
   margin-left: 10px !important;
 }
-<<<<<<< HEAD
-=======
 .fa {
   font-family: FontAwesome;
 }
->>>>>>> master
 .table tr {
   background: white;
 }
@@ -247,13 +244,18 @@ body {
   margin-right: 5px;
 }
 #formBuilder .content .dropArea .dropField input[type="text"],
-#formBuilder .content .dropArea .dropField .picker,
-#formBuilder .content .dropArea .dropField select {
+#formBuilder .content .dropArea .dropField .picker {
   box-shadow: 0 0 3px #ccc;
   border: 1px #ddd solid;
   border-radius: 0!important;
   padding-left: 15px;
   padding: 15px;
+}
+#formBuilder .content .dropArea .dropField select {
+  box-shadow: 0 0 3px #ccc;
+  border: 1px #ddd solid;
+  border-radius: 0!important;
+  padding-left: 15px;
 }
 #formBuilder .content .dropArea .dropField .checkbox {
   text-align: left;
@@ -283,10 +285,6 @@ body {
 }
 #formBuilder .content .settings .listEdit:hover {
   cursor: pointer;
-}
-#formBuilder .content .settings h1 {
-  font-weight: lighter;
-  font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif !important;
 }
 #formBuilder .content .settings h1 {
   font-weight: lighter;
@@ -423,8 +421,6 @@ body {
 #formBuilder .content .settings .block table caption {
   box-shadow: 0 0 3px #aaa;
   border-bottom: 1px #aaa solid;
-<<<<<<< HEAD
-=======
 }
 .navbar {
   position: fixed;
@@ -466,78 +462,11 @@ body {
 .navbar-search,
 .navbar-user {
   display: none;
->>>>>>> master
 }
 .modal {
   background: #fff;
   margin-top: 100px;
 }
-<<<<<<< HEAD
-.modal input {
-  padding: 15px;
-}
-.modal button {
-  padding: 4px;
-}
-.navbar {
-  position: fixed;
-  z-index: 255;
-  width: 100%;
-}
-.navbar .dropdown-menu {
-  border-radius: 0 !important;
-  box-shadow: none;
-  left: 5px;
-  top: 95%;
-  min-width: 94%;
-}
-.navbar .navbar-inner {
-  background: #0aC !important;
-}
-.navbar li {
-  height: 50px;
-}
-.navbar li a {
-  height: 50px !important;
-  max-height: 50px;
-  margin-top: 0;
-  padding-top: 0 !important;
-  padding-bottom: 0 !important;
-  line-height: 45px;
-}
-.navbar .navbar-switcher {
-  overflow: hidden;
-  margin-top: -4px;
-  height: 55px;
-}
-.navbar .navbar-switcher li {
-  overflow: hidden;
-}
-.navbar .navbar-switcher li a {
-  height: 50px !important;
-}
-.navbar-search,
-.navbar-user {
-  display: none;
-}
-#importProtocolFileText {
-  float: left;
-}
-#saveModal textarea {
-  resize: none;
-  height: 60px;
-  max-height: 60px;
-}
-#saveModal label > i {
-  color: #888;
-}
-#saveModal .modal-body {
-  padding-bottom: 25px;
-}
-#saveModal .modal-body .row-fluid:nth-child(even) {
-  margin-bottom: 5px;
-}
-=======
 .modal button {
   padding: 4px;
 }
@@ -555,7 +484,6 @@ body {
 #saveModal .modal-body .row-fluid:nth-child(even) {
   margin-bottom: 5px;
 }
->>>>>>> master
 #saveModal #saveProtocolKeywordsList {
   list-style-type: none;
   margin-left: 0 !important;
@@ -572,15 +500,13 @@ body {
 #saveModal #saveProtocolKeywordsList li button {
   padding-left: 10px;
   padding-right: 10px;
-<<<<<<< HEAD
-=======
 }
 #importProtocolFileText {
   float: left;
 }
 #editListModal {
   width: 800px;
-  left: 45%;
+  left: 40%;
 }
 #editListModal .modal-header {
   text-align: center;
@@ -589,5 +515,35 @@ body {
 }
 #editListModal h2 {
   font-size: 20px;
->>>>>>> master
+}
+#saveModal textarea {
+  resize: none;
+  height: 60px;
+  max-height: 60px;
+}
+#saveModal label > i {
+  color: #888;
+}
+#saveModal .modal-body {
+  padding-bottom: 25px;
+}
+#saveModal .modal-body .row-fluid:nth-child(even) {
+  margin-bottom: 5px;
+}
+#saveModal #saveProtocolKeywordsList {
+  list-style-type: none;
+  margin-left: 0 !important;
+}
+#saveModal #saveProtocolKeywordsList li {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  background: #0aC;
+  color: white;
+  padding: 5px 0px 5px 10px;
+  margin-left: 5px;
+}
+#saveModal #saveProtocolKeywordsList li button {
+  padding-left: 10px;
+  padding-right: 10px;
 }
