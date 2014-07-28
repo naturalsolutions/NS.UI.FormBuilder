@@ -45,7 +45,7 @@ var formBuilder = (function(app) {
          */
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'removeView', 'updateSetting', 'deleteView');
+            _.bindAll(this, 'render', 'removeView', 'deleteView');
             this.model.bind('change', this.render);
             this.model.bind('destroy', this.deleteView);
         },
@@ -81,7 +81,6 @@ var formBuilder = (function(app) {
          * Remove view
          */
         removeView: function() {
-            this.model.set('state', 'delete');
             $(this.el).remove();
             this.remove();
         },
@@ -115,18 +114,6 @@ var formBuilder = (function(app) {
             this.remove();
         },
         
-        /**
-         * Update setting view
-         */
-        updateSetting : function() {
-            if (!$('.dropArea').hasClass('span9')) {
-                app.views.set = new app.views.SettingView({
-                    model: this.model,
-                    el: $('.settings')
-                }).render();
-            }
-        }
-        
     });
     
     /**
@@ -139,7 +126,7 @@ var formBuilder = (function(app) {
          */
         events : {
             'click h2 > a:not(.selected)'   : 'displayOptions',
-            'change .property'              : 'updateModel'
+            'change .property'              : 'updateModelAttribute'
         },
         
         /**
@@ -147,9 +134,9 @@ var formBuilder = (function(app) {
          */
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'updateModel');
+            _.bindAll(this, 'render', 'updateModelAttribute', 'changeModel');
             this.model.bind('change', this.render);
-            this.model.bind('destroy', this.deleteView);
+            this.subView = null;
         },
         
         /**
@@ -171,7 +158,7 @@ var formBuilder = (function(app) {
          * 
          * @param {object} e jQuery event
          */
-        updateModel: function(e) {            
+        updateModelAttribute: function(e) {            
             if ($(e.target).prop("type") === "checkbox") {
                 this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
             } else {
@@ -188,20 +175,40 @@ var formBuilder = (function(app) {
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
-            
-            //  subView
-            var subView = new app.views[this.model.constructor.type + 'FieldEditView']({
+
+            this.subView = new app.views[this.model.constructor.type + 'FieldEditView']({
                el : $('#subView') ,
                model : this.model
             });
-            subView.render();
+            this.subView.render();
+            $(this.el).i18n();
+            
             //  Animate panel
             $('.dropArea').switchClass('span9', 'span7', 500);
             $('.widgetsPanel').switchClass('span3', 'span0', 500);
             
             return this;
         },
-        
+
+        changeModel : function(newModel) {
+
+            //  Complety remove subview
+            this.subView.undelegateEvents();
+            this.subView.$el.removeData().unbind(); 
+            this.subView.remove();  
+            Backbone.View.prototype.remove.call(this.subView);
+            this.subView = undefined;
+            delete this.subView;
+
+            //  unbind model view
+            this.unbind();           
+            this.model = newModel;
+            this.model.bind('change', this.render);     
+
+            $('.lastRow').after('<div id="subView"></div>');
+            this.model.trigger('change');
+        },
+
         getActions : function() {
             return {
                 'save' : new NS.UI.NavBar.Action({
@@ -217,15 +224,16 @@ var formBuilder = (function(app) {
                     allowedRoles: ["reader"],
                     title: '<i class="fa fa-bars"></i> Save changes'
                 })
-            }
+            };
         }
     
     }, {
         templateSrc : '<div>'+
-                        '   <h1>Settings</h1>'+
+                        '   <h1 data-i18n="label.settings">Settings</h1>'+
                         '   <div>'+
                         '       <h2>'+
-                        '           <a href="#" id="simple" class="selected">Simple options</a> / <a href="#" id="advanced">Advanced options</a>'+
+                        '           <a href="#" id="simple" class="selected" data-i18n="label.options.simple">Simple options</a> / '+
+                        '           <a href="#" id="advanced" data-i18n="label.options.advanced" >Advanced options</a>'+
                         '       </h2>'+
                         //  Edition of common attribute like name (label and displayLabel)
                         '   <div class="hide advanced">' +
@@ -264,7 +272,7 @@ var formBuilder = (function(app) {
                         '       <label class="span4 offset1">Required</label>' +
                         '           <input class="span2 property" data-attr="required" type="checkbox" <% if (required) { %> checked <% } %> />' +
                         '   </div>' +
-                        '   <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
+                        '   <div class="row-fluid lastRow">&nbsp;</div><div class="row-fluid">' +
                         '       <label class="span4 offset1">Read only</label>' +
                         '           <input class="span2 property" data-attr="readOnly" type="checkbox" <% if (readOnly) { %> checked <% } %> />' +
                         '   </div>' +
@@ -316,10 +324,17 @@ var formBuilder = (function(app) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '   <div class="span8 right hide">'+
-                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
@@ -337,7 +352,7 @@ var formBuilder = (function(app) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
-        }
+        },
         
     }, {
         templateSrc :   '<% _.each(["defaultValue", "hint", "size"], function(el) { %>' +
@@ -386,10 +401,17 @@ var formBuilder = (function(app) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span8 right hide">'+
-                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -488,10 +510,17 @@ var formBuilder = (function(app) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span8 right hide">'+
-                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -566,10 +595,17 @@ var formBuilder = (function(app) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span8 right hide">'+
-                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       <div class="span8 right hide actions">'+
+                        '           <a href="#" class="trash">'+
+                        '               <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '           </a>'+ 
+                        '           <a href="#setting/<%= id %>" class="wrench">'+
+                        '               <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                        '           </a>'+ 
+                        '           <a href="#" class="copy">'+
+                        '               &nbsp;<span class="fa fa-copy"></span>'+
+                        '               <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '           </a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -646,10 +682,17 @@ var formBuilder = (function(app) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span8 right hide">'+
-                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -721,10 +764,17 @@ var formBuilder = (function(app) {
                         '       <label class="span4">' + 
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '       <div class="span8 right hide">'+
-                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -769,10 +819,17 @@ var formBuilder = (function(app) {
                         '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '           <% if (required === true) { %> * <% } %> <%= label %>'+
                         '       </label> '+
-                        '       <div class="span8 right hide">'+
-                        '           <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '           <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '           <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '       <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '       </div>'+
                         '   </div>' +
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -822,10 +879,17 @@ var formBuilder = (function(app) {
                         '          <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '          <% if (required === true) { %> * <% } %> <%= label %>'+
                         '      </label>'+
-                        '      <div class="span8 right hide">'+
-                        '          <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '          <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '          <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '      <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '      </div>'+
                         '   </div>'+
                         '   <div class="row" style="margin-left : 10px;">' + 
@@ -858,10 +922,17 @@ var formBuilder = (function(app) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
-                        '   <div class="span8 right hide">'+
-                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
@@ -892,10 +963,17 @@ var formBuilder = (function(app) {
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       <% if (required === true) { %> * <% } %> <%= label %>'+
                         '   </label>'+
-                        '   <div class="span8 right hide">'+
-                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '   </div>'+
                         '</div>'+
                         '<div class="row" style="margin-left : 10px;">' + 
@@ -987,12 +1065,13 @@ var formBuilder = (function(app) {
             'click #addItem'                : 'addItem',
             'click .btn-primary'            : 'saveChanges',
             'change input[type="text"]'     : 'propertyChanged',
-            'change input[type="radio"]'    : 'defaultValueChanged'
+            'change input[type="radio"]'    : 'defaultValueChanged',
+            'click td .close'               : 'removeItem',
         },
 
         initialize : function (){
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'saveChanges', 'propertyChanged', 'defaultValueChanged');
+            _.bindAll(this, 'saveChanges', 'propertyChanged', 'defaultValueChanged', 'removeItem');
         },
         
         render: function() {
@@ -1003,36 +1082,91 @@ var formBuilder = (function(app) {
         },
 
         addItem : function(e) {
-            var index = this.model['items'].length;
-            this.model['items'].push({
-                label : "", value : "", id : index
-            });
-            $(e.target).parents('tr').before(
-                '<tr>'+
-                '   <td>'+
-                '       <input type="text" data-attr="label" placeholder="New item label" data-index="' + index + '" />'+
-                '   </td>'+
-                '   <td>'+
-                '       <input type="text" data-attr="value" placeholder="New item value"  data-index="' + index + '" />'+
-                '   </td>'+
-                '   <td>'+
-                '       <input type="radio"  data-index="' + index + '" name="defaultValue" />'+
-                '   </td>'+
-                '</tr>'
-            )
+            var index = this.model['items'].length, check = true;
+
+            
+            if (this.model['items'][index - 1]["label"] === "" ) {
+                check &= false;
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="label"]').addClass('error')
+            } else {
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="label"]').removeClass('error')
+            }
+
+            if (this.model['items'][index - 1]["value"] === "" ) {
+                check &= false;
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="value"]').addClass('error')
+            } else {
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="value"]').removeClass('error')
+            }
+
+            if (check) {
+                this.model['items'].push({
+                    label : "", value : "", id : index
+                });
+                $(e.target).parents('tr').before(
+                    '<tr>'+
+                    '   <td>'+
+                    '       <input type="text" data-attr="label" placeholder="New item label" data-index="' + index + '" />'+
+                    '   </td>'+
+                    '   <td>'+
+                    '       <input type="text" data-attr="value" placeholder="New item value"  data-index="' + index + '" />'+
+                    '   </td>'+
+                    '   <td>'+
+                    '       <input type="radio"  data-index="' + index + '" name="defaultValue" /> <button type="button" data-index="' + index + '" class="close">&times;</button>'+
+                    '   </td>'+
+                    '</tr>'
+                )
+            }
+            
+        },
+
+        removeItem : function(e) {
+            this.model['items'].splice($(e.target).data('index'), 1);
+            $(e.target).parents('tr').remove();
+            if (this.model['items'].length === 1) {
+                this.model['defaultValue'] = 0;
+                $(this.el).find('input[type="radio"]').prop('checked', true);
+            }
         },
 
         saveChanges : function() {
-            $(this.el).modal('hide');
-            this.trigger('saved');
+
+            var end =_.bind(function(options) {
+                if (options === true) {
+                    $(this.el).modal('hide');
+                    this.trigger('saved');
+                }
+            }, this)
+
+            var checkValues = _.bind(function(callback) {
+                var check = true;
+                _.each( this.model['items'], function(el, idx) {
+                    if (el['label'] === "") {
+                        check = false;
+                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="label"]').addClass('error');
+                    }
+                    if (el['value'] === "") {
+                        check = false;
+                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="value"]').addClass('error');   
+                    }
+                });
+                callback(check);
+            }, this)
+
+            checkValues(end);            
         },
 
         propertyChanged : function(e) {
-            var itemIndex       = $(e.target).data('index'), 
-                itemAttribute   = $(e.target).data('attr'), 
-                attributeValue  = $(e.target).val();
+            if ($(e.target).val() === "") {
+                $(e.target).addClass('error');
+            } else {
+                $(e.target).removeClass('error');
+                var itemIndex       = $(e.target).data('index'), 
+                    itemAttribute   = $(e.target).data('attr'), 
+                    attributeValue  = $(e.target).val();
 
-            this.model["items"][itemIndex][itemAttribute] = attributeValue;
+                this.model["items"][itemIndex][itemAttribute] = attributeValue;
+            }            
         },
 
         defaultValueChanged : function(e) {
@@ -1061,7 +1195,7 @@ var formBuilder = (function(app) {
                         '                       <tr>' + 
                         '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["label"] %>" /></td>'+
                         '                           <td><input type="text" data-index="<%= idx %>" data-attr="value" value="<%= item["value"] %>" /></td>' +
-                        '                           <td><input type="radio" name="defaultValue" data-index="<%= idx %>" <% if (defaultValue === item["id"]) { %> checked <% } %> /></td>'+
+                        '                           <td><input type="radio" name="defaultValue" data-index="<%= idx %>" <% if (defaultValue === item["id"]) { %> checked <% } %> /> <% if (idx > 0) { %> <button type="button" data-index="<%= idx %>" class="close">&times;</button> <% } %></td>'+
                         '                       </tr>' +
                         '                   <% }); %>' + 
                         '                       <tr><td rowspan="3"><button id="addItem" type="button">Add item</button></td></tr>'   +
@@ -1108,7 +1242,12 @@ var formBuilder = (function(app) {
         },
         
         updateView : function() {
-          $(this.el).find('#protocolName').val(this.collection.name);
+
+            console.log (this.collection);
+            var renderedContent = this.template(this.collection.toJSON());
+            $(this.el).html(renderedContent);
+            console.log (renderedContent);
+            $(this.el).find('#protocolName').val(this.collection.name);
         },
         
         addElement: function(el) {
@@ -1132,7 +1271,7 @@ var formBuilder = (function(app) {
                     message : "Can't create view for this field"
                 });
             }
-            
+            $(".actions").i18n();
         },
         
         render: function() {
@@ -1295,7 +1434,7 @@ var formBuilder = (function(app) {
                         '<div class="row-fluid">'+
                             '<input type="text" id="protocolName" class="firstText span12" value="<%= this.collection.name %>" />'+
                         '</div>'+
-                        '<div class="row-fluid"><h2 class="center">Click on a field to add it in the aera</h2></div>'+
+                        '<div class="row-fluid"><h2 class="center" data-i18n="label.help">Cliquer sur champs pour l\'ajouter au protocole</h2></div>'+
                         '<div class="row-fluid">'+
                             '<div class="span12 drop"></div>'+
                         '</div>',
@@ -1377,16 +1516,17 @@ var formBuilder = (function(app) {
             var renderedContent = _.template(this.constructor.templateSrc);
             $(this.el).html(renderedContent);
             $(this.el).nanoScroller();
+
             return this;
         }
     }, {
         templateSrc :   '<div class="nano-content">'+
-                            '<h1 class="center">Fields</h1>' +
+                            '<h1 class="center" data-i18n="label.field"></h1>' +
                             '<%  _.each(formBuilder.models, function(el, idx) { %>' + 
                             '   <% if (el.type != undefined) { %>' + 
                             '       <div class="row-fluid">' +
-                            '           <div class="span10 offset1 fields" data-type="<%= idx.replace("Field", "") %>">' +
-                            '               <%= idx.replace("Field", " Field") %>' +
+                            '           <div class="span10 offset1 fields" data-type="<%= idx.replace("Field", "") %>" data-i18n="fields.<%= el["i18n"] %>" >' +
+                            '               <%= el["i18n"] %>'+
                             '           </div>' +
                             '       </div>' +
                             '   <% } %>' +
@@ -1406,10 +1546,17 @@ var formBuilder = (function(app) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       &nbsp;</label> '+
-                        '   <div class="span8 right hide">'+
-                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#setting/<%= id %>" class="wrench"><i class="fa fa-wrench"></i>Modifier</a>'+ 
-                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
@@ -1432,9 +1579,14 @@ var formBuilder = (function(app) {
                         '   <label class="span4">' + 
                         '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
                         '       &nbsp;</label> '+
-                        '   <div class="span8 right hide">'+
-                        '       <a href="#" class="trash"><i class="fa fa-trash-o"></i>Supprimer</a>'+ 
-                        '       <a href="#" class="copy">&nbsp;<i class="fa fa-copy"></i> Dupliquer</a>'+
+                        '   <div class="span8 right hide actions">'+
+                         '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
                         '   </div>'+
                         '</div>' +
                         '<div class="row" style="margin-left : 10px;">' + 
@@ -1761,7 +1913,7 @@ var formBuilder = (function(app) {
                 '<div class="row-fluid content">'+
                 '   <div class="span3 widgetsPanel nano"></div>'+
                 '   <div class="span9 dropArea"></div>'+
-                '   <div class="settings span5"></div>'+
+                '   <div class="span5 settings"></div>'+
                 '</div>'
             );
             
@@ -1804,12 +1956,12 @@ var formBuilder = (function(app) {
         getActions : function() {
             return {
                 save : new NS.UI.NavBar.Action({
-                    title           : '<i class="fa fa-cloud"></i> Save protocol',
+                    title           : '<i class="fa fa-cloud"></i><span data-i18n="nav.save.title">Save protocol</span>',
                     allowedRoles    : ["reader"],
                     actions: {
                         'save.repo' : new NS.UI.NavBar.Action({
                             //  Display modal window for save the protocol in the repository
-                            title       : 'Save on the cloud',
+                            title       : '<span data-i18n="nav.save.cloud"></span>',
                             allowedRoles: ['reader'],                    
                             handler: function() {
                                 var modalView = new app.views.SaveProtocolModalView({el: '#saveModal'});
@@ -1822,7 +1974,7 @@ var formBuilder = (function(app) {
                                 app.instances.mainView.downloadXML();
                             },
                             allowedRoles    : ["reader"],
-                            title           : "Export as XML"
+                            title           : '<span data-i18n="nav.save.export"></span>'
                         })
                     }
                 }),
@@ -1834,18 +1986,18 @@ var formBuilder = (function(app) {
                                 app.instances.mainView.importXML();
                             },
                             allowedRoles: ["reader"],
-                            title       : "Import XML File"
+                            title       : 'Importer un fichier XML'
                         }),
                         'import.load' : new NS.UI.NavBar.Action({
-                            title       : 'load from cloud',
+                            title       : 'Charger depuis le serveur',
                             allowedRoles: ["reader"],
                             handler : function () {
                                 alert ('I\'m working on it !');
                             }
                         })
                     },
-                    title       : '<i class="fa fa-upload"></i> Import a protocol',
-                    allowedRoles: ["reader"],
+                    title       : '<span class="fa fa-upload" data-i18n="nav.import.title"></span>',
+                    allowedRoles: ["reader"]
                 }),
                 
                 clear: new NS.UI.NavBar.Action({
@@ -1853,7 +2005,7 @@ var formBuilder = (function(app) {
                         app.instances.mainView.clear();
                     },
                     allowedRoles: ["reader"],
-                    title       : '<i class="fa fa-trash-o"></i> Clear protocol'
+                    title       : '<i class="fa fa-trash-o"></i> Tout supprimer'
                 }),
                 
                 show: new NS.UI.NavBar.Action({
@@ -1948,7 +2100,7 @@ var formBuilder = (function(app) {
                         }).removeClass('hide').css('width', '700px');
                     },
                     allowedRoles: ["reader"],
-                    title: '<i class="fa fa-bars"></i> Compare XML Files'
+                    title: '<span class="fa fa-bars" data-i18n="nav.compare"></span>'
                 })        
             };
         }

@@ -5,35 +5,54 @@ var formBuilder = (function(app) {
         routes : {
             "" : 'home',
             'saveprotocol' : 'saveProtocol',
-            'setting/:id' : 'modelSetting'
+            'setting/:id' : 'modelSetting',
+            'generate' : 'generate'
+        },
+
+        initialize : function() {
+            //  Init current protocol object
+            app.instances.currentForm = new app.collections.Form( {}, { name: "My protocol" });
+
+            //  Init main view
+            app.instances.mainView = new app.views.MainView({
+                el      : '#formBuilder',
+                form    : app.instances.currentForm
+            });
+
+
         },
         
         home : function() {            
-            if (app.instances.mainView  === undefined || app.instances.currentForm === undefined) {
-                app.instances.currentForm = new app.collections.Form( {}, { name: "My protocol" });
-
-                app.instances.mainView = new app.views.MainView({
-                    el      : '#formBuilder',
-                    form    : app.instances.currentForm
-                });
-            }
-            
-            app.instances.navbar.setActions (app.instances.mainView.getActions());            
+            app.instances.navbar.setActions (app.instances.mainView.getActions());
+            i18n.init({lng: "en"}, function(t) {
+                // translate nav
+                $("body").i18n();
+            });
         },
         
         saveProtocol : function (options) {
         },
         
         modelSetting : function(modelID) {
-            if (app.instances.currentForm === undefined) {
+            if (app.instances.currentForm.length === 1) {
                 window.location.hash = '';
-            } else {
-                var edit = new app.views.BaseEditView({
-                    el: $('.settings'),
-                    model : app.instances.currentForm.models[modelID]
-                });
-                edit.render();
-                app.instances.navbar.setActions (edit.getActions());
+            } else {          
+
+                
+                if (app.instances.settingView === undefined) {
+
+                    //  Create new edit view
+                    app.instances.settingView = new app.views.BaseEditView({
+                        el: $('.settings'), 
+                        model : app.instances.currentForm.models[modelID]
+                    });
+                    app.instances.settingView.render();
+
+                } else {
+                    app.instances.settingView.changeModel( app.instances.currentForm.models[modelID] );
+                }
+                
+                app.instances.navbar.setActions (app.instances.settingView.getActions());
             }
         }
         
