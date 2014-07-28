@@ -3,31 +3,31 @@
     <head>
         <title>FormBuilder</title>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        
+
         <!-- jquery -->
         <script src="libs/jquery/jquery.min.js"                  type="text/javascript"></script>
         <script src="libs/jquery/jquery-ui.min.js"               type="text/javascript"></script>
-        
+
         <!-- backbone underscore -->
         <script src="libs/backbone/underscore/underscore-min.js" type="text/javascript"></script>
         <script src="libs/backbone/backbone-min.js"              type="text/javascript"></script>
-        
+
         <!-- bootstrap -->
         <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css"              type="text/css"/>
         <link rel="stylesheet" href="libs/bootstrap/css/bootstrap-responsive.min.css"   type="text/css"/>
         <script src="libs/bootstrap/js/bootstrap.min.js"                                type="text/javascript"></script>
-        
+
         <!-- font awesome -->
         <link rel="stylesheet" href="libs/font-awesome/css/font-awesome.min.css"        type="text/css" />
-        
+
         <!-- Nano scroll -->
         <link rel="stylesheet" href="libs/nanoScroller/nanoscroller.css" />
         <script type="text/javascript" src="libs/nanoScroller/jquery.nanoscroller.min.js"></script>
-                
+
         <!-- Blob and filesaver -->
         <script src="libs/blob/Blob.js"                          type="text/javascript"></script>
         <script src="libs/filesaver/FileSaver.js"                type="text/javascript"></script>
-        
+
         <!-- XMLlint -->
         <script src="libs/xmljs/xmllint.js"                      type="text/javascript"></script>
 
@@ -44,11 +44,13 @@
         <link rel="stylesheet" href="libs/navbar/navbar.css" type="text/css" />
         <link rel="stylesheet" href="libs/navbar/navbar-modernui.css" type="text/css" />
         <script src="libs/navbar/navbar.js" type="text/javascript"></script>
-        
+
         <!-- ns ui notification -->
         <link rel="stylesheet" href="libs/NS.UI.Notification-master/notification.css" type="text/css" />
         <script type="text/javascript" src="libs/NS.UI.Notification-master/notification.js"></script>
 
+         <script type="text/javascript" src="libs/i18n/i18next-1.7.3.min.js"></script>
+         
         <!-- Formbuilder  -->
         <link rel="stylesheet" type="text/css" href="dist/stylesheet/formbuilder.css" />
         <script type="text/javascript" src="js/formBuilder.js"  ></script>        
@@ -57,10 +59,12 @@
         <script type="text/javascript" src="js/collection.js"   ></script>
         <script type="text/javascript" src="js/views.js"        ></script>
         <script type="text/javascript" src="js/router.js"        ></script>
+        
+       
         <!-- fullName Plugin -->
-        <script type="text/javascript" src="plugins/fullNameField.js"></script>
+        <!--<script type="text/javascript" src="plugins/fullNameField.js"></script>-->
         <script type="text/javascript">
-            $(document).ready( function() {
+            $(document).ready(function() {
                 formBuilder.init();
             });
         </script>
@@ -68,11 +72,12 @@
     <body>
         <section class="container-fluid" id="formBuilder">
         </section>
-        
+
         <!-- modal -->
         <div class="modal hide fade" id="saveModal"></div>
-        
+
         <div class="modal hide fade" id="compareModal" ></div>        
         <div class="modal hide fade" id="editListModal"></div>
     </body>
+
 </html>
