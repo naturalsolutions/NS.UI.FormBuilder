@@ -4,7 +4,7 @@
         "number"    : "Numeric",
         "date"      : "Date",
         "select"    : "Select",
-        "radio"     : "Radio buttob",
+        "radio"     : "Radio button",
         "checkbox"  : "Checkbox",
         "hidden"    : "Hidden",
         "file"      : "File",
