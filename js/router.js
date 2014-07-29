@@ -36,8 +36,7 @@ var formBuilder = (function(app) {
         modelSetting : function(modelID) {
             if (app.instances.currentForm.length === 1) {
                 window.location.hash = '';
-            } else {          
-
+            } else {
                 
                 if (app.instances.settingView === undefined) {
 
@@ -49,7 +48,16 @@ var formBuilder = (function(app) {
                     app.instances.settingView.render();
 
                 } else {
-                    app.instances.settingView.changeModel( app.instances.currentForm.models[modelID] );
+                    app.instances.settingView.remove();
+                    app.instances.settingView.unbind();
+                    
+                    $('.dropArea').after('<div class="span5 settings"></div>');
+                    
+                    app.instances.settingView = new app.views.BaseEditView({
+                        el: $('.settings'), 
+                        model : app.instances.currentForm.models[modelID]
+                    });
+                    app.instances.settingView.render();
                 }
                 
                 app.instances.navbar.setActions (app.instances.settingView.getActions());

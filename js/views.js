@@ -125,7 +125,7 @@ var formBuilder = (function(app) {
          * Evenet intercepted by the view
          */
         events : {
-            'click h2 > a:not(.selected)'   : 'displayOptions',
+            'click h2 > span:not(.selected)'   : 'displayOptions',
             'change .property'              : 'updateModelAttribute'
         },
         
@@ -145,7 +145,7 @@ var formBuilder = (function(app) {
          * @param {object} e jQuery event
          */
         displayOptions: function(e) {
-            $(".settings h2 > a").toggleClass('selected');
+            $(".settings h2 > span").toggleClass('selected');
             if ($(e.target).prop('id') === "simple") {
                 $('.advanced').addClass('hide', 500);
             } else {
@@ -190,25 +190,19 @@ var formBuilder = (function(app) {
             return this;
         },
 
-        changeModel : function(newModel) {
-
-            //  Complety remove subview
-            this.subView.undelegateEvents();
-            this.subView.$el.removeData().unbind(); 
-            this.subView.remove();  
-            Backbone.View.prototype.remove.call(this.subView);
-            this.subView = undefined;
-            delete this.subView;
-
-            //  unbind model view
-            this.unbind();           
+        changeModel : function(newModel) {            
+            $(this.el).unbind();            
+            $(this.subView.el).unbind();;
+            
             this.model = newModel;
-            this.model.bind('change', this.render);     
-
-            $('.lastRow').after('<div id="subView"></div>');
+            this.model.bind('change', this.render);   
             this.model.trigger('change');
         },
 
+        /**
+         * [getActions description]
+         * @return {[type]}
+         */
         getActions : function() {
             return {
                 'save' : new NS.UI.NavBar.Action({
@@ -232,8 +226,8 @@ var formBuilder = (function(app) {
                         '   <h1 data-i18n="label.settings">Settings</h1>'+
                         '   <div>'+
                         '       <h2>'+
-                        '           <a href="#" id="simple" class="selected" data-i18n="label.options.simple">Simple options</a> / '+
-                        '           <a href="#" id="advanced" data-i18n="label.options.advanced" >Advanced options</a>'+
+                        '           <span id="simple" class="selected" data-i18n="label.options.simple">Simple options</span> / '+
+                        '           <span href="#" id="advanced" data-i18n="label.options.advanced" >Advanced options</span>'+
                         '       </h2>'+
                         //  Edition of common attribute like name (label and displayLabel)
                         '   <div class="hide advanced">' +
@@ -1025,7 +1019,7 @@ var formBuilder = (function(app) {
                 modal.unbind();
                 delete modal;
                 this.model.trigger('change');
-            }, this))
+            }, this));
         }
         
     }, {
@@ -1067,6 +1061,7 @@ var formBuilder = (function(app) {
             'change input[type="text"]'     : 'propertyChanged',
             'change input[type="radio"]'    : 'defaultValueChanged',
             'click td .close'               : 'removeItem',
+            'hidden'                        : 'close'
         },
 
         initialize : function (){
@@ -1079,6 +1074,18 @@ var formBuilder = (function(app) {
             $(this.el).html(renderedContent);
             $(this.el).modal({ show: true });
             return this;
+        },
+        
+        close : function(e) {
+            var len = this.model["items"].length, last = this.model["items"][len - 1];
+            
+            if (last["en"] === "" || last["fr"] === "" || last["value"] === "") {
+                this.model["items"].splice(len - 1, 1);
+            }
+
+            this.remove();
+            this.unbind();
+            $('#compareModal').after('<div class="modal hide fade" id="editListModal"></div>');
         },
 
         addItem : function(e) {
@@ -1101,9 +1108,9 @@ var formBuilder = (function(app) {
 
             if (this.model['items'][index - 1]["value"] === "" ) {
                 check &= false;
-                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="value"]').addClass('error')
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="value"]').addClass('error');
             } else {
-                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="value"]').removeClass('error')
+                $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="value"]').removeClass('error');
             }
 
             if (check) {
@@ -1125,7 +1132,7 @@ var formBuilder = (function(app) {
                     '       <input type="radio"  data-index="' + index + '" name="defaultValue" /> <button type="button" data-index="' + index + '" class="close">&times;</button>'+
                     '   </td>'+
                     '</tr>'
-                )
+                );
             }
             
         },
@@ -1253,13 +1260,10 @@ var formBuilder = (function(app) {
                             'getXML'
                     );
             this.collection.bind('add', this.addElement);
-            this.collection.bind('change', this.updateView);
             this._view = [];
         },
         
         updateView : function() {
-
-            console.log (this.collection);
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
             $(this.el).find('#protocolName').val(this.collection.name);
