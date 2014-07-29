@@ -11,7 +11,8 @@
         "tree"      : "TreeView",
         "long"      : "Long text",
         "mask"      : "Pattenr",
-        "line"      : "Horizontal line"
+        "line"      : "Horizontal line",
+        "autocomplete" : "autocomplete"
     },
     
     "nav" : {

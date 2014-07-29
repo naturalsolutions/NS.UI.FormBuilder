@@ -11,7 +11,8 @@
         "tree"      : "Arbre",
         "long"      : "Texte long",
         "mask"      : "Masque",
-        "line"      : "Ligne horizontale"
+        "line"      : "Ligne horizontale",
+        "autocomplete" : "autocomplete"
     },
     
     "nav" : {
