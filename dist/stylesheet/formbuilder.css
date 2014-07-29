@@ -475,25 +475,36 @@ body {
 .modal button {
   padding: 4px;
 }
-#saveModal textarea {
+#saveModal textarea,
+#exportModal textarea {
   resize: none;
   height: 60px;
   max-height: 60px;
 }
-#saveModal label > i {
+#saveModal label > i,
+#exportModal label > i {
   color: #888;
 }
-#saveModal .modal-body {
+#saveModal .modal-body,
+#exportModal .modal-body {
   padding-bottom: 25px;
+  overflow-x: hidden;
 }
-#saveModal .modal-body .row-fluid:nth-child(even) {
+#saveModal .modal-body .row-fluid:nth-child(even),
+#exportModal .modal-body .row-fluid:nth-child(even) {
   margin-bottom: 5px;
 }
-#saveModal #saveProtocolKeywordsList {
+#saveModal #saveProtocolKeywordsList,
+#exportModal #saveProtocolKeywordsList,
+#saveModal #exportProtocolKeywordsList,
+#exportModal #exportProtocolKeywordsList {
   list-style-type: none;
   margin-left: 0 !important;
 }
-#saveModal #saveProtocolKeywordsList li {
+#saveModal #saveProtocolKeywordsList li,
+#exportModal #saveProtocolKeywordsList li,
+#saveModal #exportProtocolKeywordsList li,
+#exportModal #exportProtocolKeywordsList li {
   float: left;
   height: 30px;
   line-height: 30px;
@@ -502,7 +513,10 @@ body {
   padding: 5px 0px 5px 10px;
   margin-left: 5px;
 }
-#saveModal #saveProtocolKeywordsList li button {
+#saveModal #saveProtocolKeywordsList li button,
+#exportModal #saveProtocolKeywordsList li button,
+#saveModal #exportProtocolKeywordsList li button,
+#exportModal #exportProtocolKeywordsList li button {
   padding-left: 10px;
   padding-right: 10px;
 }
