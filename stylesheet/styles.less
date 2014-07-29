@@ -215,7 +215,6 @@ html, body {
             margin-left         : 0;
             overflow-x          : scroll;
             padding-bottom      : 50px;
-            border-left         : 1px #333 solid;
             padding-top         : 50px;
             h1 {
                 text-align          : center;
@@ -232,6 +231,12 @@ html, body {
             h2 {
                 text-align  : center;
                 font-size   : 18px;
+                span:not(.selected) {
+                    color : #08C;
+                    &:hover {
+                        cursor : pointer;
+                    }
+                }
                 a {
                     color           : #08c;
                     text-decoration : none;

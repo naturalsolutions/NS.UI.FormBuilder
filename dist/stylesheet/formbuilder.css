@@ -274,7 +274,6 @@ body {
   margin-left: 0;
   overflow-x: scroll;
   padding-bottom: 50px;
-  border-left: 1px #333 solid;
   padding-top: 50px;
 }
 #formBuilder .content .settings * {
@@ -333,6 +332,12 @@ body {
 #formBuilder .content .settings h2 {
   text-align: center;
   font-size: 18px;
+}
+#formBuilder .content .settings h2 span:not(.selected) {
+  color: #08C;
+}
+#formBuilder .content .settings h2 span:not(.selected):hover {
+  cursor: pointer;
 }
 #formBuilder .content .settings h2 a {
   color: #08c;
@@ -505,8 +510,8 @@ body {
   float: left;
 }
 #editListModal {
-  width: 800px;
-  left: 40%;
+  width: 1000px;
+  left: 35%;
 }
 #editListModal .modal-header {
   text-align: center;
