@@ -1342,7 +1342,6 @@ var formBuilder = (function(app) {
                             'addElement', 
                             'changeFormName', 
                             'importXML', 
-                            'downloadXML', 
                             'updateView', 
                             'getModel',
                             'getXML'
@@ -1408,39 +1407,6 @@ var formBuilder = (function(app) {
         
         changeFormName: function() {
             this.collection.name = $('#protocolName').val();
-        },
-        
-        downloadXML: function() {
-            $( $(this.constructor.popupDwSrc) ).modal({
-                
-            }).on('click', '.btn-primary', _.bind(function() {
-                
-                $('#exportProtocolFileName')[ $('#exportProtocolFileName').val() === "" ? 'addClass' : 'removeClass']('error');
-                
-                if (!$('#exportProtocolFileName').hasClass('error')) {
-                    try {
-                        var isFileSaverSupported = !!new Blob();
-                        var blob = new Blob(
-                                [this.collection.getXML()],
-                                {type: "application/xml;charset=utf-8"}
-                        );
-                        saveAs(blob, $('#exportProtocolFileName').val() + '.xml');
-                        $('#exportProtocolModal').modal('hide').removeData();
-                        new NS.UI.Notification({
-                            type    : 'success',
-                            title   : 'Protocol export :',
-                            message : "XML file correctly created"
-                        });
-                    } catch (e) {
-                        $('#exportProtocolModal').modal('hide').removeData();
-                        new NS.UI.Notification({
-                            type    : 'error',
-                            title   : 'An error occured :',
-                            message : "Can't create your XML file"
-                        });
-                    }
-                }
-            }, this));
         },
         
         getXML : function() {
@@ -1562,24 +1528,6 @@ var formBuilder = (function(app) {
                     '           <input type="file" id="importProtocolFile" class="hide" />'+
                     '           <input type="text" id="importProtocolFileText" class="span10" placeholder="Protocol file" style="margin-left : 0" />'+
                     '           <button type="button" class="span2" id="importProtocolFind">Find</button>'+
-                    '       </div>'+
-                    '   </div>'+
-                    '   <div class="modal-footer">'+
-                    '       <a href="#" class="btn btn-primary">Import</a>'+
-                    '   </div>'+
-                    '</div>',
-
-        popupDwSrc: '<div id="exportProtocolModal" class="modal hide fade">'+
-                    '   <div class="modal-header">'+
-                    '       <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>'+
-                    '       <h3>Protocol export</h3>'+
-                    '   </div>'+
-                    '   <div class="modal-body">'+
-                    '       <div class="row-fluid">'+
-                    '           <label>Enter a name for XML File</label>'+
-                    '       </div>'+
-                    '       <div class="row-fluid">'+
-                    '           <input type="text" class="span12" id="exportProtocolFileName" placeholder="Your XML filename" />'+
                     '       </div>'+
                     '   </div>'+
                     '   <div class="modal-footer">'+
@@ -1759,7 +1707,7 @@ var formBuilder = (function(app) {
                         'save.repo' : new NS.UI.NavBar.Action({
                             //  Display modal window for save the protocol in the repository
                             title       : 'Save',
-                            allowedRoles: ['reader'],                    
+                            allowedRoles: ['reader'],
                             handler: function() {
                                 var modalView = new app.views.SaveProtocolModalView({el: '#saveModal'});
                                 modalView.render();
@@ -1768,7 +1716,11 @@ var formBuilder = (function(app) {
                         'save.xport': new NS.UI.NavBar.Action({
                             //  Allow to export protocol as a XML file
                             handler: function() {
-                                app.instances.mainView.downloadXML();
+                                var modalView = new app.views.ExportProtocolModalView({
+                                    el : "#exportModal",
+                                    model : app.instances.currentForm
+                                });
+                                modalView.render();
                             },
                             allowedRoles    : ["reader"],
                             title           : 'Export as XML'
