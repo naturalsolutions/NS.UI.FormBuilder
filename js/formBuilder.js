@@ -28,23 +28,30 @@ var formBuilder = (function(app) {
             ]
         },
         utilities   : {},
-        
-        init : function() {
+
+        init : function(options) {
+
+            app.instances.autocompleteURL = options.autocompleteURL || 'autocomplete/';
+            app.instances.translationURL  = options.translationURL  || 'locales/';
+
+            app.instances.keywordAutocomplete  = options.keywordAutocomplete  || 'autocomplete/keywords.json';
+            app.instances.protocolAutocomplete = options.protocolAutocomplete || 'autocomplete/protocols.json';
+
             app.instances.router = new app.Router();
-            
+
             app.instances.navbar = new NS.UI.NavBar({
                 roles       : app.instances.user.gaston.roles,
                 username    : app.instances.user.gaston.nickname,
                 title       : 'Form Builder'
             });
-            
+
             app.instances.navbar.$el.prependTo('body');
             app.instances.navbar.render();
-            
+
             Backbone.history.start();
         }
-    }; 
-   
+    };
+
     return app;
 
 })(formBuilder);

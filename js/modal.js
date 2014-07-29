@@ -1,61 +1,60 @@
 var formBuilder = (function(app) {
-    
+
     app.views.SaveProtocolModalView = Backbone.View.extend({
-        
+
         events : {
             'keyup #saveProtocolKeywords'               : 'validateProtocolValue',
             'click #saveProtocolKeywordsList .close'    : 'removeKeyword',
             'click .btn-primary'                        : 'validateProtocolSave'
         },
-        
+
         initialize : function(options) {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'validateProtocolValue', 'removeKeyword', 'appendKeywordValue');            
+            _.bindAll(this, 'render', 'validateProtocolValue', 'removeKeyword', 'appendKeywordValue');
             this.keywordList = [];
         },
-        
+
         render : function() {
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
             $(this.el).modal({ show: true });
-            
+
             //  Add autocomplete control on protocol name and keyword input
-            
+
             $(this.el).find('#saveProtocolName').typeahead({
                 source: function(query, process) {
-                    return $.getJSON('/protocols', {query: query}, function(data) {
+                    return $.getJSON(app.instances.protocolAutocomplete, {query: query}, function(data) {
                         return process(data.options);
                     });
                 }
             });
-            
+
             $(this.el).find('#saveProtocolKeywords').typeahead({
                 source: function(query, process) {
-                    return $.getJSON('/keywords', {query: query}, function(data) {
+                    return $.getJSON(app.instances.keywordAutocomplete, {query: query}, function(data) {
                         return process(data.options);
                     });
                 },
-                updater: _.bind(function(item) {                    
+                updater: _.bind(function(item) {
                     this.appendKeywordValue(item);
                 }, this)
             });
 
             return this;
         },
-        
+
         validateProtocolValue : function(e) {
             if (e.keyCode === 13) {
                 this.appendKeywordValue( $(e.target).val() );
             }
         },
-        
+
         /**
          * Add the keyword value in the list and check if the keyword not exists yet
-         * 
+         *
          * @param {type} keywordValue
          */
-        appendKeywordValue : function(keywordValue) {       
-            console.log (app)
+        appendKeywordValue : function(keywordValue) {
             if (this.keywordList.indexOf(keywordValue) > -1) {
                 $('li[data-value="' + keywordValue + '"]').css('background', 'red');
                 setTimeout( function() {
@@ -72,17 +71,17 @@ var formBuilder = (function(app) {
 
         /**
          * Remove keyword from the list
-         * 
+         *
          * @param {type} e clicked li on the keyword list
          */
         removeKeyword: function(e) {
             this.keywordList.splice($(e.target).parent('li').index(), 1);
             $(e.target).parent('li').remove();
         },
-        
+
         /**
          * Validate information and send protocol to the repository
-         * 
+         *
          * @param {type} e primary button clicked event
          */
         validateProtocolSave : function (e){
@@ -90,10 +89,10 @@ var formBuilder = (function(app) {
                 saveProtocolDescription = $('#saveProtocolDescription').val()   === "",
                 saveProtocolKeywords    = $('#saveProtocolKeywords').val()      === "",
                 saveProtocolComment     = $('#saveProtocolComment').val()       === "";
-        
+
             $('#saveProto, #saveProtocolDescription, #saveProtocolKeywords, #saveProtocolComment, #saveProtocolName').each( function() {
                 $(this)[ eval($(this).prop('id')) === true ? 'addClass' : 'removeClass']("error");
-            });          
+            });
 
             if (!saveProtocolName && !saveProtocolDescription && !saveProtocolKeywords && !saveProtocolComment) {
                 var dataS = JSON.stringify({
@@ -129,7 +128,7 @@ var formBuilder = (function(app) {
                 });
             }
         }
-        
+
     }, {
         templateSrc :   '<div>'+
                         '   <div class="modal-header">' +
@@ -178,14 +177,11 @@ var formBuilder = (function(app) {
             'click #exportProtocolKeywordsList .close'  : 'removeKeyword',
             'click .btn-primary'                        : 'validateProtocolSave'
         },
-        
+
         initialize : function(options) {
             this.template   = _.template(this.constructor.templateSrc);
             _.bindAll(this, 'render', 'validateProtocolValue', 'removeKeyword', 'appendKeywordValue');
             this.keywordList = [];
-
-            this._keywordUrl    = options._keywordUrl  || "autocomplete/keywords.json";
-            this._protocolUrl   = options._protocolUrl || "autocomplete/protocols.json";
         },
 
         render : function() {
@@ -197,15 +193,15 @@ var formBuilder = (function(app) {
 
             $(this.el).find('#exportProtocolName').typeahead({
                 source: _.bind(function(query, process) {
-                    return $.getJSON(this._protocolUrl, {query: query}, function(data) {
+                    return $.getJSON(app.instances.protocolAutocomplete, {query: query}, function(data) {
                         return process(data.options);
                     });
                 }, this)
             });
-            
+
             $(this.el).find('#exportProtocolKeywords').typeahead({
                 source: _.bind(function(query, process) {
-                    return $.getJSON(this._keywordUrl, {query: query}, function(data) {
+                    return $.getJSON(app.instances.keywordAutocomplete, {query: query}, function(data) {
                         return process(data.options);
                     });
                 }, this),
@@ -216,16 +212,16 @@ var formBuilder = (function(app) {
 
             return this;
         },
-        
+
         validateProtocolValue : function(e) {
             if (e.keyCode === 13) {
                 this.appendKeywordValue( $(e.target).val() );
             }
         },
-        
+
         /**
          * Add the keyword value in the list and check if the keyword not exists yet
-         * 
+         *
          * @param {type} keywordValue
          */
         appendKeywordValue : function(keywordValue) {
@@ -245,33 +241,33 @@ var formBuilder = (function(app) {
 
         /**
          * Remove keyword from the list
-         * 
+         *
          * @param {type} e clicked li on the keyword list
          */
         removeKeyword: function(e) {
             this.keywordList.splice($(e.target).parent('li').index(), 1);
             $(e.target).parent('li').remove();
         },
-        
+
         /**
          * Validate information and send protocol to the repository
-         * 
+         *
          * @param {type} e primary button clicked event
          */
         validateProtocolSave : function (e){
-            
+
             var exportProtocolName        = $('#exportProtocolName').val()          === "",
                 exportProtocolComment     = $('#exportProtocolFileName').val()      === "",
                 exportProtocolDescription = $('#exportProtocolDescription').val()   === "",
                 exportProtocolKeywords    = $('#exportProtocolKeywordsList').children('li').length  === 0;
-                
-        
+
+
             $('#exportProtocolDescription, #exportProtocolKeywords, #exportProtocolFileName, #exportProtocolName').each( function() {
                 $(this)[ eval($(this).prop('id')) === true ? 'addClass' : 'removeClass']("error");
             })
-            
+
             if (!exportProtocolName && !exportProtocolDescription && !exportProtocolKeywords && !exportProtocolComment) {
-                
+
                 this.model['description'] = $('#exportProtocolDescription').val();
                 this.model['keywords'] = this.keywordList;
                 this.model['name'] = $('#exportProtocolName').val();
@@ -301,7 +297,7 @@ var formBuilder = (function(app) {
                     }
             }
         }
-        
+
     }, {
         templateSrc :   '<div>'+
                         '   <div class="modal-header">' +
@@ -341,27 +337,27 @@ var formBuilder = (function(app) {
                         '   </div>'+
                         '</div>'
     });
-    
+
     app.views.DiffProtocolModalView = Backbone.View.extend({
-        
+
         events : {
             'click .btn-primary' : 'showDiff',
             'click #findSource, #findUpdate' : 'triggerInputFile',
             'change input[type="file"]' : 'inputFileValueChange'
         },
-        
+
         initialize : function (options) {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         render : function() {
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
             $(this.el).modal({ show: true });
-            
+
             return this;
         },
-        
+
         showDiff: function() {
             $('#compareModal').modal('hide');
 
@@ -390,7 +386,7 @@ var formBuilder = (function(app) {
                         formBuilder.displayNotification(result.error, 'error', 'Your XML don\'t matches with XML Schema');
                         return;
                     }
-                    
+
                     source = evt.target.result;
                     reader = new FileReader();
                     reader.readAsText(update, "UTF-8");
@@ -436,18 +432,18 @@ var formBuilder = (function(app) {
                 });
             };
         },
-        
+
         inputFileValueChange: function(e) {
-            var id      = $(e.target).prop('id').replace('Hide', ''), 
+            var id      = $(e.target).prop('id').replace('Hide', ''),
                 split    = $(this).val().split('\\');
             //  Set input text value from input file value
             $('#' + id).val(split[ split.length - 1]);
         },
-        
+
         triggerInputFile : function (e) {
             $('#' + $(e.target).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
         }
-        
+
     }, {
         templateSrc :   '<div>'+
                         '   <div class="modal-header">'+
@@ -472,7 +468,7 @@ var formBuilder = (function(app) {
                         '   </div>'+
                         '</div>'
     });
-    
+
     return app;
-    
+
 })(formBuilder);

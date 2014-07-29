@@ -50,23 +50,24 @@
         <script type="text/javascript" src="libs/NS.UI.Notification-master/notification.js"></script>
 
          <script type="text/javascript" src="libs/i18n/i18next-1.7.3.min.js"></script>
-         
+
         <!-- Formbuilder  -->
         <link rel="stylesheet" type="text/css" href="dist/stylesheet/formbuilder.css" />
-        <script type="text/javascript" src="js/formBuilder.js"  ></script>        
-        <script type="text/javascript" src="js/utilities.js"    ></script>        
+        <script type="text/javascript" src="js/formBuilder.js"  ></script>
+        <script type="text/javascript" src="js/utilities.js"    ></script>
         <script type="text/javascript" src="js/model.js"        ></script>
         <script type="text/javascript" src="js/collection.js"   ></script>
         <script type="text/javascript" src="js/modal.js"        ></script>
         <script type="text/javascript" src="js/views.js"        ></script>
         <script type="text/javascript" src="js/router.js"        ></script>
-        
-       
+
+
         <!-- fullName Plugin -->
         <!--<script type="text/javascript" src="plugins/fullNameField.js"></script>-->
         <script type="text/javascript">
             $(document).ready(function() {
-                formBuilder.init();
+                formBuilder.init({
+                });
             });
         </script>
     </head>
@@ -78,7 +79,7 @@
         <div class="modal hide fade" id="saveModal"></div>
         <div class="modal hide fade" id="exportModal"></div>
 
-        <div class="modal hide fade" id="compareModal" ></div>        
+        <div class="modal hide fade" id="compareModal" ></div>
         <div class="modal hide fade" id="editListModal"></div>
     </body>
 

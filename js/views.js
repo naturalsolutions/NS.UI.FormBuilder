@@ -23,12 +23,12 @@ var formBuilder = (function(app) {
 //
     //  ----------------------------------------------------------------------------------
     //  Base views
-    
+
     /**
      * It's the basic views for all field view.
      */
     app.views.BaseView = Backbone.View.extend({
-        
+
         /**
          * Events for the intercepted by the view
          */
@@ -39,7 +39,7 @@ var formBuilder = (function(app) {
             'mouseenter .element'   : 'displayOption',
             'mouseleave .element'   : 'hideOption'
         },
-        
+
         /**
          * Constructor
          */
@@ -49,25 +49,25 @@ var formBuilder = (function(app) {
             this.model.bind('change', this.render);
             this.model.bind('destroy', this.deleteView);
         },
-        
-        /**gen 
+
+        /**gen
         * Display allowed options for this element
-         * 
+         *
          * @param {object} e jQuery event
          */
         hideOption : function(e) {
             $(e.delegateTarget).find('.right').addClass('hide');
         },
-        
+
         /**
          * Hide displayed options
-         * 
+         *
          * @param {object} e jQuery event
          */
         displayOption : function(e) {
             $(e.delegateTarget).find('.right').removeClass('hide');
         },
-        
+
         /**
          * Copy model of this view
          */
@@ -76,7 +76,7 @@ var formBuilder = (function(app) {
             cl.set('id', app.views.mainView.formView.collection.length);    //  change id otherwise element replaced copied element
             app.views.mainView.formView.collection.add(cl);                 //  Add element to the collection
         },
-        
+
         /**
          * Remove view
          */
@@ -84,28 +84,28 @@ var formBuilder = (function(app) {
             $(this.el).remove();
             this.remove();
         },
-        
+
         /**
-         * Render view 
-         * 
+         * Render view
+         *
          * @returns {app.views.BaseView} view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
-            
+
             return this;
-        },        
-        
+        },
+
         /**
          * Update view index, sortable callback
-         * 
+         *
          * @param {interger} idx new index of the view
          */
         updateIndex: function(idx) {
             this.model.id = parseInt(idx);
-        },     
-        
+        },
+
         /**
          * Remove the view
          */
@@ -113,14 +113,14 @@ var formBuilder = (function(app) {
             $(this.el).remove();
             this.remove();
         }
-        
+
     });
-    
+
     /**
      * Basic edition view for all field edition view
      */
     app.views.BaseEditView = Backbone.View.extend({
-        
+
         /**
          * Evenet intercepted by the view
          */
@@ -128,7 +128,7 @@ var formBuilder = (function(app) {
             'click h2 > span:not(.selected)'   : 'displayOptions',
             'change .property'              : 'updateModelAttribute'
         },
-        
+
         /**
          * Constructor
          */
@@ -138,10 +138,10 @@ var formBuilder = (function(app) {
             this.model.bind('change', this.render);
             this.subView = null;
         },
-        
+
         /**
          * Display options by section level (simple or advanced)
-         * 
+         *
          * @param {object} e jQuery event
          */
         displayOptions: function(e) {
@@ -152,24 +152,24 @@ var formBuilder = (function(app) {
                 $('.advanced').removeClass('hide', 500);
             }
         },
-        
+
         /**
          * Update model property when input value has changed
-         * 
+         *
          * @param {object} e jQuery event
          */
-        updateModelAttribute: function(e) {            
+        updateModelAttribute: function(e) {
             if ($(e.target).prop("type") === "checkbox") {
                 this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
             } else {
                 this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
             }
         },
-        
+
 
         /**
-         * Render view 
-         * 
+         * Render view
+         *
          * @returns {app.views.BaseView} view
          */
         render: function() {
@@ -182,20 +182,20 @@ var formBuilder = (function(app) {
             });
             this.subView.render();
             $(this.el).i18n();
-            
+
             //  Animate panel
             $('.dropArea').switchClass('span9', 'span7', 500);
             $('.widgetsPanel').switchClass('span3', 'span0', 500);
-            
+
             return this;
         },
 
-        changeModel : function(newModel) {            
-            $(this.el).unbind();            
+        changeModel : function(newModel) {
+            $(this.el).unbind();
             $(this.subView.el).unbind();;
-            
+
             this.model = newModel;
-            this.model.bind('change', this.render);   
+            this.model.bind('change', this.render);
             this.model.trigger('change');
         },
 
@@ -220,7 +220,7 @@ var formBuilder = (function(app) {
                 })
             };
         }
-    
+
     }, {
         templateSrc : '<div>'+
                         '   <h1 data-i18n="label.settings">Settings</h1>'+
@@ -276,18 +276,18 @@ var formBuilder = (function(app) {
                         '   </div>' +
                         '   <div class="row-fluid">&nbsp;</div>'+
                         '</div>'
-    }); 
-    
-    
-    
+    });
+
+
+
     //  ----------------------------------------------------------------------------------
     //  TextField views
-    
+
     /**
      * View for text field element
      */
     app.views.AutocompleteFieldView = app.views.BaseView.extend({
-        
+
         /**
          * Get BaseView events and add sepecific TextFieldView event
          */
@@ -296,69 +296,70 @@ var formBuilder = (function(app) {
                 'change input[type="text"]': 'updateModel'
             });
         },
-        
+
         /**
          * Render view
          */
         render : function() {
+            console.log (app.instances)
            app.views.BaseView.prototype.render.apply(this, arguments);
            $('#autocompleteExample').typeahead({
                 source: function(query, process) {
-                    return $.getJSON('autocomplete/example.json', {query : query}, function(data) {
+                    return $.getJSON( app.instances.autocompleteURL + 'example.json', {query : query}, function(data) {
                         return process(data.options);
                     });
                 },
                 updater : _.bind(function(item) {
-                    
+
                     this.model.set('defaultValue', item);
                 }, this)
             });
        },
-       
+
        /**
         * Change model value when text input value changed
-        * 
+        *
         * @param {object} jQuery event
         */
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
-        
+
     }, {
-        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
-                        '   <label class="span4">' + 
-                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' +
+                        '   <label class="span4">' +
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '   <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '   </div>'+
                         '</div>' +
-                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="row" style="margin-left : 10px;">' +
                         '   <input id="autocompleteExample" type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" data-provide="typeahead" /> '+
                         '</div></div>'
     });
 
     app.views.AutocompleteFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
         },
-        
+
     }, {
         templateSrc :   '<% _.each(["defaultValue", "hint", "url"], function(el) { %>' +
                         '   <div >' +
@@ -375,9 +376,9 @@ var formBuilder = (function(app) {
 
     //  ------------------------
     //  Autocomplete views
-    
+
     app.views.TextFieldView = app.views.BaseView.extend({
-        
+
         /**
          * Get BaseView events and add sepecific TextFieldView event
          */
@@ -386,58 +387,58 @@ var formBuilder = (function(app) {
                 'change input[type="text"]': 'updateModel'
             });
         },
-        
+
         /**
          * Render view
          */
         render : function() {
            app.views.BaseView.prototype.render.apply(this, arguments);
        },
-       
+
        /**
         * Change model value when text input value changed
-        * 
+        *
         * @param {object} jQuery event
         */
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
-        
+
     }, {
-        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
-                        '   <label class="span4">' + 
-                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' +
+                        '   <label class="span4">' +
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '   <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '   </div>'+
                         '</div>' +
-                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="row" style="margin-left : 10px;">' +
                         '   <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
                         '</div></div>'
     });
 
     app.views.TextFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
         },
-        
+
     }, {
         templateSrc :   '<% _.each(["defaultValue", "hint", "size"], function(el) { %>' +
                         '   <div >' +
@@ -453,81 +454,81 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  Pattern views
-    
+
     /**
      * View for pattern field
      */
     app.views.PatternFieldView = app.views.BaseView.extend({
-        
+
         events: function() {
             return _.extend({}, app.views.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
-        
+
         initialize : function() {
           app.views.BaseView.prototype.initialize.apply(this, arguments);
         },
-        
+
         render: function() {
             app.views.BaseView.prototype.render.apply(this, arguments);
         },
-        
+
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
-        
+
     }, {
         templateSrc:    '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <label class="span4">' + 
-                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '       </div>'+
                         '   </div>' +
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '       <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" pattern="<%= pattern %>" /> '+
                         '   </div>'+
                         '</div>'
     });
-    
+
     app.views.PatternFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         /**
          * Render Pattern field edition view, the view contains an text field edition view
-         * 
+         *
          * @returns {PatternFieldEditView} current view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
-            
+
             var textView = new app.views.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
             textView.render();
-            
+
             return this;
         }
-        
+
     }, {
-        templateSrc :   '   <div id="subTextView"></div>' + 
+        templateSrc :   '   <div id="subTextView"></div>' +
                         '   <div >' +
                         '       <div class="row-fluid">'+
                         '           <label class="span10 offset1">Pattern</label>' +
@@ -543,12 +544,12 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  File field views
-    
+
     /**
      * file field view
      */
     app.views.FileFieldView = app.views.BaseView.extend({
-        
+
         /**
          * Events of the view
          */
@@ -560,74 +561,74 @@ var formBuilder = (function(app) {
                 'change input[type="file"]'     : 'fileChange'
             });
         },
-        
+
         initialize : function() {
           app.views.BaseView.prototype.initialize.apply(this, arguments);
         },
-        
+
         triggerFile : function() {
             $(this.el).find('input[type="file"]').trigger('click');
         },
-        
+
         render: function() {
             app.views.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input[type="text"]').enableSelection();
         },
-        
+
         /**
          * Set text input value vhen file input value changes
-         * 
+         *
          * @param {type} e jQuery event
          */
         fileChange: function(e) {
             $(this.el).find('input[type="text"]').val($(e.target).val().replace("C:\\fakepath\\", ""))
         },
-        
+
         updateModel: function(e) {
             this.model.set('value', $(e.target).val());
         }
     }, {
         templateSrc:    '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <label class="span4">' + 
-                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '       </div>'+
                         '   </div>' +
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '       <input type="file" class="hide" />' +
                         '       <input type="text" class="span10" name="<%= name %>" id="<%= id%>" value="<%= defaultValue %>" /> '+
                         '       <input type="submit" value="Find" class="span2" />'+
                         '   </div>' +
                         '</div>'
     });
-    
+
     /**
      * File field edition view
      */
     app.views.FileFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
         }
-        
+
     }, {
         templateSrc :   '   <% _.each(["defaultValue", "file", "mimeType"], function(el) {%> '+
                         '       <div >' +
@@ -646,24 +647,24 @@ var formBuilder = (function(app) {
                         '           <div class="row-fluid">' +
                         '               <input class="span10 offset1 property" type="number" data-attr="size" placeholder="Max file size" value="<%= size %>" />' +
                         '           </div>' +
-                        '       </div>' 
+                        '       </div>'
     });
 
 
 
     //  ----------------------------------------------------------------------------------
     //  Numeriv field views
-    
+
     /**
      * NumericFieldView
      */
     app.views.NumericFieldView = app.views.BaseView.extend({
-        
+
         events: function() {
             return _.extend({}, app.views.BaseView.prototype.events, {
             });
         },
-        
+
         render: function() {
             app.views.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input').spinner({
@@ -673,60 +674,60 @@ var formBuilder = (function(app) {
         }
     }, {
         templateSrc :   '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <label class="span4">' + 
-                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide actions">'+
                         '           <a href="#" class="trash">'+
                         '               <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '           </a>'+ 
+                        '           </a>'+
                         '           <a href="#setting/<%= id %>" class="wrench">'+
                         '               <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                        '           </a>'+ 
+                        '           </a>'+
                         '           <a href="#" class="copy">'+
                         '               &nbsp;<span class="fa fa-copy"></span>'+
                         '               <span data-i18n="actions.clone">Dupliquer</span>'+
                         '           </a>'+
                         '       </div>'+
                         '   </div>' +
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '       <input class="span12 spin" name="<%= name %>" step="<%= precision %>" id="<%= id%>" placeholder="<%= hint %>" min="<%= minValue %>" max="<%= maxValue %>" value="<% defaultValue || 0 %>" /> '+
                         '       <label>&nbsp;<%= unity %></label>' +
                         '   </div>'+
                         '</div>'
-    
+
     });
-    
+
     /**
      * Numeric field edition view
      */
     app.views.NumericFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         /**
          * Render Pattern field edition view, the view contains an text field edition view
-         * 
+         *
          * @returns {PatternFieldEditView} current view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
-            
+
             var textView = new app.views.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
             textView.render();
-            
+
             return this;
         }
-        
+
     }, {
-        templateSrc :   '   <div id="subTextView"></div>' + 
+        templateSrc :   '   <div id="subTextView"></div>' +
                         '   <% _.each(["minValue", "maxValue", "precision", "unity"], function(idx) { %>' +
                         '       <div >' +
                         '           <div class="row-fluid">'+
@@ -743,7 +744,7 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  Date field views
-    
+
     /**
      * date field view
      */
@@ -760,24 +761,24 @@ var formBuilder = (function(app) {
        }
     }, {
         templateSrc:    '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <label class="span4">' + 
-                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '       </div>'+
                         '   </div>' +
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '   <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" /> '+
                         '   </div>' +
                         '</div>'
@@ -787,31 +788,31 @@ var formBuilder = (function(app) {
      * Date field edition view
      */
     app.views.DateFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
         },
-        
+
         /**
          * Render Pattern field edition view, the view contains an text field edition view
-         * 
+         *
          * @returns {PatternFieldEditView} current view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
-            
+
             var textView = new app.views.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
             textView.render();
-            
+
             return this;
         }
-        
+
     }, {
-        templateSrc :   '   <div id="subTextView"></div>' + 
+        templateSrc :   '   <div id="subTextView"></div>' +
                         '   <div >' +
                         '       <div class="row-fluid">'+
                         '           <label class="span10 offset1">Format</label>' +
@@ -826,7 +827,7 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  Long text views
-    
+
     /**
      * Long text view
      */
@@ -842,29 +843,29 @@ var formBuilder = (function(app) {
         }
     }, {
         templateSrc:    '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <label class="span4">' + 
-                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '           <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '       <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '       </div>'+
                         '   </div>' +
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '       <textarea style="resize: none" class="span12"  name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>"><%= defaultValue %></textarea>'+
                         '   </div>' +
                         '</div>'
     });
-    
+
     /**
      * Long text field edition view
      */
@@ -874,9 +875,9 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  TreeView views
-    
+
     //  FIX edition view
-    
+
     /**
      * Tree view field view
      */
@@ -896,25 +897,25 @@ var formBuilder = (function(app) {
         }
     }, {
         templateSrc:    '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '       <label class="span4">' + 
-                        '           <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '           <% if (required === true) { %> * <% } %> <%= label %>'+
                         '       </label> '+
                         '       <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '       </div>'+
                         '   </div>' +
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '       <div class="span12" id="tree"></div>' +
                         '   </div>' +
                         '</div>'
@@ -924,17 +925,17 @@ var formBuilder = (function(app) {
      * Tree view field edition view
      */
     app.views.TreeViewFieldEditView = Backbone.View.extend({
-        
+
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
         }
-        
+
     }, {
         templateSrc : ''
     });
@@ -944,7 +945,7 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  Enumeration field view
-    
+
     /**
      * Radio field view
      */
@@ -956,25 +957,25 @@ var formBuilder = (function(app) {
         }
     }, {
         templateSrc:    '<div class="element">'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
-                        '      <label class="span4">' + 
-                        '          <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '      <label class="span4">' +
+                        '          <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '          <% if (required === true) { %> * <% } %> <%= label %>'+
                         '      </label>'+
                         '      <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '      </div>'+
                         '   </div>'+
-                        '   <div class="row" style="margin-left : 10px;">' + 
+                        '   <div class="row" style="margin-left : 10px;">' +
                         '      <div class="span12" style="border : 2px #eee solid;" id="<%= id %>">'+
                         '          <% _.each(itemList["items"], function(el, index) { %>' +
                         '              <label class="span12 noMarginLeft left"> '+
@@ -1000,24 +1001,24 @@ var formBuilder = (function(app) {
             this.model.updateSelectedOption($(e.target).find(':selected').data('idx'), true);
         }
     }, {
-        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
-                        '   <label class="span4">' + 
-                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' +
+                        '   <label class="span4">' +
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
                         '   <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '   </div>'+
                         '</div>' +
-                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="row" style="margin-left : 10px;">' +
                         '   <select name="<% name %>" class="span12"> '+
                         '       <% _.each(itemList["items"], function(el, idx) { %>' +
                         '           <option data-idx=<%= idx %> value="<%= el.value %>" <% if (itemList["defaultValue"] == el["id"]){ %> selected <% } %> ><%= el.en %></option>'+
@@ -1040,25 +1041,25 @@ var formBuilder = (function(app) {
         },
     }, {
         templateSrc:    '<div class="element">'+
-                        '<div class="row" style="margin-left : 10px;">' + 
-                        '   <label class="span4">' + 
-                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '<div class="row" style="margin-left : 10px;">' +
+                        '   <label class="span4">' +
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '       <% if (required === true) { %> * <% } %> <%= label %>'+
                         '   </label>'+
                         '   <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '   </div>'+
                         '</div>'+
-                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="row" style="margin-left : 10px;">' +
                         '<div class="span12" style="border : 2px #eee solid;">'+
                             '<% _.each(itemList["items"], function(el, idx) { %>' +
                                 '<label class="span12 noMarginLeft left"> '+
@@ -1067,7 +1068,7 @@ var formBuilder = (function(app) {
                                 '</label> '+
                             '<% }); %>'+
                         '</div>'+
-                        '</div>' + 
+                        '</div>' +
                         '</div>'
     });
 
@@ -1084,7 +1085,7 @@ var formBuilder = (function(app) {
             this.template = _.template(this.constructor.templateSrc);
             _.bindAll(this, 'editList');
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
@@ -1094,7 +1095,7 @@ var formBuilder = (function(app) {
         copyeItemList  : function() {
             return _.pick(this.model.get('itemList'), "items", "defaultValue");
         },
-        
+
         editList : function(e) {
             var modal = new app.views.EditListModal({
                 el      : '#editListModal',
@@ -1109,38 +1110,38 @@ var formBuilder = (function(app) {
                 this.model.trigger('change');
             }, this));
         }
-        
+
     }, {
-        templateSrc:    '   <div class="row-fluid"><div class="block span10 offset1">' + 
+        templateSrc:    '   <div class="row-fluid"><div class="block span10 offset1">' +
                         '       <table class=" table table-striped">' +
                         '           <caption><h2>'+
                         '               Item list / Default value : <b><%= itemList["defaultValue"] %>  <i class="fa fa-wrench listEdit"></i>'+
                         '           </h2></caption>'+
                         '           <thead>' +
-                        '               <tr>'+ 
+                        '               <tr>'+
                         '                   <th>Id</th>'+
                         '                   <th>Label en</th>'+
                         '                   <th>Label fr</th>'+
                         '                   <th>Value</th>'+
-                        '               </tr>'+ 
+                        '               </tr>'+
                         '           </thead>' +
                         '           <tbody>' +
                         '               <% _.each( itemList["items"], function(item, idx) { %>' +
-                        '                   <tr>' + 
+                        '                   <tr>' +
                         '                       <td><%= item["id"] %></td>'+
                         '                       <td><%= item["en"] %></td>'+
                         '                       <td><%= item["fr"] %></td>'+
                         '                       <td><%= item["value"] %></td>' +
                         '                   </tr>' +
-                        '               <% }); %>' +    
+                        '               <% }); %>' +
                         '           </tbody>'+
                         '       </table>' +
                         '   </div></div>'+
-                        '   <div class="row-fluid">' + 
+                        '   <div class="row-fluid">' +
                         '       <label class="span10 offset1"></label>' +
-                        '   </div>'    
+                        '   </div>'
     });
-    
+
     app.views.EditListModal = Backbone.View.extend({
 
         events : {
@@ -1156,17 +1157,17 @@ var formBuilder = (function(app) {
             this.template = _.template(this.constructor.templateSrc);
             _.bindAll(this, 'saveChanges', 'propertyChanged', 'defaultValueChanged', 'removeItem');
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.model);
             $(this.el).html(renderedContent);
             $(this.el).modal({ show: true });
             return this;
         },
-        
+
         close : function(e) {
             var len = this.model["items"].length, last = this.model["items"][len - 1];
-            
+
             if (last["en"] === "" || last["fr"] === "" || last["value"] === "") {
                 this.model["items"].splice(len - 1, 1);
             }
@@ -1179,14 +1180,14 @@ var formBuilder = (function(app) {
         addItem : function(e) {
             var index = this.model['items'].length, check = true;
 
-            
+
             if (this.model['items'][index - 1]["en"] === "" ) {
                 check &= false;;
                 $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="en"]').addClass('error');
             } else {
                 $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="en"]').removeClass('error');
             }
-            
+
             if (this.model['items'][index - 1]["fr"] === "" ) {
                 check &= false;;
                 $(this.el).find('input[data-index="' + (index - 1) + '"][data-attr="fr"]').addClass('error');
@@ -1222,7 +1223,7 @@ var formBuilder = (function(app) {
                     '</tr>'
                 );
             }
-            
+
         },
 
         removeItem : function(e) {
@@ -1256,13 +1257,13 @@ var formBuilder = (function(app) {
                     }
                     if (el['value'] === "") {
                         check = false;
-                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="value"]').addClass('error');   
+                        $(this.el).find('input[type="text"][data-index="' + idx + '"][data-attr="value"]').addClass('error');
                     }
                 });
                 callback(check);
             }, this);
 
-            checkValues(end);            
+            checkValues(end);
         },
 
         propertyChanged : function(e) {
@@ -1270,12 +1271,12 @@ var formBuilder = (function(app) {
                 $(e.target).addClass('error');
             } else {
                 $(e.target).removeClass('error');
-                var itemIndex       = $(e.target).data('index'), 
-                    itemAttribute   = $(e.target).data('attr'), 
+                var itemIndex       = $(e.target).data('index'),
+                    itemAttribute   = $(e.target).data('attr'),
                     attributeValue  = $(e.target).val();
 
                 this.model["items"][itemIndex][itemAttribute] = attributeValue;
-            }            
+            }
         },
 
         defaultValueChanged : function(e) {
@@ -1290,31 +1291,31 @@ var formBuilder = (function(app) {
                         '   </div>'+
                         '   <div class="modal-body">'+
                         '       <div class="row-fluid">'+
-                        '           <div class="block span12">' + 
+                        '           <div class="block span12">' +
                         '               <table class=" table table-striped">' +
                         '                   <thead>' +
-                        '                       <tr>'+ 
+                        '                       <tr>'+
                         '                           <th>Label en</th>'+
                         '                           <th>Label fr</th>'+
                         '                           <th>Value</th>'+
                         '                           <th>Is the default value ?</th>'+
-                        '                       </tr>'+ 
+                        '                       </tr>'+
                         '                   </thead>' +
                         '                   <tbody>' +
                         '                   <% _.each( items, function(item, idx) { %>' +
-                        '                       <tr>' + 
+                        '                       <tr>' +
                         '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["en"] %>" /></td>'+
                         '                           <td><input type="text" data-index="<%= idx %>" data-attr="label" value="<%= item["fr"] %>" /></td>'+
                         '                           <td><input type="text" data-index="<%= idx %>" data-attr="value" value="<%= item["value"] %>" /></td>' +
                         '                           <td><input type="radio" name="defaultValue" data-index="<%= idx %>" <% if (defaultValue === item["id"]) { %> checked <% } %> /> <% if (idx > 0) { %> <button type="button" data-index="<%= idx %>" class="close">&times;</button> <% } %></td>'+
                         '                       </tr>' +
-                        '                   <% }); %>' + 
+                        '                   <% }); %>' +
                         '                       <tr><td rowspan="3"><button id="addItem" type="button">Add item</button></td></tr>'   +
                         '                   </tbody>'+
                         '               </table>' +
                         '           </div>'+
                         '       </div>'+
-                        '       <div class="row-fluid">' + 
+                        '       <div class="row-fluid">' +
                         '           <label class="span10 offset1"></label>' +
                         '       </div>'+
                         '   </div>'+
@@ -1326,41 +1327,41 @@ var formBuilder = (function(app) {
 
     //  ----------------------------------------------------------------------------------
     //  Main views
-    
+
     /**
      * Main form view
      */
     app.views.FormView = Backbone.View.extend({
-        
+
         events: {
             'change #protocolName' : 'changeFormName'
         },
-        
+
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 
-                            'addElement', 
-                            'changeFormName', 
-                            'importXML', 
-                            'updateView', 
+            _.bindAll(this, 'render',
+                            'addElement',
+                            'changeFormName',
+                            'importXML',
+                            'updateView',
                             'getModel',
                             'getXML'
                     );
             this.collection.bind('add', this.addElement);
             this._view = [];
         },
-        
+
         updateView : function() {
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
             $(this.el).find('#protocolName').val(this.collection.name);
         },
-        
+
         addElement: function(el) {
             var id = "dropField" + this.collection.length, viewClassName = el.constructor.type + "FieldView";
-        
-            $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');            
-            
+
+            $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
+
             if (app.views[viewClassName] !== undefined) {
                 var vue = new app.views[viewClassName]({
                     el      : $("#" + id),
@@ -1379,7 +1380,7 @@ var formBuilder = (function(app) {
             }
             $(".actions").i18n();
         },
-        
+
         render: function() {
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
@@ -1400,40 +1401,40 @@ var formBuilder = (function(app) {
             });
             return this;
         },
-        
+
         getModel : function() {
             return this.collection.length;
         },
-        
+
         changeFormName: function() {
             this.collection.name = $('#protocolName').val();
         },
-        
+
         getXML : function() {
             return this.collection.getXML();
         },
-        
-        
+
+
         importXML: function() {
             $( $(this.constructor.popupSrc) ).modal({
-                
+
             }).on('click', '#importProtocolFileText, #importProtocolFind', function() {
-                
+
                 $('#importProtocolFile').trigger ('click');
-                
+
             }).on('change', '#importProtocolFile', function() {
-                
+
                 $('#importProtocolFileText').val( $('#importProtocolFile').val() );
-                
-            }).on('click', '.btn-primary', _.bind(function() {                
-            
+
+            }).on('click', '.btn-primary', _.bind(function() {
+
                 $('#importProtocolFileText')[ $('#importProtocolFile').val() === "" ? 'addClass' : 'removeClass']('error');
-                
+
                 $('#importProtocolName')[ $('#importProtocolName').val() === "" ? 'addClass' : 'removeClass']('error');
-                                    
+
                 if (!$('#importProtocolFile').hasClass('error') && !$('#importProtocolName').hasClass('error')) {
                     var file = $('#importProtocolFile')[0].files[0];
-                    
+
                     if (file) {
                         if (file.type === "text/xml") {
 
@@ -1491,12 +1492,13 @@ var formBuilder = (function(app) {
                             title   : 'File type error :',
                             message : "An error was occure during reading file."
                         });
-                    }                    
+                    }
                 }
-                
-            }, this)).find('#formName').typeahead({
+
+            }, this)).find('#importProtocolName').typeahead({
                 source: function(query, process) {
-                    return $.getJSON('/protocols', {query : query}, function(data) {
+                    console.log (app.instances)
+                    return $.getJSON(app.instances.protocolAutocomplete, {query : query}, function(data) {
                         return process(data.options);
                     });
                 }
@@ -1549,15 +1551,15 @@ var formBuilder = (function(app) {
             _.bindAll(this, 'appendToDrop');
         },
         appendToDrop : function(e) {
-            
+
             var elementClassName = $(e.target).data("type") + 'Field';
-            
+
             if (app.models[elementClassName] !== undefined) {
-                
+
                 var f = new app.models[elementClassName]({
                     id: this.collection.getSize()
                 });
-                
+
                 this.collection.add(f);
             } else {
                 new NS.UI.Notification({
@@ -1565,9 +1567,9 @@ var formBuilder = (function(app) {
                     title   : 'An error occured :',
                     message : "Can't create field object"
                 });
-            }            
+            }
         },
-        render: function() {            
+        render: function() {
             var renderedContent = _.template(this.constructor.templateSrc);
             $(this.el).html(renderedContent);
             $(this.el).nanoScroller();
@@ -1577,8 +1579,8 @@ var formBuilder = (function(app) {
     }, {
         templateSrc :   '<div class="nano-content">'+
                             '<h1 class="center" data-i18n="label.field"></h1>' +
-                            '<%  _.each(formBuilder.models, function(el, idx) { %>' + 
-                            '   <% if (el.type != undefined) { %>' + 
+                            '<%  _.each(formBuilder.models, function(el, idx) { %>' +
+                            '   <% if (el.type != undefined) { %>' +
                             '       <div class="row-fluid">' +
                             '           <div class="span10 offset1 fields" data-type="<%= idx.replace("Field", "") %>" data-i18n="fields.<%= el["i18n"] %>" >' +
                             '               <%= el["i18n"] %>'+
@@ -1597,28 +1599,28 @@ var formBuilder = (function(app) {
             return _.extend({}, app.views.BaseView.prototype.events, {});
         }
     }, {
-        templateSrc :   '<div class="element"><div class="row" style="margin-left : 10px;">' + 
-                        '   <label class="span4">' + 
-                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+        templateSrc :   '<div class="element"><div class="row" style="margin-left : 10px;">' +
+                        '   <label class="span4">' +
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '       &nbsp;</label> '+
                         '   <div class="span8 right hide actions">'+
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#setting/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
-                                '</a>'+ 
+                                '</a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '   </div>'+
                         '</div>' +
-                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="row" style="margin-left : 10px;">' +
                         '   <input type="text"  class="span12" name="<%= name %>" id="<%= id%>" value="<%= value %>" disabled="disabled" /> '+
                         '</div></div>'
     });
-    
+
     /**
      * Display an horizontal line in the form
      */
@@ -1630,28 +1632,28 @@ var formBuilder = (function(app) {
             app.views.BaseView.prototype.render.apply(this, arguments);
         }
     }, {
-        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
-                        '   <label class="span4">' + 
-                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' +
+                        '   <label class="span4">' +
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' +
                         '       &nbsp;</label> '+
                         '   <div class="span8 right hide actions">'+
                          '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
-                        '       </a>'+ 
+                        '       </a>'+
                         '       <a href="#" class="copy">'+
                         '           &nbsp;<span class="fa fa-copy"></span>'+
                         '           <span data-i18n="actions.clone">Dupliquer</span>'+
                         '       </a>'+
                         '   </div>'+
                         '</div>' +
-                        '<div class="row" style="margin-left : 10px;">' + 
+                        '<div class="row" style="margin-left : 10px;">' +
                         '   <hr class="span12" />' +
                         '</div></div>'
     });
-       
-    
+
+
     app.views.MainView = Backbone.View.extend({
-        
+
         initialize : function(options) {
             this.el = options.el;
             $(this.el).append(
@@ -1661,7 +1663,7 @@ var formBuilder = (function(app) {
                 '   <div class="span5 settings"></div>'+
                 '</div>'
             );
-            
+
             this.form = options.form || new app.views.Form({}, {
                 name: "My form"
             });
@@ -1674,30 +1676,30 @@ var formBuilder = (function(app) {
             this.formView = new app.views.FormView({
                 collection: this.form,
                 el: $('.dropArea')
-            });            
-            
+            });
+
             this.panelView.render();
             this.formView.render();
-            
+
             _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getActions');
         },
-        
+
         clear: function() {
             this.form.clearAll();
         },
-        
+
         getFormXML : function() {
             return this.formView.getXML();
         },
-        
+
         downloadXML : function() {
             return this.formView.downloadXML();
         },
-        
+
         importXML : function() {
             return this.formView.importXML();
         },
-        
+
         getActions : function() {
             return {
                 save : new NS.UI.NavBar.Action({
@@ -1727,7 +1729,7 @@ var formBuilder = (function(app) {
                         })
                     }
                 }),
-                
+
                 'import' : new NS.UI.NavBar.Action({
                     actions : {
                         'import.XML' : new NS.UI.NavBar.Action({
@@ -1748,7 +1750,7 @@ var formBuilder = (function(app) {
                     title       : '<span class="fa fa-upload" data-i18n="nav.import.title"></span>',
                     allowedRoles: ["reader"]
                 }),
-                
+
                 clear: new NS.UI.NavBar.Action({
                     handler: function() {
                         app.instances.mainView.clear();
@@ -1756,7 +1758,7 @@ var formBuilder = (function(app) {
                     allowedRoles: ["reader"],
                     title       : '<i class="fa fa-trash-o"></i> Tout supprimer'
                 }),
-                
+
                 show: new NS.UI.NavBar.Action({
                     handler: function() {
                         $('#compareModal').modal('show')
@@ -1770,10 +1772,11 @@ var formBuilder = (function(app) {
                         .on('click', '.btn-primary', function() {
                             $('#compareModal').modal('hide');
                             var source  = $('#compareModal').find('#sourceHide')[0].files[0],
-                                update  = $('#compareModal').find('#updateHide')[0].files[0], 
-                                srcName = source['name'], 
+                                update  = $('#compareModal').find('#updateHide')[0].files[0],
+                                srcName = source['name'],
                                 updName = update['name'],
                                 reader  = null;
+
 
                             if (source !== null && update !== null) {
                                  if (source.type === "text/xml" && update.type === "text/xml") {
@@ -1805,7 +1808,7 @@ var formBuilder = (function(app) {
                                                                             $('.dropArea').switchClass('span2', 'span9', 250).find('table').remove();
                                                                             navbar.setActions(actions);
                                                                             addIcon();
-                                                                        });                                                                
+                                                                        });
                                                                     },
                                                                     allowedRoles: ["reader"],
                                                                     title: "Quit"
@@ -1850,11 +1853,11 @@ var formBuilder = (function(app) {
                     },
                     allowedRoles: ["reader"],
                     title: '<span class="fa fa-bars" data-i18n="nav.compare"></span>'
-                })        
+                })
             };
         }
     });
-    
+
     return app;
-    
+
 })(formBuilder);
