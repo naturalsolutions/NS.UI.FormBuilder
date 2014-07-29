@@ -96,6 +96,21 @@
         </xs:complexContent>
     </xs:complexType>
     
+    <!--
+        Autocomplete field model description
+    -->
+    <xs:complexType name="field_autocompleteType">
+        <xs:complexContent>
+            <xs:extension base="fieldType">
+                <xs:sequence>
+                    <xs:element name="defaultValue" type="xs:string" />
+                    <xs:element name="hint"         type="xs:string" />
+                    <xs:element name="url"          type="xs:string" />
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    
     <!-- XML Definition for fullName plugin demo example -->
     
     <xs:complexType name="simpleTextType">

@@ -50,8 +50,8 @@ var formBuilder = (function(app) {
             this.model.bind('destroy', this.deleteView);
         },
         
-        /**
-         * Display allowed options for this element
+        /**gen 
+        * Display allowed options for this element
          * 
          * @param {object} e jQuery event
          */
@@ -286,6 +286,96 @@ var formBuilder = (function(app) {
     /**
      * View for text field element
      */
+    app.views.AutocompleteFieldView = app.views.BaseView.extend({
+        
+        /**
+         * Get BaseView events and add sepecific TextFieldView event
+         */
+        events: function() {
+            return _.extend({}, app.views.BaseView.prototype.events, {
+                'change input[type="text"]': 'updateModel'
+            });
+        },
+        
+        /**
+         * Render view
+         */
+        render : function() {
+           app.views.BaseView.prototype.render.apply(this, arguments);
+           $('#autocompleteExample').typeahead({
+                source: function(query, process) {
+                    return $.getJSON('autocomplete/example.json', {query : query}, function(data) {
+                        return process(data.options);
+                    });
+                },
+                updater : _.bind(function(item) {
+                    
+                    this.model.set('defaultValue', item);
+                }, this)
+            });
+       },
+       
+       /**
+        * Change model value when text input value changed
+        * 
+        * @param {object} jQuery event
+        */
+        updateModel: function(e) {
+            this.model.set('value', $(e.target).val());
+        }
+        
+    }, {
+        templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' + 
+                        '   <label class="span4">' + 
+                        '       <i class="fa fa-arrows" style="color : #09C"></i>' + 
+                        '       <% if (required === true) { %> * <% } %> <%= label %></label> '+
+                        '   <div class="span8 right hide actions">'+
+                        '       <a href="#" class="trash">'+
+                        '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '       </a>'+ 
+                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+ 
+                        '       <a href="#" class="copy">'+
+                        '           &nbsp;<span class="fa fa-copy"></span>'+
+                        '           <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '       </a>'+
+                        '   </div>'+
+                        '</div>' +
+                        '<div class="row" style="margin-left : 10px;">' + 
+                        '   <input id="autocompleteExample" type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" data-provide="typeahead" /> '+
+                        '</div></div>'
+    });
+
+    app.views.AutocompleteFieldEditView = Backbone.View.extend({
+        
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+        },
+        
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            return this;
+        },
+        
+    }, {
+        templateSrc :   '<% _.each(["defaultValue", "hint", "url"], function(el) { %>' +
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1"><%= el %></label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="<%= el %>" placeholder="<%= el %>" value="<%= eval(el) %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '<% }) %>'
+    });
+
+
+    //  ------------------------
+    //  Autocomplete views
+    
     app.views.TextFieldView = app.views.BaseView.extend({
         
         /**
@@ -361,8 +451,6 @@ var formBuilder = (function(app) {
                         '<% }) %>'
     });
 
-
-    
     //  ----------------------------------------------------------------------------------
     //  Pattern views
     

@@ -170,24 +170,29 @@ var formBuilder = (function(app) {
      * Text field model
      */
     app.models.TextField = app.models.BaseField.extend({
+
         defaults: {
             defaultValue: "",
             hint        : "Write some text",
             size        : 255,
             multiline   : false
         },
+
+        initialize : function(options) {
+            app.models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.BaseField.schema);
+        },
+
         getXML: function() {
             var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>'    + this.get('defaultValue')  + '</defaultValue>' +
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>' +
                             '<multiline>'       + this.get('multiline')     + '</multiline>';
-        },
-        initialize : function(options) {
-            app.models.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.BaseField.schema);
-        }
+        }        
+
     }, {
+
         type    : "Text",
         xmlTag  : 'field_text',
         i18n    : 'text',
@@ -196,6 +201,39 @@ var formBuilder = (function(app) {
             hint        : { type : "string" },
             size        : { type : "integer"}
         }
+
+    });
+
+    app.models.AutocompleteField =app.models.BaseField.extend({
+        defaults: {
+            defaultValue: "",
+            hint        : "Write some text",
+            url         : ""
+        },
+
+        getXML: function() {
+            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
+            return xml +    '<defaultValue>'    + this.get('defaultValue')  + '</defaultValue>' +
+                            '<hint>'            + this.get('hint')          + '</hint>' +
+                            '<url>'             + this.get('url')           + '</url>';
+        },
+
+        initialize : function(options) {
+            app.models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, app.models.BaseField.schema);
+        }
+
+    }, {
+
+        type    : "Autocomplete",
+        xmlTag  : 'field_autocomplete',
+        i18n    : 'autocomplete',
+        schema : {
+            defaultValue: { type : "string", display: "Default value", section : "advanced" },
+            hint        : { type : "string" },
+            url         : { type : "string"}
+        }
+
     });
     
     /**
@@ -427,6 +465,7 @@ var formBuilder = (function(app) {
     });
     
     _.defaults(app.models.TextField.prototype.defaults,          app.models.BaseField.prototype.defaults);
+    _.defaults(app.models.AutocompleteField.prototype.defaults,          app.models.BaseField.prototype.defaults);
     _.defaults(app.models.FileField.prototype.defaults,          app.models.BaseField.prototype.defaults);
     _.defaults(app.models.TreeViewField.prototype.defaults,      app.models.BaseField.prototype.defaults);
     _.defaults(app.models.EnumerationField.prototype.defaults,   app.models.BaseField.prototype.defaults);
