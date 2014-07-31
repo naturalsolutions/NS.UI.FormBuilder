@@ -16,7 +16,7 @@
  */
 
 var formBuilder = (function(app) {
-    
+
     /**
      * Implement form object as a fields collection
      */
@@ -25,7 +25,7 @@ var formBuilder = (function(app) {
 
         /**
          * Init form collection
-         * 
+         *
          * @param {type} models
          * @param {type} options
          */
@@ -35,12 +35,12 @@ var formBuilder = (function(app) {
             this.description    = options.description || "";
             this.keywords       = options.keywords || ["protocol"];
             //  Bind
-            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement');
+            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'addTableElement');
         },
 
         /**
          * Allow to arrange the collection through model id
-         * 
+         *
          * @param {formBuild.BaseModel} model  model
          * @returns {integer} comparaison between id
          */
@@ -66,7 +66,7 @@ var formBuilder = (function(app) {
             }
             this.count = 0;
         },
-        
+
         getKeywords : function() {
           var xml = "";
           _.each(this.keywords, function(el, idx) {
@@ -96,10 +96,10 @@ var formBuilder = (function(app) {
             });
 
             return (new XMLSerializer()).serializeToString(xml);
-        },        
-        
+        },
+
         /**
-         * 
+         *
          * @param {type} tag
          * @returns {unresolved}
          */
@@ -109,24 +109,33 @@ var formBuilder = (function(app) {
             split[0] = split[0][0].toUpperCase() + split[0].slice(1);
             return split.reverse().join("");
         },
-        
+
         /**
          * Add a new field on the form collection
-         * 
+         *
          * @param {type} element
          * @param {type} nameType
          * @returns {undefined}
          */
-        addElement: function(element, nameType) {
-            var el = new app.models[nameType](element);
-            if (el !== null) {
-                this.add(el);
-            }
+        addElement: function(nameType) {
+            var el = new app.models[nameType]({
+                id : this.getSize()
+            });
+            this.add (el);
+            this.trigger('newElement', el);
         },
-        
+
+        addTableElement : function(nameType) {
+            var el = new app.models[nameType]({
+                id : this.getSize()
+            });
+            this.add(el);
+            return el;
+        },
+
         /**
          * Update form with XML content
-         * 
+         *
          * @param {type} content
          * @param {type} name
          * @returns {undefined}
@@ -134,16 +143,16 @@ var formBuilder = (function(app) {
         updateWithXml: function(content, name) {
             this.reset();
             this.name = name;
-            var xmlDoc          = $.parseXML(content), 
+            var xmlDoc          = $.parseXML(content),
                 fieldNameType   = "",
                 form            = app.utilities.XmlToJson( $(xmlDoc).find('form') );
-            
-            _.each(form['fields'], _.bind(function(el, idx) {               
 
-                fieldNameType = this.tagNameToClassName(idx);                
+            _.each(form['fields'], _.bind(function(el, idx) {
+
+                fieldNameType = this.tagNameToClassName(idx);
                 if (el.length > 1) {
                     _.each(el, _.bind(function(subElement, subIndex) {
-                        this.addElement(subElement, fieldNameType);                        
+                        this.addElement(subElement, fieldNameType);
                     }, this));
                 } else {
                     this.addElement(el, fieldNameType);
@@ -151,9 +160,9 @@ var formBuilder = (function(app) {
 
             }, this));
         }
-    
+
     });
 
     return app;
-    
+
 })(formBuilder);

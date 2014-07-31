@@ -1,7 +1,7 @@
 var formBuilder = (function(app) {
-    
+
     app.Router = Backbone.Router.extend({
-        
+
         routes : {
             "" : 'home',
             'saveprotocol' : 'saveProtocol',
@@ -21,18 +21,18 @@ var formBuilder = (function(app) {
 
 
         },
-        
-        home : function() {            
+
+        home : function() {
             app.instances.navbar.setActions (app.instances.mainView.getActions());
             i18n.init(function(t) {
                 // translate nav
                 $("body").i18n();
             });
         },
-        
+
         saveProtocol : function (options) {
         },
-        
+
         modelSetting : function(modelID) {
             if (app.instances.currentForm.length === 1) {
                 window.location.hash = '';
@@ -42,7 +42,7 @@ var formBuilder = (function(app) {
 
                     //  Create new edit view
                     app.instances.settingView = new app.views.BaseEditView({
-                        el: $('.settings'), 
+                        el: $('.settings'),
                         model : app.instances.currentForm.models[modelID]
                     });
                     app.instances.settingView.render();
@@ -50,22 +50,22 @@ var formBuilder = (function(app) {
                 } else {
                     app.instances.settingView.remove();
                     app.instances.settingView.unbind();
-                    
+
                     $('.dropArea').after('<div class="span5 settings"></div>');
-                    
+
                     app.instances.settingView = new app.views.BaseEditView({
-                        el: $('.settings'), 
+                        el: $('.settings'),
                         model : app.instances.currentForm.models[modelID]
                     });
                     app.instances.settingView.render();
                 }
-                
+
                 app.instances.navbar.setActions (app.instances.settingView.getActions());
             }
         }
-        
+
     });
-    
+
     return app;
-    
+
 })(formBuilder);
