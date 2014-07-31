@@ -1,20 +1,21 @@
 {
     "fields" : {
-        "text"      : "Texte",
-        "number"    : "Numérique",
-        "date"      : "Date",
-        "select"    : "Liste déroulante",
-        "radio"     : "Bouton radio",
-        "checkbox"  : "Case à cocher",
-        "hidden"    : "Masqué",
-        "file"      : "Fichier",
-        "tree"      : "Arbre",
-        "long"      : "Texte long",
-        "mask"      : "Masque",
-        "line"      : "Ligne horizontale",
-        "autocomplete" : "autocomplete"
+        "text"         : "Texte",
+        "number"       : "Numérique",
+        "date"         : "Date",
+        "select"       : "Liste déroulante",
+        "radio"        : "Bouton radio",
+        "checkbox"     : "Case à cocher",
+        "hidden"       : "Masqué",
+        "file"         : "Fichier",
+        "tree"         : "Arbre",
+        "long"         : "Texte long",
+        "mask"         : "Masque",
+        "line"         : "Ligne horizontale",
+        "autocomplete" : "autocomplete",
+        "table"        : "Présentation"
     },
-    
+
     "nav" : {
         "save" : {
             "title"     : " Enregistrer",
@@ -26,11 +27,11 @@
             "cloud"     : "Charger depuis le serveur",
             "import"    : "Importer un fichier XML"
         },
-        
+
         "clear"     : " Tout supprimer",
         "compare"   : " Comparer deux fichiers XML"
     },
-    
+
     "label" : {
         "field"     : "Champs",
         "settings"  : "Paramètre",
@@ -40,7 +41,7 @@
         },
         "help" : "Cliquer sur champs pour l'ajouter au protocole"
     },
-    
+
     "actions" : {
         "edit"      : "Modifier",
         "delete"    : "Supprimer",
