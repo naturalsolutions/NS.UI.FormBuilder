@@ -93,6 +93,9 @@ body {
   border-radius: 0!important;
   padding-left: 15px;
 }
+fa {
+  font-family: FontAwesome !important;
+}
 .notification-container {
   height: 0;
 }
@@ -205,6 +208,13 @@ body {
 #formBuilder .content .dropArea .dropField:hover {
   background: beige;
 }
+#formBuilder .content .dropArea .dropField:hover .element > .row > .actions {
+  display: block;
+}
+#formBuilder .content .dropArea .dropField .actions {
+  display: none;
+  padding-right: 3px;
+}
 #formBuilder .content .dropArea .dropField.textArea textarea {
   padding-left: 10px;
   border: 2px #aaa solid;
@@ -219,9 +229,6 @@ body {
   height: 1px;
   margin-top: 0;
   min-height: 0;
-}
-#formBuilder .content .dropArea .dropField .element .hide {
-  padding-right: 3px;
 }
 #formBuilder .content .dropArea .dropField input[type="text"],
 #formBuilder .content .dropArea .dropField .spin {
@@ -475,6 +482,37 @@ body {
 .modal button {
   padding: 4px;
 }
+#saveModal textarea {
+  resize: none;
+  height: 60px;
+  max-height: 60px;
+}
+#saveModal label > i {
+  color: #888;
+}
+#saveModal .modal-body {
+  padding-bottom: 25px;
+}
+#saveModal .modal-body .row-fluid:nth-child(even) {
+  margin-bottom: 5px;
+}
+#saveModal #saveProtocolKeywordsList {
+  list-style-type: none;
+  margin-left: 0 !important;
+}
+#saveModal #saveProtocolKeywordsList li {
+  float: left;
+  height: 30px;
+  line-height: 30px;
+  background: #0aC;
+  color: white;
+  padding: 5px 0px 5px 10px;
+  margin-left: 5px;
+}
+#saveModal #saveProtocolKeywordsList li button {
+  padding-left: 10px;
+  padding-right: 10px;
+}
 #saveModal textarea,
 #exportModal textarea {
   resize: none;
@@ -565,4 +603,37 @@ body {
 #saveModal #saveProtocolKeywordsList li button {
   padding-left: 10px;
   padding-right: 10px;
+}
+.tableField {
+  border: 2px #ddd solid;
+  padding: 8px !important;
+  margin-right: 10px !important;
+  background: white;
+}
+.tableField .span6 {
+  min-height: 69px;
+}
+.tableField .span6 .element:hover > .row > .actions {
+  display: block;
+}
+.tableField .span6:not(.used) {
+  background: #eee;
+  line-height: 82px;
+  text-align: center;
+}
+.tableField .span6:not(.used) i {
+  color: #555;
+}
+.tableField .span6.used {
+  padding-bottom: 15px;
+}
+.tableField .span6.used i.fa-plus-square-o,
+.tableField .span6.used .copy {
+  display: none;
+}
+.tableField .span6.used:hover {
+  background: rgba(255, 0, 0, 0.1);
+}
+.tableField .span6.used:hover .options {
+  display: block !important;
 }

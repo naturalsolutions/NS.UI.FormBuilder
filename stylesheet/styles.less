@@ -1,52 +1,4 @@
-html, body {
-    width       : 100%;
-    height      : 100%;
-    margin      : 0;
-    padding     : 0;
-    overflow    : hidden;
-}
-
-//  ---------------------------------------------------------------------
-//  Main classes
-//  ---------------------------------------------------------------------
-.noMarginLeft   { margin-left : 0 !important; }
-.noMarginTop    { margin-top: 0 !important;}
-.navbar         { margin-bottom : 0 !important; }
-.span0          { width : 0px !important; overflow: hidden;}
-.left           { text-align: left !important;}
-.right          { text-align: right !important; }
-.center         { text-align: center; }
-.new            { background : rgba(0, 255, 0, 0.5) !important; }
-.change         { background : rgba(255, 165, 0, 0.5); }
-.delete         { background : rgba(255, 0, 0, 0.5); }
-.grey           { background : #aaa; }
-.transparent    { background : transparent !important; }
-.diff           { margin-bottom: 150px; }
-.text           { line-height : 30px; font-size : 20px; }
-.error          { box-shadow: 0 0 3px #c80000 inset !important; }
-.marginLeft10   { margin-left: 10px !important; }
-.fa             { font-family: FontAwesome; }
-
-.table      { tr { background : white; } }
-.bordered   { border : 2px #aaa solid; background : #fff; }
-.required   { color : red; &:before { content : "*"; } }
-.font       { font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif !important; }
-
-.ui-sortable-helper { cursor : move !important; * { cursor : move !important; }}
-
-.toggle {
-    background-color    : rgb(238, 238, 238); 
-    display             : none; 
-    background-position : initial initial; 
-    background-repeat   : initial initial;
-}
-
-.input {
-    box-shadow      : 0 0 3px #ccc;
-    border          : 1px #ddd solid;
-    border-radius   : 0!important;
-    padding-left    : 15px;
-}
+@import 'main.less';
 
 .notification-container {
     height : 0;
@@ -54,32 +6,31 @@ html, body {
 }
 
 #formBuilder {
-    
     height      : 100%;
-    overflow    : hidden; 
+    overflow    : hidden;
     margin      : 0 !important;
     padding     : 0 !important;
 
     .copy, .trash, .wrench { text-decoration: none; }
-    
+
     .content {
         background  : #fff;
         height      : 100%;
-        
+
         .widgetsPanel {
             height      : 100%;
             background  : #ddd;
             height      : 100%;
-            
+
             h1 { font-weight: lighter; font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif !important}
-            
+
             .nano-pane {
                 background : #aaa;
                 .nano-slider { background : #ddd; border-radius: 0 !important; }
             }
-            
+
             .nano-content { padding-top: 50px; padding-bottom: 60px; }
-                             
+
             .fields {
                 .font();
                 height          : 50px;
@@ -95,13 +46,13 @@ html, body {
                 &:hover { cursor  : pointer; outline : 5px #aaa solid; }
             }
         }
-        
+
         .dropArea {
             overflow-y      : scroll;
             height          : 100%;
             padding-top     : 50px;
             padding-right   : 2.564102564102564%;
-            
+
             .firstText {
                 .font();
                 width           : 100%;
@@ -113,11 +64,11 @@ html, body {
                 color           : #555;
                 border-bottom   : 1px #ddd solid;
                 box-shadow      : none;
-                &:focus { box-shadow: none; }                
+                &:focus { box-shadow: none; }
             }
-            
+
             hr { border-top : #333 1px solid; margin-bottom : 0; padding-bottom : 0px; }
-            
+
             h2 {
                 color       : #ddd;
                 font-weight : 100;
@@ -135,14 +86,21 @@ html, body {
             }
             .dropField {
                 .noMarginTop();
-                padding-top      : 0px;
+                padding-top    : 0px;
                 padding-bottom : 5px;
-                margin-bottom   : 5px;
-                margin-left     : 0!important;
-                background : #fff;
+                margin-bottom  : 5px;
+                margin-left    : 0!important;
+                background     : #fff;
                 transition : background 0.2s ease-in-out;
-                &:hover {                    
+                &:hover {
                     background : beige;
+                    .element>.row>.actions {
+                            display : block;
+                        }
+                }
+                .actions {
+                    display: none;
+                    padding-right: 3px;
                 }
                 &.textArea {
                     textarea {
@@ -157,14 +115,9 @@ html, body {
                     padding-right: 2.564102564102564%;
                 }
                 hr {
-                    height: 1px;
-                    margin-top: 0;
-                    min-height: 0;
-                }
-                .element {
-                    .hide {
-                        padding-right: 3px;
-                    }
+                    height     : 1px;
+                    margin-top : 0;
+                    min-height : 0;
                 }
                 input[type="text"], .spin {
                     padding-left: 10px;
@@ -173,11 +126,11 @@ html, body {
                     }
                 }
                 label { .text(); .font();}
-                i { 
-                    .text(); 
-                    &:first-child { 
-                        margin-right : 5px; 
-                    } 
+                i {
+                    .text();
+                    &:first-child {
+                        margin-right : 5px;
+                    }
                 }
                 input[type="text"], .picker {
                     .input();
@@ -248,8 +201,8 @@ html, body {
                     }
                 }
             }
-            label { 
-                .text(); 
+            label {
+                .text();
                 font-size   : 18px;
                 line-height : 50px;
                 height      : 40px;
@@ -270,11 +223,11 @@ html, body {
                 transition  : all 0.1s !important;
                 border      : none !important;
                 box-shadow  : none !important;
-                font-size   : 20px;                
+                font-size   : 20px;
             }
             .close { font-size : 28px; }
             .minMax {
-                label { 
+                label {
                     text-align  : center !important;
                     line-height : 40px;
                 }
@@ -311,7 +264,7 @@ html, body {
             }
             .block {
                 background : white;
-                margin-top : 10px;  
+                margin-top : 10px;
                 box-shadow: 0 0 3px #aaa;
                 table {
                     margin-bottom : 0;
@@ -327,44 +280,7 @@ html, body {
 
 
 
-.navbar {
-    position        : fixed;
-    z-index         : 255;
-    width : 100%;
-    
-    .dropdown-menu {
-        border-radius   : 0 !important;
-        box-shadow      : none;
-        left            : 5px;
-        top             : 95%;
-        min-width       : 94%;
-    }
-    
-    .navbar-inner { background : #0aC !important; }
-    
-    li {
-        height : 50px;
-        
-        a { 
-            height          : 50px !important;
-            max-height      : 50px;
-            margin-top      : 0;
-            padding-top     : 0 !important;
-            padding-bottom  : 0 !important;
-            line-height     : 45px;
-        }
-    }
-    .navbar-switcher {
-        overflow    : hidden;
-        margin-top  : -4px;
-        height      : 55px;
-        li {
-            overflow : hidden; a { height : 50px !important; }
-        }
-    }
-}
-
-.navbar-search, .navbar-user { display : none; }
+@import 'navbar.less';
 
 @import 'modal.less';
 
@@ -392,6 +308,38 @@ html, body {
                 padding-left: 10px;
                 padding-right: 10px;
             }
+        }
+    }
+}
+
+.tableField {
+    border        : 2px #ddd solid;
+    padding : 8px !important;
+    margin-right: 10px !important;
+    background : white;
+
+    .span6 {
+        min-height: 69px;
+        .element:hover{
+            &>.row>.actions {display: block;}
+        };
+        &:not(.used) {
+            background  : #eee;
+            line-height : 82px;
+            text-align  : center;
+            i {
+                color : #555;
+            }
+        }
+        &.used {
+            i.fa-plus-square-o, .copy { display: none; }
+            padding-bottom : 15px;
+            &:hover {
+                background : rgba(255, 0, 0, 0.1);
+                .options {
+                    display : block !important;
+                }
+            };
         }
     }
 }
