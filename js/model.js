@@ -15,12 +15,12 @@ var formBuilder = (function(app) {
     //  --------------------------------------------
     //  Basic models herited from Backbone model
     //  --------------------------------------------
-    
+
     /**
      * Basic field model
      * Establishes common field attributes
      */
-    app.models.BaseField = Backbone.Model.extend({        
+    app.models.BaseField = Backbone.Model.extend({
         defaults: {
             id      : 0,
             label   : "My label",
@@ -34,7 +34,7 @@ var formBuilder = (function(app) {
             required: false,
             readOnly: false
         },
-        
+
         getXML: function() {
             return  "<label>" + this.get('label') + '</label>' +
                     "<name>" +
@@ -44,17 +44,17 @@ var formBuilder = (function(app) {
                     "<required>" + this.get('required') + '</required>' +
                     "<readOnly>" + this.get('readOnly') + '</readOnly>';
         },
-        
+
         isAdvanced : function(index) {
             return this.getSchemaProperty(index, 'advanced') === "advanced";
         },
-        
-        getSchemaProperty: function(index, property) {        
+
+        getSchemaProperty: function(index, property) {
             if (index.indexOf("/") > 0) {
                 //  Complex index like : /name/label/lang -> ['name']['label']['lang']
-                var split = index.split('/'), str = "this.constructor.schema";                
-                for (var each in split) {                
-                    str += (parseInt(each) === split.length - 1) ? '["' + split[each] + '"]' : '["' + split[each] + '"]["elements"]';                    
+                var split = index.split('/'), str = "this.constructor.schema";
+                for (var each in split) {
+                    str += (parseInt(each) === split.length - 1) ? '["' + split[each] + '"]' : '["' + split[each] + '"]["elements"]';
                 }
                 return eval(str + '["' + property + '"]');
             } else {
@@ -62,12 +62,12 @@ var formBuilder = (function(app) {
                 return this.constructor.schema[index] !== undefined ? this.constructor.schema[index][property] : "";
             }
         },
-        
+
         changePropertyValue : function(index, value) {
             if (index.indexOf("[") > 0) {
                 //  Complexe attribute
                 var split = index.split('['), firstSelector = split.shift(), currentObject = this.get(firstSelector);
-                
+
                 split.forEach(function(element, idx, array) {
                     if (idx === array.length - 1) {
                         currentObject[ element.substr(0, element.length - 1) ] = value;
@@ -75,7 +75,7 @@ var formBuilder = (function(app) {
                         currentObject = currentObject[ element.substr(1, element.length - 1) ];
                     }
                 });
-                
+
                 this.trigger('change');
             } else {
                 this.set(index, value);
@@ -95,7 +95,7 @@ var formBuilder = (function(app) {
                             value   : { type: "string" },
                             lang    : { type: "string" }
                         }
-                    },                    
+                    },
                     display_label    : {type : "string", display: "Real displayed value" }
                 }
             },
@@ -103,7 +103,7 @@ var formBuilder = (function(app) {
             readOnly : { type : "boolean"}
         }
     });
-    
+
     /**
      * graphical horizontal line field model
      */
@@ -129,7 +129,7 @@ var formBuilder = (function(app) {
             },
             value: ""
         },
-        getSchemaProperty: function(index, property) {  
+        getSchemaProperty: function(index, property) {
             app.models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
         },
         getXML: function() {
@@ -154,7 +154,7 @@ var formBuilder = (function(app) {
                             value   : { type: "string" },
                             lang    : { type: "string" }
                         }
-                    },                    
+                    },
                     displayLabel    : {type : "string" }
                 }
             },
@@ -165,7 +165,7 @@ var formBuilder = (function(app) {
     //  --------------------------------------------
     //  Models herited from Base field model
     //  --------------------------------------------
-    
+
     /**
      * Text field model
      */
@@ -189,7 +189,7 @@ var formBuilder = (function(app) {
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>' +
                             '<multiline>'       + this.get('multiline')     + '</multiline>';
-        }        
+        }
 
     }, {
 
@@ -235,7 +235,7 @@ var formBuilder = (function(app) {
         }
 
     });
-    
+
     /**
      * File field model
      */
@@ -252,9 +252,9 @@ var formBuilder = (function(app) {
         },
        getXML : function () {
            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
-           return xml + "<file>"            + this.get('file')          + '</file>' + 
-                        "<defaultValue>"    + this.get('defaultValue')  + '</defaultValue>' + 
-                        "<mimeType>"        + this.get('mimeType')      + '</mimeType>' + 
+           return xml + "<file>"            + this.get('file')          + '</file>' +
+                        "<defaultValue>"    + this.get('defaultValue')  + '</defaultValue>' +
+                        "<mimeType>"        + this.get('mimeType')      + '</mimeType>' +
                         "<size>"            + this.get('size')          + '</size>';
        }
     }, {
@@ -268,7 +268,7 @@ var formBuilder = (function(app) {
             size        : { type : "integer", display: "Maximum size"}
         }
     });
-    
+
     /**
      * Tree view model
      */
@@ -276,13 +276,13 @@ var formBuilder = (function(app) {
        defaults : {
             node: [
                 {
-                    title   : "Node 1", 
+                    title   : "Node 1",
                     key     : "1"
                 },
                 {
-                    title   : "Folder 2", 
-                    key     : "2", 
-                    folder  : true, 
+                    title   : "Folder 2",
+                    key     : "2",
+                    folder  : true,
                     children: [
                         {
                             title: "Node 2.1",
@@ -299,19 +299,19 @@ var formBuilder = (function(app) {
            multipleSelection    : true,
            hierarchicSelection  : false
        },
-       
+
        initialize : function() {
            app.models.BaseField.prototype.initialize.apply(this, arguments);
            _.extend(this.constructor.schema, app.models.BaseField.schema);
            _.bindAll(this, 'getNodeXml', 'getXML');
        },
-       
+
        getNodeXml : function(node) {
-           var str =    '<node>' + 
-                        '   <title>'    + node['title']     + '</title>' + 
+           var str =    '<node>' +
+                        '   <title>'    + node['title']     + '</title>' +
                         '   <key>'      + node['key']       + '</key>'  +
                         '   <folder>' + (node['folder'] === undefined ? "false" : node['folder'])    + '</folder>';
-                
+
                         if (node['folder'] === true) {
                             str += "<children>";
                             _.each(node['children'], _.bind(function(subNode) {
@@ -319,21 +319,21 @@ var formBuilder = (function(app) {
                             }, this));
                             str += "</children>";
                         }
-                        
+
            return str + '</node>';
        },
-       
+
        getXML : function() {
            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
-           
-           xml +=   '<defaultNode>'         + this.get('defaultNode')           + '</defaultNode>' + 
-                    '<multipleSelection>'   + this.get('multipleSelection')     + '</multipleSelection>' + 
+
+           xml +=   '<defaultNode>'         + this.get('defaultNode')           + '</defaultNode>' +
+                    '<multipleSelection>'   + this.get('multipleSelection')     + '</multipleSelection>' +
                     '<hierarchicSelection>' + this.get('hierarchicSelection')   + '</hierarchicSelection>';
            _.each(this.get('node'), _.bind(function(el) {
                xml +=   this.getNodeXml(el);
            }, this));
-           
-           
+
+
            return xml;
        }
     }, {
@@ -359,7 +359,7 @@ var formBuilder = (function(app) {
      * enumeration field type
      */
     app.models.EnumerationField  = app.models.BaseField.extend({
-        
+
         defaults: {
             itemList : {
                 items : [
@@ -372,13 +372,13 @@ var formBuilder = (function(app) {
                 ],
                 defaultValue : 1
             },
-            multiple : false, 
+            multiple : false,
             expanded : false
         },
-        
+
         /**
          * Constructor
-         * 
+         *
          * Get BaseField schema and add it on EnumerationField schema
          */
         initialize : function() {
@@ -388,23 +388,23 @@ var formBuilder = (function(app) {
 
         /**
          * Add an item on an itemList
-         * 
+         *
          * @param {integer} listIndex  itemList index
          * @param {object} element    element to add
          * @param {boolean} selected   if this element is the defaultValue
          */
         addOption: function(listIndex, element, selected) {
-            this.get('items')[listIndex]['items'].push(element);            
+            this.get('items')[listIndex]['items'].push(element);
             if (selected) {
                 this.get('items')[listIndex]['defaultValue'] = element['id'];
             }
-            
+
             this.trigger('change');
         },
-        
+
         /**
          * Remove an item from an itemList
-         * 
+         *
          * @param {integer} listIndex  index of the itemList
          * @param {integer} index      index of element to remove
          */
@@ -412,25 +412,25 @@ var formBuilder = (function(app) {
             this.get("items")[listIndex].splice(index, 1);
             this.trigger('change');
         },
-        
+
         /**
          * Return choosen item list elements
-         * 
+         *
          * @param {integer} itemListIndex  itemList index
          * @returns {array} itemList
          */
         getOption: function(itemListIndex) {
             return this.get('items')[itemListIndex];
         },
-        
+
         /**
          * Return object XML content
-         * 
+         *
          * @returns {String} XML content
          */
         getXML: function() {
             var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
-            
+
             xml +=  '<itemList>'+
                     '<items>';
             _.each(this.get('itemList')['items'], function(el, idx) {
@@ -441,12 +441,12 @@ var formBuilder = (function(app) {
             xml +=  '</itemList>';
             xml += '<expanded>' + this.get('expanded') + '</expanded>';
             xml += '<multiple>' + this.get('multiple') + '</multiple>';
-            
+
             return xml;
         }
-        
+
     }, {
-        schema: {            
+        schema: {
             items : {
                 type : "array",
                 itemList : {
@@ -458,22 +458,22 @@ var formBuilder = (function(app) {
                         value   : { type : "string" }
                     }
                 }
-            },            
+            },
             expanded : { type : "boolean" },
             multiple : { type : "boolean" }
         }
     });
-    
+
     _.defaults(app.models.TextField.prototype.defaults,          app.models.BaseField.prototype.defaults);
     _.defaults(app.models.AutocompleteField.prototype.defaults,          app.models.BaseField.prototype.defaults);
     _.defaults(app.models.FileField.prototype.defaults,          app.models.BaseField.prototype.defaults);
     _.defaults(app.models.TreeViewField.prototype.defaults,      app.models.BaseField.prototype.defaults);
     _.defaults(app.models.EnumerationField.prototype.defaults,   app.models.BaseField.prototype.defaults);
-    
+
     //  --------------------------------------------
     //  Models herited from text field model
     //  --------------------------------------------
-    
+
     /**
      * Pattern field model
      */
@@ -496,7 +496,7 @@ var formBuilder = (function(app) {
             pattern : { type : "string" }
         }
     });
-    
+
     /**
      * date pickear field type
      */
@@ -577,11 +577,11 @@ var formBuilder = (function(app) {
     _.defaults(app.models.PatternField.prototype.defaults,   app.models.TextField.prototype.defaults);
     _.defaults(app.models.DateField.prototype.defaults,      app.models.TextField.prototype.defaults);
     _.defaults(app.models.LongTextField.prototype.defaults,  app.models.TextField.prototype.defaults);
-    
+
     //  --------------------------------------------
     //  Models herited from enumeration field model
     //  --------------------------------------------
-    
+
     /**
      * Checkbox field type
      */
@@ -639,8 +639,42 @@ var formBuilder = (function(app) {
 
     _.defaults(app.models.RadioField.prototype.defaults,         app.models.EnumerationField.prototype.defaults);
     _.defaults(app.models.CheckBoxField.prototype.defaults,      app.models.EnumerationField.prototype.defaults);
-    _.defaults(app.models.SelectField.prototype.defaults,        app.models.EnumerationField.prototype.defaults);    
+    _.defaults(app.models.SelectField.prototype.defaults,        app.models.EnumerationField.prototype.defaults);
+
+    app.models.TableField = app.models.BaseField.extend({
+
+        defaults : {
+            fields : [],
+        },
+
+        initialize : function() {
+            app.models.BaseField.prototype.initialize.apply(this, arguments);
+        },
+
+        getXML : function() {
+
+        },
+
+        addModel  : function(model) {
+            var arr = this.get('fields');
+            arr.push(model);
+            this.set('fields', arr);
+        },
+
+        removeModel : function(index) {
+            var arr = this.get('fields');
+            arr.splice(index-1, 1);
+            this.set("fields", arr);
+        }
+
+    }, {
+        type    : 'Table',
+        xmlTag  : 'field_table',
+        i18n    : 'table'
+    });
+
+    _.defaults(app.models.TableField.prototype.defaults, app.models.BaseField.prototype.defaults);
 
     return app;
-    
+
 })(formBuilder);
