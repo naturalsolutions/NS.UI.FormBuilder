@@ -96,6 +96,66 @@ body {
 fa {
   font-family: FontAwesome !important;
 }
+.marginBottom5 {
+  margin-bottom: 5px;
+}
+.marginTop5 {
+  margin-top: 5px;
+}
+.marginLeft5 {
+  margin-left: 5px;
+}
+.marginRight5 {
+  margin-right: 5px;
+}
+.marginBottom10 {
+  margin-bottom: 10px;
+}
+.marginTop10 {
+  margin-top: 10px;
+}
+.marginLeft10 {
+  margin-left: 10px;
+}
+.marginRight10 {
+  margin-right: 10px;
+}
+.marginBottom15 {
+  margin-bottom: 15px;
+}
+.marginTop15 {
+  margin-top: 15px;
+}
+.marginLeft15 {
+  margin-left: 15px;
+}
+.marginRight15 {
+  margin-right: 15px;
+}
+.marginBottom20 {
+  margin-bottom: 20px;
+}
+.marginTop20 {
+  margin-top: 20px;
+}
+.marginLeft20 {
+  margin-left: 20px;
+}
+.marginRight20 {
+  margin-right: 20px;
+}
+.marginBottom25 {
+  margin-bottom: 25px;
+}
+.marginTop25 {
+  margin-top: 25px;
+}
+.marginLeft25 {
+  margin-left: 25px;
+}
+.marginRight25 {
+  margin-right: 25px;
+}
 .notification-container {
   height: 0;
 }

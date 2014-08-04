@@ -49,3 +49,17 @@ html, body {
 }
 
 fa { font-family: FontAwesome !important; }
+
+.generate-columns(5);
+
+.generate-columns(@n, @i: 1) when (@i =< @n) {
+
+    @num : @i * 5;
+
+    .marginBottom@{num} { margin-bottom: (@i * 5px);    }
+    .marginTop@{num}    { margin-top: (@i * 5px);       }
+    .marginLeft@{num}   { margin-left: (@i * 5px);      }
+    .marginRight@{num}  { margin-right:  (@i * 5px);    }
+
+  .generate-columns(@n, (@i + 1));
+}
