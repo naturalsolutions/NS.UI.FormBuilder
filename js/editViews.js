@@ -290,8 +290,14 @@ var formBuilder = (function(app) {
      */
     app.views.NumericFieldEditView = Backbone.View.extend({
 
+        events : {
+            'change select' : 'changed'
+        },
+
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 'render', 'changed')
+            this.model.bind('change', this.render)
         },
 
         /**
@@ -309,12 +315,27 @@ var formBuilder = (function(app) {
             });
             textView.render();
 
+            $.getJSON(app.instances.unitURL, _.bind(function(data) {
+                var isSelected = value = null;
+
+                for (var op in data['options']) {
+                    isSelected = this.model.get('unity') == data['options'][op] ? 'selected' : '';
+                    value      = data['options'][op];
+                    $(this.el).find('select').append('<option value="' + value + '"' + isSelected + '>' + value + '</option>');
+                }
+
+            }, this));
+
             return this;
+        },
+
+        changed : function(e) {
+            this.model.set('unity', $(e.target).val());
         }
 
     }, {
         templateSrc :   '   <div id="subTextView"></div>' +
-                        '   <% _.each(["minValue", "maxValue", "precision", "unity"], function(idx) { %>' +
+                        '   <% _.each(["minValue", "maxValue", "precision"], function(idx) { %>' +
                         '       <div >' +
                         '           <div class="row-fluid">'+
                         '               <label class="span10 offset1"><%= idx %></label>' +
@@ -323,7 +344,16 @@ var formBuilder = (function(app) {
                         '               <input class="span10 offset1 property" type="text" data-attr="<%= idx %>" placeholder="<%= idx %>" value="<%= eval(idx) %>" />' +
                         '           </div>' +
                         '       </div>'+
-                        '   <% }) %>'
+                        '   <% }) %>' + 
+                        '       <div >' +
+                        '           <div class="row-fluid">'+
+                        '               <label class="span10 offset1">Unit</label>' +
+                        '           </div>' +
+                        '           <div class="row-fluid">' +
+                        '               <select class="span10 offset1 property" type="text" data-attr="unity" placeholder="unit">' +
+                        '               </select>' +
+                        '           </div>' +
+                        '       </div>'
     });
 
     /**
@@ -461,29 +491,64 @@ var formBuilder = (function(app) {
 
 
     app.views.TableFieldEditView = Backbone.View.extend({
-        events : function() {
-
+        events : {
+        	'change .positionOption' : 'optionChanged'
         },
 
         initialize : function() {
             this.template = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 'optionChanged');
+            this.model.bind('change', this.render);
+            this.model.bind('done', _.bind(function() { this.render(); }, this));
         },
 
         render : function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             return this;
+        },
+
+        optionChanged : function(e) {
+            var currentViewIndex    = $(e.target).data('index'),
+                newViewIndex        = parseInt($(e.target).val());
+
+        	this.model.moveModel(currentViewIndex, newViewIndex);
         }
     }, {
-        templateSrc : '   <div id="subTextView"></div>' +
-                        '   <div >' +
-                        '       <div class="row-fluid">'+
-                        '           <label class="span10 offset1">SubView position</label>' +
-                        '       </div>' +
-                        '       <div class="row-fluid">' +
-                        '' +
-                        '       </div>' +
-                        '   </div>'
+        templateSrc :   ' 	<div class="row-fluid">'+
+                        '           	<label class="span10 offset1">SubView position</label>' +
+                        '       	</div>' +
+        				'   <div class="row-fluid">' +
+        				'		<div class="block span10 offset1">' +
+                        '       	<div class="row-fluid">' +
+                        '				<table class="table table-striped">' +
+                        '					<thead>'+
+                        '						<tr>'+
+                        '							<th>Element</th>'+
+                        '							<th>Type</th>'+
+                        '							<th>Position</th>'+
+                        '						</tr>'+
+                        '					</thead>' +
+                        '					<tbody>'+
+                        '						<% _.each(fields, function(el, idx) {  if (fields[idx] != undefined) { %>'+
+                        '						<tr>'+
+                        '							<td><%= el.get("label") %></td>'+
+                        '							<td><%= el.constructor.type %></td>'+
+                        '							<td>'+
+                        '								<select class="positionOption" data-index="<%=idx %>">'+
+                        '									<option value="0" <% if (idx == 0) {%> selected <% } %> >Top left corner</option>'+
+                        '									<option value="1" <% if (idx == 1) {%> selected <% } %> >Top right corner</option>'+
+                        '									<option value="2" <% if (idx == 2) {%> selected <% } %> >Bottom left corner</option>'+
+                        '									<option value="3" <% if (idx == 3) {%> selected <% } %> >Bottom right corner</option>'+
+                        '								</select>'+
+                        '							</td>' +
+                        '						</tr>'+
+                    	'						<% } }); %>' +
+                        '					</tbody>'+
+                        '				</table>' +
+                        '       	</div>' +
+                        '   	</div>'+
+                        '	</div>'
     });
 
 
