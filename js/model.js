@@ -644,27 +644,44 @@ var formBuilder = (function(app) {
     app.models.TableField = app.models.BaseField.extend({
 
         defaults : {
-            fields : [],
+            fields : {},
         },
 
         initialize : function() {
             app.models.BaseField.prototype.initialize.apply(this, arguments);
+            _.bindAll(this, 'moveModel', 'addModel', 'removeModel');
         },
 
         getXML : function() {
 
         },
 
-        addModel  : function(model) {
+        addModel  : function(model, modelIndex) {
             var arr = this.get('fields');
-            arr.push(model);
+            arr[modelIndex] = model;
             this.set('fields', arr);
         },
 
         removeModel : function(index) {
             var arr = this.get('fields');
-            arr.splice(index-1, 1);
+            delete arr[index];
             this.set("fields", arr);
+        },
+
+        moveModel : function(currentIndex, newIndex) {
+            var arr = this.get('fields');
+
+            if (arr[newIndex] !== undefined) {
+                var tmp           = arr[currentIndex];
+                arr[currentIndex] = arr[newIndex];
+                arr[newIndex]     = tmp;
+            } else {
+                arr[newIndex] = arr[currentIndex];
+                delete arr[currentIndex];
+            }
+            this.set('fields', arr);
+            this.trigger('update', currentIndex, newIndex);
+            this.trigger('done');
         }
 
     }, {
