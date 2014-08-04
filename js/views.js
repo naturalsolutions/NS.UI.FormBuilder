@@ -30,9 +30,11 @@ var formBuilder = (function(app) {
          * Events for the intercepted by the view
          */
         events: {
-            'click  .trash'         : 'removeView',
-            'click .copy'           : 'copyModel',
-            'focus input'           : 'updateSetting',
+            'click  .trash' : 'removeView',
+            'click .copy'   : 'copyModel',
+            'focus input'   : 'updateSetting',
+//            "move"          : 'moveView'
+            'dropped' : 'viewDropped'
         },
 
         /**
@@ -40,20 +42,34 @@ var formBuilder = (function(app) {
          */
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
-            _.bindAll(this, 'render', 'removeView', 'deleteView');
+            _.bindAll(this, 'render', 'removeView', 'deleteView', 'viewDropped');
             this.model.bind('change', this.render);
             this.model.bind('destroy', this.deleteView);
+        },
 
-            $(this.el).on('move', _.bind(function(event, el, id) {
-                var last = this.el;
-                this.setElement(el);
-                this.render();
+        viewDropped : function(event, data) {
+            $(data).trigger('droppedModel', this.model.get('id'));
+            this.removeView();
+        },
 
-                $(this.el).switchClass('empty', 'used');
-                $(last).remove();
-                $('body').trigger('viewAdded', 'yo');
-                $('#' + id).trigger('viewAdded', this)
-            }, this));
+        /**
+         * Event callback send by TableFieldView when view is dropped
+         *
+         * @param  {[type]} e  [description]
+         * @param  {[type]} el [description]
+         * @param  {[type]} id [description]
+         * @return {[type]}    [description]
+         */
+        moveView : function(e, el, id) {
+            var last = this.el;
+            this.setElement(el);
+            this.render();
+
+            $(this.el).switchClass('empty', 'used');
+            $(last).remove();
+
+            //  Send event
+            $('#' + id).trigger('viewAdded', this)
         },
 
         /**
@@ -82,7 +98,6 @@ var formBuilder = (function(app) {
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
-
             return this;
         },
 
@@ -638,7 +653,6 @@ var formBuilder = (function(app) {
     });
 
 
-
     /**
      * Hidden field view
      */
@@ -705,54 +719,100 @@ var formBuilder = (function(app) {
 
         events: function() {
             return _.extend({}, app.views.BaseView.prototype.events, {
-                'viewAdded' : 'saveView'
+                'delete'        : 'deleteSubView',
+                'droppedModel'  : 'droppedModel'
             });
         },
 
         initialize : function() {
             app.views.BaseView.prototype.initialize.apply(this, arguments);
-            this._subView = [];
-            _.bindAll(this, 'saveView');
+            this._subView = {};
+            _.bindAll(this, 'deleteSubView', 'droppedModel', 'renderSubView', 'updateModel', 'addSubView');
+            this.model.bind('update', this.updateModel);
+        },
+
+        droppedModel : function(event, modelID) {
+            var droppedViewModel        = app.instances.currentForm.get(modelID),
+                droppedViewModelType    = droppedViewModel.constructor.type,
+                tableElementLeft        = $(this.el).find('.empty').length,
+                newSubViewEl            = '#tableView' + (4 - tableElementLeft),
+                newSubView              = new app.views[droppedViewModelType + 'FieldView']({ model : droppedViewModel, el : newSubViewEl });
+
+            this.model.addModel(droppedViewModel, 4 - tableElementLeft);
+            newSubView.render();
+            $(newSubViewEl).switchClass('empty', 'used');
+            this._subView[newSubViewEl] = newSubView;
         },
 
         render : function() {
             app.views.BaseView.prototype.render.apply(this, arguments);
-            var vue = null;
-
             $('.tableField').droppable({
                 accept : '.dropField',
                 drop : _.bind(function(event, ui) {
-                    this.addSubView($(ui['draggable']).prop('id'));
+
+                    // Check if the tableView is not empty
+                    if ($(this.el).find('.empty').length > 0) {
+                        $(ui['draggable']).trigger('dropped', this.el);
+                    } else {
+                        $(".dropArea").animate({ scrollTop: 0 }, "medium");
+                        new NS.UI.Notification({
+                            type    : 'warning',
+                            title   : 'Limit :',
+                            message : "You table field is full"
+                        });
+                    }
+
                 }, this)
             });
+            this.renderSubView();
             return this;
         },
 
-        saveView : function(event, data) {
-            this._subView.push(data.el);
-            this.model.addModel(data.model);
+        renderSubView : function() {
+            _.each(this._subView, _.bind(function(el, idx) {
+                console.log (idx, el);
+            }, this));
         },
 
-        addSubView : function(id) {
-            var size = $(this.el).find('.empty').length;
+        deleteSubView : function(event) {
+            delete this._subView[$(event.target).prop('id')];
 
-            if ( size > 0) {
-                var newEl = '#tableView' + (4 - (size - 1));
+            var index = $(event.target).prop('id').replace('tableView', '');
+            this.model.removeModel( index );
+            $(event.target).replaceWith(
+                '<div class="span6 empty" id="' + $(event.target).prop('id') + '"><i class="fa fa-plus-square-o "> Drop field here</i></div>'
+            )
+        },
 
-                // Move view in tableFieldView
-                $('#' + id).trigger('move', [newEl, $(this.el).prop('id')]);
+        updateModel : function(currentViewIndex, newViewIndex) {
+            var currentSubViewEl    = '#tableView' + currentViewIndex
+                newSubViewEl        = '#tableView' + newViewIndex,
+                view                = this._subView[currentSubViewEl],
+                otherView           = this._subView[newSubViewEl] !== undefined ? this._subView[newSubViewEl] : null;
 
-                //  Keep event
-                $(newEl).on('delete', _.bind(function(event) {
-                    var index = $(event.target).prop('id').replace('tableView', '');
-                    this.model.removeModel( index );
-                    $(event.target).replaceWith(
-                        '<div class="span6 empty" id="' + $(event.target).prop('id') + '"><i class="fa fa-plus-square-o "> Drop field here</i></div>'
-                    )
-                }, this));
+            if (otherView !== null) {
+                this._subView[currentSubViewEl] = this._subView[newSubViewEl];
+                this._subView[newSubViewEl] = view;
+
+                view.setElement(newSubViewEl);
+                otherView.setElement(currentSubViewEl);
+                view.render();
+                otherView.render();
             } else {
-
+                view.setElement(newSubViewEl)
+                $(newSubViewEl).switchClass('empty', 'used')
+                $(currentSubViewEl).replaceWith('<div class="span6 empty" id="tableView' + currentViewIndex + '"><i class="fa fa-plus-square-o "> Drop field here</i></div>')
+                view.render();
+                this._subView[newSubViewEl] = view;
+                this._subView['#tableView' + currentViewIndex] = null;
             }
+        },
+
+        addSubView : function(viewEl, model) {
+            var vue = new app.views[model.constructor.type + 'FieldView']({ model : model, el : viewEl });
+            this._subView[viewEl] = vue;
+            vue.render();
+            $(viewEl).switchClass('empty', 'used');
         }
 
 
@@ -778,12 +838,12 @@ var formBuilder = (function(app) {
                         '   </div>' +
                         '   <div class="row tableField" style="margin-left : 10px;">' +
                         '       <div class="row-fluid">'+
+                        '           <div class="span6 empty" id="tableView0"><i class="fa fa-plus-square-o "> Drop field here</i></div>'+
                         '           <div class="span6 empty" id="tableView1"><i class="fa fa-plus-square-o "> Drop field here</i></div>'+
-                        '           <div class="span6 empty" id="tableView2"><i class="fa fa-plus-square-o "> Drop field here</i></div>'+
                         '       </div>'+
                         '       <div class="row-fluid">'+
+                        '           <div class="span6 empty" id="tableView2"><i class="fa fa-plus-square-o "> Drop field here</i></div>'+
                         '           <div class="span6 empty" id="tableView3"><i class="fa fa-plus-square-o "> Drop field here</i></div>'+
-                        '           <div class="span6 empty" id="tableView4"><i class="fa fa-plus-square-o "> Drop field here</i></div>'+
                         '       </div>'+
                         '   </div>'+
                         '</div>'
