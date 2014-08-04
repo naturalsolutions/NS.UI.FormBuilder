@@ -90,9 +90,11 @@ var formBuilder = (function(app) {
             this.sort();
 
             _.each(arr, function(el, idx) {
-                xmlDoc.find('fields').append(
-                    '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
-                );
+                if (el.get('isDragged') !== true) {
+                    xmlDoc.find('fields').append(
+                        '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
+                    );
+                }
             });
 
             return (new XMLSerializer()).serializeToString(xml);

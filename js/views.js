@@ -738,6 +738,7 @@ var formBuilder = (function(app) {
                 newSubViewEl            = '#tableView' + (4 - tableElementLeft),
                 newSubView              = new app.views[droppedViewModelType + 'FieldView']({ model : droppedViewModel, el : newSubViewEl });
 
+            droppedViewModel.set('isDragged', true);
             this.model.addModel(droppedViewModel, 4 - tableElementLeft);
             newSubView.render();
             $(newSubViewEl).switchClass('empty', 'used');
@@ -814,7 +815,6 @@ var formBuilder = (function(app) {
             vue.render();
             $(viewEl).switchClass('empty', 'used');
         }
-
 
     }, {
         templateSrc :   '<div class="element">'+

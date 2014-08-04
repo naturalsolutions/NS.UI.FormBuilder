@@ -653,7 +653,11 @@ var formBuilder = (function(app) {
         },
 
         getXML : function() {
-
+            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments)
+            _.each (this.get('fields'), function(el, idx) {
+                xml += '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
+            });
+            return xml;
         },
 
         addModel  : function(model, modelIndex) {
