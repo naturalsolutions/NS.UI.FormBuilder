@@ -37,6 +37,8 @@ var formBuilder = (function(app) {
             app.instances.keywordAutocomplete  = options.keywordAutocomplete  || 'autocomplete/keywords.json';
             app.instances.protocolAutocomplete = options.protocolAutocomplete || 'autocomplete/protocols.json';
 
+            app.instances.unitURL = options.unitURL || 'autocomplete/units.json';
+
             app.instances.router = new app.Router();
 
             app.instances.navbar = new NS.UI.NavBar({
