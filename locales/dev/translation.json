@@ -1,20 +1,20 @@
 {
     "fields" : {
-        "text"      : "Text",
-        "number"    : "Numeric",
-        "date"      : "Date",
-        "select"    : "Select",
-        "radio"     : "Radio buttob",
-        "checkbox"  : "Checkbox",
-        "hidden"    : "Hidden",
-        "file"      : "File",
-        "tree"      : "TreeView",
-        "long"      : "Long text",
-        "mask"      : "Pattenr",
-        "line"      : "Horizontal line",
+        "text"         : "Text",
+        "numeric"      : "Numeric",
+        "date"         : "Date",
+        "select"       : "Select",
+        "radio"        : "Radio buttob",
+        "checkbox"     : "Checkbox",
+        "hidden"       : "Hidden",
+        "file"         : "File",
+        "tree"         : "TreeView",
+        "long"         : "Long text",
+        "mask"         : "Pattenr",
+        "line"         : "Horizontal line",
         "autocomplete" : "autocomplete"
     },
-    
+
     "nav" : {
         "save" : {
             "title"     : " Save protocol",
@@ -26,11 +26,11 @@
             "cloud"     : "Load from server",
             "import"    : "Importe XML file"
         },
-        
+
         "clear"     : " Clear",
         "compare"   : " Compare XML files"
     },
-    
+
     "label" : {
         "field"     : "Fields",
         "settings"  : "Settings",
@@ -40,7 +40,7 @@
         },
         "help" : "Clic on field to add it on protocol"
     },
-    
+
     "actions" : {
         "edit"      : "Edit",
         "delete"    : "Delete",

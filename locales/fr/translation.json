@@ -1,7 +1,7 @@
 {
     "fields" : {
         "text"         : "Texte",
-        "number"       : "Numérique",
+        "numeric"      : "Numérique",
         "date"         : "Date",
         "select"       : "Liste déroulante",
         "radio"        : "Bouton radio",
