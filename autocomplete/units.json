@@ -1,0 +1,5 @@
+{
+	"options" : [
+		"meters", "days", "months", "weeks", "percentage"
+	]
+}
