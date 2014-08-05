@@ -47,8 +47,6 @@
         </xs:sequence>
     </xs:complexType>
 
-
-
     <!--
         treeview node element type
     -->
@@ -111,8 +109,9 @@
         </xs:complexContent>
     </xs:complexType>
 
-    <!-- XML Definition for fullName plugin demo example -->
-
+    <!-- 
+        XML Definition for fullName plugin demo example 
+    -->
     <xs:complexType name="simpleTextType">
         <xs:sequence>
             <xs:element name="defaultValue" type="xs:string" />
@@ -121,6 +120,9 @@
         </xs:sequence>
     </xs:complexType>
 
+    <!-- 
+        XML schema for fullname plugin example 
+    -->
     <xs:complexType name="field_fullNameType">
         <xs:complexContent>
             <xs:extension base="fieldType">
@@ -131,8 +133,9 @@
             </xs:extension>
         </xs:complexContent>
     </xs:complexType>
-    <!--
-        file field type
+
+    <!-- 
+        file field type 
     -->
     <xs:complexType name="field_fileType">
         <xs:complexContent>
@@ -148,7 +151,7 @@
     </xs:complexType>
 
     <!--
-        file field type
+        Treeview field type
     -->
     <xs:complexType name="field_treeViewType">
         <xs:complexContent>
@@ -191,6 +194,9 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <!--
+        Keywords model
+    -->
     <xs:complexType name="keywords">
         <xs:sequence>
             <xs:element name="keyword" type="xs:string" minOccurs="1" maxOccurs="unbounded" />
@@ -250,39 +256,54 @@
         </xs:complexContent>
     </xs:complexType>
 
+    <!--
+        table field declaration
+    -->
     <xs:complexType name="field_tableType">
-<xs:complexContent>
+        <xs:complexContent>
             <xs:extension base="fieldType">
-            <xs:sequence>
-                <xs:element name="fields">
-                    <xs:complexType>
-                        <xs:choice minOccurs="1" maxOccurs="unbounded">
-
-                            <xs:element name="field_text"       minOccurs="0"   type="field_textType"     />
-
-                            <xs:element name="field_pattern"    minOccurs="0"   type="field_patternType"  />
-
-                            <xs:element name="field_file"       minOccurs="0"   type="field_fileType"     />
-
-                            <xs:element name="field_date"       minOccurs="0"   type="field_dateType"     />
-
-                            <xs:element name="field_hidden"     minOccurs="0"   type="field_hiddenType"   />
-
-                            <xs:element name="field_numeric"    minOccurs="0"   type="field_numericType"  />
-
-                            <xs:element name="field_list"       minOccurs="0"   type="field_enumType"     />
-
-                            <xs:element name="field_mask"       minOccurs="0"   type="field_maskType"     />
-
-                            <xs:element name="field_treeView"   minOccurs="0"   type="field_treeViewType" />
-
-                        </xs:choice>
-                    </xs:complexType>
-                </xs:element>
-            </xs:sequence>
-        </xs:extension>
-</xs:complexContent>
+                <xs:sequence>
+                    <xs:choice minOccurs="0" maxOccurs="unbounded">
+                        <xs:element name="field_text"       minOccurs="0"   type="field_textType"     />
+                        <xs:element name="field_pattern"    minOccurs="0"   type="field_patternType"  />
+                        <xs:element name="field_file"       minOccurs="0"   type="field_fileType"     />
+                        <xs:element name="field_date"       minOccurs="0"   type="field_dateType"     />
+                        <xs:element name="field_hidden"     minOccurs="0"   type="field_hiddenType"   />
+                        <xs:element name="field_numeric"    minOccurs="0"   type="field_numericType"  />
+                        <xs:element name="field_list"       minOccurs="0"   type="field_enumType"     />
+                        <xs:element name="field_mask"       minOccurs="0"   type="field_maskType"     />
+                        <xs:element name="field_treeView"   minOccurs="0"   type="field_treeViewType" />
+                        <xs:element name="field_table"      minOccurs="0"   type="field_tableType"    />
+                        <xs:element ref="fieldset" />
+                    </xs:choice>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
     </xs:complexType>
+
+    
+
+    <xs:complexType name="field_fieldsetType">
+        <xs:sequence>
+            <xs:element name="legend"         type="xs:string"    />
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element name="field_text"       minOccurs="0"   type="field_textType"     />
+                <xs:element name="field_pattern"    minOccurs="0"   type="field_patternType"  />
+                <xs:element name="field_file"       minOccurs="0"   type="field_fileType"     />
+                <xs:element name="field_date"       minOccurs="0"   type="field_dateType"     />
+                <xs:element name="field_hidden"     minOccurs="0"   type="field_hiddenType"   />
+                <xs:element name="field_numeric"    minOccurs="0"   type="field_numericType"  />
+                <xs:element name="field_list"       minOccurs="0"   type="field_enumType"     />
+                <xs:element name="field_mask"       minOccurs="0"   type="field_maskType"     />
+                <xs:element name="field_treeView"   minOccurs="0"   type="field_treeViewType" />
+                <xs:element name="field_table"      minOccurs="0"   type="field_tableType"    />
+                <xs:element name="field_fieldset"   minOccurs="0"   type="field_fieldsetType" />
+            </xs:choice>
+        </xs:sequence>
+        <xs:attribute type="xs:string" name="id"/>
+    </xs:complexType>
+
+    <xs:element name="fieldset" type="field_fieldsetType" />
 
     <!--
         form element schema declaration
@@ -290,39 +311,31 @@
     <xs:element name="form">
         <xs:complexType>
             <xs:sequence>
-                <!-- protocol elements -->
-                <xs:element name="name" type="xs:string" />
-                <xs:element name="description" type="xs:string" />
-                <xs:element name="keywords" type="keywords" />
-                <!-- fields description -->
+                <xs:element name="name"         type="xs:string"    />
+                <xs:element name="description"  type="xs:string"    />
+                <xs:element name="keywords"     type="keywords"     />
+
                 <xs:element name="fields">
                     <xs:complexType>
                         <xs:choice minOccurs="0" maxOccurs="unbounded">
-
                             <xs:element name="field_text"       minOccurs="0"   type="field_textType"     />
-
                             <xs:element name="field_pattern"    minOccurs="0"   type="field_patternType"  />
-
                             <xs:element name="field_file"       minOccurs="0"   type="field_fileType"     />
-
                             <xs:element name="field_date"       minOccurs="0"   type="field_dateType"     />
-
                             <xs:element name="field_hidden"     minOccurs="0"   type="field_hiddenType"   />
-
                             <xs:element name="field_numeric"    minOccurs="0"   type="field_numericType"  />
-
                             <xs:element name="field_list"       minOccurs="0"   type="field_enumType"     />
-
                             <xs:element name="field_mask"       minOccurs="0"   type="field_maskType"     />
-
                             <xs:element name="field_treeView"   minOccurs="0"   type="field_treeViewType" />
-
+                            <xs:element name="field_table"      minOccurs="0"   type="field_tableType"    />
+                            <xs:element name="fieldset"         minOccurs="0"   type="field_fieldsetType" />
                         </xs:choice>
                     </xs:complexType>
                 </xs:element>
+
             </xs:sequence>
-            <!-- attribute -->
             <xs:attribute type="xs:string" name="id"/>
         </xs:complexType>
     </xs:element>
+
 </xs:schema>

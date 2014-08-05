@@ -669,7 +669,7 @@ var formBuilder = (function(app) {
                         '       <a href="#" class="trash">'+
                         '           <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
                         '       </a>'+
-                        '       <a href="#setting/<%= id %>" class="wrench">'+
+                        '       <a href="#option/<%= id %>" class="wrench">'+
                         '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
                                 '</a>'+
                         '       <a href="#" class="copy">'+
@@ -848,6 +848,113 @@ var formBuilder = (function(app) {
                         '   </div>'+
                         '</div>'
     });
+
+    app.views.SubformFieldView = app.views.BaseView.extend({
+
+        events: function() {
+            return _.extend({}, app.views.BaseView.prototype.events, {
+                'delete'        : 'deleteSubView',
+                'droppedModel'  : 'droppedModel'
+            });
+        },
+
+        initialize : function() {
+            app.views.BaseView.prototype.initialize.apply(this, arguments);
+            this._subView = {};
+            _.bindAll(this, 'deleteSubView', 'droppedModel', 'renderSubView', 'addSubView', 'render');
+            //this.model.bind('update', this.updateModel);
+        },
+
+        droppedModel : function(event, modelID) {
+            var droppedViewModel     = app.instances.currentForm.get(modelID),
+                subformSize          = Object.keys(this._subView).length,
+                newSubViewEl         = 'subform' + subformSize;
+
+            $(this.el).find('fieldset').append(
+                '<div class="row-fluid subelement ' + (subformSize === 0 ? 'noMarginTop' : 'marginTop25') + '" id="' + newSubViewEl + '"></div>'
+            );
+
+            this.addSubView(droppedViewModel.constructor.type + 'FieldView', droppedViewModel, newSubViewEl, subformSize)
+        },
+
+        addSubView : function(viewType, model, viewEl, subformSize) {
+            var newSubView = new app.views[viewType]({ model : model, el : '#' + viewEl});
+
+            model.set('isDragged', true);
+            this.model.addModel(model, subformSize);
+
+            newSubView.render();
+            this._subView[viewEl] = newSubView;
+        },
+
+        render : function() {
+            app.views.BaseView.prototype.render.apply(this, arguments);
+            $('.subformField').droppable({
+                accept : '.dropField',
+                drop : _.bind(function(event, ui) {
+                    alert (true)
+                    $(ui['draggable']).trigger('dropped', this.el);
+                }, this)
+            });
+
+            $(this.el).find('fieldset').sortable({
+                cancel      : null,
+                cursor      : 'pointer',
+                axis        : 'y',
+                items       : ".subelement",
+                stop: _.bind(function(event, ui) {
+                    $(this.el).find('.subelement').removeClass('noMarginTop');
+                    $(this.el).find('.subelement').first().switchClass('marginTop25', 'noMarginTop');
+                    for (var v in this._subView) {
+                        this._subView[v].updateIndex($('#' + v).index());
+                    }
+                }, this)
+            });
+
+            this.renderSubView();
+            return this;
+        },
+
+        renderSubView : function() {
+            _.each(this._subView, _.bind(function(el, idx) {
+                console.log (idx, el);
+            }, this));
+        },
+
+        deleteSubView : function(event) {
+            delete this._subView[$(event.target).prop('id')];
+
+            var index = $(event.target).prop('id').replace('subform', '');
+            this.model.removeModel( index );
+            $(event.target).replaceWith('')
+        }
+
+    }, {
+        templateSrc :   '<div class="element">'+
+                        '   <div class="row" style="margin-left : 10px;">' +
+                        '       <label class="span4">' +
+                        '           <i class="fa fa-arrows" style="color : #09C"></i>' +
+                        '           &nbsp;'+
+                        '       </label> '+
+                        '       <div class="span8 right actions">'+
+                         '          <a href="#" class="trash">'+
+                        '               <i class="fa fa-trash-o"></i><span data-i18n="actions.delete">Supprimer</span>'+
+                        '           </a>'+
+                        '       <a href="#option/<%= id %>" class="wrench">'+
+                        '           <i class="fa fa-wrench"></i><span data-i18n="actions.edit">Modifier</span>'+
+                                '</a>'+
+                        '           <a href="#" class="copy">'+
+                        '               &nbsp;<span class="fa fa-copy"></span>'+
+                        '               <span data-i18n="actions.clone">Dupliquer</span>'+
+                        '           </a>'+
+                        '       </div>'+
+                        '   </div>' +
+                        '   <fieldset class="row subformField" style="margin-left : 10px;"><legend><%= legend %>' +
+                        '   </fieldset>'+
+                        '</div>'
+    });
+
+
 
 
     return app;

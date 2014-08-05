@@ -13,7 +13,8 @@
         "mask"         : "Masque",
         "line"         : "Ligne horizontale",
         "autocomplete" : "autocomplete",
-        "table"        : "Présentation"
+        "table"        : "Présentation",
+        "fieldset"     : "Sous formulaire"
     },
 
     "nav" : {

@@ -32,7 +32,8 @@ var formBuilder = (function(app) {
                 display_label: "field"
             },
             required: false,
-            readOnly: false
+            readOnly: false,
+            isDragged : false
         },
 
         getXML: function() {
@@ -132,6 +133,11 @@ var formBuilder = (function(app) {
         getSchemaProperty: function(index, property) {
             app.models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
         },
+
+        changePropertyValue : function(index, value) {
+            app.models.BaseField.prototype.changePropertyValue.apply(this, arguments);
+        },
+
         getXML: function() {
             return  "<name>" +
                     "   <label lang='" + this.get('name')['label']['lang'] + "'>" + this.get('name')['label']['value'] + '</label>' +
@@ -641,7 +647,7 @@ var formBuilder = (function(app) {
     _.defaults(app.models.CheckBoxField.prototype.defaults,      app.models.EnumerationField.prototype.defaults);
     _.defaults(app.models.SelectField.prototype.defaults,        app.models.EnumerationField.prototype.defaults);
 
-    app.models.TableField = app.models.BaseField.extend({
+    app.models.TableField = Backbone.Model.extend({
 
         defaults : {
             fields : {},
@@ -649,7 +655,7 @@ var formBuilder = (function(app) {
 
         initialize : function() {
             app.models.BaseField.prototype.initialize.apply(this, arguments);
-            _.bindAll(this, 'moveModel', 'addModel', 'removeModel');
+            _.bindAll(this, 'moveModel', 'addModel', 'removeModel', 'getXML');
         },
 
         getXML : function() {
@@ -695,6 +701,47 @@ var formBuilder = (function(app) {
     });
 
     _.defaults(app.models.TableField.prototype.defaults, app.models.BaseField.prototype.defaults);
+
+    app.models.SubformField = Backbone.Model.extend({
+        defaults : {
+            id : 0,
+            fields : {},
+            legend : 'Fieldset'
+        },
+
+        initialize : function() {
+            _.bindAll(this, 'addModel', 'removeModel', 'getXML');
+        },
+
+        addModel  : function(model, modelIndex) {
+            var arr = this.get('fields');
+            arr[modelIndex] = model;
+            this.set('fields', arr);
+        },
+
+        removeModel : function(index) {
+            var arr = this.get('fields');
+            delete arr[index];
+            this.set("fields", arr);
+        },
+
+        getXML : function() {
+            var xml = '<legend>' + this.get('legend') + '</legend>';
+            _.each (this.get('fields'), function(el, idx) {
+                xml += '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
+            });
+            return xml;
+        },
+
+        changePropertyValue : function(index, value) {
+            app.models.BaseField.prototype.changePropertyValue.apply(this, arguments);
+        },
+    }, {
+        type    : 'Subform',
+        xmlTag  : 'fieldset',
+        i18n    : 'fieldset'
+    });
+
 
     return app;
 

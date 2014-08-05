@@ -162,6 +162,95 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
+    app.views.SimpleEditView = Backbone.View.extend({
+
+        events : {
+            'click h2 > span:not(.selected)'   : 'displayOptions',
+            'change .property'                 : 'updateModelAttribute'
+        },
+
+        initialize: function() {
+            this.template   = _.template(this.constructor.templateSrc);
+            _.bindAll(this, 'render', 'updateModelAttribute', 'changeModel');
+            this.model.bind('change', this.render);
+        },
+
+
+        displayOptions: function(e) {
+            $(".settings h2 > span").toggleClass('selected');
+            if ($(e.target).prop('id') === "simple") {
+                $('.advanced').addClass('hide', 500);
+            } else {
+                $('.advanced').removeClass('hide', 500);
+            }
+        },
+
+
+        updateModelAttribute: function(e) {
+            if ($(e.target).prop("type") === "checkbox") {
+                this.model.changePropertyValue($(e.target).data('attr'), $(e.target).is(':checked'));
+            } else {
+                this.model.changePropertyValue($(e.target).data('attr'), $(e.target).val());
+            }
+        },
+
+        render: function() {
+            var renderedContent = this.template(this.model.toJSON());
+            $(this.el).html(renderedContent);
+            $(this.el).i18n();
+            //  Animate panel
+            $('.dropArea').switchClass('span9', 'span7', 500);
+            $('.widgetsPanel').switchClass('span3', 'span0', 500);
+            return this;
+        },
+
+        changeModel : function(newModel) {
+            $(this.el).unbind();
+            $(this.subView.el).unbind();;
+
+            this.model = newModel;
+            this.model.bind('change', this.render);
+            this.model.trigger('change');
+        },
+
+        getActions : function() {
+            return app.views.BaseEditView.prototype.getActions.apply(this, arguments);
+        }
+
+    });
+
+    app.views.HiddenFieldEditView = app.views.SimpleEditView.extend({
+    }, {
+        templateSrc : '<div>'+
+                        '   <h1 data-i18n="label.settings">Settings</h1>'+
+                        '   <div>'+
+                        '       <h2>'+
+                        '           <span id="simple" class="selected" data-i18n="label.options.simple">Simple options</span> / '+
+                        '           <span href="#" id="advanced" data-i18n="label.options.advanced" >Advanced options</span>'+
+                        '       </h2>'+
+                        //  Edition of common attribute like name (label and displayLabel)
+                        '   <div class="hide advanced">' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">ID</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="number" data-attr="id" placeholder="Id" value="<%= id %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        '   <div >' +
+                        '       <div class="row-fluid">'+
+                        '           <label class="span10 offset1">Value</label>' +
+                        '       </div>' +
+                        '       <div class="row-fluid">' +
+                        '           <input class="span10 offset1 property" type="text" data-attr="value" placeholder="Value" value="<%= value %>" />' +
+                        '       </div>' +
+                        '   </div> ' +
+                        //  end
+                        '   </div>' +
+                        '   <div class="row-fluid">&nbsp;</div>'+
+                        '</div>'
+    });
+
 	app.views.AutocompleteFieldEditView = Backbone.View.extend({
 
         initialize: function() {
@@ -549,6 +638,41 @@ var formBuilder = (function(app) {
                         '       	</div>' +
                         '   	</div>'+
                         '	</div>'
+    });
+
+    app.views.SubformFieldEditView = app.views.SimpleEditView.extend({
+
+        events : function(){
+            return _.extend({}, app.views.SimpleEditView.prototype.events, {});
+        },
+
+    }, {
+        templateSrc : '<div>'+
+                        '   <h1 data-i18n="label.settings">Settings</h1>'+
+                        '   <div>'+
+                        '       <h2>'+
+                        '           <span id="simple" class="selected" data-i18n="label.options.simple">Simple options</span> / '+
+                        '           <span href="#" id="advanced" data-i18n="label.options.advanced" >Advanced options</span>'+
+                        '       </h2>'+
+                        '       <div class="hide advanced">' +
+                        '           <div class="row-fluid">'+
+                        '               <label class="span10 offset1">ID</label>' +
+                        '           </div>' +
+                        '           <div class="row-fluid">' +
+                        '               <input class="span10 offset1 property" type="number" data-attr="id" placeholder="Id" value="<%= id %>" />' +
+                        '           </div>' +
+                        '       </div> ' +
+                        '       <div>' +
+                        '           <div class="row-fluid">'+
+                        '               <label class="span10 offset1">Legend</label>' +
+                        '           </div>' +
+                        '           <div class="row-fluid">' +
+                        '               <input class="span10 offset1 property" type="text" data-attr="legend" placeholder="Fieldset legend" value="<%= legend %>" />' +
+                        '           </div>' +
+                        '       </div> ' +
+                        '   </div>' +
+                        '   <div class="row-fluid">&nbsp;</div>'+
+                        '</div>'
     });
 
 
