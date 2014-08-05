@@ -892,7 +892,6 @@ var formBuilder = (function(app) {
             $('.subformField').droppable({
                 accept : '.dropField',
                 drop : _.bind(function(event, ui) {
-                    alert (true)
                     $(ui['draggable']).trigger('dropped', this.el);
                 }, this)
             });
