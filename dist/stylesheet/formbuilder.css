@@ -697,3 +697,7 @@ fa {
 .tableField .span6.used:hover .options {
   display: block !important;
 }
+fieldset.subformField {
+  min-height: 100px;
+  background: #eee !important;
+}
