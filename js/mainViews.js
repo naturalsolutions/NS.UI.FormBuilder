@@ -29,15 +29,15 @@ var formBuilder = (function(app) {
             $(this.el).find('#protocolName').val(this.collection.name);
         },
 
-        addElement: function(el) {
-            var id = "dropField" + this.collection.length, viewClassName = el.constructor.type + "FieldView";
+        addElement: function(newModel) {
+            var id = "dropField" + this.collection.length, viewClassName = newModel.constructor.type + "FieldView";
 
             $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
 
             if (app.views[viewClassName] !== undefined) {
                 var vue = new app.views[viewClassName]({
-                    el      : $("#" + id),
-                    model   : el
+                    el      : '#' + id,
+                    model   : newModel
                 });
                 if (vue !== null) {
                     vue.render();
@@ -274,7 +274,7 @@ var formBuilder = (function(app) {
             });
 
             this.panelView = new app.views.PanelView({
-                el: $('.widgetsPanel'),
+                el: '.widgetsPanel',
                 collection: this.form,
             });
 

@@ -38,7 +38,7 @@ var formBuilder = (function(app) {
 
                     //  Create new edit view
                     app.instances.settingView = new app.views[app.instances.currentForm.get(modelID).constructor.type + 'FieldEditView']({
-                        el: $('.settings'),
+                        el: '.settings',
                         model : app.instances.currentForm.models[modelID]
                     });
                     app.instances.settingView.render();
@@ -50,7 +50,7 @@ var formBuilder = (function(app) {
                     $('.dropArea').after('<div class="span5 settings"></div>');
 
                     app.instances.settingView = new app.views[app.instances.currentForm.get(modelID).constructor.type + 'FieldEditView']({
-                        el: $('.settings'),
+                        el: '.settings',
                         model : app.instances.currentForm.models[modelID]
                     });
                     app.instances.settingView.render();
@@ -67,7 +67,7 @@ var formBuilder = (function(app) {
                 if (app.instances.settingView === undefined) {
                     //  Create new edit view
                     app.instances.settingView = new app.views.BaseEditView({
-                        el: $('.settings'),
+                        el: '.settings',
                         model : app.instances.currentForm.models[modelID]
                     });
                     app.instances.settingView.render();
@@ -78,7 +78,7 @@ var formBuilder = (function(app) {
                     $('.dropArea').after('<div class="span5 settings"></div>');
 
                     app.instances.settingView = new app.views.BaseEditView({
-                        el: $('.settings'),
+                        el: '.settings',
                         model : app.instances.currentForm.models[modelID]
                     });
                     app.instances.settingView.render();
