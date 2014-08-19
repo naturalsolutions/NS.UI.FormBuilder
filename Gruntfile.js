@@ -7,10 +7,11 @@ module.exports = function(grunt) {
         less: {
             dist: {
                 options: {
-                    paths: ["stylesheet"]
+                    paths: ["stylesheet"],
+                    cleancss: true,
                 },
                 files: {
-                     "dist/stylesheet/formbuilder.css": "stylesheet/styles.less"
+                     "compressed/formbuilder.min.css": "stylesheet/styles.less"
                 }
             }
         },
@@ -60,7 +61,22 @@ module.exports = function(grunt) {
         watch: {
             stylesheet : {
                 files : ['stylesheet/*.less'],
-                tasks : ['less:dist', 'cssmin:dist']
+                tasks : ['less:dist']
+            }
+        },
+        bower: {
+            install: {
+                options : {
+                    targetDir : './librairies',
+                    cleanBowerDir : true,
+                }
+            },
+        },
+        shell : {
+            clean : {
+                command : [
+                    "find lib/ -iname '*.md' -exec rm '{}' ';'"
+                ].join('&&')
             }
         }
     });
@@ -70,6 +86,9 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-bower-requirejs');
+    grunt.loadNpmTasks('grunt-bower-task');
 
     grunt.registerTask('dev', ['less', 'concat', 'uglify', 'cssmin']);
+    grunt.registerTask('install', ['bower:install', 'bower:target'])
 }

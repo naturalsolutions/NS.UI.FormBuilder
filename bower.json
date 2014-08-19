@@ -1,0 +1,32 @@
+{
+  "name"     : "formbuilder",
+  "version"  : "0.0.0",
+  "homepage" : "https://github.com/NaturalSolutions/NS.UI.FormBuilder",
+  "authors"  : [
+    "MICELI Antoine"
+  ],
+  "main"     : "index.html",
+  "keywords" : [
+    "XML"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies" : {
+    "jquery"             : "1.11.1",
+    "jquery.ui" : null,
+    "backbone"           : null,
+    "underscore"         : null,
+    "NS.UI.Notification" : "https://github.com/NaturalSolutions/NS.UI.Notification.git",
+    "NS.UI.Navbar"       : "git@github.com:NaturalSolutions/NS.UI.NavBar.git",
+    "bootstrap"          : "2.3.2",
+    "blobjs"             : "https://github.com/eligrey/Blob.js.git",
+    "xmljs"              : "git@github.com:kripken/xml.js.git",
+    "i18n"               : "https://github.com/jamuhl/i18next.git",
+    "jsdifflib"          : "https://github.com/cemerick/jsdifflib.git",
+    "font-awesome"       : "https://github.com/FortAwesome/Font-Awesome.git",
+    "fancytree"          : "https://github.com/mar10/fancytree.git",
+    "filesaver"          : "git@github.com:eligrey/FileSaver.js.git",
+    "requirejs" : null,
+    "nanoscroller"       : null
+  }
+}
