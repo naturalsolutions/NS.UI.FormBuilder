@@ -17,10 +17,16 @@ var formBuilder = (function(app) {
                             'importXML',
                             'updateView',
                             'getModel',
-                            'getXML'
+                            'getXML',
+                            "getSubView"
                     );
             this.collection.bind('newElement', this.addElement);
             this._view = [];
+        },
+
+
+        getSubView : function(subViewID) {
+            return this._view[subViewID];
         },
 
         updateView : function() {
@@ -38,7 +44,7 @@ var formBuilder = (function(app) {
                 var vue = new app.views[viewClassName]({
                     el      : '#' + id,
                     model   : newModel
-                });
+               });
                 if (vue !== null) {
                     vue.render();
                     this._view[id] = vue;
@@ -62,7 +68,8 @@ var formBuilder = (function(app) {
                 cursor      : 'pointer',
                 axis        : 'y',
                 items       : ".dropField",
-                handle      : 'label, input[type="text"]',
+                handle      : '.fa-arrows',
+                hoverClass : 'hovered',
                 containement: '.dropArea',
                 stop: function(event, ui) {
                     for (var v in _vues) {
@@ -286,7 +293,11 @@ var formBuilder = (function(app) {
             this.panelView.render();
             this.formView.render();
 
-            _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getActions');
+            _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getActions', 'getSubView');
+        },
+
+        getSubView : function(subViewID) {
+            return this.formView.getSubView(subViewID);
         },
 
         clear: function() {

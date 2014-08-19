@@ -650,7 +650,7 @@ var formBuilder = (function(app) {
     app.models.TableField = Backbone.Model.extend({
 
         defaults : {
-            fields : {},
+            fields : [],
         },
 
         initialize : function() {
@@ -668,7 +668,8 @@ var formBuilder = (function(app) {
 
         addModel  : function(model, modelIndex) {
             var arr = this.get('fields');
-            arr[modelIndex] = model;
+            model.set('isDragged', true);
+            arr.push(model);
             this.set('fields', arr);
         },
 
@@ -705,17 +706,18 @@ var formBuilder = (function(app) {
     app.models.SubformField = Backbone.Model.extend({
         defaults : {
             id : 0,
-            fields : {},
+            fields : [],
             legend : 'Fieldset'
         },
 
         initialize : function() {
-            _.bindAll(this, 'addModel', 'removeModel', 'getXML');
+            _.bindAll(this, 'addModel', 'removeModel', 'getXML', 'updateModel');
         },
 
         addModel  : function(model, modelIndex) {
             var arr = this.get('fields');
-            arr[modelIndex] = model;
+            model.set('isDragged', true);
+            arr.push(model);
             this.set('fields', arr);
         },
 
@@ -723,6 +725,14 @@ var formBuilder = (function(app) {
             var arr = this.get('fields');
             delete arr[index];
             this.set("fields", arr);
+        },
+
+        updateModel : function(index, from, to) {
+            var arr = this.get('fields');
+            var element = arr[from];
+            arr.splice(from, 1);
+            arr.splice(to, 0, element);
+            this.set('fields', arr);
         },
 
         getXML : function() {
