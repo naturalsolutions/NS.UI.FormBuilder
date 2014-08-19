@@ -15,8 +15,9 @@
 
     .content {
         background  : #fff;
-        height      : 100%;
+        height      : 100%; 
 
+        //  Widget Panel on the left
         .widgetsPanel {
             height      : 100%;
             background  : #ddd;
@@ -47,6 +48,7 @@
             }
         }
 
+        // Drag and drop area center
         .dropArea {
             overflow-y      : scroll;
             height          : 100%;
@@ -69,11 +71,7 @@
 
             hr { border-top : #333 1px solid; margin-bottom : 0; padding-bottom : 0px; }
 
-            h2 {
-                color       : #ddd;
-                font-weight : 100;
-                font-size   : 22px;
-            }
+            h2 { color : #ddd; font-weight : 100; font-size : 22px; }
 
             .row-fluid:last-child {
                 margin-top  : 25px;
@@ -94,7 +92,7 @@
                 transition : background 0.2s ease-in-out;
                 &:hover {
                     background : beige;
-                    .element>.row>.actions {
+                    &>.element:first-child>.row>.actions {
                             display : block;
                         }
                 }
@@ -134,7 +132,7 @@
                 }
                 input[type="text"], .picker {
                     .input();
-                    padding : 15px;
+                    //padding : 15px;
                 }
                 select {
                     .input();
@@ -149,26 +147,27 @@
                 input[type="checkbox"] {
                     margin-left : 10px;
                 }
+                label:hover { cursor : default !important; }
             }
         }
+
+        //  Setting panel on the right (hide by default)
         .settings {
-            * {
-                font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
-                &.fa {
-                    font-family: FontAwesome !important;
-                }
-            }
-            .listEdit {
-                &:hover {
-                    cursor : pointer;
-                }
-            }
             .widgetsPanel();
             background-color    : #eee;
             margin-left         : 0;
             overflow-x          : scroll;
             padding-bottom      : 50px;
             padding-top         : 50px;
+
+            * {
+                font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
+                &.fa {
+                    font-family: FontAwesome !important;
+                }
+            }
+            .listEdit { &:hover {cursor : pointer;} }
+
             h1 {
                 text-align          : center;
                 padding-bottom      : 0 !important ;
@@ -181,6 +180,7 @@
                     cursor: pointer;
                 }
             }
+
             h2 {
                 text-align  : center;
                 font-size   : 18px;
@@ -201,6 +201,7 @@
                     }
                 }
             }
+
             label {
                 .text();
                 font-size   : 18px;
@@ -208,6 +209,7 @@
                 height      : 40px;
                 text-align  : left;
             }
+
             input, select {
                 .input();
                 border      : 2px #aaa solid;
@@ -215,6 +217,7 @@
                 line-height : 25px;
                 height      : 40px;
             }
+
             #fieldRequire { .left(); margin-left: -15px; }
             .close, .addOp {
                 background  : none !important;
@@ -275,42 +278,13 @@
                 }
             }
         }
+
     }
 }
-
-
 
 @import 'navbar.less';
 
 @import 'modal.less';
-
-#saveModal {
-    textarea { resize: none; height : 60px; max-height: 60px; }
-    label > i { color : #888; }
-    .modal-body {
-        padding-bottom: 25px;
-        .row-fluid:nth-child(even){
-            margin-bottom: 5px;
-        }
-    }
-    #saveProtocolKeywordsList {
-        list-style-type: none;
-        .noMarginLeft();
-        li {
-            float : left;
-            height: 30px;
-            line-height: 30px;
-            background : #0aC;
-            color : white;
-            padding : 5px 0px 5px 10px;
-            margin-left : 5px;
-            button {
-                padding-left: 10px;
-                padding-right: 10px;
-            }
-        }
-    }
-}
 
 .tableField {
     border        : 2px #ddd solid;
@@ -335,16 +309,35 @@
             i.fa-plus-square-o, .copy { display: none; }
             padding-bottom : 15px;
             &:hover {
-                background : rgba(255, 0, 0, 0.1);
-                .options {
-                    display : block !important;
+                    background : rgba(255, 0, 0, 0.1);
+                    &>.element:first-child>.row>.actions {
+                            display : block;
+                        }
                 }
-            };
         }
     }
 }
 
 fieldset.subformField {
-    min-height: 100px;
-    background : #eee !important;
+    min-height     : 100px;
+    background     : #eee !important;
+    padding-bottom : 10px;
+    margin-right: 7px;
+    legend { margin-bottom: 0; }
+    .subElement {
+        background     : white;
+        padding-bottom : 15px;
+        box-shadow     : 0 0 2px #555;
+        &:hover {
+            box-shadow: 0 0 4px #555;
+             .actions {
+                display : block !important;
+            }
+        }
+    }
+    .sortableRow { margin-top: 20px; }
+    &.hovered {
+        background : rgba(200, 210, 220, 0.5) !important;
+        border : 1px dashed #888 !important;
+    }
 }
