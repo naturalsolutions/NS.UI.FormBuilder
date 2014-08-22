@@ -46,8 +46,11 @@ define(['backbone', 'app/router'], function(Backbone, router) {
          */
         copyModel : function() {
             var cl = this.model.clone();
-            cl.set('id', app.views.mainView.formView.collection.length);    //  change id otherwise element replaced copied element
-            app.views.mainView.formView.collection.add(cl);                 //  Add element to the collection
+            require (['app/formbuilder'], function(formbuilderInstance) {
+                cl.set('id', formbuilderInstance.currentCollection.length);    //  change id otherwise element replaced copied element
+                formbuilderInstance.currentCollection.add(cl);                 //  Add element to the collection
+                formbuilderInstance.currentCollection.trigger('newElement', cl);
+            });
         },
 
         /**
