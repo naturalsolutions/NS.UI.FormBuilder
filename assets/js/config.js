@@ -45,28 +45,13 @@ require.config({
     }],
 
     shim: {
-        'jquery'     : { exports: '$' },
-        'underscore' : { exports: '_' },
-        "jqueryui": {
-            exports: "$",
-            deps: ['jquery']
-        },
-        "i18n" : {
-            exports: "$",
-            deps: ['jquery']
-        },
-        "nanoscroller" : {
-            exports: "$",
-            deps: ['jquery', 'jqueryui']
-        },
-        "NS.UI.Navbar" : {
-            export : "$",
-            deps : ['jquery', 'backbone', 'bootstrap']
-        },
-        "bootstrap" : {
-            exports: "$",
-            deps: ['jquery']
-        },
+        'jquery'       : { exports: '$' },
+        'underscore'   : { exports: '_' },
+        "jqueryui"     : { exports: "$", deps: ['jquery'] },
+        "i18n"         : { exports: "$", deps: ['jquery'] },
+        "nanoscroller" : { exports: "$", deps: ['jquery', 'jqueryui'] },
+        "NS.UI.Navbar" : { exports: "$", deps: ['jquery', 'backbone', 'bootstrap'] },
+        "bootstrap"    : { exports: "$", deps: ['jquery'] },
     }
 });
 
@@ -75,7 +60,7 @@ require(['app/formbuilder'], function(formbuilder) {
 
     var options = {
         // Specify URL for formBuilder configuration
-        // Replace this URL by your own
+        // Replace this URL with your own
         autocompleteURL      : 'ressources/autocomplete/',
         translationURL       : 'ressources/locales/',
         keywordAutocomplete  : 'ressources/autocomplete/keywords.json',

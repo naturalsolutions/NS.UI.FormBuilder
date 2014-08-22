@@ -1,10 +1,7 @@
 /**
  * @fileOverview model.js
- * This file implements all field models
  *
- * Depandencies :   undersoore
- *                  jquery
- *                  backbone
+ * This file implements all field models
  *
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
@@ -12,7 +9,7 @@
 
 define(['backbone'], function(Backbone) {
 
-    var app = { models : {} }
+    var models = {};
 
     //  --------------------------------------------
     //  Basic models herited from Backbone model
@@ -22,7 +19,7 @@ define(['backbone'], function(Backbone) {
      * Basic field model
      * Establishes common field attributes
      */
-    app.models.BaseField = Backbone.Model.extend({
+    models.BaseField = Backbone.Model.extend({
         defaults: {
             id      : 0,
             label   : "My label",
@@ -110,7 +107,7 @@ define(['backbone'], function(Backbone) {
     /**
      * graphical horizontal line field model
      */
-    app.models.HorizontalLineField    = Backbone.Model.extend({
+    models.HorizontalLineField    = Backbone.Model.extend({
     }, {
         type    : 'HorizontalLine',
         xmlTag  : 'field_horizontalLine',
@@ -120,7 +117,7 @@ define(['backbone'], function(Backbone) {
     /**
      * Hidden field model
      */
-    app.models.HiddenField       = Backbone.Model.extend({
+    models.HiddenField       = Backbone.Model.extend({
         defaults: {
             id  : 0,
             name    : {
@@ -133,11 +130,11 @@ define(['backbone'], function(Backbone) {
             value: ""
         },
         getSchemaProperty: function(index, property) {
-            app.models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
+            models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
         },
 
         changePropertyValue : function(index, value) {
-            app.models.BaseField.prototype.changePropertyValue.apply(this, arguments);
+            models.BaseField.prototype.changePropertyValue.apply(this, arguments);
         },
 
         getXML: function() {
@@ -177,7 +174,7 @@ define(['backbone'], function(Backbone) {
     /**
      * Text field model
      */
-    app.models.TextField = app.models.BaseField.extend({
+    models.TextField = models.BaseField.extend({
 
         defaults: {
             defaultValue: "",
@@ -187,12 +184,12 @@ define(['backbone'], function(Backbone) {
         },
 
         initialize : function(options) {
-            app.models.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.BaseField.schema);
+            models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.BaseField.schema);
         },
 
         getXML: function() {
-            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
+            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>'    + this.get('defaultValue')  + '</defaultValue>' +
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<size>'            + this.get('size')          + '</size>' +
@@ -212,7 +209,7 @@ define(['backbone'], function(Backbone) {
 
     });
 
-    app.models.AutocompleteField =app.models.BaseField.extend({
+    models.AutocompleteField =models.BaseField.extend({
         defaults: {
             defaultValue: "",
             hint        : "Write some text",
@@ -220,15 +217,15 @@ define(['backbone'], function(Backbone) {
         },
 
         getXML: function() {
-            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
+            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>'    + this.get('defaultValue')  + '</defaultValue>' +
                             '<hint>'            + this.get('hint')          + '</hint>' +
                             '<url>'             + this.get('url')           + '</url>';
         },
 
         initialize : function(options) {
-            app.models.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.BaseField.schema);
+            models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.BaseField.schema);
         }
 
     }, {
@@ -247,7 +244,7 @@ define(['backbone'], function(Backbone) {
     /**
      * File field model
      */
-    app.models.FileField         = app.models.BaseField.extend({
+    models.FileField         = models.BaseField.extend({
         defaults: {
             defaultValue: "",
             file        : "",
@@ -255,11 +252,11 @@ define(['backbone'], function(Backbone) {
             size        : 200    //  specify max file size in ko
         },
         initialize : function() {
-            app.models.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.BaseField.schema);
+            models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.BaseField.schema);
         },
        getXML : function () {
-           var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
+           var xml = models.BaseField.prototype.getXML.apply(this, arguments);
            return xml + "<file>"            + this.get('file')          + '</file>' +
                         "<defaultValue>"    + this.get('defaultValue')  + '</defaultValue>' +
                         "<mimeType>"        + this.get('mimeType')      + '</mimeType>' +
@@ -280,7 +277,7 @@ define(['backbone'], function(Backbone) {
     /**
      * Tree view model
      */
-    app.models.TreeViewField     = app.models.BaseField.extend({
+    models.TreeViewField     = models.BaseField.extend({
        defaults : {
             node: [
                 {
@@ -309,8 +306,8 @@ define(['backbone'], function(Backbone) {
        },
 
        initialize : function() {
-           app.models.BaseField.prototype.initialize.apply(this, arguments);
-           _.extend(this.constructor.schema, app.models.BaseField.schema);
+           models.BaseField.prototype.initialize.apply(this, arguments);
+           _.extend(this.constructor.schema, models.BaseField.schema);
            _.bindAll(this, 'getNodeXml', 'getXML');
        },
 
@@ -332,7 +329,7 @@ define(['backbone'], function(Backbone) {
        },
 
        getXML : function() {
-           var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
+           var xml = models.BaseField.prototype.getXML.apply(this, arguments);
 
            xml +=   '<defaultNode>'         + this.get('defaultNode')           + '</defaultNode>' +
                     '<multipleSelection>'   + this.get('multipleSelection')     + '</multipleSelection>' +
@@ -366,7 +363,7 @@ define(['backbone'], function(Backbone) {
     /**
      * enumeration field type
      */
-    app.models.EnumerationField  = app.models.BaseField.extend({
+    models.EnumerationField  = models.BaseField.extend({
 
         defaults: {
             itemList : {
@@ -390,8 +387,8 @@ define(['backbone'], function(Backbone) {
          * Get BaseField schema and add it on EnumerationField schema
          */
         initialize : function() {
-            app.models.BaseField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.BaseField.schema);
+            models.BaseField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.BaseField.schema);
         },
 
         /**
@@ -437,7 +434,7 @@ define(['backbone'], function(Backbone) {
          * @returns {String} XML content
          */
         getXML: function() {
-            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments);
+            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
 
             xml +=  '<itemList>'+
                     '<items>';
@@ -472,11 +469,11 @@ define(['backbone'], function(Backbone) {
         }
     });
 
-    _.defaults(app.models.TextField.prototype.defaults,          app.models.BaseField.prototype.defaults);
-    _.defaults(app.models.AutocompleteField.prototype.defaults,          app.models.BaseField.prototype.defaults);
-    _.defaults(app.models.FileField.prototype.defaults,          app.models.BaseField.prototype.defaults);
-    _.defaults(app.models.TreeViewField.prototype.defaults,      app.models.BaseField.prototype.defaults);
-    _.defaults(app.models.EnumerationField.prototype.defaults,   app.models.BaseField.prototype.defaults);
+    _.defaults(models.TextField.prototype.defaults         , models.BaseField.prototype.defaults);
+    _.defaults(models.AutocompleteField.prototype.defaults , models.BaseField.prototype.defaults);
+    _.defaults(models.FileField.prototype.defaults         , models.BaseField.prototype.defaults);
+    _.defaults(models.TreeViewField.prototype.defaults     , models.BaseField.prototype.defaults);
+    _.defaults(models.EnumerationField.prototype.defaults  , models.BaseField.prototype.defaults);
 
     //  --------------------------------------------
     //  Models herited from text field model
@@ -485,16 +482,16 @@ define(['backbone'], function(Backbone) {
     /**
      * Pattern field model
      */
-    app.models.PatternField      = app.models.TextField.extend({
+    models.PatternField      = models.TextField.extend({
         defaults : {
             pattern : ""
         } ,
         initialize : function() {
-            app.models.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.TextField.schema);
+            models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.TextField.schema);
         },
         getXML : function() {
-            return app.models.TextField.prototype.getXML.apply(this, arguments) + "<pattern>" + this.get('pattern') + '</pattern>';
+            return models.TextField.prototype.getXML.apply(this, arguments) + "<pattern>" + this.get('pattern') + '</pattern>';
         }
     }, {
         type: "Pattern",
@@ -508,16 +505,16 @@ define(['backbone'], function(Backbone) {
     /**
      * date pickear field type
      */
-    app.models.DateField         = app.models.TextField.extend({
+    models.DateField         = models.TextField.extend({
         defaults: {
             format: "dd/mm/yyyy"
         },
         initialize : function() {
-            app.models.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.TextField.schema);
+            models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.TextField.schema);
         },
         getXML: function() {
-            return app.models.TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
+            return models.TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
         }
     }, {
         type    : "Date",
@@ -531,7 +528,7 @@ define(['backbone'], function(Backbone) {
     /**
      * numeric field type
      */
-    app.models.NumericField      = app.models.TextField.extend({
+    models.NumericField      = models.TextField.extend({
         defaults: {
             minValue    : 0,
             maxValue    : 100,
@@ -539,13 +536,13 @@ define(['backbone'], function(Backbone) {
             unity       : "meters"
         },
         initialize : function() {
-            app.models.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.TextField.schema);
+            models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.TextField.schema);
             this.set('hint', 'Enter a numeric value');
         },
 
         getXML: function() {
-            return  app.models.TextField.prototype.getXML.apply(this, arguments) +
+            return  models.TextField.prototype.getXML.apply(this, arguments) +
                     '<min>' + this.get("minValue")  + '</min>' +
                     '<max>' + this.get("maxValue")  + '</max>' +
                     '<precision>'+ this.get("precision")      + '</precision>' +
@@ -566,14 +563,14 @@ define(['backbone'], function(Backbone) {
     /**
      * long text field type
      */
-    app.models.LongTextField     = app.models.TextField.extend({
+    models.LongTextField     = models.TextField.extend({
         initialize : function() {
-            app.models.TextField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.TextField.schema);
+            models.TextField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.TextField.schema);
             this.set('multiline', true);
         },
         getXML: function() {
-            return app.models.TextField.prototype.getXML.apply(this, arguments);
+            return models.TextField.prototype.getXML.apply(this, arguments);
         }
     }, {
         type    : 'LongText',
@@ -581,10 +578,10 @@ define(['backbone'], function(Backbone) {
         i18n    : 'long'
     });
 
-    _.defaults(app.models.NumericField.prototype.defaults,   app.models.TextField.prototype.defaults);
-    _.defaults(app.models.PatternField.prototype.defaults,   app.models.TextField.prototype.defaults);
-    _.defaults(app.models.DateField.prototype.defaults,      app.models.TextField.prototype.defaults);
-    _.defaults(app.models.LongTextField.prototype.defaults,  app.models.TextField.prototype.defaults);
+    _.defaults(models.NumericField.prototype.defaults  , models.TextField.prototype.defaults);
+    _.defaults(models.PatternField.prototype.defaults  , models.TextField.prototype.defaults);
+    _.defaults(models.DateField.prototype.defaults     , models.TextField.prototype.defaults);
+    _.defaults(models.LongTextField.prototype.defaults , models.TextField.prototype.defaults);
 
     //  --------------------------------------------
     //  Models herited from enumeration field model
@@ -593,13 +590,13 @@ define(['backbone'], function(Backbone) {
     /**
      * Checkbox field type
      */
-    app.models.CheckBoxField     = app.models.EnumerationField.extend({
+    models.CheckBoxField     = models.EnumerationField.extend({
         getXML: function() {
-            return app.models.EnumerationField.prototype.getXML.apply(this, arguments);
+            return models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
         initialize : function() {
-            app.models.EnumerationField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.EnumerationField.schema);
+            models.EnumerationField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.EnumerationField.schema);
             this.set('multiple', true);
             this.set('expanded', true);
         }
@@ -612,13 +609,13 @@ define(['backbone'], function(Backbone) {
     /**
      * radio field type
      */
-    app.models.RadioField        = app.models.EnumerationField.extend({
+    models.RadioField        = models.EnumerationField.extend({
         getXML: function() {
-            return app.models.EnumerationField.prototype.getXML.apply(this, arguments);
+            return models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
         initialize : function() {
-            app.models.EnumerationField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.EnumerationField.schema);
+            models.EnumerationField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.EnumerationField.schema);
             this.set('multiple', false);
             this.set('expanded', true);
         }
@@ -631,13 +628,13 @@ define(['backbone'], function(Backbone) {
     /**
      * select field type
      */
-    app.models.SelectField       = app.models.EnumerationField.extend({
+    models.SelectField       = models.EnumerationField.extend({
         getXML: function() {
-            return app.models.EnumerationField.prototype.getXML.apply(this, arguments);
+            return models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
         initialize : function() {
-            app.models.EnumerationField.prototype.initialize.apply(this, arguments);
-            _.extend(this.constructor.schema, app.models.EnumerationField.schema);
+            models.EnumerationField.prototype.initialize.apply(this, arguments);
+            _.extend(this.constructor.schema, models.EnumerationField.schema);
         }
     }, {
         type    : 'Select',
@@ -645,23 +642,23 @@ define(['backbone'], function(Backbone) {
         i18n    : 'select'
     });
 
-    _.defaults(app.models.RadioField.prototype.defaults,         app.models.EnumerationField.prototype.defaults);
-    _.defaults(app.models.CheckBoxField.prototype.defaults,      app.models.EnumerationField.prototype.defaults);
-    _.defaults(app.models.SelectField.prototype.defaults,        app.models.EnumerationField.prototype.defaults);
+    _.defaults(models.RadioField.prototype.defaults    , models.EnumerationField.prototype.defaults);
+    _.defaults(models.CheckBoxField.prototype.defaults , models.EnumerationField.prototype.defaults);
+    _.defaults(models.SelectField.prototype.defaults   , models.EnumerationField.prototype.defaults);
 
-    app.models.TableField = Backbone.Model.extend({
+    models.TableField = Backbone.Model.extend({
 
         defaults : {
             fields : [],
         },
 
         initialize : function() {
-            app.models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.apply(this, arguments);
             _.bindAll(this, 'moveModel', 'addModel', 'removeModel', 'getXML');
         },
 
         getXML : function() {
-            var xml = app.models.BaseField.prototype.getXML.apply(this, arguments)
+            var xml = models.BaseField.prototype.getXML.apply(this, arguments)
             _.each (this.get('fields'), function(el, idx) {
                 xml += '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
             });
@@ -703,9 +700,9 @@ define(['backbone'], function(Backbone) {
         i18n    : 'table'
     });
 
-    _.defaults(app.models.TableField.prototype.defaults, app.models.BaseField.prototype.defaults);
+    _.defaults(models.TableField.prototype.defaults, models.BaseField.prototype.defaults);
 
-    app.models.SubformField = Backbone.Model.extend({
+    models.SubformField = Backbone.Model.extend({
         defaults : {
             id : 0,
             fields : [],
@@ -746,7 +743,7 @@ define(['backbone'], function(Backbone) {
         },
 
         changePropertyValue : function(index, value) {
-            app.models.BaseField.prototype.changePropertyValue.apply(this, arguments);
+            models.BaseField.prototype.changePropertyValue.apply(this, arguments);
         },
     }, {
         type    : 'Subform',
@@ -755,6 +752,6 @@ define(['backbone'], function(Backbone) {
     });
 
 
-    return app.models;
+    return models;
 
 });

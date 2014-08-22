@@ -1,20 +1,30 @@
+/**
+ * @fileOverview utilies.js
+ *
+ * Contains some useful function for the application
+ *
+ * @author          MICELI Antoine (miceli.antoine@gmail.com)
+ * @version         1.0
+ */
 
-var formBuilder = (function(app) {
+require(['underscore'], function(_) {
+
+    var utilities = {};
 
     /**
      * Return if the XML Content is valid
-     * 
+     *
      * @param {string} xmlContent xml content to check
      * @returns {array|Boolean} a boolean if everything is ok or an array with the errors
      */
-    app.utilities.XMLValidation = function(xmlContent) {
+    utilities.XMLValidation = function(xmlContent) {
             var result;
-            $.ajax({                
+            $.ajax({
                 url         : 'xml/NS_Schema.xsd',
                 dataType    : 'html',
-                async       : false                
+                async       : false
             }).done(function(data) {
-                
+
                 var Module = {
                     xml         : xmlContent,
                     schema      : data,
@@ -38,9 +48,9 @@ var formBuilder = (function(app) {
 
             return result;
     };
-    
+
     /**
-     * 
+     *
      * @param {type} baseTText
      * @param {type} newText
      * @param {type} selector
@@ -50,9 +60,9 @@ var formBuilder = (function(app) {
      * @param {type} inline
      * @returns {diffview.buildView.ctelt.e|Element|diffview.buildView.celt.e}
      */
-    app.utilities.GetXMLDiff = function (baseText, newText, baseTextName, newTextName, inline, contextSize) {
-        
-        var base    = difflib.stringAsLines(baseText), 
+    utilities.GetXMLDiff = function (baseText, newText, baseTextName, newTextName, inline, contextSize) {
+
+        var base    = difflib.stringAsLines(baseText),
             newtxt  = difflib.stringAsLines(newText),
             sm      = new difflib.SequenceMatcher(base, newtxt),
             opcodes = sm.get_opcodes();
@@ -69,21 +79,21 @@ var formBuilder = (function(app) {
             viewType        : inline        ||  0
         });
     };
-    
-    app.utilities.XmlToJson = function(element, index) {
-        
+
+    utilities.XmlToJson = function(element, index) {
+
         var jsonObject = {};
-        
+
         _.each($(element).children(), function(el, idx) {
-            
+
             jsonObject[$(el).prop('tagName')] = {};
-            
+
             if ($(el).get(0).attributes.length > 0) {
                 $.each($(el).get(0).attributes, function(index, attr) {
                     jsonObject[$(el).prop('tagName')][attr.nodeName] = attr.nodeValue;
                 });
-            }         
-            
+            }
+
            if ($(el).children().length > 0) {
                //   recursive
                _.each(app.utilities.XmlToJson(el, idx), function(subEl, subId) {
@@ -97,16 +107,12 @@ var formBuilder = (function(app) {
                    jsonObject[$(el).prop('tagName')]['value'] = $(el).text();
                }
            }
-           
+
         });
 
-        return jsonObject;        
+        return jsonObject;
     };
 
-    app.utilities.displayNotification = function(title, type, message, delay) {
-        new NS.UI.Notification(arguments);
-    };
-    
-    return app;
+    return utilities;
 
-})(formBuilder);
+});

@@ -1,16 +1,9 @@
 /**
  * @fileOverview view.js
+ * 
  * This file implements all field and specific views
  *
- * Depandencies :   undersoore
- *                  jquery
- *                  backbone
- *                  jqueryui
- *                  model.js
- *                  collection.js
- *
- * Each views (exept settings views : Settingview) has a class property "templateSrc".
- * That property contains the view HTML code for backbone templating render.
+ * Each field model has a specifig view representation
  *
  * Some views uses jquery ui to add some effect and for a better interface.
  *
@@ -20,12 +13,12 @@
 
 define(['backbone', 'app/router'], function(Backbone, router) {
 
-    var app = { views : {} };
+    var views = {};
 
     /**
      * It's the basic views for all field view.
      */
-    app.views.BaseView = Backbone.View.extend({
+    views.BaseView = Backbone.View.extend({
 
         /**
          * Events for the intercepted by the view
@@ -92,13 +85,13 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * View for text field element
      */
-    app.views.AutocompleteFieldView = app.views.BaseView.extend({
+    views.AutocompleteFieldView = views.BaseView.extend({
 
         /**
          * Get BaseView events and add sepecific TextFieldView event
          */
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
@@ -107,7 +100,7 @@ define(['backbone', 'app/router'], function(Backbone, router) {
          * Render view
          */
         render : function() {
-           app.views.BaseView.prototype.render.apply(this, arguments);
+           views.BaseView.prototype.render.apply(this, arguments);
            $('#autocompleteExample').typeahead({
                 source: function(query, process) {
                     return $.getJSON( app.instances.autocompleteURL + 'example.json', {query : query}, function(data) {
@@ -154,13 +147,13 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     });
 
 
-    app.views.TextFieldView = app.views.BaseView.extend({
+    views.TextFieldView = views.BaseView.extend({
 
         /**
          * Get BaseView events and add sepecific TextFieldView event
          */
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
@@ -169,7 +162,7 @@ define(['backbone', 'app/router'], function(Backbone, router) {
          * Render view
          */
         render : function() {
-           app.views.BaseView.prototype.render.apply(this, arguments);
+           views.BaseView.prototype.render.apply(this, arguments);
        },
 
        /**
@@ -208,20 +201,20 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * View for pattern field
      */
-    app.views.PatternFieldView = app.views.BaseView.extend({
+    views.PatternFieldView = views.BaseView.extend({
 
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'change input[type="text"]': 'updateModel'
             });
         },
 
         initialize : function() {
-          app.views.BaseView.prototype.initialize.apply(this, arguments);
+          views.BaseView.prototype.initialize.apply(this, arguments);
         },
 
         render: function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
         },
 
         updateModel: function(e) {
@@ -257,13 +250,13 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * file field view
      */
-    app.views.FileFieldView = app.views.BaseView.extend({
+    views.FileFieldView = views.BaseView.extend({
 
         /**
          * Events of the view
          */
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'change input[type="text"]'     : 'updateModel',
                 'click input[type="submit"]'    : 'triggerFile',
                 'click input[type="text"]'      : 'triggerFile',
@@ -272,7 +265,7 @@ define(['backbone', 'app/router'], function(Backbone, router) {
         },
 
         initialize : function() {
-          app.views.BaseView.prototype.initialize.apply(this, arguments);
+          views.BaseView.prototype.initialize.apply(this, arguments);
         },
 
         triggerFile : function() {
@@ -280,7 +273,7 @@ define(['backbone', 'app/router'], function(Backbone, router) {
         },
 
         render: function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input[type="text"]').enableSelection();
         },
 
@@ -327,15 +320,15 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * NumericFieldView
      */
-    app.views.NumericFieldView = app.views.BaseView.extend({
+    views.NumericFieldView = views.BaseView.extend({
 
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
             });
         },
 
         render: function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
             $(this.el).find('input').spinner({
                 step: this.model.step,
                 min: this.model.minValue
@@ -372,13 +365,13 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * date field view
      */
-    app.views.DateFieldView = app.views.BaseView.extend({
+    views.DateFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
             });
         },
        render : function() {
-           app.views.BaseView.prototype.render.apply(this, arguments);
+           views.BaseView.prototype.render.apply(this, arguments);
            $(this.el).find('input').datepicker({
                format: this.model.get('format')
            });
@@ -412,14 +405,14 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Long text view
      */
-    app.views.LongTextFieldView = app.views.BaseView.extend({
+    views.LongTextFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'focus textarea'        : 'updateSetting'
             });
         },
         initialize : function() {
-            app.views.BaseView.prototype.initialize.apply(this, arguments);
+            views.BaseView.prototype.initialize.apply(this, arguments);
             $(this.el).addClass('textArea');
         }
     }, {
@@ -452,13 +445,13 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Tree view field view
      */
-    app.views.TreeViewFieldView = app.views.BaseView.extend({
+    views.TreeViewFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
             });
         },
         render : function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
             var src = this.model.get('node');
             $(this.el).find('#tree').fancytree({
                 source: src,
@@ -496,9 +489,9 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Radio field view
      */
-    app.views.RadioFieldView = app.views.BaseView.extend({
+    views.RadioFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'click input[type="radio"]'        : 'updateSetting'
             });
         }
@@ -538,9 +531,9 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Options field vue
      */
-    app.views.SelectFieldView = app.views.BaseView.extend({
+    views.SelectFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'change select'        : 'updateSelected'
             });
         },
@@ -577,9 +570,9 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Checkbox field view
      */
-    app.views.CheckBoxFieldView = app.views.BaseView.extend({
+    views.CheckBoxFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'change input[type="checkbox"]' : 'updateSelected'
             });
         },
@@ -623,9 +616,9 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Hidden field view
      */
-    app.views.HiddenFieldView = app.views.BaseView.extend({
+    views.HiddenFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {});
+            return _.extend({}, views.BaseView.prototype.events, {});
         }
     }, {
         templateSrc :   '<div class="element"><div class="row" style="margin-left : 10px;">' +
@@ -653,12 +646,12 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     /**
      * Display an horizontal line in the form
      */
-    app.views.HorizontalLineFieldView = app.views.BaseView.extend({
+    views.HorizontalLineFieldView = views.BaseView.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {});
+            return _.extend({}, views.BaseView.prototype.events, {});
         },
         render : function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
         }
     }, {
         templateSrc:    '<div class="element"><div class="row" style="margin-left : 10px;">' +
@@ -682,16 +675,16 @@ define(['backbone', 'app/router'], function(Backbone, router) {
 
 
 
-    app.views.TableFieldView = app.views.BaseView.extend({
+    views.TableFieldView = views.BaseView.extend({
 
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'delete'        : 'deleteSubView'
             });
         },
 
         initialize : function() {
-            app.views.BaseView.prototype.initialize.apply(this, arguments);
+            views.BaseView.prototype.initialize.apply(this, arguments);
             this._subView = [];
             _.bindAll(this, 'deleteSubView', 'renderSubView', 'render', 'addSubView');
         },
@@ -702,7 +695,7 @@ define(['backbone', 'app/router'], function(Backbone, router) {
         },
 
         render : function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
             $('.tableField').droppable({
                 accept : '.dropField',
                 drop : _.bind(function(event, ui) {
@@ -803,16 +796,16 @@ define(['backbone', 'app/router'], function(Backbone, router) {
 
     });
 
-    app.views.SubformFieldView = app.views.BaseView.extend({
+    views.SubformFieldView = views.BaseView.extend({
 
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, views.BaseView.prototype.events, {
                 'delete'        : 'deleteSubView'
             });
         },
 
         initialize : function() {
-            app.views.BaseView.prototype.initialize.apply(this, arguments);
+            views.BaseView.prototype.initialize.apply(this, arguments);
             this._subView = [];
             _.bindAll(this, 'deleteSubView', 'renderSubView', 'addSubView', 'render');
         },
@@ -823,7 +816,7 @@ define(['backbone', 'app/router'], function(Backbone, router) {
         },
 
         render : function() {
-            app.views.BaseView.prototype.render.apply(this, arguments);
+            views.BaseView.prototype.render.apply(this, arguments);
 
             $('.subformField').droppable({
                 accept      : '.dropField',
@@ -926,5 +919,5 @@ define(['backbone', 'app/router'], function(Backbone, router) {
     });
 
 
-    return app.views;
+    return views;
 });

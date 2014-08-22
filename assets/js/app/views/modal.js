@@ -1,6 +1,17 @@
-var formBuilder = (function(app) {
+/**
+ * @fileOverview modal.js
+ *
+ * Describe all modal views for bootstrap
+ *
+ * @author          MICELI Antoine (miceli.antoine@gmail.com)
+ * @version         1.0
+ */
 
-    app.views.SaveProtocolModalView = Backbone.View.extend({
+define(['backbone'], function(Backbone) {
+
+    var modalViews = {};
+
+    modalViews.SaveProtocolModalView = Backbone.View.extend({
 
         events : {
             'keyup #saveProtocolKeywords'               : 'validateProtocolValue',
@@ -170,7 +181,7 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.views.ExportProtocolModalView = Backbone.View.extend({
+    modalViews.ExportProtocolModalView = Backbone.View.extend({
 
         events : {
             'keyup #exportProtocolKeywords'             : 'validateProtocolValue',
@@ -338,7 +349,7 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.views.DiffProtocolModalView = Backbone.View.extend({
+    modalViews.DiffProtocolModalView = Backbone.View.extend({
 
         events : {
             'click .btn-primary'             : 'showDiff',
@@ -469,7 +480,7 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    app.views.EditListModal = Backbone.View.extend({
+    modalViews.EditListModal = Backbone.View.extend({
 
         events : {
             'click #addItem'                : 'addItem',
@@ -652,6 +663,5 @@ var formBuilder = (function(app) {
                         '</div>'
     });
 
-    return app;
-
-})(formBuilder);
+    return modalViews;
+});

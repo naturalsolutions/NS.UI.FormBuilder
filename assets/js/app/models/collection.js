@@ -1,29 +1,15 @@
 /**
  * @fileOverview collection.js
- * This file describ form collection model
  *
- * Depandencies :   undersoore
- *                  jquery
- *                  backbone
- *                  model.js
- *                  xmllint
- *                  blod
- *                  FileSaver
- *                  NS_Schema.xsd
+ * Describe form model for the application
+ * Inherited from Backbone collection
  *
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-/*
-var formBuilder = (function(app) {
-
-    ;
-
-    return app;
-
-})(formBuilder);*/
 
 define(['backbone', 'app/models/model'], function(Backbone, models) {
+
     /**
      * Implement form object as a fields collection
      */

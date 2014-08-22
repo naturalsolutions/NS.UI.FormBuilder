@@ -1,6 +1,6 @@
 define(
-    ['jquery', 'underscore', 'backbone', 'app/models/model','app/views/views', 'text!../../../templates/mainViews.html', 'i18n','jqueryui', 'nanoscroller', 'bootstrap'], 
-    function($, _, Backbone, model, views, templates) {
+    ['jquery', 'underscore', 'backbone', 'app/models/model','app/views/views', 'app/views/modal', 'text!../../../templates/mainViews.html', 'i18n','jqueryui', 'nanoscroller', 'bootstrap'], 
+    function($, _, Backbone, model, views, modals, templates) {
 
     var app = { views : {} };
 
@@ -342,18 +342,21 @@ define(
                             title       : 'Save',
                             allowedRoles: ['reader'],
                             handler: function() {
-                                var modalView = new views.SaveProtocolModalView({el: '#saveModal'});
+                                var modalView = new modals.SaveProtocolModalView({el: '#saveModal'});
                                 modalView.render();
                             }
                         }),
                         'save.xport': new NS.UI.NavBar.Action({
                             //  Allow to export protocol as a XML file
                             handler: function() {
-                                var modalView = new views.ExportProtocolModalView({
-                                    el : "#exportModal",
-                                    model : app.instances.currentForm
+                                require(['app/formbuilder'], function(formbuilderObjectRef) {
+                                    var modalView = new modals.ExportProtocolModalView({
+                                        el : "#exportModal",
+                                        model : formbuilderObjectRef.currentCollection
+                                    });
+                                    modalView.render();
+
                                 });
-                                modalView.render();
                             },
                             allowedRoles    : ["reader"],
                             title           : 'Export as XML'
@@ -365,7 +368,9 @@ define(
                     actions : {
                         'import.XML' : new NS.UI.NavBar.Action({
                             handler: function() {
-                                app.instances.mainView.importXML();
+                                require(['app/formbuilder'], function(formbuilderRef) {
+                                    formbuilderRef.mainView.importXML();
+                                });
                             },
                             allowedRoles: ["reader"],
                             title       : 'Importer un fichier XML'
@@ -483,7 +488,7 @@ define(
                         }).removeClass('hide').css('width', '700px');
                     },
                     allowedRoles: ["reader"],
-                    title: '<span class="fa fa-bars" data-i18n="nav.compare"></span>'
+                    title: '<span class="fa fa-bars" data-i18n="nav.compare" data-key="show"></span>'
                 })
             };
         }

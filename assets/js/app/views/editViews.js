@@ -1,11 +1,20 @@
+/**
+ * @fileOverview editViews.js
+ *
+ * Describe all edition views, each field model has a specific edition view
+ *
+ * @author          MICELI Antoine (miceli.antoine@gmail.com)
+ * @version         1.0
+ */
+
 define(['backbone'], function(Backbone) {
 
-    var app = { views : {} };
+    var editionViews = {};
 
 	/**
      * Basic edition view for all field edition view
      */
-    app.views.BaseEditView = Backbone.View.extend({
+    editionViews.BaseEditView = Backbone.View.extend({
 
         /**
          * Evenet intercepted by the view
@@ -56,13 +65,13 @@ define(['backbone'], function(Backbone) {
         /**
          * Render view
          *
-         * @returns {app.views.BaseView} view
+         * @returns {editionViews.BaseView} view
          */
         render: function() {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
 
-            this.subView = new app.views[this.model.constructor.type + 'FieldEditView']({
+            this.subView = new editionViews[this.model.constructor.type + 'FieldEditView']({
                el : $('#subView') ,
                model : this.model
             });
@@ -162,7 +171,7 @@ define(['backbone'], function(Backbone) {
                         '</div>'
     });
 
-    app.views.SimpleEditView = Backbone.View.extend({
+    editionViews.SimpleEditView = Backbone.View.extend({
 
         events : {
             'click h2 > span:not(.selected)'   : 'displayOptions',
@@ -214,12 +223,12 @@ define(['backbone'], function(Backbone) {
         },
 
         getActions : function() {
-            return app.views.BaseEditView.prototype.getActions.apply(this, arguments);
+            return editionViews.BaseEditView.prototype.getActions.apply(this, arguments);
         }
 
     });
 
-    app.views.HiddenFieldEditView = app.views.SimpleEditView.extend({
+    editionViews.HiddenFieldEditView = editionViews.SimpleEditView.extend({
     }, {
         templateSrc : '<div>'+
                         '   <h1 data-i18n="label.settings">Settings</h1>'+
@@ -251,7 +260,7 @@ define(['backbone'], function(Backbone) {
                         '</div>'
     });
 
-	app.views.AutocompleteFieldEditView = Backbone.View.extend({
+	editionViews.AutocompleteFieldEditView = Backbone.View.extend({
 
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -276,7 +285,7 @@ define(['backbone'], function(Backbone) {
                         '<% }) %>'
     });
 
-    app.views.TextFieldEditView = Backbone.View.extend({
+    editionViews.TextFieldEditView = Backbone.View.extend({
 
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -302,7 +311,7 @@ define(['backbone'], function(Backbone) {
     });
 
 
-    app.views.PatternFieldEditView = Backbone.View.extend({
+    editionViews.PatternFieldEditView = Backbone.View.extend({
 
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -317,7 +326,7 @@ define(['backbone'], function(Backbone) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
 
-            var textView = new app.views.TextFieldEditView({
+            var textView = new editionViews.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
@@ -341,7 +350,7 @@ define(['backbone'], function(Backbone) {
     /**
      * File field edition view
      */
-    app.views.FileFieldEditView = Backbone.View.extend({
+    editionViews.FileFieldEditView = Backbone.View.extend({
 
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -377,7 +386,7 @@ define(['backbone'], function(Backbone) {
     /**
      * Numeric field edition view
      */
-    app.views.NumericFieldEditView = Backbone.View.extend({
+    editionViews.NumericFieldEditView = Backbone.View.extend({
 
         events : {
             'change select' : 'changed'
@@ -398,7 +407,7 @@ define(['backbone'], function(Backbone) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
 
-            var textView = new app.views.TextFieldEditView({
+            var textView = new editionViews.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
@@ -448,7 +457,7 @@ define(['backbone'], function(Backbone) {
     /**
      * Date field edition view
      */
-    app.views.DateFieldEditView = Backbone.View.extend({
+    editionViews.DateFieldEditView = Backbone.View.extend({
 
         initialize: function() {
             this.template   = _.template(this.constructor.templateSrc);
@@ -463,7 +472,7 @@ define(['backbone'], function(Backbone) {
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
 
-            var textView = new app.views.TextFieldEditView({
+            var textView = new editionViews.TextFieldEditView({
                 el      : $('#subTextView'),
                 model   : this.model
             });
@@ -487,12 +496,12 @@ define(['backbone'], function(Backbone) {
     /**
      * Long text field edition view
      */
-    app.views.LongTextFieldEditView = app.views.TextFieldEditView.extend({});
+    editionViews.LongTextFieldEditView = editionViews.TextFieldEditView.extend({});
 
     /**
      * Tree view field edition view
      */
-    app.views.TreeViewFieldEditView = Backbone.View.extend({
+    editionViews.TreeViewFieldEditView = Backbone.View.extend({
 
         initialize: function() {
             this.template = _.template(this.constructor.templateSrc);
@@ -511,9 +520,9 @@ define(['backbone'], function(Backbone) {
     /**
      * Common edition view for enumeration field
      */
-    app.views.RadioFieldEditView = app.views.CheckBoxFieldEditView = app.views.SelectFieldEditView = Backbone.View.extend({
+    editionViews.RadioFieldEditView = editionViews.CheckBoxFieldEditView = editionViews.SelectFieldEditView = Backbone.View.extend({
         events: function() {
-            return _.extend({}, app.views.BaseEditView.prototype.events, {
+            return _.extend({}, editionViews.BaseEditView.prototype.events, {
                 'click .listEdit' : 'editList'
             });
         },
@@ -533,17 +542,19 @@ define(['backbone'], function(Backbone) {
         },
 
         editList : function(e) {
-            var modal = new app.views.EditListModal({
-                el      : '#editListModal',
-                model   : this.copyeItemList()
-            });
-            modal.render();
+            require(['app/views/modal'], _.bind(function(modalViews) {
+                var modal = new modalViews.EditListModal({
+                    el      : '#editListModal',
+                    model   : this.copyeItemList()
+                });
+                modal.render();
 
-            modal.bind('saved', _.bind(function() {
-                this.model.set('itemList', modal.model);
-                modal.unbind();
-                delete modal;
-                this.model.trigger('change');
+                modal.bind('saved', _.bind(function() {
+                    this.model.set('itemList', modal.model);
+                    modal.unbind();
+                    delete modal;
+                    this.model.trigger('change');
+                }, this));
             }, this));
         }
 
@@ -579,7 +590,7 @@ define(['backbone'], function(Backbone) {
     });
 
 
-    app.views.TableFieldEditView = Backbone.View.extend({
+    editionViews.TableFieldEditView = Backbone.View.extend({
         events : {
         	'change .positionOption' : 'optionChanged'
         },
@@ -640,10 +651,10 @@ define(['backbone'], function(Backbone) {
                         '	</div>'
     });
 
-    app.views.SubformFieldEditView = app.views.SimpleEditView.extend({
+    editionViews.SubformFieldEditView = editionViews.SimpleEditView.extend({
 
         events : function(){
-            return _.extend({}, app.views.SimpleEditView.prototype.events, {});
+            return _.extend({}, editionViews.SimpleEditView.prototype.events, {});
         },
 
     }, {
@@ -676,5 +687,5 @@ define(['backbone'], function(Backbone) {
     });
 
 
-	return app.views;
+	return editionViews;
 });
