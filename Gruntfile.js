@@ -11,7 +11,7 @@ module.exports = function(grunt) {
                     cleancss: true,
                 },
                 files: {
-                     "compressed/formbuilder.min.css": "stylesheet/styles.less"
+                     "compressed/formbuilder.min.css": "assets/stylesheet/styles.less"
                 }
             }
         },
@@ -46,21 +46,11 @@ module.exports = function(grunt) {
         },
 
         //  --------------------------------------------
-        //  Minify CSS file
-        //  --------------------------------------------
-        cssmin : {
-            dist : {
-                src: 'dist/stylesheet/formbuilder.css',
-                dest: 'dist/stylesheet/formbuilder.min.css'
-            }
-        },
-
-        //  --------------------------------------------
         //  Watch file event and run task
         //  --------------------------------------------
         watch: {
             stylesheet : {
-                files : ['stylesheet/*.less'],
+                files : ['assets/stylesheet/*.less'],
                 tasks : ['less:dist']
             }
         },
@@ -84,7 +74,6 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-requirejs');
     grunt.loadNpmTasks('grunt-bower-task');
