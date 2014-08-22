@@ -1,4 +1,6 @@
-var formBuilder = (function(app) {
+define(['backbone'], function(Backbone) {
+
+    var app = { views : {} };
 
 	/**
      * Basic edition view for all field edition view
@@ -94,9 +96,7 @@ var formBuilder = (function(app) {
                         if ($('.dropArea').hasClass('span7')) {
                             $('.dropArea').switchClass('span7', 'span9', 100);
                             $('.widgetsPanel').switchClass('span0', 'span3', 200);
-                            app.instances.router.navigate("#", {
-                                trigger : true
-                            });
+                            window.location.hash = "#";
                         }
                     },
                     allowedRoles: ["reader"],
@@ -513,7 +513,7 @@ var formBuilder = (function(app) {
      */
     app.views.RadioFieldEditView = app.views.CheckBoxFieldEditView = app.views.SelectFieldEditView = Backbone.View.extend({
         events: function() {
-            return _.extend({}, app.views.BaseView.prototype.events, {
+            return _.extend({}, app.views.BaseEditView.prototype.events, {
                 'click .listEdit' : 'editList'
             });
         },
@@ -676,5 +676,5 @@ var formBuilder = (function(app) {
     });
 
 
-	return app;
-})(formBuilder);
+	return app.views;
+});

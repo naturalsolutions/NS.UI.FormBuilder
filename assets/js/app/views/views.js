@@ -18,8 +18,9 @@
  * @version         1.0
  */
 
-var formBuilder = (function(app) {
+define(['backbone', 'app/router'], function(Backbone, router) {
 
+    var app = { views : {} };
 
     /**
      * It's the basic views for all field view.
@@ -709,21 +710,25 @@ var formBuilder = (function(app) {
                     // Check if the tableView is not empty
                     if ($(this.el).find('.empty').length > 0) {
 
-                        var subViewID   = $(ui['draggable']).prop('id'),
-                            subView     = app.instances.mainView.getSubView( subViewID ),
-                            size        = 4 - $(this.el).find('.empty').length;
+                        require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
 
-                        this.addSubView(subViewID, subView, subView.model)
+                            var subViewID   = $(ui['draggable']).prop('id'),
+                                subView     = formbuilderInstance.mainView.getSubView( subViewID ),
+                                size        = 4 - $(this.el).find('.empty').length;
 
-                        $(this.el + ' #tableView' + size).switchClass('empty', 'used', 0)
-                        $(this.el + ' #tableView' + size).find('i').remove();
+                            this.addSubView(subViewID, subView, subView.model)
 
-                        subView.$el.remove();
-                        setTimeout( _.bind(function() {
-                            subView.$el.removeClass('dropField')
-                            $(this.el + ' #tableView' + size).append(subView.$el );
-                            subView.render();
-                        }, this), 0)
+                            $(this.el + ' #tableView' + size).switchClass('empty', 'used', 0)
+                            $(this.el + ' #tableView' + size).find('i').remove();
+
+                            subView.$el.remove();
+                            setTimeout( _.bind(function() {
+                                subView.$el.removeClass('dropField')
+                                $(this.el + ' #tableView' + size).append(subView.$el );
+                                subView.render();
+                            }, this), 0)
+
+                        }, this));
 
                     } else {
                         $(".dropArea").animate({ scrollTop: 0 }, "medium");
@@ -741,12 +746,15 @@ var formBuilder = (function(app) {
         },
 
         renderSubView : function() {
-            _.each(this._subView, _.bind(function(el, idx) {
-                if (el!= undefined && idx != undefined) {
-                    this.$el.find('#tableView' + idx).append( app.instances.mainView.getSubView( el ).$el )
-                    this.$el.find('#tableView' + idx).switchClass('empty', "used", 0);
-                    app.instances.mainView.getSubView( el ).render();
-                }
+            require(['formbuilder'], _.bind(function(formbuilderInstance) {
+
+                _.each(this._subView, _.bind(function(el, idx) {
+                    if (el!= undefined && idx != undefined) {
+                        this.$el.find('#tableView' + idx).append( formbuilderInstance.mainView.getSubView( el ).$el )
+                        this.$el.find('#tableView' + idx).switchClass('empty', "used", 0);
+                        formbuilderInstance.mainView.getSubView( el ).render();
+                    }
+                }, this));
 
             }, this));
         },
@@ -818,24 +826,31 @@ var formBuilder = (function(app) {
             app.views.BaseView.prototype.render.apply(this, arguments);
 
             $('.subformField').droppable({
-                accept : '.dropField',
-                                hoverClass : 'hovered',
+                accept      : '.dropField',
+                hoverClass  : 'hovered',
                 activeClass : 'hovered',
+
                 drop : _.bind(function(event, ui) {
-                    var subViewID   = $(ui['draggable']).prop('id'),
-                        subView     = app.instances.mainView.getSubView( subViewID );
 
-                    this.addSubView(subViewID, subView, subView.model)
+                    require(['formbuilder'], _.bind(function(formbuilderInstance) {
 
-                    $(this.el + ' fieldset').append('<div class="row-fluid sortableRow"></div>');
-                    subView.$el.switchClass('span12', 'span10 offset1',0);
-                    subView.$el.switchClass('dropField', 'subElement',0);
+                        var subViewID   = $(ui['draggable']).prop('id'),
+                            subView     = formbuilderInstance.mainView.getSubView( subViewID );
 
-                    subView.$el.remove();
-                    setTimeout( _.bind(function() {
-                        $(this.el + ' fieldset .row-fluid:last').append(subView.$el );
-                        subView.render();
-                    }, this), 0)
+                        this.addSubView(subViewID, subView, subView.model)
+
+                        $(this.el + ' fieldset').append('<div class="row-fluid sortableRow"></div>');
+                        subView.$el.switchClass('span12', 'span10 offset1',0);
+                        subView.$el.switchClass('dropField', 'subElement',0);
+
+                        subView.$el.remove();
+                        setTimeout( _.bind(function() {
+                            $(this.el + ' fieldset .row-fluid:last').append(subView.$el );
+                            subView.render();
+                        }, this), 0)
+
+                    }, this));
+
                 }, this)
             });
 
@@ -862,14 +877,18 @@ var formBuilder = (function(app) {
         },
 
         renderSubView : function() {
-            _.each(this._subView, _.bind(function(el, idx) {
-                if (el!= undefined && idx != undefined) {
-                    this.$el.find('fieldset').append(
-                        '<div class="row-fluid subElement ' + (idx == 0 ? 'noMarginTop' : '' )+ '" id="' + el + '"></div>'
-                    )
-                    $(this.el + ' fieldset .row-fluid:last').append(app.instances.mainView.getSubView( el ).$el );
-                    app.instances.mainView.getSubView( el ).render();
-                }
+            require(['formbuilder'], _.bind(function(formbuilderInstance) {
+
+                _.each(this._subView, _.bind(function(el, idx) {
+                    if (el!= undefined && idx != undefined) {
+                        this.$el.find('fieldset').append(
+                            '<div class="row-fluid subElement ' + (idx == 0 ? 'noMarginTop' : '' )+ '" id="' + el + '"></div>'
+                        )
+                        $(this.el + ' fieldset .row-fluid:last').append(formbuilderInstance.mainView.getSubView( el ).$el );
+                        formbuilderInstance.mainView.getSubView( el ).render();
+                    }
+                }, this));
+
             }, this));
         },
 
@@ -907,8 +926,5 @@ var formBuilder = (function(app) {
     });
 
 
-
-
-    return app;
-
-})(formBuilder);
+    return app.views;
+});

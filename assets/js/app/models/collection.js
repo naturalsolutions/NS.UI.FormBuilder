@@ -14,14 +14,21 @@
  * @author          MICELI Antoine (miceli.antoine@gmail.com)
  * @version         1.0
  */
-
+/*
 var formBuilder = (function(app) {
 
+    ;
+
+    return app;
+
+})(formBuilder);*/
+
+define(['backbone', 'app/models/model'], function(Backbone, models) {
     /**
      * Implement form object as a fields collection
      */
-    app.collections.Form = Backbone.Collection.extend({
-        model: app.models.BaseField,
+    var Form = Backbone.Collection.extend({
+        model: models.BaseField,
 
         /**
          * Init form collection
@@ -120,7 +127,7 @@ var formBuilder = (function(app) {
          * @returns {undefined}
          */
         addElement: function(nameType) {
-            var el = new app.models[nameType]({
+            var el = new models[nameType]({
                 id : this.getSize()
             });
             this.add (el);
@@ -165,6 +172,5 @@ var formBuilder = (function(app) {
 
     });
 
-    return app;
-
-})(formBuilder);
+    return Form;
+})

@@ -10,7 +10,9 @@
  * @version         1.0
  */
 
-var formBuilder = (function(app) {
+define(['backbone'], function(Backbone) {
+
+    var app = { models : {} }
 
     //  --------------------------------------------
     //  Basic models herited from Backbone model
@@ -753,6 +755,6 @@ var formBuilder = (function(app) {
     });
 
 
-    return app;
+    return app.models;
 
-})(formBuilder);
+});
