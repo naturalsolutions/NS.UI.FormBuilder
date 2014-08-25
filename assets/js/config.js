@@ -1,3 +1,11 @@
+/**
+ * @fileOverview config.js
+ *
+ * RequireJS configuration file
+ *
+ * @author          MICELI Antoine (miceli.antoine@gmail.com)
+ * @version         1.0
+ */
 
 function loadAllCss() {
     var links = [
@@ -25,9 +33,8 @@ require.config({
         backbone             : "../../librairies/backbone/backbone",
         blobjs               : "../../librairies/blobjs/Blob",
         bootstrap            : "../../librairies/bootstrap/bootstrap",
-        fancytree            : "../../librairies/fancytree/dist/jquery.fancytree-custom.min",
+        fancytree            : "../../librairies/fancytree/jquery.fancytree-custom.min",
         filesaver            : "../../librairies/filesaver/FileSaver",
-        "font-awesome"       : "../../librairies/font-awesome/fonts/*",
         i18n                 : "../../librairies/i18n/i18next",
         jquery               : "../../librairies/jquery/jquery",
         jqueryui             : '../../librairies/jquery-ui/jquery-ui',
@@ -38,15 +45,10 @@ require.config({
         requirejs            : "../../librairies/requirejs/require",
     },
 
-    packages : [{
-        name     : 'js',
-        location : '',
-        main     : 'formbuilder.js'
-    }],
-
     shim: {
         'jquery'       : { exports: '$' },
         'underscore'   : { exports: '_' },
+        'backbone'     : { deps : ['underscore', 'jquery'], exports : "Backbone"},
         "jqueryui"     : { exports: "$", deps: ['jquery'] },
         "i18n"         : { exports: "$", deps: ['jquery'] },
         "nanoscroller" : { exports: "$", deps: ['jquery', 'jqueryui'] },

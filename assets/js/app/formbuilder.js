@@ -8,7 +8,7 @@
  * @version         1.0
  */
 
-define(['jquery', 'underscore', 'backbone', 'app/router'], function($, _, Backbone, Router){
+define(['backbone', 'app/router'], function(Backbone, Router){
 
     var formbuilder = {
         initialize : function(options) {
