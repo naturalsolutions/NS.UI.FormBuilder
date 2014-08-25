@@ -1,9 +1,8 @@
 module.exports = function(grunt) {
 
     grunt.initConfig({
-        //  --------------------------------------------
-        //  Compile LESS files
-        //  --------------------------------------------
+
+        //  LESS file compilation
         less: {
             dist: {
                 options: {
@@ -16,68 +15,35 @@ module.exports = function(grunt) {
             }
         },
 
-        //  --------------------------------------------
-        //  Concat all js files (not librairies files)
-        //  FIX Me : outputed file not works !
-        //  --------------------------------------------
-        concat: {
-            dist: {
-                src: [
-                    'js/formBuilder.js',
-                    'js/utilities.js',
-                    'js/model.js',
-                    'js/collection.js',
-                    'js/views.js',
-                    'js/router.js',
-                    'js/brain.js',
-                ],
-                dest: 'dist/js/formbuilder.js'
-            }
-        },
-
-        //  --------------------------------------------
-        //  Minify concated js file
-        //  --------------------------------------------
-        uglify: {
-            dist: {
-                src: 'dist/js/formbuilder.js',
-                dest: 'dist/js/formbuilder.min.js'
-            },
-        },
-
-        //  --------------------------------------------
-        //  Watch file event and run task
-        //  --------------------------------------------
+        // Watch less file changes for compile
         watch: {
             stylesheet : {
                 files : ['assets/stylesheet/*.less'],
                 tasks : ['less:dist']
             }
         },
+
+        //  Bower : install bower components and create requireJS configuration file
         bower: {
             install: {
                 options : {
                     targetDir : './librairies',
-                    cleanBowerDir : true,
-                }
+                    cleanBowerDir : true
+                },
             },
-        },
-        shell : {
-            clean : {
-                command : [
-                    "find lib/ -iname '*.md' -exec rm '{}' ';'"
-                ].join('&&')
+            target: {
+                rjsConfig: 'assets/js/config.js',
+                options: {
+                    baseUrl: './'
+                }
             }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
-    grunt.loadNpmTasks('grunt-contrib-concat');
-    grunt.loadNpmTasks('grunt-contrib-uglify');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-requirejs');
     grunt.loadNpmTasks('grunt-bower-task');
 
-    grunt.registerTask('dev', ['less', 'concat', 'uglify', 'cssmin']);
     grunt.registerTask('install', ['bower:install', 'bower:target'])
 }

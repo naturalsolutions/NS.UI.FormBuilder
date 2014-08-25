@@ -2,31 +2,24 @@
   "name"        : "formBuilder",
   "version"     : "0.0.0",
   "description" : "",
-  "main"        : "index.js",
-  "scripts"     : {
-    "test"        : "echo \"Error: no test specified\" && exit 1"
-  },
+  "main"        : "assets/js/config.js",
   "repository"  : {
-    "type"        : "git",
-    "url"         : "git://github.com/NaturalSolutions/NS.UI.FormBuilder.git"
+    "type" : "git",
+    "url"  : "git://github.com/NaturalSolutions/NS.UI.FormBuilder.git"
   },
-  "author"      : "MICELI Antoine",
-  "license"     : "ISC",
-  "bugs"        : {
-    "url"         : "https://github.com/NaturalSolutions/NS.UI.FormBuilder/issues"
+  "author"  : "MICELI Antoine",
+  "license" : "ISC",
+  "bugs"    : {
+    "url": "https://github.com/NaturalSolutions/NS.UI.FormBuilder/issues"
   },
-  "homepage"    : "https://github.com/NaturalSolutions/NS.UI.FormBuilder",
-  "devDependencies": {
-    "grunt"                 : "^0.4.4"  ,
-    "grunt-contrib-less"    : "^0.11.0" ,
-    "grunt-contrib-concat"  : "^0.4.0"  ,
-    "grunt-contrib-uglify"  : "^0.4.0"  ,
-    "grunt-contrib-watch"   : "^0.6.1"  ,
-    "grunt-contrib-cssmin"  : "^0.9.0"  ,
-    "grunt-preprocess"      : "^4.0.0"  ,
-    "grunt-file-append"     : "0.0.4"   ,
-    "grunt-bower-task"      : "^0.4.0"  ,
-    "grunt-shell"           : "^0.7.0"  ,
+  "homepage"        : "https://github.com/NaturalSolutions/NS.UI.FormBuilder",
+  "devDependencies" : {
+    "grunt"                 : "^0.4.4",
+    "grunt-contrib-less"    : "^0.11.0",
+    "grunt-contrib-uglify"  : "^0.4.0",
+    "grunt-contrib-watch"   : "^0.6.1",
+    "grunt-contrib-cssmin"  : "^0.9.0",
+    "grunt-bower-task"      : "^0.4.0",
     "grunt-bower-requirejs" : "^1.0.0"
   }
 }
