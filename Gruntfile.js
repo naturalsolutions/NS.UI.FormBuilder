@@ -10,32 +10,23 @@ module.exports = function(grunt) {
                     cleancss: true,
                 },
                 files: {
-                     "compressed/formbuilder.min.css": "assets/stylesheet/styles.less"
+                    "compressed/formbuilder.min.css": "assets/stylesheet/styles.less"
                 }
             }
         },
 
         // Watch less file changes for compile
         watch: {
-            stylesheet : {
-                files : ['assets/stylesheet/*.less'],
-                tasks : ['less:dist']
+            stylesheet: {
+                files: ['assets/stylesheet/*.less'],
+                tasks: ['less:dist']
             }
         },
 
         //  Bower : install bower components and create requireJS configuration file
         bower: {
-            install: {
-                options : {
-                    targetDir : './librairies',
-                    cleanBowerDir : true
-                },
-            },
             target: {
-                rjsConfig: 'assets/js/config.js',
-                options: {
-                    baseUrl: './'
-                }
+                rjsConfig: 'assets/js/config.js'
             }
         }
     });
@@ -43,7 +34,23 @@ module.exports = function(grunt) {
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-bower-requirejs');
-    grunt.loadNpmTasks('grunt-bower-task');
 
-    grunt.registerTask('install', ['bower:install', 'bower:target'])
+    grunt.registerTask('bower-install', function() {
+        var done = this.async();
+        grunt.util.spawn({
+            cmd: 'bower',
+            args: ['install'],
+            opts: {
+                stdio: 'inherit'
+            }
+        }, function(error, result) {
+            if (error) {
+                grunt.fail.fatal(result.stdout);
+            }
+            grunt.log.writeln(result.stdout);
+            done();
+        });
+    });
+
+    grunt.registerTask('install', ['bower:target'])
 }
