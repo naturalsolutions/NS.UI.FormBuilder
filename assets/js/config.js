@@ -10,6 +10,7 @@
 function loadAllCss() {
     var links = [
         'lib/font-awesome/font-awesome.css',
+        'lib/fancytree/ui.fancytree.min.css',
         'lib/bootstrap/bootstrap.css',
         'librairies/bootstrap/docs/assets/css/bootstrap-responsive.css',
         'lib/jsdifflib/diffview.css',
@@ -60,6 +61,12 @@ require.config({
             exports: "Backbone"
         },
         jqueryui: {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        },
+        fancytree: {
             exports: "$",
             deps: [
                 "jquery"

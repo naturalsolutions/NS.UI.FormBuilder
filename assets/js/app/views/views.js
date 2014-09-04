@@ -11,7 +11,7 @@
  * @version         1.0
  */
 
-define(['backbone', 'app/router'], function(Backbone, router) {
+define(['jquery', 'underscore', 'backbone', 'app/router', 'fancytree'], function($, _, Backbone, router) {
 
     var views = {};
 
