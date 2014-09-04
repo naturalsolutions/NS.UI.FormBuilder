@@ -25,32 +25,15 @@ module.exports = function(grunt) {
 
         //  Bower : install bower components and create requireJS configuration file
         bower: {
-            target: {
-                rjsConfig: 'assets/js/config.js'
+            install: {
+                options: {
+                    cleanBowerDir : true
+                }
             }
         }
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
-    grunt.loadNpmTasks('grunt-bower-requirejs');
-
-    grunt.registerTask('bower-install', function() {
-        var done = this.async();
-        grunt.util.spawn({
-            cmd: 'bower',
-            args: ['install'],
-            opts: {
-                stdio: 'inherit'
-            }
-        }, function(error, result) {
-            if (error) {
-                grunt.fail.fatal(result.stdout);
-            }
-            grunt.log.writeln(result.stdout);
-            done();
-        });
-    });
-
-    grunt.registerTask('install', ['bower:target'])
+    grunt.loadNpmTasks('grunt-bower-task');
 }

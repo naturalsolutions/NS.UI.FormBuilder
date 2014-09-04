@@ -9,13 +9,14 @@
 
 function loadAllCss() {
     var links = [
-        'librairies/font-awesome/font-awesome.css',
-        'librairies/bootstrap/bootstrap.css',
-        'librairies/jsdifflib/diffview.css',
-        'librairies/nanoscroller/nanoscroller.css',
-        'librairies/NS.UI.Navbar/navbar-modernui.css',
-        'librairies/NS.UI.Navbar/navbar.css',
-        'librairies/NS.UI.Notification/notification.css',
+        'lib/font-awesome/font-awesome.css',
+        'lib/bootstrap/bootstrap.css',
+        'librairies/bootstrap/docs/assets/css/bootstrap-responsive.css',
+        'lib/jsdifflib/diffview.css',
+        'lib/nanoscroller/nanoscroller.css',
+        'lib/NS.UI.Navbar/navbar-modernui.css',
+        'lib/NS.UI.Navbar/navbar.css',
+        'lib/NS.UI.Notification/notification.css',
         'compressed/formbuilder.min.css'
     ];
     for (var l in links) {
@@ -28,33 +29,73 @@ function loadAllCss() {
 }
 
 require.config({
-
     paths: {
-        backbone             : "../../librairies/backbone/backbone",
-        blobjs               : "../../librairies/blobjs/Blob",
-        bootstrap            : "../../librairies/bootstrap/bootstrap",
-        fancytree            : "../../librairies/fancytree/jquery.fancytree-custom.min",
-        filesaver            : "../../librairies/filesaver/FileSaver",
-        i18n                 : "../../librairies/i18n/i18next",
-        jquery               : "../../librairies/jquery/jquery",
-        jqueryui             : '../../librairies/jquery-ui/jquery-ui',
-        nanoscroller         : "../../librairies/nanoscroller/jquery.nanoscroller",
-        underscore           : "../../librairies/underscore/underscore",
-        "NS.UI.Navbar"       : "../../librairies/NS.UI.Navbar/navbar",
-        "NS.UI.Notification" : "../../librairies/NS.UI.Notification/notification",
-        requirejs            : "../../librairies/requirejs/require",
+        backbone             : "../../lib/backbone/backbone",
+        blobjs               : "../../lib/blobjs/Blob",
+        bootstrap            : "../../lib/bootstrap/bootstrap",
+        fancytree            : "../../lib/fancytree/jquery.fancytree-custom.min",
+        filesaver            : "../../lib/filesaver/FileSaver",
+        i18n                 : "../../lib/i18n/i18next",
+        jquery               : "../../lib/jquery/jquery",
+        jqueryui             : "../../lib/jquery-ui/jquery-ui",
+        nanoscroller         : "../../lib/nanoscroller/jquery.nanoscroller",
+        underscore           : "../../lib/underscore/underscore",
+        "NS.UI.Navbar"       : "../../lib/NS.UI.Navbar/navbar",
+        "NS.UI.Notification" : "../../lib/NS.UI.Notification/notification",
+        requirejs            : "../../lib/requirejs/require",
+        "font-awesome"       : "../../lib/font-awesome/*"
     },
-
     shim: {
-        'jquery'       : { exports: '$' },
-        'underscore'   : { exports: '_' },
-        'backbone'     : { deps : ['underscore', 'jquery'], exports : "Backbone"},
-        "jqueryui"     : { exports: "$", deps: ['jquery'] },
-        "i18n"         : { exports: "$", deps: ['jquery'] },
-        "nanoscroller" : { exports: "$", deps: ['jquery', 'jqueryui'] },
-        "NS.UI.Navbar" : { exports: "$", deps: ['jquery', 'backbone', 'bootstrap'] },
-        "bootstrap"    : { exports: "$", deps: ['jquery'] },
-    }
+        jquery: {
+            exports: "$"
+        },
+        underscore: {
+            exports: "_"
+        },
+        backbone: {
+            deps: [
+                "underscore",
+                "jquery"
+            ],
+            exports: "Backbone"
+        },
+        jqueryui: {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        },
+        i18n: {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        },
+        nanoscroller: {
+            exports: "$",
+            deps: [
+                "jquery",
+                "jqueryui"
+            ]
+        },
+        "NS.UI.Navbar": {
+            exports: "$",
+            deps: [
+                "jquery",
+                "backbone",
+                "bootstrap"
+            ]
+        },
+        bootstrap: {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        }
+    },
+    packages: [
+
+    ]
 });
 
 require(['app/formbuilder'], function(formbuilder) {
