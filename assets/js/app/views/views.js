@@ -742,7 +742,7 @@ define(['jquery', 'underscore', 'backbone', 'app/router', 'fancytree'], function
         },
 
         renderSubView : function() {
-            require(['formbuilder'], _.bind(function(formbuilderInstance) {
+            require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
 
                 _.each(this._subView, _.bind(function(el, idx) {
                     if (el!= undefined && idx != undefined) {
@@ -828,8 +828,7 @@ define(['jquery', 'underscore', 'backbone', 'app/router', 'fancytree'], function
 
                 drop : _.bind(function(event, ui) {
 
-                    require(['formbuilder'], _.bind(function(formbuilderInstance) {
-
+                    require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
                         var subViewID   = $(ui['draggable']).prop('id'),
                             subView     = formbuilderInstance.mainView.getSubView( subViewID );
 
@@ -873,7 +872,7 @@ define(['jquery', 'underscore', 'backbone', 'app/router', 'fancytree'], function
         },
 
         renderSubView : function() {
-            require(['formbuilder'], _.bind(function(formbuilderInstance) {
+            require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
 
                 _.each(this._subView, _.bind(function(el, idx) {
                     if (el!= undefined && idx != undefined) {
