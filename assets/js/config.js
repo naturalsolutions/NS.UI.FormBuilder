@@ -9,10 +9,10 @@
 
 function loadAllCss() {
     var links = [
-        'lib/font-awesome/font-awesome.css',
-        'lib/fancytree/ui.fancytree.min.css',
+        'lib/font-awesome/css/font-awesome.css',
+        'lib/fancytree/skin-win7/ui.fancytree.min.css',
         'lib/bootstrap/bootstrap.css',
-        'librairies/bootstrap/docs/assets/css/bootstrap-responsive.css',
+        'lib/bootstrap/bootstrap-responsive.css',
         'lib/jsdifflib/diffview.css',
         'lib/nanoscroller/nanoscroller.css',
         'lib/NS.UI.Navbar/navbar-modernui.css',
