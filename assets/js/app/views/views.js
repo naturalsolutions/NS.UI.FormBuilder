@@ -11,7 +11,7 @@
  * @version         1.0
  */
 
-define(['jquery', 'underscore', 'backbone', 'app/router', 'fancytree'], function($, _, Backbone, router) {
+define(['jquery', 'underscore', 'backbone', 'app/router'], function($, _, Backbone, router) {
 
     var views = {};
 
@@ -456,11 +456,13 @@ define(['jquery', 'underscore', 'backbone', 'app/router', 'fancytree'], function
         render : function() {
             views.BaseView.prototype.render.apply(this, arguments);
             var src = this.model.get('node');
-            $(this.el).find('#tree').fancytree({
-                source: src,
-                checkbox : true,
-                selectMode : 2
-            });
+            require(['jquery', 'fancytree'], _.bind(function($) {
+                $(this.el).find('#tree').fancytree({
+                    source: src,
+                    checkbox : true,
+                    selectMode : 2
+                });
+            }, this));
         }
     }, {
         templateSrc:    '<div class="element">'+
