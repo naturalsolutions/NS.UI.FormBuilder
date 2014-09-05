@@ -74,6 +74,7 @@ define(
             if (this.formbuilderInstanceRef.currentCollection.length === 1) {
                 window.location.hash = '';
             } else {
+
                 if (this.formbuilderInstanceRef.settingView === undefined) {
 
                     //  Create new edit view
@@ -100,7 +101,38 @@ define(
 
                 this.formbuilderInstanceRef.navbar.setActions (this.formbuilderInstanceRef.settingView.getActions());
             }
+        },
+
+        simpleSetting : function(modelID) {
+            if (this.formbuilderInstanceRef.currentCollection.length === 1) {
+                window.location.hash = '';
+            } else {
+                if (this.formbuilderInstanceRef.settingView === undefined) {
+
+                    //  Create new edit view
+                    this.formbuilderInstanceRef.settingView = new editViews[this.formbuilderInstanceRef.currentCollection.get(modelID).constructor.type + 'FieldEditView']({
+                        el: '.settings',
+                        model : this.formbuilderInstanceRef.currentCollection.models[modelID]
+                    });
+                    this.formbuilderInstanceRef.settingView.render();
+
+                } else {
+                    this.formbuilderInstanceRef.settingView.remove();
+                    this.formbuilderInstanceRef.settingView.unbind();
+
+                    $('.dropArea').after('<div class="span5 settings"></div>');
+
+                    this.formbuilderInstanceRef.settingView = new editViews[this.formbuilderInstanceRef.currentCollection.get(modelID).constructor.type + 'FieldEditView']({
+                        el: '.settings',
+                        model : this.formbuilderInstanceRef.currentCollection.models[modelID]
+                    });
+                    this.formbuilderInstanceRef.settingView.render();
+                }
+
+                this.formbuilderInstanceRef.navbar.setActions (this.formbuilderInstanceRef.settingView.getActions());
+            }
         }
+
     });
 
     return AppRouter;
