@@ -706,7 +706,8 @@ define(['backbone'], function(Backbone) {
         defaults : {
             id : 0,
             fields : [],
-            legend : 'Fieldset'
+            legend : 'Fieldset',
+            multiple : false
         },
 
         initialize : function() {
@@ -736,6 +737,7 @@ define(['backbone'], function(Backbone) {
 
         getXML : function() {
             var xml = '<legend>' + this.get('legend') + '</legend>';
+                xml += '<multiple>' + this.get('multiple') + '</multiple>';
             _.each (this.get('fields'), function(el, idx) {
                 xml += '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
             });

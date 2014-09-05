@@ -681,6 +681,10 @@ define(['backbone'], function(Backbone) {
                         '               <input class="span10 offset1 property" type="text" data-attr="legend" placeholder="Fieldset legend" value="<%= legend %>" />' +
                         '           </div>' +
                         '       </div> ' +
+                         '   <div class="row-fluid">&nbsp;</div><div class="row-fluid">' +
+                        '       <label class="span4 offset1">Multiple</label>' +
+                        '           <input class="span2 property" data-attr="multiple" type="checkbox" <% if (multiple) { %> checked <% } %> />' +
+                        '   </div>' +
                         '   </div>' +
                         '   <div class="row-fluid">&nbsp;</div>'+
                         '</div>'

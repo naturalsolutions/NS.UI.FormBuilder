@@ -28,7 +28,7 @@ define(['backbone', 'app/models/model'], function(Backbone, models) {
             this.description    = options.description || "";
             this.keywords       = options.keywords || ["protocol"];
             //  Bind
-            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'addTableElement');
+            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'addTableElement', 'getJSON', 'getJSONFromModel');
         },
 
         /**
@@ -91,6 +91,75 @@ define(['backbone', 'app/models/model'], function(Backbone, models) {
             });
 
             return (new XMLSerializer()).serializeToString(xml);
+        },
+
+        getJSONFromModel : function(model) {
+            var subModel = { validators : [] };
+
+            switch (model.constructor.type) {
+                case 'Numeric' :
+                    subModel['type'] = 'Number';
+                    break;
+
+                case 'LongText':
+                    subModel['type'] = 'TextArea';
+                    break;
+
+                case 'Radio' :
+                case 'CheckBox':
+                case  'Select':
+                    subModel['options'] = $.map(model.get('itemList')['items'], function(item) {
+                        return  {
+                            val : item['value'],
+                            label : item['en']
+                        }
+                    });
+                    subModel['type'] = (model.constructor.type === "CheckBox") ? 'Checkboxes' : model.constructor.type;
+                    break;
+
+                case 'Table':
+                    var item = null;
+                    subModel['subSchema'] = {}
+                    $.map(model.get('fields'), _.bind(function(field) {
+                        subModel['subSchema'][(field.get('label') + field.get('id'))] = this.getJSONFromModel(field);
+
+                    }, this));
+                    subModel['type'] = 'Object';
+                    break;
+
+                default :
+                    subModel['type'] = model.constructor.type;
+                    break;
+            }
+
+            subModel['help'] = model.get('hint');
+            if (model.get('required')) {
+                subModel.validators.push('required');
+            }
+            return subModel;
+        },
+
+        getJSON : function() {
+            var json = {}, subModel = null;
+            json.name        = this.name;
+            json.description = this.description;
+            json.keywords    = this.keywords;
+            json.schema = {};
+
+            this.map( _.bind(function(model) {
+                if (model.constructor.type != undefined && (!model.get('isDragged')) ) {
+
+                    subModel = this.getJSONFromModel(model);
+
+                    if (json.schema[model.get('label')] !== undefined) {
+                        model.set('label', model.get('label') + model.get('id'));
+                    }
+
+                    json.schema[model.get('label')] = subModel;
+                }
+            }, this));
+
+            return json;
         },
 
         /**
