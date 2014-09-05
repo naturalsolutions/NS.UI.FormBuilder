@@ -106,7 +106,7 @@ define(
         },
 
         importXML: function() {
-            require(['text!../templates/modals.html'], function(modalViewTemplate) {
+            require(['text!../templates/modals.html', 'app/formbuilder'], function(modalViewTemplate, formbuilderRef) {
                 var modalTemplate = $(modalViewTemplate).filter('#importProtocolModal')
 
                 $( $(modalTemplate) ).modal({
@@ -186,7 +186,7 @@ define(
 
                 }, this)).find('#importProtocolName').typeahead({
                     source: function(query, process) {
-                        return $.getJSON(app.instances.protocolAutocomplete, {query : query}, function(data) {
+                        return $.getJSON(formbuilderRef.URLOptions.protocolAutocomplete, {query : query}, function(data) {
                             return process(data.options);
                         });
                     }
@@ -432,7 +432,9 @@ define(
 
                 clear: new NS.UI.NavBar.Action({
                     handler: function() {
-                        app.instances.mainView.clear();
+                        require(['app/formbuilder'], function(formbuilderRef) {
+                            formbuilderRef.mainView.clear();
+                        });
                     },
                     allowedRoles: ["reader"],
                     title       : '<i class="fa fa-trash-o"></i> Tout supprimer'

@@ -104,17 +104,21 @@ define(['jquery', 'underscore', 'backbone', 'app/router'], function($, _, Backbo
          */
         render : function() {
            views.BaseView.prototype.render.apply(this, arguments);
-           $('#autocompleteExample').typeahead({
-                source: function(query, process) {
-                    return $.getJSON( app.instances.autocompleteURL + 'example.json', {query : query}, function(data) {
-                        return process(data.options);
-                    });
-                },
-                updater : _.bind(function(item) {
+           require(['app/formbuilder'], _.bind(function(formbuilderRef) {
 
-                    this.model.set('defaultValue', item);
-                }, this)
-            });
+               $('#autocompleteExample').typeahead({
+                    source: function(query, process) {
+                        return $.getJSON(formbuilderRef.URLOptions.autocompleteURL + 'example.json', {query : query}, function(data) {
+                            return process(data.options);
+                        });
+                    },
+                    updater : _.bind(function(item) {
+
+                        this.model.set('defaultValue', item);
+                    }, this)
+                });
+
+           }, this));
        },
 
        /**

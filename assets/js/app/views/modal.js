@@ -31,25 +31,28 @@ define(['backbone'], function(Backbone) {
             $(this.el).modal({ show: true });
 
             //  Add autocomplete control on protocol name and keyword input
+            require(['app/formbuilder'], _.bind(function(formBuilderRef) {
 
-            $(this.el).find('#saveProtocolName').typeahead({
-                source: function(query, process) {
-                    return $.getJSON(app.instances.protocolAutocomplete, {query: query}, function(data) {
-                        return process(data.options);
-                    });
-                }
-            });
+                $(this.el).find('#saveProtocolName').typeahead({
+                    source: function(query, process) {
+                        return $.getJSON(formBuilderRef.URLOptions.protocolAutocomplete, {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }
+                });
 
-            $(this.el).find('#saveProtocolKeywords').typeahead({
-                source: function(query, process) {
-                    return $.getJSON(app.instances.keywordAutocomplete, {query: query}, function(data) {
-                        return process(data.options);
-                    });
-                },
-                updater: _.bind(function(item) {
-                    this.appendKeywordValue(item);
-                }, this)
-            });
+                $(this.el).find('#saveProtocolKeywords').typeahead({
+                    source: function(query, process) {
+                        return $.getJSON(formBuilderRef.URLOptions.keywordAutocomplete, {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    },
+                    updater: _.bind(function(item) {
+                        this.appendKeywordValue(item);
+                    }, this)
+                });
+
+            }, this));
 
             return this;
         },
@@ -202,24 +205,28 @@ define(['backbone'], function(Backbone) {
 
             //  Add autocomplete control on protocol name and keyword input
 
-            $(this.el).find('#exportProtocolName').typeahead({
-                source: _.bind(function(query, process) {
-                    return $.getJSON(app.instances.protocolAutocomplete, {query: query}, function(data) {
-                        return process(data.options);
-                    });
-                }, this)
-            });
+            require(['app/formbuilder'], _.bind(function(formBuilderRef) {
 
-            $(this.el).find('#exportProtocolKeywords').typeahead({
-                source: _.bind(function(query, process) {
-                    return $.getJSON(app.instances.keywordAutocomplete, {query: query}, function(data) {
-                        return process(data.options);
-                    });
-                }, this),
-                updater: _.bind(function(item) {
-                    this.appendKeywordValue(item);
-                }, this)
-            });
+                $(this.el).find('#exportProtocolName').typeahead({
+                    source: _.bind(function(query, process) {
+                        return $.getJSON(formBuilderRef.URLOptions.protocolAutocomplete, {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }, this)
+                });
+
+                $(this.el).find('#exportProtocolKeywords').typeahead({
+                    source: _.bind(function(query, process) {
+                        return $.getJSON(formBuilderRef.URLOptions.keywordAutocomplete, {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }, this),
+                    updater: _.bind(function(item) {
+                        this.appendKeywordValue(item);
+                    }, this)
+                });
+
+            }, this));
 
             return this;
         },
@@ -369,25 +376,28 @@ define(['backbone'], function(Backbone) {
             $(this.el).modal({ show: true });
 
             //  Add autocomplete control on protocol name and keyword input
+            require(['app/formbuilder'], _.bind(function(formBuilderRef) {
 
-            $(this.el).find('#exportProtocolName').typeahead({
-                source: _.bind(function(query, process) {
-                    return $.getJSON(app.instances.protocolAutocomplete, {query: query}, function(data) {
-                        return process(data.options);
-                    });
-                }, this)
-            });
+                $(this.el).find('#exportProtocolName').typeahead({
+                    source: _.bind(function(query, process) {
+                        return $.getJSON(formBuilderRef.URLOptions.protocolAutocomplete, {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }, this)
+                });
 
-            $(this.el).find('#exportProtocolKeywords').typeahead({
-                source: _.bind(function(query, process) {
-                    return $.getJSON(app.instances.keywordAutocomplete, {query: query}, function(data) {
-                        return process(data.options);
-                    });
-                }, this),
-                updater: _.bind(function(item) {
-                    this.appendKeywordValue(item);
-                }, this)
-            });
+                $(this.el).find('#exportProtocolKeywords').typeahead({
+                    source: _.bind(function(query, process) {
+                        return $.getJSON(formBuilderRef.URLOptions.keywordAutocomplete, {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }, this),
+                    updater: _.bind(function(item) {
+                        this.appendKeywordValue(item);
+                    }, this)
+                });
+
+            }, this));
 
             return this;
         },

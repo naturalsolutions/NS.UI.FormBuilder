@@ -12,6 +12,7 @@ define(['backbone', 'app/router'], function(Backbone, Router){
 
     var formbuilder = {
         initialize : function(options) {
+        	this.URLOptions = options;
             //  Init router
             this.router = new Router(this);
             Backbone.history.start();

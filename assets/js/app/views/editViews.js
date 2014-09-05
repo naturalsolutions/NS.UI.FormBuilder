@@ -412,15 +412,18 @@ define(['backbone'], function(Backbone) {
                 model   : this.model
             });
             textView.render();
+            require(['app/formbuilder'], _.bind(function(formbuilderRef) {
 
-            $.getJSON(app.instances.unitURL, _.bind(function(data) {
-                var isSelected = value = null;
+                $.getJSON(formbuilderRef.URLOptions.unitURL, _.bind(function(data) {
+                    var isSelected = value = null;
 
-                for (var op in data['options']) {
-                    isSelected = this.model.get('unity') == data['options'][op] ? 'selected' : '';
-                    value      = data['options'][op];
-                    $(this.el).find('select').append('<option value="' + value + '"' + isSelected + '>' + value + '</option>');
-                }
+                    for (var op in data['options']) {
+                        isSelected = this.model.get('unity') == data['options'][op] ? 'selected' : '';
+                        value      = data['options'][op];
+                        $(this.el).find('select').append('<option value="' + value + '"' + isSelected + '>' + value + '</option>');
+                    }
+
+                }, this));
 
             }, this));
 
