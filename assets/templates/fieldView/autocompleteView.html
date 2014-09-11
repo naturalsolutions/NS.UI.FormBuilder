@@ -1,0 +1,25 @@
+<div class="element">
+    <div class="row" style="margin-left : 10px;">
+        <label class="span4">
+            <i class="fa fa-arrows" style="color : #09C"></i>
+            <% if (required === true) { %> * <% } %> <%= label %>
+        </label>
+        <div class="span8 right actions">
+                <a href="#" class="trash">
+                        <i class="fa fa-trash-o"></i>
+                        <span data-i18n="actions.delete">Supprimer</span>
+                </a>
+                <a href="#setting/<%= id %>" class="wrench">
+                        <i class="fa fa-wrench"></i>
+                        <span data-i18n="actions.edit">Modifier</span>
+                </a>
+                <a href="#" class="copy">
+                        &nbsp;<span class="fa fa-copy"></span>
+                        <span data-i18n="actions.clone">Dupliquer</span>
+                </a>
+        </div>
+    </div>
+    <div class="row" style="margin-left : 10px;">
+        <input id="autocompleteExample" type="text" class="span12" name="<%= name %>" id="<%= id %>" placeholder="<%= hint %>" value="<%= defaultValue %>" data-provide="typeahead" />
+    </div>
+</div>

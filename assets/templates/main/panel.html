@@ -1,0 +1,10 @@
+<div class="nano-content">
+    <h1 class="center" data-i18n="label.field"></h1>
+    <% for (var n in list) { %>
+        <div class="row-fluid">
+            <div class="span10 offset1 fields" data-type="<%= n.replace(" Field ", " ") %>" data-i18n="fields.<%= list[n]["i18n"] %>">
+                <%= list[n]["i18n"] %>
+            </div>
+        </div>
+        <%}; %>
+</div>
