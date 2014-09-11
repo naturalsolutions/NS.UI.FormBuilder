@@ -105,7 +105,7 @@ require.config({
     ]
 });
 
-require(['app/formbuilder'], function(formbuilder) {
+require(['formbuilder'], function(formbuilder) {
     loadAllCss();
 
     var options = {
