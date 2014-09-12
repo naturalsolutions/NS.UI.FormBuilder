@@ -49,9 +49,9 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
         }
 
     }, {
-        type: 'Table',
-        xmlTag: 'field_table',
-        i18n: 'table'
+        type   : 'Table',
+        xmlTag : 'field_table',
+        i18n   : 'table'
     });
 
     return TableField;

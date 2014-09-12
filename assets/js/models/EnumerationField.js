@@ -6,20 +6,57 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
             return _.extend(BaseField.prototype.defaults, {
                 itemList: {
                     items: [{
-                        id: 0,
-                        value: "0",
-                        en: "My first Option",
-                        fr: 'Mon option'
+                        id    : 0,
+                        value : "0",
+                        en    : "My first Option",
+                        fr    : 'Mon option'
                     }, {
-                        id: 1,
-                        value: "1",
-                        en: "My second Option",
-                        fr: 'Mon option 2'
+                        id    : 1,
+                        value : "1",
+                        en    : "My second Option",
+                        fr    : 'Mon option 2'
                     }],
                     defaultValue: 1
                 },
                 multiple: false,
                 expanded: false
+            });
+        },
+
+        schema: function() {
+            return _.extend(BaseField.prototype.schema, {
+                itemList : {
+                    type : 'Object',
+                    title : '',
+                    subSchema : {
+                        defaultValue : { type : 'Text', editorClass : 'span10' },
+                        items : {
+                            type : 'List',
+                            editorClass : 'itemList',
+                            itemType : 'Object',
+                            add : function() {
+                                alert (true)
+                            },
+                            itemToString : function(item) {
+                                return 'ID : ' + item.id + ', <b>EN label</b> : ' + item.en + ', FR label : ' + item.fr + ', value : ' + item.value;
+                            },
+                            subSchema : {
+                                id    : { type : 'Number' },
+                                value : { type : 'Text', title : 'Real value', validators : ['required'] },
+                                en    : { type : 'Text', title : 'Text display in English', validators : ['required'] },
+                                fr    : { type : 'Text', title : 'Text display in French', validators : ['required']}
+                            }
+                        }
+                    }
+                },
+                expanded: {
+                    type: 'Checkbox',
+                    editorClass : 'span10'
+                },
+                multiple: {
+                    type: 'Checkbox',
+                    editorClass : 'span10'
+                }
             });
         },
 
@@ -92,37 +129,6 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
             return xml;
         }
 
-    }, {
-        schema: function() {
-            return _.extend(BaseField.Constructor.schema, {
-                items: {
-                    type: "array",
-                    itemList: {
-                        defaultValue: {
-                            type: "string"
-                        },
-                        lang: {
-                            type: "string"
-                        },
-                        type: "array",
-                        items: {
-                            label: {
-                                type: "string"
-                            },
-                            value: {
-                                type: "string"
-                            }
-                        }
-                    }
-                },
-                expanded: {
-                    type: "boolean"
-                },
-                multiple: {
-                    type: "boolean"
-                }
-            });
-        }
     });
 
     return EnumerationField;

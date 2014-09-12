@@ -12,6 +12,33 @@ define(['backbone'], function(Backbone) {
             },
             value: ""
         },
+
+        schema: {
+            id: {
+                type: 'Number'
+            },
+            name: {
+                type: 'Object',
+                subSchema : {
+                    label : {
+                        type 'Object',
+                        subSchema : {
+                            value : { type : 'Text', editorClass : 'span10' },
+                            lang  : { type : 'Text', editorClass : 'span10' }
+                        }
+                    },
+                    displayLabel : {
+                        type : 'Text',
+                        editorClass : 'span10'
+                    }
+                }
+            },
+            value: {
+                type : 'Text',
+                editorClass : 'span10'
+            }
+        },
+
         getSchemaProperty: function(index, property) {
             models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
         },
@@ -28,36 +55,9 @@ define(['backbone'], function(Backbone) {
                 "<value>" + this.get('value') + '</value>';
         }
     }, {
-        type: 'Hidden',
-        xmlTag: 'field_hidden',
-        i18n: 'hidden',
-        schema: {
-            id: {
-                type: "integer"
-            },
-            name: {
-                type: "object",
-                elements: {
-                    label: {
-                        type: "object",
-                        elements: {
-                            value: {
-                                type: "string"
-                            },
-                            lang: {
-                                type: "string"
-                            }
-                        }
-                    },
-                    displayLabel: {
-                        type: "string"
-                    }
-                }
-            },
-            value: {
-                type: "string"
-            }
-        }
+        type   : 'Hidden',
+        xmlTag : 'field_hidden',
+        i18n   : 'hidden'
     });
 
     return HiddenField;

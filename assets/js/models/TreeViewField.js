@@ -25,6 +25,42 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
             })
         },
 
+        schema: function() {
+            return _.extend(BaseField.schema, {
+                defaultNode: {
+                    type: 'Number'
+                },
+                multipleSelection: {
+                    type: 'Checkbox'
+                },
+                hierarchicSelection: {
+                    type: 'Checkbox'
+                },
+                node : {
+                    type : 'Object',
+                    subSchema : {
+                        node : {
+                            type : 'Object',
+                            subSchema : {
+                                title: {
+                                    type: "string"
+                                },
+                                key: {
+                                    type: 'Number'
+                                },
+                                folder: {
+                                    type: 'Checkbox'
+                                },
+                                /*children: [{
+                                    type: "node"
+                                }]*/
+                            }
+                        }
+                    }
+                }
+            });
+        },
+
         initialize: function() {
             BaseField.prototype.initialize.apply(this, arguments);
             _.bindAll(this, 'getNodeXml', 'getXML');
@@ -61,36 +97,9 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
             return xml;
         }
     }, {
-        type: 'TreeView',
-        xmlTag: 'field_treeView',
-        i18n: 'tree',
-        schema: function() {
-            return _.extend(BaseField.schema, {
-                defaultNode: {
-                    type: "integer"
-                },
-                multipleSelection: {
-                    type: "boolean"
-                },
-                hierarchicSelection: {
-                    type: "boolean"
-                },
-                node: [{
-                    title: {
-                        type: "string"
-                    },
-                    key: {
-                        type: "integer"
-                    },
-                    folder: {
-                        type: "boolean"
-                    },
-                    children: [{
-                        type: "node"
-                    }]
-                }]
-            });
-        }
+        type   : 'TreeView',
+        xmlTag : 'field_treeView',
+        i18n   : 'tree'
     });
 
     return TreeViewField;

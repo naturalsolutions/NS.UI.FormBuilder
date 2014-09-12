@@ -4,17 +4,36 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
 
         defaults: function() {
             return _.extend(BaseField.prototype.defaults, {
-                defaultValue: "",
-                hint: "Write some text",
-                url: ""
+                defaultValue : "",
+                hint         : "Write some text",
+                url          : ""
+            });
+        },
+
+        schema: function() {
+            return _.extend(BaseField.prototype.schema, {
+                defaultValue: {
+                    type        : 'Text',
+                    title       : 'Default value'
+                    fieldClass : 'advanced',
+                    editorClass : 'span10'
+                },
+                hint: {
+                    type: 'Text',
+                    editorClass : 'span10'
+                },
+                url: {
+                    type: 'Text',
+                    editorClass : 'span10'
+                }
             });
         },
 
         getXML: function() {
             var xml = BaseField.prototype.getXML.apply(this, arguments);
-            return xml + '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
-                '<hint>' + this.get('hint') + '</hint>' +
-                '<url>' + this.get('url') + '</url>';
+            return xml +    '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
+                            '<hint>'         + this.get('hint')         + '</hint>' +
+                            '<url>'          + this.get('url')          + '</url>';
         },
 
         initialize: function(options) {
@@ -22,26 +41,9 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
         }
 
     }, {
-
-        type: "Autocomplete",
-        xmlTag: 'field_autocomplete',
-        i18n: 'autocomplete',
-        schema: function() {
-            return _.extend(BaseField.constructor.schema, {
-                defaultValue: {
-                    type: "string",
-                    display: "Default value",
-                    section: "advanced"
-                },
-                hint: {
-                    type: "string"
-                },
-                url: {
-                    type: "string"
-                }
-            })
-        }
-
+        type   : "Autocomplete",
+        xmlTag : 'field_autocomplete',
+        i18n   : 'autocomplete'
     });
 
     return AutocompleteField;

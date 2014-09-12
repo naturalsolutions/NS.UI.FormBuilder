@@ -17,6 +17,45 @@ define(['backbone'], function(Backbone) {
             isDragged : false
         },
 
+        schema : {
+            id : {
+                type    : "Number",
+                fieldClass : 'advanced'
+            },
+            label   : {
+                type  : "Text",
+                title : 'Label',
+                editorClass : 'span10'
+            },
+            name : {
+                type : 'Object',
+                title : '',
+                subSchema : {
+                    label : {
+                        title : '',
+                        type : 'Object',
+                        subSchema : {
+                            value : { type : 'Text', title : 'Name label value', editorClass : 'span10'},
+                            lang  : { type : 'Text', title : 'Name label lang', editorClass : 'span10' }
+                        }
+                    },
+                    displayLabel : {
+                        type : 'Text',
+                        editorClass : 'span10'
+                    }
+                }
+            },
+            required : {
+                type : 'Checkbox',
+                editorClass : 'span10'
+            },
+            readonly : {
+                type : 'Checkbox',
+                fieldClass : 'advanced',
+                editorClass : 'span10'
+            }
+        },
+
         getXML: function() {
             return  "<label>" + this.get('label') + '</label>' +
                     "<name>" +
@@ -29,75 +68,8 @@ define(['backbone'], function(Backbone) {
 
         isAdvanced : function(index) {
             return this.getSchemaProperty(index, 'advanced') === "advanced";
-        },
-
-        getSchemaProperty: function(index, property) {
-            if (index.indexOf("/") > 0) {
-                //  Complex index like : /name/label/lang -> ['name']['label']['lang']
-                var split = index.split('/'), str = "this.constructor.schema";
-                for (var each in split) {
-                    str += (parseInt(each) === split.length - 1) ? '["' + split[each] + '"]' : '["' + split[each] + '"]["elements"]';
-                }
-                return eval(str + '["' + property + '"]');
-            } else {
-                //  Simple index
-                return this.constructor.schema[index] !== undefined ? this.constructor.schema[index][property] : "";
-            }
-        },
-
-        changePropertyValue : function(index, value) {
-            if (index.indexOf("[") > 0) {
-                //  Complexe attribute
-                var split = index.split('['), firstSelector = split.shift(), currentObject = this.get(firstSelector);
-
-                split.forEach(function(element, idx, array) {
-                    if (idx === array.length - 1) {
-                        currentObject[ element.substr(0, element.length - 1) ] = value;
-                    } else {
-                        currentObject = currentObject[ element.substr(1, element.length - 1) ];
-                    }
-                });
-
-                this.trigger('change');
-            } else {
-                this.set(index, value);
-            }
         }
 
-    }, {
-        schema : {
-            id : {
-                type    : "Number",
-                editorClass : 'advanced'
-            },
-            label   : {
-                type : "Text",
-                section : "simple",
-                title : 'Label'
-            },
-            name : {
-                type : 'Object',
-                subSchema : {
-                    label : {
-                        type : 'Object',
-                        subSchema : {
-                            value : { type : 'Text' },
-                            lang  : { type : 'Text' }
-                        }
-                    },
-                    displayLabel : {
-                        type : 'Text'
-                    }
-                }
-            },
-            required : {
-                type : 'Checkbox'
-            },
-            readonly : {
-                type : 'Checkbox',
-                editorClass : 'advanced'
-            }
-        }
     });
 
     return BaseField;

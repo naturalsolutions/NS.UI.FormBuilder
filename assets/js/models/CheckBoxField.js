@@ -2,6 +2,14 @@ define(['backbone', 'models/EnumerationField'], function(Backbone, EnumerationFi
 
     var CheckBoxField = EnumerationField.extend({
 
+        defaults : function() {
+            return EnumerationField.prototype.defaults();
+        },
+
+        schema: function() {
+            return EnumerationField.prototype.schema();
+        },
+
         getXML: function() {
             return models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
@@ -14,12 +22,9 @@ define(['backbone', 'models/EnumerationField'], function(Backbone, EnumerationFi
         }
 
     }, {
-        type: 'CheckBox',
-        xmlTag: 'field_list',
-        i18n: 'checkbox',
-        schema: function() {
-            return EnumerationField.constructor.schema();
-        }
+        type   : 'CheckBox',
+        xmlTag : 'field_list',
+        i18n   : 'checkbox'
     });
 
     return CheckBoxField;

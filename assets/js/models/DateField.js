@@ -8,6 +8,15 @@ define(['backbone', 'models/TextField'], function(Backbone, TextField) {
             });
         },
 
+        schema: function() {
+            return _.extend(TextField.prototype.schema(), {
+                format: {
+                    type: 'Text',
+                    editorClass : 'span10'
+                }
+            });
+        },
+
         initialize: function() {
             TextField.prototype.initialize.apply(this, arguments);
         },
@@ -15,16 +24,9 @@ define(['backbone', 'models/TextField'], function(Backbone, TextField) {
             return TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
         }
     }, {
-        type: "Date",
-        xmlTag: 'field_date',
-        i18n: 'date',
-        schema: function() {
-            return _.extend(TextField.constructor.schema(), {
-                format: {
-                    type: "string"
-                }
-            })
-        }
+        type   : "Date",
+        xmlTag : 'field_date',
+        i18n   : 'date'
     });
 
     return DateField;

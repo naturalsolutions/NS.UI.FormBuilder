@@ -2,10 +2,16 @@ define(['backbone'], function(Backbone) {
 
     var SubformField = Backbone.Model.extend({
         defaults: {
-            id: 0,
-            fields: [],
-            legend: 'Fieldset',
-            multiple: false
+            id       : 0,
+            fields   : [],
+            legend   : 'Fieldset',
+            multiple : false
+        },
+
+        schema : {
+            id       : { type : 'Number', title : 'ID', editorClass : 'span10', fieldClass : 'advanced' },
+            multiple : { type : 'Checkbox', editorClass : 'span1', help : 'This fieldset can be present many times in one form' },
+            legend   : { type : 'Text', editorClass : 'span10' }
         },
 
         initialize: function() {
@@ -46,9 +52,9 @@ define(['backbone'], function(Backbone) {
             models.BaseField.prototype.changePropertyValue.apply(this, arguments);
         },
     }, {
-        type: 'Subform',
-        xmlTag: 'fieldset',
-        i18n: 'fieldset'
+        type   : 'Subform',
+        xmlTag : 'fieldset',
+        i18n   : 'fieldset'
     });
 
     return SubformField;

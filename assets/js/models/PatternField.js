@@ -2,9 +2,17 @@ define(['backbone', 'models/TextField'], function(Backbone, TextField) {
 
     var PatternField = TextField.extend({
         defaults: function() {
-            return _.extend(TextField.prototype.defaults(), {
+            return _.extend(TextField.prototype.defaults, {
                 pattern: ""
             })
+        },
+
+        schema: function() {
+            return _.extend(TextField.constructor.schema, {
+                pattern: {
+                    type: 'Text'
+                }
+            });
         },
 
         initialize: function() {
@@ -16,16 +24,9 @@ define(['backbone', 'models/TextField'], function(Backbone, TextField) {
         }
 
     }, {
-        type: "Pattern",
-        xmlTag: 'field_pattern',
-        i18n: 'mask',
-        schema: function() {
-            return _.extend(TextField.constructor.schema(), {
-                pattern: {
-                    type: "string"
-                }
-            });
-        }
+        type   : "Pattern",
+        xmlTag : 'field_pattern',
+        i18n   : 'mask'
     });
 
     return PatternField;
