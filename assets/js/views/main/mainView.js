@@ -2,14 +2,13 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'models/model',
     'assets/js/views/main/panelView.js',
     'assets/js/views/main/formView.js',
     'i18n',
     'jqueryui',
     'nanoscroller',
     'bootstrap'
-], function($, _, Backbone, model, PanelView, FormView) {
+], function($, _, Backbone, PanelView, FormView) {
 
 
     var MainView = Backbone.View.extend({

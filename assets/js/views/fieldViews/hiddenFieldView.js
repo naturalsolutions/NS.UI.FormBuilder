@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'views/fieldViews/baseView',
-    'text!../../../../templates/fieldView/HiddenFieldView.html'
+    'text!../../../templates/fieldView/HiddenFieldView.html'
 ], function($, _, Backbone, BaseView, viewTemplate) {
 
     var HiddenFieldView = BaseView.extend({
@@ -12,8 +12,10 @@ define([
         },
 
         initialize : function(options) {
-            options.template = viewTemplate;
-            BaseView.prototype.initialize.apply(this, options);
+            var opt = options;
+            opt.template = viewTemplate;
+
+            BaseView.prototype.initialize.apply(this, [opt]);
         }
     });
 

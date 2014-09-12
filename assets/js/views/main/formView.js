@@ -2,13 +2,12 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'models/model',
     'text!../../../../../templates/main/formView.html',
     'i18n',
     'jqueryui',
     'nanoscroller',
     'bootstrap'
-], function($, _, Backbone, model, formViewTemplate) {
+], function($, _, Backbone, formViewTemplate) {
 
     var FormView = Backbone.View.extend({
 
@@ -56,8 +55,6 @@ define([
 
             var viewClassName = newModel.constructor.type + "FieldView";
 
-            console.log (viewClassName);
-            
             require(['views/fieldViews/' + viewClassName], _.bind(function(fieldView) {
 
                 //  View file successfully loaded

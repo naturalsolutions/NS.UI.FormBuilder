@@ -3,14 +3,14 @@ define(
         'jquery',
         'underscore',
         'backbone',
-        'models/model',
         'text!../../../../../templates/main/panel.html',
+        'text!models/register.json',
         'i18n',
         'jqueryui',
         'nanoscroller',
         'NS.UI.Notification'
     ],
-    function($, _, Backbone, model, panelViewTemplate) {
+    function($, _, Backbone, panelViewTemplate, registeredField) {
 
         var PanelView = Backbone.View.extend({
 
@@ -22,14 +22,13 @@ define(
                 this.template   = _.template(panelViewTemplate);
                 this._collection = collection;
 
-                this.list = [];
-                _.each(model, _.bind(function(el, idx) {
-                    if (el.type != undefined) {
-                        this.list[idx] = {
-                            i18n : el.i18n
-                        }
+                this.list = [], register = $.parseJSON(registeredField)['registeredField'];
+
+                for (var el in register) {
+                    this.list[ register[el] ] = {
+                        i18n : register[el].replace('Field', '').toLowerCase()
                     }
-                }, this));
+                }
 
                 _.bindAll(this, 'appendToDrop');
             },
@@ -37,16 +36,20 @@ define(
             appendToDrop : function(e) {
                 var elementClassName = $(e.target).data("type");
 
-                if (model[elementClassName] !== undefined) {
+                //elementClassName
+                require(['models/' + elementClassName], _.bind(function(fieldModel) {
+
                     this.collection.addElement(elementClassName);
-                } else {
+
+                }, this)/*, /*function(err) {
+                    console.log(err)
                     new NS.UI.Notification({
                         type    : 'error',
                         title   : 'An error occured :',
                         message : "Can't create field object"
                     });
-                }
 
+                }*/);
             },
 
             render: function() {
