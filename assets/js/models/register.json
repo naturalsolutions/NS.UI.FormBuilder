@@ -1,0 +1,19 @@
+{
+    "registeredField": [
+        "AutocompleteField",
+        "CheckBoxField",
+        "DateField",
+        "FileField",
+        "HiddenField",
+        "HorizontalLineField",
+        "LongTextField",
+        "NumericField",
+        "PatternField",
+        "RadioField",
+        "SelectField",
+        "SubformField",
+        "TableField",
+        "TextField",
+        "TreeViewField"
+    ]
+}
