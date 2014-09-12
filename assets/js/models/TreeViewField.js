@@ -1,5 +1,23 @@
 define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
 
+    var Node = Backbone.Model.extend({
+        schema: {
+            title: {
+                type: "Text"
+            },
+            key: {
+                type: 'Number'
+            },
+            folder: {
+                type: 'Checkbox'
+            }
+        },
+
+        initialize: function(options) {
+            
+        }
+    });
+
     var TreeViewField = BaseField.extend({
 
         defaults: function() {
@@ -26,7 +44,7 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
         },
 
         schema: function() {
-            return _.extend(BaseField.schema, {
+            return _.extend(BaseField.prototype.schema, {
                 defaultNode: {
                     type: 'Number'
                 },
@@ -36,25 +54,29 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
                 hierarchicSelection: {
                     type: 'Checkbox'
                 },
-                node : {
-                    type : 'Object',
-                    subSchema : {
-                        node : {
-                            type : 'Object',
-                            subSchema : {
-                                title: {
-                                    type: "string"
-                                },
-                                key: {
-                                    type: 'Number'
-                                },
-                                folder: {
-                                    type: 'Checkbox'
-                                },
-                                /*children: [{
-                                    type: "node"
-                                }]*/
-                            }
+                node: {
+                    type: 'List',
+                    itemType: 'Object',
+                    itemToString: function(node) {
+                        return '<b>Title : </b>' + node.title + ', <b>Key : </b>' + node.key + ', <b>is a folder : </b>' + (node.folder ? 'Yes' : 'No');
+                    },
+                    subSchema: {
+                        title: {
+                            type: "Text"
+                        },
+                        key: {
+                            type: 'Number'
+                        },
+                        folder: {
+                            type: 'Checkbox'
+                        },
+                        children : {
+                            type : 'List',
+                            itemToString: function(node) {
+                                return 'Children : <b>Title : </b>' + node.title + ', <b>Key : </b>' + node.key + ', <b>is a folder : </b>' + (node.folder ? 'Yes' : 'No');
+                            },
+                            itemType : 'NestedModel',
+                            model : Node
                         }
                     }
                 }
@@ -97,9 +119,9 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
             return xml;
         }
     }, {
-        type   : 'TreeView',
-        xmlTag : 'field_treeView',
-        i18n   : 'tree'
+        type: 'TreeView',
+        xmlTag: 'field_treeView',
+        i18n: 'tree'
     });
 
     return TreeViewField;
