@@ -1,20 +1,21 @@
 {
     "fields" : {
-        "text"         : "Texte",
-        "numeric"      : "Numérique",
-        "date"         : "Date",
-        "select"       : "Liste déroulante",
-        "radio"        : "Bouton radio",
-        "checkbox"     : "Case à cocher",
-        "hidden"       : "Masqué",
-        "file"         : "Fichier",
-        "tree"         : "Arbre",
-        "long"         : "Texte long",
-        "mask"         : "Masque",
-        "line"         : "Ligne horizontale",
-        "autocomplete" : "autocomplete",
-        "table"        : "Présentation",
-        "fieldset"     : "Sous formulaire"
+        "text"           : "Texte",
+        "numeric"        : "Numérique",
+        "date"           : "Date",
+        "select"         : "Liste déroulante",
+        "radio"          : "Bouton radio",
+        "checkbox"       : "Case à cocher",
+        "hidden"         : "Masqué",
+        "file"           : "Fichier",
+        "longtext"       : "Texte long",
+        "pattern"        : "Masque",
+        "line"           : "Ligne horizontale",
+        "autocomplete"   : "Auto complétion",
+        "table"          : "Présentation",
+        "subform"        : "Sous formulaire",
+        "horizontalline" : "Séparation",
+        "treeview"       : "Arborescence"
     },
 
     "nav" : {

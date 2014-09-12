@@ -8,11 +8,13 @@
         "checkbox"     : "Checkbox",
         "hidden"       : "Hidden",
         "file"         : "File",
-        "tree"         : "TreeView",
-        "long"         : "Long text",
-        "mask"         : "Pattenr",
+        "treeview"     : "Tree View",
+        "longtext"     : "Long text",
+        "pattern"      : "Pattern",
         "line"         : "Horizontal line",
-        "autocomplete" : "autocomplete"
+        "autocomplete" : "Auto complete",
+        "table"        : "Presentation",
+        "subform"      : "Fieldset",
     },
 
     "nav" : {
