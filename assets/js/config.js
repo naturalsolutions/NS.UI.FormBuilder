@@ -31,25 +31,26 @@ function loadAllCss() {
 
 require.config({
     paths: {
-        backbone              : "../../lib/backbone/backbone",
-        blobjs                : "../../lib/blobjs/Blob",
-        bootstrap             : "../../lib/bootstrap/bootstrap",
-        fancytree             : "../../lib/fancytree/jquery.fancytree-custom.min",
-        filesaver             : "../../lib/filesaver/FileSaver",
-        i18n                  : "../../lib/i18n/i18next",
-        jquery                : "../../lib/jquery/jquery",
-        jqueryui              : "../../lib/jquery-ui/jquery-ui",
-        nanoscroller          : "../../lib/nanoscroller/jquery.nanoscroller",
-        underscore            : "../../lib/underscore/underscore",
-        "NS.UI.Navbar"        : "../../lib/NS.UI.Navbar/navbar",
-        "NS.UI.Notification"  : "../../lib/NS.UI.Notification/notification",
-        requirejs             : "../../lib/requirejs/require",
-        "font-awesome"        : "../../lib/font-awesome/*",
-        "backbone-forms"      : "../../lib/backbone-forms/distribution.amd/backbone-forms",
+        backbone              : "../../libs/backbone/backbone",
+        blobjs                : "../../libs/blobjs/Blob",
+        bootstrap             : "../../libs/bootstrap/dist/js/bootstrap",
+        fancytree             : "../../libs/fancytree/dist/jquery.fancytree-custom.min",
+        filesaver             : "../../libs/filesaver/FileSaver",
+        i18n                  : "../../libs/i18n/i18next",
+        jquery                : "../../libs/jquery/dist/jquery.min",
+        jqueryui              : "../../libs/jquery-ui/jquery-ui.min",
+        nanoscroller          : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller.min",
+        underscore            : "../../libs/underscore/underscore",
+        "NS.UI.Navbar"        : "../../libs/NS.UI.Navbar/navbar",
+        "NS.UI.Notification"  : "../../libs/NS.UI.Notification/notification",
+        requirejs             : "../../libs/requirejs/require",
+        "font-awesome"        : "../../libs/font-awesome/fonts/*",
+        "backbone-forms"      : "../../libs/backbone-forms/distribution.amd/backbone-forms",
         "backbone-forms-list" : "../../lib/backbone-forms//distribution.amd/editors/list.min",
-        "modalAdapter"        : '../../lib/bootstrapAdapter/src/backbone.bootstrap-modal',
-        "template"            : "../../lib/backbone-forms/distribution/templates/bootstrap",
-        "xmljs"               : "../../lib/xmljs/xmllint"
+        modalAdapter          : "../../lib/bootstrapAdapter/src/backbone.bootstrap-modal",
+        template              : "../../lib/backbone-forms/distribution/templates/bootstrap",
+        xmljs                 : "../../lib/xmljs/xmllint",
+        bootstrapAdapter      : "../../libs/bootstrapAdapter/index"
     },
     shim: {
         jquery: {
@@ -65,8 +66,11 @@ require.config({
             ],
             exports: "Backbone"
         },
-        "backbone-forms" : {
-            deps : [ 'backbone'], exports: "Backbone"
+        "backbone-forms": {
+            deps: [
+                "backbone"
+            ],
+            exports: "Backbone"
         },
         jqueryui: {
             exports: "$",
