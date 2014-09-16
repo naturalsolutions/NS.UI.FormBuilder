@@ -14,7 +14,7 @@ define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
             return _.extend(BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
-                    title       : 'Default value'
+                    title       : 'Default value',
                     fieldClass : 'advanced',
                     editorClass : 'span10'
                 },
