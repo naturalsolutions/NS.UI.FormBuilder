@@ -48,7 +48,8 @@ require.config({
         "backbone-forms"      : "../../lib/backbone-forms/distribution.amd/backbone-forms",
         "backbone-forms-list" : "../../lib/backbone-forms//distribution.amd/editors/list.min",
         "modalAdapter"        : '../../lib/bootstrapAdapter/src/backbone.bootstrap-modal',
-        "template"            : "../../lib/backbone-forms/distribution/templates/bootstrap"
+        "template"            : "../../lib/backbone-forms/distribution/templates/bootstrap",
+        "xmljs"               : "../../lib/xmljs/xmllint"
     },
     shim: {
         jquery: {

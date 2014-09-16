@@ -18,7 +18,7 @@
     "underscore"         : null,
     "NS.UI.Notification" : "https://github.com/NaturalSolutions/NS.UI.Notification.git",
     "NS.UI.Navbar"       : "git@github.com:NaturalSolutions/NS.UI.NavBar.git",
-    "bootstrap"          : "2.3.2",
+    "bootstrap"          : "3.2.0",
     "blobjs"             : "https://github.com/eligrey/Blob.js.git",
     "xmljs"              : "git@github.com:kripken/xml.js.git",
     "i18n"               : "https://github.com/jamuhl/i18next.git",
