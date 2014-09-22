@@ -1,38 +1,31 @@
 .navbar {
-    position        : fixed;
-    z-index         : 255;
-    width : 100%;
-
-    .dropdown-menu {
-        border-radius   : 0 !important;
-        box-shadow      : none;
-        left            : 5px;
-        top             : 95%;
-        min-width       : 94%;
+    .container-fluid {
+        background: #862332 !important;
     }
-
-    .navbar-inner { background : #0aC !important; }
-
-    li {
-        height : 50px;
-
-        a {
-            height          : 50px !important;
-            max-height      : 50px;
-            margin-top      : 0;
-            padding-top     : 0 !important;
-            padding-bottom  : 0 !important;
-            line-height     : 45px;
-        }
-    }
-    .navbar-switcher {
-        overflow    : hidden;
-        margin-top  : -4px;
-        height      : 55px;
+}
+.navbar-default {
+    background: #862332 !important;
+    .navbar-nav {
         li {
-            overflow : hidden; a { height : 50px !important; }
+            a {
+                background: #862332 !important;
+            }
         }
     }
 }
-
-.navbar-search, .navbar-user { display : none; }
+a[data-key="save"]:before {
+    font-family: "Glyphicons Halflings";
+    content: "\e166";
+}
+a[data-key="import"]:before {
+    font-family: "Glyphicons Halflings";
+    content: "\e198";
+}
+a[data-key="clear"]:before {
+    font-family: "Glyphicons Halflings";
+    content: "\e020";
+}
+a[data-key="show"]:before {
+    font-family: "Glyphicons Halflings";
+    content: "\e178";
+}
