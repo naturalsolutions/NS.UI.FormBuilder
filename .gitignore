@@ -2,3 +2,4 @@ node_modules/
 web.config
 libs/
 bower_components
+compressed/
