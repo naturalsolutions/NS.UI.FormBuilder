@@ -6,7 +6,7 @@ define([
     'assets/js/views/main/formView.js',
     'i18n',
     'jqueryui',
-    'nanoscroller',
+    //'nanoscroller',
     'bootstrap'
 ], function($, _, Backbone, PanelView, FormView) {
 
@@ -16,10 +16,10 @@ define([
         initialize : function(options) {
             this.el = options.el;
             $(this.el).append(
-                '<div class="row-fluid content">'+
-                '   <div class="span3 widgetsPanel nano"></div>'+
-                '   <div class="span9 dropArea"></div>'+
-                '   <div class="span5 settings"></div>'+
+                '<div class="row content">'+
+                '   <div class="col-md-3 widgetsPanel nano"></div>'+
+                '   <div class="col-md-9 dropArea"></div>'+
+                '   <div class="col-md-5 settings"></div>'+
                 '</div>'
             );
 
@@ -84,48 +84,13 @@ define([
                             //  Display modal window for save the protocol in the repository
                             title       : 'Save',
                             allowedRoles: ['reader'],
-                            handler: _.bind(function() {
-
-                                require(['views/modals/saveProtocol'], _.bind(function(SaveProtocolModalView) {
-                                    var modalView = new SaveProtocolModalView({
-                                        el: '#saveModal',
-                                        protocolAutocomplete : this.URLOptions.protocolAutocomplete,
-                                        keywordAutocomplete  : this.URLOptions.keywordAutocomplete
-                                    });
-                                    modalView.render();
-                                }, this));
-
-                            }, this)
+                            url : "#save/repo"
                         }),
-                        'save.export': new NS.UI.NavBar.Action({
+                        'export': new NS.UI.NavBar.Action({
                             //  Allow to export protocol as a XML file
-                            handler: function() {
-                                require(['app/formbuilder'], function(formbuilderObjectRef) {
-                                    var modalView = new modals.ExportProtocolModalView({
-                                        el : "#exportModal",
-                                        model : formbuilderObjectRef.currentCollection
-                                    });
-                                    modalView.render();
-
-                                });
-                            },
                             allowedRoles    : ["reader"],
-                            title           : 'Export as XML'
-                        }),
-                        'save.json': new NS.UI.NavBar.Action({
-                            //  Allow to export protocol as a XML file
-                            handler: function() {
-                                require(['app/formbuilder'], function(formbuilderObjectRef) {
-                                    var modalView = new modals.ExportJSONProtocolModalView({
-                                        el : "#exportModal",
-                                        model : formbuilderObjectRef.currentCollection
-                                    });
-                                    modalView.render();
-
-                                });
-                            },
-                            allowedRoles    : ["reader"],
-                            title           : 'Export as JSON'
+                            title           : 'Export as JSON or XML',
+                            url : "#export"
                         })
                     }
                 }),
@@ -133,29 +98,19 @@ define([
                 'import' : new NS.UI.NavBar.Action({
                     actions : {
                         'import.JSON' : new NS.UI.NavBar.Action({
-                            handler : function() {
-                                require(['app/formbuilder'], function(formbuilderRef) {
-                                    formbuilderRef.mainView.importJSON();
-                                });
-                            },
                             allowedRoles: ["reader"],
-                            title       : 'Importer un fichier JSON'
+                            title       : 'Importer un fichier JSON',
+                            utl : "#import/json"
                         }),
                         'import.XML' : new NS.UI.NavBar.Action({
-                            handler: function() {
-                                require(['app/formbuilder'], function(formbuilderRef) {
-                                    formbuilderRef.mainView.importXML();
-                                });
-                            },
                             allowedRoles: ["reader"],
-                            title       : 'Importer un fichier XML'
+                            title       : 'Importer un fichier XML',
+                            url : '#import/xml'
                         }),
                         'import.load' : new NS.UI.NavBar.Action({
                             title       : 'Charger depuis le serveur',
                             allowedRoles: ["reader"],
-                            handler : function () {
-                                alert ('I\'m working on it !');
-                            }
+                            url : '#load'
                         })
                     },
                     title       : '<i class="fa fa-upload"></i><span data-i18n="nav.import.title" data-key="import">Import</span>',
@@ -173,97 +128,7 @@ define([
                 }),
 
                 show: new NS.UI.NavBar.Action({
-                    handler: function() {
-                        $('#compareModal').modal('show')
-                        .on('click', '#findSource, #findUpdate', function() {
-                            $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
-                        })
-                        .on('change', 'input[type="file"]', function() {
-                            var id = $(this).prop('id').replace('Hide', ''), split = $(this).val().split('\\');
-                            $('#' + id).val(split[ split.length - 1]);
-                        })
-                        .on('click', '.btn-primary', function() {
-                            $('#compareModal').modal('hide');
-                            var source  = $('#compareModal').find('#sourceHide')[0].files[0],
-                                update  = $('#compareModal').find('#updateHide')[0].files[0],
-                                srcName = source['name'],
-                                updName = update['name'],
-                                reader  = null;
-
-
-                            if (source !== null && update !== null) {
-                                 if (source.type === "text/xml" && update.type === "text/xml") {
-                                    reader = new FileReader();
-                                    reader.readAsText(source, "UTF-8");
-                                    reader.onload = function(evt) {
-                                        try {
-                                            if (formBuilder.XMLValidation(evt.target.result) !== true) {
-                                                new NS.UI.Notification ({
-                                                    title : result.error,
-                                                    type : 'error',
-                                                    message : 'Your XML don\'t matches with XML Schema'
-                                                });
-                                            } else {
-                                                source = evt.target.result;
-                                                reader = new FileReader();
-                                                reader.readAsText(update, "UTF-8");
-                                                reader.onload = function(evt) {
-                                                    if (formBuilder.XMLValidation(evt.target.result) === true) {
-                                                        update = evt.target.result;
-                                                        $('.widgetsPanel').switchClass('span3', 'span0', 250, function() {
-                                                            $('.dropArea').append(
-                                                                formBuilder.GetXMLDiff(source, update, srcName, updName)
-                                                            ).switchClass('span9', 'span12', 250).find('.diff').addClass('span11');
-                                                            var acts = {
-                                                                quit: new NS.UI.NavBar.Action({
-                                                                    handler: function() {
-                                                                        $('.widgetsPanel').switchClass('span0', 'span3', 250, function() {
-                                                                            $('.dropArea').switchClass('span2', 'span9', 250).find('table').remove();
-                                                                            navbar.setActions(actions);
-                                                                            addIcon();
-                                                                        });
-                                                                    },
-                                                                    allowedRoles: ["reader"],
-                                                                    title: "Quit"
-                                                                })
-                                                            };
-                                                            navbar.setActions(acts);
-                                                        })
-                                                    }
-                                                };
-                                            }
-                                        } catch (exp) {
-                                            new NS.UI.Notification({
-                                                type: 'error',
-                                                title: "An error occured",
-                                                message: 'One of giles can\'t be read'
-                                            });
-                                        }
-                                    };
-                                    reader.onerror = function(evt) {
-                                        new NS.UI.Notification({
-                                            type: 'error',
-                                            title: "Reading error",
-                                            message: 'An error was occure during reading file'
-                                        });
-                                    };
-
-                                } else {
-                                    new NS.UI.Notification({
-                                        type: 'error',
-                                        title: "File mime type error",
-                                        message: 'You must choose only XML files'
-                                    });
-                                }
-                            } else {
-                                new NS.UI.Notification({
-                                    type: 'error',
-                                    title: "Reading error",
-                                    message: 'Error durring XML loading ! '
-                                });
-                            }
-                        }).removeClass('hide').css('width', '700px');
-                    },
+                    url : '#show',
                     allowedRoles: ["reader"],
                     title: '<span class="fa fa-bars" data-i18n="nav.compare" data-key="show"></span>'
                 })
