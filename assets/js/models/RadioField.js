@@ -2,7 +2,7 @@ define(['backbone', 'models/EnumerationField'], function(Backbone, EnumerationFi
 
     var RadioField = EnumerationField.extend({
         defaults : function() {
-            return EnumerationField.prototype.defaults;
+            return EnumerationField.prototype.defaults();
         },
 
         schema : function() {
