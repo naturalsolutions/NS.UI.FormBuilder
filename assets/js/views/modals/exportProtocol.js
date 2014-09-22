@@ -1,4 +1,4 @@
-define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocolJSON.html', 'NS.UI.Notification'], function(_, Backbone, exportJSONTemplate) {
+define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocolJSON.html', 'bootstrap', 'typeahead'], function(_, Backbone, exportJSONTemplate) {
 
     var ExportJSONProtocolModalView = Backbone.View.extend({
 
@@ -100,33 +100,18 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
             })
 
             if (!exportProtocolName && !exportProtocolDescription && !exportProtocolKeywords && !exportProtocolComment) {
+                $('#exportmode').val( $(e.target).data('i18n').indexOf('json') > 0 ? 'json' : 'xml');
+                $('#exportModal').modal('hide').removeData();
+            }
+        },
 
-                this.model['description'] = $('#exportProtocolDescription').val();
-                this.model['keywords'] = this.keywordList;
-                this.model['name'] = $('#exportProtocolName').val();
-
-                require(['blobjs', 'filesaver'], _.bind(function() {
-                    //try {
-                        var json = this.model.getJSON();
-
-                        var isFileSaverSupported = !!new Blob();
-                        var blob = new Blob( [JSON.stringify(json, null, 2)], {type: "application/json;charset=utf-8"} );
-                        saveAs(blob, $('#exportProtocolFileName').val() + '.json');
-                        $('#exportModal').modal('hide').removeData();
-                        new NS.UI.Notification({
-                            type    : 'success',
-                            title   : 'Protocol export :',
-                            message : "XML file correctly created"
-                        });
-                    /*} catch (e) {
-                        $('#exportModal').modal('hide').removeData();
-                        new NS.UI.Notification({
-                            type    : 'error',
-                            title   : 'An error occured :',
-                            message : "Can't create your XML file"
-                        });
-                    }*/
-                }, this))
+        getData : function() {
+            return {
+                name        : $('#exportProtocolName').val(),
+                comment     : $('#exportProtocolFileName').val(),
+                description : $('#exportProtocolDescription').val(),
+                keywords    : this.keywordList,
+                mode        : $('#exportmode').val()
             }
         }
 

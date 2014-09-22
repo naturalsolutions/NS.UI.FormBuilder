@@ -1,4 +1,4 @@
-define(['underscore', 'backbone', 'text!../../../templates/modals/saveProtocol.html'], function(_, Backbone, saveProtocolTemplate) {
+define(['underscore', 'backbone', 'text!../../../templates/modals/saveProtocol.html', 'bootstrap', 'typeahead'], function(_, Backbone, saveProtocolTemplate) {
 
     var SaveProtocolModalView = Backbone.View.extend({
 
@@ -93,7 +93,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/saveProtocol.h
         validateProtocolSave : function (e){
             var saveProtocolName        = $('#saveProtocolName').val()          === "",
                 saveProtocolDescription = $('#saveProtocolDescription').val()   === "",
-                saveProtocolKeywords    = $('#saveProtocolKeywords').val()      === "",
+                saveProtocolKeywords    = $('#saveProtocolKeywordsList').children('li').length  === 0,
                 saveProtocolComment     = $('#saveProtocolComment').val()       === "";
 
             $('#saveProto, #saveProtocolDescription, #saveProtocolKeywords, #saveProtocolComment, #saveProtocolName').each( function() {
@@ -101,38 +101,17 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/saveProtocol.h
             });
 
             if (!saveProtocolName && !saveProtocolDescription && !saveProtocolKeywords && !saveProtocolComment) {
-                var dataS = JSON.stringify({
-                    content: mainView.getFormXML(),
-                    name: $('#saveProtocolName').val(),
-                    comment: $('#saveProtocolComment').val(),
-                    keywords: $('#saveProtocolKeywords').val(),
-                    description: $('#saveProtocolDescription').val()
-                }, null, 2);
-
-                $.ajax({
-                    data: dataS,
-                    type: 'POST',
-                    url: '/protocols',
-                    contentType: 'application/json',
-                    success: function(res) {
-                        $('#saveModal').modal('hide').removeData();
-                        new NS.UI.Notification({
-                            type: 'success',
-                            title: 'Protocol saved : ',
-                            message: 'your protocol has been saved correctly !'
-                        });
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        $('#saveModal').modal('hide').removeData();
-                        new NS.UI.Notification({
-                            delay: 15,
-                            type: 'error',
-                            message: jqXHR.responseText,
-                            title: 'An error occured :'
-                        });
-                    }
-                });
+                $('#saveModal').modal('hide').removeData();
             }
+        },
+
+        getData : function() {
+            return JSON.stringify({
+                name        : $('#saveProtocolName').val(),
+                comment     : $('#saveProtocolComment').val(),
+                keywords    : $('#saveProtocolKeywords').val(),
+                description : $('#saveProtocolDescription').val()
+            }, null, 2);
         }
 
     });

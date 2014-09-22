@@ -18,6 +18,26 @@
         "treeview"       : "Arborescence"
     },
 
+    "protocol" : {
+        "name" : "Nom du protocole",
+        "description" : "Description du protocol",
+        "keywords" : "Mots clés"
+    },
+
+    "modal" : {
+        "comment" : "Votre commentaire",
+        "filename" : "Nom du fichier",
+        "save" : {
+            "title" : "Sauvegarde du protocol",
+            "button" : "Sauvegarder"
+        },
+        "export" : {
+            "title" : "Export",
+            "json" : "Exporter au format JSON",
+            "xml" : "Exporter au format XML"
+        }
+    },
+
     "nav" : {
         "save" : {
             "title"     : " Enregistrer",

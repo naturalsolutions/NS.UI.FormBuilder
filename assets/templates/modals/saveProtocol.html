@@ -1,38 +1,51 @@
-<div>
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Save protocol</h3>
-    </div>
-    <div class="modal-body">
-        <div class="row-fluid">
-            <label>Protocol name</label>
+<div class="modal-dialog">
+    <div class="modal-content">
+
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3 data-i18n="modal.save.title">
+                Save protocol
+            </h3>
         </div>
-        <div class="row-fluid">
-            <input type="text" id="saveProtocolName" class="span10" placeholder="Protocol name" data-provide="typeahead" />
+
+        <div class="modal-body">
+            <div class="form-group">
+                <label data-i18n="protocol.name">
+                    Protocol Name
+                </label>
+                <input
+                    type="text"
+                    id="saveProtocolName"
+                    class="form-control"
+                    data-provide="typeahead"
+                />
+            </div>
+            <div class="form-group">
+                <label data-i18n="modal.comment">
+                </label>
+                <input type="text" id="saveProtocolComment" class="form-control" />
+            </div>
+            <div class="form-group">
+                <label data-i18n="protocol.description">
+                    Protocol description
+                </label>
+                <textarea id="saveProtocolDescription" class="form-control"></textarea>
+            </div>
+            <div class="form-group">
+                <label data-i18n="protocol.keywords">
+                    Keywords <i>(Tape enter for validate)</i>
+                </label>
+                <input type="text" id="saveProtocolKeywords" class="form-control" data-provider="typeahead" />
+                <ul class="row" id="saveProtocolKeywordsList">
+                </ul>
+            </div>
         </div>
-        <div class="row-fluid">
-            <label>Your comment</label>
+
+        <div class="modal-footer">
+            <a href="#" class="btn btn-primary" data-i18n="modal.save.button">
+                Save changes
+            </a>
         </div>
-        <div class="row-fluid">
-            <input type="text" id="saveProtocolComment" class="span10" placeholder="Your comment" />
-        </div>
-        <div class="row-fluid">
-            <label>Protocol description</label>
-        </div>
-        <div class="row-fluid">
-            <textarea id="saveProtocolDescription" class="span10" placeholder="Describe this protocol in some words"></textarea>
-        </div>
-        <div class="row-fluid">
-            <label>Keywords <i>(Taped enter for validate)</i>
-            </label>
-        </div>
-        <div class="row-fluid">
-            <input type="text" id="saveProtocolKeywords" placeholder="Enter keywords" class="span10" data-provider="typeahead" />"</div>"
-        <ul class="row-fluid" id="saveProtocolKeywordsList">
-        </ul>
-        <div class="row-fluid">&nbsp;</div>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-primary">Save changes</a>
+
     </div>
 </div>
