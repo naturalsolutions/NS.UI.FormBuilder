@@ -9,15 +9,14 @@
 
 function loadAllCss() {
     var links = [
-        'lib/font-awesome/css/font-awesome.css',
-        'lib/fancytree/skin-win7/ui.fancytree.min.css',
-        'lib/bootstrap/bootstrap.css',
-        'lib/bootstrap/bootstrap-responsive.css',
-        'lib/jsdifflib/diffview.css',
-        'lib/nanoscroller/nanoscroller.css',
-        'lib/NS.UI.Navbar/navbar-modernui.css',
-        'lib/NS.UI.Navbar/navbar.css',
-        'lib/NS.UI.Notification/notification.css',
+        'libs/font-awesome/css/font-awesome.min.css',
+        'libs/fancytree/dist/skin-bootstrap/ui.fancytree.min.css',
+        'libs/bootstrap/dist/css/bootstrap-theme.min.css',
+        'libs/bootstrap/dist/css/bootstrap.min.css',
+        'libs/jsdifflib/diffview.css',
+        'libs/nanoscroller/bin/css/nanoscroller.css',
+        'libs/NS.UI.Navbar/themes/navbar.bootstrap3.css',
+        'libs/NS.UI.Notification/notification.css',
         'compressed/formbuilder.min.css'
     ];
     for (var l in links) {
@@ -33,24 +32,26 @@ require.config({
     paths: {
         backbone              : "../../libs/backbone/backbone",
         blobjs                : "../../libs/blobjs/Blob",
-        bootstrap             : "../../libs/bootstrap/dist/js/bootstrap",
+        bootstrap             : "../../libs/bootstrap/dist/js/bootstrap.min",
         fancytree             : "../../libs/fancytree/dist/jquery.fancytree-custom.min",
         filesaver             : "../../libs/filesaver/FileSaver",
         i18n                  : "../../libs/i18n/i18next",
-        jquery                : "../../libs/jquery/dist/jquery.min",
+        jquery                : "../../libs/jquery/dist/jquery",
         jqueryui              : "../../libs/jquery-ui/jquery-ui.min",
-        nanoscroller          : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller.min",
         underscore            : "../../libs/underscore/underscore",
         "NS.UI.Navbar"        : "../../libs/NS.UI.Navbar/navbar",
+        "NS.UI.NavbarTheme"   : "../../libs/NS.UI.Navbar/themes/navbar.bootstrap3",
         "NS.UI.Notification"  : "../../libs/NS.UI.Notification/notification",
         requirejs             : "../../libs/requirejs/require",
         "font-awesome"        : "../../libs/font-awesome/fonts/*",
         "backbone-forms"      : "../../libs/backbone-forms/distribution.amd/backbone-forms",
-        "backbone-forms-list" : "../../lib/backbone-forms//distribution.amd/editors/list.min",
-        modalAdapter          : "../../lib/bootstrapAdapter/src/backbone.bootstrap-modal",
-        template              : "../../lib/backbone-forms/distribution/templates/bootstrap",
-        xmljs                 : "../../lib/xmljs/xmllint",
-        bootstrapAdapter      : "../../libs/bootstrapAdapter/index"
+        "backbone-forms-list" : "../../libs/backbone-forms//distribution.amd/editors/list.min",
+        modalAdapter          : "../../libs/bootstrapAdapter/src/backbone.bootstrap-modal",
+        template              : "../../libs/backbone-forms/distribution/templates/bootstrap",
+        xmljs                 : "../../libs/xmljs/xmllint",
+        bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
+        nanoscroller          : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller",
+        typeahead             : "../../libs/typeahead/bootstrap3-typeahead.min"
     },
     shim: {
         jquery: {
@@ -90,14 +91,19 @@ require.config({
                 "jquery"
             ]
         },
-        nanoscroller: {
+        "NS.UI.Navbar": {
             exports: "$",
             deps: [
                 "jquery",
-                "jqueryui"
+                "backbone",
+                "bootstrap"
             ]
         },
-        "NS.UI.Navbar": {
+        "NS.UI.NavbarTheme" : {
+            deps : ['NS.UI.Navbar'],
+            exports : "NS"
+        },
+        "NS.UI.Notification": {
             exports: "$",
             deps: [
                 "jquery",
@@ -110,8 +116,15 @@ require.config({
             deps: [
                 "jquery"
             ]
+        },
+        typeahead: {
+            exports: "$",
+            deps: [
+                "jquery", "bootstrap"
+            ]
         }
     },
+    
     packages: [
 
     ]

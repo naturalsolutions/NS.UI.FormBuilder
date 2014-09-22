@@ -29,6 +29,7 @@
     "requirejs"          : null,
     "nanoscroller"       : null,
     "backbone-forms"     : "https://github.com/powmedia/backbone-forms.git",
-    "bootstrapAdapter"   : "https://github.com/powmedia/backbone.bootstrap-modal.git"
+    "bootstrapAdapter"   : "https://github.com/powmedia/backbone.bootstrap-modal.git",
+    "typeahead"          : "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git"
   }
 }
