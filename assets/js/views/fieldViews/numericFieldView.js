@@ -21,10 +21,6 @@ define([
 
         render: function() {
             BaseView.prototype.render.apply(this, arguments);
-            $(this.el).find('input').spinner({
-                step: this.model.step,
-                min: this.model.minValue
-            }).parent('span').addClass('span10');
         }
     });
 
