@@ -21,7 +21,7 @@ define(['backbone'], function(Backbone) {
                 type: 'Object',
                 subSchema : {
                     label : {
-                        type 'Object',
+                        type :'Object',
                         subSchema : {
                             value : { type : 'Text', editorClass : 'span10' },
                             lang  : { type : 'Text', editorClass : 'span10' }

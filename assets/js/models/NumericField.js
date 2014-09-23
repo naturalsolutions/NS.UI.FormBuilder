@@ -3,7 +3,7 @@ define(['backbone', 'models/TextField'], function(Backbone, TextField) {
     var NumericField = TextField.extend({
 
         defaults: function() {
-            return _.extend(TextField.prototype.defaults, {
+            return _.extend(TextField.prototype.defaults(), {
                 minValue  : 0,
                 maxValue  : 100,
                 precision : 1,
@@ -12,7 +12,7 @@ define(['backbone', 'models/TextField'], function(Backbone, TextField) {
         },
 
         schema: function() {
-            return _.extend(TextField.prototype.schema, {
+            return _.extend(TextField.prototype.schema(), {
                 minValue: {
                     type: 'Number'
                 },
