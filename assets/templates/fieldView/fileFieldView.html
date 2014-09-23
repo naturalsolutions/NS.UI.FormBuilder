@@ -1,10 +1,11 @@
-<div class="element">
-    <div class="row" style="margin-left : 10px;">
-        <label class="span4">
+<div class="element padding5">
+    <div class="form-group container-fluid paddingBottom5">
+        <div class="row">
+            <label class="col-md-4 paddingLeft0">
             <i class="fa fa-arrows" style="color : #09C"></i>
             <% if (required === true) { %>*<% } %> <%= label %>
         </label>
-        <div class="span8 right actions">
+        <div class="col-md-8 right actions">
             <a href="#" class="trash">
                 <i class="fa fa-trash-o"></i>
                 <span data-i18n="actions.delete">Supprimer</span>
@@ -14,14 +15,15 @@
                 <span data-i18n="actions.edit">Modifier</span>
             </a>
             <a href="#" class="copy">
-                                   &nbsp;<span class="fa fa-copy"></span>
-                                   <span data-i18n="actions.clone">Dupliquer</span>
-                               </a>
+               &nbsp;<span class="fa fa-copy"></span>
+               <span data-i18n="actions.clone">Dupliquer</span>
+           </a>
         </div>
-    </div>
-    <div class="row" style="margin-left : 10px;">
-        <input type="file" class="hide" />
-        <input type="text" class="span10" name="<%= name %>" id="<%= id%>" value="<%= defaultValue %>" />
-        <input type="submit" value="Find" class="span2" />
+        </div>
+        <div class="row">
+            <input type="file" class="hide" />
+            <input type="text" class="form-control col-md-10" name="<%= name %>" id="<%= id%>" value="<%= defaultValue %>" />
+            <input type="submit" value="Find" class="col-md-1 marginLeft10 find" />
+        </div>
     </div>
 </div>

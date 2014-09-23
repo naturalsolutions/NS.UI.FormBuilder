@@ -1,12 +1,11 @@
-<div class="element">
-
-    <div class="form-group">
+<div class="element padding5">
+    <div class="form-group paddingBottom5">
         <div class="row">
         <label class="col-md-4">
             <i class="fa fa-arrows" style="color : #09C"></i>
             <% if (required === true) { %> * <% } %> <%= label %>
         </label>
-        <div class="col-md-8 right actions">
+                <div class="col-md-8 right actions">
                 <a href="#" class="trash">
                     <i class="fa fa-trash-o"></i>
                     <span data-i18n="actions.delete">Supprimer</span>
@@ -20,11 +19,11 @@
                     <span data-i18n="actions.clone">Dupliquer</span>
                 </a>
                 </div>
-                </div>
+        </div>
             <% _.each(itemList["items"], function(el, idx) { %>
-        <div class="checkbox row">
-            <label for="">
-                <input data-idx=<%=idx %> type="checkbox"  name=" <%= name %>" id="<%= id %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> />
+        <div class="checkbox">
+            <label>
+                <input data-idx=<%=idx %> type="checkbox"  name="<%= name %>" id="<%= id %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
                 <%= label %>
             </label>
         </div>

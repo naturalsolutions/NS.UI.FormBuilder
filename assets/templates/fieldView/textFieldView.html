@@ -1,7 +1,7 @@
-<div class="element ">
-    <div class="row" style="margin-left : 10px;">
-        <label class="span4">
-            <i class="fa fa-arrows" style="color : #09C"></i> 
+<div class="element padding5">
+    <div class="form-group paddingBottom5">
+        <label class="col-md-4 paddingLeft0">
+            <i class="fa fa-arrows" style="color : #09C"></i>
             <% if (required===true) { %>*<% } %> <%= label %>
         </label>
         <div class="span8 right actions">
@@ -14,18 +14,11 @@
                 <span data-i18n="actions.edit">Modifier</span>
             </a>
             <a href="#" class="copy">
-                                   &nbsp;<span class="fa fa-copy"></span>
-                                   <span data-i18n="actions.clone">Dupliquer</span>
-                               </a>
+               &nbsp;<span class="fa fa-copy"></span>
+               <span data-i18n="actions.clone">Dupliquer</span>
+           </a>
         </div>
     </div>
-    <!--<div class="row" style="margin-left : 10px;">
-        <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" />
-    </div>-->
-    <div class="form-group">
-    <label for="inputEmail3" class="col-sm-2 control-label">Email</label>
-    <div class="col-sm-10">
-      <input type="email" class="form-control" id="inputEmail3" placeholder="Email">
-    </div>
+    <input type="text" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" />
   </div>
 </div>
