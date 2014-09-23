@@ -85,8 +85,6 @@
             .dropField {
                 .noMarginTop();
                 padding-top    : 0px;
-                padding-bottom : 5px;
-                margin-bottom  : 5px;
                 margin-left    : 0!important;
                 background     : #fff;
                 transition : background 0.2s ease-in-out;
@@ -144,8 +142,10 @@
                     margin-left     : 12px !important;
                     margin-right    : 22px;
                 }
-                input[type="checkbox"] {
-                    margin-left : 10px;
+                input[type="checkbox"], input[type="radio"] {
+                    margin-left : 0px !important;
+                    position: static !important;
+                    width : 25px;
                 }
                 label:hover { cursor : default !important; }
             }

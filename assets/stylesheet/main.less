@@ -14,20 +14,22 @@ html, body {
 .span0          { width         : 0px !important; overflow: hidden;}
 .left           { text-align    : left !important;}
 .right          { text-align    : right !important; }
+.transparent    { background    : transparent !important; }
+.fa             { font-family   : FontAwesome !important; }
+
 .center         { text-align    : center; }
 .new            { background    : rgba(0, 255, 0, 0.5) !important; }
 .change         { background    : rgba(255, 165, 0, 0.5); }
 .delete         { background    : rgba(255, 0, 0, 0.5); }
 .grey           { background    : #aaa; }
-.transparent    { background    : transparent !important; }
 .diff           { margin-bottom : 150px; }
 .text           { line-height   : 30px; font-size : 20px; }
 .error          { box-shadow    : 0 0 3px #c80000 inset !important; }
 .marginLeft10   { margin-left   : 10px !important; }
-.fa             { font-family   : FontAwesome; }
-.advanced { display: none; }
-
-.modal { background : transparent !important; }
+.advanced       { display       : none; }
+.input          { border        : 1px #ddd solid; border-radius: 0!important; }
+.modal          { background    : transparent !important; }
+.form-group     { margin-bottom: 0px !important; }
 
 .table      { tr { background : white; } }
 .bordered   { border : 2px #aaa solid; background : #fff; }
@@ -43,25 +45,33 @@ html, body {
     background-repeat   : initial initial;
 }
 
-.input {
-    //box-shadow      : 0 0 3px #ccc;
-    border          : 1px #ddd solid;
-    border-radius   : 0!important;
-    //padding-left    : 15px;
-}
-
-fa { font-family: FontAwesome !important; }
-
 .generate-columns(5);
 
-.generate-columns(@n, @i: 1) when (@i =< @n) {
+.generate-columns(@n, @i: 0) when (@i =< @n) {
 
     @num : @i * 5;
 
-    .marginBottom@{num} { margin-bottom: (@i * 5px);    }
-    .marginTop@{num}    { margin-top: (@i * 5px);       }
-    .marginLeft@{num}   { margin-left: (@i * 5px);      }
-    .marginRight@{num}  { margin-right:  (@i * 5px);    }
+    .margin@{num}       { margin        : (@i * 5px);   }
+    .marginBottom@{num} { margin-bottom : (@i * 5px);   }
+    .marginTop@{num}    { margin-top    : (@i * 5px);   }
+    .marginLeft@{num}   { margin-left   : (@i * 5px);   }
+    .marginRight@{num}  { margin-right  : (@i * 5px);   }
+
+    .padding@{num}       { padding        : (@i * 5px);   }
+    .paddingBottom@{num} { padding-bottom : (@i * 5px);   }
+    .paddingTop@{num}    { padding-top    : (@i * 5px);   }
+    .paddingLeft@{num}   { padding-left   : (@i * 5px) !important;   }
+    .paddingRight@{num}  { padding-right  : (@i * 5px);   }
 
   .generate-columns(@n, (@i + 1));
+}
+
+.form-control{
+    &.col-md-10 {
+        width : 83.333333333% !important;
+    }
+}
+
+.find {
+    height : 34px;
 }
