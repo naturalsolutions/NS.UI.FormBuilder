@@ -14,10 +14,11 @@ function loadAllCss() {
         'libs/bootstrap/dist/css/bootstrap-theme.min.css',
         'libs/bootstrap/dist/css/bootstrap.min.css',
         'libs/jsdifflib/diffview.css',
-        'libs/nanoscroller/bin/css/nanoscroller.css',
+        'libs/nanoscroller/dist/css/nanoscroller.css',
         'libs/NS.UI.Navbar/themes/navbar.bootstrap3.css',
         'libs/NS.UI.Notification/notification.css',
-        'compressed/formbuilder.min.css'
+        'compressed/formbuilder.min.css',
+        'libs/fancytree/dist/skin-win7/ui.fancytree.min.css'
     ];
     for (var l in links) {
         var link  = document.createElement("link");
@@ -50,7 +51,7 @@ require.config({
         template              : "../../libs/backbone-forms/distribution/templates/bootstrap",
         xmljs                 : "../../libs/xmljs/xmllint",
         bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
-        nanoscroller          : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller",
+        nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller",
         typeahead             : "../../libs/typeahead/bootstrap3-typeahead.min"
     },
     shim: {
