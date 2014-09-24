@@ -10,6 +10,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         </div>\
     ');
 
+    i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false});
+
     var models = {};
 
     models.BaseField = Backbone.Model.extend({
@@ -55,20 +57,24 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                         }
                     },
                     displayLabel : {
-                        type : 'Text',
+                        type        : 'Text',
                         editorClass : 'form-control',
-                        template : fieldTemplate
+                        template    : fieldTemplate
                     }
                 }
             },
             required : {
-                type : 'Checkbox',
-                editorClass : 'span10'
+                type        : 'Checkbox',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : $.t('schema.required')
             },
             readonly : {
-                type : 'Checkbox',
-                fieldClass : 'advanced',
-                editorClass : 'span10'
+                type        : 'Checkbox',
+                fieldClass  : 'advanced',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : $.t('schema.readonly')
             }
         },
 
@@ -103,7 +109,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         schema: {
             id: {
-                type: 'Number'
+                type: 'Number',
+                title : "ID"
             },
             name: {
                 type: 'Object',
@@ -111,19 +118,21 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     label : {
                         type :'Object',
                         subSchema : {
-                            value : { type : 'Text', editorClass : 'span10' },
-                            lang  : { type : 'Text', editorClass : 'span10' }
+                            value : { type : 'Text',  editorClass : 'form-control', template : fieldTemplate },
+                            lang  : { type : 'Text',  editorClass : 'form-control', template : fieldTemplate }
                         }
                     },
                     displayLabel : {
                         type : 'Text',
-                        editorClass : 'span10'
+                         editorClass : 'form-control', template : fieldTemplate
                     }
                 }
             },
             value: {
-                type : 'Text',
-                editorClass : 'span10'
+                type        : 'Text',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : $.t('schema.value')
             }
         },
 
@@ -172,17 +181,22 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend(models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
-                    title       : 'Default value',
-                    fieldClass : 'advanced',
-                    editorClass : 'span10'
+                    title       : $.t('schema.default'),
+                    fieldClass  : 'advanced',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
                 },
                 hint: {
-                    type: 'Text',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.hint')
                 },
                 url: {
-                    type: 'Text',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.url')
                 }
             });
         },
@@ -219,17 +233,22 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend(models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
-                    display     : 'Default value',
-                    fieldClass : 'advanced',
-                    editorClass : 'span10'
+                    title       : $.t('schema.default'),
+                    fieldClass  : 'advanced',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
                 },
                 hint: {
-                    type: 'Text',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.hint')
                 },
                 size: {
-                    type: 'Number',
-                    editorClass : 'span10'
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.size')
                 }
             })
         },
@@ -267,22 +286,29 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: function() {
             return _.extend(models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
-                    title : 'Default value',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    title       : $.t('schema.default'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
                 },
                 file: {
-                    type: 'Text',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.file')
                 },
                 mimeType: {
-                    type: 'Text',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.mime')
                 },
                 size: {
-                    type: 'Number',
-                    title: "Maximum size",
-                    editorClass : 'span10'
+                    type        : 'Number',
+                    title       : "Maximum size",
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.size')
                 }
             });
         },
@@ -307,13 +333,16 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     var Node = Backbone.Model.extend({
         schema: {
             title: {
-                type: "Text"
+                type  : "Text",
+                title : $.t('schema.title')
             },
             key: {
-                type: 'Number'
+                type  : 'Number',
+                title : $.t('schema.key')
             },
             folder: {
-                type: 'Checkbox'
+                type  : 'Checkbox',
+                title : $.t('schema.readonly')
             }
         },
 
@@ -349,13 +378,16 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: function() {
             return _.extend(models.BaseField.prototype.schema, {
                 defaultNode: {
-                    type: 'Number'
+                    type  : 'Number',
+                    title : $.t('schema.defaultNode')
                 },
                 multipleSelection: {
-                    type: 'Checkbox'
+                    type  : 'Checkbox',
+                    title : $.t('schema.multipleSelection')
                 },
                 hierarchicSelection: {
-                    type: 'Checkbox'
+                    type  : 'Checkbox',
+                    title : $.t('schema.hierarchic')
                 },
                 node: {
                     type: 'List',
@@ -365,13 +397,20 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     },
                     subSchema: {
                         title: {
-                            type: "Text"
+                            type        : "Text",
+                            editorClass : 'form-control',
+                            template    : fieldTemplate,
+                            title       : $.t('schema.title')
                         },
                         key: {
-                            type: 'Number'
+                            type        : 'Number',
+                            editorClass : 'form-control',
+                            template    : fieldTemplate,
+                            title       : $.t('schema.key')
                         },
                         folder: {
-                            type: 'Checkbox'
+                            type  : 'Checkbox',
+                            title : $.t('schema.folder')
                         },
                         children : {
                             type : 'List',
@@ -379,7 +418,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                                 return 'Children : <b>Title : </b>' + node.title + ', <b>Key : </b>' + node.key + ', <b>is a folder : </b>' + (node.folder ? 'Yes' : 'No');
                             },
                             itemType : 'NestedModel',
-                            model : Node
+                            model    : Node,
+                            title    : $.t('schema.child')
                         }
                     }
                 }
@@ -456,7 +496,12 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type : 'Object',
                     title : '',
                     subSchema : {
-                        defaultValue : { type : 'Text', editorClass : 'span10' },
+                        defaultValue : {
+                            type        : 'Text',
+                            editorClass : 'form-control',
+                            template    : fieldTemplate,
+                            title       : $.t('schema.default')
+                        },
                         items : {
                             type : 'List',
                             editorClass : 'itemList',
@@ -468,21 +513,37 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                                 return 'ID : ' + item.id + ', <b>EN label</b> : ' + item.en + ', FR label : ' + item.fr + ', value : ' + item.value;
                             },
                             subSchema : {
-                                id    : { type : 'Number' },
-                                value : { type : 'Text', title : 'Real value', validators : ['required'] },
-                                en    : { type : 'Text', title : 'Text display in English', validators : ['required'] },
-                                fr    : { type : 'Text', title : 'Text display in French', validators : ['required']}
+                                id    : {
+                                    type  : 'Number',
+                                    title : "ID"
+                                 },
+                                value : {
+                                    type       : 'Text',
+                                    title      : $.t('schema.real'),
+                                    validators : ['required']
+                                },
+                                en    : {
+                                    type : 'Text',
+                                    title      : 'Text display in English',
+                                    validators : ['required'] ,
+                                    title      : $.t('schema.englishText')
+                                },
+                                fr    : {
+                                    type       : 'Text',
+                                    title      : $.t('schema.frenchText'),
+                                    validators : ['required']
+                                }
                             }
                         }
                     }
                 },
                 expanded: {
                     type: 'Checkbox',
-                    editorClass : 'span10'
+                     editorClass : 'form-control', template : fieldTemplate
                 },
                 multiple: {
                     type: 'Checkbox',
-                    editorClass : 'span10'
+                     editorClass : 'form-control', template : fieldTemplate
                 }
             });
         },
@@ -573,8 +634,10 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: function() {
             return _.extend(models.TextField.prototype.schema(), {
                 format: {
-                    type: 'Text',
-                    editorClass : 'span10'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.format')
                 }
             });
         },
@@ -602,8 +665,10 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: function() {
             return _.extend(models.TextField.prototype.schema(), {
                 multiline : {
-                    type : 'Checkbox',
-                    editorClass : 'span10'
+                    type        : 'Checkbox',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.multiline')
                 }
             });
         },
@@ -637,16 +702,28 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: function() {
             return _.extend(models.TextField.prototype.schema(), {
                 minValue: {
-                    type: 'Number'
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.min')
                 },
                 maxValue: {
-                    type: 'Number'
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.max')
                 },
                 precision: {
-                    type: 'Number'
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.precision')
                 },
                 unity: {
-                    type: 'Text'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.unity')
                 }
             });
         },
@@ -680,7 +757,10 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: function() {
             return _.extend(models.TextField.constructor.schema, {
                 pattern: {
-                    type: 'Text'
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.pattern')
                 }
             });
         },
@@ -784,9 +864,25 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema : {
-            id       : { type : 'Number', title : 'ID', editorClass : 'span10', fieldClass : 'advanced' },
-            multiple : { type : 'Checkbox', editorClass : 'span1', help : 'This fieldset can be present many times in one form' },
-            legend   : { type : 'Text', editorClass : 'span10' }
+            id       : { 
+                type        : 'Number',
+                title       : 'ID',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                fieldClass  : 'advanced'
+            },
+            multiple : { 
+                type        : 'Checkbox',
+                editorClass : 'span1',
+                help        : 'This fieldset can be present many times in one form' ,
+                title       : $.t('schema.multiple')
+            },
+            legend   : { 
+                type        : 'Text',
+                editorClass : 'form-control',
+                template    : fieldTemplate ,
+                title       : $.t('schema.legend')
+            }
         },
 
         initialize: function() {

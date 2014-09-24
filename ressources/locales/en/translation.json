@@ -68,5 +68,37 @@
         "edit"      : "Edit",
         "delete"    : "Delete",
         "clone"     : " Clone"
+    },
+
+    "schema" : {
+        "required"          : "Required",
+        "readonly"          : "Read only",
+        "value"             : "Value",
+        "default"           : "Default value",
+        "url"               : "Web service URL",
+        "hint"              : "Help text",
+        "size"              : "Maximal size",
+        "file"              : "Default file",
+        "mime"              : "Allowed file type",
+        "title"             : "Title",
+        "key"               : "Key",
+        "folder"            : "Folder",
+        "defaultNode"       : "Default node",
+        "multipleSelection" : "Multiple selection",
+        "hierarchic"        : "Hierarchic selection",
+        "child"             : "Sub node",
+        "real"              : "Real value",
+        "englishText"       : "English displayed text",
+        "frenchText"        : "French displayed text",
+        "format"            : "Display format",
+        "multiline"         : "Multiline",
+        "min"               : "Minimal value",
+        "max"               : "Maximal value",
+        "precision"         : "Step",
+        "unity"             : "Unity",
+        "pattern"           : "Pattern value",
+        "multiple"          : "Multiple",
+        "legend"            : "Legend"
     }
+
 }
