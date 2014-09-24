@@ -3,14 +3,14 @@ define(
         'jquery',
         'underscore',
         'backbone',
-        'text!../../../../../templates/main/panel.html',
-        'text!models/register.json',
+        'text!../../../templates/main/panel.html',
+        'models/fields',
         'i18n',
         'jqueryui',
-        'nanoscroller',
+        //'nanoscroller',
         'NS.UI.Notification'
     ],
-    function($, _, Backbone, panelViewTemplate, registeredField) {
+    function($, _, Backbone, panelViewTemplate, Fields) {
 
         var PanelView = Backbone.View.extend({
 
@@ -22,11 +22,14 @@ define(
                 this.template   = _.template(panelViewTemplate);
                 this._collection = collection;
 
-                this.list = [], register = $.parseJSON(registeredField)['registeredField'];
+                this.list = [], models = _.keys(Fields);
+                models.shift()
 
-                for (var el in register) {
-                    this.list[ register[el] ] = {
-                        i18n : register[el].replace('Field', '').toLowerCase()
+                for (var el in models) {
+                    if (Fields[models[el]].type !== undefined) {
+                        this.list[ models[el] ] = {
+                            i18n : models[el].replace('Field', '').toLowerCase()
+                        }
                     }
                 }
 
@@ -36,26 +39,22 @@ define(
             appendToDrop : function(e) {
                 var elementClassName = $(e.target).data("type");
 
-                //elementClassName
-                require(['models/' + elementClassName], _.bind(function(fieldModel) {
-
+                if (Fields[elementClassName] !== undefined) {
                     this.collection.addElement(elementClassName);
-
-                }, this)/*, /*function(err) {
+                } else {
                     console.log(err)
                     new NS.UI.Notification({
                         type    : 'error',
                         title   : 'An error occured :',
                         message : "Can't create field object"
                     });
-
-                }*/);
+                }
             },
 
             render: function() {
                 var renderedContent = this.template({ list : this.list});
                 $(this.el).html(renderedContent);
-                $(this.el).nanoScroller();
+                //$(this.el).nanoScroller();
                 $('.fields').disableSelection();
                 return this;
             }
