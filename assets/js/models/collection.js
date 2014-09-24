@@ -8,13 +8,13 @@
  * @version         1.0
  */
 
-define(['backbone', 'models/BaseField'], function(Backbone, BaseField) {
+define(['backbone', 'models/fields'], function(Backbone, Fields) {
 
     /**
      * Implement form object as a fields collection
      */
     var Form = Backbone.Collection.extend({
-        model: BaseField,
+        model: Fields.BaseField,
 
         /**
          * Init form collection
