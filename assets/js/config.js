@@ -53,7 +53,7 @@ require.config({
         template              : "../../libs/backbone-forms/distribution/templates/bootstrap",
         xmljs                 : "../../libs/xmljs/xmllint",
         bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
-        nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller",
+        nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller.min",
         typeahead             : "../../libs/typeahead/bootstrap3-typeahead.min"
     },
     shim: {
@@ -128,6 +128,12 @@ require.config({
             exports: "$",
             deps: [
                 "jquery", "bootstrap"
+            ]
+        },
+        nanoscroller : {
+            exports: "$",
+            deps: [
+                "jquery"
             ]
         }
     },
