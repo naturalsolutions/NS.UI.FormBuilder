@@ -7,7 +7,7 @@ define(
         'models/fields',
         'i18n',
         'jqueryui',
-        //'nanoscroller',
+        'nanoscroller',
         'NS.UI.Notification'
     ],
     function($, _, Backbone, panelViewTemplate, Fields) {
@@ -54,7 +54,7 @@ define(
             render: function() {
                 var renderedContent = this.template({ list : this.list});
                 $(this.el).html(renderedContent);
-                //$(this.el).nanoScroller();
+                $(this.el).nanoScroller();
                 $('.fields').disableSelection();
                 return this;
             }
