@@ -42,12 +42,12 @@
         "save" : {
             "title"     : " Enregistrer",
             "cloud"     : "Enregistrer sur le serveur",
-            "export"    : "Exporter au format XML"
+            "export"    : "Exporter au format XML ou JSON"
         },
         "import" : {
             "title"     : " Importer un protocole",
             "cloud"     : "Charger depuis le serveur",
-            "import"    : "Importer un fichier XML"
+            "import"    : "Importer un fichier XML ou JSON"
         },
 
         "clear"     : " Tout supprimer",
@@ -67,6 +67,6 @@
     "actions" : {
         "edit"      : "Modifier",
         "delete"    : "Supprimer",
-        "clone"     : " Dupliqueer"
+        "clone"     : " Dupliquer"
     }
 }

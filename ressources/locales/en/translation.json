@@ -15,6 +15,27 @@
         "autocomplete" : "Auto complete",
         "table"        : "Presentation",
         "subform"      : "Fieldset",
+		"horizontalline" : "Horizontal line",
+    },
+
+    "protocol" : {
+        "name" : "Protocol name",
+        "description" : "Protocol Description",
+        "keywords" : "Keywords"
+    },
+
+    "modal" : {
+        "comment" : "Your coment",
+        "filename" : "File name",
+        "save" : {
+            "title" : "Protocol save",
+            "button" : "Save"
+        },
+        "export" : {
+            "title" : "Export",
+            "json" : "Export as JSON file",
+            "xml" : "Exporter as XML File"
+        }
     },
 
     "nav" : {
