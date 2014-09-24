@@ -21,7 +21,7 @@ define(
                 'export' : 'export',
                 'import' : 'import',
                 'load'   : 'load',
-                'clear'  : 'clear', //formbuilderRef.mainView.clear();
+                'clear'  : 'clear',
                 'show'   : 'show'
             },
 
@@ -234,6 +234,11 @@ define(
 
                 }, this));
 
+            },
+
+            clear : function() {
+                this.formbuilderInstanceRef.mainView.clear();
+                window.location.hash = '#';
             },
 
             importJSON: function() {

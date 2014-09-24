@@ -22,7 +22,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             this.template   = _.template(options.template);
             _.bindAll(this, 'render', 'removeView');
             this.model.bind('change', this.render);
-            this.model.bind('destroy', this.deleteView);
+            this.model.bind('destroy', this.removeView);
 
             this.el = options.el;
         },
