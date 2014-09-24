@@ -18,7 +18,8 @@ function loadAllCss() {
         'libs/NS.UI.Navbar/themes/navbar.bootstrap3.css',
         'libs/NS.UI.Notification/notification.css',
         'compressed/formbuilder.min.css',
-        'libs/fancytree/dist/skin-win7/ui.fancytree.min.css'
+        'libs/fancytree/dist/skin-win7/ui.fancytree.min.css',
+        'libs/backbone-forms/distribution/templates/bootstrap3.css'
     ];
     for (var l in links) {
         var link  = document.createElement("link");
@@ -48,6 +49,7 @@ require.config({
         "backbone-forms"      : "../../libs/backbone-forms/distribution.amd/backbone-forms",
         "backbone-forms-list" : "../../libs/backbone-forms//distribution.amd/editors/list.min",
         modalAdapter          : "../../libs/bootstrapAdapter/src/backbone.bootstrap-modal",
+        bootstrapTemplate : '../../libs/backbone-forms/distribution/templates/bootstrap3',
         template              : "../../libs/backbone-forms/distribution/templates/bootstrap",
         xmljs                 : "../../libs/xmljs/xmllint",
         bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
@@ -73,6 +75,10 @@ require.config({
                 "backbone"
             ],
             exports: "Backbone"
+        },
+        bootstrapTemplate : {
+            deps : [ 'backbone-forms'],
+            exports : 'Form'
         },
         jqueryui: {
             exports: "$",
