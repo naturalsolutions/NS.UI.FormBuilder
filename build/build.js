@@ -8,7 +8,7 @@
         i18n                 : "../../libs/i18n/i18next",
         jquery               : "../../libs/jquery/dist/jquery.min",
         jqueryui             : '../../libs/jquery-ui/jquery-ui',
-        nanoscroller         : "../../libs/nanoscroller/jquery.nanoscroller",
+        nanoscroller         : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller.min",
         underscore           : "../../libs/underscore/underscore",
         "NS.UI.Navbar"       : "../../libs/NS.UI.Navbar/navbar",
         "NS.UI.Notification" : "../../libs/NS.UI.Notification/notification",
