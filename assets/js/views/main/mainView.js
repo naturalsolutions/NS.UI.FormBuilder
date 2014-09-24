@@ -2,8 +2,8 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'assets/js/views/main/panelView.js',
-    'assets/js/views/main/formView.js',
+    'views/main/panelView',
+    'views/main/formView',
     'i18n',
     'jqueryui',
     //'nanoscroller',
@@ -77,60 +77,49 @@ define([
         getActions : function() {
             return {
                 save : new NS.UI.NavBar.Action({
-                    title           : '<i class="fa fa-cloud"></i><span data-i18n="nav.save.title" data-key="save">Save protocol</span>',
+                    title           :$.t('nav.save.title'),
                     allowedRoles    : ["reader"],
                     actions: {
-                        'save.repo' : new NS.UI.NavBar.Action({
-                            //  Display modal window for save the protocol in the repository
-                            title       : 'Save',
+                        'repo' : new NS.UI.NavBar.Action({
+                            title       : $.t('nav.save.cloud'),
                             allowedRoles: ['reader'],
-                            url : "#save/repo"
+                            url : "#save"
                         }),
                         'export': new NS.UI.NavBar.Action({
-                            //  Allow to export protocol as a XML file
                             allowedRoles    : ["reader"],
-                            title           : 'Export as JSON or XML',
+                            title           : $.t('nav.save.export'),
                             url : "#export"
                         })
                     }
                 }),
 
-                'import' : new NS.UI.NavBar.Action({
+                import : new NS.UI.NavBar.Action({
                     actions : {
-                        'import.JSON' : new NS.UI.NavBar.Action({
-                            allowedRoles: ["reader"],
-                            title       : 'Importer un fichier JSON',
-                            utl : "#import/json"
-                        }),
-                        'import.XML' : new NS.UI.NavBar.Action({
-                            allowedRoles: ["reader"],
-                            title       : 'Importer un fichier XML',
-                            url : '#import/xml'
+                        'import.file' : new NS.UI.NavBar.Action({
+                            allowedRoles : ["reader"],
+                            title        : $.t("nav.import.import"),
+                            utl          : "#import"
                         }),
                         'import.load' : new NS.UI.NavBar.Action({
-                            title       : 'Charger depuis le serveur',
-                            allowedRoles: ["reader"],
-                            url : '#load'
+                            title        : $.t("nav.import.cloud"),
+                            allowedRoles : ["reader"],
+                            url          : '#load'
                         })
                     },
-                    title       : '<i class="fa fa-upload"></i><span data-i18n="nav.import.title" data-key="import">Import</span>',
+                    title       : $.t("nav.import.title"),
                     allowedRoles: ["reader"]
                 }),
 
                 clear: new NS.UI.NavBar.Action({
-                    handler: function() {
-                        require(['app/formbuilder'], function(formbuilderRef) {
-                            formbuilderRef.mainView.clear();
-                        });
-                    },
-                    allowedRoles: ["reader"],
-                    title       : '<i class="fa fa-trash-o"></i> Tout supprimer'
+                    url          : '#clear',
+                    allowedRoles : ["reader"],
+                    title        : $.t('nav.clear')
                 }),
 
                 show: new NS.UI.NavBar.Action({
-                    url : '#show',
-                    allowedRoles: ["reader"],
-                    title: '<span class="fa fa-bars" data-i18n="nav.compare" data-key="show"></span>'
+                    url          : '#show',
+                    allowedRoles : ["reader"],
+                    title        : $.t('nav.compare')
                 })
             };
         }
