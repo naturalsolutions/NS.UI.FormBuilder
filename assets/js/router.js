@@ -17,11 +17,17 @@ define(
                 ""             : 'home',
                 'saveprotocol' : 'saveProtocol',
                 'setting/:id': 'modelSetting',
-                'save/repo'    : 'saveOnRepo',
-                'export'     : 'export',
+                'save'   : 'saveOnRepo',
+                'export' : 'export',
+                'import' : 'import',
+                'load'   : 'load',
+                'clear'  : 'clear', //formbuilderRef.mainView.clear();
+                'show'   : 'show'
             },
 
             initialize: function(formbuilderInstanceRef) {
+
+                i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false});
 
                 window.location.hash = '#';
                 //  Keep formbuilder object references
@@ -81,9 +87,7 @@ define(
                 this.formbuilderInstanceRef.navbar.$el.prependTo('body');
                 this.formbuilderInstanceRef.navbar.render();
 
-                i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json'}, function(t) {
-                    $("body").i18n();
-                });
+                $("body").i18n();
             },
 
             home: function() {
@@ -91,7 +95,6 @@ define(
             },
 
             modelSetting: function(modelID) {
-                alert (true)
                 require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
 
                     var field = this.formbuilderInstanceRef.currentCollection.models[modelID];
@@ -101,7 +104,7 @@ define(
                     }).render();
                     $('.settings').append(form.el)
 
-                    $('.dropArea').switchClass('col-md-9', 'col-dm-7', 500);
+                    $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
                     $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
 
                     this.formbuilderInstanceRef.navbar.setActions({
@@ -110,8 +113,8 @@ define(
                             allowedRoles: ["reader"],
                             handler: _.bind(function() {
 
-                                $('.dropArea').switchClass('span7', 'span9', 500);
-                                $('.widgetsPanel').switchClass('span0', 'span3', 500);
+                                $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
+                                $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
                                 window.location.hash = "#";
 
                                 field.set(form.getValue())
@@ -198,7 +201,7 @@ define(
                                     });
                                     saveAs(blob, $('#exportProtocolFileName').val() + '.json');
 
-                                } else {
+                                } else if (datas['mode'] === 'xml') {
 
                                     var isFileSaverSupported = !!new Blob();
                                     var blob = new Blob(
@@ -222,6 +225,8 @@ define(
                                     message : "Can't create your JSON file"
                                 });
                             }
+
+                            window.location.hash = '#';
 
                         }, this));  //  End require
 
