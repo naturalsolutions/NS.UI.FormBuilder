@@ -182,22 +182,18 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
          * @returns {undefined}
          */
         addElement: function(nameType, properties) {
-            require(['models/'+nameType], _.bind(function(Field) {
-
               var field   = properties || {};
               field['id'] = this.getSize();
-              var el      = new Field(field);
+              var el      = new Fields[nameType](field);
 
               this.add (el);
               this.trigger('newElement', el);
-
-            }, this));
         },
 
         addTableElement : function(nameType) {
             var field   = properties || {};
             field['id'] = this.getSize();
-            var el      = new models[nameType](field);
+            var el      = new Fields[nameType](field);
 
             this.add (el);
             return el;
