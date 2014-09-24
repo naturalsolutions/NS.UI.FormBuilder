@@ -2,7 +2,7 @@ define([
     'jquery',
     'underscore',
     'backbone',
-    'text!../../../../../templates/main/formView.html',
+    'text!../../../templates/main/formView.html',
     'i18n',
     'jqueryui',
     'nanoscroller',
