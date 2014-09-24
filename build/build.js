@@ -27,15 +27,14 @@
     },
 
     optimize: 'uglify2',
-uglify2: {
-  output: {
-    beautify: true,
-  },
-  beautify: {
-    semicolons: false
-  }
-},
-
+    uglify2: {
+      output: {
+        beautify: true,
+      },
+      beautify: {
+        semicolons: false
+      }
+    },
 	baseUrl                 : '../assets/js/',
 	mainConfigFile          : '../assets/js/config.js',
 	name                    : 'formbuilder',
@@ -44,7 +43,7 @@ uglify2: {
         beautify: true
     },
 	preserveLicenseComments : false,
-	
 
-    include : ['requirejs', 'backbone'],
-})
+    include : ['requirejs', 'backbone']
+
+});

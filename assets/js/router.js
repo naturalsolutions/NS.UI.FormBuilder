@@ -16,13 +16,13 @@ define(
             routes: {
                 ""             : 'home',
                 'saveprotocol' : 'saveProtocol',
-                'setting/:id': 'modelSetting',
-                'save'   : 'saveOnRepo',
-                'export' : 'export',
-                'import' : 'import',
-                'load'   : 'load',
-                'clear'  : 'clear',
-                'show'   : 'show'
+                'setting/:id'  : 'modelSetting',
+                'save'         : 'saveOnRepo',
+                'export'       : 'export',
+                'import'       : 'import',
+                'load'         : 'load',
+                'clear'        : 'clear',
+                'show'         : 'show'
             },
 
             initialize: function(formbuilderInstanceRef) {
