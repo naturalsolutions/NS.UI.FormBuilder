@@ -30,7 +30,7 @@
                 .nano-slider { background : #ddd; border-radius: 0 !important; }
             }
 
-            .nano-content { padding-top: 50px; padding-bottom: 60px; }
+            .nano-content { padding-bottom: 60px; }
 
             .fields {
                 .font();
@@ -365,5 +365,13 @@ fieldset.subformField {
     padding-right  : 5px;
 }
 
-
+.settings {
+    form {
+        &>fieldset:first-child {
+            &>div:not(.form-group) {
+                &>label:first-child { background : red;}
+            }
+        }
+    }
+}
 
