@@ -15,7 +15,7 @@ define([
                 '<div class="row content">'+
                 '   <div class="col-md-3 widgetsPanel nano"></div>'+
                 '   <div class="col-md-9 dropArea"></div>'+
-                '   <div class="col-md-5 settings"></div>'+
+                '   <div class="col-md-5 settings nano"></div>'+
                 '</div>'
             );
 

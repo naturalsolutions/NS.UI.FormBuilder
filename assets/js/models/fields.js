@@ -10,7 +10,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         </div>\
     ');
 
-    i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false});
+    i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});
 
     var models = {};
 

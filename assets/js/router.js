@@ -8,8 +8,8 @@
  */
 
 define(
-    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'views/editViews', 'models/collection', 'NS.UI.Navbar', 'NS.UI.NavbarTheme'],
-    function($, _, Backbone, MainView, editViews, collection) {
+    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'NS.UI.Navbar', 'NS.UI.NavbarTheme'],
+    function($, _, Backbone, MainView, collection) {
 
         var AppRouter = Backbone.Router.extend({
 
@@ -27,7 +27,7 @@ define(
 
             initialize: function(formbuilderInstanceRef) {
 
-                i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false});
+                i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});
 
                 window.location.hash = '#';
                 //  Keep formbuilder object references
