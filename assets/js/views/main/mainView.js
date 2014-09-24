@@ -4,12 +4,8 @@ define([
     'backbone',
     'views/main/panelView',
     'views/main/formView',
-    'i18n',
-    'jqueryui',
-    //'nanoscroller',
-    'bootstrap'
+    'i18n'
 ], function($, _, Backbone, PanelView, FormView) {
-
 
     var MainView = Backbone.View.extend({
 
@@ -126,4 +122,5 @@ define([
     });
 
     return MainView;
+
 });
