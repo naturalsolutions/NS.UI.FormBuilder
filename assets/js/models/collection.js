@@ -118,6 +118,7 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
                     break;
 
                 case 'Table':
+                case 'Subform' : 
                     var item = null;
                     subModel['subSchema'] = {}
                     $.map(model.get('fields'), _.bind(function(field) {

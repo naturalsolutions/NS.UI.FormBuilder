@@ -13,6 +13,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             'click  .trash' : 'removeView',
             'click .copy'   : 'copyModel',
             'focus input'   : 'updateSetting',
+            "isDropped"     : "isDropped"
         },
 
         /**
@@ -65,6 +66,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
          */
         updateIndex: function(idx) {
             this.model.id = parseInt(idx);
+        },
+
+        isDropped : function(event, data) {
+            $('#' + data['id']).trigger('isDroppedReturn', [{
+                subViewID : this.$el.attr('id'),
+                subView : this
+            }]);
         }
     });
 

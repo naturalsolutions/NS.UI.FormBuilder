@@ -10,7 +10,8 @@ define([
 
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
-                'delete'        : 'deleteSubView'
+                'delete'          : 'deleteSubView',
+                'isDroppedReturn' : 'isDroppedReturn'
             });
         },
 
@@ -20,12 +21,31 @@ define([
 
             BaseView.prototype.initialize.apply(this, [opt]);
             this._subView = [];
+
+            this.collectionRef = options.collection;
+
             _.bindAll(this, 'deleteSubView', 'renderSubView', 'addSubView', 'render');
         },
 
         addSubView : function(subViewID, subView, model) {
             this._subView[ _.size(this._subView)] = subViewID;
             this.model.addModel(model, subViewID);
+        },
+
+        isDroppedReturn : function(event, data) {
+            var subViewID = data['subViewID'], subView = data['subView'];
+
+            this.addSubView(subViewID, subView, subView.model)
+
+            $(this.el + ' fieldset').append('<div class="row-fluid sortableRow"></div>');
+            subView.$el.switchClass('span12', 'span10 offset1',0);
+            subView.$el.switchClass('dropField', 'subElement',0);
+
+            subView.$el.remove();
+            setTimeout( _.bind(function() {
+                $(this.el + ' fieldset .row-fluid:last').append(subView.$el );
+                subView.render();
+            }, this), 0)
         },
 
         render : function() {
@@ -37,25 +57,11 @@ define([
                 activeClass : 'hovered',
 
                 drop : _.bind(function(event, ui) {
-
-                    require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
-                        var subViewID   = $(ui['draggable']).prop('id'),
-                            subView     = formbuilderInstance.mainView.getSubView( subViewID );
-
-                        this.addSubView(subViewID, subView, subView.model)
-
-                        $(this.el + ' fieldset').append('<div class="row-fluid sortableRow"></div>');
-                        subView.$el.switchClass('span12', 'span10 offset1',0);
-                        subView.$el.switchClass('dropField', 'subElement',0);
-
-                        subView.$el.remove();
-                        setTimeout( _.bind(function() {
-                            $(this.el + ' fieldset .row-fluid:last').append(subView.$el );
-                            subView.render();
-                        }, this), 0)
-
-                    }, this));
-
+                    //  Send and event to the dropped view
+                    //  The dropped view return its backbone view
+                    $(ui['draggable']).trigger("isDropped", [{
+                        id : this.$el.attr('id')
+                    }]);
                 }, this)
             });
 
@@ -82,7 +88,7 @@ define([
         },
 
         renderSubView : function() {
-            require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
+            /*require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
 
                 _.each(this._subView, _.bind(function(el, idx) {
                     if (el!= undefined && idx != undefined) {
@@ -94,7 +100,7 @@ define([
                     }
                 }, this));
 
-            }, this));
+            }, this));*/
         },
 
         deleteSubView : function(event) {

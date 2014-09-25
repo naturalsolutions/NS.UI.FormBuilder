@@ -64,7 +64,8 @@ define([
 
                 var vue = new fieldView({
                     el      : '#' + id,
-                    model   : newModel
+                    model   : newModel,
+                    collection : this.collection
                });
                 if (vue !== null) {
                     vue.render();
