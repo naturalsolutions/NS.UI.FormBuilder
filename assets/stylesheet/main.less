@@ -51,17 +51,17 @@ html, body {
 
     @num : @i * 5;
 
-    .margin@{num}       { margin        : (@i * 5px);   }
-    .marginBottom@{num} { margin-bottom : (@i * 5px);   }
-    .marginTop@{num}    { margin-top    : (@i * 5px);   }
-    .marginLeft@{num}   { margin-left   : (@i * 5px);   }
-    .marginRight@{num}  { margin-right  : (@i * 5px);   }
+    .margin@{num}       { margin        : (@i * 5px) !important;   }
+    .marginBottom@{num} { margin-bottom : (@i * 5px) !important;   }
+    .marginTop@{num}    { margin-top    : (@i * 5px) !important;   }
+    .marginLeft@{num}   { margin-left   : (@i * 5px) !important;   }
+    .marginRight@{num}  { margin-right  : (@i * 5px) !important;   }
 
-    .padding@{num}       { padding        : (@i * 5px);   }
-    .paddingBottom@{num} { padding-bottom : (@i * 5px);   }
-    .paddingTop@{num}    { padding-top    : (@i * 5px);   }
+    .padding@{num}       { padding        : (@i * 5px) !important;   }
+    .paddingBottom@{num} { padding-bottom : (@i * 5px) !important;   }
+    .paddingTop@{num}    { padding-top    : (@i * 5px) !important;   }
     .paddingLeft@{num}   { padding-left   : (@i * 5px) !important;   }
-    .paddingRight@{num}  { padding-right  : (@i * 5px);   }
+    .paddingRight@{num}  { padding-right  : (@i * 5px) !important;    }
 
   .generate-columns(@n, (@i + 1));
 }
