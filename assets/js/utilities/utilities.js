@@ -7,7 +7,7 @@
  * @version         1.0
  */
 
-require(['jquery', 'underscore', 'xmljs'], function($, _) {
+define(['jquery', 'underscore', 'xmljs'], function($, _) {
 
     var utilities = {};
 
@@ -111,6 +111,21 @@ require(['jquery', 'underscore', 'xmljs'], function($, _) {
         });
 
         return jsonObject;
+    };
+
+    utilities.ReadFile = function(input, callback) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                callback(e.target.result)
+            };
+            reader.onerror = function(e) {
+                callback(e);
+            }
+            reader.readAsText(input.files[0], "UTF-8");
+        } else {
+            callback(false);
+        }
     };
 
     return utilities;
