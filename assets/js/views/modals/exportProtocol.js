@@ -38,7 +38,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
                     });
                 }, this),
                 updater: _.bind(function(item) {
-                    this.appendKeywordValue(item);
+                    $('#pillbox').pillbox('addItems',-1, [{text :item, value : item}])
                 }, this)
             });
 
