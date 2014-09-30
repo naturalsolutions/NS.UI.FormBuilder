@@ -34,8 +34,8 @@ require.config({
     paths: {
         backbone              : "../../libs/backbone/backbone",
         blobjs                : "../../libs/blobjs/Blob",
-        bootstrap             : "../../libs/bootstrap/dist/js/bootstrap.min",
-        fancytree             : "../../libs/fancytree/dist/jquery.fancytree-custom.min",
+        bootstrap             : "../../libs/bootstrap/dist/js/bootstrap",
+        fancytree             : "../../libs/fancytree/dist/jquery.fancytree-all.min",
         filesaver             : "../../libs/filesaver/FileSaver",
         i18n                  : "../../libs/i18n/i18next",
         jquery                : "../../libs/jquery/dist/jquery",
@@ -49,12 +49,13 @@ require.config({
         "backbone-forms"      : "../../libs/backbone-forms/distribution.amd/backbone-forms",
         "backbone-forms-list" : "../../libs/backbone-forms//distribution.amd/editors/list.min",
         modalAdapter          : "../../libs/bootstrapAdapter/src/backbone.bootstrap-modal",
-        bootstrapTemplate : '../../libs/backbone-forms/distribution/templates/bootstrap3',
+        bootstrapTemplate     : "../../libs/backbone-forms/distribution/templates/bootstrap3",
         template              : "../../libs/backbone-forms/distribution/templates/bootstrap",
         xmljs                 : "../../libs/xmljs/xmllint",
         bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
-        nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller.min",
-        typeahead             : "../../libs/typeahead/bootstrap3-typeahead.min"
+        nanoscroller          : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller",
+        typeahead             : "../../libs/typeahead/bootstrap3-typeahead",
+        "backbone.radio"      : "../../libs/backbone.radio/build/backbone.radio"
     },
     shim: {
         jquery: {
@@ -76,9 +77,17 @@ require.config({
             ],
             exports: "Backbone"
         },
-        bootstrapTemplate : {
-            deps : [ 'backbone-forms'],
-            exports : 'Form'
+        "backbone.radio": {
+            deps: [
+                "backbone"
+            ],
+            exports: "Backbone"
+        },
+        bootstrapTemplate: {
+            deps: [
+                "backbone-forms"
+            ],
+            exports: "Form"
         },
         jqueryui: {
             exports: "$",
@@ -106,9 +115,11 @@ require.config({
                 "bootstrap"
             ]
         },
-        "NS.UI.NavbarTheme" : {
-            deps : ['NS.UI.Navbar'],
-            exports : "NS"
+        "NS.UI.NavbarTheme": {
+            deps: [
+                "NS.UI.Navbar"
+            ],
+            exports: "NS"
         },
         "NS.UI.Notification": {
             exports: "$",
@@ -127,17 +138,17 @@ require.config({
         typeahead: {
             exports: "$",
             deps: [
-                "jquery", "bootstrap"
+                "jquery",
+                "bootstrap"
             ]
         },
-        nanoscroller : {
+        nanoscroller: {
             exports: "$",
             deps: [
                 "jquery"
             ]
         }
     },
-    
     packages: [
 
     ]
