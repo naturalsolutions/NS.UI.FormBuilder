@@ -32,6 +32,7 @@ define(
                 window.location.hash = '#';
 
                 this.URLOptions = options['URLOptions'];
+                this.el = options['el'];
 
                 var user = {
                     anonymous: {
@@ -163,6 +164,7 @@ define(
 
             saveOnRepo: function() {
                 require(['views/modals/saveProtocol'], _.bind(function(SaveProtocolModalView) {
+                    $(this.el).append('<div class="modal  fade" id="saveModal"></div>');
                     var modalView = new SaveProtocolModalView({
                         el                   : '#saveModal',
                         protocolAutocomplete : this.URLOptions['protocolAutocomplete'],
@@ -209,7 +211,7 @@ define(
 
             export: function() {
                 require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
-
+                    $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
                     var modalView = new exportProtocolJSON({
                         el: "#exportModal",
                         URLOptions: this.URLOptions
@@ -281,7 +283,7 @@ define(
 
             importJSONOrXML : function() {
                 require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
-                    $('#formBuilder').append('<div class="modal fade" id="importModal"></div>');
+                    $(this.el).append('<div class="modal fade" id="importModal"></div>');
                     var modalView = new importProtocolModal({
                         el: "#importModal"
                     });
@@ -325,6 +327,7 @@ define(
             },
 
             show: function() {
+                $(this.el).append('<div class="modal  fade" id="compareModal" ></div>');
                 $('#compareModal').modal('show')
                     .on('click', '#findSource, #findUpdate', function() {
                         $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');

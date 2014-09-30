@@ -53,7 +53,7 @@ require.config({
         template              : "../../libs/backbone-forms/distribution/templates/bootstrap",
         xmljs                 : "../../libs/xmljs/xmllint",
         bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
-        nanoscroller          : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller",
+        nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller",
         typeahead             : "../../libs/typeahead/bootstrap3-typeahead",
         "backbone.radio"      : "../../libs/backbone.radio/build/backbone.radio"
     },
@@ -160,11 +160,14 @@ require(['formbuilder'], function(formbuilder) {
     var options = {
         // Specify URL for formBuilder configuration
         // Replace this URL with your own
-        autocompleteURL      : 'ressources/autocomplete/',
-        translationURL       : 'ressources/locales/',
-        keywordAutocomplete  : 'ressources/autocomplete/keywords.json',
-        protocolAutocomplete : 'ressources/autocomplete/protocols.json',
-        unitURL              : 'ressources/autocomplete/units.json'
+        URLOptions : {
+            autocompleteURL      : 'ressources/autocomplete/',
+            translationURL       : 'ressources/locales/',
+            keywordAutocomplete  : 'ressources/autocomplete/keywords.json',
+            protocolAutocomplete : 'ressources/autocomplete/protocols.json',
+            unitURL              : 'ressources/autocomplete/units.json',
+        },
+        el : '#formBuilder'
     }
 
     formbuilder.initialize(options);
