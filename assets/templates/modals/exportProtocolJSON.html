@@ -1,4 +1,4 @@
-<div class="modal-dialog">
+<div class="modal-dialog fuelux">
     <div class="modal-content">
 
         <div class="modal-header">
@@ -27,9 +27,19 @@
                 <label data-i18n="protocol.keywords">
                     Keywords <i>(Taped enter for validate)</i>
                 </label>
-                <input type="text" id="exportProtocolKeywords" class="form-control" data-provider="typeahead" />
-                <ul class="row-fluid" id="exportProtocolKeywordsList">
-                </ul>
+                <div data-initialize="pillbox" class="pillbox" id="pillbox">
+                    <ul class="clearfix pill-group" id="exportProtocolKeywordsList">
+                        <li class="pillbox-input-wrap btn-group">
+                          <a class="pillbox-more">and <span class="pillbox-more-count"></span> more...</a>
+                          <input type="text" class="form-control dropdown-toggle pillbox-add-item" placeholder="add item">
+                          <button type="button" class="dropdown-toggle sr-only">
+                            <span class="caret"></span>
+                            <span class="sr-only">Toggle Dropdown</span>
+                          </button>
+                          <ul class="suggest dropdown-menu" role="menu" data-toggle="dropdown" data-flip="auto"></ul>
+                        </li>
+                      </ul>
+                </div>
             </div>
 
             <div class="form-group">

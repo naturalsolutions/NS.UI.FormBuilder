@@ -1,4 +1,4 @@
-define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocolJSON.html', 'bootstrap', 'typeahead'], function(_, Backbone, exportJSONTemplate) {
+define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocolJSON.html', 'bootstrap', 'typeahead', 'fuelux'], function(_, Backbone, exportJSONTemplate) {
 
     var ExportJSONProtocolModalView = Backbone.View.extend({
 
@@ -10,7 +10,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
 
         initialize : function(options) {
             this.template   = _.template(exportJSONTemplate);
-            _.bindAll(this, 'render', 'validateProtocolValue', 'removeKeyword', 'appendKeywordValue');
+            _.bindAll(this, 'render', 'validateProtocolValue');
             this.keywordList = [];
 
             // Set URL autocomplete value from options
@@ -31,7 +31,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
                 }, this)
             });
 
-            $(this.el).find('#exportProtocolKeywords').typeahead({
+            $(this.el).find('#exportProtocolKeywordsList input[type="text"]').typeahead({
                 source: _.bind(function(query, process) {
                     return $.getJSON(this.keywordAutocomplete, {query: query}, function(data) {
                         return process(data.options);
@@ -42,7 +42,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
                 }, this)
             });
 
-
+            $(this.el).find('#pillbox').pillbox()
             return this;
         },
 
@@ -50,36 +50,6 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
             if (e.keyCode === 13) {
                 this.appendKeywordValue( $(e.target).val() );
             }
-        },
-
-        /**
-         * Add the keyword value in the list and check if the keyword not exists yet
-         *
-         * @param {type} keywordValue
-         */
-        appendKeywordValue : function(keywordValue) {
-            if (this.keywordList.indexOf(keywordValue) > -1) {
-                $('li[data-value="' + keywordValue + '"]').css('background', 'red');
-                setTimeout( function() {
-                    $('li[data-value="' + keywordValue + '"]').css('background', '#0ac');
-                }, 1500);
-            } else {
-                $(this.el).find('#exportProtocolKeywordsList').append(
-                    '<li data-value="' + keywordValue + '" >' + keywordValue + '<button class="close">x</button></li>'
-                );
-                this.keywordList.push(keywordValue);
-                $('#exportProtocolKeywords').val("");
-            }
-        },
-
-        /**
-         * Remove keyword from the list
-         *
-         * @param {type} e clicked li on the keyword list
-         */
-        removeKeyword: function(e) {
-            this.keywordList.splice($(e.target).parent('li').index(), 1);
-            $(e.target).parent('li').remove();
         },
 
         /**
@@ -92,14 +62,22 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
             var exportProtocolName        = $('#exportProtocolName').val()          === "",
                 exportProtocolComment     = $('#exportProtocolFileName').val()      === "",
                 exportProtocolDescription = $('#exportProtocolDescription').val()   === "",
-                exportProtocolKeywords    = $('#exportProtocolKeywordsList').children('li').length  === 0;
+                myArray = $("#exportProtocolKeywordsList .pill>span:not(.glyphicon)").map(function() {
+                 if ($(this).text() !== 'Remove') {
+                    return $(this).text();
+                 }
+                }).get(),
+                inputText = $('#exportProtocolKeywordsList input[type="text"]').val(),
+                exportProtocolKeywords    = myArray.length  === 0 && inputText == "";
 
 
-            $('#exportProtocolDescription, #exportProtocolKeywords, #exportProtocolFileName, #exportProtocolName').each( function() {
+            $('#exportProtocolDescription, #exportProtocolKeywordsList input[type="text"], #exportProtocolFileName, #exportProtocolName').each( function() {
                 $(this)[ eval($(this).prop('id')) === true ? 'addClass' : 'removeClass']("error");
             })
 
             if (!exportProtocolName && !exportProtocolDescription && !exportProtocolKeywords && !exportProtocolComment) {
+                myArray.push(inputText);
+                this.keywordList = myArray;
                 $('#exportmode').val( $(e.target).data('i18n').indexOf('json') > 0 ? 'json' : 'xml');
                 $('#exportModal').modal('hide').removeData();
             }

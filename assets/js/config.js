@@ -19,7 +19,8 @@ function loadAllCss() {
         'libs/NS.UI.Notification/notification.css',
         'compressed/formbuilder.min.css',
         'libs/fancytree/dist/skin-win7/ui.fancytree.min.css',
-        'libs/backbone-forms/distribution/templates/bootstrap3.css'
+        'libs/backbone-forms/distribution/templates/bootstrap3.css',
+        'libs/fuelux/dist/css/fuelux.min.css'
     ];
     for (var l in links) {
         var link  = document.createElement("link");
@@ -55,7 +56,8 @@ require.config({
         bootstrapAdapter      : "../../libs/bootstrapAdapter/index",
         nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller",
         typeahead             : "../../libs/typeahead/bootstrap3-typeahead",
-        "backbone.radio"      : "../../libs/backbone.radio/build/backbone.radio"
+        "backbone.radio"      : "../../libs/backbone.radio/build/backbone.radio",
+        fuelux                : "../../libs/fuelux/dist/js/fuelux"
     },
     shim: {
         jquery: {
