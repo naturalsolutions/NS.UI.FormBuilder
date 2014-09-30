@@ -21,10 +21,7 @@ define([
 
             this.URLOptions = options.URLOptions;
 
-
-            this.form = options.form || new app.views.Form({}, {
-                name: "My form"
-            });
+            this.form = options.form;
 
             this.panelView = new PanelView({
                 el: '.widgetsPanel',
@@ -39,7 +36,7 @@ define([
             this.panelView.render();
             this.formView.render();
 
-            _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getActions', 'getSubView');
+            _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getSubView');
         },
 
         getSubView : function(subViewID) {
@@ -68,56 +65,6 @@ define([
 
         importJSON : function() {
             return this.formView.importJSON();
-        },
-
-        getActions : function() {
-            return {
-                save : new NS.UI.NavBar.Action({
-                    title           :$.t('nav.save.title'),
-                    allowedRoles    : ["reader"],
-                    actions: {
-                        'repo' : new NS.UI.NavBar.Action({
-                            title       : $.t('nav.save.cloud'),
-                            allowedRoles: ['reader'],
-                            url : "#save"
-                        }),
-                        'export': new NS.UI.NavBar.Action({
-                            allowedRoles    : ["reader"],
-                            title           : $.t('nav.save.export'),
-                            url : "#export"
-                        })
-                    }
-                }),
-
-                import : new NS.UI.NavBar.Action({
-                    actions : {
-                        'import.file' : new NS.UI.NavBar.Action({
-                            allowedRoles : ["reader"],
-                            title        : $.t("nav.import.import"),
-                            utl          : "#import"
-                        }),
-                        'import.load' : new NS.UI.NavBar.Action({
-                            title        : $.t("nav.import.cloud"),
-                            allowedRoles : ["reader"],
-                            url          : '#load'
-                        })
-                    },
-                    title       : $.t("nav.import.title"),
-                    allowedRoles: ["reader"]
-                }),
-
-                clear: new NS.UI.NavBar.Action({
-                    url          : '#clear',
-                    allowedRoles : ["reader"],
-                    title        : $.t('nav.clear')
-                }),
-
-                show: new NS.UI.NavBar.Action({
-                    url          : '#show',
-                    allowedRoles : ["reader"],
-                    title        : $.t('nav.compare')
-                })
-            };
         }
     });
 

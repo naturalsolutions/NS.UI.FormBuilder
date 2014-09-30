@@ -28,7 +28,7 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
             this.description    = options.description || "";
             this.keywords       = options.keywords || ["protocol"];
             //  Bind
-            _.bindAll(this, 'updateWithXml', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'addTableElement', 'getJSON', 'getJSONFromModel');
+            _.bindAll(this, 'updateWithXML', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'addTableElement', 'getJSON', 'getJSONFromModel');
         },
 
         /**
@@ -207,9 +207,8 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
          * @param {type} name
          * @returns {undefined}
          */
-        updateWithXml: function(content, name) {
+        updateWithXML: function(content) {
             this.reset();
-            this.name = name;
             var xmlDoc          = $.parseXML(content),
                 fieldNameType   = "",
                 form            = app.utilities.XmlToJson( $(xmlDoc).find('form') );
@@ -231,7 +230,6 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
         addTableFieldFromJSON  : function(schema, name) {
             var fields = {}, subField = null;
             _.each(schema.subSchema, _.bind(function(el, idx){
-                
                 subField = _.pick(el, 'help');
                 if (el.validators.length > 0) {
                     subField['required'] = el.validators['required'] !== undefined;
@@ -267,7 +265,7 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
                 }
                 this.addElement( (el.type === 'TextArea' ? 'LongText' : el.type) + 'Field', field)
             }
-          }, this))
+          }, this));
         }
 
     });

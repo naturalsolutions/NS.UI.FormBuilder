@@ -14,8 +14,8 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
             this.keywordList = [];
 
             // Set URL autocomplete value from options
-            this.protocolAutocomplete = options.protocolAutocomplete;
-            this.keywordAutocomplete  = options.keywordAutocomplete
+            this.protocolAutocomplete = options.URLOptions['protocolAutocomplete'];
+            this.keywordAutocomplete  = options.URLOptions['keywordAutocomplete'];
         },
 
         render : function() {
