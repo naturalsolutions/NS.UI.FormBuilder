@@ -1,24 +1,24 @@
-<!-- FormView importProtocolModal view template -->
-<div class="modal hide fade" id="importProtocolModal">
-    <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-        <h3>Import protocol</h3>
-    </div>
-    <div class="modal-body">
-        <div class="row-fluid">
-            <label>Enter a protocol name and import your file</label>
+<div class="modal-dialog">
+    <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+            <h3>Import protocol</h3>
         </div>
-        <div class="row-fluid">
-            <input type="text" id="importProtocolName" class="span12" placeholder="Protocol name" data-provide="typeahead" />
+        <div class="modal-body">
+            <div class="form-group">
+                <label>
+                    Select a JSON or XML file to import
+                </label>
+                <input type="file" id="importProtocolFile" class="hide" />
+                <div class="row paddingRight15 paddingLeft15">
+                    <input type="text" id="importProtocolFileText" class="control col-md-9" placeholder="Protocol file" style="margin-left : 0" accept="application/json, application/xml" />
+                <button class="col-md-2 marginTop0 marginLeft5 btn btn-lg btn-info find">Find</button> <br/>
+                <label class="error"></label>
+                </div>
+            </div>
         </div>
-        <br />
-        <div class="row-fluid">
-            <input type="file" id="importProtocolFile" class="hide" />
-            <input type="text" id="importProtocolFileText" class="span10" placeholder="Protocol file" style="margin-left : 0" />
-            <button type="button" class="span2" id="importProtocolFind">Find</button>
+        <div class="modal-footer paddingBottom10 paddingTop20">
+            <button type="button" class="btn btn-lg btn-success">Import</button>
         </div>
-    </div>
-    <div class="modal-footer">
-        <a href="#" class="btn btn-primary">Import</a>
     </div>
 </div>
