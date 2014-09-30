@@ -20,6 +20,10 @@ module.exports = function(grunt) {
             stylesheet: {
                 files: ['assets/stylesheet/*.less'],
                 tasks: ['less:dist']
+            },
+            bower : {
+                files : ['bower.json'],
+                tasks : ['bower:target']
             }
         },
 
