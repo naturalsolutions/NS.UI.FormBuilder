@@ -46,4 +46,4 @@
 
     include : ['requirejs', 'backbone']
 
-});
+})
