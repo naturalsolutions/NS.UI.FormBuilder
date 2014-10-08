@@ -3,3 +3,4 @@ web.config
 libs/
 bower_components
 compressed/
+build/formbuilder.min.js
