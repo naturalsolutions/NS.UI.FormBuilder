@@ -2,7 +2,7 @@
     <div class="form-group paddingBottom5">
         <label class="col-md-4 paddingLeft0">
             <i class="fa fa-arrows" style="color : #09C"></i>
-            <% if (required===true) { %>*<% } %> <%= label %>
+            <% if (required===true) { %>*<% } %> <%= title %>
         </label>
         <div class="span8 right actions">
             <a href="#" class="trash">
@@ -19,6 +19,6 @@
            </a>
         </div>
     </div>
-    <input type="number" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= hint %>" value="<%= defaultValue %>" />
+    <input type="number" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
   </div>
 </div>

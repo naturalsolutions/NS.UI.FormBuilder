@@ -3,7 +3,7 @@
         <div class="row">
         <label class="col-md-4">
             <i class="fa fa-arrows" style="color : #09C"></i>
-            <% if (required === true) { %> * <% } %> <%= label %>
+            <% if (required === true) { %> * <% } %> <%= title %>
         </label>
                 <div class="col-md-8 right actions">
                 <a href="#" class="trash">
@@ -24,7 +24,7 @@
         <div class="radio marginTop0 marginBottom0">
             <label>
                 <input data-idx=<%=idx %> type="radio"  name="<%= name %>" id="<%= id %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
-                <%= label %>
+                <%= title %>
             </label>
         </div>
     <% }); %>
