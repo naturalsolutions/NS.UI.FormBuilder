@@ -54,7 +54,6 @@ define([
         addElement: function(newModel) {
 
             var viewClassName = newModel.constructor.type + "FieldView";
-
             require(['views/fieldViews/' + viewClassName], _.bind(function(fieldView) {
 
                 //  View file successfully loaded

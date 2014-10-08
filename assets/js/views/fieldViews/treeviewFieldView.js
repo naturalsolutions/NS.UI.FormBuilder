@@ -22,7 +22,7 @@ define([
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
             var src = this.model.get('node');
-            require(['jquery', 'fancytree'], _.bind(function($) {
+            require(['jqueryui', 'fancytree'], _.bind(function($) {
                 $(this.el).find('#tree').fancytree({
                     source: src,
                     checkbox : true,
