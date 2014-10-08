@@ -93,6 +93,19 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
             return (new XMLSerializer()).serializeToString(xml);
         },
 
+        getFieldsetFromModel : function(model) {
+          var fieldset = {
+            legend : model.get('legend'),
+            fields : []
+          };
+
+          _.each (model.get('fields'), function(el, idx) {
+            fieldset['fields'].push(el.get('name'));
+          });
+
+          return fieldset;
+        },
+
         getJSONFromModel : function(model) {
             var subModel = { validators : [] };
 
@@ -118,7 +131,6 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
                     break;
 
                 case 'Table':
-                case 'Subform' : 
                     var item = null;
                     subModel['subSchema'] = {}
                     $.map(model.get('fields'), _.bind(function(field) {
@@ -147,17 +159,20 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
             json.description = this.description;
             json.keywords    = this.keywords;
             json.schema = {};
+            json.fieldsets = [];
 
             this.map( _.bind(function(model) {
-                if (model.constructor.type != undefined && (!model.get('isDragged')) ) {
+                if (model.constructor.type === 'Subform') {
+                  json.fieldsets.push( this.getFieldsetFromModel(model) );
+                } else if (model.constructor.type != undefined) {
 
                     subModel = this.getJSONFromModel(model);
 
-                    if (json.schema[model.get('label')] !== undefined) {
-                        model.set('label', model.get('label') + model.get('id'));
+                    if (json.schema[model.get('name')] !== undefined) {
+                        model.set('name', model.get('name') + model.get('id'));
                     }
 
-                    json.schema[model.get('label')] = subModel;
+                    json.schema[model.get('name')] = subModel;
                 }
             }, this));
 
