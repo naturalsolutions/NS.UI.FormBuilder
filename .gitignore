@@ -4,3 +4,5 @@ libs/
 bower_components
 compressed/
 build/formbuilder.min.js
+/nbproject/private/
+nbproject/
