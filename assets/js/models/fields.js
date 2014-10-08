@@ -17,51 +17,32 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
-            id      : 0,
-            label   : "My label",
-            name    : {
-                label: {
-                    value: "field",
-                    lang : "en"
-                },
-                display_label: "field"
-            },
-            required: false,
-            readOnly: false,
+            id        : 0,
+            title     : "My label",
+            name      : "Field",
+            required  : false,
+            readOnly  : false,
             isDragged : false
         },
 
         schema : {
             id : {
-                type    : "Number",
-                fieldClass : 'advanced',
+                type        : "Number",
+                fieldClass  : 'advanced',
                 editorClass : 'form-control',
-                template : fieldTemplate
+                template    : fieldTemplate
             },
-            label   : {
-                type  : "Text",
-                title : 'Label',
+            title   : {
+                type        : "Text",
+                title       : $.t('schema.title'),
                 editorClass : 'form-control',
-                template : fieldTemplate
+                template    : fieldTemplate
             },
-            name : {
-                type : 'Object',
-                title : '&nbsp;',
-                subSchema : {
-                    label : {
-                        title : '&nbsp;',
-                        type : 'Object',
-                        subSchema : {
-                            value : { type : 'Text', title : 'Name label value', editorClass : 'form-control', template : fieldTemplate },
-                            lang  : { type : 'Text', title : 'Name label lang', editorClass : 'form-control', template : fieldTemplate }
-                        }
-                    },
-                    displayLabel : {
-                        type        : 'Text',
-                        editorClass : 'form-control',
-                        template    : fieldTemplate
-                    }
-                }
+            name   : {
+                type        : "Text",
+                title       : $.t('schema.name'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
             },
             required : {
                 type        : 'Checkbox',
@@ -79,13 +60,11 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         getXML: function() {
-            return  "<label>" + this.get('label') + '</label>' +
-                    "<name>" +
-                    "   <label lang='" + this.get('name')['label']['lang'] + "'>" + this.get('name')['label']['value'] + '</label>' +
-                    "   <display_label>" + this.get('name')['displayLabel'] + '</display_label>' +
-                    "</name>" +
-                    "<required>" + this.get('required') + '</required>' +
-                    "<readOnly>" + this.get('readOnly') + '</readOnly>';
+            return  "<label>"       + this.get('label')     + '</label>' +
+                    "<name>"        + this.get('name')      + "</name>" +
+                    "<title>"       + this.get('title')     + "</title>" +
+                    "<required>"    + this.get('required')  + '</required>' +
+                    "<readOnly>"    + this.get('readOnly')  + '</readOnly>';
         },
 
         isAdvanced : function(index) {
@@ -96,15 +75,10 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     models.HiddenField = Backbone.Model.extend({
         defaults: {
-            id: 0,
-            name: {
-                label: {
-                    value: "field",
-                    lang: "en"
-                },
-                displayLabel: "field"
-            },
-            value: ""
+            id    : 0,
+            title : "My label",
+            name  : "Field",
+            value : ""
         },
 
         schema: {
@@ -112,21 +86,17 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type: 'Number',
                 title : "ID"
             },
-            name: {
-                type: 'Object',
-                subSchema : {
-                    label : {
-                        type :'Object',
-                        subSchema : {
-                            value : { type : 'Text',  editorClass : 'form-control', template : fieldTemplate },
-                            lang  : { type : 'Text',  editorClass : 'form-control', template : fieldTemplate }
-                        }
-                    },
-                    displayLabel : {
-                        type : 'Text',
-                         editorClass : 'form-control', template : fieldTemplate
-                    }
-                }
+            name   : {
+                type        : "Text",
+                title       : 'Name',
+                editorClass : 'form-control',
+                template    : fieldTemplate
+            },
+            title   : {
+                type        : "Text",
+                title       : $.t('schema.title'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
             },
             value: {
                 type        : 'Text',
@@ -145,11 +115,9 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         getXML: function() {
-            return "<name>" +
-                "   <label lang='" + this.get('name')['label']['lang'] + "'>" + this.get('name')['label']['value'] + '</label>' +
-                "   <display_label>" + this.get('name')['displayLabel'] + '</display_label>' +
-                "</name>" +
-                "<value>" + this.get('value') + '</value>';
+            return  "<name>"    + this.get('name')      + "</name>" +
+                    "<title>"   + this.get('title')     + "</title>" +
+                    "<value>"   + this.get('value')     + '</value>';
         }
     }, {
         type   : 'Hidden',
@@ -172,7 +140,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         defaults: function() {
             return _.extend(models.BaseField.prototype.defaults, {
                 defaultValue : "",
-                hint         : "Write some text",
+                help         : "Write some text",
                 url          : ""
             });
         },
@@ -186,11 +154,11 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
-                hint: {
+                help: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.hint')
+                    title       : $.t('schema.help')
                 },
                 url: {
                     type        : 'Text',
@@ -204,7 +172,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         getXML: function() {
             var xml = models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
-                            '<hint>'         + this.get('hint')         + '</hint>' +
+                            '<help>'         + this.get('help')         + '</help>' +
                             '<url>'          + this.get('url')          + '</url>';
         },
 
@@ -223,7 +191,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         defaults : function() {
             return _.extend(models.BaseField.prototype.defaults, {
                 defaultValue : "",
-                hint         : "Write some text",
+                help         : "Write some text",
                 size         : 255,
                 multiline    : false
             });
@@ -238,11 +206,11 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
-                hint: {
+                help: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.hint')
+                    title       : $.t('schema.help')
                 },
                 size: {
                     type        : 'Number',
@@ -260,7 +228,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         getXML: function() {
             var xml = models.BaseField.prototype.getXML.apply(this, arguments);
             return xml +    '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
-                            '<hint>'         + this.get('hint')         + '</hint>' +
+                            '<help>'         + this.get('help')         + '</help>' +
                             '<size>'         + this.get('size')         + '</size>' +
                             '<multiline>'    + this.get('multiline')    + '</multiline>';
         }
@@ -731,7 +699,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
 
-            this.set('hint', 'Enter a numeric value');
+            this.set('help', 'Enter a numeric value');
         },
 
         getXML: function() {

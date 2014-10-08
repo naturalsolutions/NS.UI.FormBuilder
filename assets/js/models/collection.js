@@ -134,6 +134,7 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
             }
 
             subModel['help'] = model.get('hint');
+            subModel['title'] = model.get('title');
             if (model.get('required')) {
                 subModel.validators.push('required');
             }

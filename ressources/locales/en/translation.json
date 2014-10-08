@@ -76,7 +76,7 @@
         "value"             : "Value",
         "default"           : "Default value",
         "url"               : "Web service URL",
-        "hint"              : "Help text",
+        "help"              : "Help text",
         "size"              : "Maximal size",
         "file"              : "Default file",
         "mime"              : "Allowed file type",
