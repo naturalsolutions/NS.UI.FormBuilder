@@ -18,7 +18,11 @@ That page is static, so some functionnalities like "save on the cloud" will not 
 
 ### Demo FormBuilder to Backbone forms
 
-When you've imported a JSON file, you can try it on this page [FormBuilder to Backbone-forms](http://amiceli.github.io/FormBuilderToBBForms/).
+When you've imported a JSON file, you can try it on this page [FormBuilder to 
+Backbone-forms](http://amiceli.github.io/FormBuilderTobackbone-forms/).
 You can generate a form with your jSON File.
+
+You can also try [this demo](http://amiceli.github.io/backboneformsWizard/). You can 
+generate a form with fieldset and wizard.
 
 ##### Currently the FormBuilder is not 100% compatible with backbone forms but it's our goal.
