@@ -13,6 +13,54 @@ define(
 
         var AppRouter = Backbone.Router.extend({
 
+            mainActions : {
+                save : new NS.UI.NavBar.Action({
+                    title           :$.t('nav.save.title'),
+                    allowedRoles    : ["reader"],
+                    actions: {
+                        'repo' : new NS.UI.NavBar.Action({
+                            title       : $.t('nav.save.cloud'),
+                            allowedRoles: ['reader'],
+                            url : "#save"
+                        }),
+                        'export': new NS.UI.NavBar.Action({
+                            allowedRoles    : ["reader"],
+                            title           : $.t('nav.save.export'),
+                            url : "#export"
+                        })
+                    }
+                }),
+
+                import : new NS.UI.NavBar.Action({
+                    actions : {
+                        'import.file' : new NS.UI.NavBar.Action({
+                            allowedRoles : ["reader"],
+                            title        : $.t("nav.import.import"),
+                            url          : "#import"
+                        }),
+                        'import.load' : new NS.UI.NavBar.Action({
+                            title        : $.t("nav.import.cloud"),
+                            allowedRoles : ["reader"],
+                            url          : '#load'
+                        })
+                    },
+                    title       : $.t("nav.import.title"),
+                    allowedRoles: ["reader"]
+                }),
+
+                clear: new NS.UI.NavBar.Action({
+                    url          : '#clear',
+                    allowedRoles : ["reader"],
+                    title        : $.t('nav.clear')
+                }),
+
+                show: new NS.UI.NavBar.Action({
+                    url          : '#show',
+                    allowedRoles : ["reader"],
+                    title        : $.t('nav.compare')
+                })
+            },
+
             routes: {
                 ""             : 'home',
                 'saveprotocol' : 'saveProtocol',
@@ -80,53 +128,7 @@ define(
             },
 
             home: function() {
-                this.navbar.setActions({
-                    save : new NS.UI.NavBar.Action({
-                        title           :$.t('nav.save.title'),
-                        allowedRoles    : ["reader"],
-                        actions: {
-                            'repo' : new NS.UI.NavBar.Action({
-                                title       : $.t('nav.save.cloud'),
-                                allowedRoles: ['reader'],
-                                url : "#save"
-                            }),
-                            'export': new NS.UI.NavBar.Action({
-                                allowedRoles    : ["reader"],
-                                title           : $.t('nav.save.export'),
-                                url : "#export"
-                            })
-                        }
-                    }),
-
-                    import : new NS.UI.NavBar.Action({
-                        actions : {
-                            'import.file' : new NS.UI.NavBar.Action({
-                                allowedRoles : ["reader"],
-                                title        : $.t("nav.import.import"),
-                                url          : "#import"
-                            }),
-                            'import.load' : new NS.UI.NavBar.Action({
-                                title        : $.t("nav.import.cloud"),
-                                allowedRoles : ["reader"],
-                                url          : '#load'
-                            })
-                        },
-                        title       : $.t("nav.import.title"),
-                        allowedRoles: ["reader"]
-                    }),
-
-                    clear: new NS.UI.NavBar.Action({
-                        url          : '#clear',
-                        allowedRoles : ["reader"],
-                        title        : $.t('nav.clear')
-                    }),
-
-                    show: new NS.UI.NavBar.Action({
-                        url          : '#show',
-                        allowedRoles : ["reader"],
-                        title        : $.t('nav.compare')
-                    })
-                })
+                this.navbar.setActions(this.mainActions)
             },
 
             modelSetting: function(modelID) {
@@ -303,97 +305,58 @@ define(
             },
 
             show: function() {
-                $(this.el).append('<div class="modal  fade" id="compareModal" ></div>');
-                $('#compareModal').modal('show')
-                    .on('click', '#findSource, #findUpdate', function() {
-                        $('#' + $(this).prop('id').replace('find', '').toLowerCase() + 'Hide').trigger('click');
-                    })
-                    .on('change', 'input[type="file"]', function() {
-                        var id = $(this).prop('id').replace('Hide', ''),
-                            split = $(this).val().split('\\');
-                        $('#' + id).val(split[split.length - 1]);
-                    })
-                    .on('click', '.btn-primary', function() {
-                        $('#compareModal').modal('hide');
-                        var source = $('#compareModal').find('#sourceHide')[0].files[0],
-                            update = $('#compareModal').find('#updateHide')[0].files[0],
-                            srcName = source['name'],
-                            updName = update['name'],
-                            reader = null;
+                require(['views/modals/diffProtocol', 'utilities/utilities'], _.bind(function(diffModal, Utilities) {
+                    $(this.el).append('<div class="modal  fade" id="compareModal" ></div>');
+                    var modal = new diffModal({
+                        el : '#compareModal'
+                    });
+                    modal.render();
 
+                    $('#compareModal').on('hidden.bs.modal', _.bind(function () {
+                        var datas = modal.getData();
 
-                        if (source !== null && update !== null) {
-                            if (source.type === "text/xml" && update.type === "text/xml") {
-                                reader = new FileReader();
-                                reader.readAsText(source, "UTF-8");
-                                reader.onload = function(evt) {
-                                    try {
-                                        if (formBuilder.XMLValidation(evt.target.result) !== true) {
-                                            new NS.UI.Notification({
-                                                title: result.error,
-                                                type: 'error',
-                                                message: 'Your XML don\'t matches with XML Schema'
-                                            });
-                                        } else {
-                                            source = evt.target.result;
-                                            reader = new FileReader();
-                                            reader.readAsText(update, "UTF-8");
-                                            reader.onload = function(evt) {
-                                                if (formBuilder.XMLValidation(evt.target.result) === true) {
-                                                    update = evt.target.result;
-                                                    $('.widgetsPanel').switchClass('span3', 'span0', 250, function() {
-                                                        $('.dropArea').append(
-                                                            formBuilder.GetXMLDiff(source, update, srcName, updName)
-                                                        ).switchClass('span9', 'span12', 250).find('.diff').addClass('span11');
-                                                        var acts = {
-                                                            quit: new NS.UI.NavBar.Action({
-                                                                handler: function() {
-                                                                    $('.widgetsPanel').switchClass('span0', 'span3', 250, function() {
-                                                                        $('.dropArea').switchClass('span2', 'span9', 250).find('table').remove();
-                                                                        navbar.setActions(actions);
-                                                                        addIcon();
-                                                                    });
-                                                                },
-                                                                allowedRoles: ["reader"],
-                                                                title: "Quit"
-                                                            })
-                                                        };
-                                                        navbar.setActions(acts);
-                                                    })
-                                                }
+                        Utilities.ReadFile(datas['source'], _.bind(function(result) {
+                            if (result !== false) {
+                                var source = result;
+
+                                Utilities.ReadFile(datas['update'], _.bind(function(resultUpdate) {
+                                    if (resultUpdate !== false) {
+                                        var update = resultUpdate;
+
+                                        //  Now we have all we need !
+                                        $('.widgetsPanel').switchClass('col-md-3', 'hide', 250, _.bind(function() {
+                                            console.log ("diff : ", Utilities.GetXMLDiff(source, update, datas['srcName'], datas['updName']))
+                                            $('.dropArea').append(
+                                                Utilities.GetXMLDiff(source, update, datas['srcName'], datas['updName'])
+                                            ).switchClass('col-md-9', 'col-md-12', 250).find('.diff').addClass('col-md-10 col-md-offset-1');
+                                            var acts = {
+                                                quit: new NS.UI.NavBar.Action({
+                                                    handler: _.bind(function() {
+                                                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 250, _.bind(function() {
+                                                            $('.dropArea').switchClass('col-md-12', 'col-md-9', 250).find('table').remove();
+                                                            window.location.hash = "#";
+                                                            this.navbar.setActions(this.mainActions)
+                                                        }, this));
+                                                    }, this),
+                                                    allowedRoles: ["reader"],
+                                                    title: "Quit"
+                                                })
                                             };
-                                        }
-                                    } catch (exp) {
-                                        new NS.UI.Notification({
-                                            type: 'error',
-                                            title: "An error occured",
-                                            message: 'One of giles can\'t be read'
-                                        });
+                                            this.navbar.setActions(acts);
+                                        }, this))
+
+                                    } else {
+                                        console.log (resultUpdate);
                                     }
-                                };
-                                reader.onerror = function(evt) {
-                                    new NS.UI.Notification({
-                                        type: 'error',
-                                        title: "Reading error",
-                                        message: 'An error was occure during reading file'
-                                    });
-                                };
+                                }, this));
 
                             } else {
-                                new NS.UI.Notification({
-                                    type: 'error',
-                                    title: "File mime type error",
-                                    message: 'You must choose only XML files'
-                                });
+                                console.log (result);
                             }
-                        } else {
-                            new NS.UI.Notification({
-                                type: 'error',
-                                title: "Reading error",
-                                message: 'Error durring XML loading ! '
-                            });
-                        }
-                    }).removeClass('hide').css('width', '700px');
+                        }, this));
+                    }, this));
+
+                }, this));
             }
         });
 

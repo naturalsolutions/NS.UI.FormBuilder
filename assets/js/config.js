@@ -40,7 +40,8 @@ require.config({
         filesaver             : "../../libs/filesaver/FileSaver",
         i18n                  : "../../libs/i18n/i18next",
         jquery                : "../../libs/jquery/dist/jquery",
-        jqueryui              : "../../libs/jquery-ui/jquery-ui.min",
+        jqueryui              : "../../libs/jquery-ui/jquery-ui",
+        "jquery-ui"           : "../../libs/jquery-ui/jquery-ui",
         underscore            : "../../libs/underscore/underscore",
         "NS.UI.Navbar"        : "../../libs/NS.UI.Navbar/navbar",
         "NS.UI.NavbarTheme"   : "../../libs/NS.UI.Navbar/themes/navbar.bootstrap3",
@@ -57,9 +58,17 @@ require.config({
         nanoscroller          : "../../libs/nanoscroller/dist/javascripts/jquery.nanoscroller",
         typeahead             : "../../libs/typeahead/bootstrap3-typeahead",
         "backbone.radio"      : "../../libs/backbone.radio/build/backbone.radio",
-        fuelux                : "../../libs/fuelux/dist/js/fuelux"
+        fuelux                : "../../libs/fuelux/dist/js/fuelux",
+        'difflib'             : '../../libs/jsdifflib/difflib',
+        'diffview'             : '../../libs/jsdifflib/diffview'
     },
     shim: {
+        difflib : {
+            exports : 'difflib'
+        },
+        diffview : {
+            exports : 'diffview'
+        },
         jquery: {
             exports: "$"
         },
@@ -97,10 +106,16 @@ require.config({
                 "jquery"
             ]
         },
-        fancytree: {
+        "jquery-ui": {
             exports: "$",
             deps: [
                 "jquery"
+            ]
+        },
+        fancytree: {
+            exports: "$",
+            deps: [
+                "jquery-ui"
             ]
         },
         i18n: {

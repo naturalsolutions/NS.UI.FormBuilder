@@ -364,7 +364,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            _.bindAll(this, 'getNodeXml', 'getXML');
         }
     }, {
         type: 'TreeView',
@@ -740,7 +739,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         initialize: function() {
-            _.bindAll(this, 'addModel', 'removeModel', 'getXML', 'updateModel');
+            _.bindAll(this, 'addModel', 'removeModel', 'updateModel');
         },
 
         addModel: function(model) {
@@ -777,7 +776,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            _.bindAll(this, 'moveModel', 'addModel', 'removeModel', 'getXML');
+            _.bindAll(this, 'moveModel', 'addModel', 'removeModel');
         },
 
         addModel: function(model, modelIndex) {
