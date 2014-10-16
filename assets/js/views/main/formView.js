@@ -51,13 +51,14 @@ define([
             $(this.el).find('#protocolName').val(this.collection.name);
         },
 
-        addElement: function(newModel) {
-
+        addElement: function (newModel) {
+            
             var viewClassName = newModel.constructor.type + "FieldView";
+
             require(['views/fieldViews/' + viewClassName], _.bind(function(fieldView) {
 
                 //  View file successfully loaded
-                var id = "dropField" + this.collection.length;
+                var id = "dropField" + newModel['id'];
 
                 $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
 
