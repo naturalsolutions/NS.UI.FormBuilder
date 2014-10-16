@@ -8,7 +8,7 @@
  * @version         1.0
  */
 
-define(['backbone', 'models/fields'], function(Backbone, Fields) {
+define(['backbone', 'models/fields'], function (Backbone, Fields) {
 
     /**
      * Implement form object as a fields collection
@@ -22,13 +22,13 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
          * @param {type} models
          * @param {type} options
          */
-        initialize: function(models, options) {
-            this.name           = options.name || 'My form';
-            this.count          = 0;
-            this.description    = options.description || "";
-            this.keywords       = options.keywords || ["protocol"];
+        initialize: function (models, options) {
+            this.name = options.name || 'My form';
+            this.count = 0;
+            this.description = options.description || "";
+            this.keywords = options.keywords || ["protocol"];
             //  Bind
-            _.bindAll(this, 'updateWithXML', 'clearAll', 'getSize', 'tagNameToClassName', 'addElement', 'addTableElement', 'getJSON', 'getJSONFromModel');
+            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addTableElement', 'getJSON', 'getJSONFromModel');
         },
 
         /**
@@ -37,7 +37,7 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
          * @param {formBuild.BaseModel} model  model
          * @returns {integer} comparaison between id
          */
-        comparator: function(model) {
+        comparator: function (model) {
             return model.get(model.id);
         },
 
@@ -45,14 +45,14 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
          * Return collection size
          * @returns {integer} collection size
          */
-        getSize: function( ) {
+        getSize: function () {
             return this.length;
         },
 
         /**
          * Clear form collection
          */
-        clearAll: function() {
+        clearAll: function () {
             while (this.models.length > 0) {
                 var el = this.at(this.models.length - 1);
                 el.trigger('destroy', el);
@@ -60,57 +60,32 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
             this.count = 0;
         },
 
-        getKeywords : function() {
-          var xml = "";
-          _.each(this.keywords, function(el, idx) {
-              xml += '<keyword>' + el + '</keyword>';
-          });
-          return '<keywords>' + xml + '</keywords>';
+        getKeywords: function () {
+            var xml = "";
+            _.each(this.keywords, function (el, idx) {
+                xml += '<keyword>' + el + '</keyword>';
+            });
+            return '<keywords>' + xml + '</keywords>';
         },
 
-        /**
-         * Extract XML code from models values
-         * @returns {string} XML code
-         */
-        getXML: function() {
-            var arr     = this.models.slice(1, this.models.length),
-                xml     = $.parseXML('<?xml version="1.0" ?><form id="test attribute"   xmlns="http://www.w3schools.com" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.w3schools.com note.xsd"></form>'),
-                xmlDoc  = $(xml);
+        getFieldsetFromModel: function (model) {
+            var fieldset = {
+                legend: model.get('legend'),
+                fields: []
+            };
 
-            xmlDoc.find('form').append(
-                '<name>' + this.name + '</name><description>' + this.description + '</description>' + this.getKeywords() + '<fields></fields>'
-            );
-            this.sort();
-
-            _.each(arr, function(el, idx) {
-                if (el.get('isDragged') !== true) {
-                    xmlDoc.find('fields').append(
-                        '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
-                    );
-                }
+            _.each(model.get('fields'), function (el, idx) {
+                fieldset['fields'].push(el.get('name'));
             });
 
-            return (new XMLSerializer()).serializeToString(xml);
+            return fieldset;
         },
 
-        getFieldsetFromModel : function(model) {
-          var fieldset = {
-            legend : model.get('legend'),
-            fields : []
-          };
-
-          _.each (model.get('fields'), function(el, idx) {
-            fieldset['fields'].push(el.get('name'));
-          });
-
-          return fieldset;
-        },
-
-        getJSONFromModel : function(model) {
-            var subModel = { validators : [] };
+        getJSONFromModel: function (model) {
+            var subModel = { validators: [] };
 
             switch (model.constructor.type) {
-                case 'Numeric' :
+                case 'Numeric':
                     subModel['type'] = 'Number';
                     break;
 
@@ -118,13 +93,13 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
                     subModel['type'] = 'TextArea';
                     break;
 
-                case 'Radio' :
+                case 'Radio':
                 case 'CheckBox':
-                case  'Select':
-                    subModel['options'] = $.map(model.get('itemList')['items'], function(item) {
-                        return  {
-                            val : item['value'],
-                            label : item['en']
+                case 'Select':
+                    subModel['options'] = $.map(model.get('itemList')['items'], function (item) {
+                        return {
+                            val: item['value'],
+                            label: item['en']
                         }
                     });
                     subModel['type'] = (model.constructor.type === "CheckBox") ? 'Checkboxes' : model.constructor.type;
@@ -133,37 +108,39 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
                 case 'Table':
                     var item = null;
                     subModel['subSchema'] = {}
-                    $.map(model.get('fields'), _.bind(function(field) {
+                    $.map(model.get('fields'), _.bind(function (field) {
                         subModel['subSchema'][(field.get('label') + field.get('id'))] = this.getJSONFromModel(field);
 
                     }, this));
                     subModel['type'] = 'Object';
                     break;
 
-                default :
+                default:
                     subModel['type'] = model.constructor.type;
                     break;
             }
 
             subModel['help'] = model.get('hint');
             subModel['title'] = model.get('title');
+            subModel['editorClass'] = model.get('editorClass');
+            subModel['fieldClass'] = model.get('fieldClass');
             if (model.get('required')) {
                 subModel.validators.push('required');
             }
             return subModel;
         },
 
-        getJSON : function() {
-            var json = {}, subModel = null;
+        getJSON: function () {
+            var json         = {}, subModel = null;
             json.name        = this.name;
             json.description = this.description;
             json.keywords    = this.keywords;
-            json.schema = {};
-            json.fieldsets = [];
+            json.schema      = {};
+            json.fieldsets   = [];
 
-            this.map( _.bind(function(model) {
+            this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
-                  json.fieldsets.push( this.getFieldsetFromModel(model) );
+                    json.fieldsets.push(this.getFieldsetFromModel(model));
                 } else if (model.constructor.type != undefined) {
 
                     subModel = this.getJSONFromModel(model);
@@ -180,72 +157,32 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
         },
 
         /**
-         *
-         * @param {type} tag
-         * @returns {unresolved}
-         */
-        tagNameToClassName: function(tag) {
-            var split = tag.split('_');
-            split[1] = split[1][0].toUpperCase() + split[1].slice(1);
-            split[0] = split[0][0].toUpperCase() + split[0].slice(1);
-            return split.reverse().join("");
-        },
-
-        /**
          * Add a new field on the form collection
          *
          * @param {type} element
          * @param {type} nameType
          * @returns {undefined}
          */
-        addElement: function(nameType, properties) {
-              var field   = properties || {};
-              field['id'] = this.getSize();
-              var el      = new Fields[nameType](field);
-
-              this.add (el);
-              this.trigger('newElement', el);
+        addElement: function (nameType, properties) {
+            var field = properties || {};
+            field['id'] = this.getSize();
+            var el = new Fields[nameType](field);
+            this.add(el);
+            this.trigger('newElement', el);
         },
 
-        addTableElement : function(nameType) {
-            var field   = properties || {};
+        addTableElement: function (nameType) {
+            var field = properties || {};
             field['id'] = this.getSize();
-            var el      = new Fields[nameType](field);
+            var el = new Fields[nameType](field);
 
-            this.add (el);
+            this.add(el);
             return el;
         },
 
-        /**
-         * Update form with XML content
-         *
-         * @param {type} content
-         * @param {type} name
-         * @returns {undefined}
-         */
-        updateWithXML: function(content) {
-            this.reset();
-            var xmlDoc          = $.parseXML(content),
-                fieldNameType   = "",
-                form            = app.utilities.XmlToJson( $(xmlDoc).find('form') );
-
-            _.each(form['fields'], _.bind(function(el, idx) {
-
-                fieldNameType = this.tagNameToClassName(idx);
-                if (el.length > 1) {
-                    _.each(el, _.bind(function(subElement, subIndex) {
-                        this.addElement(subElement, fieldNameType);
-                    }, this));
-                } else {
-                    this.addElement(el, fieldNameType);
-                }
-
-            }, this));
-        },
-
-        addTableFieldFromJSON  : function(schema, name) {
+        addTableFieldFromJSON: function (schema, name) {
             var fields = {}, subField = null;
-            _.each(schema.subSchema, _.bind(function(el, idx){
+            _.each(schema.subSchema, _.bind(function (el, idx) {
                 subField = _.pick(el, 'help');
                 if (el.validators.length > 0) {
                     subField['required'] = el.validators['required'] !== undefined;
@@ -259,29 +196,59 @@ define(['backbone', 'models/fields'], function(Backbone, Fields) {
 
             }, this))
             this.addElement('TableField', {
-              fields : fields
+                fields: fields
             })
         },
 
-        updateWithJSON : function(content, name) {
-          this.name        = name;
-          this.description = content.description;
-          this.keywords    = content.keywords;
+        updateWithJSON: function (JSONUpdate) {
+            this.name        = JSONUpdate["name"];
+            this.description = JSONUpdate["description"];
+            this.keywords    = JSONUpdate["keywords"];
 
-          var tmpObject = null, field = null;
-          _.each(content.schema, _.bind(function(el, idx){
-            if (el.type === 'Object') {
-                this.addTableFieldFromJSON(el, idx);
-            } else {
-                field = _.pick(el, 'help');
-                field['label'] = idx;
-                if (el.validators !== undefined && el.validators.length > 0) {
-                    field['required'] = schema.validators['required'] !== undefined;
-                    field['readonly'] = schema.validators['required'] !== undefined;
+            var field    = null,
+                fieldset = [];
+
+            _.each(JSONUpdate['fieldsets'], function (el, idx) {
+                fieldset = fieldset.concat(el["fields"]);
+            });
+
+            _.each(JSONUpdate["schema"], _.bind(function (el, idx) {
+                // Check if this field is not in a fieldset element
+                if (!_.contains(fieldset, idx)) {
+                    field = _.pick(el, 'title', 'help', 'editorClass', 'fieldClass')
+                    if (el["validators"] !== undefined && el["validators"].length > 0) {
+                        field['required'] = el["validators"]['required'] !== undefined;
+                        field['readonly'] = el["validators"]['required'] !== undefined;
+                    }
+                    this.addElement((el.type === 'TextArea' ? 'LongText' : el.type) + 'Field', field)
                 }
-                this.addElement( (el.type === 'TextArea' ? 'LongText' : el.type) + 'Field', field)
-            }
-          }, this));
+                field = null;
+            }, this));
+
+            //  Fieldset Section
+            _.each(JSONUpdate['fieldsets'], _.bind(function (el, idx) {
+
+                field = {
+                    legend: el['legend'],
+                    fields: []
+                };
+
+                _.each(el["fields"], function (name, index) {
+                    field.fields.push(
+                        new Fields[JSONUpdate['schema'][name]['type'] + 'Field']({
+                            id          : field['fields'].length,
+                            title       : JSONUpdate['schema'][name]['title'],
+                            help        : JSONUpdate['schema'][name]['help'],
+                            editorClass : JSONUpdate['schema'][name]['editorClass'],
+                            fieldClass  : JSONUpdate['schema'][name]['fieldClass'],
+                            required    : JSONUpdate['schema'][name]['validators']['required'] !== undefined,
+                        })
+                    );
+                });
+
+                this.addElement('SubformField', field);
+
+            }, this));
         }
 
     });

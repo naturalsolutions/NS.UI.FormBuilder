@@ -17,12 +17,14 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
-            id        : 0,
-            title     : "My label",
-            name      : "Field",
-            required  : false,
-            readOnly  : false,
-            isDragged : false
+            id          : 0,
+            title       : "My label",
+            name        : "Field",
+            required    : false,
+            readOnly    : false,
+            isDragged   : false,
+            editorClass : '',
+            fieldClass  : ''
         },
 
         schema : {
@@ -56,15 +58,19 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 title       : $.t('schema.readonly')
+            },
+            editorClass : {
+                type        : "Text",
+                title       : $.t('schema.editorClass'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
+            },
+            fieldClass : {
+                type        : "Text",
+                title       : $.t('schema.fieldClass'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
             }
-        },
-
-        getXML: function() {
-            return  "<label>"       + this.get('label')     + '</label>' +
-                    "<name>"        + this.get('name')      + "</name>" +
-                    "<title>"       + this.get('title')     + "</title>" +
-                    "<required>"    + this.get('required')  + '</required>' +
-                    "<readOnly>"    + this.get('readOnly')  + '</readOnly>';
         },
 
         isAdvanced : function(index) {
@@ -104,20 +110,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 template    : fieldTemplate,
                 title       : $.t('schema.value')
             }
-        },
-
-        getSchemaProperty: function(index, property) {
-            models.BaseField.prototype.getSchemaProperty.apply(this, arguments);
-        },
-
-        changePropertyValue: function(index, value) {
-            models.BaseField.prototype.changePropertyValue.apply(this, arguments);
-        },
-
-        getXML: function() {
-            return  "<name>"    + this.get('name')      + "</name>" +
-                    "<title>"   + this.get('title')     + "</title>" +
-                    "<value>"   + this.get('value')     + '</value>';
         }
     }, {
         type   : 'Hidden',
@@ -169,13 +161,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             });
         },
 
-        getXML: function() {
-            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
-            return xml +    '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
-                            '<help>'         + this.get('help')         + '</help>' +
-                            '<url>'          + this.get('url')          + '</url>';
-        },
-
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
         }
@@ -223,16 +208,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
-        },
-
-        getXML: function() {
-            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
-            return xml +    '<defaultValue>' + this.get('defaultValue') + '</defaultValue>' +
-                            '<help>'         + this.get('help')         + '</help>' +
-                            '<size>'         + this.get('size')         + '</size>' +
-                            '<multiline>'    + this.get('multiline')    + '</multiline>';
         }
-
     }, {
 
         type   : "Text",
@@ -283,14 +259,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-        },
-
-        getXML: function() {
-            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
-            return xml +    "<file>"         + this.get('file')         + '</file>' +
-                            "<defaultValue>" + this.get('defaultValue') + '</defaultValue>' +
-                            "<mimeType>"     + this.get('mimeType')     + '</mimeType>' +
-                            "<size>"         + this.get('size')         + '</size>';
         }
     }, {
         type   : "File",
@@ -397,37 +365,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
             _.bindAll(this, 'getNodeXml', 'getXML');
-        },
-
-        getNodeXml: function(node) {
-            var str = '<node>' +
-                '   <title>' + node['title'] + '</title>' +
-                '   <key>' + node['key'] + '</key>' +
-                '   <folder>' + (node['folder'] === undefined ? "false" : node['folder']) + '</folder>';
-
-            if (node['folder'] === true) {
-                str += "<children>";
-                _.each(node['children'], _.bind(function(subNode) {
-                    str += this.getNodeXml(subNode);
-                }, this));
-                str += "</children>";
-            }
-
-            return str + '</node>';
-        },
-
-        getXML: function() {
-            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
-
-            xml += '<defaultNode>' + this.get('defaultNode') + '</defaultNode>' +
-                '<multipleSelection>' + this.get('multipleSelection') + '</multipleSelection>' +
-                '<hierarchicSelection>' + this.get('hierarchicSelection') + '</hierarchicSelection>';
-            _.each(this.get('node'), _.bind(function(el) {
-                xml += this.getNodeXml(el);
-            }, this));
-
-
-            return xml;
         }
     }, {
         type: 'TreeView',
@@ -561,28 +498,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
          */
         getOption: function(itemListIndex) {
             return this.get('items')[itemListIndex];
-        },
-
-        /**
-         * Return object XML content
-         *
-         * @returns {String} XML content
-         */
-        getXML: function() {
-            var xml = models.BaseField.prototype.getXML.apply(this, arguments);
-
-            xml += '<itemList>' +
-                '<items>';
-            _.each(this.get('itemList')['items'], function(el, idx) {
-                xml += '<item id="' + el['id'] + '"><en>' + el['en'] + '</en><fr>' + el['fr'] + '</fr><value>' + el['value'] + '</value></item>';
-            });
-            xml += '</items>';
-            xml += '<defaultValue>' + this.get('itemList')['defaultValue'] + '</defaultValue>';
-            xml += '</itemList>';
-            xml += '<expanded>' + this.get('expanded') + '</expanded>';
-            xml += '<multiple>' + this.get('multiple') + '</multiple>';
-
-            return xml;
         }
 
     });
@@ -612,9 +527,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
-        },
-        getXML: function() {
-            return models.TextField.prototype.getXML.apply(this, arguments) + '<format>' + this.get("format") + '</format>';
         }
     }, {
         type   : "Date",
@@ -644,10 +556,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
             this.set('multiline', true);
-        },
-
-        getXML: function() {
-            return models.TextField.prototype.getXML.apply(this, arguments);
         }
 
     }, {
@@ -700,14 +608,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             models.TextField.prototype.initialize.apply(this, arguments);
 
             this.set('help', 'Enter a numeric value');
-        },
-
-        getXML: function() {
-            return models.TextField.prototype.getXML.apply(this, arguments) +
-                '<min>'         + this.get("minValue")  + '</min>' +
-                '<max>'         + this.get("maxValue")  + '</max>' +
-                '<precision>'   + this.get("precision") + '</precision>' +
-                '<unity>'       + this.get("unity")     + '</unity>';
         }
     }, {
         type   : 'Numeric',
@@ -735,10 +635,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
-        },
-
-        getXML: function() {
-            return models.TextField.prototype.getXML.apply(this, arguments) + "<pattern>" + this.get('pattern') + '</pattern>';
         }
 
     }, {
@@ -759,10 +655,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         schema: function() {
             return models.EnumerationField.prototype.schema();
-        },
-
-        getXML: function() {
-            return models.EnumerationField.prototype.getXML.apply(this, arguments);
         },
 
         initialize: function() {
@@ -787,9 +679,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return models.EnumerationField.constructor.schema;
         },
 
-        getXML: function() {
-            return models.EnumerationField.prototype.getXML.apply(this, arguments);
-        },
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
             this.set('multiple', false);
@@ -811,9 +700,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return models.EnumerationField.prototype.schema();
         },
 
-        getXML: function() {
-            return models.EnumerationField.prototype.getXML.apply(this, arguments);
-        },
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
         }
@@ -876,20 +762,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             arr.splice(from, 1);
             arr.splice(to, 0, element);
             this.set('fields', arr);
-        },
-
-        getXML: function() {
-            var xml = '<legend>' + this.get('legend') + '</legend>';
-            xml += '<multiple>' + this.get('multiple') + '</multiple>';
-            _.each(this.get('fields'), function(el, idx) {
-                xml += '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
-            });
-            return xml;
-        },
-
-        changePropertyValue: function(index, value) {
-            models.models.BaseField.prototype.changePropertyValue.apply(this, arguments);
-        },
+        }
     }, {
         type   : 'Subform',
         xmlTag : 'fieldset',
@@ -905,14 +778,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
             _.bindAll(this, 'moveModel', 'addModel', 'removeModel', 'getXML');
-        },
-
-        getXML: function() {
-            var xml = models.BaseField.prototype.getXML.apply(this, arguments)
-            _.each(this.get('fields'), function(el, idx) {
-                xml += '<' + el.constructor.xmlTag + ' id="' + el.get('id') + '" >' + el.getXML() + '</' + el.constructor.xmlTag + '>'
-            });
-            return xml;
         },
 
         addModel: function(model, modelIndex) {
