@@ -49,8 +49,7 @@ define([
 
         getData: function() {
             return {
-                file : $(this.el).find('input[type="file"]')[0],
-                mode : $(this.el).find('input[type="text"]').val().indexOf('json') > 0 ? 'json' : 'xml'
+                file : $(this.el).find('input[type="file"]')[0]
             }
         }
 

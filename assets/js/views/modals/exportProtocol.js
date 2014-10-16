@@ -78,7 +78,6 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
             if (!exportProtocolName && !exportProtocolDescription && !exportProtocolKeywords && !exportProtocolComment) {
                 myArray.push(inputText);
                 this.keywordList = myArray;
-                $('#exportmode').val( $(e.target).data('i18n').indexOf('json') > 0 ? 'json' : 'xml');
                 $('#exportModal').modal('hide').removeData();
             }
         },
@@ -88,8 +87,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
                 name        : $('#exportProtocolName').val(),
                 comment     : $('#exportProtocolFileName').val(),
                 description : $('#exportProtocolDescription').val(),
-                keywords    : this.keywordList,
-                mode        : $('#exportmode').val()
+                keywords    : this.keywordList
             }
         }
 
