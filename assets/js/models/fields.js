@@ -857,7 +857,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             _.bindAll(this, 'addModel', 'removeModel', 'getXML', 'updateModel');
         },
 
-        addModel: function(model, modelIndex) {
+        addModel: function(model) {
             var arr = this.get('fields');
             model.set('isDragged', true);
             arr.push(model);
