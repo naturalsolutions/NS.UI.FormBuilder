@@ -63,6 +63,12 @@ require.config({
         'diffview'             : '../../libs/jsdifflib/diffview'
     },
     shim: {
+        blobjs : {
+            exports : 'blobjs'
+        },
+        filesaver : {
+            exports : 'filesaver'
+        },
         difflib : {
             exports : 'difflib'
         },
