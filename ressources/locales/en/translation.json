@@ -34,7 +34,6 @@
         "export" : {
             "title" : "Export",
             "json" : "Export as JSON file",
-            "xml" : "Exporter as XML File"
         }
     },
 
@@ -42,16 +41,16 @@
         "save" : {
             "title"     : " Save protocol",
             "cloud"     : "Save on server",
-            "export"    : "Export to XML file"
+            "export"    : "Export to JSON file"
         },
         "import" : {
-            "title"     : " Import XML file",
+            "title"     : " Import JSON file",
             "cloud"     : "Load from server",
-            "import"    : "Importe XML file"
+            "import"    : "Import JSON file"
         },
 
         "clear"     : " Clear",
-        "compare"   : " Compare XML files"
+        "compare"   : " Compare protocols"
     },
 
     "label" : {
@@ -98,7 +97,9 @@
         "unity"             : "Unity",
         "pattern"           : "Pattern value",
         "multiple"          : "Multiple",
-        "legend"            : "Legend"
+        "legend"            : "Legend",
+        "editorClass"       : "Editor CSS class",
+        "fieldClass"        : "Field CSS class"
     }
 
 }
