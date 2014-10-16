@@ -45,8 +45,7 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 this.currentCollection['name']        = datas['name'];
                 this.currentCollection['comments']    = datas['comments'];
 
-            	var collectionExport = this.currentCollection[datas['mode'] === 'json' ? 'getJSON' : 'getXML']();
-            	this.mainChannel.trigger('export:return', collectionExport);
+            	this.mainChannel.trigger('export:return', this.currentCollection.getJSON());
             }, this));
 
             this.mainChannel.on('clear', _.bind(function() {
@@ -55,10 +54,6 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
             this.mainChannel.on('JSONUpdate', _.bind(function(JSONUpdate) {
             	this.currentCollection.updateWithJSON(JSONUpdate);
-            }, this));
-
-			this.mainChannel.on('XMLUpdate', _.bind(function(XMLUpdate) {
-            	this.currentCollection.updateWithXML(XMLUpdate);
             }, this));
 
             //  Init router
