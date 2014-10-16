@@ -19,7 +19,7 @@ define(
                 'setting/:id'  : 'modelSetting',
                 'save'         : 'saveOnRepo',
                 'export'       : 'export',
-                'import'       : 'importJSONOrXML',
+                'import'       : 'import',
                 'load'         : 'load',
                 'clear'        : 'clear',
                 'show'         : 'show'
@@ -149,7 +149,6 @@ define(
                                     $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
                                     $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
                                     window.location.hash = "#";
-
                                     field.set(form.getValue())
                                     form.remove();
                                 }, this)
@@ -229,23 +228,11 @@ define(
 
                                 try {
 
-                                    if (datas['mode'] === 'json') {
-
-                                        var isFileSaverSupported = !!new Blob();
-                                        var blob = new Blob([JSON.stringify(collectionExport, null, 2)], {
-                                            type: "application/json;charset=utf-8"
-                                        });
-                                        saveAs(blob, $('#exportProtocolFileName').val() + '.json');
-
-                                    } else if (datas['mode'] === 'xml') {
-
-                                        var isFileSaverSupported = !!new Blob();
-                                        var blob = new Blob(
-                                                [collectionExport],
-                                                {type: "application/xml;charset=utf-8"}
-                                        );
-                                        saveAs(blob, $('#exportProtocolFileName').val() + '.xml');
-                                    }
+                                    var isFileSaverSupported = !!new Blob();
+                                    var blob = new Blob([JSON.stringify(collectionExport, null, 2)], {
+                                        type: "application/json;charset=utf-8"
+                                    });
+                                    saveAs(blob, $('#exportProtocolFileName').val() + '.json');
 
                                     $('#exportModal').modal('hide').removeData();
                                     new NS.UI.Notification({
@@ -281,7 +268,7 @@ define(
                 window.location.hash = '#';
             },
 
-            importJSONOrXML : function() {
+            import : function() {
                 require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
                     $(this.el).append('<div class="modal fade" id="importModal"></div>');
                     var modalView = new importProtocolModal({
@@ -291,25 +278,14 @@ define(
                     $("#importModal").i18n();
 
                     $('#importModal').on('hidden.bs.modal', _.bind(function () {
-                        var datas= modalView.getData();
+                        var datas = modalView.getData();
 
                         Utilities.ReadFile(datas['file'], _.bind(function(result) {
                             if (result !== false) {
 
-                                if (datas['mode'] === 'json') {
-                                    var jsonParsed = $.parseJSON(result);
-                                    this.mainChannel.trigger('JSONUpdate', jsonParsed);
-                                    window.location.hash = '#';
-                                } else if(datas['mode'] === 'xml') {
-                                    var isValid = Utilities.XMLValidation(result);
-                                    if (isValid) {
-                                        this.mainChannel.trigger('XMLUpdate', result);
-                                    } else {
-                                        //display Notification
-                                    }
-                                } else {
-                                    console.log ('wrong mime type');
-                                }
+                                var jsonParsed = $.parseJSON(result);
+                                this.mainChannel.trigger('JSONUpdate', jsonParsed);
+                                window.location.hash = '#';
 
                             } else {
                                 // display error
