@@ -201,7 +201,15 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Number',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.size')
+                    title       : $.t('schema.size'),
+                    validators : [function checkValue(value, formValues) {
+                        if (value < 0 || value > 255) {
+                            return {
+                                type : 'Invalid number', 
+                                message : "La taille doit être comprise en 0 et 100"
+                            }
+                        }
+                    }]
                 }
             })
         },
@@ -542,7 +550,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.TextField.prototype.schema(), {
+            var schema =  _.extend(models.TextField.prototype.schema(), {
                 multiline : {
                     type        : 'Checkbox',
                     editorClass : 'form-control',
@@ -550,6 +558,15 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     title       : $.t('schema.multiline')
                 }
             });
+            schema.size.validators = [function checkValue(value, formValues) {
+                if (value < 0 || value > 8000) {
+                    return {
+                        type : 'Invalid number', 
+                        message : "La taille doit être comprise en 0 et 8000"
+                    }
+                }
+            }];
+            return schema;
         },
 
         initialize: function() {
