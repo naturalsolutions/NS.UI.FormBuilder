@@ -70,7 +70,8 @@ define(
                 'import'       : 'import',
                 'load'         : 'load',
                 'clear'        : 'clear',
-                'show'         : 'show'
+                'show'         : 'show',
+                "copy/:id"     : "copy"
             },
 
             initialize: function(options) {
@@ -129,6 +130,11 @@ define(
 
             home: function() {
                 this.navbar.setActions(this.mainActions)
+            },
+
+            copy : function(modelID) {
+                this.mainChannel.trigger('copy', modelID);
+                window.location.hash = '#';
             },
 
             modelSetting: function(modelID) {

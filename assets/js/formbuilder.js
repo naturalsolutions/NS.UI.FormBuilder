@@ -56,6 +56,14 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             	this.currentCollection.updateWithJSON(JSONUpdate);
             }, this));
 
+            this.mainChannel.on('copy', _.bind(function(modelID) {
+                var modelToCopy     = this.currentCollection.get(modelID),
+                    newModelAttr    = modelToCopy.toJSON();
+
+                newModelAttr['id'] = this.currentCollection.length;
+                this.currentCollection.addElement(modelToCopy.constructor.type + 'Field', newModelAttr);
+            }, this));
+
             //  Init router
             this.router = new Router(options);
             Backbone.history.start();
