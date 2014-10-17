@@ -126,6 +126,68 @@ define(
 
                 $("body").i18n();
                 this.mainChannel = Backbone.Radio.channel('global');
+
+                this.mainChannel.on('getModel:return', _.bind(function(field) {
+
+                    require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
+
+                        if (this.form !== undefined) {
+
+                            //console.log (field.schema())
+                            this.removeForm()
+                            this.form = new Backbone.Form({
+                                model: field,
+                            }).render();
+
+                            $('.settings').append(this.form.el)
+                            $('.settings form').addClass('nano-content')
+
+                        } else {
+
+                            //  The form are not created yet
+                            this.form = new Backbone.Form({
+                                model: field,
+                            }).render();
+                            $('.settings').append(this.form.el)
+                            $('.settings form').addClass('nano-content')
+
+                            $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
+                            $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
+
+                        }
+
+                        this.navbar.setActions({
+                            save: new NS.UI.NavBar.Action({
+                                title: 'Save changes',
+                                allowedRoles: ["reader"],
+                                handler: _.bind(function() {
+
+                                    if (!this.form.commit() !== undefined) {
+                                        $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
+                                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
+                                        window.location.hash = "#";
+
+                                        field.set(this.form.getValue());
+                                        field = null;
+                                        this.removeForm();
+                                    }
+
+                                }, this)
+                            })
+                        });
+
+                    }, this));
+
+                }, this));
+            },
+
+            removeForm : function() {
+                this.form.undelegateEvents();
+                this.form.$el.removeData().unbind();
+                this.form.remove();
+                Backbone.View.prototype.remove.call(this.form);
+                delete this.form;
+                $('.settings').html('');
             },
 
             home: function() {
@@ -138,39 +200,6 @@ define(
             },
 
             modelSetting: function(modelID) {
-                this.mainChannel.on('getModel:return', _.bind(function(field) {
-                    require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
-                        var form = new Backbone.Form({
-                            model: field,
-                        }).render();
-                        $('.settings').append(form.el)
-                        $('.settings form').addClass('nano-content')
-
-                        $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
-                        $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
-
-                        this.navbar.setActions({
-                            save: new NS.UI.NavBar.Action({
-                                title: 'Save changes',
-                                allowedRoles: ["reader"],
-                                handler: _.bind(function() {
-
-                                    if (!form.commit() !== undefined) {
-                                        $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
-                                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
-                                        window.location.hash = "#";
-
-                                        field.set(form.getValue())
-                                        form.remove();
-                                    }
-
-                                }, this)
-                            })
-                        });
-
-                    }, this));
-
-                }, this));
                 this.mainChannel.trigger('getModel', modelID);
             },
 

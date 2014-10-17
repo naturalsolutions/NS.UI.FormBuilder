@@ -130,7 +130,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.AutocompleteField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend(models.BaseField.prototype.defaults, {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : "Write some text",
                 url          : ""
@@ -138,7 +138,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.BaseField.prototype.schema, {
+            return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
                     title       : $.t('schema.default'),
@@ -174,7 +174,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.TextField = models.BaseField.extend({
 
         defaults : function() {
-            return _.extend(models.BaseField.prototype.defaults, {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : "Write some text",
                 size         : 255,
@@ -183,7 +183,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.BaseField.prototype.schema, {
+            return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
                     title       : $.t('schema.default'),
@@ -227,7 +227,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.FileField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend(models.BaseField.prototype.defaults, {
+            return _.extend({}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 file         : "",
                 mimeType     : "*",
@@ -236,7 +236,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.BaseField.prototype.schema, {
+            return _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
                     title       : $.t('schema.default'),
@@ -297,7 +297,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.TreeViewField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend(models.BaseField.prototype.defaults, {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
                 node: [{
                     title: "Node 1",
                     key: "1"
@@ -320,7 +320,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.BaseField.prototype.schema, {
+            return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultNode: {
                     type  : 'Number',
                     title : $.t('schema.defaultNode')
@@ -382,7 +382,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.EnumerationField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend(models.BaseField.prototype.defaults, {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
                 itemList: {
                     items: [{
                         id    : 0,
@@ -403,7 +403,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.BaseField.prototype.schema, {
+            return _.extend( {}, models.BaseField.prototype.schema, {
                 itemList : {
                     type : 'Object',
                     title : '',
@@ -516,13 +516,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.DateField = models.TextField.extend({
 
         defaults: function() {
-            return _.extend(models.TextField.prototype.defaults(), {
+            return _.extend( {}, models.TextField.prototype.defaults(), {
                 format: "dd/mm/yyyy"
             });
         },
 
         schema: function() {
-            return _.extend(models.TextField.prototype.schema(), {
+            return _.extend( {}, models.TextField.prototype.schema(), {
                 format: {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -544,13 +544,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.LongTextField = models.TextField.extend({
 
         defaults : function() {
-            return _.extend(models.TextField.prototype.defaults(), {
+            return _.extend( {}, models.TextField.prototype.defaults(), {
                 multiline : true
             });
         },
 
         schema: function() {
-            var schema =  _.extend(models.TextField.prototype.schema(), {
+            var schema =  _.extend( {}, models.TextField.prototype.schema(), {
                 multiline : {
                     type        : 'Checkbox',
                     editorClass : 'form-control',
@@ -583,7 +583,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.NumericField = models.TextField.extend({
 
         defaults: function() {
-            return _.extend(models.TextField.prototype.defaults(), {
+            return _.extend( {}, models.TextField.prototype.defaults(), {
                 minValue  : 0,
                 maxValue  : 100,
                 precision : 1,
@@ -592,7 +592,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema: function() {
-            return _.extend(models.TextField.prototype.schema(), {
+            return _.extend( {}, models.TextField.prototype.schema(), {
                 minValue: {
                     type        : 'Number',
                     editorClass : 'form-control',
@@ -633,13 +633,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     models.PatternField = models.TextField.extend({
         defaults: function() {
-            return _.extend(models.TextField.prototype.defaults, {
+            return _.extend( {}, models.TextField.prototype.defaults, {
                 pattern: ""
             })
         },
 
         schema: function() {
-            return _.extend(models.TextField.constructor.schema, {
+            return _.extend( {}, models.TextField.constructor.schema, {
                 pattern: {
                     type        : 'Text',
                     editorClass : 'form-control',
