@@ -4,7 +4,7 @@ define([
     'backbone',
     'text!../../../templates/main/formView.html',
     'i18n',
-    'jqueryui',
+    'jquery-ui',
     'nanoscroller',
     'bootstrap'
 ], function($, _, Backbone, formViewTemplate) {

@@ -6,7 +6,7 @@ define(
         'text!../../../templates/main/panel.html',
         'models/fields',
         'i18n',
-        'jqueryui',
+        'jquery-ui',
         'nanoscroller',
         'NS.UI.Notification'
     ],

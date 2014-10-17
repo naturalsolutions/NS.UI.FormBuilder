@@ -21,10 +21,15 @@ define([
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
-            var src = this.model.get('node');
-            require(['jqueryui', 'fancytree'], _.bind(function($) {
+            require(['jquery-ui', 'fancytree'], _.bind(function() {
                 $(this.el).find('#tree').fancytree({
-                    source: src,
+                    source: [
+                        {title: "Node 1", key: "1"},
+                        {title: "Folder 2", key: "2", folder: true, children: [
+                            {title: "Node 2.1", key: "3"},
+                            {title: "Node 2.2", key: "4"}
+                        ]}
+                    ],
                     checkbox : true,
                     selectMode : 2
                 });
