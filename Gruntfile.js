@@ -8,6 +8,9 @@ module.exports = function(grunt) {
                 options: {
                     paths: ["stylesheet"],
                     cleancss: true,
+                    sourceMap: true,
+                    sourceMapFilename: 'compressed/formbuilder.css.map',
+                    sourceMapRootpath: ''
                 },
                 files: {
                     "compressed/formbuilder.min.css": "assets/stylesheet/styles.less"
@@ -20,6 +23,9 @@ module.exports = function(grunt) {
             stylesheet: {
                 files: ['assets/stylesheet/*.less'],
                 tasks: ['less:dist']
+                /*options: {
+                  livereload: true,
+                },*/
             },
             bower : {
                 files : ['bower.json'],
