@@ -20,9 +20,6 @@ define([
 
        render : function() {
            BaseView.prototype.render.apply(this, arguments);
-           $(this.el).find('input').datepicker({
-               format: this.model.get('format')
-           });
        }
     });
 
