@@ -138,6 +138,7 @@ define(
                             model: field,
                         }).render();
                         $('.settings').append(form.el)
+                        $('.settings form').addClass('nano-content')
 
                         $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
                         $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
@@ -148,11 +149,15 @@ define(
                                 allowedRoles: ["reader"],
                                 handler: _.bind(function() {
 
-                                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
-                                    $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
-                                    window.location.hash = "#";
-                                    field.set(form.getValue())
-                                    form.remove();
+                                    if (!form.commit() !== undefined) {
+                                        $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
+                                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
+                                        window.location.hash = "#";
+
+                                        field.set(form.getValue())
+                                        form.remove();
+                                    }
+
                                 }, this)
                             })
                         });
