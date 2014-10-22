@@ -29,18 +29,6 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
         },
 
         /**
-         * Copy model of this view
-         */
-        copyModel : function() {
-            /*var cl = this.model.clone();
-            require (['app/formbuilder'], function(formbuilderInstance) {
-                cl.set('id', formbuilderInstance.currentCollection.length);    //  change id otherwise element replaced copied element
-                formbuilderInstance.currentCollection.add(cl);                 //  Add element to the collection
-                formbuilderInstance.currentCollection.trigger('newElement', cl);
-            });*/
-        },
-
-        /**
          * Remove view
          */
         removeView: function() {
