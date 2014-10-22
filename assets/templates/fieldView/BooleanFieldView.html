@@ -20,14 +20,12 @@
                 </a>
                 </div>
         </div>
-            <% _.each(itemList["items"], function(el, idx) { %>
         <div class="checkbox">
             <label>
-                <input data-idx=<%=idx %> type="checkbox"  name="<%= name %>" id="<%= id %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
-                <%= title %>
+                <input type="checkbox"  name="checked" id="<%= id %>" value="checked" <% if (checked){ %>checked<% } %> />
+                <%= checkboxLabel %>
             </label>
         </div>
-    <% }); %>
     </div>
 
 
