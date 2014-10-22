@@ -8,7 +8,7 @@
  */
 
 define(
-    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'NS.UI.Navbar', 'NS.UI.NavbarTheme'],
+    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'fancytree', 'NS.UI.Navbar', 'NS.UI.NavbarTheme'],
     function($, _, Backbone, MainView, collection, Radio) {
 
         var AppRouter = Backbone.Router.extend({
@@ -129,11 +129,10 @@ define(
 
                 this.mainChannel.on('getModel:return', _.bind(function(field) {
 
-                    require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
+                    require(['backbone-forms', 'modalAdapter', "backbone-forms-list"], _.bind(function() {
 
                         if (this.form !== undefined) {
 
-                            //console.log (field.schema())
                             this.removeForm()
                             this.form = new Backbone.Form({
                                 model: field,
@@ -156,13 +155,40 @@ define(
 
                         }
 
+                        this.form.$el.on('change input[name="decimal"]', _.bind(function(e) {
+                            if ($(e.target).is(':checked')) {
+                                this.form.$el.find('.field-precision').addClass('advanced');
+                            } else {
+                                this.form.$el.find('.field-precision').removeClass('advanced');
+                            }
+                        }, this))
+
+                        if (field.constructor.type === 'Thesaurus') {
+
+                            $.getJSON('ressources/thesaurus/thesaurus.json', _.bind(function(data) {
+
+                                $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+                                $('.settings form #defaultNode').fancytree({
+                                    source: data['d'],
+                                    checkbox : false,
+                                    selectMode : 2,
+                                    activate : _.bind(function(event, data) {
+                                        this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
+                                    }, this)
+                                });
+
+                            }, this)).error(function(a,b , c) {
+                                alert ("can't load ressources !");
+                            })
+
+                        }
+
                         this.navbar.setActions({
                             save: new NS.UI.NavBar.Action({
                                 title: 'Save changes',
                                 allowedRoles: ["reader"],
                                 handler: _.bind(function() {
-
-                                    if (!this.form.commit() !== undefined) {
+                                    if (this.form.commit() == undefined) {
                                         $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
                                         $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
                                         window.location.hash = "#";

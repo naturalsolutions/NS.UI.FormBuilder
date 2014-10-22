@@ -9,7 +9,9 @@ define([
     var NumericFieldView = BaseView.extend({
 
         events: function() {
-            return BaseView.prototype.events;
+            return _.extend( {}, BaseView.prototype.events, {
+                'change input[type="number"]' : 'valueChanged'
+            });
         },
 
         initialize : function(options) {
@@ -21,6 +23,10 @@ define([
 
         render: function() {
             BaseView.prototype.render.apply(this, arguments);
+        },
+
+        valueChanged : function(e) {
+            this.model.set('defaultValue', $(e.target).val())
         }
     });
 

@@ -187,7 +187,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 defaultValue: {
                     type        : 'Text',
                     title       : $.t('schema.default'),
-                    fieldClass  : 'advanced',
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
@@ -205,8 +204,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     validators : [function checkValue(value, formValues) {
                         if (value < 0 || value > 255) {
                             return {
-                                type : 'Invalid number', 
-                                message : "La taille doit être comprise en 0 et 100"
+                                type : 'Invalid number',
+                                message : "La taille doit être comprise en 0 et 255"
                             }
                         }
                     }]
@@ -323,7 +322,9 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultNode: {
                     type  : 'Number',
-                    title : $.t('schema.defaultNode')
+                    title : $.t('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
                 },
                 multipleSelection: {
                     type  : 'Checkbox',
@@ -583,16 +584,28 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.NumericField = models.TextField.extend({
 
         defaults: function() {
-            return _.extend( {}, models.TextField.prototype.defaults(), {
-                minValue  : 0,
-                maxValue  : 100,
-                precision : 1,
-                unity     : "meters"
+            var baseSchema = _.pick(
+                models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults, 'help')
+            );
+            baseSchema.help = $.t('schema.numericHelp')
+            return _.extend( {}, baseSchema, {
+                minValue     : 0,
+                maxValue     : 100,
+                precision    : 1,
+                decimal      : true,
+                defaultValue : 10,
+                unity        : "meters",
             })
         },
 
-        schema: function() {
-            return _.extend( {}, models.TextField.prototype.schema(), {
+        baseSchema : {
+            decimal : {
+                    type        : 'Checkbox',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.decimal')
+                },
+                defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
                 minValue: {
                     type        : 'Number',
                     editorClass : 'form-control',
@@ -603,11 +616,20 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Number',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.max')
+                    title       : $.t('schema.max'),
+                    validators : [function checkValue(value, formValues) {
+                        if (value < formValues['minValue']) {
+                            return {
+                                type : 'Invalid number',
+                                message : "La valeur maximale est inférieure à la valeur minimale"
+                            }
+                        }
+                    }]
                 },
                 precision: {
                     type        : 'Number',
                     editorClass : 'form-control',
+                    fieldClass  : 'advanced',
                     template    : fieldTemplate,
                     title       : $.t('schema.precision')
                 },
@@ -617,13 +639,33 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     template    : fieldTemplate,
                     title       : $.t('schema.unity')
                 }
-            });
+            },
+
+        schema: function() {
+            var schema = _.extend( {}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema), 'help'), this.baseSchema);
+
+            schema.defaultValue.type = 'Number';
+            schema.defaultValue.validators = [function checkValue(value, formValues) {
+                if (value > formValues['maxValue']) {
+                    return {
+                        type : 'Invalid number',
+                        message : "La valeur par défault est supérieur à la valeur maximale"
+                    }
+                } else if (value < formValues['minValue']) {
+                    return {
+                        type : 'Invalid number',
+                        message : "La valeur par défault est inférieure à la valeur minimale"
+                    }
+                } else {
+                    return undefined;
+                }
+
+            }]
+            return schema;
         },
 
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
-
-            this.set('help', 'Enter a numeric value');
         }
     }, {
         type   : 'Numeric',
@@ -821,14 +863,78 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 delete arr[currentIndex];
             }
             this.set('fields', arr);
-            this.trigger('update', currentIndex, newIndex);
-            this.trigger('done');
+            this.trigger('update', currentIndex, newIndex)
+;            this.trigger('done');
         }
 
     }, {
         type   : 'Table',
-        xmlTag : 'field_table',
         i18n   : 'table'
+    });
+
+    models.BooleanField = models.BaseField.extend({
+        defaults: function() {
+            return _.extend({}, models.BaseField.prototype.defaults, {
+                checked : true,
+                checkboxLabel : 'Am i checked ?'
+            })
+        },
+
+        schema: function() {
+            return _.extend({}, models.BaseField.prototype.schema, {
+                checked : {
+                    type        : 'Checkbox',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.checked')
+                },
+                checkboxLabel : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.checkboxlabel')
+                }
+            });
+        },
+    }, {
+        type : 'Boolean',
+        i18n : 'boolean'
+    });
+
+    // Thesaurus picker, move to separate folder
+
+    models.ThesaurusField = models.BaseField.extend({
+
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                defaultNode: 0,
+                URL : ""
+            })
+        },
+
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                defaultNode: {
+                    type  : 'Text',
+                    title : $.t('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                },
+                URL: {
+                    type  : 'Text',
+                    title : 'URL',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                }
+            });
+        },
+
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
+    }, {
+        type: 'Thesaurus',
+        i18n: 'thesaurus'
     });
 
     return models;

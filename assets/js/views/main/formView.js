@@ -52,8 +52,14 @@ define([
         },
 
         addElement: function (newModel) {
-            
+
             var viewClassName = newModel.constructor.type + "FieldView";
+
+            if (newModel.constructor.type === "Numeric") {
+                newModel.on('change:decimal', function(e) {
+                    e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
+                })
+            }
 
             require(['views/fieldViews/' + viewClassName], _.bind(function(fieldView) {
 
