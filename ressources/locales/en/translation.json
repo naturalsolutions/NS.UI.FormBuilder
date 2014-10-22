@@ -111,7 +111,8 @@
             "medium" : "Medium",
             "large"  : "Large"
         },
-        "eol" : "Is the end of the line"
+        "eol" : "Is the end of the line",
+        "webServiceURL" : "Web service URL pour data list"
     },
 
     "tooltip" : {

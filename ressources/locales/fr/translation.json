@@ -113,7 +113,8 @@
             "medium" : "Moyen",
             "large"  : "Large"
         },
-        "eol" : "Est en fin de ligne"
+        "eol" : "Est en fin de ligne",
+        "webServiceURL" : "URL service web pour les données"
     },
 
     "tooltip" : {

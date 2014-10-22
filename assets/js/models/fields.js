@@ -325,6 +325,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                         key: "4"
                     }]
                 }],
+                webServiceURL : '',
                 defaultNode: 0,
                 multipleSelection: true,
                 hierarchicSelection: false
@@ -341,11 +342,21 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 },
                 multipleSelection: {
                     type  : 'Checkbox',
-                    title : $.t('schema.multipleSelection')
+                    title : $.t('schema.multipleSelection'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
                 },
                 hierarchicSelection: {
                     type  : 'Checkbox',
-                    title : $.t('schema.hierarchic')
+                    title : $.t('schema.hierarchic'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                },
+                webServiceURL : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.webServiceURL')
                 },
                 node: {
                     type: 'List',
@@ -411,6 +422,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     }],
                     defaultValue: 1
                 },
+                webServiceURL : "",
                 multiple: false,
                 expanded: false
             });
@@ -418,6 +430,12 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         schema: function() {
             return _.extend( {}, models.BaseField.prototype.schema, {
+                webServiceURL : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.webServiceURL')
+                },
                 itemList : {
                     type : 'Object',
                     title : '',
