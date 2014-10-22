@@ -1,21 +1,22 @@
 {
     "fields" : {
-        "text"         : "Text",
-        "numeric"      : "Numeric",
-        "date"         : "Date",
-        "select"       : "Select",
-        "radio"        : "Radio button",
-        "checkbox"     : "Checkbox",
-        "hidden"       : "Hidden",
-        "file"         : "File",
-        "treeview"     : "Tree View",
-        "longtext"     : "Long text",
-        "pattern"      : "Pattern",
-        "line"         : "Horizontal line",
-        "autocomplete" : "Auto complete",
-        "table"        : "Presentation",
-        "subform"      : "Fieldset",
-		"horizontalline" : "Horizontal line",
+        "text"           : "Text",
+        "numeric"        : "Numeric",
+        "date"           : "Date",
+        "select"         : "Select",
+        "radio"          : "Radio button",
+        "checkbox"       : "Checkbox",
+        "hidden"         : "Hidden",
+        "file"           : "File",
+        "treeview"       : "Tree View",
+        "longtext"       : "Long text",
+        "pattern"        : "Pattern",
+        "line"           : "Horizontal line",
+        "autocomplete"   : "Auto complete",
+        "table"          : "Presentation",
+        "subform"        : "Fieldset",
+        "horizontalline" : "Horizontal line",
+        "boolean"        : "Boolean"
     },
 
     "protocol" : {
@@ -33,7 +34,7 @@
         },
         "export" : {
             "title" : "Export",
-            "json" : "Export as JSON file",
+            "json" : "Export as JSON file"
         }
     },
 
@@ -99,7 +100,11 @@
         "multiple"          : "Multiple",
         "legend"            : "Legend",
         "editorClass"       : "Editor CSS class",
-        "fieldClass"        : "Field CSS class"
+        "fieldClass"        : "Field CSS class",
+        "checked"           : "Selected",
+        "checkboxlabel"     : "Checkbox label",
+        "numericHelp"       : "Enter numeric value",
+        "decimal"           : "Allow decimal value"
     }
 
 }

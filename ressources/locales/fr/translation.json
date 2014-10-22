@@ -15,7 +15,8 @@
         "table"          : "Présentation",
         "subform"        : "Sous formulaire",
         "horizontalline" : "Séparation",
-        "treeview"       : "Arborescence"
+        "treeview"       : "Arborescence",
+        "boolean"        : "Booléen"
     },
 
     "protocol" : {
@@ -101,6 +102,10 @@
         "multiple"          : "Multiple",
         "legend"            : "Légende",
         "editorClass"       : "Class CSS de l'éditeur",
-        "fieldClass"        : "Classe CSS du champs"
+        "fieldClass"        : "Classe CSS du champs",
+        "checked"           : "Sélectionné",
+        "checkboxlabel"     : "Label checkbox",
+        "numericHelp"       : "Saisir une valeur numérique",
+        "decimal"           : "Valeur décimal autorisée"
     }
 }
