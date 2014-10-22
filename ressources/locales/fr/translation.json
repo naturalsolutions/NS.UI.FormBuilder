@@ -106,6 +106,12 @@
         "checked"           : "Sélectionné",
         "checkboxlabel"     : "Label checkbox",
         "numericHelp"       : "Saisir une valeur numérique",
-        "decimal"           : "Valeur décimal autorisée"
+        "decimal"           : "Valeur décimal autorisée",
+        "fieldSize"         : "Taille d'affichage",
+        "sizeValue" : {
+            "small"  : "Etroit",
+            "medium" : "Moyen",
+            "large"  : "Large"
+        }
     }
 }

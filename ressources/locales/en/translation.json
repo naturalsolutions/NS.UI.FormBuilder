@@ -104,7 +104,13 @@
         "checked"           : "Selected",
         "checkboxlabel"     : "Checkbox label",
         "numericHelp"       : "Enter numeric value",
-        "decimal"           : "Allow decimal value"
+        "decimal"           : "Allow decimal value",
+        "fieldSize"         : "Field display size",
+        "sizeValue" : {
+            "small"  : "Small",
+            "medium" : "Medium",
+            "large"  : "Large"
+        }
     }
 
 }

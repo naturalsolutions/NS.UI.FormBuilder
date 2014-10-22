@@ -70,6 +70,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 title       : $.t('schema.fieldClass'),
                 editorClass : 'form-control',
                 template    : fieldTemplate
+            },
+            fieldSize : {
+                type : 'Select',
+                title       : $.t('schema.fieldSize'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                options : [$.t('schema.sizeValue.small'), $.t('schema.sizeValue.medium'), $.t('schema.sizeValue.large')]
             }
         },
 
