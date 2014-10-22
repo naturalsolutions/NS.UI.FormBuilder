@@ -111,6 +111,26 @@
             "medium" : "Medium",
             "large"  : "Large"
         }
-    }
+    },
+
+    "tooltip" : {
+        "text"           : "Text field",
+        "numeric"        : "Numeric field",
+        "date"           : "Date field",
+        "select"         : "Dropdown list",
+        "radio"          : "Radio button",
+        "checkbox"       : "Checkbox",
+        "hidden"         : "Hidden field",
+        "file"           : "File",
+        "treeview"       : "Tree View",
+        "longtext"       : "Long text",
+        "pattern"        : "Field with regular expression",
+        "line"           : "Horizontal line",
+        "autocomplete"   : "Auto complete",
+        "table"          : "Presentation",
+        "subform"        : "Fieldset",
+        "horizontalline" : "Horizontal line",
+        "boolean"        : "Boolean"
+    },
 
 }

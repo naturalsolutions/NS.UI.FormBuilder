@@ -2,7 +2,13 @@
     <h1 class="center" data-i18n="label.field"></h1>
     <% for (var n in list) { %>
         <div class="row">
-            <div class="col-md-10 col-md-offset-1 fields" data-type="<%= n.replace(" Field ", " ") %>" data-i18n="fields.<%= list[n]["i18n"] %>">
+            <div 	class="col-md-10 col-md-offset-1 fields"
+            		data-type="<%= n.replace(" Field ", " ") %>"
+            		data-i18n="fields.<%= list[n]["i18n"] %>;[title]tooltip.<%= list[n]["i18n"] %>"
+
+            		data-toggle="tooltip"
+            		data-placement="right"
+    		>
                 <%= list[n]["i18n"] %>
             </div>
         </div>

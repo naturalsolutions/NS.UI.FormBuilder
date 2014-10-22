@@ -5,7 +5,6 @@ define(
         'backbone',
         'text!../../../templates/main/panel.html',
         'models/fields',
-        'i18n',
         'jquery-ui',
         'nanoscroller',
         'NS.UI.Notification'
