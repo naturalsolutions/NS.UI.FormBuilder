@@ -77,7 +77,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [$.t('schema.sizeValue.small'), $.t('schema.sizeValue.medium'), $.t('schema.sizeValue.large')]
-            }
+            },
+            endOfLine : {
+                type        : 'Checkbox',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : $.t('schema.eol')
+            },
         },
 
         isAdvanced : function(index) {

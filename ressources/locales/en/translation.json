@@ -110,7 +110,8 @@
             "small"  : "Small",
             "medium" : "Medium",
             "large"  : "Large"
-        }
+        },
+        "eol" : "Is the end of the line"
     },
 
     "tooltip" : {

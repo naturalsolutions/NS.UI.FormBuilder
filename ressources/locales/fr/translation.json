@@ -112,7 +112,8 @@
             "small"  : "Etroit",
             "medium" : "Moyen",
             "large"  : "Large"
-        }
+        },
+        "eol" : "Est en fin de ligne"
     },
 
     "tooltip" : {
