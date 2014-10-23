@@ -11,13 +11,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     ');
 
     var checkboxFieldTemplate = _.template('\
-        <div class="form-group row checkbox padding5 paddingRight25 field-<%= key %>">\
+        <div><div class="form-group row checkbox padding5 paddingRight25 field-<%= key %>">\
             <div data-editor class="col-md-2" >\
                 <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
             </div>\
             <label class="control-label left" for="<%= editorId %>"><%= title %></label>\
         </div>\
+        <div class="row padding5 marginLeft10"><p class="help-block"><%= help %></p></div></div>\
     ');
 
     i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});
