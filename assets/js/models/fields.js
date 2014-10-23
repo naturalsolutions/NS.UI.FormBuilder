@@ -54,7 +54,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             readonly : {
                 type        : 'Checkbox',
-                fieldClass  : 'advanced',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 title       : $.t('schema.readonly')
@@ -807,7 +806,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         },
 
         schema : {
-            id       : { 
+            id       : {
                 type        : 'Number',
                 title       : 'ID',
                 editorClass : 'form-control',
@@ -816,7 +815,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             multiple : { 
                 type        : 'Checkbox',
-                editorClass : 'span1',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
                 help        : 'This fieldset can be present many times in one form' ,
                 title       : $.t('schema.multiple')
             },
