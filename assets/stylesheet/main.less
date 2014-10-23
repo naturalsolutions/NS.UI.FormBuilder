@@ -30,6 +30,7 @@ html, body {
 .input          { border        : 1px #ddd solid; border-radius: 0!important; }
 .modal          { background    : transparent !important; }
 .form-group     { margin-bottom: 0px !important; }
+.left           { float: left}
 
 .table      { tr { background : white; } }
 .bordered   { border : 2px #aaa solid; background : #fff; }
@@ -74,4 +75,34 @@ html, body {
 
 .find {
     height : 34px;
+}
+
+.form-group {
+    &.row {
+        .col-md-2 {
+            height: 40px !important;
+        }
+    }
+}
+
+
+
+.checkbox {
+    label {
+        line-height: 55px !important;
+        font-size: 20px !important;
+        padding-left: 0 !important;
+    }
+    input[type="checkbox"] {
+        box-shadow: none !important;
+        border: none !important;
+        &:focus {
+            box-shadow: none !important;
+            border: none !important;
+        }
+        &:active {
+            box-shadow: none !important;
+            border: none !important;
+        }
+    }
 }

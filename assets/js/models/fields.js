@@ -10,6 +10,16 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         </div>\
     ');
 
+    var checkboxFieldTemplate = _.template('\
+        <div class="form-group row checkbox padding5 paddingRight25 field-<%= key %>">\
+            <div data-editor class="col-md-2" >\
+                <p class="help-block" data-error></p>\
+                <p class="help-block"><%= help %></p>\
+            </div>\
+            <label class="control-label left" for="<%= editorId %>"><%= title %></label>\
+        </div>\
+    ');
+
     i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});
 
     var models = {};
@@ -49,13 +59,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             required : {
                 type        : 'Checkbox',
                 editorClass : 'form-control',
-                template    : fieldTemplate,
+                template    : checkboxFieldTemplate,
                 title       : $.t('schema.required')
             },
             readonly : {
                 type        : 'Checkbox',
                 editorClass : 'form-control',
-                template    : fieldTemplate,
+                template    : checkboxFieldTemplate,
                 title       : $.t('schema.readonly')
             },
             editorClass : {
@@ -80,7 +90,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             endOfLine : {
                 type        : 'Checkbox',
                 editorClass : 'form-control',
-                template    : fieldTemplate,
+                template    : checkboxFieldTemplate,
                 title       : $.t('schema.eol')
             },
         },
@@ -283,6 +293,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             folder: {
                 type  : 'Checkbox',
+                template : checkboxFieldTemplate,
                 title : $.t('schema.readonly')
             }
         },
@@ -329,13 +340,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type  : 'Checkbox',
                     title : $.t('schema.multipleSelection'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate
+                    template    : checkboxFieldTemplate
                 },
                 hierarchicSelection: {
                     type  : 'Checkbox',
                     title : $.t('schema.hierarchic'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate
+                    template    : checkboxFieldTemplate
                 },
                 webServiceURL : {
                     type        : 'Text',
@@ -364,7 +375,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                         },
                         folder: {
                             type  : 'Checkbox',
-                            title : $.t('schema.folder')
+                            title : $.t('schema.folder'),
+                            template : checkboxFieldTemplate
                         },
                         children : {
                             type : 'List',
@@ -571,7 +583,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 multiline : {
                     type        : 'Checkbox',
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
+                    template    : checkboxFieldTemplate,
                     title       : $.t('schema.multiline')
                 }
             });
@@ -618,7 +630,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             decimal : {
                     type        : 'Checkbox',
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
+                    template    : checkboxFieldTemplate,
                     title       : $.t('schema.decimal')
                 },
                 defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
@@ -802,7 +814,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             multiple : { 
                 type        : 'Checkbox',
                 editorClass : 'form-control',
-                template    : fieldTemplate,
+                template    : checkboxFieldTemplate,
                 help        : 'This fieldset can be present many times in one form' ,
                 title       : $.t('schema.multiple')
             },
