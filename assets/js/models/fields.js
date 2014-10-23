@@ -239,8 +239,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         defaults: function() {
             return _.extend({}, models.BaseField.prototype.defaults, {
-                defaultValue : "",
-                file         : "",
                 mimeType     : "*",
                 size         : 200 //  specify max file size in ko
             })
@@ -248,18 +246,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         schema: function() {
             return _.extend({}, models.BaseField.prototype.schema, {
-                defaultValue: {
-                    type        : 'Text',
-                    title       : $.t('schema.default'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                },
-                file: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : $.t('schema.file')
-                },
                 mimeType: {
                     type        : 'Text',
                     editorClass : 'form-control',
