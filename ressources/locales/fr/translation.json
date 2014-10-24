@@ -16,7 +16,8 @@
         "subform"        : "Sous formulaire",
         "horizontalline" : "Séparation",
         "treeview"       : "Arborescence",
-        "boolean"        : "Booléen"
+        "boolean"        : "Booléen",
+        "thesaurus"      : "Thesaurus"
     },
 
     "protocol" : {

@@ -16,7 +16,8 @@
         "table"          : "Presentation",
         "subform"        : "Fieldset",
         "horizontalline" : "Horizontal line",
-        "boolean"        : "Boolean"
+        "boolean"        : "Boolean",
+        "thesaurus"      : "Thesaurus"
     },
 
     "protocol" : {

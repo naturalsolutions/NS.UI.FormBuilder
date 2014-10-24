@@ -1,34 +1,58 @@
 {
     "fields" : {
-        "text"         : "Text",
-        "numeric"      : "Numeric",
-        "date"         : "Date",
-        "select"       : "Select",
-        "radio"        : "Radio buttob",
-        "checkbox"     : "Checkbox",
-        "hidden"       : "Hidden",
-        "file"         : "File",
-        "tree"         : "TreeView",
-        "long"         : "Long text",
-        "mask"         : "Pattenr",
-        "line"         : "Horizontal line",
-        "autocomplete" : "autocomplete"
+        "text"           : "Text",
+        "numeric"        : "Numeric",
+        "date"           : "Date",
+        "select"         : "Select",
+        "radio"          : "Radio button",
+        "checkbox"       : "Checkbox",
+        "hidden"         : "Hidden",
+        "file"           : "File",
+        "treeview"       : "Tree View",
+        "longtext"       : "Long text",
+        "pattern"        : "Pattern",
+        "line"           : "Horizontal line",
+        "autocomplete"   : "Auto complete",
+        "table"          : "Presentation",
+        "subform"        : "Fieldset",
+        "horizontalline" : "Horizontal line",
+        "boolean"        : "Boolean",
+        "thesaurus"      : "Thesaurus"
+    },
+
+    "protocol" : {
+        "name" : "Protocol name",
+        "description" : "Protocol Description",
+        "keywords" : "Keywords"
+    },
+
+    "modal" : {
+        "comment" : "Your coment",
+        "filename" : "File name",
+        "save" : {
+            "title" : "Protocol save",
+            "button" : "Save"
+        },
+        "export" : {
+            "title" : "Export",
+            "json" : "Export as JSON file"
+        }
     },
 
     "nav" : {
         "save" : {
             "title"     : " Save protocol",
             "cloud"     : "Save on server",
-            "export"    : "Export to XML file"
+            "export"    : "Export to JSON file"
         },
         "import" : {
-            "title"     : " Import XML file",
+            "title"     : " Import JSON file",
             "cloud"     : "Load from server",
-            "import"    : "Importe XML file"
+            "import"    : "Import JSON file"
         },
 
         "clear"     : " Clear",
-        "compare"   : " Compare XML files"
+        "compare"   : " Compare protocols"
     },
 
     "label" : {
@@ -45,5 +69,71 @@
         "edit"      : "Edit",
         "delete"    : "Delete",
         "clone"     : " Clone"
+    },
+
+    "schema" : {
+        "required"          : "Required",
+        "readonly"          : "Read only",
+        "value"             : "Value",
+        "default"           : "Default value",
+        "url"               : "Web service URL",
+        "help"              : "Help text",
+        "size"              : "Maximal size",
+        "file"              : "Default file",
+        "mime"              : "Allowed file type",
+        "title"             : "Title",
+        "key"               : "Key",
+        "folder"            : "Folder",
+        "defaultNode"       : "Default node",
+        "multipleSelection" : "Multiple selection",
+        "hierarchic"        : "Hierarchic selection",
+        "child"             : "Sub node",
+        "real"              : "Real value",
+        "englishText"       : "English displayed text",
+        "frenchText"        : "French displayed text",
+        "format"            : "Display format",
+        "multiline"         : "Multiline",
+        "min"               : "Minimal value",
+        "max"               : "Maximal value",
+        "precision"         : "Step",
+        "unity"             : "Unity",
+        "pattern"           : "Pattern value",
+        "multiple"          : "Multiple",
+        "legend"            : "Legend",
+        "editorClass"       : "Editor CSS class",
+        "fieldClass"        : "Field CSS class",
+        "checked"           : "Selected",
+        "checkboxlabel"     : "Checkbox label",
+        "numericHelp"       : "Enter numeric value",
+        "decimal"           : "Allow decimal value",
+        "fieldSize"         : "Field display size",
+        "sizeValue" : {
+            "small"  : "Small",
+            "medium" : "Medium",
+            "large"  : "Large"
+        },
+        "eol" : "Is the end of the line",
+        "webServiceURL" : "Web service URL pour data list"
+    },
+
+    "tooltip" : {
+        "text"           : "Text field",
+        "numeric"        : "Numeric field",
+        "date"           : "Date field",
+        "select"         : "Dropdown list",
+        "radio"          : "Radio button",
+        "checkbox"       : "Checkbox",
+        "hidden"         : "Hidden field",
+        "file"           : "File",
+        "treeview"       : "Tree View",
+        "longtext"       : "Long text",
+        "pattern"        : "Field with regular expression",
+        "line"           : "Horizontal line",
+        "autocomplete"   : "Auto complete",
+        "table"          : "Presentation",
+        "subform"        : "Fieldset",
+        "horizontalline" : "Horizontal line",
+        "boolean"        : "Boolean"
     }
+
 }
