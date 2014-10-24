@@ -11,6 +11,7 @@
 define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backbone.radio'], function(Backbone, Router, Collection, MainView, Radio){
 
     var formbuilder = {
+
         initialize : function(options) {
 
         	//	Init collection
@@ -27,13 +28,18 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
             this.mainView.render();
 
-            //	Init radio channel
+            /*  ****************************************************    */
+            /*  Init Backbone Radio channel
+            /*  ****************************************************    */
             this.mainChannel = Backbone.Radio.channel('global');
+
+            //  This channel allows to get a model with an ID
             this.mainChannel.on('getModel', _.bind(function(id) {
             	this.mainChannel.trigger('getModel:return', this.currentCollection.get(id));
             }, this));
 
-            this.mainChannel.on('getJSON', _.bind(function(id) {
+            //  Allows to get JSON data from collection
+            this.mainChannel.on('getJSON', _.bind(function() {
             	this.mainChannel.trigger('getJSON:return', this.currentCollection.getJSON());
             }, this));
 
@@ -48,14 +54,17 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             	this.mainChannel.trigger('export:return', this.currentCollection.getJSON());
             }, this));
 
+            //  Clear form, remove all fields
             this.mainChannel.on('clear', _.bind(function() {
             	this.mainView.clear();
             }, this))
 
+            //  Update form with imported JSON data
             this.mainChannel.on('JSONUpdate', _.bind(function(JSONUpdate) {
             	this.currentCollection.updateWithJSON(JSONUpdate);
             }, this));
 
+            //  Duplicate field
             this.mainChannel.on('copy', _.bind(function(modelID) {
                 var modelToCopy     = this.currentCollection.get(modelID),
                     newModelAttr    = modelToCopy.toJSON();
