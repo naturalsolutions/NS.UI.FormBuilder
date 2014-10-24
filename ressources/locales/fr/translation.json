@@ -17,7 +17,8 @@
         "horizontalline" : "Séparation",
         "treeview"       : "Arborescence",
         "boolean"        : "Booléen",
-        "thesaurus"      : "Thesaurus"
+        "thesaurus"      : "Thesaurus",
+        "autocompletetreeview" : "Arborescence avec autocompletion"
     },
 
     "protocol" : {
@@ -52,7 +53,7 @@
             "import"    : "Importer un fichier JSON"
         },
 
-        "clear"     : " Tout supprimer",
+        "clear"     : " Créer nouveau formulaire",
         "compare"   : " Comparer deux protocoles"
     },
 
@@ -115,7 +116,10 @@
             "large"  : "Large"
         },
         "eol" : "Est en fin de ligne",
-        "webServiceURL" : "URL service web pour les données"
+        "webServiceURL" : "URL service web pour les données",
+        "wsUrl" : "service web URL",
+        "ws" : "Identifiant service web",
+        "wslng" : "Langue d'affichage pour les données"
     },
 
     "tooltip" : {
@@ -135,6 +139,14 @@
         "subform"        : "Sous formulaire",
         "horizontalline" : "Séparation",
         "treeview"       : "Arborescence",
-        "boolean"        : "Booléen"
+        "boolean"        : "Booléen",
+        "autocompletetreeview" : "Champs arborescence avec un champs de recherche"
+    },
+
+    "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
+    "form" : {
+        "cancel" : "Annuler",
+        "clear" : "Supprimer",
+        "title" : "Création d'un nouveau formulaire"
     }
 }

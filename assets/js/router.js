@@ -9,7 +9,7 @@
 
 define(
     ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'fancytree', 'NS.UI.Navbar', 'NS.UI.NavbarTheme'],
-    function($, _, Backbone, MainView, collection, Radio) {
+    function($, _, Backbone, MainView, collection, Radio, fancytree) {
 
         var AppRouter = Backbone.Router.extend({
 
@@ -173,6 +173,7 @@ define(
                                     checkbox : false,
                                     selectMode : 2,
                                     activate : _.bind(function(event, data) {
+                                        console.log ("key")
                                         this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
                                     }, this)
                                 });
@@ -332,8 +333,22 @@ define(
             },
 
             clear : function() {
-                this.mainChannel.trigger('clear');
-                window.location.hash = '#';
+                require(['views/modals/clearProtocol'], _.bind(function(exportProtocolJSON) {
+                    $(this.el).append('<div class="modal  fade" id="clearProtocol"></div>');
+                    var modalView = new exportProtocolJSON({
+                        el: "#clearProtocol",
+                        URLOptions: this.URLOptions
+                    });
+                    modalView.render();
+                    $("#clearProtocol").i18n();
+
+                    $('#clearProtocol').on('hidden.bs.modal', _.bind(function () {
+                        if (modalView.getData()) {
+                            this.mainChannel.trigger('clear')
+                        }
+                        window.location.hash = '#';
+                    }, this));
+                }, this))
             },
 
             import : function() {

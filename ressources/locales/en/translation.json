@@ -17,7 +17,8 @@
         "subform"        : "Fieldset",
         "horizontalline" : "Horizontal line",
         "boolean"        : "Boolean",
-        "thesaurus"      : "Thesaurus"
+        "thesaurus"      : "Thesaurus",
+        "autocompletetreeview" : "Autocomplete Treeview"
     },
 
     "protocol" : {
@@ -51,7 +52,7 @@
             "import"    : "Import JSON file"
         },
 
-        "clear"     : " Clear",
+        "clear"     : " Create new form",
         "compare"   : " Compare protocols"
     },
 
@@ -113,7 +114,10 @@
             "large"  : "Large"
         },
         "eol" : "Is the end of the line",
-        "webServiceURL" : "Web service URL pour data list"
+        "webServiceURL" : "Web service URL pour data list",
+        "wsUrl" : "Web service URL",
+        "ws" : "Web service ID",
+        "wslng" : "Data display language"
     },
 
     "tooltip" : {
@@ -133,7 +137,14 @@
         "table"          : "Presentation",
         "subform"        : "Fieldset",
         "horizontalline" : "Horizontal line",
-        "boolean"        : "Boolean"
+        "boolean"        : "Boolean",
+        "autocompletetreeview" : "A TreeView field with searching functionnalité"
     },
 
+    "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
+    "form" : {
+        "cancel" : "Cancel",
+        "clear" : "Clear form",
+        "title" : "Create new form"
+    }
 }
