@@ -3,7 +3,8 @@ define([
     'underscore',
     'backbone',
     'views/fieldViews/baseView',
-    'text!../../../templates/fieldView/autocompleteView.html'
+    'text!../../../templates/fieldView/autocompleteView.html',
+    'typeahead'
 ], function($, _, Backbone, BaseView, autocompleteTemplate) {
 
     var AutocompleteFieldView = BaseView.extend({
@@ -22,7 +23,6 @@ define([
             opt.template = autocompleteTemplate;
 
             BaseView.prototype.initialize.apply(this, [opt]);
-            this.autocompleteURL = options.autocompleteURL;
         },
 
         /**
@@ -30,15 +30,15 @@ define([
          */
         render : function() {
            BaseView.prototype.render.apply(this, arguments);
-
-           $('#autocompleteExample').typeahead({
+           $(this.el).find('.form-control').typeahead({
                 source: _.bind(function(query, process) {
-                    return $.getJSON(this.autocompleteURL + 'example.json', {query : query}, function(data) {
+                    return $.getJSON(this.model.get('url'), {query : query}, function(data) {
                         return process(data.options);
                     });
                 }, this),
                 updater : _.bind(function(item) {
                     this.model.set('defaultValue', item);
+                    $(this.el).find('.form-control').val(item)
                 }, this)
             });
        },
