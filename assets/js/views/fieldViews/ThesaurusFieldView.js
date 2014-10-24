@@ -20,20 +20,24 @@ define([
             BaseView.prototype.initialize.apply(this, [opt]);
             this.mainChannel = Backbone.Radio.channel('global');
 
-            this.mainChannel.on('nodeSelected' + this.model.get('id'), function(data) {
+            this.mainChannel.on('nodeSelected' + this.model.get('id'), _.bind(function(data) {
 
-                //  URL ? data.node.key
-                $(this.el).find('#tree').fancytree('getTree').rootNode = data.node;
-                $(this.el).find('#tree').fancytree('getTree').reload(data.node.children);
-                //console.log ($(this.el).find('#tree').fancytree('getTree'))
+                this.model.set('defaultNode', data.node.key)
 
-            });
+                if (data['node']['children'] !== null) {
+                    $(this.el).find('#tree').fancytree('getTree').reload(data['node']['children']);
+                } else {
+                    var arr = [];
+                    arr[0] = data.node;
+                    $(this.el).find('#tree').fancytree('getTree').reload(arr);
+                }
+            }, this));
         },
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
             require(['jquery-ui', 'fancytree'], _.bind(function() {
-                $.getJSON('ressources/thesaurus/thesaurus.json', _.bind(function(data) {
+                $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
 
                     $(this.el).find('#tree').fancytree({
                         source: data['d'],

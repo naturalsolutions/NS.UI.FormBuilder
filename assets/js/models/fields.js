@@ -155,7 +155,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : "Write some text",
-                url          : ""
+                url          : "ressources/autocomplete/example.json"
             });
         },
 
@@ -854,6 +854,38 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         type   : 'Subform',
         xmlTag : 'fieldset',
         i18n   : 'fieldset'
+    });
+
+    models.ThesaurusField = models.BaseField.extend({
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                webServiceURL : 'ressources/thesaurus/thesaurus.json',
+                defaultNode: ""
+            });
+        },
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                defaultNode: {
+                    type  : 'Text',
+                    title : $.t('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                },
+                webServiceURL : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.webServiceURL')
+                }
+            });
+        },
+
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
+    }, {
+        type: 'Thesaurus',
+        i18n: 'thesaurus'
     });
 
     return models;
