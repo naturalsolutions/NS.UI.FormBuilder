@@ -21,25 +21,29 @@ define([
             this.mainChannel = Backbone.Radio.channel('global');
 
             this.mainChannel.on('nodeSelected' + this.model.get('id'), _.bind(function(data) {
+                console.log ("receive")
+                //this.model.set('defaultNode', data.node.key)
 
-                this.model.set('defaultNode', data.node.key)
-
+                console.log (this.$el.first('.thesaurusField').fancytree('getTree'))
                 if (data['node']['children'] !== null) {
-                    $(this.el).find('#tree').fancytree('getTree').reload(data['node']['children']);
+                    this.$el.first('.thesaurusField').fancytree('getTree').reload({
+                        children : data['node']['children']
+                    });
                 } else {
                     var arr = [];
                     arr[0] = data.node;
-                    $(this.el).find('#tree').fancytree('getTree').reload(arr);
+                    this.$el.first('.thesaurusField').fancytree('getTree').reload(arr);
                 }
             }, this));
         },
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
+            console.log ("render")
             require(['jquery-ui', 'fancytree'], _.bind(function() {
                 $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
 
-                    $(this.el).find('#tree').fancytree({
+                    this.$el.first('.thesaurusField').fancytree({
                         source: data['d'],
                         checkbox : false,
                         selectMode : 2
