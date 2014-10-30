@@ -634,7 +634,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 }
             },
 
-        schema: function() {
+        schema : function() {
             var schema = _.extend( {}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema), 'help'), this.baseSchema);
 
             schema.defaultValue.type = 'Number';
@@ -662,9 +662,26 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Numeric',
-        xmlTag : 'field_numeric',
         i18n   : 'numeric'
     });
+
+    //  Numeric field with range
+    //  It's the same modal we change only constructor object
+    models.NumericRangeField = models.NumericField.extend({
+
+        defaults : function() {
+            return models.NumericField.prototype.defaults()
+        },
+
+        schema : function() {
+            return models.NumericField.prototype.schema()
+        },
+
+    }, {
+        type   : 'NumericRange',
+        i18n   : 'numericrange'
+    });
+
 
     models.PatternField = models.TextField.extend({
         defaults: function() {
