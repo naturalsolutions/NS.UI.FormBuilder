@@ -3,7 +3,8 @@ define([
     'underscore',
     'backbone',
     'views/fieldViews/baseView',
-    'text!../../../templates/fieldView/treeviewFieldView.html'
+    'text!../../../templates/fieldView/treeviewFieldView.html',
+    'jquery-ui', 'fancytree'
 ], function($, _, Backbone, BaseView, viewTemplate) {
 
     var TreeViewFieldView = BaseView.extend({
@@ -21,19 +22,17 @@ define([
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
-            require(['jquery-ui', 'fancytree'], _.bind(function() {
-                $(this.el).find('#tree').fancytree({
-                    source: [
-                        {title: "Node 1", key: "1"},
-                        {title: "Folder 2", key: "2", folder: true, children: [
-                            {title: "Node 2.1", key: "3"},
-                            {title: "Node 2.2", key: "4"}
-                        ]}
-                    ],
-                    checkbox : true,
-                    selectMode : 2
-                });
-            }, this));
+            $('#treeview' + this.model.get('id')).fancytree({
+                source: [
+                    {title: "Node 1", key: "1"},
+                    {title: "Folder 2", key: "2", folder: true, children: [
+                        {title: "Node 2.1", key: "3"},
+                        {title: "Node 2.2" + this.model.get('defaultNode'), key: "4"}
+                    ]}
+                ],
+                selectMode : 1,
+                defaultkey : "" + this.model.get('defaultNode')
+            });
         }
     });
 
