@@ -1,8 +1,8 @@
 <div class="element padding5">
-    <div class="form-group paddingBottom5">
+    <div class="row paddingBottom5">
 
         <label class="col-md-4 paddingLeft0">
-            <i class="fa fa-arrows" style="color : #09C"></i> 
+            <i class="fa fa-arrows" style="color : #09C"></i>
             <%= title %><% if (required === true) { %> (*) <% } %>
         </label>
         <div class="col-md-8 right actions">
@@ -19,9 +19,10 @@
                <span data-i18n="actions.clone">Dupliquer</span>
            </a>
         </div>
+    </div>
+    <div class="row">
         <textarea style="resize: none" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>">
             <%= defaultValue %>
         </textarea>
     </div>
-
 </div>

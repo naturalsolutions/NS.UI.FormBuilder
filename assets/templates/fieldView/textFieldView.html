@@ -1,5 +1,5 @@
 <div class="element padding5">
-    <div class="form-group paddingBottom5">
+    <div class="row paddingBottom5">
         <label class="col-md-4 paddingLeft0">
             <i class="fa fa-arrows" style="color : #09C"></i>
             <%= title %><% if (required === true) { %> (*) <% } %>
@@ -19,6 +19,7 @@
            </a>
         </div>
     </div>
-    <input type="text" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
-  </div>
+    <div class="row">
+        <input type="text" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
+    </div>
 </div>

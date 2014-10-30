@@ -1,9 +1,10 @@
 <div class="element padding5">
-    <div class="form-group container-fluid paddingBottom5">
-        <div class="row">
-            <label class="col-md-4 paddingLeft0">
+    <div class="row paddingBottom5">
+        <label class="col-md-4 paddingLeft0">
             <i class="fa fa-arrows" style="color : #09C"></i>
-            <%= title %><% if (required === true) { %> (*) <% } %>
+            <%= title %>
+                <% if (required=== true) { %>(*)
+                    <% } %>
         </label>
         <div class="col-md-8 right actions">
             <a href="#" class="trash">
@@ -15,15 +16,14 @@
                 <span data-i18n="actions.edit">Modifier</span>
             </a>
             <a href="#copy/<%= id %>" class="copy">
-               &nbsp;<span class="fa fa-copy"></span>
-               <span data-i18n="actions.clone">Dupliquer</span>
-           </a>
+                   &nbsp;<span class="fa fa-copy"></span>
+                   <span data-i18n="actions.clone">Dupliquer</span>
+               </a>
         </div>
-        </div>
-        <div class="row">
-            <input type="file" class="hide" />
-            <input type="text" class="form-control col-md-10" name="<%= name %>" id="<%= id%>" />
-            <input type="submit" value="Browse" class="col-md-1 marginLeft10 find btn btn-info" />
-        </div>
+    </div>
+    <div class="row">
+        <input type="file" class="hide" />
+        <input type="text" class="form-control col-md-10" name="<%= name %>" id="<%= id%>" />
+        <input type="submit" value="Browse" class="col-md-1 marginLeft10 find btn btn-info" />
     </div>
 </div>

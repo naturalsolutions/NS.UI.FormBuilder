@@ -1,5 +1,5 @@
 <div class="element padding5">
-    <div class="form-group paddingBottom5">
+    <div class="row paddingBottom5">
         <label class="col-md-4 paddingLeft0">
             <i class="fa fa-arrows" style="color : #09C"></i>
             <%= title %><% if (required === true) { %> (*) <% } %>
@@ -19,8 +19,9 @@
            </a>
         </div>
     </div>
-    <input  type="number" class="form-control" min="<%= minValue %>" max="<%= maxValue %>"
+    <div class="row">
+        <input  type="number" class="form-control" min="<%= minValue %>" max="<%= maxValue %>"
             step="<% if(decimal == true) { %>any<% } else { %><%= precision %><% } %>"
             name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
-  </div>
+    </div>
 </div>
