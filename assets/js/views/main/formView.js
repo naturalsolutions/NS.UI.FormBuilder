@@ -3,11 +3,12 @@ define([
     'underscore',
     'backbone',
     'text!../../../templates/main/formView.html',
+    'autocompleteTreeView',
     'i18n',
     'jquery-ui',
     'nanoscroller',
     'bootstrap'
-], function($, _, Backbone, formViewTemplate) {
+], function($, _, Backbone, formViewTemplate, autocompTree) {
 
     var FormView = Backbone.View.extend({
 

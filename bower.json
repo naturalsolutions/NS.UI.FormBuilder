@@ -32,6 +32,7 @@
         "bootstrapAdapter"     : "https://github.com/powmedia/backbone.bootstrap-modal.git",
         "typeahead"            : "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git",
         "fuelux"               : null,
-        "jquery-simple-slider" : null
+        "jquery-simple-slider" : null,
+        "autocompleteTreeview" : "https://github.com/NaturalSolutions/NS.UI.autocompTree.git"
     }
 }

@@ -129,7 +129,7 @@ define(
 
                 this.mainChannel.on('getModel:return', _.bind(function(field) {
 
-                    require(['backbone-forms', 'modalAdapter', "backbone-forms-list"], _.bind(function() {
+                    require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
 
                         if (this.form !== undefined) {
 
@@ -163,7 +163,8 @@ define(
                             }
                         }, this))
 
-                        if (field.constructor.type === 'Thesaurus') {
+
+                        if (_.contains(['Thesaurus', 'AutocompleteTreeView'], field.constructor.type)) {
 
                             $.getJSON('ressources/thesaurus/thesaurus.json', _.bind(function(data) {
 
@@ -171,9 +172,8 @@ define(
                                 $('.settings form #defaultNode').fancytree({
                                     source: data['d'],
                                     checkbox : false,
-                                    selectMode : 2,
+                                    selectMode : 1,
                                     activate : _.bind(function(event, data) {
-                                        console.log ("key")
                                         this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
                                     }, this)
                                 });
@@ -181,6 +181,24 @@ define(
                             }, this)).error(function(a,b , c) {
                                 alert ("can't load ressources !");
                             })
+
+                        } else if (field.constructor.type === 'TreeView') {
+
+                            $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+                            $('.settings form #defaultNode').fancytree({
+                                source: [
+                                    {title: "Node 1", key: "1"},
+                                    {title: "Folder 2", key: "2", folder: true, children: [
+                                        {title: "Node 2.1", key: "3"},
+                                        {title: "Node 2.2", key: "4"}
+                                    ]}
+                                ],
+                                selectMode : 1,
+                                activate : _.bind(function(event, data) {
+                                    field.set('defaultNode', data.node.key)
+                                    this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
+                                }, this)
+                            });
 
                         }
 

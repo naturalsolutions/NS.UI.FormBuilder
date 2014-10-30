@@ -353,41 +353,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : $.t('schema.webServiceURL')
-                },
-                node: {
-                    type: 'List',
-                    itemType: 'Object',
-                    itemToString: function(node) {
-                        return '<b>Title : </b>' + node.title + ', <b>Key : </b>' + node.key + ', <b>is a folder : </b>' + (node.folder ? 'Yes' : 'No');
-                    },
-                    subSchema: {
-                        title: {
-                            type        : "Text",
-                            editorClass : 'form-control',
-                            template    : fieldTemplate,
-                            title       : $.t('schema.title')
-                        },
-                        key: {
-                            type        : 'Number',
-                            editorClass : 'form-control',
-                            template    : fieldTemplate,
-                            title       : $.t('schema.key')
-                        },
-                        folder: {
-                            type  : 'Checkbox',
-                            title : $.t('schema.folder'),
-                            template : checkboxFieldTemplate
-                        },
-                        children : {
-                            type : 'List',
-                            itemToString: function(node) {
-                                return 'Children : <b>Title : </b>' + node.title + ', <b>Key : </b>' + node.key + ', <b>is a folder : </b>' + (node.folder ? 'Yes' : 'No');
-                            },
-                            itemType : 'NestedModel',
-                            model    : Node,
-                            title    : $.t('schema.child')
-                        }
-                    }
                 }
             });
         },
@@ -886,6 +851,54 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     }, {
         type: 'Thesaurus',
         i18n: 'thesaurus'
+    });
+
+    models.AutocompleteTreeView = models.BaseField.extend({
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                language    : { hasLanguage: true, lng: 'En' },
+                wsUrl       : 'ressources/thesaurus',
+                webservices : 'autocompleteTreeView.json',
+                startId     : '85263',
+                defaultNode : ""
+            });
+        },
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                defaultNode: {
+                    type  : 'Text',
+                    title : $.t('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                },
+                wsUrl : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.wsUrl')
+                },
+                webservices : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.ws')
+                },
+                language : {
+                    type        : 'Select',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : $.t('schema.wslng'),
+                    options : ["fr", "en"]
+                }
+            });
+        },
+
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
+    }, {
+        type: 'AutocompleteTreeView',
+        i18n: 'autocomp'
     });
 
     return models;
