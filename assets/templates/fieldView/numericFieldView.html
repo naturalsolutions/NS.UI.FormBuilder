@@ -20,7 +20,7 @@
         </div>
     </div>
     <div class="row">
-        <input  type="number" class="form-control" min="<%= minValue %>" max="<%= maxValue %>"
+        <input  class="form-control" type="number" min="<%= minValue %>" max="<%= maxValue %>"
             step="<% if(decimal == true) { %>any<% } else { %><%= precision %><% } %>"
             name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
     </div>
