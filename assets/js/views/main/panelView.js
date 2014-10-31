@@ -21,16 +21,27 @@ define(
                 this.template   = _.template(panelViewTemplate);
                 this._collection = collection;
 
-                this.list = [], models = _.keys(Fields);
-                models.shift()
+                var section = { other : [] };
 
-                for (var el in models) {
-                    if (Fields[models[el]].type !== undefined) {
-                        this.list[ models[el] ] = {
-                            i18n : models[el].replace('Field', '').toLowerCase()
+                for (var i in Fields) {
+                    if (Fields[i].type !== undefined) {
+                        if (Fields[i].section === undefined) {
+                            section['other'][i] = {
+                                i18n : i.replace('Field', '').toLowerCase()
+                            }
+                        } else {
+                            if (section[i] === undefined) {
+                                //  create new section
+                                section[ Fields[i].section ] = [];
+                            }
+                            section[ Fields[i].section ][i] = {
+                                i18n : i.replace('Field', '').toLowerCase()
+                            }
                         }
                     }
                 }
+
+                this.section = section;
 
                 _.bindAll(this, 'appendToDrop');
             },
@@ -51,10 +62,14 @@ define(
             },
 
             render: function() {
-                var renderedContent = this.template({ list : this.list});
+                var renderedContent = this.template({
+                    list : this.list,
+                    section : this.section
+                });
                 $(this.el).html(renderedContent);
                 $(this.el).nanoScroller();
                 $('.fields').disableSelection();
+                this.$el.find('#accordion').accordion();
                 return this;
             }
 

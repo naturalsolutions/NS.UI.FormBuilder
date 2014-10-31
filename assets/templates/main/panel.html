@@ -1,16 +1,20 @@
 <div class="nano-content">
     <h1 class="center" data-i18n="label.field"></h1>
-    <% for (var n in list) { %>
-        <div class="row">
-            <div 	class="col-md-10 col-md-offset-1 fields"
-            		data-type="<%= n.replace(" Field ", " ") %>"
-            		data-i18n="fields.<%= list[n]["i18n"] %>;[title]tooltip.<%= list[n]["i18n"] %>"
+    <div id="accordion" class="container-fluid">
+        <% for (var n in section) { %>
+            <h3 class="center"><%= n %> <span class="caret"></span></h3>
+            <div class="row">
+            <% for (var i in section[n]) { %>
+                <div    class="col-md-10 col-md-offset-1 fields"
+                        data-type="<%= i.replace(" Field ", " ") %>"
+                        data-i18n="fields.<%= section[n][i]['i18n'] %>;[title]tooltip.<%= section[n][i]['i18n'] %>"
 
-            		data-toggle="tooltip"
-            		data-placement="right"
-    		>
-                <%= list[n]["i18n"] %>
+                        data-toggle="tooltip"
+                        data-placement="right">
+                    <%= section[n][i]['i18n'] %>
+                </div>
+            <%}; %>
             </div>
-        </div>
         <%}; %>
+    </div>
 </div>
