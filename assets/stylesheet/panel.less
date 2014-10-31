@@ -1,0 +1,59 @@
+.widgetsPanel {
+    background: #ddd;
+    h1 {
+        font-weight: lighter;
+        font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif !important
+    }
+    .nano-pane {
+        background: #aaa;
+        .nano-slider {
+            background: #O8C;
+            border-radius: 0 !important;
+        }
+    }
+    .nano-content {
+        padding-bottom: 60px;
+    }
+    .fields {
+        .font();
+        height        : 50px;
+        background    : white;
+        border        : 2px #aaa solid;
+        color         : #555;
+        font-size     : 18px;
+        text-align    : center;
+        padding       : 10px;
+        margin-bottom : 10px;
+        margin-top    : 10px;
+        transition    : all 0.3s ease-in-out;
+        &:hover {
+            cursor: pointer;
+            outline: 5px #aaa solid;
+        }
+    }
+    #accordion {
+        h3 {
+            .font;
+            &:hover {
+                color      : #555;
+                cursor     : pointer;
+                box-shadow : none;
+                border     : none;
+                outline    : none;
+            }
+            &:active, &:focus, &:blur {
+                box-shadow: none;
+                border: none;
+                outline: none;
+            }
+        }
+        .ui-state-focus {
+            box-shadow: none;
+            border: none;
+            outline: none;
+        }
+        .ui-accordion-content-active {
+            height: auto !important;
+        }
+    }
+}

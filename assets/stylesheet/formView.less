@@ -1,0 +1,101 @@
+.dropArea {
+            overflow-y      : scroll;
+            height          : 100%;
+            padding-top     : 50px;
+            //padding-right   : 2.564102564102564%;
+
+            .firstText {
+                .font();
+                width           : 100%;
+                border          : none;
+                outline         : none;
+                height          : 70px;
+                text-align      : right;
+                font-size       : 45px;
+                color           : #555;
+                border-bottom   : 1px #ddd solid;
+                box-shadow      : none;
+                &:focus { box-shadow: none; }
+            }
+
+            hr { border-top : #333 1px solid; margin-bottom : 0; padding-bottom : 0px; }
+
+            h2 { color : #ddd; font-weight : 100; font-size : 22px; }
+
+            .row-fluid:last-child {
+                margin-top  : 25px;
+                height      : 70%;
+                .drop {
+                    min-height      : 70%;
+                    border          : 1px #aaa solid !important;
+                    margin-bottom   : 100px;
+                }
+            }
+            .dropField {
+                .noMarginTop();
+                padding-top    : 0px;
+                margin-left    : 0!important;
+                background     : #fff;
+                transition : background 0.2s ease-in-out;
+                &:hover {
+                    background : beige;
+                    .actions {
+                        display : block;
+                    }
+                }
+                .actions {
+                    display: none;
+                    padding-right: 3px;
+                }
+                &.textArea {
+                    textarea {
+                        padding-left    : 10px;
+                        border          : 2px #aaa solid;
+                    }
+                    .span1:last-child {
+                        height      : 48px;
+                    }
+                }
+                .row {
+                    //padding-right: 2.564102564102564%;
+                }
+                hr {
+                    height     : 1px;
+                    margin-top : 0;
+                    min-height : 0;
+                }
+                input[type="text"], .spin {
+                    padding-left: 10px;
+                    &.span10 {
+                        margin-left: 0;
+                    }
+                }
+                label { .text(); .font();}
+                i {
+                    .text();
+                    &:first-child {
+                        margin-right : 5px;
+                    }
+                }
+                input[type="text"], .picker {
+                    .input();
+                    //padding : 15px;
+                }
+                select {
+                    .input();
+                }
+                .checkbox {
+                    text-align      : left;
+                    padding-left    : 0 !important;
+                    margin-top      : 0 !important;
+                    margin-left     : 12px !important;
+                    margin-right    : 22px;
+                }
+                input[type="checkbox"], input[type="radio"] {
+                    margin-left : 0px !important;
+                    position: static !important;
+                    width : 25px;
+                }
+                label:hover { cursor : default !important; }
+            }
+        }

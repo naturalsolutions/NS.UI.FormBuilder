@@ -1,0 +1,125 @@
+.settings {
+            .widgetsPanel();
+            background-color    : #eee;
+            margin-left         : 0;
+            overflow-x          : scroll;
+            padding-bottom      : 50px;
+
+            * {
+                font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
+                &.fa {
+                    font-family: FontAwesome !important;
+                }
+            }
+            .listEdit { &:hover {cursor : pointer;} }
+
+            h1 {
+                text-align          : center;
+                padding-bottom      : 0 !important ;
+                margin-bottom       : 0 !important;
+                margin-top          : 0 !important;
+                color               : #333;
+                height              : 70px;
+                line-height         : 60px;
+                &:hover {
+                    cursor: pointer;
+                }
+            }
+
+            h2 {
+                text-align  : center;
+                font-size   : 18px;
+                span:not(.selected) {
+                    color : #08C;
+                    &:hover {
+                        cursor : pointer;
+                    }
+                }
+                a {
+                    color           : #08c;
+                    text-decoration : none;
+                    &.selected {
+                        color       : #555;
+                    }
+                    &:hover {
+                        text-decoration: none;
+                    }
+                }
+            }
+
+            label {
+                .text();
+                font-size   : 18px;
+                line-height : 50px;
+                height      : 40px;
+                text-align  : left;
+            }
+
+            input, select {
+                .input();
+                border      : 2px #aaa solid;
+                font-size   : 18px;
+                line-height : 25px;
+                height      : 40px;
+            }
+
+            #fieldRequire { .left(); margin-left: -15px; }
+            .close, .addOp {
+                background  : none !important;
+                color       : #111 !important;
+                opacity     : 0.5 !important;
+                transition  : all 0.1s !important;
+                border      : none !important;
+                box-shadow  : none !important;
+                font-size   : 20px;
+            }
+            .close { font-size : 28px; }
+            .minMax {
+                label {
+                    text-align  : center !important;
+                    line-height : 40px;
+                }
+            }
+            #optionsPanel {
+                table {
+                    border-collapse : collapse;
+                    thead {
+                        tr { border : 2px #ccc solid; border-collapse : collapse; }
+                    }
+                    tbody {
+                        tr {
+                            border          : 2px #ccc solid;
+                            border-collapse : collapse;
+                            height          : 40px;
+                            line-height     : 40px;
+                            td {
+                                height  : 40px;
+                                line-height : 40px;
+                                input {
+                                    width       : 120px;
+                                    box-shadow  : none;
+                                    border       : 1px #aaa solid;
+                                    &[type="checkbox"] {
+                                        width   : 15px;
+                                        height  : 15px;
+                                    }
+
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .block {
+                background : white;
+                margin-top : 10px;
+                box-shadow: 0 0 3px #aaa;
+                table {
+                    margin-bottom : 0;
+                    caption {
+                        box-shadow: 0 0 3px #aaa;
+                        border-bottom: 1px #aaa solid;
+                    }
+                }
+            }
+        }
