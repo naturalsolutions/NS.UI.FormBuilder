@@ -205,24 +205,29 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
             this.description = JSONUpdate["description"];
             this.keywords    = JSONUpdate["keywords"];
 
-            var field    = null,
-                fieldset = [];
+            var field = null, fieldset = [];
 
             _.each(JSONUpdate['fieldsets'], function (el, idx) {
                 fieldset = fieldset.concat(el["fields"]);
             });
 
             _.each(JSONUpdate["schema"], _.bind(function (el, idx) {
-                // Check if this field is not in a fieldset element
+
+                //  Add field if it is not in the fieldset
+
                 if (!_.contains(fieldset, idx)) {
                     field = _.pick(el, 'title', 'help', 'editorClass', 'fieldClass')
                     if (el["validators"] !== undefined && el["validators"].length > 0) {
                         field['required'] = el["validators"]['required'] !== undefined;
                         field['readonly'] = el["validators"]['required'] !== undefined;
                     }
+
+                    //  Add the field to the collection
                     this.addElement((el.type === 'TextArea' ? 'LongText' : el.type) + 'Field', field)
                 }
                 field = null;
+
+
             }, this));
 
             //  Fieldset Section
@@ -234,16 +239,18 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
                 };
 
                 _.each(el["fields"], function (name, index) {
-                    field.fields.push(
-                        new Fields[JSONUpdate['schema'][name]['type'] + 'Field']({
-                            id          : field['fields'].length,
-                            title       : JSONUpdate['schema'][name]['title'],
-                            help        : JSONUpdate['schema'][name]['help'],
-                            editorClass : JSONUpdate['schema'][name]['editorClass'],
-                            fieldClass  : JSONUpdate['schema'][name]['fieldClass'],
-                            required    : JSONUpdate['schema'][name]['validators']['required'] !== undefined,
-                        })
-                    );
+                    if (Fields[JSONUpdate['schema'][name]['type'] + 'Field'] !== undefined) {
+                        field.fields.push(
+                            new Fields[JSONUpdate['schema'][name]['type'] + 'Field']({
+                                id          : field['fields'].length,
+                                title       : JSONUpdate['schema'][name]['title'],
+                                help        : JSONUpdate['schema'][name]['help'],
+                                editorClass : JSONUpdate['schema'][name]['editorClass'],
+                                fieldClass  : JSONUpdate['schema'][name]['fieldClass'],
+                                required    : JSONUpdate['schema'][name]['validators']['required'] !== undefined,
+                            })
+                        );
+                    }
                 });
 
                 this.addElement('SubformField', field);

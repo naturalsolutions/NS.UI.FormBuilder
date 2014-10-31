@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'views/fieldViews/baseView',
-    'text!../../../templates/fieldView/subformFieldView.html'
-], function($, _, Backbone, BaseView, viewTemplate) {
+    'text!../../../templates/fieldView/subformFieldView.html',
+    'backbone.radio'
+], function($, _, Backbone, BaseView, viewTemplate, Radio) {
 
     var SubformFieldView = BaseView.extend({
 
@@ -25,6 +26,15 @@ define([
             this.collectionRef = options.collection;
 
             _.bindAll(this, 'deleteSubView', 'renderSubView', 'addSubView', 'render');
+
+            this.collectionChannel = Backbone.Radio.channel('collection');
+
+            //  Now we need to create a view for each view field
+            //  And add this view to the subformfield view
+
+            this.collectionChannel.on('subViewCreated/' + this.model.get('id'), _.bind(function(subView) {
+                this._subView.push(subView)
+            }, this));
         },
 
         addSubView : function(subViewID, subView, model) {
@@ -88,19 +98,19 @@ define([
         },
 
         renderSubView : function() {
-            /*require(['app/formbuilder'], _.bind(function(formbuilderInstance) {
+            _.each(this.model.get('fields'), _.bind(function(el, idx) {
 
-                _.each(this._subView, _.bind(function(el, idx) {
-                    if (el!= undefined && idx != undefined) {
-                        this.$el.find('fieldset').append(
-                            '<div class="row-fluid subElement ' + (idx == 0 ? 'noMarginTop' : '' )+ '" id="' + el + '"></div>'
-                        )
-                        $(this.el + ' fieldset .row-fluid:last').append(formbuilderInstance.mainView.getSubView( el ).$el );
-                        formbuilderInstance.mainView.getSubView( el ).render();
-                    }
-                }, this));
+                //  Create a html element for the sub view
+                $(this.el + ' fieldset').append('<div class="row-fluid sortableRow" id="subView' + this._subView.length + '"></div>');
 
-            }, this));*/
+                //  Create a view for each field
+                this.collectionChannel.trigger('addSubView', {
+                    field : el,
+                    viewEl : '#subView' + this._subView.length,
+                    id : this.model.get('id')
+                });
+
+            }, this))
         },
 
         deleteSubView : function(event) {

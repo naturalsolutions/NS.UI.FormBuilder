@@ -135,13 +135,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Hidden',
-        xmlTag : 'field_hidden',
+        section : 'presentation',
         i18n   : 'hidden'
     });
 
     models.HorizontalLineField = Backbone.Model.extend({}, {
         type   : 'HorizontalLine',
-        xmlTag : 'field_horizontalLine',
+        section : 'presentation',
         i18n   : 'line'
     });
 
@@ -189,7 +189,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     }, {
         type   : "Autocomplete",
-        xmlTag : 'field_autocomplete',
+        section : 'autocomplete',
         i18n   : 'autocomplete'
     });
 
@@ -241,7 +241,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     }, {
 
         type   : "Text",
-        xmlTag : 'field_text',
+        section : 'standard',
         i18n   : 'text'
     });
 
@@ -277,7 +277,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : "File",
-        xmlTag : 'field_file',
         i18n   : 'file'
     });
 
@@ -362,7 +361,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type: 'TreeView',
-        xmlTag: 'field_treeView',
         i18n: 'tree'
     });
 
@@ -531,7 +529,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : "Date",
-        xmlTag : 'field_date',
         i18n   : 'date'
     });
 
@@ -570,7 +567,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     }, {
         type   : 'LongText',
-        xmlTag : 'field_text',
         i18n   : 'long'
     });
 
@@ -707,7 +703,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     }, {
         type   : "Pattern",
-        xmlTag : 'field_pattern',
         i18n   : 'mask'
     });
 
@@ -734,7 +729,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     }, {
         type   : 'CheckBox',
-        xmlTag : 'field_list',
         i18n   : 'checkbox'
     });
 
@@ -754,7 +748,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Radio',
-        xmlTag : 'field_list',
         i18n   : 'radio'
     });
 
@@ -773,7 +766,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Select',
-        xmlTag : 'field_list',
         i18n   : 'select'
     });
 
@@ -808,7 +800,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             }
         },
 
-        initialize: function() {
+        initialize: function(options) {
             _.bindAll(this, 'addModel', 'removeModel', 'updateModel');
         },
 
@@ -834,7 +826,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Subform',
-        xmlTag : 'fieldset',
         i18n   : 'fieldset'
     });
 

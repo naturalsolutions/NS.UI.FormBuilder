@@ -12,6 +12,8 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
     var formbuilder = {
 
+        importedFields : {},
+
         initialize : function(options) {
 
         	//	Init collection
@@ -31,8 +33,29 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             /*  ****************************************************    */
             /*  Init Backbone Radio channel
             /*  ****************************************************    */
-            this.mainChannel = Backbone.Radio.channel('global');
+            this.mainChannel        = Backbone.Radio.channel('global');         // global application channel
+            this.collectionChannel  = Backbone.Radio.channel('collection');     // channel for colleciton fonctionnalities
 
+            this.collectionChannel.on('addSubView', _.bind(function(options){
+
+                //  The event is send form a subformFieldView
+                //  who want to create a subView
+                var fieldViewType = options['field'].constructor.type + 'FieldView';
+
+                require(['views/fieldViews/' + fieldViewType], _.bind(function(fieldView) {
+                    var subView = new fieldView({
+                        el : options['viewEl'],
+                        model : options['field']
+                    });
+
+                    subView.render();
+                    subView.$el.switchClass('span12', 'span10 offset1',0);
+                    subView.$el.switchClass('dropField', 'subElement',0);
+
+                    this.collectionChannel.trigger('subViewCreated/' + options['id'], subView);
+                }, this));
+
+            }, this));
             //  This channel allows to get a model with an ID
             this.mainChannel.on('getModel', _.bind(function(id) {
             	this.mainChannel.trigger('getModel:return', this.currentCollection.get(id));
