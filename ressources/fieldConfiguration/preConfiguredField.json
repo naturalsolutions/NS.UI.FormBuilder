@@ -1,0 +1,49 @@
+{
+    "Text": {
+
+        "FirstName": {
+            "validators"  : ["required"],
+            "type"        : "Text",
+            "title"       : "Mon fichier",
+            "editorClass" : "",
+            "fieldClass"  : ""
+        },
+
+        "Ttitle": {
+            "validators"  : ["required"],
+            "type"        : "Text",
+            "title"       : "Titre",
+            "editorClass" : "",
+            "fieldClass"  : "",
+            "endOfLine" : true
+        }
+
+    },
+
+    "LongText": {
+
+    	"Note": {
+            "validators"  : ["required"],
+            "type"        : "TextArea",
+            "title"       : "Note",
+            "editorClass" : "",
+            "fieldClass"  : "",
+            "multiple" : true
+        }
+    },
+
+    "Numeric": {
+
+    	"Your age": {
+            "validators"  : ["required"],
+            "type"        : "Numeric",
+            "title"       : "Your age",
+            "editorClass" : "",
+            "fieldClass"  : "",
+            "minValue"    : 3,
+            "maxValue"    : 99,
+            "precision"   : 1,
+            "unity"       : "year"
+        }
+    }
+}
