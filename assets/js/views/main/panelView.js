@@ -21,7 +21,7 @@ define(
                 this.template   = _.template(panelViewTemplate);
                 this._collection = collection;
 
-                var section = { other : [] };
+                var section = { other : {} };
 
                 for (var i in Fields) {
                     if (Fields[i].type !== undefined) {
@@ -30,9 +30,9 @@ define(
                                 i18n : i.replace('Field', '').toLowerCase()
                             }
                         } else {
-                            if (section[i] === undefined) {
+                            if (section[Fields[i].section] === undefined) {
                                 //  create new section
-                                section[ Fields[i].section ] = [];
+                                section[ Fields[i].section ] = {};
                             }
                             section[ Fields[i].section ][i] = {
                                 i18n : i.replace('Field', '').toLowerCase()
