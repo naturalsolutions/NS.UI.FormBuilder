@@ -159,6 +159,8 @@ require(['formbuilder'], function(formbuilder) {
             keywordAutocomplete  : 'ressources/autocomplete/keywords.json',
             protocolAutocomplete : 'ressources/autocomplete/protocols.json',
             unitURL              : 'ressources/autocomplete/units.json',
+            preConfiguredField   : 'ressources/fieldConfiguration/preConfiguredField.json',
+            configurationURL     : 'configurationSaved' //  This is a random URL, we are in client node without back end
         },
         el : '#formBuilder'
     }

@@ -21,6 +21,8 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 name: "My protocol"
             });
 
+            this.URLOptions = options['URLOptions'];
+
             //  Init main view
             this.mainView = new MainView({
                 el         : options['el'],
@@ -95,6 +97,14 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 newModelAttr['id'] = this.currentCollection.length;
                 this.currentCollection.addElement(modelToCopy.constructor.type + 'Field', newModelAttr);
             }, this));
+
+            this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
+                $.post(this.URLOptions['configurationURL'], configuration).success(function() {
+                    console.log ("on est bon")
+                }).fail(function() {
+                    console.log ("fail")
+                })
+            }, this))
 
             //  Init router
             this.router = new Router(options);

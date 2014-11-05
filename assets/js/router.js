@@ -127,112 +127,43 @@ define(
                 $("body").i18n();
                 this.mainChannel = Backbone.Radio.channel('global');
 
-                this.mainChannel.on('getModel:return', _.bind(function(field) {
+                this.mainChannel.on('formCreated', _.bind(function(field) {
 
-                    require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
+                    $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
+                    $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
 
-                        if (this.form !== undefined) {
-
-                            this.removeForm()
-                            this.form = new Backbone.Form({
-                                model: field,
-                            }).render();
-
-                            $('.settings').append(this.form.el)
-                            $('.settings form').addClass('nano-content')
-
-                        } else {
-
-                            //  The form are not created yet
-                            this.form = new Backbone.Form({
-                                model: field,
-                            }).render();
-                            $('.settings').append(this.form.el)
-                            $('.settings form').addClass('nano-content')
-
-                            $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
-                            $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
-
-                        }
-
-                        this.form.$el.on('change input[name="decimal"]', _.bind(function(e) {
-                            if ($(e.target).is(':checked')) {
-                                this.form.$el.find('.field-precision').addClass('advanced');
-                            } else {
-                                this.form.$el.find('.field-precision').removeClass('advanced');
-                            }
-                        }, this))
-
-
-                        if (_.contains(['Thesaurus', 'AutocompleteTreeView'], field.constructor.type)) {
-
-                            $.getJSON('ressources/thesaurus/thesaurus.json', _.bind(function(data) {
-
-                                $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-                                $('.settings form #defaultNode').fancytree({
-                                    source: data['d'],
-                                    checkbox : false,
-                                    selectMode : 1,
-                                    activate : _.bind(function(event, data) {
-                                        this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
-                                    }, this)
-                                });
-
-                            }, this)).error(function(a,b , c) {
-                                alert ("can't load ressources !");
-                            })
-
-                        } else if (field.constructor.type === 'TreeView') {
-
-                            $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-                            $('.settings form #defaultNode').fancytree({
-                                source: [
-                                    {title: "Node 1", key: "1"},
-                                    {title: "Folder 2", key: "2", folder: true, children: [
-                                        {title: "Node 2.1", key: "3"},
-                                        {title: "Node 2.2", key: "4"}
-                                    ]}
-                                ],
-                                selectMode : 1,
-                                activate : _.bind(function(event, data) {
-                                    field.set('defaultNode', data.node.key)
-                                    this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
-                                }, this)
-                            });
-
-                        }
-
-                        this.navbar.setActions({
-                            save: new NS.UI.NavBar.Action({
-                                title: 'Save changes',
-                                allowedRoles: ["reader"],
-                                handler: _.bind(function() {
-                                    if (this.form.commit() == undefined) {
-                                        $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
-                                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
-                                        window.location.hash = "#";
-
-                                        field.set(this.form.getValue());
-                                        field = null;
-                                        this.removeForm();
-                                    }
-
-                                }, this)
-                            })
-                        });
-
-                    }, this));
+                    this.navbar.setActions({
+                        save: new NS.UI.NavBar.Action({
+                            title: 'Save changes',
+                            allowedRoles: ["reader"],
+                            handler: _.bind(function() {
+                                this.mainChannel.trigger('saveForm');
+                            }, this)
+                        }),
+                        saveConfiguration :new NS.UI.NavBar.Action({
+                            title: 'Save settings',
+                            allowedRoles: ["reader"],
+                            handler: _.bind(function() {
+                                this.mainChannel.trigger('saveConfiguration');
+                            }, this)
+                        })
+                    });
 
                 }, this));
-            },
 
-            removeForm : function() {
-                this.form.undelegateEvents();
-                this.form.$el.removeData().unbind();
-                this.form.remove();
-                Backbone.View.prototype.remove.call(this.form);
-                delete this.form;
-                $('.settings').html('');
+                this.mainChannel.on('formCommit', _.bind(function(isValid) {
+                    if (isValid) {
+                        $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
+                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
+                        window.location.hash = "#";
+                    }
+                }, this))
+
+                this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
+                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
+                    $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
+                    window.location.hash = "#";
+                }, this))
             },
 
             home: function() {

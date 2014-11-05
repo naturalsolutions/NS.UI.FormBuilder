@@ -4,8 +4,9 @@ define([
     'backbone',
     'views/main/panelView',
     'views/main/formView',
+    'views/main/settingView',
     'i18n'
-], function($, _, Backbone, PanelView, FormView) {
+], function($, _, Backbone, PanelView, FormView, SettingView) {
 
     var MainView = Backbone.View.extend({
 
@@ -23,6 +24,9 @@ define([
 
             this.form = options.form;
 
+            //  ---------------------------------------------------
+            //  Create each view for the formbuilder
+
             this.panelView = new PanelView({
                 el: '.widgetsPanel',
                 collection: this.form,
@@ -33,8 +37,14 @@ define([
                 el: $('.dropArea')
             });
 
+            this.settingView = new SettingView({
+                el : '.settings',
+                URL : _.pick(options.URLOptions, 'preConfiguredField')
+            })
+
             this.panelView.render();
             this.formView.render();
+            this.settingView.render();
 
             _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getSubView');
         },
