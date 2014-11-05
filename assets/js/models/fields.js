@@ -48,7 +48,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type        : "Text",
                 title       : $.t('schema.title'),
                 editorClass : 'form-control',
-                template    : fieldTemplate
+                template    : fieldTemplate,
+                validators : ['required']
             },
             name   : {
                 type        : "Text",
