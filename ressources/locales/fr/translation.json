@@ -19,7 +19,7 @@
         "boolean"              : "Booléen",
         "thesaurus"            : "Thesaurus",
         "autocompletetreeview" : "Arborescence avec autocompletion",
-        "numericrange"         : "Numérique avec slider"
+        "numericrange"         : "Curseur numérique"
     },
 
     "protocol" : {
@@ -149,5 +149,9 @@
         "cancel" : "Annuler",
         "clear" : "Supprimer",
         "title" : "Création d'un nouveau formulaire"
+    },
+
+    "accordion" : {
+        "standard" : "Champs standards"
     }
 }
