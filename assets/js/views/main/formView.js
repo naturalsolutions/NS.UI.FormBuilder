@@ -119,16 +119,8 @@ define([
             this.collection.name = $('#protocolName').val();
         },
 
-        getXML : function() {
-            return this.collection.getXML();
-        },
-
         getJSON : function() {
             return this.collection.getJSON();
-        },
-
-        importXML: function(XMLImport) {
-            this.collection.updateWithXML(XMLImport);
         },
 
         importJSON : function(JSONImport)  {
