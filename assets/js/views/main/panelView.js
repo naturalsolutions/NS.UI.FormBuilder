@@ -14,14 +14,14 @@ define(
         var PanelView = Backbone.View.extend({
 
             events: {
-                'click .fields': 'appendToDrop'
+                'click .col-md-5': 'appendToDrop'
             },
 
             initialize: function(collection) {
                 this.template   = _.template(panelViewTemplate);
                 this._collection = collection;
 
-                var section = { other : {} };
+                var section = { standard : {}, other : {} };
 
                 for (var i in Fields) {
                     if (Fields[i].type !== undefined) {
@@ -52,7 +52,6 @@ define(
                 if (Fields[elementClassName] !== undefined) {
                     this.collection.addElement(elementClassName);
                 } else {
-                    console.log(err)
                     new NS.UI.Notification({
                         type    : 'error',
                         title   : 'An error occured :',

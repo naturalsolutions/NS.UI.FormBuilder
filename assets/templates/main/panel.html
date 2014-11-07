@@ -1,17 +1,21 @@
 <div class="nano-content">
-    <h1 class="center" data-i18n="label.field"></h1>
     <div id="accordion" class="container-fluid">
         <% for (var n in section) { %>
-            <h3 class="center"><%= n %> <span class="caret"></span></h3>
             <div class="row">
-            <% for (var i in section[n]) { %>
-                <div    class="col-md-10 col-md-offset-1 fields"
-                        data-type="<%= i.replace(" Field ", " ") %>"
-                        data-i18n="fields.<%= section[n][i]['i18n'] %>;[title]tooltip.<%= section[n][i]['i18n'] %>"
-
-                        data-toggle="tooltip"
-                        data-placement="right">
-                    <%= section[n][i]['i18n'] %>
+                <h3 class="col-md-10 col-md-offset-1 paddingLeft0" >
+                    <span data-i18n="accordion.<%= n %>">
+                        <%= n %>
+                    </span>
+                    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+                </h3>
+            </div>
+            <div class="row">
+            <% var count = 0 %>
+            <% for (var i in section[n]) { count++; %>
+                <div class="col-md-5 <% if (count%2 !== 0) { %> col-md-offset-1 <%} %>" data-toggle="tooltip" data-placement="right">
+                    <div data-type="<%= i.replace(" Field ", " ") %>" class="fields" data-i18n="fields.<%= section[n][i]['i18n'] %>;[title]tooltip.<%= section[n][i]['i18n'] %>">
+                            <%= section[n][i]['i18n'] %>
+                    </div>
                 </div>
             <%}; %>
             </div>
