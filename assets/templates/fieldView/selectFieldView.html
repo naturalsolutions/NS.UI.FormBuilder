@@ -1,32 +1,33 @@
 <div class="element padding5">
-    <div class="form-group paddingBottom5">
-        <label class="col-md-4 paddingLeft0">
-            <i class="fa fa-arrows" style="color : #09C"></i>
+    <div class="row paddingBottom5">
+        <label class="col-md-4">
+            <i class="fa fa-arrows"></i>
             <%= title %><% if (required === true) { %> (*) <% } %>
         </label>
         <div class="col-md-8 right actions">
             <a href="#" class="trash">
                 <i class="fa fa-trash-o"></i>
-                <span data-i18n="actions.delete">Supprimer</span>
-            </a>
-            <a href="#setting/<%= id %>" class="wrench">
-                <i class="fa fa-wrench"></i>
-                <span data-i18n="actions.edit">Modifier</span>
             </a>
             <a href="#copy/<%= id %>" class="copy">
-               &nbsp;<span class="fa fa-copy"></span>
-               <span data-i18n="actions.clone">Dupliquer</span>
+               <i class="fa fa-copy"></i>
            </a>
+           <a href="#setting/<%= id %>" class="wrench">
+                <i class="fa fa-wrench"></i>
+            </a>
         </div>
     </div>
-    <select name="<% name %>" class="form-control">
-        <% _.each(itemList[ "items"], function(el, idx) { %>
-            <option data-idx=<%=idx %>value="
-                <%=el.value %>"
-                    <% if (itemList[ "defaultValue"]==el["id"]){ %>selected
-                        <% } %>>
-                            <%= el.en %>
-            </option>
-            <% }) %>
-    </select>
+    <div class="row">
+        <div class="col-md-12">
+            <select name="<% name %>" class="form-control">
+                <% _.each(itemList[ "items"], function(el, idx) { %>
+                    <option data-idx=<%=idx %>value="
+                        <%=el.value %>"
+                            <% if (itemList[ "defaultValue"]==el["id"]){ %>selected
+                                <% } %>>
+                                    <%= el.en %>
+                    </option>
+                    <% }) %>
+            </select>
+        </div>
+    </div>
 </div>
