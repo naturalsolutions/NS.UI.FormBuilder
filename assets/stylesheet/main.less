@@ -4,20 +4,59 @@ html, body {
     margin      : 0;
     padding     : 0;
     overflow    : hidden;
+    background : #111;
 }
+
+footer {
+    width:100%;
+    height:60px;
+    position:absolute;
+    bottom:0;
+    left:0;
+    div {
+        height: 100%;
+        &.col-md-4 {
+            //background : rgba(0, 0, 0, 0.6);
+            background : transparent;
+        }
+        &.col-md-8 {
+            //background : red;
+            background : #000;
+            button {
+                height : 35px;
+                margin-top: 12.5px;
+                color : white;
+                .exo;
+                &.gray {
+                    border-radius: 0 !important;
+                    background : #333;
+                    &:hover {
+                        color : white;
+                    }
+                }
+                &:not(.gray) {
+                    border-radius: 2px;
+                    background : #862332;
+                    &:last-child {
+                        margin-left : 20px;
+                    }
+                }
+            }
+        }
+    }
+}
+
 //  ---------------------------------------------------------------------
 //  Main classes
 //  ---------------------------------------------------------------------
-.noMarginLeft   { margin-left   : 0 !important; }
-.noMarginTop    { margin-top    : 0 !important; }
+
 .navbar         { margin-bottom : 0 !important; }
 .span0          { width         : 0px !important; overflow: hidden;}
-.left           { text-align    : left !important;}
-.right          { text-align    : right !important; }
+
 .transparent    { background    : transparent !important; }
 .fa             { font-family   : FontAwesome !important; }
 
-.center         { text-align    : center; }
+
 .new            { background    : rgba(0, 255, 0, 0.5) !important; }
 .change         { background    : rgba(255, 165, 0, 0.5); }
 .delete         { background    : rgba(255, 0, 0, 0.5); }
@@ -30,12 +69,12 @@ html, body {
 .input          { border        : 1px #ddd solid; border-radius: 0!important; }
 .modal          { background    : transparent !important; }
 .form-group     { margin-bottom: 0px !important; }
-.left           { float: left}
+
 
 .table      { tr { background : white; } }
 .bordered   { border : 2px #aaa solid; background : #fff; }
 .required   { color : red; &:before { content : "*"; } }
-.font       { font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif !important; }
+
 
 .ui-sortable-helper { cursor : move !important; * { cursor : move !important; }}
 
@@ -118,4 +157,36 @@ html, body {
 .displayValue {
     height: 16px;
     line-height: 16px !important;
+}
+
+.formUl {
+    list-style-type: none;
+    li {
+        display : inline-block;
+        input {
+            float : left;
+            width : 30px;
+            height : 30px;
+            margin-right: 5px;
+        }
+        label {
+            float : left;
+        }
+    }
+}
+
+.itemList {
+    float          : left;
+    vertical-align : middle;
+    padding-top    : 5px;
+    padding-right  : 5px;
+}
+
+
+
+.element {
+    .row {
+        margin-left: 0;
+        margin-right: 0;
+    }
 }

@@ -1,10 +1,18 @@
 .widgetsPanel {
-    background: #ddd;
+    background-image: url('../assets/images/back.jpg');
     h1 {
         font-weight: lighter;
         font-family: "Segoe UI Light", "Helvetica Neue", "Segoe UI", "Segoe WP", sans-serif !important
     }
-    .nano-pane {
+    .col-md-5 {
+        &.col-md-offset-1 {
+            padding-left: 0 !important;
+        }
+        &:not(.col-md-offset-1) {
+            padding-right: 0 !important;
+        }
+    }
+    /*.nano-pane {
         background: #aaa;
         .nano-slider {
             background: #O8C;
@@ -13,16 +21,16 @@
     }
     .nano-content {
         padding-bottom: 60px;
-    }
+    }*/
     .fields {
         .font();
-        height        : 50px;
+        height        : 45px;
         background    : white;
         border        : 2px #aaa solid;
         color         : #555;
         font-size     : 18px;
         text-align    : center;
-        padding       : 10px;
+        line-height: 37px;
         margin-bottom : 10px;
         margin-top    : 10px;
         transition    : all 0.3s ease-in-out;
@@ -33,18 +41,28 @@
     }
     #accordion {
         h3 {
-            .font;
+            border-bottom: 1px #555 solid;
+            padding-bottom: 10px;
+
             &:hover {
                 color      : #555;
                 cursor     : pointer;
                 box-shadow : none;
-                border     : none;
+                border-bottom: 1px #555 solid;
                 outline    : none;
             }
             &:active, &:focus, &:blur {
                 box-shadow: none;
-                border: none;
+                border-bottom: 1px #555 solid;
                 outline: none;
+            }
+
+            span {
+                &.glyphicon {
+                    height : 30px;
+                    line-height: 30px;
+                    font-size : 18px;
+                }
             }
         }
         .ui-state-focus {

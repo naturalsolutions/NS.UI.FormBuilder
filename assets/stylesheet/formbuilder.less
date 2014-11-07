@@ -1,0 +1,21 @@
+#formBuilder {
+    height      : 100%;
+    overflow    : hidden;
+
+    .copy, .trash, .wrench { text-decoration: none; }
+
+    .content {
+        background  : #fff;
+        height      : 100%;
+
+        //  Widget Panel on the left
+        @import url('panel.less');
+
+        // Drag and drop area center
+        @import url('formView.less');
+
+        //  Setting panel on the right (hide by default)
+        @import url('setting.less');
+
+    }
+}
