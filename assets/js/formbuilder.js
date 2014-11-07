@@ -18,7 +18,7 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
         	//	Init collection
             this.currentCollection = new Collection({}, {
-                name: "My protocol"
+                name: "Mon protocole"
             });
 
             this.URLOptions = options['URLOptions'];
