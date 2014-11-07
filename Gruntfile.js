@@ -13,7 +13,7 @@ module.exports = function(grunt) {
                     sourceMapRootpath: ''
                 },
                 files: {
-                    "compressed/formbuilder.min.css": "assets/stylesheet/styles.less"
+                    "compressed/formbuilder.min.css": "assets/stylesheet/all.less"
                 }
             }
         },
@@ -23,14 +23,11 @@ module.exports = function(grunt) {
             stylesheet: {
                 files: ['assets/stylesheet/*.less'],
                 tasks: ['less:dist']
-                /*options: {
-                  livereload: true,
-                },*/
             },
             bower : {
                 files : ['bower.json'],
                 tasks : ['bower:target']
-            }
+            },
         },
 
         //  Bower : install bower components and create requireJS configuration file
