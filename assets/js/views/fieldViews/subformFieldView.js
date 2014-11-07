@@ -47,13 +47,13 @@ define([
 
             this.addSubView(subViewID, subView, subView.model)
 
-            $(this.el + ' fieldset').append('<div class="row-fluid sortableRow"></div>');
-            subView.$el.switchClass('span12', 'span10 offset1',0);
+            $(this.el + ' fieldset').append('<div class="row sortableRow"></div>');
+            subView.$el.switchClass('col-md-12', 'col-md-10 col-md-offset-1',0);
             subView.$el.switchClass('dropField', 'subElement',0);
 
             subView.$el.remove();
             setTimeout( _.bind(function() {
-                $(this.el + ' fieldset .row-fluid:last').append(subView.$el );
+                $(this.el + ' fieldset .sortableRow').append(subView.$el );
                 subView.render();
             }, this), 0)
         },
