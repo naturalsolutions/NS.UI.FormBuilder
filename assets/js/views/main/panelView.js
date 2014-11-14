@@ -6,7 +6,7 @@ define(
         'text!../../../templates/main/panel.html',
         'models/fields',
         'jquery-ui',
-        'nanoscroller',
+        'perfect-scrollbar',
         'NS.UI.Notification'
     ],
     function($, _, Backbone, panelViewTemplate, Fields) {
@@ -66,7 +66,7 @@ define(
                     section : this.section
                 });
                 $(this.el).html(renderedContent);
-                $(this.el).nanoScroller();
+                $('.scroll').perfectScrollbar();
                 $('.fields').disableSelection();
                 this.$el.find('#accordion').accordion();
                 return this;

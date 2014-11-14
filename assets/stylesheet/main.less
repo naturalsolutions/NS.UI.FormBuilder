@@ -15,12 +15,10 @@ footer {
     left:0;
     div {
         height: 100%;
-        &.col-md-4 {
-            //background : rgba(0, 0, 0, 0.6);
+        &:first-child {
             background : transparent;
         }
-        &.col-md-8 {
-            //background : red;
+        &:last-child {
             background : #000;
             button {
                 height : 35px;
@@ -51,7 +49,7 @@ footer {
 //  ---------------------------------------------------------------------
 
 .navbar         { margin-bottom : 0 !important; }
-.span0          { width         : 0px !important; overflow: hidden;}
+.col0          { width         : 0px !important; overflow: hidden;}
 
 .transparent    { background    : transparent !important; }
 .fa             { font-family   : FontAwesome !important; }

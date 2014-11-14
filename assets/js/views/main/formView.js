@@ -6,7 +6,7 @@ define([
     'autocompleteTreeView',
     'i18n',
     'jquery-ui',
-    'nanoscroller',
+    'perfect-scrollbar',
     'bootstrap'
 ], function($, _, Backbone, formViewTemplate, autocompTree) {
 
@@ -21,10 +21,8 @@ define([
             _.bindAll(this, 'render',
                             'addElement',
                             'changeFormName',
-                            'importXML',
                             'updateView',
                             'getModel',
-                            'getXML',
                             "getSubView"
                     );
             this.collection.bind('newElement', this.addElement);
@@ -94,6 +92,10 @@ define([
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
             var _vues = this._view;
+
+            $("#scrollSection").perfectScrollbar({
+                suppressScrollX : true
+            });
             $(".drop").sortable({
                 cancel      : null,
                 cursor      : 'pointer',
@@ -108,6 +110,7 @@ define([
                     }
                 }
             });
+
             return this;
         },
 

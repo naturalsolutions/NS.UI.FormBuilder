@@ -27,7 +27,7 @@
     "fancytree"            : "https://github.com/mar10/fancytree.git",
     "filesaver"            : "https://github.com/eligrey/FileSaver.js.git",
     "requirejs"            : null,
-    "nanoscroller"         : null,
+    "perfect-scrollbar"    : "https://github.com/noraesae/perfect-scrollbar.git",
     "backbone-forms"       : "https://github.com/powmedia/backbone-forms.git",
     "bootstrapAdapter"     : "https://github.com/powmedia/backbone.bootstrap-modal.git",
     "typeahead"            : "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git",
