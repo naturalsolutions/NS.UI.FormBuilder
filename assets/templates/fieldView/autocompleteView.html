@@ -1,25 +1,24 @@
 <div class="element padding5">
     <div class="row paddingBottom5">
-           <label class="col-md-4 paddingLeft0">
-                <i class="fa fa-arrows"></i>
-                <%= title %><% if (required === true) { %> (*) <% } %>
-            </label>
+        <label class="col-md-4">
+            <i class="fa fa-arrows"></i>
+            <%= title %><% if (required === true) { %> (*) <% } %>
+        </label>
         <div class="col-md-8 right actions">
-                <a href="#" class="trash">
-                    <i class="fa fa-trash-o"></i>
-                    <span data-i18n="actions.delete">Supprimer</span>
-                </a>
-                <a href="#setting/<%= id %>" class="wrench">
-                    <i class="fa fa-wrench"></i>
-                    <span data-i18n="actions.edit">Modifier</span>
-                </a>
-                <a href="#copy/<%= id %>" class="copy">
-                    &nbsp;<span class="fa fa-copy"></span>
-                    <span data-i18n="actions.clone">Dupliquer</span>
-                </a>
+            <a href="#" class="trash">
+                <i class="fa fa-trash-o"></i>
+            </a>
+            <a href="#copy/<%= id %>" class="copy">
+               <i class="fa fa-copy"></i>
+           </a>
+           <a href="#setting/<%= id %>" class="wrench">
+                <i class="fa fa-wrench"></i>
+            </a>
         </div>
     </div>
     <div class="row">
-        <input type="text" name="<%= name %>" id="<%= id %>" placeholder="<%= help %>" value="<%= defaultValue %>" class="form-control" />
+        <div class="col-md-12">
+            <input type="text" name="<%= name %>" id="<%= id %>" placeholder="<%= help %>" value="<%= defaultValue %>" class="form-control" />
+        </div>
     </div>
 </div>

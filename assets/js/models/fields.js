@@ -155,7 +155,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
-                help         : "Write some text",
+                help         : "Write some text to see a list value",
                 url          : "ressources/autocomplete/example.json"
             });
         },
