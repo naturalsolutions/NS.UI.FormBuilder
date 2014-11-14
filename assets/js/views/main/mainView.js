@@ -5,25 +5,98 @@ define([
     'views/main/panelView',
     'views/main/formView',
     'views/main/settingView',
+    'text!../../../templates/main/mainView.html',
+    'backbone.radio',
     'i18n'
-], function($, _, Backbone, PanelView, FormView, SettingView) {
+], function($, _, Backbone, PanelView, FormView, SettingView, mainViewTemplate, Radio) {
 
     var MainView = Backbone.View.extend({
 
+        events : {
+            'click #clearAll' : 'clear',
+            'click #export'   : 'export',
+            'click #save'     : 'save',
+            'click #toggle'   : 'toggle',
+            'click #untoggle' : 'untoggle'
+        },
+
         initialize : function(options) {
-            this.el = options.el;
-            $(this.el).append(
-                '<div class="row content">'+
-                '   <div class="col-md-3 widgetsPanel nano"></div>'+
-                '   <div class="col-md-9 dropArea"></div>'+
-                '   <div class="col-md-5 settings nano"></div>'+
-                '</div>'
-            );
-
+            this.el         = options.el;
+            this.template   = _.template(mainViewTemplate);
             this.URLOptions = options.URLOptions;
+            this.form       = options.form;
 
-            this.form = options.form;
+            this.mainChannel = Backbone.Radio.channel('global');
 
+            _.bindAll(this, 'render', 'renderSubView', 'getSubView', 'clear', 'export', 'save');
+        },
+
+        render : function() {
+            var renderedContent = this.template();
+            $(this.el).html(renderedContent);
+            this.renderSubView();
+            return this;
+        },
+
+        untoggle : function() {
+            $('.widgetsPanel').animate({
+                marginLeft : 0
+            }, 500, function() {
+                $(this).css({
+                    'position' : 'relative',
+                    'z-index' : 'auto'
+                })
+            });
+            $('.dropArea').switchClass('col-md-12', 'col-md-8', 500).css({
+                'padding-left' : 0,
+                'overflow' : 'hidden'
+            })
+
+            //  Toggle footer div
+            $('footer div:first-child').animate({
+                marginLeft : 0
+            }, 100, function() {
+                $('footer div:last-child:not(.pull-right)').switchClass('col-md-12', 'col-md-8', 500, function() {
+                    $(this).css({
+                        'padding-left' : 15,
+                        'overflow' : 'hidden'
+                    })
+                });
+            });
+        },
+
+        toggle : function() {
+            //  Toggle panels
+            $('.widgetsPanel').animate({
+                marginLeft : - (parseInt($('.widgetsPanel').css('width')) - 50)
+            }, 500, function() {
+                $(this).css({
+                    'position' : 'absolute',
+                    'z-index' : '255'
+                })
+            });
+            $('.dropArea').switchClass('col-md-8', 'col-md-12', 500).css({
+                'padding-left' : 50,
+                'overflow' : 'hidden'
+            })
+
+            //  Toggle footer div
+            $('footer div:first-child').animate({
+                marginLeft : - parseInt($('footer div:first-child').css('width'))
+            }, 100, function() {
+                $('footer div:last-child:not(.pull-right)').switchClass('col-md-8', 'col-md-12', 500, function() {
+                    $(this).css({
+                        'padding-left' : 80,
+                        'overflow' : 'hidden'
+                    })
+                });
+            });
+
+            //  Display gobach
+            $('#toggle').attr('id', 'untoggle').text('>')
+        },
+
+        renderSubView : function() {
             //  ---------------------------------------------------
             //  Create each view for the formbuilder
 
@@ -39,43 +112,71 @@ define([
 
             this.settingView = new SettingView({
                 el : '.settings',
-                URL : _.pick(options.URLOptions, 'preConfiguredField')
+                URL : _.pick(this.URLOptions, 'preConfiguredField')
             })
 
             this.panelView.render();
             this.formView.render();
             this.settingView.render();
+        },
 
-            _.bindAll(this, 'getFormXML', 'downloadXML', 'importXML', 'getSubView');
+        clear : function() {
+            require(['views/modals/clearProtocol'], _.bind(function(exportProtocolJSON) {
+                $(this.el).append('<div class="modal  fade" id="clearProtocol"></div>');
+                var modalView = new exportProtocolJSON({
+                    el: "#clearProtocol",
+                    URLOptions: this.URLOptions
+                });
+                modalView.render();
+                $("#clearProtocol").i18n();
+
+                $('#clearProtocol').on('hidden.bs.modal', _.bind(function () {
+                    if (modalView.getData()) {
+                        this.form.clearAll();
+                    }
+                    window.location.hash = '#';
+                }, this));
+            }, this))
+        },
+
+        export : function() {
+            require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
+                $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
+                var modalView = new exportProtocolJSON({
+                    el: "#exportModal",
+                    URLOptions: this.URLOptions
+                });
+                modalView.render();
+                $("#exportModal").i18n();
+
+                $('#exportModal').on('hidden.bs.modal', _.bind(function () {
+
+                    var datas = modalView.getData();
+                    if (data['response'] === true) {
+                        this.mainChannel.trigger('export', datas);
+                    }
+
+                }, this));
+
+            }, this));
+        },
+
+        save : function() {
+
         },
 
         getSubView : function(subViewID) {
             return this.formView.getSubView(subViewID);
         },
 
-        clear: function() {
-            this.form.clearAll();
-        },
-
-        getFormXML : function() {
-            return this.formView.getXML();
-        },
-
         getFormJSON : function() {
             return this.formView.getJSON();
-        },
-
-        downloadXML : function() {
-            return this.formView.downloadXML();
-        },
-
-        importXML : function() {
-            return this.formView.importXML();
         },
 
         importJSON : function() {
             return this.formView.importJSON();
         }
+
     });
 
     return MainView;
