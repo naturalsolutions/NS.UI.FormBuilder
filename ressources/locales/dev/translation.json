@@ -147,5 +147,11 @@
         "cancel" : "Cancel",
         "clear" : "Clear form",
         "title" : "Create new form"
+    },
+    "accordion" : {
+        "standard" : "Standard fields",
+        "autocomplete" : "Fields with autocomplete",
+        "presentation" : "Presentation field",
+        "other" : "Other fields"
     }
 }

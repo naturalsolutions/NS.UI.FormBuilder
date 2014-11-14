@@ -152,6 +152,9 @@
     },
 
     "accordion" : {
-        "standard" : "Champs standards"
+        "standard" : "Champs standards",
+        "autocomplete" : "Champs avec autocomplétion",
+        "presentation" : "Champs de présentation",
+        "other" : "Autres champs"
     }
 }
