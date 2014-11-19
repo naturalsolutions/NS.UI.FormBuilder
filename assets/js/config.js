@@ -38,7 +38,8 @@ require.config({
         autocompleteTreeView   : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider" : "../../libs/jquery-simple-slider/js/simple-slider",
         "perfect-scrollbar"    : "../../libs/perfect-scrollbar/src/perfect-scrollbar",
-        rangeslider            : "../../libs/rangeslider.js/dist/rangeslider"
+        rangeslider            : "../../libs/rangeslider.js/dist/rangeslider",
+        "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select.min"
     },
     shim: {
         blobjs: {
@@ -146,6 +147,12 @@ require.config({
             ]
         },
         "perfect-scrollbar": {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        },
+        "bootstrap-select" :{
             exports: "$",
             deps: [
                 "jquery"
