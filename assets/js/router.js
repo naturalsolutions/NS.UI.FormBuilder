@@ -265,61 +265,6 @@ define(
                 }, this));
             },
 
-            /*export: function() {
-                require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
-                    $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
-                    var modalView = new exportProtocolJSON({
-                        el: "#exportModal",
-                        URLOptions: this.URLOptions
-                    });
-                    modalView.render();
-                    $("#exportModal").i18n();
-
-                    $('#exportModal').on('hidden.bs.modal', _.bind(function () {
-
-                        var datas = modalView.getData();
-
-                        this.mainChannel.on('export:return', _.bind(function(collectionExport) {
-
-                            require(['blobjs', 'filesaver'], _.bind(function() {
-
-                                try {
-
-                                    var isFileSaverSupported = !!new Blob();
-                                    var blob = new Blob([JSON.stringify(collectionExport, null, 2)], {
-                                        type: "application/json;charset=utf-8"
-                                    });
-                                    saveAs(blob, $('#exportProtocolFileName').val() + '.json');
-
-                                    $('#exportModal').modal('hide').removeData();
-                                    new NS.UI.Notification({
-                                        type    : 'success',
-                                        title   : 'Protocol export :',
-                                        message : "XML file correctly created"
-                                    });
-                                } catch (e) {
-                                    $('#exportModal').modal('hide').removeData();
-                                    new NS.UI.Notification({
-                                        type    : 'error',
-                                        title   : 'An error occured :',
-                                        message : "Can't create your JSON file"
-                                    });
-                                }
-
-                                window.location.hash = '#';
-
-                            }, this));  //  End require
-
-                        }, this));
-
-                        this.mainChannel.trigger('export', datas);
-
-                    }, this));  //  Modal view is closed
-
-                }, this));
-
-            },*/
-
             import : function() {
                 require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
                     $(this.el).append('<div class="modal fade" id="importModal"></div>');

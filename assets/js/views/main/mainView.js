@@ -140,7 +140,7 @@ define([
                 $('#exportModal').on('hidden.bs.modal', _.bind(function () {
 
                     var datas = modalView.getData();
-                    if (data['response'] === true) {
+                    if (datas['response'] === true) {
                         this.mainChannel.trigger('export', datas);
                     }
 
