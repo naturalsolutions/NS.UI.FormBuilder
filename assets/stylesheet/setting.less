@@ -1,9 +1,60 @@
 .settings {
-            //.widgetsPanel();
-            background-color    : #222;
-            margin-left         : 0;
-            overflow-x          : scroll;
-            padding-bottom      : 50px;
+
+    background-color    : #222;
+    margin-left         : 0;
+    padding-bottom      : 50px;
+    
+    height: 100%;
+    .scroll {
+        position: relative;
+        overflow: hidden;
+        height: 95%;
+        //margin-top: 5%;
+    }
+
+    hr {
+        border-color: black;
+    }
+
+    .bootstrap-select {
+
+    margin-top: 10px;
+    .dropdown-menu  {
+        padding-top: 0;
+        padding-bottom: 0;
+        border-color  : #333;
+        border-radius: 0;
+    }
+    .selectpicker  {
+        background    : #111;
+        border-radius : 0;
+        border-color  : #333;
+        text-shadow   : none;
+        color         : #555;
+        .exo;
+        li {
+            background : #111;
+            .exo;
+            color : #000;
+            &:hover {
+                color : #111;
+                background : #000;
+            }
+            a {
+                background : transparent;
+                padding-top: 0;
+                padding-bottom: 0;
+            }
+            .text {
+                padding-top: 0;
+                padding-bottom: 0;
+                .exo;
+                color : #555;
+                font-size : 15px;
+            }
+        }
+    }
+}
 
             &.fa {
                     font-family: FontAwesome !important;
@@ -46,19 +97,23 @@
             }
 
             label {
-                .text();
+                .exo;
                 font-size   : 18px;
                 line-height : 50px;
-                height      : 40px;
+                height      : 30px;
                 text-align  : left;
+                color : #000;
             }
 
             input, select {
-                .input();
-                border      : 2px #aaa solid;
+                .exo;
+                background : #111;
+                color : #555;
+                border : 1px #333 solid;
                 font-size   : 18px;
                 line-height : 25px;
                 height      : 40px;
+                border-radius: 0;
             }
 
             #fieldRequire { .left(); margin-left: -15px; }

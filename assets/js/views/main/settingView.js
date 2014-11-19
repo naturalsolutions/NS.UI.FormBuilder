@@ -6,6 +6,8 @@ define([
     'text!../../../templates/main/settingView.html',
     'jquery-ui',
     'i18n',
+    'bootstrap-select',
+    'perfect-scrollbar'
 ], function($, _, Backbone, Radio, settingTemplate) {
 
     var SettingView = Backbone.View.extend({
@@ -55,6 +57,9 @@ define([
         render : function(options) {
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
+            this.$el.find('.scroll').perfectScrollbar({
+                suppressScrollX : true
+            });
             return this;
         },
 
@@ -74,7 +79,7 @@ define([
                 this.$el.find('select').append('<option>No field found</option>');
                 this.$el.find('select').prop('disabled', true)
             }, this)).always(_.bind(function() {
-
+                this.$el.find('select').selectpicker();
                 //  Always create form even if saved Field cannot be load
                 this.createForm(field);
 
