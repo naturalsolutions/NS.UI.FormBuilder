@@ -66,7 +66,7 @@ define(
                     section : this.section
                 });
                 $(this.el).html(renderedContent);
-                $('.scroll').perfectScrollbar();
+                this.$el.find('.scroll').perfectScrollbar();
                 $('.fields').disableSelection();
                 this.$el.find('#accordion').accordion();
                 return this;
