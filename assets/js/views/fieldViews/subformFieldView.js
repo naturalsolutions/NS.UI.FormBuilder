@@ -48,7 +48,7 @@ define([
             this.addSubView(subViewID, subView, subView.model)
 
             $(this.el + ' fieldset').append('<div class="row sortableRow"></div>');
-            subView.$el.switchClass('col-md-12', 'col-md-10 col-md-offset-1',0);
+            //subView.$el.switchClass('col-md-12', 'col-md-10 col-md-offset-1',0);
             subView.$el.switchClass('dropField', 'subElement',0);
 
             subView.$el.remove();

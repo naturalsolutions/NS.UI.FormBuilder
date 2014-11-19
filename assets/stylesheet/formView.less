@@ -36,7 +36,7 @@
 
     .scrollSection {
         height: 80%;
-        
+
         .col-md-12:first-child {
             height: 100%;
             /*padding-bottom : 20px;
@@ -49,7 +49,7 @@
         }
     }
 
-    
+
 
     .ps-scrollbar-y-rail {
         background : black;
@@ -158,11 +158,22 @@
             min-height : 0;
         }
 
-        input[type="text"], input[type="number"], select {
+        input[type="text"], input[type="number"]{
             padding-left: 10px;
             background: #000;
             border : 1px #555 solid !important;
             color : #222;
+
+            &.span10 {
+                margin-left: 0;
+            }
+        }
+
+        select {
+            padding-left: 10px;
+            background: #000;
+            border : 1px #555 solid !important;
+            color : #555;
 
             &.span10 {
                 margin-left: 0;
@@ -200,7 +211,7 @@
                         }
                     }
                 }
-                .sortableRow { margin-top: 20px; }
+                .sortableRow { margin-top: 20px; padding-left: 7px; padding-right: 7px; }
                 &.hovered {
                     background : rgba(200, 210, 220, 0.5) !important;
                     border : 1px dashed #888 !important;
@@ -290,7 +301,7 @@ span.fancytree-node.fancytree-active {
     padding: 0;
     margin: 0;
     border : none;
-    
+
     .fancytree-node {
         background : transparent !important;
         padding-left: 0;
@@ -313,4 +324,34 @@ span.fancytree-node.fancytree-active {
 
 ul.fancytree-container {
     padding: 0 !important;
+}
+
+.bootstrap-select {
+
+    .dropdown-menu  {
+        padding-top: 0;
+        padding-bottom: 0;
+        border-color  : #333;
+        border-radius: 0;
+    }
+    .selectpicker  {
+        background    : #222;
+        border-radius : 0;
+        border-color  : #333;
+        text-shadow   : none;
+        color         : #555;
+        .exo;
+        li {
+            background : #111;
+            .exo;
+            color : #000;
+            &:hover {
+                color : #111;
+                background : #000;
+            }
+            a {
+                background : transparent;
+            }
+        }
+    }
 }
