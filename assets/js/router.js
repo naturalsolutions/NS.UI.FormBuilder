@@ -66,10 +66,10 @@ define(
                 'saveprotocol' : 'saveProtocol',
                 'setting/:id'  : 'modelSetting',
                 'save'         : 'saveOnRepo',
-                'export'       : 'export',
+                //'export'       : 'export',
                 'import'       : 'import',
                 'load'         : 'load',
-                'clear'        : 'clear',
+                //'clear'        : 'clear',
                 'show'         : 'show',
                 "copy/:id"     : "copy"
             },
@@ -83,7 +83,7 @@ define(
                 this.URLOptions = options['URLOptions'];
                 this.el = options['el'];
 
-                var user = {
+                /*var user = {
                     anonymous: {
                         roles: ['reader']
                     },
@@ -112,20 +112,53 @@ define(
                     tileClass: 'tile-admin tile-double',
                     url: '#admin',
                     allowedRoles: ['moderator']
-                }]
+                }]*/
 
                 //  Init navbar
-                this.navbar = new NS.UI.NavBar({
+                /*this.navbar = new NS.UI.NavBar({
                     roles    : user.gaston.roles,
                     username : user.gaston.nickname,
                     title    : 'Form Builder'
-                });
+                });*/
 
-                this.navbar.$el.prependTo('body');
-                this.navbar.render();
+                /*this.navbar.$el.prependTo('body');
+                this.navbar.render();*/
 
                 $("body").i18n();
                 this.mainChannel = Backbone.Radio.channel('global');
+
+                this.mainChannel.on('export:return', _.bind(function(collectionExport) {
+
+                    require(['blobjs', 'filesaver'], _.bind(function() {
+
+                        try {
+
+                            var isFileSaverSupported = !!new Blob();
+                            var blob = new Blob([JSON.stringify(collectionExport, null, 2)], {
+                                type: "application/json;charset=utf-8"
+                            });
+                            saveAs(blob, $('#exportProtocolFileName').val() + '.json');
+
+                            $('#exportModal').modal('hide').removeData();
+                            new NS.UI.Notification({
+                                type    : 'success',
+                                title   : 'Protocol export :',
+                                message : "XML file correctly created"
+                            });
+                        } catch (e) {
+                            $('#exportModal').modal('hide').removeData();
+                            new NS.UI.Notification({
+                                type    : 'error',
+                                title   : 'An error occured :',
+                                message : "Can't create your JSON file"
+                            });
+                        }
+
+                        window.location.hash = '#';
+
+                    }, this));  //  End require
+
+                }, this));
 
                 this.mainChannel.on('formCreated', _.bind(function(field) {
 
@@ -153,10 +186,16 @@ define(
 
                 this.mainChannel.on('formCommit', _.bind(function(isValid) {
                     if (isValid) {
-                        $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
-                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
+                        $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
+                        $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
                         window.location.hash = "#";
                     }
+                }, this))
+
+                this.mainChannel.on('formCancel', _.bind(function() {
+                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
+                    $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
+                    window.location.hash = "#";
                 }, this))
 
                 this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
@@ -167,7 +206,7 @@ define(
             },
 
             home: function() {
-                this.navbar.setActions(this.mainActions)
+                /*this.navbar.setActions(this.mainActions)*/
             },
 
             copy : function(modelID) {
@@ -226,7 +265,7 @@ define(
                 }, this));
             },
 
-            export: function() {
+            /*export: function() {
                 require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
                     $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
                     var modalView = new exportProtocolJSON({
@@ -279,26 +318,7 @@ define(
 
                 }, this));
 
-            },
-
-            clear : function() {
-                require(['views/modals/clearProtocol'], _.bind(function(exportProtocolJSON) {
-                    $(this.el).append('<div class="modal  fade" id="clearProtocol"></div>');
-                    var modalView = new exportProtocolJSON({
-                        el: "#clearProtocol",
-                        URLOptions: this.URLOptions
-                    });
-                    modalView.render();
-                    $("#clearProtocol").i18n();
-
-                    $('#clearProtocol').on('hidden.bs.modal', _.bind(function () {
-                        if (modalView.getData()) {
-                            this.mainChannel.trigger('clear')
-                        }
-                        window.location.hash = '#';
-                    }, this));
-                }, this))
-            },
+            },*/
 
             import : function() {
                 require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {

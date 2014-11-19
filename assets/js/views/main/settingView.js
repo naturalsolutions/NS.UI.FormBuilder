@@ -13,7 +13,9 @@ define([
     var SettingView = Backbone.View.extend({
 
         events : {
-            'change select' : 'selectChanged'
+            'change select' : 'selectChanged',
+            'click #cancel' : 'cancel',
+            'click #saveChange' : 'saveChange'
         },
 
         initialize : function(options) {
@@ -31,27 +33,26 @@ define([
             }, this));
 
             this.mainChannel.on('getModel:return', _.bind(function(field) {
-
                 //  Create form with model
                 this.initForm(field);
-
-            }, this));
-
-            this.mainChannel.on('saveForm', _.bind(function() {
-                //  Try to save change
-                //  Event send from router
-                var isValid = this.form.commit() === undefined;
-                if (isValid) {
-                    //field.set(this.form.getValue());
-                    //field = null;
-                    this.removeForm();
-                    this.mainChannel.trigger('formCommit', isValid)
-                }
             }, this));
 
             this.fieldWithSameType = null;
 
             _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect');
+        },
+
+        saveChange : function() {
+            var isValid = this.form.commit() === undefined;
+            if (isValid) {
+                this.removeForm();
+                this.mainChannel.trigger('formCommit', isValid)
+            }
+        },
+
+        cancel : function(){
+            this.removeForm();
+            this.mainChannel.trigger('formCancel')
         },
 
         render : function(options) {

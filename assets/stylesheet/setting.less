@@ -12,6 +12,27 @@
         //margin-top: 5%;
     }
 
+    button:not(.selectpicker ) {
+            height: 35px;
+            margin-top: 12.5px;
+            color: white;
+            .exo;
+            &.gray {
+                border-radius: 0 !important;
+                background: #111;
+                &:hover {
+                    color: white;
+                }
+            }
+            &:not(.gray) {
+                border-radius: 2px;
+                background: #862332;
+                &:last-child {
+                    margin-left: 20px;
+                }
+            }
+        }
+
     hr {
         border-color: black;
     }
