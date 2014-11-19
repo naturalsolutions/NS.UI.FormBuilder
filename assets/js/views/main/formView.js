@@ -65,7 +65,7 @@ define([
                 //  View file successfully loaded
                 var id = "dropField" + newModel['id'];
 
-                $('.drop').append('<div class="span12 dropField " id="' + id  + '" ></div>');
+                $('.drop').append('<div class="dropField " id="' + id  + '" ></div>');
 
                 var vue = new fieldView({
                     el      : '#' + id,
