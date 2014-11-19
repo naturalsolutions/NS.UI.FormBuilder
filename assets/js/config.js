@@ -39,7 +39,8 @@ require.config({
         "jquery-simple-slider" : "../../libs/jquery-simple-slider/js/simple-slider",
         "perfect-scrollbar"    : "../../libs/perfect-scrollbar/src/perfect-scrollbar",
         rangeslider            : "../../libs/rangeslider.js/dist/rangeslider",
-        "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select.min"
+        "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select.min",
+        sweetalert : "../../libs/sweetalert/lib/sweet-alert.min"
     },
     shim: {
         blobjs: {
@@ -153,6 +154,12 @@ require.config({
             ]
         },
         "bootstrap-select" :{
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        },
+        sweetalert:{
             exports: "$",
             deps: [
                 "jquery"
