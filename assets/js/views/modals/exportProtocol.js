@@ -11,7 +11,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
         initialize : function(options) {
             this.template   = _.template(exportJSONTemplate);
             _.bindAll(this, 'render', 'validateProtocolValue');
-            this.keywordList = [];
+            this.keywordList = [], check = false;
 
             // Set URL autocomplete value from options
             this.protocolAutocomplete = options.URLOptions['protocolAutocomplete'];
@@ -78,6 +78,7 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
             if (!exportProtocolName && !exportProtocolDescription && !exportProtocolKeywords && !exportProtocolComment) {
                 myArray.push(inputText);
                 this.keywordList = myArray;
+                this.check = true;
                 $('#exportModal').modal('hide').removeData();
             }
         },
@@ -87,7 +88,8 @@ define(['underscore', 'backbone', 'text!../../../templates/modals/exportProtocol
                 name        : $('#exportProtocolName').val(),
                 comment     : $('#exportProtocolFileName').val(),
                 description : $('#exportProtocolDescription').val(),
-                keywords    : this.keywordList
+                keywords    : this.keywordList,
+                response    : this.check
             }
         }
 

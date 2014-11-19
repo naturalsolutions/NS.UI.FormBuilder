@@ -7,7 +7,8 @@ define([
     'views/main/settingView',
     'text!../../../templates/main/mainView.html',
     'backbone.radio',
-    'i18n'
+    'i18n',
+    'sweetalert'
 ], function($, _, Backbone, PanelView, FormView, SettingView, mainViewTemplate, Radio) {
 
     var MainView = Backbone.View.extend({
@@ -109,7 +110,7 @@ define([
         },
 
         clear : function() {
-            require(['views/modals/clearProtocol'], _.bind(function(exportProtocolJSON) {
+            /*require(['views/modals/clearProtocol'], _.bind(function(exportProtocolJSON) {
                 $(this.el).append('<div class="modal  fade" id="clearProtocol"></div>');
                 var modalView = new exportProtocolJSON({
                     el: "#clearProtocol",
@@ -124,7 +125,30 @@ define([
                     }
                     window.location.hash = '#';
                 }, this));
-            }, this))
+            }, this))*/
+
+            var self = this;
+
+            swal({
+                title              : "Etes vous sûr?",
+                text               : "Le formulaire sera définitivement perdu !",
+                type               : "warning",
+                showCancelButton   : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText  : "Oui, supprimer",
+                cancelButtonText   : "Annuler",
+                closeOnConfirm     : false,
+                closeOnCancel      : false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    swal("Supprimé !", "Votre formulaire a été supprimé !", "success");
+                    self.form.clearAll();
+                } else {
+                    swal("Annulé", "", "error");
+                }
+            });
+
+
         },
 
         export : function() {

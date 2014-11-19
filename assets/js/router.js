@@ -8,7 +8,7 @@
  */
 
 define(
-    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'fancytree', 'NS.UI.Navbar', 'NS.UI.NavbarTheme'],
+    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'fancytree', 'NS.UI.Navbar', 'NS.UI.NavbarTheme', 'sweetalert'],
     function($, _, Backbone, MainView, collection, Radio, fancytree) {
 
         var AppRouter = Backbone.Router.extend({
@@ -140,18 +140,10 @@ define(
                             saveAs(blob, $('#exportProtocolFileName').val() + '.json');
 
                             $('#exportModal').modal('hide').removeData();
-                            new NS.UI.Notification({
-                                type    : 'success',
-                                title   : 'Protocol export :',
-                                message : "XML file correctly created"
-                            });
+                            swal("Export réussi !", "", "success")
                         } catch (e) {
                             $('#exportModal').modal('hide').removeData();
-                            new NS.UI.Notification({
-                                type    : 'error',
-                                title   : 'An error occured :',
-                                message : "Can't create your JSON file"
-                            });
+                            swal("Echec de l'export !", "Une erreur est survenue lors de l'export", "error")
                         }
 
                         window.location.hash = '#';
