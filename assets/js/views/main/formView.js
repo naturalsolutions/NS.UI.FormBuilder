@@ -75,6 +75,9 @@ define([
                 if (vue !== null) {
                     vue.render();
                     this._view[id] = vue;
+
+                    $("#scrollSection").scrollTop($("#scrollSection").height());
+                    $("#scrollSection").perfectScrollbar('update');
                 }
 
                 $(".actions").i18n();
