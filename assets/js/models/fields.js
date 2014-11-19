@@ -730,7 +730,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     }, {
         type   : 'CheckBox',
-        i18n   : 'checkbox'
+        i18n   : 'checkbox',
+        section : 'list'
     });
 
     models.RadioField = models.EnumerationField.extend({
@@ -749,7 +750,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Radio',
-        i18n   : 'radio'
+        i18n   : 'radio',
+        section : 'list'
     });
 
     models.SelectField = models.EnumerationField.extend({
@@ -767,7 +769,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Select',
-        i18n   : 'select'
+        i18n   : 'select',
+        section : 'list'
     });
 
     models.SubformField = Backbone.Model.extend({

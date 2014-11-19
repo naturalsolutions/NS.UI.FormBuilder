@@ -152,6 +152,7 @@
         "standard" : "Standard fields",
         "autocomplete" : "Fields with autocomplete",
         "presentation" : "Presentation field",
-        "other" : "Other fields"
+        "other" : "Other fields",
+        "list" : "List fields"
     }
 }

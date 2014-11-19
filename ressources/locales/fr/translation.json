@@ -155,6 +155,7 @@
         "standard" : "Champs standards",
         "autocomplete" : "Champs avec autocomplétion",
         "presentation" : "Champs de présentation",
-        "other" : "Autres champs"
+        "other" : "Autres champs",
+        "list" : "Champs à choix multiples"
     }
 }
