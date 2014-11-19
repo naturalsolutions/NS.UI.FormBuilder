@@ -5,6 +5,45 @@
     overflow   : hidden;
     height     : 100%;
     background : #111;
+    margin-bottom: 50px;
+
+    footer {
+        height: 60px;
+        position: relative;
+        bottom: 15px;
+        left: 0;
+        background: #000;
+        margin-left: -15px;
+        margin-right: -15px !important;
+
+        padding-right: 15px;
+        padding-left: 15px;
+        div {
+            height: 100%;
+        }
+
+        button {
+                    height: 35px;
+                    margin-top: 12.5px;
+                    color: white;
+                    .exo;
+                    &.gray {
+                        border-radius: 0 !important;
+                        background: #111;
+                        &:hover {
+                            color: white;
+                        }
+                    }
+                    &:not(.gray) {
+                        border-radius: 2px;
+                        background: #862332;
+                        &:last-child {
+                            margin-left: 20px;
+                        }
+                    }
+                }
+    }
+
 
     .col-md-10 {
         padding-right: 40px !important;
