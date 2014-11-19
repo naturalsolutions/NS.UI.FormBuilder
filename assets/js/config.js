@@ -20,7 +20,6 @@ require.config({
         underscore             : "../../libs/underscore/underscore",
         "NS.UI.Navbar"         : "../../libs/NS.UI.Navbar/navbar",
         "NS.UI.NavbarTheme"    : "../../libs/NS.UI.Navbar/themes/navbar.bootstrap3",
-        "NS.UI.Notification"   : "../../libs/NS.UI.Notification/notification",
         requirejs              : "../../libs/requirejs/require",
         "font-awesome"         : "../../libs/font-awesome/fonts/*",
         "backbone-forms"       : "../../libs/backbone-forms/distribution.amd/backbone-forms",
@@ -105,14 +104,6 @@ require.config({
                 "NS.UI.Navbar"
             ],
             exports: "NS"
-        },
-        "NS.UI.Notification": {
-            exports: "$",
-            deps: [
-                "jquery",
-                "backbone",
-                "bootstrap"
-            ]
         },
         bootstrap: {
             exports: "$",

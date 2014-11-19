@@ -7,7 +7,7 @@ define(
         'models/fields',
         'jquery-ui',
         'perfect-scrollbar',
-        'NS.UI.Notification'
+        'sweet-alert'
     ],
     function($, _, Backbone, panelViewTemplate, Fields) {
 
@@ -52,11 +52,7 @@ define(
                 if (Fields[elementClassName] !== undefined) {
                     this.collection.addElement(elementClassName);
                 } else {
-                    new NS.UI.Notification({
-                        type    : 'error',
-                        title   : 'An error occured :',
-                        message : "Can't create field object"
-                    });
+                    swal("Une erreur est survenue !", "Le champ n'a pas pu être généré !", "error");
                 }
             },
 

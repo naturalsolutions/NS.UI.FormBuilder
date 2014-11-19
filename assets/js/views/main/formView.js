@@ -34,16 +34,6 @@ define([
             return this._view[subViewID];
         },
 
-        displayNotification : function(type, title, msg) {
-            require(['NS.UI.Notification'], function() {
-                new NS.UI.Notification({
-                    type    : type,
-                    title   : title,
-                    message : msg
-                });
-            });
-        },
-
         updateView : function() {
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
@@ -83,11 +73,7 @@ define([
                 $(".actions").i18n();
 
             }, this), function(err) {
-                new NS.UI.Notification({
-                    type    : 'error',
-                    title   : 'An error occured :',
-                    message : "Can't create view for this field"
-                });
+                swal("Echec de l'ajout!", "Une erreur est survenue lors de l'ajout du champ!", "error");
             });
         },
 
@@ -134,6 +120,6 @@ define([
         }
     });
 
-return FormView;
+    return FormView;
 
 });

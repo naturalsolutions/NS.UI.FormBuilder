@@ -110,23 +110,6 @@ define([
         },
 
         clear : function() {
-            /*require(['views/modals/clearProtocol'], _.bind(function(exportProtocolJSON) {
-                $(this.el).append('<div class="modal  fade" id="clearProtocol"></div>');
-                var modalView = new exportProtocolJSON({
-                    el: "#clearProtocol",
-                    URLOptions: this.URLOptions
-                });
-                modalView.render();
-                $("#clearProtocol").i18n();
-
-                $('#clearProtocol').on('hidden.bs.modal', _.bind(function () {
-                    if (modalView.getData()) {
-                        this.form.clearAll();
-                    }
-                    window.location.hash = '#';
-                }, this));
-            }, this))*/
-
             var self = this;
 
             swal({

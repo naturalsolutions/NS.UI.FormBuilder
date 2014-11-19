@@ -66,10 +66,8 @@ define(
                 'saveprotocol' : 'saveProtocol',
                 'setting/:id'  : 'modelSetting',
                 'save'         : 'saveOnRepo',
-                //'export'       : 'export',
                 'import'       : 'import',
                 'load'         : 'load',
-                //'clear'        : 'clear',
                 'show'         : 'show',
                 "copy/:id"     : "copy"
             },
@@ -239,15 +237,12 @@ define(
                                         title: 'Protocol saved : ',
                                         message: 'your protocol has been saved correctly !'
                                     });
+
+                                    swal("Sauvé !", "Votre formulaire a été enregistré sur le serveur !", "success");
                                 },
                                 error: function(jqXHR, textStatus, errorThrown) {
                                     $('#saveModal').modal('hide').removeData();
-                                    new NS.UI.Notification({
-                                        delay: 15,
-                                        type: 'error',
-                                        message: jqXHR.responseText,
-                                        title: 'An error occured :'
-                                    });
+                                    swal("Une erreur est survenu !", "Votre formulaire n'a pas été enregistré !<br /> Pensez à faire un export", "error");
                                 }
                             });
                         }, this));
