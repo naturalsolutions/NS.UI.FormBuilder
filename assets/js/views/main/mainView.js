@@ -80,18 +80,6 @@ define([
                 'overflow' : 'hidden'
             })
 
-            //  Toggle footer div
-            $('footer div:first-child').animate({
-                marginLeft : - parseInt($('footer div:first-child').css('width'))
-            }, 100, function() {
-                $('footer div:last-child:not(.pull-right)').switchClass('col-md-8', 'col-md-12', 500, function() {
-                    $(this).css({
-                        'padding-left' : 80,
-                        'overflow' : 'hidden'
-                    })
-                });
-            });
-
             //  Display gobach
             $('#toggle').attr('id', 'untoggle').text('>')
         },
