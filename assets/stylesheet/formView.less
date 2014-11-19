@@ -116,8 +116,8 @@
                 &:not(.paddingBottom5) {
                     //  row with input
                     background : #111;
-                    padding-top: 10px !important;
-                    padding-bottom: 10px !important;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
                 }
             }
             &:hover {
@@ -263,4 +263,54 @@
 
     }
 
+}
+
+.find {
+    background : #862332;
+    border-radius: 0;
+    border-color: #862332;
+}
+
+span.fancytree-node.fancytree-active {
+
+    background : #444;
+    border-color: #444;
+
+    .fancytree-title {
+        background : #444;
+        border-color: #444;
+    }
+}
+
+.fancytree-node:hover {
+    background: #444;
+}
+
+.ui-fancytree {
+    padding: 0;
+    margin: 0;
+    border : none;
+    
+    .fancytree-node {
+        background : transparent !important;
+        padding-left: 0;
+        .fancytree-title {
+            background : transparent !important;
+            color : white !important;
+        }
+    }
+
+    .fancytree-focused {
+        background : black !important;
+        border-color : black !important;
+
+        .fancytree-title {
+            border-radius: 0;
+            border-color : black !important;
+        }
+    }
+}
+
+ul.fancytree-container {
+    padding: 0 !important;
 }

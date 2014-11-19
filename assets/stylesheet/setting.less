@@ -1,16 +1,14 @@
 .settings {
-            .widgetsPanel();
-            background-color    : #eee;
+            //.widgetsPanel();
+            background-color    : #222;
             margin-left         : 0;
             overflow-x          : scroll;
             padding-bottom      : 50px;
 
-            * {
-                font-family: "Segoe UI Light","Helvetica Neue","Segoe UI","Segoe WP",sans-serif;
-                &.fa {
+            &.fa {
                     font-family: FontAwesome !important;
-                }
             }
+            
             .listEdit { &:hover {cursor : pointer;} }
 
             h1 {
@@ -18,7 +16,7 @@
                 padding-bottom      : 0 !important ;
                 margin-bottom       : 0 !important;
                 margin-top          : 0 !important;
-                color               : #333;
+                color               : #111;
                 height              : 70px;
                 line-height         : 60px;
                 &:hover {
@@ -39,7 +37,7 @@
                     color           : #08c;
                     text-decoration : none;
                     &.selected {
-                        color       : #555;
+                        color       : #222;
                     }
                     &:hover {
                         text-decoration: none;
