@@ -81,50 +81,16 @@ define(
                 this.URLOptions = options['URLOptions'];
                 this.el = options['el'];
 
-                /*var user = {
-                    anonymous: {
-                        roles: ['reader']
-                    },
-                    roger: {
-                        nickname: 'Roger',
-                        roles: ['reader', 'writer']
-                    },
-                    gaston: {
-                        nickname: 'Gaston',
-                        roles: ['reader', 'writer', 'moderator']
-                    }
-                };
-
-                var tiles = [{
-                    title: 'Home',
-                    tileClass: 'tile-home',
-                    url: '#',
-                    allowedRoles: ['reader']
-                }, {
-                    title: 'Forum',
-                    tileClass: 'tile-forum',
-                    url: '#forum',
-                    allowedRoles: ['reader']
-                }, {
-                    title: 'Administration',
-                    tileClass: 'tile-admin tile-double',
-                    url: '#admin',
-                    allowedRoles: ['moderator']
-                }]*/
-
-                //  Init navbar
-                /*this.navbar = new NS.UI.NavBar({
-                    roles    : user.gaston.roles,
-                    username : user.gaston.nickname,
-                    title    : 'Form Builder'
-                });*/
-
-                /*this.navbar.$el.prependTo('body');
-                this.navbar.render();*/
-
                 $("body").i18n();
+
+
+                //  ----------------------------------------------------------
+                //  Backbone radio configuration
+
                 this.mainChannel = Backbone.Radio.channel('global');
 
+                //  This event is sent from the main view when export modal view is closed
+                //  and where the model view data are corrects, event sent with the collection
                 this.mainChannel.on('export:return', _.bind(function(collectionExport) {
 
                     require(['blobjs', 'filesaver'], _.bind(function() {
@@ -150,30 +116,18 @@ define(
 
                 }, this));
 
-                this.mainChannel.on('formCreated', _.bind(function(field) {
+                //  Event sent from setting view when backbone forms generation is finished
+                //  Run an nimation for hide panel view and display setting view, I love jQuery !
+                this.mainChannel.on('formCreated', _.bind(function() {
 
                     $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
                     $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
 
-                    this.navbar.setActions({
-                        save: new NS.UI.NavBar.Action({
-                            title: 'Save changes',
-                            allowedRoles: ["reader"],
-                            handler: _.bind(function() {
-                                this.mainChannel.trigger('saveForm');
-                            }, this)
-                        }),
-                        saveConfiguration :new NS.UI.NavBar.Action({
-                            title: 'Save settings',
-                            allowedRoles: ["reader"],
-                            handler: _.bind(function() {
-                                this.mainChannel.trigger('saveConfiguration');
-                            }, this)
-                        })
-                    });
-
                 }, this));
 
+                //  Event sent from setting view when field changed are saved
+                //  and the data are correct
+                //  Run an animation for hide setting view and display panel view
                 this.mainChannel.on('formCommit', _.bind(function(isValid) {
                     if (isValid) {
                         $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
@@ -182,31 +136,46 @@ define(
                     }
                 }, this))
 
+                //  Event sent from setting view when modifications are cancelled
+                //  Run an animation for hide setting view and display panel view
                 this.mainChannel.on('formCancel', _.bind(function() {
                     $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
                     $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
                     window.location.hash = "#";
                 }, this))
 
-                this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
+                /*this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
                     $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
                     $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
                     window.location.hash = "#";
-                }, this))
+                }, this))*/
             },
 
-            home: function() {
-                /*this.navbar.setActions(this.mainActions)*/
-            },
+            home: function() {},
 
+            /**
+             * This function is run when user wants to duplicate a field
+             * Trigger an event with the field ID to the formbuilder object (see formbuilder.js)
+             *
+             * @param  {integer} ID of the field to duplicate
+             */
             copy : function(modelID) {
                 this.mainChannel.trigger('copy', modelID);
                 window.location.hash = '#';
             },
 
+            /**
+             * This function is run when user wants to configure a field
+             * Trigger an event with field ID to the formbuilder object (see formbuilder.js)
+             *
+             * @param  {integer} ID of the field to duplicate
+             */
             modelSetting: function(modelID) {
                 this.mainChannel.trigger('getModel', modelID);
             },
+
+
+
 
             saveOnRepo: function() {
                 require(['views/modals/saveProtocol'], _.bind(function(SaveProtocolModalView) {
