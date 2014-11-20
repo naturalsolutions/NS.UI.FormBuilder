@@ -1,53 +1,40 @@
 .dropArea {
 
-    position: relative;
-
-    overflow   : hidden;
-    height     : 100%;
-    background : #111;
-    margin-bottom: 50px;
+    position      : relative;
+    overflow      : hidden;
+    height        : 100%;
+    background    : #111;
+    margin-bottom : 50px;
 
     footer {
-        height: 60px;
-        position: relative;
-        bottom: 15px;
-        left: 0;
-        background: #000;
-        margin-left: -15px;
-        margin-right: -15px !important;
+        height        : 60px;
+        position      : relative;
+        bottom        : 15px;
+        left          : 0;
+        background    : #000;
+        margin-left   : -15px;
+        margin-right  : -15px !important;
+        padding-right : 15px;
+        padding-left  : 15px;
 
-        padding-right: 15px;
-        padding-left: 15px;
         div {
             height: 100%;
         }
 
         button {
-                    height: 35px;
-                    margin-top: 12.5px;
-                    color: white;
-                    .exo;
-                    &.gray {
-                        border-radius: 0 !important;
-                        background: #111;
-                        &:hover {
-                            color: white;
-                        }
-                    }
-                    &:not(.gray) {
-                        border-radius: 2px;
-                        background: #862332;
-                        &:last-child {
-                            margin-left: 20px;
-                        }
-                    }
+            &.red {
+                border-radius : 2px;
+                &:last-child {
+                    margin-left: 20px;
                 }
+            }
+        }
     }
 
-
+    //  All field element
     .col-md-10 {
-        padding-right: 40px !important;
-        padding-left: 40px !important;
+        padding-right : 40px !important;
+        padding-left  : 40px !important;
         #protocolName {
             .exo;
             width           : 100%;
@@ -63,19 +50,9 @@
         }
     }
 
-    .row-fluid:last-child {
-        margin-top  : 25px;
-        height      : 70%;
-        .drop {
-            min-height      : 70%;
-            border          : 1px #aaa solid !important;
-            margin-bottom   : 100px;
-        }
-    }
-
+    //  Main drop section, use perfect scrollbar library
     .scrollSection {
         height: 80%;
-
         .col-md-12:first-child {
             height: 100%;
         }
@@ -84,23 +61,20 @@
             position: relative;
             overflow: hidden;
         }
-    }
-
-
-
-    .ps-scrollbar-y-rail {
-        background : black;
+        .ps-scrollbar-y-rail {
+            background : black;
+        }
     }
 
     .drop {
         padding: 0;
     }
 
+    //  Class for each field in the drop zone
     .dropField {
         .noMarginTop;
         padding-top : 0px;
         margin-left : 0!important;
-        background  : #fff;
         transition  : background 0.2s ease-in-out;
         background  : #111;
         border      : 1px #222 solid;
@@ -167,6 +141,13 @@
             }
         }
 
+        hr {
+            height     : 1px;
+            margin-top : 0;
+            min-height : 0;
+        }
+
+        //  Display action : edit, copy and delete when field is hovered
         &:hover {
             a {
                 i {
@@ -176,51 +157,39 @@
             }
         }
 
+        //  ---------------------------------------------------
+        //  Style for specific field type
+
+        label { .text(); .exo; &:hover { cursor : default !important; } }
+
         &.textArea {
             textarea {
-                padding-left: 10px;
-                background: #000;
-                border : 1px #555 solid !important;
-                color : #222;
-                resize : none;
+                padding-left : 10px;
+                background   : #000;
+                border       : 1px #555 solid !important;
+                color        : #222;
+                resize       : none;
             }
             .span1:last-child {
                 height      : 48px;
             }
         }
 
-        hr {
-            height     : 1px;
-            margin-top : 0;
-            min-height : 0;
-        }
-
         input[type="text"], input[type="number"]{
-            padding-left: 10px;
-            background: #000;
-            border : 1px #555 solid !important;
-            color : #222;
-
-            &.span10 {
-                margin-left: 0;
-            }
+            padding-left : 10px;
+            background   : #000;
+            border       : 1px #555 solid !important;
+            color        : #222;
         }
 
         select {
-            padding-left: 10px;
-            background: #000;
-            border : 1px #555 solid !important;
-            color : #555;
-
-            &.span10 {
-                margin-left: 0;
-            }
+            padding-left : 10px;
+            background   : #000;
+            border       : 1px #555 solid !important;
+            color        : #555;
         }
 
-        label { .text(); .exo;}
-
         .subformField {
-
 
             fieldset {
                 background     : #555;
@@ -237,10 +206,10 @@
                 }
 
                 .subElement {
-                    background     : transparent;
-                    padding-left: 0;
-                    padding-right: 0;
-                    box-shadow     : 0 0 2px #555;
+                    background    : transparent;
+                    padding-left  : 0;
+                    padding-right : 0;
+                    box-shadow    : 0 0 2px #555;
                     &:hover {
                         box-shadow: 0 0 4px #555;
                          .actions {
@@ -248,7 +217,9 @@
                         }
                     }
                 }
+
                 .sortableRow { margin-top: 20px; padding-left: 7px; padding-right: 7px; }
+
                 &.hovered {
                     background : rgba(200, 210, 220, 0.5) !important;
                     border : 1px dashed #888 !important;
@@ -257,133 +228,116 @@
 
         }
 
-
-        input[type="text"], .picker {
-            
-        }
-
-        select {
-            //.input();
-        }
-
         input[type="checkbox"], input[type="radio"] {
             margin-left : 0px !important;
-            position: static !important;
-            width : 25px;
+            position    : static !important;
+            width       : 25px;
         }
 
-        label:hover { cursor : default !important; }
+        .thesaurusField {
+            display: none;
+        }
 
         .treeview {
+
             ul {
                 background : #111;
+
                 li {
+
                     &:hover {
                         background : #222;
+
                         .fancytree-title {
                             background : #222;
                             border-color : #222;
+
                             .fancytree-node {
                                 background : #111;
                                 border-color : #111;
                             }
+
                         }
-                        /*.fancytree-node {
-                            background : #222;
-                            border-color : #222;
-                        }*/
+
                     }
+
                     .fancytree-title {
                         .exo;
                         color : white;
                     }
+
                 }
+
             }
+
+            span.fancytree-node.fancytree-active {
+                background: #444;
+                border-color: #444;
+
+                .fancytree-title {
+                    background: #444;
+                    border-color: #444;
+                }
+
+            }
+
+            .fancytree-node:hover {
+                background: #444;
+            }
+
+            .ui-fancytree {
+                padding: 0;
+                margin: 0;
+                border: none;
+                background: transparent;
+
+                .fancytree-node {
+                    background: transparent !important;
+                    padding-left: 0;
+
+                    .fancytree-title {
+                        background: transparent !important;
+                        color: white !important;
+                    }
+
+                }
+
+                .fancytree-focused {
+                    background: black !important;
+                    border-color: black !important;
+
+                    .fancytree-title {
+                        border-radius: 0;
+                        border-color: black !important;
+                    }
+
+                }
+
+            }
+
+            ul.fancytree-container {
+                padding: 0 !important;
+            }
+
         }
 
-    }
-
-}
-
-.find {
-    background : #862332;
-    border-radius: 0;
-    border-color: #862332;
-}
-
-span.fancytree-node.fancytree-active {
-
-    background : #444;
-    border-color: #444;
-
-    .fancytree-title {
-        background : #444;
-        border-color: #444;
-    }
-}
-
-.fancytree-node:hover {
-    background: #444;
-}
-
-.ui-fancytree {
-    padding: 0;
-    margin: 0;
-    border : none;
-    background: transparent;
-
-    .fancytree-node {
-        background : transparent !important;
-        padding-left: 0;
-        .fancytree-title {
-            background : transparent !important;
-            color : white !important;
+        .slider {
+            float : left;
+            width: 500px !important;
         }
-    }
 
-    .fancytree-focused {
-        background : black !important;
-        border-color : black !important;
-
-        .fancytree-title {
+        .find {
+            background : #862332;
             border-radius: 0;
-            border-color : black !important;
+            border-color: #862332;
         }
+
     }
+
 }
 
-ul.fancytree-container {
-    padding: 0 !important;
-}
 
-.bootstrap-select {
 
-    .dropdown-menu  {
-        padding-top: 0;
-        padding-bottom: 0;
-        border-color  : #333;
-        border-radius: 0;
-    }
-    .selectpicker  {
-        background    : #222;
-        border-radius : 0;
-        border-color  : #333;
-        text-shadow   : none;
-        color         : #555;
-        .exo;
-        li {
-            background : #111;
-            .exo;
-            color : #000;
-            &:hover {
-                color : #111;
-                background : #000;
-            }
-            a {
-                background : transparent;
-            }
-        }
-    }
-}
 
-.thesaurusField {display: none;}
+
+

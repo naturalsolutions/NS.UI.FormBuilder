@@ -13,24 +13,14 @@ html, body {
 //  Main classes
 //  ---------------------------------------------------------------------
 
-.navbar         { margin-bottom : 0 !important; }
-.col0          { width         : 0px !important; overflow: hidden;}
 
-.transparent    { background    : transparent !important; }
-.fa             { font-family   : FontAwesome !important; }
-
-
-.new            { background    : rgba(0, 255, 0, 0.5) !important; }
-.change         { background    : rgba(255, 165, 0, 0.5); }
-.delete         { background    : rgba(255, 0, 0, 0.5); }
-.grey           { background    : #aaa; }
+.col0           { width         : 0px !important; overflow: hidden;}
 .diff           { margin-bottom : 150px; }
 .text           { line-height   : 30px; font-size : 20px; }
 .error          { box-shadow    : 0 0 3px #c80000 inset !important; }
 .marginLeft10   { margin-left   : 10px !important; }
 .advanced       { display       : none; }
 
-.modal          { background    : transparent !important; }
 .form-group     { margin-bottom: 0px !important; }
 
 
@@ -47,30 +37,6 @@ html, body {
     background-position : initial initial;
     background-repeat   : initial initial;
 }
-
-.generate-columns(5);
-
-.generate-columns(@n, @i: 0) when (@i =< @n) {
-
-    @num : @i * 5;
-
-    .margin@{num}       { margin        : (@i * 5px) !important;   }
-    .marginBottom@{num} { margin-bottom : (@i * 5px) !important;   }
-    .marginTop@{num}    { margin-top    : (@i * 5px) !important;   }
-    .marginLeft@{num}   { margin-left   : (@i * 5px) !important;   }
-    .marginRight@{num}  { margin-right  : (@i * 5px) !important;   }
-
-    .padding@{num}       { padding        : (@i * 5px) !important;   }
-    .paddingBottom@{num} { padding-bottom : (@i * 5px) !important;   }
-    .paddingTop@{num}    { padding-top    : (@i * 5px) !important;   }
-    .paddingLeft@{num}   { padding-left   : (@i * 5px) !important;   }
-    .paddingRight@{num}  { padding-right  : (@i * 5px) !important;    }
-
-  .generate-columns(@n, (@i + 1));
-}
-
-.noMargin { margin: 0 !important; }
-.noPadding { padding: 0 !important;}
 
 .form-control{
     &.col-md-10 {
@@ -90,55 +56,9 @@ html, body {
     }
 }
 
-
-
-.checkbox {
-    label {
-        line-height: 55px !important;
-        font-size: 20px !important;
-        padding-left: 0 !important;
-    }
-    input[type="checkbox"] {
-        box-shadow: none !important;
-        border: none !important;
-        &:focus {
-            box-shadow: none !important;
-            border: none !important;
-        }
-        &:active {
-            box-shadow: none !important;
-            border: none !important;
-        }
-    }
-}
-
-.slider {
-    float : left;
-    width: 500px !important;
-    &+label {
-        color : red;
-    }
-}
-
 .displayValue {
     height: 16px;
     line-height: 16px !important;
-}
-
-.formUl {
-    list-style-type: none;
-    li {
-        display : inline-block;
-        input {
-            float : left;
-            width : 30px;
-            height : 30px;
-            margin-right: 5px;
-        }
-        label {
-            float : left;
-        }
-    }
 }
 
 .itemList {
@@ -147,8 +67,6 @@ html, body {
     padding-top    : 5px;
     padding-right  : 5px;
 }
-
-
 
 .element {
     .row {
