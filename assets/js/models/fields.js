@@ -1,7 +1,7 @@
 define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     var fieldTemplate = _.template('\
-        <div class="form-group padding5 paddingRight25 field-<%= key %>">\
+        <div class="form-group field-<%= key %>">\
             <label class="control-label" for="<%= editorId %>"><%= title %></label>\
             <div data-editor >\
                 <p class="help-block" data-error></p>\
@@ -910,7 +910,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type: 'AutocompleteTreeView',
-        i18n: 'autocomp'
+        i18n: 'autocomp',
+        doubleColumn : true
     });
 
     return models;
