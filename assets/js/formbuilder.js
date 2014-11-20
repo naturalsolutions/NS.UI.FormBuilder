@@ -21,55 +21,56 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 name: "Mon protocole"
             });
 
+            //  Keep option
             this.URLOptions = options['URLOptions'];
 
-            //  Init main view
+            //  Init main view and render it
             this.mainView = new MainView({
                 el         : options['el'],
                 form       : this.currentCollection,
                 URLOptions : options['URLOptions']
             });
-
             this.mainView.render();
 
-            /*  ****************************************************    */
-            /*  Init Backbone Radio channel
-            /*  ****************************************************    */
-            this.mainChannel        = Backbone.Radio.channel('global');         // global application channel
-            this.collectionChannel  = Backbone.Radio.channel('collection');     // channel for colleciton fonctionnalities
 
-            this.collectionChannel.on('addSubView', _.bind(function(options){
+            //  ----------------------------------------------------------
+            //  Backbone radio configuration
 
-                //  The event is send form a subformFieldView
-                //  who want to create a subView
-                var fieldViewType = options['field'].constructor.type + 'FieldView';
 
-                require(['views/fieldViews/' + fieldViewType], _.bind(function(fieldView) {
-                    var subView = new fieldView({
-                        el : options['viewEl'],
-                        model : options['field']
-                    });
+            //  We create to separate channel and keep cleans events configuration
 
-                    subView.render();
-                    subView.$el.switchClass('span12', 'span10 offset1',0);
-                    subView.$el.switchClass('dropField', 'subElement',0);
+            this.mainChannel        = Backbone.Radio.channel('global');
+            this.collectionChannel  = Backbone.Radio.channel('collection');
 
-                    this.collectionChannel.trigger('subViewCreated/' + options['id'], subView);
-                }, this));
 
-            }, this));
-            //  This channel allows to get a model with an ID
+            //  This event is receive from the router when user wants to see field configuration (see router.js)
+            //  Send an event to the setting view
             this.mainChannel.on('getModel', _.bind(function(id) {
             	this.mainChannel.trigger('getModel:return', this.currentCollection.get(id));
             }, this));
 
-            //  Allows to get JSON data from collection
+
+            //  Event receive from router when user wants to export current form in JSON
+            //  Send an event to the router with current form in JSON DATA
             this.mainChannel.on('getJSON', _.bind(function() {
             	this.mainChannel.trigger('getJSON:return', this.currentCollection.getJSON());
             }, this));
 
-            this.mainChannel.on('export', _.bind(function(datas) {
 
+            //  This event is received when user want to dusplicate a field
+            //  Add field copy to the collection
+            this.mainChannel.on('copy', _.bind(function(modelID) {
+                var modelToCopy     = this.currentCollection.get(modelID),
+                    newModelAttr    = modelToCopy.toJSON();
+
+                newModelAttr['id'] = this.currentCollection.length;
+                this.currentCollection.addElement(modelToCopy.constructor.type + 'Field', newModelAttr);
+            }, this));
+
+
+            //  Event receive when user wants to export a form
+            //  We trigger on the mainchannel with current form as json data
+            this.mainChannel.on('export', _.bind(function(datas) {
             	//	Set attribute with datas parameters
                 this.currentCollection['description'] = datas['description'];
                 this.currentCollection['keywords']    = datas['keywords'];
@@ -79,24 +80,12 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             	this.mainChannel.trigger('export:return', this.currentCollection.getJSON());
             }, this));
 
-            //  Clear form, remove all fields
-            this.mainChannel.on('clear', _.bind(function() {
-            	this.mainView.clear();
-            }, this))
 
             //  Update form with imported JSON data
             this.mainChannel.on('JSONUpdate', _.bind(function(JSONUpdate) {
             	this.currentCollection.updateWithJSON(JSONUpdate);
             }, this));
 
-            //  Duplicate field
-            this.mainChannel.on('copy', _.bind(function(modelID) {
-                var modelToCopy     = this.currentCollection.get(modelID),
-                    newModelAttr    = modelToCopy.toJSON();
-
-                newModelAttr['id'] = this.currentCollection.length;
-                this.currentCollection.addElement(modelToCopy.constructor.type + 'Field', newModelAttr);
-            }, this));
 
             this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
                 $.post(this.URLOptions['configurationURL'], configuration).success(function() {
