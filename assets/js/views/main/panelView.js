@@ -7,7 +7,7 @@ define(
         'models/fields',
         'jquery-ui',
         'perfect-scrollbar',
-        'sweet-alert'
+        'sweetalert'
     ],
     function($, _, Backbone, panelViewTemplate, Fields) {
 
@@ -27,7 +27,8 @@ define(
                     if (Fields[i].type !== undefined) {
                         if (Fields[i].section === undefined) {
                             section['other'][i] = {
-                                i18n : i.replace('Field', '').toLowerCase()
+                                i18n : i.replace('Field', '').toLowerCase(),
+                                doubleColumn : Fields[i].doubleColumn !== undefined
                             }
                         } else {
                             if (section[Fields[i].section] === undefined) {
@@ -35,7 +36,8 @@ define(
                                 section[ Fields[i].section ] = {};
                             }
                             section[ Fields[i].section ][i] = {
-                                i18n : i.replace('Field', '').toLowerCase()
+                                i18n : i.replace('Field', '').toLowerCase(),
+                                doubleColumn : Fields[i].doubleColumn !== undefined
                             }
                         }
                     }
