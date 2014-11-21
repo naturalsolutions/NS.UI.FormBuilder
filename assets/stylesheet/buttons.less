@@ -1,13 +1,8 @@
 .btn, button {
     .exo;
-
-    &:hover {
-        color : white;
-        * { color : white; }
-    }
     height     : 35px;
     margin-top : 12.5px;
-    color      : white;
+    color      : white;    
 
     &.gray {
         border-radius : 0 !important;
@@ -47,6 +42,13 @@
                 background: #702029;
             }
         }
+    }
+
+    &:hover, &:active, &:focus, &:visited {
+        color      : white;
+        box-shadow : none !important;
+        outline    : none !important
+        * { color : white; }
     }
 
 }
