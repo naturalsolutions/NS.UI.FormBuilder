@@ -34,21 +34,19 @@ define(
                 $("body").i18n();
 
 
-                this.initRadioChannel();
+                this.initFormChannel();
+                this.initMainChannel();
             },
 
             /**
-             * [initRadioChannel Initialize all callback and event for backbone radio channels]]
+             * Initialize a radio channel for "form" channel and create all callbacks for each events
+             * This channel is form functionnalities like save and export
              */
-            initRadioChannel : function() {
-
-                this.mainChannel = Backbone.Radio.channel('global');
+            initFormChannel : function() {
                 this.formChannel = Backbone.Radio.channel('form');
 
                 //  This event is sent from the main view when export modal view is closed
                 //  and where the model view data are corrects, event sent with the collection
-
-
                 this.formChannel.on('export:return', _.bind(function(collectionExport) {
                     require(['blobjs', 'filesaver'], _.bind(function() {
 
@@ -72,13 +70,15 @@ define(
                     }, this));  //  End require
                 }, this));
 
+                //  Event received when user wants to save his form on the server
                 this.formChannel.on('save', _.bind(function(formAsJSON) {
-
                     $.ajax({
-                        data: formAsJSON,
-                        type: 'POST',
-                        url: this.URLOptions['saveURL'],
-                        contentType: 'application/json',
+                        data        : formAsJSON,
+                        type        : 'POST',
+                        url         : this.URLOptions['saveURL'],
+                        contentType : 'application/json',
+
+                        //  Trigger event with ajax result on the formView
                         success: _.bind(function(res) {
                             this.formChannel.trigger('save:return', true);
                         }, this),
@@ -86,15 +86,22 @@ define(
                             this.formChannel.trigger('save:return', false);
                         }, this)
                     });
-
-
-
                 }, this));
 
+                //  Event sent from setting view vhen form properties are changed
+                //  see settingView.js
                 this.formChannel.on('edition', _.bind(function(formValues) {
                     $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
                     $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
                 }, this))
+            }
+
+            /**
+             * Initialize a radio channel for "main" channel and create all callbacks for each events
+             */
+            initMainChannel : function() {
+
+                this.mainChannel = Backbone.Radio.channel('global');
 
                 //  Event sent from setting view when backbone forms generation is finished
                 //  Run an nimation for hide panel view and display setting view, I love jQuery !

@@ -32,8 +32,6 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             });
             this.mainView.render();
 
-
-            //  ----------------------------------------------------------
             //  Backbone radio configuration
 
             //  We create to separate channel and keep cleans events configuration
@@ -103,6 +101,8 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 this.currentCollection.updateWithJSON(JSONUpdate);
             }, this));
 
+            //  Event sent from the setting view when user validates form modification (name, description ...)
+            //  See settingView.js
             this.formChannel.on('edition', _.bind(function(formValues) {
                 this.currentCollection['name']        = formValues['name']
                 this.currentCollection['description'] = formValues['description']
