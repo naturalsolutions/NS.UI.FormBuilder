@@ -17,7 +17,6 @@
     "backbone"             : null,
     "underscore"           : null,
     "backbone.radio"       : null,
-    "NS.UI.Navbar"         : "https://github.com/NaturalSolutions/NS.UI.NavBar.git",
     "bootstrap"            : "3.2.0",
     "blobjs"               : "https://github.com/eligrey/Blob.js.git",
     "i18n"                 : "https://github.com/jamuhl/i18next.git",
@@ -34,7 +33,8 @@
     "jquery-simple-slider" : null,
     "autocompleteTreeview" : "https://github.com/NaturalSolutions/NS.UI.autocompTree.git",
     "rangeslider.js"       : "~0.3.6",
-    "bootstrap-select" : "https://github.com/silviomoreto/bootstrap-select.git",
-    "sweetalert" : null
+    "bootstrap-select"     : "https://github.com/silviomoreto/bootstrap-select.git",
+    "sweetalert"           : null,
+    "reneco-fonts"         : null
   }
 }
