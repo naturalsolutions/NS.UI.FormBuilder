@@ -91,6 +91,11 @@ define(
 
                 }, this));
 
+                this.formChannel.on('edition', _.bind(function(formValues) {
+                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
+                    $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
+                }, this))
+
                 //  Event sent from setting view when backbone forms generation is finished
                 //  Run an nimation for hide panel view and display setting view, I love jQuery !
                 this.mainChannel.on('formCreated', _.bind(function() {
@@ -103,12 +108,10 @@ define(
                 //  Event sent from setting view when field changed are saved
                 //  and the data are correct
                 //  Run an animation for hide setting view and display panel view
-                this.mainChannel.on('formCommit', _.bind(function(isValid) {
-                    if (isValid) {
-                        $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
-                        $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
-                        window.location.hash = "#";
-                    }
+                this.mainChannel.on('formCommit', _.bind(function() {
+                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
+                    $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
+                    window.location.hash = "#";
                 }, this))
 
                 //  Event sent from setting view when modifications are cancelled

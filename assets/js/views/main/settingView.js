@@ -51,7 +51,7 @@ define([
                 //  Get form schema for backbone forms
                 var formSchema = formObject.schema;
 
-                this.generateForm(formSchema);
+                this.generateForm(formObject);
             }, this));
 
             this.fieldWithSameType = null;
@@ -74,10 +74,11 @@ define([
                 }
 
                 this.form = new Backbone.Form({
-                    schema: formSchema,
+                    model: formSchema,
                 }).render();
 
                 this.$el.find('#form').append(this.form.el)
+                this.$el.find('.scroll').perfectScrollbar('update');
                 this.$el.find('#getField').hide();
                 this.mainChannel.trigger('formCreated');
             }, this));
@@ -88,9 +89,16 @@ define([
         saveChange : function() {
             var isValid = this.form.commit() === undefined;
             if (isValid) {
+
+                if (this.$el.find('#getField').is(':visible')) {
+                    this.mainChannel.trigger('formCommit')
+                } else {
+                    this.formChannel.trigger('edition', this.form.getValue());
+                }
+
                 this.removeForm();
-                this.mainChannel.trigger('formCommit', isValid)
             }
+
         },
 
         cancel : function(){
@@ -123,6 +131,7 @@ define([
                 this.$el.find('select').append('<option>No field found</option>');
                 this.$el.find('select').prop('disabled', true)
             }, this)).always(_.bind(function() {
+                this.$el.find('#getField').show();
                 this.$el.find('select').selectpicker();
                 //  Always create form even if saved Field cannot be load
                 this.createForm(field);
@@ -146,7 +155,8 @@ define([
                     }).render();
                 }
 
-                $('.settings #form').append(this.form.el)
+                this.$el.find('#form').append(this.form.el)
+                this.$el.find('.scroll').perfectScrollbar('update');
 
                 this.mainChannel.trigger('formCreated');
 
@@ -201,12 +211,12 @@ define([
         },
 
         removeForm : function() {
+            this.$el.find('#form').html('');
             this.form.undelegateEvents();
             this.form.$el.removeData().unbind();
             this.form.remove();
             Backbone.View.prototype.remove.call(this.form);
             this.form = null;
-            this.$el.find('#form').html('');
         },
 
         resetSelect : function() {

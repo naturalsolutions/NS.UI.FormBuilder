@@ -49,8 +49,8 @@ define([
 
             //  This event is send when form properties are changed (name, description, keywords ...)
             //  This view display only the form name, so the form name is passed in the callback
-            this.formChannel.on('edition', _.bind(function(formName) {
-                this.$el.find('h1').text( formName );
+            this.formChannel.on('edition', _.bind(function(formValues) {
+                this.$el.find('h1').html( formValues.name + '<span class="reneco settings pull-right"></span>');
             }, this));
 
             //  This event is send from the router with the ajax request result

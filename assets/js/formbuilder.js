@@ -102,6 +102,12 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             this.formChannel.on('JSONUpdate', _.bind(function(JSONUpdate) {
                 this.currentCollection.updateWithJSON(JSONUpdate);
             }, this));
+
+            this.formChannel.on('edition', _.bind(function(formValues) {
+                this.currentCollection['name']        = formValues['name']
+                this.currentCollection['description'] = formValues['description']
+                this.currentCollection['keywords']    = formValues['keywords']
+            }, this));
         }
 
     };
