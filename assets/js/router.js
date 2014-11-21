@@ -94,7 +94,7 @@ define(
                     $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
                     $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
                 }, this))
-            }
+            },
 
             /**
              * Initialize a radio channel for "main" channel and create all callbacks for each events
