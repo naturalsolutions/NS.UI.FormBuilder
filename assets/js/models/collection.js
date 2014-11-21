@@ -10,11 +10,38 @@
 
 define(['backbone', 'models/fields'], function (Backbone, Fields) {
 
+    var fieldTemplate = _.template('\
+        <div class="form-group field-<%= key %>">\
+            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
+            <div data-editor >\
+                <p class="help-block" data-error></p>\
+                <p class="help-block"><%= help %></p>\
+            </div>\
+        </div>\
+    ');
+
     /**
      * Implement form object as a fields collection
      */
     var Form = Backbone.Collection.extend({
         model: Fields.BaseField,
+
+        schema : {
+            name : {
+                type        : "Text",
+                title       : $.t('collection.name'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators : ['required']
+            },
+            description : {
+                type        : "TextArea",
+                title       : $.t('collection.description'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators : ['required']
+            }
+        },
 
         /**
          * Init form collection
