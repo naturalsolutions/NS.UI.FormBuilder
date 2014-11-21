@@ -13,54 +13,6 @@ define(
 
         var AppRouter = Backbone.Router.extend({
 
-            mainActions : {
-                /*save : new NS.UI.NavBar.Action({
-                    title           :$.t('nav.save.title'),
-                    allowedRoles    : ["reader"],
-                    actions: {
-                        'repo' : new NS.UI.NavBar.Action({
-                            title       : $.t('nav.save.cloud'),
-                            allowedRoles: ['reader'],
-                            url : "#save"
-                        }),
-                        'export': new NS.UI.NavBar.Action({
-                            allowedRoles    : ["reader"],
-                            title           : $.t('nav.save.export'),
-                            url : "#export"
-                        })
-                    }
-                }),
-
-                import : new NS.UI.NavBar.Action({
-                    actions : {
-                        'import.file' : new NS.UI.NavBar.Action({
-                            allowedRoles : ["reader"],
-                            title        : $.t("nav.import.import"),
-                            url          : "#import"
-                        }),
-                        'import.load' : new NS.UI.NavBar.Action({
-                            title        : $.t("nav.import.cloud"),
-                            allowedRoles : ["reader"],
-                            url          : '#load'
-                        })
-                    },
-                    title       : $.t("nav.import.title"),
-                    allowedRoles: ["reader"]
-                }),
-
-                clear: new NS.UI.NavBar.Action({
-                    url          : '#clear',
-                    allowedRoles : ["reader"],
-                    title        : $.t('nav.clear')
-                }),
-
-                show: new NS.UI.NavBar.Action({
-                    url          : '#show',
-                    allowedRoles : ["reader"],
-                    title        : $.t('nav.compare')
-                })*/
-            },
-
             routes: {
                 ""             : 'home',
                 'saveprotocol' : 'saveProtocol',
@@ -156,7 +108,12 @@ define(
                 }, this))*/
             },
 
-            home: function() {},
+            /**
+             * Initiale route
+             */
+            home: function() {
+                //  Awesome function !!!
+            },
 
             /**
              * This function is run when user wants to duplicate a field
