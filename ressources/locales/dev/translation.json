@@ -154,5 +154,11 @@
         "presentation" : "Presentation field",
         "other" : "Other fields",
         "list" : "List fields"
+    },
+
+    "collection" : {
+        "name" : "Form name",
+        "description" : "Form description",
+        "keywords" : "Form keywords"
     }
 }

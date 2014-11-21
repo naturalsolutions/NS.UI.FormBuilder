@@ -157,5 +157,11 @@
         "presentation" : "Champs de présentation",
         "other" : "Autres champs",
         "list" : "Champs à choix multiples"
+    },
+
+    "collection" : {
+        "name" : "Nom du formulaire",
+        "description" : "Description du formulaire",
+        "keywords" : "Mot clés du formulaire"
     }
 }
