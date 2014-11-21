@@ -9,8 +9,7 @@
     footer {
         height        : 60px;
         position      : relative;
-        bottom        : 15px;
-        left          : 0;
+        bottom        : 20px;
         background    : #000;
         margin-left   : -15px;
         margin-right  : -15px !important;
@@ -35,17 +34,17 @@
     .col-md-10 {
         padding-right : 40px !important;
         padding-left  : 40px !important;
-        #protocolName {
+        h1 {
             .exo;
             width           : 100%;
             background      : #111;
-            border          : none;
-            outline         : none;
-            height          : 70px;
             font-size       : 35px;
             color           : #fff;
             border-bottom   : 1px #555 solid;
-            box-shadow      : none;
+
+            padding-bottom: 15px;
+            overflow: hidden;
+            margin-bottom: 0;
             &:focus { box-shadow: none; }
         }
     }
@@ -122,8 +121,8 @@
                                 }
                             }
                             &.btn {
-                                width: 97px;
-                                margin-top: -5px;
+                                //width: 97px;
+                                margin-top: -15px;
                                 i {
                                     height       : 30px;
                                     width        : 30px;
@@ -143,12 +142,46 @@
                     padding-bottom: 10px;
                 }
             }
+
             &:hover {
                 border-color : #333;
                 .row {
                     &.paddingBottom5 {
                         background: #333;
                     }
+                }
+            }
+
+            a {
+                color : #aaa;
+                &:hover {
+                    color : white;
+                }
+                &.copy, &.trash {
+                    font-size: 25px;
+                    margin-right: 7px;
+                }
+                &.trash {
+                    margin-right: 20px;
+                }
+            }
+        }
+
+        a.reneco {
+            overflow: hidden;
+            padding-right: 50px;
+            div {
+                position: absolute;
+                float: right;
+                top: 4px;
+                height: 35px;
+                width: 35px;
+                background: #000;
+                line-height: 35px;
+                overflow: hidden;
+                right: 15px;
+                span {
+                    background: transparent;
                 }
             }
         }
