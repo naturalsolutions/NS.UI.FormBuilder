@@ -100,7 +100,7 @@ define([
             });
 
             this.settingView = new SettingView({
-                el : '.settings',
+                el : '#settings',
                 URL : _.pick(this.URLOptions, 'preConfiguredField')
             })
 
