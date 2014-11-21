@@ -53,6 +53,16 @@ define([
                 this.$el.find('h1').text( formName );
             }, this));
 
+            //  This event is send from the router with the ajax request result
+            //  And we display message with sweet alert
+            this.formChannel.on('save:return', _.bind(function(saveResult) {
+                if (saveResult) {
+                    swal("Sauvé !", "Votre formulaire a été enregistré sur le serveur !", "success");
+                } else {
+                    swal("Une erreur est survenu !", "Votre formulaire n'a pas été enregistré !\nPensez à faire un export", "error");
+                }
+            }, this));
+
         },
 
         protocolSettings : function() {
@@ -113,6 +123,10 @@ define([
             }, this));
         },
 
+        /**
+         * Display a sweet alert and ask the classic "Are you sur ?"
+         * And clear the current form if the user agrees
+         */
         clear : function() {
             var self = this;
 
@@ -125,20 +139,22 @@ define([
                 confirmButtonText  : "Oui, supprimer",
                 cancelButtonText   : "Annuler",
                 closeOnConfirm     : false,
-                closeOnCancel      : false
+                closeOnCancel      : true
             }, function(isConfirm) {
                 if (isConfirm) {
                     swal("Supprimé !", "Votre formulaire a été supprimé !", "success");
                     self.collection.clearAll();
-                } else {
-                    swal("Annulé", "", "error");
                 }
             });
 
         },
 
+        /**
+         * Run when user wants to save current form on the server
+         * Trigger an event for the router on the form channel
+         */
         save : function() {
-
+            this.formChannel.trigger('save', this.collection.getJSON());
         },
 
 

@@ -17,7 +17,6 @@ define(
                 ""             : 'home',
                 'saveprotocol' : 'saveProtocol',
                 'setting/:id'  : 'modelSetting',
-                'save'         : 'saveOnRepo',
                 'import'       : 'import',
                 'show'         : 'show',
                 "copy/:id"     : "copy"
@@ -48,8 +47,9 @@ define(
 
                 //  This event is sent from the main view when export modal view is closed
                 //  and where the model view data are corrects, event sent with the collection
-                this.formChannel.on('export:return', _.bind(function(collectionExport) {
 
+
+                this.formChannel.on('export:return', _.bind(function(collectionExport) {
                     require(['blobjs', 'filesaver'], _.bind(function() {
 
                         try {
@@ -70,6 +70,24 @@ define(
                         window.location.hash = '#';
 
                     }, this));  //  End require
+                }, this));
+
+                this.formChannel.on('save', _.bind(function(formAsJSON) {
+
+                    $.ajax({
+                        data: formAsJSON,
+                        type: 'POST',
+                        url: this.URLOptions['saveURL'],
+                        contentType: 'application/json',
+                        success: _.bind(function(res) {
+                            this.formChannel.trigger('save:return', true);
+                        }, this),
+                        error: _.bind(function(jqXHR, textStatus, errorThrown) {
+                            this.formChannel.trigger('save:return', false);
+                        }, this)
+                    });
+
+
 
                 }, this));
 
@@ -134,53 +152,6 @@ define(
              */
             modelSetting: function(modelID) {
                 this.mainChannel.trigger('getModel', modelID);
-            },
-
-
-
-
-            saveOnRepo: function() {
-                require(['views/modals/saveProtocol'], _.bind(function(SaveProtocolModalView) {
-                    $(this.el).append('<div class="modal  fade" id="saveModal"></div>');
-                    var modalView = new SaveProtocolModalView({
-                        el                   : '#saveModal',
-                        protocolAutocomplete : this.URLOptions['protocolAutocomplete'],
-                        keywordAutocomplete  : this.URLOptions['keywordAutocomplete']
-                    });
-                    modalView.render();
-                    $('#saveModal').i18n();
-
-                    $('#saveModal').on('hidden.bs.modal', _.bind(function () {
-
-                        this.mainChannel.on('getJSON:return', _.bind(function(JSON) {
-                            var datas = modalView.getData();
-                            datas['content'] = JSON;
-
-                            $.ajax({
-                                data: datas,
-                                type: 'POST',
-                                url: '/protocols',
-                                contentType: 'application/json',
-                                success: function(res) {
-                                    $('#saveModal').modal('hide').removeData();
-                                    new NS.UI.Notification({
-                                        type: 'success',
-                                        title: 'Protocol saved : ',
-                                        message: 'your protocol has been saved correctly !'
-                                    });
-
-                                    swal("Sauvé !", "Votre formulaire a été enregistré sur le serveur !", "success");
-                                },
-                                error: function(jqXHR, textStatus, errorThrown) {
-                                    $('#saveModal').modal('hide').removeData();
-                                    swal("Une erreur est survenu !", "Votre formulaire n'a pas été enregistré !<br /> Pensez à faire un export", "error");
-                                }
-                            });
-                        }, this));
-                        this.mainChannel.on('getJSON');
-
-                    }, this));
-                }, this));
             },
 
             show: function() {
