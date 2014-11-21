@@ -12,23 +12,42 @@ define([
 
     var SettingView = Backbone.View.extend({
 
+        /**
+         * jQuery event triggered by the view
+         * @type {Object}
+         */
         events : {
-            'change select' : 'selectChanged',
-            'click #cancel' : 'cancel',
+            'change select'     : 'selectChanged',
+            'click #cancel'     : 'cancel',
             'click #saveChange' : 'saveChange'
         },
 
+        /**
+         * Initialize setting view
+         *
+         * @param  {[Object]} options Initialization option like URL options and main HTML element
+         */
         initialize : function(options) {
 
-            this.el       = options.el;
-            this.URL      = options.URL;
-            this.template = _.template(settingTemplate);
-            this.form     = null;
+            this.el                = options.el;
+            this.URL               = options.URL;
+            this.template          = _.template(settingTemplate);
+            this.form              = null;
+            this.fieldWithSameType = null;
 
-            //  Init radio channel
+            //  Init backbone radio channel
+
+            this.initMainChannel();
+            this.initFormChannel();
+
+            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect', 'generateForm');
+        },
+
+        /**
+         * Register settingView to main radio channel and listen event on main channel
+         */
+        initMainChannel : function() {
             this.mainChannel = Backbone.Radio.channel('global');
-
-
 
             this.mainChannel.on('saveConfiguration', _.bind(function() {
                 this.mainChannel.trigger('fieldConfiguration', this.form.model.toJSON());
@@ -38,27 +57,21 @@ define([
                 //  Create form with model
                 this.initForm(field);
             }, this));
+        },
 
-            //  -----------------------------------------------------
-            //  Form channel configuration
-
-
+        /**
+         *  Register the view to the form channel and listent on form channel
+         */
+        initFormChannel : function() {
             //  The form channel is used only for the main form object options
             //  save, export, clear and settings
             this.formChannel = Backbone.Radio.channel('form');
 
+            //  Event is sent by formView when user wants to edit form configuration (name, description and keywords)
             this.formChannel.on('displaySettings', _.bind(function(formObject) {
-                //  Get form schema for backbone forms
-                var formSchema = formObject.schema;
-
                 this.generateForm(formObject);
             }, this));
-
-            this.fieldWithSameType = null;
-
-            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect', 'generateForm');
         },
-
 
         /**
          * Generate form for edit main form object properties
@@ -85,11 +98,13 @@ define([
 
         },
 
-
+        /**
+         * Check generated form values and send events if all is good
+         * This function concerns generated form for field AND main form
+         */
         saveChange : function() {
             var isValid = this.form.commit() === undefined;
             if (isValid) {
-
                 if (this.$el.find('#getField').is(':visible')) {
                     this.mainChannel.trigger('formCommit')
                 } else {
@@ -98,14 +113,22 @@ define([
 
                 this.removeForm();
             }
-
         },
 
+        /**
+         * Send an event on form channel when user wants to clear current form
+         */
         cancel : function(){
             this.removeForm();
             this.mainChannel.trigger('formCancel')
         },
 
+        /**
+         * Render view
+         *
+         * @param  {[Object]} options Rendering otpions
+         * @return {Object} return current view
+         */
         render : function(options) {
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
@@ -115,6 +138,11 @@ define([
             return this;
         },
 
+        /**
+         * Create a form to edit field properties
+         *
+         * @param  {[Object]} field Field with which backbone forms will generate an edition form
+         */
         initForm : function(field) {
             $.getJSON(this.URL.preConfiguredField, _.bind(function(fieldList) {
 
@@ -139,6 +167,11 @@ define([
             }, this))
         },
 
+        /**
+         * Create a form to edit current collection properties (name, description and keywords)
+         *
+         * @param  {[Object]} field current main form (Backbone collection)
+         */
         createForm : function(field) {
             require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
 
@@ -210,6 +243,9 @@ define([
             }, this));
         },
 
+        /**
+         * Remove the generated form and clear HTML element
+         */
         removeForm : function() {
             this.$el.find('#form').html('');
             this.form.undelegateEvents();
@@ -219,10 +255,19 @@ define([
             this.form = null;
         },
 
+        /**
+         * Reset the select element with pre configuration field name
+         */
         resetSelect : function() {
             this.$el.find('select').html('<option value="" disabled selected>Select an option</option>');
         },
 
+        /**
+         * Event send when user change select value
+         * Set value to the current vield
+         *
+         * @param  {[Object]} e jQuery event
+         */
         selectChanged : function(e) {
             var choice = this.fieldWithSameType[ $(e.target).val() ];
 
