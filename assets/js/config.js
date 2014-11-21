@@ -18,17 +18,12 @@ require.config({
         jquery                 : "../../libs/jquery/dist/jquery",
         "jquery-ui"            : "../../libs/jquery-ui/jquery-ui",
         underscore             : "../../libs/underscore/underscore",
-        "NS.UI.Navbar"         : "../../libs/NS.UI.Navbar/navbar",
-        "NS.UI.NavbarTheme"    : "../../libs/NS.UI.Navbar/themes/navbar.bootstrap3",
         requirejs              : "../../libs/requirejs/require",
-        "font-awesome"         : "../../libs/font-awesome/fonts/*",
         "backbone-forms"       : "../../libs/backbone-forms/distribution.amd/backbone-forms",
         modalAdapter           : "../../libs/bootstrapAdapter/src/backbone.bootstrap-modal",
         "backbone-forms-list"  : "../../libs/backbone-forms/distribution.amd/editors/list.min",
         bootstrapTemplate      : "../../libs/backbone-forms/distribution/templates/bootstrap3",
-        xmljs                  : "../../libs/xmljs/xmllint",
         bootstrapAdapter       : "../../libs/bootstrapAdapter/index",
-        nanoscroller           : "../../libs/nanoscroller/bin/javascripts/jquery.nanoscroller",
         typeahead              : "../../libs/typeahead/bootstrap3-typeahead",
         "backbone.radio"       : "../../libs/backbone.radio/build/backbone.radio",
         fuelux                 : "../../libs/fuelux/dist/js/fuelux",
@@ -38,8 +33,8 @@ require.config({
         "jquery-simple-slider" : "../../libs/jquery-simple-slider/js/simple-slider",
         "perfect-scrollbar"    : "../../libs/perfect-scrollbar/src/perfect-scrollbar",
         rangeslider            : "../../libs/rangeslider.js/dist/rangeslider",
-        "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select.min",
-        sweetalert : "../../libs/sweetalert/lib/sweet-alert.min"
+        "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select",
+        sweetalert             : "../../libs/sweetalert/lib/sweet-alert",
     },
     shim: {
         blobjs: {
@@ -91,20 +86,6 @@ require.config({
                 "jquery"
             ]
         },
-        "NS.UI.Navbar": {
-            exports: "$",
-            deps: [
-                "jquery",
-                "backbone",
-                "bootstrap"
-            ]
-        },
-        "NS.UI.NavbarTheme": {
-            deps: [
-                "NS.UI.Navbar"
-            ],
-            exports: "NS"
-        },
         bootstrap: {
             exports: "$",
             deps: [
@@ -116,12 +97,6 @@ require.config({
             deps: [
                 "jquery",
                 "bootstrap"
-            ]
-        },
-        nanoscroller: {
-            exports: "$",
-            deps: [
-                "jquery"
             ]
         },
         autocompleteTreeView: {
@@ -144,22 +119,19 @@ require.config({
                 "jquery"
             ]
         },
-        "bootstrap-select" :{
+        "bootstrap-select": {
             exports: "$",
             deps: [
                 "jquery"
             ]
         },
-        sweetalert:{
+        sweetalert: {
             exports: "$",
             deps: [
                 "jquery"
             ]
         }
-    },
-    packages: [
-
-    ]
+    }
 });
 
 require(['formbuilder'], function(formbuilder) {
