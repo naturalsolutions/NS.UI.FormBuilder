@@ -4,29 +4,141 @@ define([
     'backbone',
     'text!../../../templates/main/formView.html',
     'autocompleteTreeView',
+    'backbone.radio',
     'i18n',
     'jquery-ui',
     'perfect-scrollbar',
     'bootstrap'
-], function($, _, Backbone, formViewTemplate, autocompTree) {
+], function($, _, Backbone, formViewTemplate, autocompTree, Radio) {
 
     var FormView = Backbone.View.extend({
 
         events: {
-            'change #protocolName' : 'changeFormName'
+            'click h1>span' : 'protocolSettings',
+            'click #export'   : 'export',
+            'click #import'   : 'import',
+            'click #clearAll' : 'clear',
+            'click #save'     : 'save'
         },
 
-        initialize: function() {
+        initialize: function(options) {
             this.template = _.template(formViewTemplate);
             _.bindAll(this, 'render',
                             'addElement',
-                            'changeFormName',
                             'updateView',
                             'getModel',
-                            "getSubView"
+                            "getSubView",
+                            'protocolSettings',
+                            'export',
+                            'import',
+                            'clear'
                     );
             this.collection.bind('newElement', this.addElement);
             this._view = [];
+
+            this.URLOptions = options.URLOptions;
+
+
+            //  -------------------------------------------------------------
+            //  Backbone radio configuration
+
+
+            //  The form channel is used only for the main form object options
+            //  save, export, clear and settings
+            this.formChannel = Backbone.Radio.channel('form');
+
+            //  This event is send when form properties are changed (name, description, keywords ...)
+            //  This view display only the form name, so the form name is passed in the callback
+            this.formChannel.on('edition', _.bind(function(formName) {
+                this.$el.find('h1').text( formName );
+            }, this));
+
+        },
+
+        protocolSettings : function() {
+            //  Send an event to the setting view (settingView.js) to display properties form
+            this.formChannel.trigger('displaySettings', this.collection);
+        },
+
+
+        export : function() {
+            require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
+                $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
+                var modalView = new exportProtocolJSON({
+                    el: "#exportModal",
+                    URLOptions: this.URLOptions
+                });
+                modalView.render();
+                $("#exportModal").i18n();
+
+                $('#exportModal').on('hidden.bs.modal', _.bind(function () {
+
+                    var datas = modalView.getData();
+                    if (datas['response'] === true) {
+                        this.formChannel.trigger('export', datas);
+                    }
+
+                }, this));
+
+            }, this));
+        },
+
+
+        import : function() {
+            require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
+                $(this.el).append('<div class="modal fade" id="importModal"></div>');
+                var modalView = new importProtocolModal({
+                    el: "#importModal"
+                });
+                modalView.render();
+                $("#importModal").i18n();
+
+                $('#importModal').on('hidden.bs.modal', _.bind(function () {
+                    var datas = modalView.getData();
+
+                    Utilities.ReadFile(datas['file'], _.bind(function(result) {
+                        if (result !== false) {
+
+                            var jsonParsed = $.parseJSON(result);
+                            this.formChannel.trigger('JSONUpdate', jsonParsed);
+
+                        } else {
+                            // display error
+                            console.log (result)
+                        }
+                    }, this));
+
+                }, this));
+
+            }, this));
+        },
+
+        clear : function() {
+            var self = this;
+
+            swal({
+                title              : "Etes vous sûr?",
+                text               : "Le formulaire sera définitivement perdu !",
+                type               : "warning",
+                showCancelButton   : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText  : "Oui, supprimer",
+                cancelButtonText   : "Annuler",
+                closeOnConfirm     : false,
+                closeOnCancel      : false
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    swal("Supprimé !", "Votre formulaire a été supprimé !", "success");
+                    self.collection.clearAll();
+                } else {
+                    swal("Annulé", "", "error");
+                }
+            });
+
+        },
+
+        save : function() {
+
         },
 
 
@@ -105,10 +217,6 @@ define([
 
         getModel : function() {
             return this.collection.length;
-        },
-
-        changeFormName: function() {
-            this.collection.name = $('#protocolName').val();
         },
 
         getJSON : function() {

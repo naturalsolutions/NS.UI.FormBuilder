@@ -8,13 +8,13 @@
  */
 
 define(
-    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'fancytree', 'NS.UI.Navbar', 'NS.UI.NavbarTheme', 'sweetalert'],
+    ['jquery', 'underscore', 'backbone', 'views/main/mainView', 'models/collection', 'backbone.radio', 'fancytree', 'sweetalert'],
     function($, _, Backbone, MainView, collection, Radio, fancytree) {
 
         var AppRouter = Backbone.Router.extend({
 
             mainActions : {
-                save : new NS.UI.NavBar.Action({
+                /*save : new NS.UI.NavBar.Action({
                     title           :$.t('nav.save.title'),
                     allowedRoles    : ["reader"],
                     actions: {
@@ -58,7 +58,7 @@ define(
                     url          : '#show',
                     allowedRoles : ["reader"],
                     title        : $.t('nav.compare')
-                })
+                })*/
             },
 
             routes: {
@@ -67,7 +67,6 @@ define(
                 'setting/:id'  : 'modelSetting',
                 'save'         : 'saveOnRepo',
                 'import'       : 'import',
-                'load'         : 'load',
                 'show'         : 'show',
                 "copy/:id"     : "copy"
             },
@@ -84,14 +83,20 @@ define(
                 $("body").i18n();
 
 
-                //  ----------------------------------------------------------
-                //  Backbone radio configuration
+                this.initRadioChannel();
+            },
+
+            /**
+             * [initRadioChannel Initialize all callback and event for backbone radio channels]]
+             */
+            initRadioChannel : function() {
 
                 this.mainChannel = Backbone.Radio.channel('global');
+                this.formChannel = Backbone.Radio.channel('form');
 
                 //  This event is sent from the main view when export modal view is closed
                 //  and where the model view data are corrects, event sent with the collection
-                this.mainChannel.on('export:return', _.bind(function(collectionExport) {
+                this.formChannel.on('export:return', _.bind(function(collectionExport) {
 
                     require(['blobjs', 'filesaver'], _.bind(function() {
 
@@ -219,40 +224,6 @@ define(
 
                     }, this));
                 }, this));
-            },
-
-            import : function() {
-                require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
-                    $(this.el).append('<div class="modal fade" id="importModal"></div>');
-                    var modalView = new importProtocolModal({
-                        el: "#importModal"
-                    });
-                    modalView.render();
-                    $("#importModal").i18n();
-
-                    $('#importModal').on('hidden.bs.modal', _.bind(function () {
-                        var datas = modalView.getData();
-
-                        Utilities.ReadFile(datas['file'], _.bind(function(result) {
-                            if (result !== false) {
-
-                                var jsonParsed = $.parseJSON(result);
-                                this.mainChannel.trigger('JSONUpdate', jsonParsed);
-                                window.location.hash = '#';
-
-                            } else {
-                                // display error
-                                console.log (result)
-                            }
-                        }, this));
-
-                    }, this));
-
-                }, this));
-            },
-
-            load: function() {
-                alert("I'm working on it !");
             },
 
             show: function() {

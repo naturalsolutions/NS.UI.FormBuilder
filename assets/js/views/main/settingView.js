@@ -28,6 +28,8 @@ define([
             //  Init radio channel
             this.mainChannel = Backbone.Radio.channel('global');
 
+
+
             this.mainChannel.on('saveConfiguration', _.bind(function() {
                 this.mainChannel.trigger('fieldConfiguration', this.form.model.toJSON());
             }, this));
@@ -37,10 +39,51 @@ define([
                 this.initForm(field);
             }, this));
 
+            //  -----------------------------------------------------
+            //  Form channel configuration
+
+
+            //  The form channel is used only for the main form object options
+            //  save, export, clear and settings
+            this.formChannel = Backbone.Radio.channel('form');
+
+            this.formChannel.on('displaySettings', _.bind(function(formObject) {
+                //  Get form schema for backbone forms
+                var formSchema = formObject.schema;
+
+                this.generateForm(formSchema);
+            }, this));
+
             this.fieldWithSameType = null;
 
-            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect');
+            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect', 'generateForm');
         },
+
+
+        /**
+         * Generate form for edit main form object properties
+         *
+         * @param  {Object} formSchema main form object schema
+         */
+        generateForm : function(formSchema) {
+
+            require(['backbone-forms'], _.bind(function() {
+                if (this.form !== null) {
+                    //  Remove last form and create new with new model
+                    this.removeForm()
+                }
+
+                this.form = new Backbone.Form({
+                    schema: formSchema,
+                }).render();
+
+                this.$el.find('#form').append(this.form.el)
+                this.$el.find('#getField').hide();
+                this.mainChannel.trigger('formCreated');
+            }, this));
+
+        },
+
 
         saveChange : function() {
             var isValid = this.form.commit() === undefined;
@@ -104,7 +147,6 @@ define([
                 }
 
                 $('.settings #form').append(this.form.el)
-                $('.settings #form').addClass('nano-content')
 
                 this.mainChannel.trigger('formCreated');
 

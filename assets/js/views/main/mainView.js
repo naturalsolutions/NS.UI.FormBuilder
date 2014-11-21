@@ -6,37 +6,74 @@ define([
     'views/main/formView',
     'views/main/settingView',
     'text!../../../templates/main/mainView.html',
-    'backbone.radio',
     'i18n',
     'sweetalert'
-], function($, _, Backbone, PanelView, FormView, SettingView, mainViewTemplate, Radio) {
+], function($, _, Backbone, PanelView, FormView, SettingView, mainViewTemplate) {
 
     var MainView = Backbone.View.extend({
 
+        /**
+         * Views event objects
+         * @type {Object}
+         */
         events : {
-            'click #clearAll' : 'clear',
-            'click #export'   : 'export',
-            'click #save'     : 'save',
             'click #toggle'   : 'toggle',
             'click #untoggle' : 'untoggle'
         },
 
+        /**
+         * View constructor
+         *
+         * @param  {Object} All options for view configuration
+         */
         initialize : function(options) {
             this.el         = options.el;
             this.template   = _.template(mainViewTemplate);
             this.URLOptions = options.URLOptions;
             this.form       = options.form;
 
-            this.mainChannel = Backbone.Radio.channel('global');
-
-            _.bindAll(this, 'render', 'renderSubView', 'getSubView', 'clear', 'export', 'save');
+            _.bindAll(this, 'render', 'renderSubView', 'getSubView');
         },
 
+        /**
+         * Render main view, render sub views too
+         */
         render : function() {
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
             this.renderSubView();
             return this;
+        },
+
+        /**
+         * Render all main views for the application
+         */
+        renderSubView : function() {
+
+            //  Panel view, on the left, with each field type
+            this.panelView = new PanelView({
+                el: '.widgetsPanel',
+                collection: this.form,
+            });
+
+            //  Form view, central panel with form edition
+            this.formView = new FormView({
+                collection: this.form,
+                el: $('.dropArea'),
+                URLOptions : this.URLOptions
+            });
+
+            //  Setting view, hide on start display when user tries to edit field or collection properties
+            this.settingView = new SettingView({
+                el : '#settings',
+                URL : _.pick(this.URLOptions, 'preConfiguredField')
+            })
+
+            //  Render all subviews
+
+            this.panelView.render();
+            this.formView.render();
+            this.settingView.render();
         },
 
         untoggle : function() {
@@ -83,81 +120,6 @@ define([
 
             //  Display gobach
             $('#toggle').attr('id', 'untoggle').text('>')
-        },
-
-        renderSubView : function() {
-            //  ---------------------------------------------------
-            //  Create each view for the formbuilder
-
-            this.panelView = new PanelView({
-                el: '.widgetsPanel',
-                collection: this.form,
-            });
-
-            this.formView = new FormView({
-                collection: this.form,
-                el: $('.dropArea')
-            });
-
-            this.settingView = new SettingView({
-                el : '#settings',
-                URL : _.pick(this.URLOptions, 'preConfiguredField')
-            })
-
-            this.panelView.render();
-            this.formView.render();
-            this.settingView.render();
-        },
-
-        clear : function() {
-            var self = this;
-
-            swal({
-                title              : "Etes vous sûr?",
-                text               : "Le formulaire sera définitivement perdu !",
-                type               : "warning",
-                showCancelButton   : true,
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : "Oui, supprimer",
-                cancelButtonText   : "Annuler",
-                closeOnConfirm     : false,
-                closeOnCancel      : false
-            }, function(isConfirm) {
-                if (isConfirm) {
-                    swal("Supprimé !", "Votre formulaire a été supprimé !", "success");
-                    self.form.clearAll();
-                } else {
-                    swal("Annulé", "", "error");
-                }
-            });
-
-
-        },
-
-        export : function() {
-            require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
-                $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
-                var modalView = new exportProtocolJSON({
-                    el: "#exportModal",
-                    URLOptions: this.URLOptions
-                });
-                modalView.render();
-                $("#exportModal").i18n();
-
-                $('#exportModal').on('hidden.bs.modal', _.bind(function () {
-
-                    var datas = modalView.getData();
-                    if (datas['response'] === true) {
-                        this.mainChannel.trigger('export', datas);
-                    }
-
-                }, this));
-
-            }, this));
-        },
-
-        save : function() {
-
         },
 
         getSubView : function(subViewID) {
