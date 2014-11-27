@@ -66,7 +66,7 @@ define([
             //  Setting view, hide on start display when user tries to edit field or collection properties
             this.settingView = new SettingView({
                 el : '#settings',
-                URL : _.pick(this.URLOptions, 'preConfiguredField')
+                URL : _.pick(this.URLOptions, 'preConfiguredField', 'keywordAutocomplete', 'protocolAutocomplete')
             })
 
             //  Render all subviews
