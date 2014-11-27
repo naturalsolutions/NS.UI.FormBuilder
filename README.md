@@ -2,7 +2,7 @@
 
 ## Screenshoots
 
-![formBuilder](https://drive.google.com/open?id=0B363_4UXLoNhbHdmYjhrVHdoVWc&authuser=0)
+![formBuilder](http://s16.postimg.org/722bej4p1/Form_Builder_Google_Chrome_2.jpg)
 
 ## Features
 
