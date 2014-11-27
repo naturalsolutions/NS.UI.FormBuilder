@@ -87,12 +87,11 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             //  We trigger on the mainchannel with current form as json data
             this.formChannel.on('export', _.bind(function(datas) {
                 //  Set attribute with datas parameters
-                this.currentCollection['description'] = datas['description'];
-                this.currentCollection['keywords']    = datas['keywords'];
-                this.currentCollection['name']        = datas['name'];
-                this.currentCollection['comments']    = datas['comments'];
 
-                this.formChannel.trigger('export:return', this.currentCollection.getJSON());
+                this.formChannel.trigger('export:return', {
+                    collection : this.currentCollection.getJSON(),
+                    filename : datas['filename']
+                });
             }, this));
 
 

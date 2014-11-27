@@ -177,4 +177,51 @@
         }
     }
 
+    .pillbox {
+
+        background: #111;
+        color: #555;
+        border: 1px #333 solid;
+
+        .pill-group {
+            padding-left: 0;
+            margin-bottom: 0;
+            padding-top: 3px;
+            padding-bottom: 3px;
+
+            .pill {
+                background    : transparent;
+                border        : 1px #333 solid;
+                border-radius : 0;
+                margin-top    : 0;
+                margin-left: 7px;
+
+                span.reneco {
+                    color : white !important;
+                    font-size: 15px !important;
+                    padding-left: 7px;
+                    margin-top: 3px;
+                }
+            }
+
+            .pillbox-input-wrap {
+                //width: 100%;
+
+                input[type="text"] {
+                    border: none;
+                    background : transparent;
+                    float : left;
+                    &:active, &:focus {
+                        box-shadow: none !important;
+                    }
+                }
+
+                .pillbox-more {
+                    display : none;
+                }
+            }
+
+        }
+
+    }
 }

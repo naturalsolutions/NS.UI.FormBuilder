@@ -82,12 +82,9 @@ define([
                 $("#exportModal").i18n();
 
                 $('#exportModal').on('hidden.bs.modal', _.bind(function () {
-
                     var datas = modalView.getData();
-                    if (datas['response'] === true) {
-                        this.formChannel.trigger('export', datas);
-                    }
-
+                    if( datas['response'])
+                        this.formChannel.trigger('export', modalView.getData());
                 }, this));
 
             }, this));

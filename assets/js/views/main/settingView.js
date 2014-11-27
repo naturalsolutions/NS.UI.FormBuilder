@@ -7,7 +7,9 @@ define([
     'jquery-ui',
     'i18n',
     'bootstrap-select',
-    'perfect-scrollbar'
+    'perfect-scrollbar',
+    'fuelux',
+    'typeahead'
 ], function($, _, Backbone, Radio, settingTemplate) {
 
     var SettingView = Backbone.View.extend({
@@ -93,7 +95,41 @@ define([
                 this.$el.find('#form').append(this.form.el)
                 this.$el.find('.scroll').perfectScrollbar('update');
                 this.$el.find('#getField').hide();
+
+                //  Add pillbow for form keywords
+                this.$el.find('.field-keywords input[type="text"]').pillbox();
+
+                this.$el.find('.field-name input[type="text"]').typeahead({
+                    source: _.bind(function(query, process) {
+                        return $.getJSON(this.URL['protocolAutocomplete'], {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }, this)
+                });
+
+                this.$el.find('#pillboxkeywordsList input[type="text"]').typeahead({
+                    source: _.bind(function(query, process) {
+                        return $.getJSON(this.URL['keywordAutocomplete'], {query: query}, function(data) {
+                            return process(data.options);
+                        });
+                    }, this),
+                    updater: _.bind(function(item) {
+                        this.$el.find('#pillboxkeywords').pillbox('addItems',-1, [{text :item, value : item}])
+
+                        $('#pillboxkeywords .pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item + '"></span>');
+                    }, this)
+                });
+
+                this.$el.find('#pillboxkeywords').on('added.fu.pillbox', _.bind(function (evt, item) {
+                  $('#pillboxkeywords .pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
+                }, this));
+
+                this.$el.find('#pillboxkeywords').on('click', '.reneco', function() {
+                    $('#pillboxkeywords').pillbox('removeByText', $(this).data('parent'));
+                });
+
                 this.mainChannel.trigger('formCreated');
+
             }, this));
 
         },
@@ -108,7 +144,14 @@ define([
                 if (this.$el.find('#getField').is(':visible')) {
                     this.mainChannel.trigger('formCommit')
                 } else {
-                    this.formChannel.trigger('edition', this.form.getValue());
+                    var values       = this.form.getValue(),
+                        pillboxItems = $('#pillboxkeywords').pillbox('items');
+
+                    values['keywords'] = _.map(pillboxItems, function(num){
+                        return num['value'];
+                    });
+
+                    this.formChannel.trigger('edition', values);
                 }
 
                 this.removeForm();

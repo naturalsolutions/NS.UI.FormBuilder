@@ -20,6 +20,29 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
         </div>\
     ');
 
+    var pillboxTemplate = _.template('\
+        <div class="form-group field-<%= key %>">\
+            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
+            <p class="help-block" data-error></p>\
+            <div data-editor >\
+                <div data-initialize="pillbox" class="pillbox" id="pillbox<%= key %>">\
+                    <ul class="clearfix pill-group" id="pillbox<%= key %>List">\
+                        <li class="pillbox-input-wrap btn-group">\
+                          <a class="pillbox-more">and <span class="pillbox-more-count"></span> more...</a>\
+                          <input type="text" class="form-control dropdown-toggle pillbox-add-item" placeholder="add item">\
+                          <button type="button" class="dropdown-toggle sr-only">\
+                            <span class="caret"></span>\
+                            <span class="sr-only">Toggle Dropdown</span>\
+                          </button>\
+                          <ul class="suggest dropdown-menu" role="menu" data-toggle="dropdown" data-flip="auto"></ul>\
+                        </li>\
+                      </ul>\
+                </div>\
+                <p class="help-block"><%= help %></p>\
+            </div>\
+        </div>\
+    ');
+
     /**
      * Implement form object as a fields collection
      */
@@ -40,6 +63,12 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators : ['required']
+            },
+            keywords : {
+                type        : 'Text',
+                title       : $.t('collection.keywords'),
+                editorClass : 'form-control hide',
+                template    : pillboxTemplate
             }
         },
 
