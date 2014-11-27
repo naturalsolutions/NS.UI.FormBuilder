@@ -2,12 +2,12 @@
 
 ## Screenshoots
 
-![formBuilder](https://bfc338e5d0f8ee39c10a706464e4731eb4bd4d7a.googledrive.com/host/0B363_4UXLoNhUWhTOWhCbXlQQ2s/form.jpg)
+![formBuilder](https://drive.google.com/open?id=0B363_4UXLoNhbHdmYjhrVHdoVWc&authuser=0)
 
 ## Features
 
 * Graphical form definition
-* Export / Import with JSON or XML file
+* Export / Import in JSON file
 * Drag'n drop field position ajustement
 * Model definition based on backone-forms
 
