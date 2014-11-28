@@ -13,6 +13,11 @@ define(
 
         var AppRouter = Backbone.Router.extend({
 
+            /**
+             * Router routes
+             *
+             * @type {Object}
+             */
             routes: {
                 ""             : 'home',
                 'saveprotocol' : 'saveProtocol',
@@ -22,6 +27,11 @@ define(
                 "copy/:id"     : "copy"
             },
 
+            /**
+             * Router constructor
+             *
+             * @param  {object} options Initialization options
+             */
             initialize: function(options) {
 
                 i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});

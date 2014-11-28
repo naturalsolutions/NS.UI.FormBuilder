@@ -13,6 +13,10 @@ define([
 
     var FormView = Backbone.View.extend({
 
+        /**
+         * Form view event
+         * @type {Object}
+         */
         events: {
             'click h1>span' : 'protocolSettings',
             'click #export'   : 'export',
@@ -21,6 +25,11 @@ define([
             'click #save'     : 'save'
         },
 
+        /**
+         * Form view constructor
+         *
+         * @param  {Object} options Initialization option like URL for autococomplete
+         */
         initialize: function(options) {
             this.template = _.template(formViewTemplate);
             _.bindAll(this, 'render',
@@ -31,17 +40,22 @@ define([
                             'protocolSettings',
                             'export',
                             'import',
-                            'clear'
+                            'clear',
+                            'initRadioChannel'
                     );
             this.collection.bind('newElement', this.addElement);
             this._view = [];
 
             this.URLOptions = options.URLOptions;
 
-
-            //  -------------------------------------------------------------
             //  Backbone radio configuration
+            this.initRadioChannel();
+        },
 
+        /**
+         * Init form radio channel and listen some venets
+         */
+        initRadioChannel : function() {
 
             //  The form channel is used only for the main form object options
             //  save, export, clear and settings
@@ -62,15 +76,20 @@ define([
                     swal("Une erreur est survenu !", "Votre formulaire n'a pas été enregistré !\nPensez à faire un export", "error");
                 }
             }, this));
-
         },
 
+        /**
+         * Send an event to the setting view (settingView.js) to display properties form
+         * Channel send on the form channel
+         */
         protocolSettings : function() {
-            //  Send an event to the setting view (settingView.js) to display properties form
             this.formChannel.trigger('displaySettings', this.collection);
         },
 
-
+        /**
+         * Display modal view when user wants to export him form
+         * When modal view is hidden we send an event on the form channel to send data (filename), see formbuilder.js
+         */
         export : function() {
             require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
                 $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
@@ -90,7 +109,10 @@ define([
             }, this));
         },
 
-
+        /**
+         * Display modal view when user wants to import him form
+         * When modal view is hidden we send an event on the form channel to send data (filename), see formbuilder.js
+         */
         import : function() {
             require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
                 $(this.el).append('<div class="modal fade" id="importModal"></div>');
@@ -110,8 +132,7 @@ define([
                             this.formChannel.trigger('JSONUpdate', jsonParsed);
 
                         } else {
-                            // display error
-                            console.log (result)
+                            swal("Une erreur est survenu !", "Votre formulaire n'a pas pu être importé", "error");
                         }
                     }, this));
 
@@ -202,6 +223,11 @@ define([
             });
         },
 
+        /**
+         * Render form view
+         *
+         * @return {object} returns form view object
+         */
         render: function() {
             var renderedContent = this.template(this.collection.toJSON());
             $(this.el).html(renderedContent);
@@ -210,6 +236,7 @@ define([
             $("#scrollSection").perfectScrollbar({
                 suppressScrollX : true
             });
+
             $(".drop").sortable({
                 cancel      : null,
                 cursor      : 'pointer',
@@ -220,7 +247,7 @@ define([
                 containement: '.dropArea',
                 stop: function(event, ui) {
                     for (var v in _vues) {
-                        _vues[v].updateIndex($('#' + v).index());
+                        _vues[v].updateIndex( $('#' + v).index() );
                     }
                 }
             });
@@ -232,10 +259,20 @@ define([
             return this.collection.length;
         },
 
+        /**
+         * eturn current form as a JSON object
+         *
+         * @return {object} current form as a JSON object
+         */
         getJSON : function() {
             return this.collection.getJSON();
         },
 
+        /**
+         * Update vurrent form with JSON data from user import
+         *
+         * @param  {object} JSONImport JSON object imported
+         */
         importJSON : function(JSONImport)  {
             this.collection.updateWithJSON(JSONImport);
         }
