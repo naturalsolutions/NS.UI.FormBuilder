@@ -21,6 +21,9 @@
         }
 
         button {
+            label:hover {
+                cursor : pointer;
+            }
             &.red {
                 border-radius : 2px;
                 &:last-child {
@@ -46,6 +49,14 @@
             overflow: hidden;
             margin-bottom: 0;
             &:focus { box-shadow: none; }
+        }
+
+        .reneco.settings {
+            color : #555;
+            &:hover {
+                cursor : pointer;
+                color : #888;
+            }
         }
     }
 
@@ -142,6 +153,10 @@
                     padding-top: 10px;
                     padding-bottom: 10px;
                 }
+
+                .actions {
+                    .trash, .copy { visibility: hidden; }
+                }
             }
 
             &:hover {
@@ -150,6 +165,9 @@
                     &.paddingBottom5 {
                         background: #333;
                     }
+                }
+                .actions {
+                    .trash, .copy { visibility: visible; }
                 }
             }
 
