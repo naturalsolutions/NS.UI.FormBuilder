@@ -1,6 +1,9 @@
+@settingViewBackgroundColor : #231f20;
+@settingViewInputBackgroundColor : #292c2e;
+
 #settings {
 
-    background : #222;
+    background : @settingViewBackgroundColor;
 
     margin-left         : 0;
     padding-bottom      : 50px;
@@ -129,13 +132,16 @@
 
     input, select, textarea {
         .exo;
-        background : #111;
-        color : #555;
-        border : 1px #333 solid;
-        font-size   : 18px;
-        line-height : 25px;
-        height      : 40px;
-        border-radius: 0;
+        background    : @settingViewInputBackgroundColor;
+        color         : #555;
+        border        : none;
+        border-radius : 0 !important;
+        font-size     : 18px;
+        line-height   : 25px;
+        height        : 40px;
+        &:active, &:hover {
+            box-shadow : none;
+        }
     }
 
     textarea {
