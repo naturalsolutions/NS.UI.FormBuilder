@@ -1,16 +1,31 @@
+@backgroundColor       : #312f30;
+@dropFieldHeaderColor  : #3e3e3f;
+@imputBackgroundColor  : #242021;
+@elementHoverColor     : #57585a;
+@footerBackgroundColor : #2e2b2c;
+
+.mainField {
+    padding-left : 10px;
+    background   : @imputBackgroundColor;
+    border       : 1px #555 solid !important;
+    color        : #555;
+}
+
+.col11centered { margin-left: 4.15555% !important; }
+
 .dropArea {
 
     position      : relative;
     overflow      : hidden;
     height        : 100%;
-    background    : #111;
+    background    : @backgroundColor;
     margin-bottom : 50px;
 
     footer {
         height        : 60px;
         position      : relative;
         bottom        : 20px;
-        background    : #000;
+        background    : @footerBackgroundColor;
         margin-left   : -15px;
         margin-right  : -15px !important;
         padding-right : 15px;
@@ -40,7 +55,7 @@
         h1 {
             .exo;
             width           : 100%;
-            background      : #111;
+            background      : @backgroundColor;
             font-size       : 35px;
             color           : #fff;
             border-bottom   : 1px #555 solid;
@@ -73,6 +88,7 @@
         }
         .ps-scrollbar-y-rail {
             background : black;
+            height: 580px !important;
         }
     }
 
@@ -86,14 +102,14 @@
         .noMarginTop;
         padding-top : 0px;
         margin-left : 0!important;
-        transition  : background 0.2s ease-in-out;
+        transition  : all 0.2s ease-in-out;
         background  : #111;
-        border      : 1px #222 solid;
         margin-bottom: 20px;
 
         .element {
             background : #222;
             padding: 0 !important;
+            border : 1px solid @dropFieldHeaderColor;
 
             .row {
                 //  field banner with label and action
@@ -103,6 +119,7 @@
                     height      : 45px;
                     line-height : 45px;
                     color       : white;
+                    background-color : @dropFieldHeaderColor;
 
                     .col-md-4 {
                         .exo;
@@ -149,7 +166,7 @@
 
                 &:not(.paddingBottom5) {
                     //  row with input
-                    background : #111;
+                    background : @backgroundColor;
                     padding-top: 10px;
                     padding-bottom: 10px;
                 }
@@ -160,10 +177,10 @@
             }
 
             &:hover {
-                border-color : #333;
+                border : 1px solid @elementHoverColor;
                 .row {
                     &.paddingBottom5 {
-                        background: #333;
+                        background: @elementHoverColor;
                     }
                 }
                 .actions {
@@ -227,10 +244,7 @@
 
         &.textArea {
             textarea {
-                padding-left : 10px;
-                background   : #000;
-                border       : 1px #555 solid !important;
-                color        : #222;
+                .mainField;
                 resize       : none;
             }
             .span1:last-child {
@@ -238,18 +252,8 @@
             }
         }
 
-        input[type="text"], input[type="number"]{
-            padding-left : 10px;
-            background   : #000;
-            border       : 1px #555 solid !important;
-            color        : #222;
-        }
-
-        select {
-            padding-left : 10px;
-            background   : #000;
-            border       : 1px #555 solid !important;
-            color        : #555;
+        input[type="text"], input[type="number"], select{
+            .mainField;
         }
 
         .subformField {
