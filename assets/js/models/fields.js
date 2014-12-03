@@ -11,8 +11,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     ');
 
     var checkboxFieldTemplate = _.template('\
-        <div class="checkbox">\
-            <div class="form-group row field-<%= key %>">\
+        <div class="checkboxField">\
+            <div class="form-group field-<%= key %>">\
                 <input type="checkbox" name="<%= key %>" id="<%=this.model.cid %>_<%= key %>" />\
                 <label for="<%= editorId %>"><%= title %></label>\
             </div>\

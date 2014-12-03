@@ -1,0 +1,64 @@
+//	--------------------------------------------------
+//	All field style like select, radio, ...
+
+//	Style is separated to beused on setting and form panel
+
+.fontAwesomeField(@type, @selectedContent, @unSelectedContent) {
+	height: 40px;
+
+    label { color : #555; font-size: 24px !important; }
+
+    input[type="@{type}"] {
+    	display : none;
+
+    	& + label:before {
+	        .fa;
+	        display   : inline-block;
+	        color     : #555;
+	        font-size : 24px;
+	        content: @unSelectedContent;
+	        letter-spacing: 10px;
+	    }
+
+	    &:checked + label:before {
+	    	content: @selectedContent;
+	    }
+
+    }
+}
+
+.checkboxField {
+	.fontAwesomeField(checkbox, "\f096", "\f046");
+}
+
+.radioField {
+    .fontAwesomeField(radio, "\f192", "\f10c");
+}
+
+.bootstrap-select {
+    box-shadow: none;
+
+    .selectpicker {
+        border : none;
+        background : #222;
+        color : white;
+        box-shadow: none;
+        &:focus, &:active {
+            box-shadow: none;
+        }
+
+        li {
+            span {
+                &.text {
+                    .exo;
+                    font-size : 16px;
+                    color : white;
+                }
+            }
+            &.selected {
+                box-shadow: none;
+                background : #222;
+            }
+        }
+    }
+}
