@@ -47,7 +47,7 @@ define([
 
             this.addSubView(subViewID, subView, subView.model)
 
-            $(this.el + ' fieldset').append('<div class="row sortableRow"></div>');
+            $(this.el + ' fieldset').append('<div class="row sortableRow marginTop0"></div>');
             //subView.$el.switchClass('col-md-12', 'col-md-10 col-md-offset-1',0);
             subView.$el.switchClass('dropField', 'subElement',0);
 
@@ -101,7 +101,7 @@ define([
             _.each(this.model.get('fields'), _.bind(function(el, idx) {
 
                 //  Create a html element for the sub view
-                $(this.el + ' fieldset').append('<div class="row-fluid sortableRow" id="subView' + this._subView.length + '"></div>');
+                $(this.el + ' fieldset').append('<div class="row sortableRow marginTop0" id="subView' + this._subView.length + '"></div>');
 
                 //  Create a view for each field
                 this.collectionChannel.trigger('addSubView', {
