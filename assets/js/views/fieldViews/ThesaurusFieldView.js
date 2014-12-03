@@ -39,7 +39,7 @@ define([
             require(['jquery-ui', 'fancytree'], _.bind(function() {
                 $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
 
-                    this.$el.first('.thesaurusField').fancytree({
+                    $('#thesaurus' + this.model.get('id')).fancytree({
                         source: data['d'],
                         checkbox : false,
                         selectMode : 2
