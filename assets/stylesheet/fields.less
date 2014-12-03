@@ -18,10 +18,17 @@
 	        font-size : 24px;
 	        content: @unSelectedContent;
 	        letter-spacing: 10px;
+
+            &:hover {
+                cursor: pointer !important;
+            }
 	    }
 
 	    &:checked + label:before {
 	    	content: @selectedContent;
+            &:hover {
+                cursor: pointer !important;
+            }
 	    }
 
     }

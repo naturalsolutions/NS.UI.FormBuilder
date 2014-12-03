@@ -11,7 +11,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     ');
 
     var checkboxFieldTemplate = _.template('\
-        <div class="checkboxField">\
+        <div class="checkboxField <%= this.editor.schema.editorClass %>">\
             <div class="form-group field-<%= key %>">\
                 <input type="checkbox" name="<%= key %>" id="<%=this.model.cid %>_<%= key %>" />\
                 <label for="<%= editorId %>"><%= title %></label>\
@@ -57,12 +57,14 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type        : "Text",
                 title       : $.t('schema.name'),
                 editorClass : 'form-control',
-                template    : fieldTemplate
+                template    : fieldTemplate,
+                fieldClass  : 'marginBottom10'
             },
             required : {
                 type        : 'Checkbox',
                 template    : checkboxFieldTemplate,
-                title       : $.t('schema.required')
+                title       : $.t('schema.required'),
+                editorClass : 'leftField',
             },
             readonly : {
                 type        : 'Checkbox',
@@ -73,6 +75,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type        : "Text",
                 title       : $.t('schema.editorClass'),
                 editorClass : 'form-control',
+                fieldClass  : 'marginTop20',
                 template    : fieldTemplate
             },
             fieldClass : {
@@ -90,7 +93,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             endOfLine : {
                 type        : 'Checkbox',
-                editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
                 title       : $.t('schema.eol')
             },
