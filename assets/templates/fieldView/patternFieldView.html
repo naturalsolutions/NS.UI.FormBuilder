@@ -1,25 +1,27 @@
 <div class="element">
-    <div class="row" style="margin-left : 10px;">
-        <label class="span4">
-            <i class="fa fa-arrows"></i> 
-            <%=label %> <% if (required===true) { %>* <% } %>
+    <div class="row paddingBottom5">
+        <label class="col-md-4">
+            <i class="fa fa-arrows"></i>
+            <%= title %><% if (required === true) { %> (*) <% } %>
         </label>
-        <div class="span8 right actions">
+        <div class="col-md-8 right actions">
             <a href="#" class="trash">
-                <i class="fa fa-trash-o"></i>
-                <span data-i18n="actions.delete">Supprimer</span>
-            </a>
-            <a href="#setting/<%= id %>" class="wrench">
-                <i class="fa fa-wrench"></i>
-                <span data-i18n="actions.edit">Modifier</span>
+                <span class="reneco trash"></span>
             </a>
             <a href="#copy/<%= id %>" class="copy">
-                                   &nbsp;<span class="fa fa-copy"></span>
-                                   <span data-i18n="actions.clone">Dupliquer</span>
-                               </a>
+               <span class="reneco duplicate"></span>
+           </a>
+           <a href="#setting/<%= id %>" class="btn reneco gray">
+                Modifier
+                <div>
+                    <span class="reneco settings"></span>
+                </div>
+            </a>
         </div>
     </div>
-    <div class="row" style="margin-left : 10px;">
-        <input type="text" class="span12" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" pattern="<%= pattern %>" />
+    <div class="row">
+        <div class="col-md-11 col11centered">
+            <input type="text" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" pattern="<%= pattern %>" />
+        </div>
     </div>
 </div>
