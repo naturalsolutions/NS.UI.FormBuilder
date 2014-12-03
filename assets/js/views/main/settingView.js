@@ -300,6 +300,11 @@ define([
             this.form.$el.removeData().unbind();
             this.form.remove();
             Backbone.View.prototype.remove.call(this.form);
+
+            //  Update scrollBar
+            this.$el.find('.scroll').scrollTop(0);
+            this.$el.find('.scroll').perfectScrollbar('update');
+
             this.form = null;
         },
 
