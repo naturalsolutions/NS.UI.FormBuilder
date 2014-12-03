@@ -259,18 +259,10 @@
         .subformField {
 
             fieldset {
-                background     : #555;
                 border         : 1px #222 solid;
                 min-height     : 100px;
                 padding-bottom : 10px;
                 margin-right   : 7px;
-
-                legend {
-                    .exo;
-                    border : 1px #222 solid;
-                    margin-bottom: 0;
-                    padding-left: 10px;
-                }
 
                 .subElement {
                     background    : transparent;
@@ -295,37 +287,86 @@
 
         }
 
+        .radio {
+            label {
+                color : #111;
+            }
+        }
+
+        .bootstrap-select {
+            box-shadow: none;
+
+            .selectpicker {
+                border : none;
+                background : #222;
+                color : white;
+                box-shadow: none;
+                &:focus, &:active {
+                    box-shadow: none;
+                }
+
+                li {
+                    span {
+                        &.text {
+                            .exo;
+                            font-size : 16px;
+                            color : white;
+                        }
+                    }
+                    &.selected {
+                        box-shadow: none;
+                        background : #222;
+                    }
+                }
+            }
+        }
+
         input[type="checkbox"], input[type="radio"] {
             margin-left : 0px !important;
             position    : static !important;
             width       : 25px;
         }
 
-        .thesaurusField {
-            display: none;
-        }
+        //  Treeview element style
+        .treeview, .thesaurusField, .fancytreeview  {
 
-        .treeview {
-
+            background : transparent;
             ul {
-                background : #111;
+                background : transparent;
+                border : none;
 
-                li {
+                span {
 
-                    &:hover {
-                        background : #222;
-
-                        .fancytree-title {
-                            background : #222;
-                            border-color : #222;
-
-                            .fancytree-node {
-                                background : #111;
-                                border-color : #111;
+                    &.fancytree-node {
+                        //  node element
+                        &:hover {
+                            background: #222;
+                            .fancytree-title {
+                                background: #222;
+                                border-color : #222 !important;
                             }
+                        }
+                    }
 
+                    &.fancytree-active {
+                        //  selected node
+                    }
+
+                    &.fancytree-focused {
+                        //  current node
+                        background: black !important;
+                        border-color: black !important;
+                        .fancytree-title {
+                            background: black;
+                            border-color : black !important;
                         }
 
+                        &:hover {
+                            .fancytree-title {
+                                background: black;
+                                border-color : black !important;
+                            }
+                        }
                     }
 
                     .fancytree-title {
@@ -337,56 +378,9 @@
 
             }
 
-            span.fancytree-node.fancytree-active {
-                background: #444;
-                border-color: #444;
-
-                .fancytree-title {
-                    background: #444;
-                    border-color: #444;
-                }
-
-            }
-
-            .fancytree-node:hover {
-                background: #444;
-            }
-
-            .ui-fancytree {
-                padding: 0;
-                margin: 0;
-                border: none;
-                background: transparent;
-
-                .fancytree-node {
-                    background: transparent !important;
-                    padding-left: 0;
-
-                    .fancytree-title {
-                        background: transparent !important;
-                        color: white !important;
-                    }
-
-                }
-
-                .fancytree-focused {
-                    background: black !important;
-                    border-color: black !important;
-
-                    .fancytree-title {
-                        border-radius: 0;
-                        border-color: black !important;
-                    }
-
-                }
-
-            }
-
-            ul.fancytree-container {
-                padding: 0 !important;
-            }
-
         }
+
+        .fancytreeview { background : #111; }
 
         .slider {
             float : left;
@@ -399,12 +393,11 @@
             border-color: #862332;
         }
 
+        .displayValue {
+            .exo;
+            color : white;
+        }
+
     }
 
 }
-
-
-
-
-
-
