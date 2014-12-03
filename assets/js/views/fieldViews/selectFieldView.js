@@ -22,7 +22,7 @@ define([
         },
 
         updateSelected : function(e) {
-            this.model.updateSelectedOption($(e.target).find(':selected').data('idx'), true);
+            this.model.updateSelectedOption($(e.target).find(':selected').index());
         },
 
         render : function() {
