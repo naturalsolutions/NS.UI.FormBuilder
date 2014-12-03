@@ -82,6 +82,8 @@ define([
          */
         generateForm : function(formSchema) {
 
+            $('*[data-setting="field"]').hide();
+
             require(['backbone-forms'], _.bind(function() {
                 if (this.form !== null) {
                     //  Remove last form and create new with new model
@@ -216,6 +218,9 @@ define([
          * @param  {[Object]} field current main form (Backbone collection)
          */
         createForm : function(field) {
+
+            $('*[data-setting="field"]').show();
+
             require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
 
                 if (this.form !== null) {

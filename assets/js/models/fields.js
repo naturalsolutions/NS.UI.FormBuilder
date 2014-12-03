@@ -11,13 +11,15 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     ');
 
     var checkboxFieldTemplate = _.template('\
-        <div><div class="form-group row checkbox padding5 paddingRight25 field-<%= key %>">\
-            <div data-editor class="col-md-2" >\
-                <p class="help-block" data-error></p>\
+        <div class="checkbox">\
+            <div class="form-group row field-<%= key %>">\
+                <input type="checkbox" name="<%= key %>" id="<%=this.model.cid %>_<%= key %>" />\
+                <label for="<%= editorId %>"><%= title %></label>\
             </div>\
-            <label class="control-label left" for="<%= editorId %>"><%= title %></label>\
+            <div class="row padding5 marginLeft10">\
+                <p class="help-block"><%= help %></p>\
+            </div>\
         </div>\
-        <div class="row padding5 marginLeft10"><p class="help-block"><%= help %></p></div></div>\
     ');
 
     i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});
@@ -59,13 +61,11 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             required : {
                 type        : 'Checkbox',
-                editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
                 title       : $.t('schema.required')
             },
             readonly : {
                 type        : 'Checkbox',
-                editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
                 title       : $.t('schema.readonly')
             },
@@ -498,6 +498,12 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
          */
         getOption: function(itemListIndex) {
             return this.get('items')[itemListIndex];
+        },
+
+        updateSelectedOption : function(index) {
+            var itemList = this.get('itemList');
+            itemList.defaultValue = index;
+            this.set('itemList', itemList);
         }
 
     });
