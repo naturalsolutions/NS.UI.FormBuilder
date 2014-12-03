@@ -325,9 +325,16 @@ define([
             var choice = this.fieldWithSameType[ $(e.target).val() ];
 
             this.form.setValue(choice)
+
             if(_.contains(choice['validators'], "required")) {
                 this.form.setValue({'required': true});
+                this.$el.find('input[name="required"]').prop('checked', true)
+            } else {
+                this.form.setValue({'required': false});
+                this.$el.find('input[name="required"]').prop('checked', false)
             }
+
+            this.$el.find('input[name="endOfLine"]').prop('checked', choice['endOfLine'] != undefined)
         }
 
     });

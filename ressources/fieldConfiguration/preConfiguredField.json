@@ -9,8 +9,7 @@
             "fieldClass"  : ""
         },
 
-        "Ttitle": {
-            "validators"  : ["required"],
+        "Title": {
             "type"        : "Text",
             "title"       : "Titre",
             "editorClass" : "",
