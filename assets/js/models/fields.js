@@ -682,13 +682,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
     models.PatternField = models.TextField.extend({
         defaults: function() {
-            return _.extend( {}, models.TextField.prototype.defaults, {
+            return _.extend( {}, models.TextField.prototype.defaults(), {
                 pattern: ""
             })
         },
 
         schema: function() {
-            return _.extend( {}, models.TextField.constructor.schema, {
+            return _.extend( {}, models.TextField.prototype.schema(), {
                 pattern: {
                     type        : 'Text',
                     editorClass : 'form-control',
