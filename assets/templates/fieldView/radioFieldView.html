@@ -23,10 +23,10 @@
         <div class="col-md-12">
             <% _.each(itemList["items"], function(el, idx) { console.log (el, idx);%>
                 <div class="radio marginTop0 marginBottom0">
-                    <label>
-                        <input data-idx=<%=idx %> type="radio"  name="<%= name %>" id="<%= id %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
-                        <%= el.fr %>
-                    </label>
+                    <div class="form-group row marginTop0 marginBottom0 paddingTop0 paddingBottom0">
+                        <input data-idx=<%=idx %> type="radio"  name="<%= name %>" id="<%=id %>_<%= idx %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
+                        <label for="<%=id %>_<%= idx %>"><%= el.fr %></label>
+                    </div>
                 </div>
             <% }); %>
         </div>

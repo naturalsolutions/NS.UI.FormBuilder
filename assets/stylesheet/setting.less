@@ -237,32 +237,4 @@
 
     }
 
-    .checkbox {
-        height: 40px;
-
-        label {
-            color : #555;
-            font-size: 24px;
-        }
-
-        input[type="checkbox"] {
-            display : none;
-        }
-
-        input[type=checkbox] + label:before {
-            .fa;
-            display: inline-block;
-            color : #555;
-            font-size: 24px;
-        }
-
-        input[type=checkbox] + label:before { content: "\f096"; } /* unchecked icon */
-
-        input[type=checkbox] + label:before { letter-spacing: 10px; } /* space between checkbox and label */
-
-        input[type=checkbox]:checked + label:before { content: "\f046"; } /* checked icon */
-
-        input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
-    }
-
 }
