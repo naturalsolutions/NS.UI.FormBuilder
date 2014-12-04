@@ -58,13 +58,16 @@ define(
                 //  This event is sent from the main view when export modal view is closed
                 //  and where the model view data are corrects, event sent with the collection
                 this.formChannel.on('export:return', _.bind(function(collectionAndFilename) {
-                    require(['blobjs', 'filesaver'], _.bind(function() {
+                    require(['blobjs', 'filesaver'], _.bind(function(Blob, Filesaver) {
                         try {
+
                             var isFileSaverSupported = !!new Blob();
                             var blob = new Blob([JSON.stringify(collectionAndFilename['collection'], null, 2)], {
                                 type: "application/json;charset=utf-8"
                             });
-                            saveAs(blob, collectionAndFilename['filename'] + '.json');
+
+                            var fs = new Filesaver(blob, collectionAndFilename['filename'] + '.json');
+
 
                             $('#exportModal').modal('hide').removeData();
                             swal("Export réussi !", "", "success")

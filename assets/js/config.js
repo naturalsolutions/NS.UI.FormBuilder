@@ -38,10 +38,10 @@ require.config({
     },
     shim: {
         blobjs: {
-            exports: "blobjs"
+            exports: "Blob"
         },
         filesaver: {
-            exports: "filesaver"
+            exports: "Filesaver"
         },
         difflib: {
             exports: "difflib"
@@ -139,13 +139,13 @@ require(['formbuilder'], function(formbuilder) {
         // Specify URL for formBuilder configuration
         // Replace this URL with your own
         URLOptions : {
-            autocompleteURL      : 'ressources/autocomplete/',
-            translationURL       : 'ressources/locales/',
-            keywordAutocomplete  : 'ressources/autocomplete/keywords.json',
-            protocolAutocomplete : 'ressources/autocomplete/protocols.json',
-            unitURL              : 'ressources/autocomplete/units.json',
-            preConfiguredField   : 'ressources/fieldConfiguration/preConfiguredField.json',
-            configurationURL     : 'configurationSaved' //  This is a random URL, we are in client node without back end
+            autocompleteURL       : 'ressources/autocomplete/',
+            translationURL        : 'ressources/locales/',
+            keywordAutocomplete   : 'ressources/autocomplete/keywords.json',
+            protocolAutocomplete  : 'ressources/autocomplete/protocols.json',
+            unitURL               : 'ressources/autocomplete/units.json',
+            preConfiguredField    : 'ressources/fieldConfiguration/preConfiguredField.json',
+            fieldConfigurationURL : 'configurationSaved'
         },
         el : '#formBuilder'
     }
