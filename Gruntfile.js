@@ -7,8 +7,8 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     paths: ["stylesheet"],
-                    cleancss: true,
-                    sourceMap: true,
+                    cleancss: false,
+                    sourceMap: false,
                     sourceMapFilename: 'compressed/formbuilder.css.map',
                     sourceMapRootpath: ''
                 },
@@ -22,12 +22,21 @@ module.exports = function(grunt) {
         watch: {
             stylesheet: {
                 files: ['assets/stylesheet/*.less'],
-                tasks: ['less:dist']
+                tasks: ['less:dist', 'autoprefixer:single_file']
             }
         },
+
+        autoprefixer: {
+            single_file: {
+                src: "compressed/formbuilder.min.css",
+                dest: "compressed/prefixedformbuilder.min.css"
+            },
+        }
+
     });
 
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
+    grunt.loadNpmTasks('grunt-autoprefixer');
 
 }
