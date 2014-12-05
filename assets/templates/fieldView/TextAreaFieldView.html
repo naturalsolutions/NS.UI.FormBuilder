@@ -21,12 +21,7 @@
     </div>
     <div class="row">
         <div class="col-md-11 col11centered">
-            <input  class="col-sm-6" type="range" min="<%= minValue %>" max="<%= maxValue %>"
-                step="<% if(decimal == true) { %>any<% } else { %><%= precision %><% } %>"
-                name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
-            <label class="displayValue col-sm-2">
-                <%= defaultValue %>
-            </label>
+            <textarea style="resize: none" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>"><%= defaultValue %></textarea>
         </div>
     </div>
 </div>
