@@ -57,6 +57,20 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
                 template    : fieldTemplate,
                 validators : ['required']
             },
+            labelFr   : {
+                type        : "Text",
+                title       : $.t('schema.label.fr'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators : ['required']
+            },
+            labelEn   : {
+                type        : "Text",
+                title       : $.t('schema.label.en'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators : ['required']
+            },
             description : {
                 type        : "TextArea",
                 title       : $.t('collection.description'),
@@ -79,12 +93,13 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
          * @param {type} options
          */
         initialize: function (models, options) {
-            this.name = options.name || 'My form';
-            this.count = 0;
+            this.name        = options.name || 'My form';
+            this.count       = 0;
             this.description = options.description || "";
-            this.keywords = options.keywords || ["protocol"];
+            this.keywords    = options.keywords || ["protocol"];
+            this.labelFr     = this.labelEn = "";
             //  Bind
-            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addTableElement', 'getJSON', 'getJSONFromModel');
+            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel');
         },
 
         /**
@@ -114,14 +129,6 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
                 el.trigger('destroy', el);
             }
             this.count = 0;
-        },
-
-        getKeywords: function () {
-            var xml = "";
-            _.each(this.keywords, function (el, idx) {
-                xml += '<keyword>' + el + '</keyword>';
-            });
-            return '<keywords>' + xml + '</keywords>';
         },
 
         getFieldsetFromModel: function (model) {
@@ -163,12 +170,15 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
         },
 
         getJSON: function () {
-            var json         = {}, subModel = null;
-            json.name        = this.name;
-            json.description = this.description;
-            json.keywords    = this.keywords;
-            json.schema      = {};
-            json.fieldsets   = [];
+            var json         = {
+                name        : this.name,
+                description : this.description,
+                keywords    : this.keywords,
+                labelFr     : this.labelFr,
+                labelEn     : this.labelEn,
+                schema      : {},
+                fieldsets   : []
+            }, subModel = null;
 
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
@@ -201,35 +211,6 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
             var el = new Fields[nameType](field);
             this.add(el);
             this.trigger('newElement', el);
-        },
-
-        addTableElement: function (nameType) {
-            var field = properties || {};
-            field['id'] = this.getSize();
-            var el = new Fields[nameType](field);
-
-            this.add(el);
-            return el;
-        },
-
-        addTableFieldFromJSON: function (schema, name) {
-            var fields = {}, subField = null;
-            _.each(schema.subSchema, _.bind(function (el, idx) {
-                subField = _.pick(el, 'help');
-                if (el.validators.length > 0) {
-                    subField['required'] = el.validators['required'] !== undefined;
-                    subField['readonly'] = el.validators['required'] !== undefined;
-                }
-                subField['label'] = idx;
-                subField['isDragged'] = true;
-                subField.type = el.type === 'TextArea' ? 'LongText' : el.type;
-
-                fields[idx] = subField;
-
-            }, this))
-            this.addElement('TableField', {
-                fields: fields
-            })
         },
 
         updateWithJSON: function (JSONUpdate) {
