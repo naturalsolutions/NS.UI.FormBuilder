@@ -30,13 +30,16 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
 
         defaults: {
             id          : 0,
-            title       : "My label",
             name        : "Field",
+            labelFr     : $.t('schema.label.fr'),
+            labelEn     : $.t('schema.label.en'),
             required    : false,
-            readOnly    : false,
+            readonly    : false,
             isDragged   : false,
             editorClass : '',
-            fieldClass  : ''
+            fieldClass  : '',
+            fieldSize   : '',
+            endOfLine   : false
         },
 
         schema : {
@@ -46,9 +49,16 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 editorClass : 'form-control',
                 template    : fieldTemplate
             },
-            title   : {
+            labelFr   : {
                 type        : "Text",
-                title       : $.t('schema.title'),
+                title       : $.t('schema.label.fr'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators : ['required']
+            },
+            labelEn   : {
+                type        : "Text",
+                title       : $.t('schema.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators : ['required']
@@ -98,8 +108,31 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
         },
 
+        initialize : function(options) {
+            _.bindAll(this, 'getJSON');
+        },
+
         isAdvanced : function(index) {
             return this.getSchemaProperty(index, 'advanced') === "advanced";
+        },
+
+        getJSON : function() {
+
+            var jsonObject                  = {
+                    validators : []
+                },
+                schemaKeys                  = _.keys( typeof this.schema == "function" ? this.schema() : this.schema ),
+                schemaKeysWithoutValidator  = _.without(schemaKeys, 'required');
+
+            _.each(schemaKeysWithoutValidator, _.bind(function(el) {
+                jsonObject[el] = this.get(el);
+            }, this));
+
+            if (this.get('required')) {
+                jsonObject['validators'].push('required');
+            }
+
+            return jsonObject;
         }
 
     });
@@ -107,7 +140,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.HiddenField = Backbone.Model.extend({
         defaults: {
             id    : 0,
-            title : "My label",
+            labelFr     : $.t('schema.label.fr'),
+            labelEn     : $.t('schema.label.en'),
             name  : "Field",
             value : ""
         },
@@ -123,11 +157,19 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 editorClass : 'form-control',
                 template    : fieldTemplate
             },
-            title   : {
+            labelFr   : {
                 type        : "Text",
-                title       : $.t('schema.title'),
+                title       : $.t('schema.label.fr'),
                 editorClass : 'form-control',
-                template    : fieldTemplate
+                template    : fieldTemplate,
+                validators : ['required']
+            },
+            labelEn   : {
+                type        : "Text",
+                title       : $.t('schema.label.en'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators : ['required']
             },
             value: {
                 type        : 'Text',
@@ -541,7 +583,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         i18n   : 'date'
     });
 
-    models.LongTextField = models.TextField.extend({
+    models.TextAreaField = models.TextField.extend({
 
         defaults : function() {
             return _.extend( {}, models.TextField.prototype.defaults(), {
@@ -575,11 +617,11 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
 
     }, {
-        type   : 'LongText',
-        i18n   : 'long'
+        type   : 'TextArea',
+        i18n   : 'TextArea'
     });
 
-    models.NumericField = models.TextField.extend({
+    models.NumberField = models.TextField.extend({
 
         defaults: function() {
             var baseSchema = _.pick(
@@ -666,13 +708,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             models.TextField.prototype.initialize.apply(this, arguments);
         }
     }, {
-        type   : 'Numeric',
-        i18n   : 'numeric'
+        type   : 'Number',
+        i18n   : 'Number'
     });
 
     //  Numeric field with range
     //  It's the same modal we change only constructor object
-    models.NumericRangeField = models.NumericField.extend({
+    models.NumericRangeField = models.NumberField.extend({
 
         defaults : function() {
             return models.NumericField.prototype.defaults()

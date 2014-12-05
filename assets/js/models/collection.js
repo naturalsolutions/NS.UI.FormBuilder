@@ -138,16 +138,9 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
         },
 
         getJSONFromModel: function (model) {
-            var subModel = { validators: [] };
+            var subModel = model.getJSON();
 
             switch (model.constructor.type) {
-                case 'Numeric':
-                    subModel['type'] = 'Number';
-                    break;
-
-                case 'LongText':
-                    subModel['type'] = 'TextArea';
-                    break;
 
                 case 'Radio':
                 case 'CheckBox':
@@ -161,28 +154,11 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
                     subModel['type'] = (model.constructor.type === "CheckBox") ? 'Checkboxes' : model.constructor.type;
                     break;
 
-                case 'Table':
-                    var item = null;
-                    subModel['subSchema'] = {}
-                    $.map(model.get('fields'), _.bind(function (field) {
-                        subModel['subSchema'][(field.get('label') + field.get('id'))] = this.getJSONFromModel(field);
-
-                    }, this));
-                    subModel['type'] = 'Object';
-                    break;
-
                 default:
                     subModel['type'] = model.constructor.type;
                     break;
             }
 
-            subModel['help'] = model.get('hint');
-            subModel['title'] = model.get('title');
-            subModel['editorClass'] = model.get('editorClass');
-            subModel['fieldClass'] = model.get('fieldClass');
-            if (model.get('required')) {
-                subModel.validators.push('required');
-            }
             return subModel;
         },
 

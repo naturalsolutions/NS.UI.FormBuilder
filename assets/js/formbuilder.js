@@ -35,12 +35,14 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             //  Backbone radio configuration
 
             //  We create to separate channel and keep cleans events configuration
-            this.mainChannel  = Backbone.Radio.channel('global');
-            this.formChannel  = Backbone.Radio.channel('form');
+            this.mainChannel    = Backbone.Radio.channel('global');
+            this.formChannel    = Backbone.Radio.channel('form');
+            this.requestChannel = Backbone.Radio.channel('request');
 
             //  Run event configuration
             this.initMainChannel();
             this.initFormChannel();
+            this.initRequestChannel();
 
             //  Init router
             this.router = new Router(options);
@@ -106,6 +108,18 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 this.currentCollection['name']        = formValues['name']
                 this.currentCollection['description'] = formValues['description']
                 this.currentCollection['keywords']    = formValues['keywords']
+            }, this));
+        },
+
+        initRequestChannel : function() {
+            this.requestChannel.on('saveConfiguration', _.bind(function(fieldConfiguration) {
+
+                $.post(this.URLOptions['fieldConfigurationURL'], fieldConfiguration).success(function() {
+                    alert ('field saved');
+                }).fail(function() {
+                    alert ('error !')
+                })
+
             }, this));
         }
 
