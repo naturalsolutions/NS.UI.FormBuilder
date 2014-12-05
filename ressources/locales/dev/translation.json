@@ -1,7 +1,7 @@
 {
     "fields" : {
         "text"                 : "Text",
-        "numeric"              : "Numeric",
+        "number"              : "Numeric",
         "date"                 : "Date",
         "select"               : "Select",
         "radio"                : "Radio button",
@@ -9,7 +9,7 @@
         "hidden"               : "Hidden",
         "file"                 : "File",
         "treeview"             : "Tree View",
-        "longtext"             : "Long text",
+        "textarea"             : "Long text",
         "pattern"              : "Pattern",
         "line"                 : "Horizontal line",
         "autocomplete"         : "Auto complete",
@@ -118,12 +118,16 @@
         "webServiceURL" : "Web service URL pour data list",
         "wsUrl" : "Web service URL",
         "ws" : "Web service ID",
-        "wslng" : "Data display language"
+        "wslng" : "Data display language",
+        "label"         : {
+            "fr" : "French label",
+            "en" : "English label"
+        }
     },
 
     "tooltip" : {
         "text"           : "Text field",
-        "numeric"        : "Numeric field",
+        "number"        : "Numeric field",
         "date"           : "Date field",
         "select"         : "Dropdown list",
         "radio"          : "Radio button",
@@ -131,11 +135,10 @@
         "hidden"         : "Hidden field",
         "file"           : "File",
         "treeview"       : "Tree View",
-        "longtext"       : "Long text",
+        "textarea"       : "Long text",
         "pattern"        : "Field with regular expression",
         "line"           : "Horizontal line",
         "autocomplete"   : "Auto complete",
-        "table"          : "Presentation",
         "subform"        : "Fieldset",
         "horizontalline" : "Horizontal line",
         "boolean"        : "Boolean",

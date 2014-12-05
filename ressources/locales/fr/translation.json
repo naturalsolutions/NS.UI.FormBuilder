@@ -1,14 +1,14 @@
 {
     "fields" : {
         "text"                 : "Texte",
-        "numeric"              : "Numérique",
+        "number"              : "Numérique",
         "date"                 : "Date",
         "select"               : "Liste déroulante",
         "radio"                : "Bouton radio",
         "checkbox"             : "Case à cocher",
         "hidden"               : "Masqué",
         "file"                 : "Fichier",
-        "longtext"             : "Texte long",
+        "textarea"             : "Texte long",
         "pattern"              : "Masque",
         "line"                 : "Ligne horizontale",
         "autocomplete"         : "Auto complétion",
@@ -116,16 +116,20 @@
             "medium" : "Moyen",
             "large"  : "Large"
         },
-        "eol" : "Est en fin de ligne",
+        "eol"           : "Est en fin de ligne",
         "webServiceURL" : "URL service web pour les données",
-        "wsUrl" : "service web URL",
-        "ws" : "Identifiant service web",
-        "wslng" : "Langue d'affichage pour les données"
+        "wsUrl"         : "service web URL",
+        "ws"            : "Identifiant service web",
+        "wslng"         : "Langue d'affichage pour les données",
+        "label"         : {
+            "fr" : "Label en français",
+            "en" : "Label en anglais"
+        }
     },
 
     "tooltip" : {
         "text"           : "Champs texte",
-        "numeric"        : "Champs numérique",
+        "number"        : "Champs numérique",
         "date"           : "Champs date",
         "select"         : "Liste déroulante",
         "radio"          : "Bouton radio",
