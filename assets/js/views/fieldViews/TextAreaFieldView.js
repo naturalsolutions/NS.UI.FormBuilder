@@ -3,7 +3,7 @@ define([
     'underscore',
     'backbone',
     'views/fieldViews/baseView',
-    'text!../../../templates/fieldView/longtextFieldView.html'
+    'text!../../../templates/fieldView/TextAreaFieldView.html'
 ], function($, _, Backbone, BaseView, viewTemplate) {
 
     var LongTextFieldView = BaseView.extend({
