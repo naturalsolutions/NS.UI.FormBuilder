@@ -19,9 +19,11 @@ define([
          * @type {Object}
          */
         events : {
-            'change select'     : 'selectChanged',
-            'click #cancel'     : 'cancel',
-            'click #saveChange' : 'saveChange'
+            'change select'               : 'selectChanged',
+            'click #cancel'               : 'cancel',
+            'click #saveChange'           : 'saveChange',
+            'click #saveButton'           : 'saveField',
+            'change .checkboxField input' : 'checkboxChange'
         },
 
         /**
@@ -41,8 +43,9 @@ define([
 
             this.initMainChannel();
             this.initFormChannel();
+            this.initRequestChannel();
 
-            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect', 'generateForm');
+            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect', 'generateForm', 'saveField');
         },
 
         /**
@@ -73,6 +76,10 @@ define([
             this.formChannel.on('displaySettings', _.bind(function(formObject) {
                 this.generateForm(formObject);
             }, this));
+        },
+
+        initRequestChannel : function() {
+            this.requestChannel = Backbone.Radio.channel('request');
         },
 
         /**
@@ -142,8 +149,12 @@ define([
          */
         saveChange : function() {
             var isValid = this.form.commit() === undefined;
+
             if (isValid) {
                 if (this.$el.find('#getField').is(':visible')) {
+
+                    console.log ("values : ", this.form.getValue())
+
                     this.mainChannel.trigger('formCommit')
                 } else {
                     var values       = this.form.getValue(),
@@ -152,7 +163,6 @@ define([
                     values['keywords'] = _.map(pillboxItems, function(num){
                         return num['value'];
                     });
-
                     this.formChannel.trigger('edition', values);
                 }
 
@@ -189,6 +199,10 @@ define([
          * @param  {[Object]} field Field with which backbone forms will generate an edition form
          */
         initForm : function(field) {
+
+            console.log ("Field : ", field)
+            this.currentFieldType = field.constructor.type;
+
             $.getJSON(this.URL.preConfiguredField, _.bind(function(fieldList) {
 
                 this.fieldWithSameType = fieldList[field.constructor.type];
@@ -335,6 +349,33 @@ define([
             }
 
             this.$el.find('input[name="endOfLine"]').prop('checked', choice['endOfLine'] != undefined)
+        },
+
+        /**
+         * Save current field as a configuration field
+         */
+        saveField : function() {
+            var formCommitResult = this.form.commit();
+            if (formCommitResult) {
+
+                //  If something wrong we move to the first incorrect field
+                var offsetTop = $('input[name="' + Object.keys(formCommitResult)[0] + '"]').offset().top;
+                this.$el.find('.scroll').scrollTop( offsetTop );
+                this.$el.find('.scroll').perfectScrollbar('update');
+
+            } else {
+                var formValue = this.form.getValue();
+
+                this.requestChannel.trigger('saveConfiguration', {
+                    type    : this.currentFieldType,
+                    name    : formValue['name'],
+                    content : formValue
+                });
+            }
+        },
+
+        checkboxChange : function(e) {
+            $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
         }
 
     });

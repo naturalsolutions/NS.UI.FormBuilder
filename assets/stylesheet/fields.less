@@ -4,38 +4,42 @@
 //	Style is separated to beused on setting and form panel
 
 .fontAwesomeField(@type, @selectedContent, @unSelectedContent) {
-	height: 40px;
-
-    label { color : #555; font-size: 24px !important; }
 
     input[type="@{type}"] {
-    	display : none;
-
-    	& + label:before {
-	        .fa;
-	        display   : inline-block;
-	        color     : #555;
-	        font-size : 24px;
-	        content: @unSelectedContent;
-	        letter-spacing: 10px;
-
-            &:hover {
-                cursor: pointer !important;
-            }
-	    }
-
-	    &:checked + label:before {
-	    	content: @selectedContent;
-            &:hover {
-                cursor: pointer !important;
-            }
-	    }
-
+        display : none;
     }
+
+    label {
+        &.@{type}Label {
+
+            &:before {
+                .fa;
+                display        : inline-block;
+                color          : #555;
+                font-size      : 24px;
+                content        : @unSelectedContent;
+                letter-spacing : 10px;
+
+                &:hover {
+                    cursor: pointer !important;
+                }
+            }
+
+            &.selected {
+                &:before {
+                    content: @selectedContent;
+                    &:hover {
+                        cursor: pointer !important;
+                    }
+                }
+            }
+        }
+    }
+
 }
 
 .checkboxField {
-	.fontAwesomeField(checkbox, "\f096", "\f046");
+	.fontAwesomeField(checkbox, "\f046", "\f096");
 }
 
 .radioField {
