@@ -13,8 +13,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     var checkboxFieldTemplate = _.template('\
         <div class="checkboxField <%= this.editor.schema.editorClass %>">\
             <div class="form-group field-<%= key %>">\
-                <input type="checkbox" name="<%= key %>" id="<%=this.model.cid %>_<%= key %>" />\
-                <label for="<%= editorId %>"><%= title %></label>\
+                <span data-editor></span>\
+                <label class="checkboxLabel" for="<%= editorId %>"><%= title %></label>\
             </div>\
             <div class="row padding5 marginLeft10">\
                 <p class="help-block"><%= help %></p>\
@@ -603,7 +603,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             schema.size.validators = [function checkValue(value, formValues) {
                 if (value < 0 || value > 8000) {
                     return {
-                        type : 'Invalid number', 
+                        type : 'Invalid number',
                         message : "La taille doit être comprise en 0 et 8000"
                     }
                 }
@@ -839,14 +839,14 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 template    : fieldTemplate,
                 fieldClass  : 'advanced'
             },
-            multiple : { 
+            multiple : {
                 type        : 'Checkbox',
                 editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
                 help        : 'This fieldset can be present many times in one form' ,
                 title       : $.t('schema.multiple')
             },
-            legend   : { 
+            legend   : {
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate ,
