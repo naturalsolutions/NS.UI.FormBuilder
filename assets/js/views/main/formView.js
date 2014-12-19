@@ -218,6 +218,8 @@ define([
 
                 $(".actions").i18n();
 
+                $('#count').find('span').text(this._view.length)
+
             }, this), function(err) {
                 swal("Echec de l'ajout!", "Une erreur est survenue lors de l'ajout du champ!", "error");
             });
