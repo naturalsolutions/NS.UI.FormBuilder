@@ -249,16 +249,16 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
         },
 
         updateWithJSON: function (JSONUpdate) {
-            this.name          = JSONUpdate["name"];
+            this.name          = JSONUpdate["Name"];
 
-            this.descriptionFr = JSONUpdate["descriptionFr"];
-            this.descriptionEn = JSONUpdate["descriptionEn"];
+            this.descriptionFr = JSONUpdate["DescriptionFR"];
+            this.descriptionEn = JSONUpdate["DescriptionEN"];
 
-            this.keywordsFr    = JSONUpdate["keywordsFr"];
-            this.keywordsEn    = JSONUpdate["keywordsEn"];
+            this.keywordsFr    = JSONUpdate["KeywordsFR"];
+            this.keywordsEn    = JSONUpdate["KeywordsEN"];
 
-            this.labelFr       = JSONUpdate["labelFr"];
-            this.labelEn       = JSONUpdate["labelEn"];
+            this.labelFr       = JSONUpdate["LabelFR"];
+            this.labelEn       = JSONUpdate["LabelEN"];
 
             var field = null, fieldset = [];
 
@@ -266,7 +266,7 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
                 fieldset = fieldset.concat(el["fields"]);
             });
 
-            _.each(JSONUpdate["schema"], _.bind(function (el, idx) {
+            _.each(JSONUpdate["Schema"], _.bind(function (el, idx) {
 
                 //  Add field if it is not in the fieldset
 
@@ -278,7 +278,7 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
                     }
 
                     //  Add the field to the collection
-                    this.addElement((el.type === 'TextArea' ? 'LongText' : el.type) + 'Field', field)
+                    this.addElement((el['InputType']) + 'Field', field)
                 }
                 field = null;
 
@@ -296,7 +296,7 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
                 _.each(el["fields"], function (name, index) {
                     if (Fields[JSONUpdate['schema'][name]['type'] + 'Field'] !== undefined) {
                         field.fields.push(
-                            new Fields[JSONUpdate['schema'][name]['type'] + 'Field']({
+                            new Fields[JSONUpdate['schema'][name]['InputType'] + 'Field']({
                                 id          : field['fields'].length,
                                 title       : JSONUpdate['schema'][name]['title'],
                                 help        : JSONUpdate['schema'][name]['help'],
@@ -311,6 +311,8 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
                 this.addElement('SubformField', field);
 
             }, this));
+
+            this.formChannel.trigger('updateFinished')
         }
 
     });

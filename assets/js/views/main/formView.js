@@ -42,7 +42,8 @@ define([
                             'import',
                             'clear',
                             'initRadioChannel',
-                            'removeElement'
+                            'removeElement',
+                            'updateFormName'
                     );
             this.collection.bind('newElement', this.addElement);
             this._view = [];
@@ -80,6 +81,8 @@ define([
             }, this));
 
             this.formChannel.on('remove', this.removeElement)
+
+            this.formChannel.on('updateFinished', this.updateFormName)
         },
 
         /**
@@ -133,6 +136,7 @@ define([
                         if (result !== false) {
 
                             var jsonParsed = $.parseJSON(result);
+
                             this.formChannel.trigger('JSONUpdate', jsonParsed);
 
                         } else {
@@ -287,7 +291,12 @@ define([
         removeElement : function() {
             this._viewCount--;
             $('#count').find('span').text(this._viewCount)
+        },
+
+        updateFormName : function() {
+            this.$el.find('h1 label').text( this.collection.name);
         }
+
     });
 
     return FormView;
