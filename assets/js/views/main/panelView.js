@@ -45,8 +45,6 @@ define(
                 }
 
                 this.section = section;
-
-                _.bindAll(this, 'appendToDrop');
             },
 
             appendToDrop : function(e) {
