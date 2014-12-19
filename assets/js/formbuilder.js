@@ -99,7 +99,7 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
             //  Update form with imported JSON data
             this.formChannel.on('JSONUpdate', _.bind(function(JSONUpdate) {
-                this.currentCollection.updateWithJSON(JSONUpdate);
+                this.currentCollection.updateWithJSON(JSONUpdate['form']);
             }, this));
 
             //  Event sent from the setting view when user validates form modification (name, description ...)
