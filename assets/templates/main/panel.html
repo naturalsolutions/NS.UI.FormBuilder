@@ -25,9 +25,11 @@
                 <div class="<%= clasS %>" data-toggle="tooltip" data-placement="right">
                     <div    data-type="<%= i.replace(" Field ", " ") %>"
                             class="fields"
-                            data-i18n="fields.<%= section[n][i]['i18n'] %>;[title]tooltip.<%= section[n][i]['i18n'] %>"
+                            data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>"
                             >
-                            <%= section[n][i]['i18n'] %>
+                            <i class="fa fa-plus"></i>
+                            <label data-i18n="fields.<%= section[n][i]['i18n'] %>">
+                            <%= section[n][i]['i18n'] %></label>
                     </div>
                 </div>
             <%}; %>
