@@ -108,6 +108,9 @@ define([
                 //  Add pillbow for form keywords
                 this.$el.find('.field-keywords input[type="text"]').pillbox();
 
+                this.$el.find('#pillboxkeywordsFr').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
+                this.$el.find('#pillboxkeywordsEn').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
+
                 this.$el.find('.field-name input[type="text"]').typeahead({
                     source: _.bind(function(query, process) {
                         return $.getJSON(this.URL['protocolAutocomplete'], {query: query}, function(data) {
@@ -116,25 +119,24 @@ define([
                     }, this)
                 });
 
-                this.$el.find('#pillboxkeywordsList input[type="text"]').typeahead({
+                this.$el.find('#pillboxkeywordsFr input[type="text"], #pillboxkeywordsEn input[type="text"]').typeahead({
                     source: _.bind(function(query, process) {
                         return $.getJSON(this.URL['keywordAutocomplete'], {query: query}, function(data) {
                             return process(data.options);
                         });
                     }, this),
-                    updater: _.bind(function(item) {
-                        this.$el.find('#pillboxkeywords').pillbox('addItems',-1, [{text :item, value : item}])
-
-                        $('#pillboxkeywords .pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item + '"></span>');
-                    }, this)
+                    updater: (function(item) {
+                        this.$element.parents('.pillbox').pillbox('addItems',-1, [{text :item, value : item}])
+                        this.$element.parents('.pillbox').find('.pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item + '"></span>');
+                    })
                 });
 
-                this.$el.find('#pillboxkeywords').on('added.fu.pillbox', _.bind(function (evt, item) {
-                  $('#pillboxkeywords .pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
+                this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('added.fu.pillbox', _.bind(function (evt, item) {
+                  this.$element.find('.pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
                 }, this));
 
-                this.$el.find('#pillboxkeywords').on('click', '.reneco', function() {
-                    $('#pillboxkeywords').pillbox('removeByText', $(this).data('parent'));
+                this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('click', '.reneco', function(evt) {
+                    $(this).parents('div.pillbox').pillbox('removeByText', $(this).data('parent'));
                 });
 
                 this.mainChannel.trigger('formCreated');
