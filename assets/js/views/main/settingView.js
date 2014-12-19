@@ -154,9 +154,6 @@ define([
 
             if (isValid) {
                 if (this.$el.find('#getField').is(':visible')) {
-
-                    console.log ("values : ", this.form.getValue())
-
                     this.mainChannel.trigger('formCommit')
                 } else {
                     var values       = this.form.getValue(),
@@ -202,7 +199,6 @@ define([
          */
         initForm : function(field) {
 
-            console.log ("Field : ", field)
             this.currentFieldType = field.constructor.type;
 
             $.getJSON(this.URL.preConfiguredField, _.bind(function(fieldList) {
