@@ -8,7 +8,7 @@
  * @version         1.0
  */
 
-define(['backbone', 'models/fields'], function (Backbone, Fields) {
+define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fields, Radio) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -99,7 +99,15 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
             this.keywords    = options.keywords || ["protocol"];
             this.labelFr     = this.labelEn = "";
             //  Bind
-            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel');
+            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
+
+            this.initFormChannel();
+        },
+
+        initFormChannel : function() {
+            this.formChannel = Backbone.Radio.channel('form');
+
+            this.formChannel.on('remove', this.removeElement);
         },
 
         /**
@@ -206,11 +214,16 @@ define(['backbone', 'models/fields'], function (Backbone, Fields) {
          * @returns {undefined}
          */
         addElement: function (nameType, properties) {
-            var field = properties || {};
+            var field   = properties || {};
             field['id'] = this.getSize();
-            var el = new Fields[nameType](field);
+            var el      = new Fields[nameType](field);
             this.add(el);
             this.trigger('newElement', el);
+        },
+
+        removeElement : function(id) {
+           var item = this.get(id);
+           this.remove( item );
         },
 
         updateWithJSON: function (JSONUpdate) {

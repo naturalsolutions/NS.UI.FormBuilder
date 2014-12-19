@@ -1,5 +1,5 @@
 
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+define(['jquery', 'underscore', 'backbone', 'backbone.radio'], function($, _, Backbone, Radio) {
 
     /**
      *  Base view
@@ -23,9 +23,13 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             this.template   = _.template(options.template);
             _.bindAll(this, 'render', 'removeView');
             this.model.bind('change', this.render);
-            this.model.bind('destroy', this.removeView);
 
             this.el = options.el;
+            this.initFormChannel();
+        },
+
+        initFormChannel : function() {
+            this.formChannel = Backbone.Radio.channel('form')
         },
 
         /**
@@ -35,6 +39,10 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             $(this.el).trigger('delete');
             $(this.el).remove();
             this.remove();
+            this.formChannel.trigger('remove', this.model.get('id'))
+
+            //  Prevent second trigger, i don't why i've this bug
+            return false;
         },
 
         /**

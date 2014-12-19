@@ -41,7 +41,8 @@ define([
                             'export',
                             'import',
                             'clear',
-                            'initRadioChannel'
+                            'initRadioChannel',
+                            'removeElement'
                     );
             this.collection.bind('newElement', this.addElement);
             this._view = [];
@@ -50,6 +51,7 @@ define([
 
             //  Backbone radio configuration
             this.initRadioChannel();
+            this._viewCount = 0;
         },
 
         /**
@@ -76,6 +78,8 @@ define([
                     swal("Une erreur est survenu !", "Votre formulaire n'a pas été enregistré !\nPensez à faire un export", "error");
                 }
             }, this));
+
+            this.formChannel.on('remove', this.removeElement)
         },
 
         /**
@@ -218,7 +222,8 @@ define([
 
                 $(".actions").i18n();
 
-                $('#count').find('span').text(this._view.length)
+                this._viewCount++;
+                $('#count').find('span').text(this._viewCount)
 
             }, this), function(err) {
                 swal("Echec de l'ajout!", "Une erreur est survenue lors de l'ajout du champ!", "error");
@@ -277,6 +282,11 @@ define([
          */
         importJSON : function(JSONImport)  {
             this.collection.updateWithJSON(JSONImport);
+        },
+
+        removeElement : function() {
+            this._viewCount--;
+            $('#count').find('span').text(this._viewCount)
         }
     });
 
