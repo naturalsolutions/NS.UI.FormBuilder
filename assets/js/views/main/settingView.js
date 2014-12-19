@@ -307,17 +307,22 @@ define([
          * Remove the generated form and clear HTML element
          */
         removeForm : function() {
-            this.$el.find('#form').html('');
-            this.form.undelegateEvents();
-            this.form.$el.removeData().unbind();
-            this.form.remove();
-            Backbone.View.prototype.remove.call(this.form);
+            //  I know it's bad but it works for the moment ;)
+            setTimeout(_.bind(function() {
+                this.$el.find('#form').html('');
+                this.form.undelegateEvents();
+                this.form.$el.removeData().unbind();
+                this.form.remove();
+                Backbone.View.prototype.remove.call(this.form);
 
-            //  Update scrollBar
-            this.$el.find('.scroll').scrollTop(0);
-            this.$el.find('.scroll').perfectScrollbar('update');
+                //  Update scrollBar
+                this.$el.find('.scroll').scrollTop(0);
+                this.$el.find('.scroll').perfectScrollbar('update');
 
-            this.form = null;
+                this.form = null;
+            }, this), 300);
+            //  My prefered music for developpement
+            //  https://www.youtube.com/watch?v=YKhNbKplIYA
         },
 
         /**

@@ -18,7 +18,7 @@ define([
          * @type {Object}
          */
         events: {
-            'click h1>span' : 'protocolSettings',
+            'click h1>span'   : 'protocolSettings',
             'click #export'   : 'export',
             'click #import'   : 'import',
             'click #clearAll' : 'clear',

@@ -119,7 +119,9 @@ define(
                 this.mainChannel.on('formCreated', _.bind(function() {
 
                     $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
-                    $('.widgetsPanel').switchClass('col-md-3', 'hide', 500);
+                    $('.widgetsPanel').animate({
+                        marginLeft : '-33.33333333%'
+                    }, 500)
 
                 }, this));
 
@@ -127,16 +129,20 @@ define(
                 //  and the data are correct
                 //  Run an animation for hide setting view and display panel view
                 this.mainChannel.on('formCommit', _.bind(function() {
-                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
-                    $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
+                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
+                    $('.widgetsPanel').animate({
+                        marginLeft : 0
+                    }, 300)
                     window.location.hash = "#";
                 }, this))
 
                 //  Event sent from setting view when modifications are cancelled
                 //  Run an animation for hide setting view and display panel view
                 this.mainChannel.on('formCancel', _.bind(function() {
-                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
-                    $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
+                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 300);
+                    $('.widgetsPanel').animate({
+                        marginLeft : 0
+                    }, 300)
                     window.location.hash = "#";
                 }, this))
 
