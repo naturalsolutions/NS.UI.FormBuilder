@@ -1,7 +1,7 @@
 {
     "fields" : {
         "text"                 : "Text",
-        "number"              : "Numeric",
+        "number"               : "Numeric",
         "date"                 : "Date",
         "select"               : "Select",
         "radio"                : "Radio button",
@@ -22,10 +22,24 @@
         "numericrange"         : "Numeric with slider"
     },
 
-    "protocol" : {
+    "form" : {
         "name" : "Protocol name",
-        "description" : "Protocol Description",
-        "keywords" : "Keywords"
+        "description" : {
+            "fr" : "Frendh form description",
+            "en" : "English form description"
+        },
+        "label" : {
+            "fr" : "French form displayed name",
+            "fr" : "English form displayed name"
+        },
+        "keywords" : {
+            "fr" : "French keywords",
+            "en" : "English keywords",
+            "action" : "Add keyword"
+        },
+        "cancel" : "Cancel",
+        "clear" : "Clear form",
+        "title" : "Create new form"
     },
 
     "modal" : {
@@ -126,42 +140,34 @@
     },
 
     "tooltip" : {
-        "text"           : "Text field",
-        "number"        : "Numeric field",
-        "date"           : "Date field",
-        "select"         : "Dropdown list",
-        "radio"          : "Radio button",
-        "checkbox"       : "Checkbox",
-        "hidden"         : "Hidden field",
-        "file"           : "File",
-        "treeview"       : "Tree View",
-        "textarea"       : "Long text",
-        "pattern"        : "Field with regular expression",
-        "line"           : "Horizontal line",
-        "autocomplete"   : "Auto complete",
-        "subform"        : "Fieldset",
-        "horizontalline" : "Horizontal line",
-        "boolean"        : "Boolean",
+        "text"                 : "Text field",
+        "number"               : "Numeric field",
+        "date"                 : "Date field",
+        "select"               : "Dropdown list",
+        "radio"                : "Radio button",
+        "checkbox"             : "Checkbox",
+        "hidden"               : "Hidden field",
+        "file"                 : "File",
+        "treeview"             : "Tree View",
+        "textarea"             : "Long text",
+        "pattern"              : "Field with regular expression",
+        "line"                 : "Horizontal line",
+        "autocomplete"         : "Auto complete",
+        "subform"              : "Fieldset",
+        "horizontalline"       : "Horizontal line",
+        "boolean"              : "Boolean",
         "autocompletetreeview" : "A TreeView field with searching functionnalité"
     },
 
     "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
-    "form" : {
-        "cancel" : "Cancel",
-        "clear" : "Clear form",
-        "title" : "Create new form"
-    },
+
     "accordion" : {
-        "standard" : "Standard fields",
+        "standard"     : "Standard fields",
         "autocomplete" : "Fields with autocomplete",
         "presentation" : "Presentation field",
-        "other" : "Other fields",
-        "list" : "List fields"
+        "other"        : "Other fields",
+        "list"         : "List fields"
     },
 
-    "collection" : {
-        "name" : "Form name",
-        "description" : "Form description",
-        "keywords" : "Form keywords"
-    }
+    "panel" : "Options panel"
 }

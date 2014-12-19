@@ -1,7 +1,8 @@
 {
+
     "fields" : {
         "text"                 : "Texte",
-        "number"              : "Numérique",
+        "number"               : "Numérique",
         "date"                 : "Date",
         "select"               : "Liste déroulante",
         "radio"                : "Bouton radio",
@@ -22,23 +23,37 @@
         "numericrange"         : "Curseur numérique"
     },
 
-    "protocol" : {
+    "form" : {
         "name" : "Nom du protocole",
-        "description" : "Description du protocol",
-        "keywords" : "Mots clés"
+        "description" : {
+            "fr" : "Description française du formulaire",
+            "en" : "Description anglaise du formulaire"
+        },
+        "keywords" : {
+            "fr" : "Mots clés français",
+            "en" : "Mots clés anglais",
+            "action" : "Ajouter un mot clé"
+        },
+        "label" : {
+            "fr" : "Intitulé français",
+            "en" : "intitulé anglais"
+        },
+        "cancel" : "Annuler",
+        "clear" : "Supprimer",
+        "title" : "Création d'un nouveau formulaire"
     },
 
     "modal" : {
-        "comment" : "Votre commentaire",
+        "comment"  : "Votre commentaire",
         "filename" : "Nom du fichier",
         "save" : {
-            "title" : "Sauvegarde du protocol",
+            "title"  : "Sauvegarde du protocol",
             "button" : "Sauvegarder"
         },
         "export" : {
             "title" : "Export",
-            "json" : "Exporter au format JSON",
-            "xml" : "Exporter au format XML"
+            "json"  : "Exporter au format JSON",
+            "xml"   : "Exporter au format XML"
         }
     },
 
@@ -128,44 +143,35 @@
     },
 
     "tooltip" : {
-        "text"           : "Champs texte",
-        "number"        : "Champs numérique",
-        "date"           : "Champs date",
-        "select"         : "Liste déroulante",
-        "radio"          : "Bouton radio",
-        "checkbox"       : "Case à cocher",
-        "hidden"         : "Champs masqué",
-        "file"           : "Fichier",
-        "longtext"       : "Texte long",
-        "pattern"        : "Champs avec expression régulière",
-        "line"           : "Ligne horizontale",
-        "autocomplete"   : "Auto complétion",
-        "table"          : "Présentation",
-        "subform"        : "Sous formulaire",
-        "horizontalline" : "Séparation",
-        "treeview"       : "Arborescence",
-        "boolean"        : "Booléen",
+        "text"                 : "Champs texte",
+        "number"               : "Champs numérique",
+        "date"                 : "Champs date",
+        "select"               : "Liste déroulante",
+        "radio"                : "Bouton radio",
+        "checkbox"             : "Case à cocher",
+        "hidden"               : "Champs masqué",
+        "file"                 : "Fichier",
+        "longtext"             : "Texte long",
+        "pattern"              : "Champs avec expression régulière",
+        "line"                 : "Ligne horizontale",
+        "autocomplete"         : "Auto complétion",
+        "table"                : "Présentation",
+        "subform"              : "Sous formulaire",
+        "horizontalline"       : "Séparation",
+        "treeview"             : "Arborescence",
+        "boolean"              : "Booléen",
         "autocompletetreeview" : "Champs arborescence avec un champs de recherche"
     },
 
     "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
-    "form" : {
-        "cancel" : "Annuler",
-        "clear" : "Supprimer",
-        "title" : "Création d'un nouveau formulaire"
-    },
 
     "accordion" : {
-        "standard" : "Champs standards",
+        "standard"     : "Champs standards",
         "autocomplete" : "Champs avec autocomplétion",
         "presentation" : "Champs de présentation",
-        "other" : "Autres champs",
-        "list" : "Champs à choix multiples"
+        "other"        : "Autres champs",
+        "list"         : "Champs à choix multiples"
     },
 
-    "collection" : {
-        "name" : "Nom du formulaire",
-        "description" : "Description du formulaire",
-        "keywords" : "Mot clés du formulaire"
-    }
+    "panel" : "Paramètres"
 }

@@ -52,35 +52,48 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
         schema : {
             name : {
                 type        : "Text",
-                title       : $.t('collection.name'),
+                title       : $.t('form.name'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators  : ['required']
             },
             labelFr   : {
                 type        : "Text",
-                title       : $.t('schema.label.fr'),
+                title       : $.t('form.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators  : ['required']
             },
             labelEn   : {
                 type        : "Text",
-                title       : $.t('schema.label.en'),
+                title       : $.t('form.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators  : ['required']
             },
-            description : {
+            descriptionEn : {
                 type        : "TextArea",
-                title       : $.t('collection.description'),
+                title       : $.t('form.description.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators  : ['required']
             },
-            keywords : {
+            descriptionFr : {
+                type        : "TextArea",
+                title       : $.t('form.description.fr'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators  : ['required']
+            },
+            keywordsFr : {
                 type        : 'Text',
-                title       : $.t('collection.keywords'),
+                title       : $.t('form.keywords.fr'),
+                editorClass : 'form-control hide',
+                template    : pillboxTemplate
+            },
+            keywordsEn : {
+                type        : 'Text',
+                title       : $.t('form.keywords.en'),
                 editorClass : 'form-control hide',
                 template    : pillboxTemplate
             }
@@ -93,11 +106,16 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
          * @param {type} options
          */
         initialize: function (models, options) {
-            this.name        = options.name || 'My form';
             this.count       = 0;
-            this.description = options.description || "";
-            this.keywords    = options.keywords || ["protocol"];
-            this.labelFr     = this.labelEn = "";
+
+            this.name          = options.name           || 'My form';
+            this.descriptionFr = options.descriptionFr  || "";
+            this.descriptionEn = options.descriptionEn  || "";
+            this.keywordsFr    = options.keywordsFr     || ["formulaire"];
+            this.keywordsEn    = options.keywordsEn     || ["form"];
+            this.labelFr       = options.labelFr        || "";
+            this.labelEn       = options.labelEn        || "";
+
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 
@@ -179,13 +197,17 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
 
         getJSON: function () {
             var json         = {
-                name        : this.name,
-                description : this.description,
-                keywords    : this.keywords,
-                labelFr     : this.labelFr,
-                labelEn     : this.labelEn,
-                schema      : {},
-                fieldsets   : []
+                //  form properties
+                name          : this.name,
+                descriptionFr : this.descriptionFr,
+                descriptionEn : this.descriptionEn,
+                keywordsEn    : this.keywordsEn,
+                keywordsFr    : this.keywordsFr,
+                labelFr       : this.labelFr,
+                labelEn       : this.labelEn,
+                //  form inputs
+                schema        : {},
+                fieldsets     : []
             }, subModel = null;
 
             this.map(_.bind(function (model) {
@@ -227,9 +249,16 @@ define(['backbone', 'models/fields', 'backbone.radio'], function (Backbone, Fiel
         },
 
         updateWithJSON: function (JSONUpdate) {
-            this.name        = JSONUpdate["name"];
-            this.description = JSONUpdate["description"];
-            this.keywords    = JSONUpdate["keywords"];
+            this.name          = JSONUpdate["name"];
+
+            this.descriptionFr = JSONUpdate["descriptionFr"];
+            this.descriptionEn = JSONUpdate["descriptionEn"];
+
+            this.keywordsFr    = JSONUpdate["keywordsFr"];
+            this.keywordsEn    = JSONUpdate["keywordsEn"];
+
+            this.labelFr       = JSONUpdate["labelFr"];
+            this.labelEn       = JSONUpdate["labelEn"];
 
             var field = null, fieldset = [];
 
