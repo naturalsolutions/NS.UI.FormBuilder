@@ -1,4 +1,3 @@
-}
 {
     "fields" : {
         "text"                 : "Text",
@@ -230,7 +229,7 @@
         },
         "field" : {
             "error" : "Field can't be added !",
-            "errorMsg" : "An error occured during field addition"
+            "errorMsg" : "An error occured during field addition !"
         }
     }
 }
