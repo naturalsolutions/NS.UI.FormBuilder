@@ -40,7 +40,14 @@
         },
         "cancel" : "Annuler",
         "clear" : "Supprimer",
-        "title" : "Création d'un nouveau formulaire"
+        "title" : "Création d'un nouveau formulaire",
+        "count" : "Champ(s)",
+        "actions" : {
+            "import" : "IMPORTER",
+            "export" : "EXPORTER",
+            "save"   : "SAUVER",
+            "clear"  : "TOUT EFFACER"
+        }
     },
 
     "modal" : {
@@ -139,7 +146,8 @@
         "label"         : {
             "fr" : "Label en français",
             "en" : "Label en anglais"
-        }
+        },
+        "name" : "Nom"
     },
 
     "tooltip" : {
@@ -173,5 +181,30 @@
         "list"         : "Champs à choix multiples"
     },
 
-    "panel" : "Paramètres"
+    "panel" : "Paramètres",
+
+    "navbar" : {
+        "context" : {
+            "edition" : "édition"
+        },
+        "status" : {
+            "online" : "Connecté"
+        }
+    },
+
+    "field" : {
+        "action" : {
+            "edit" : "Modifier"
+        }
+    },
+
+    "settings" : {
+        "actions" : {
+            "saveAsType" : "Enregistrez comme nouveau type",
+            "save" : "Sauvegarder",
+            "cancel" : "Annuler"
+        },
+        "preField" : "Champs pré configurés"
+    }
+
 }

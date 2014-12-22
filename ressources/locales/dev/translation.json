@@ -39,7 +39,14 @@
         },
         "cancel" : "Cancel",
         "clear" : "Clear form",
-        "title" : "Create new form"
+        "title" : "Create new form",
+        "count" : "Field(s)",
+        "actions" : {
+            "import" : "IMPORT",
+            "export" : "EXPORT",
+            "save"   : "SAVE",
+            "clear"  : "CLEAR ALL"
+        }
     },
 
     "modal" : {
@@ -136,7 +143,8 @@
         "label"         : {
             "fr" : "French label",
             "en" : "English label"
-        }
+        },
+        "name" : "Field name"
     },
 
     "tooltip" : {
@@ -169,5 +177,29 @@
         "list"         : "List fields"
     },
 
-    "panel" : "Options panel"
+    "panel" : "Options panel",
+
+    "navbar" : {
+        "context" : {
+            "edition" : "edition"
+        },
+        "status" : {
+            "online" : "Online"
+        }
+    },
+
+    "field" : {
+        "action" : {
+            "edit" : "Edit"
+        }
+    },
+
+    "settings" : {
+        "actions" : {
+            "saveAsType" : "Save as new type",
+            "save" : "Save changes",
+            "cancel" : "Cancel"
+        },
+        "preField" : "Pre-configurated field"
+    }
 }
