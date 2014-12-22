@@ -23,7 +23,6 @@
     "jsdifflib"            : "https://github.com/cemerick/jsdifflib.git",
     "font-awesome"         : "https://github.com/FortAwesome/Font-Awesome.git",
     "fancytree"            : "https://github.com/mar10/fancytree.git",
-    "filesaver"            : "https://github.com/eligrey/FileSaver.js.git",
     "requirejs"            : null,
     "perfect-scrollbar"    : "https://github.com/noraesae/perfect-scrollbar.git",
     "backbone-forms"       : "https://github.com/powmedia/backbone-forms.git",
@@ -35,6 +34,7 @@
     "rangeslider.js"       : "~0.3.6",
     "bootstrap-select"     : "https://github.com/silviomoreto/bootstrap-select.git",
     "sweetalert"           : null,
-    "reneco-fonts"         : null
+    "reneco-fonts"         : null,
+    "filesaver"            : "https://github.com/eligrey/FileSaver.js.git"
   }
 }
