@@ -201,5 +201,35 @@
             "cancel" : "Cancel"
         },
         "preField" : "Pre-configurated field"
+    },
+
+    "modal" : {
+        "clear" : {
+            "title"       : "Are you sure ?",
+            "text"        : "The form will be lost !",
+            "yes"         : "Yes, delete it",
+            "no"          : "No, cancel",
+            "deleted"     : "Deleted",
+            "formDeleted" : "Your form has been deleted !"
+        },
+        "import" : {
+            "error" : "An error occured !",
+            "errorMsg" : "Your form can't be imported !"
+        },
+        "export" : {
+            "success" : "Export successful !",
+            "error" : "Export failed !",
+            "errorMsg" : "An error occured during form export"
+        },
+        "save" : {
+            "success" : "Form savad !",
+            "successMsg" : "Your form was successfully saved on the server !",
+            "error" : "An error occured !",
+            "errorMsg" :" Your form wasn't saved. Consider making a export"
+        },
+        "field" : {
+            "error" : "Field can't be added !",
+            "errorMsg" : "An error occured during field addition !"
+        }
     }
 }

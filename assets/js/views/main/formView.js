@@ -43,7 +43,9 @@ define([
                             'clear',
                             'initRadioChannel',
                             'removeElement',
-                            'updateFormName'
+                            'updateFormName',
+                            'displayExportMessage',
+                            'displaySaveMessage'
                     );
             this.collection.bind('newElement', this.addElement);
             this._view = [];
@@ -72,17 +74,15 @@ define([
 
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
-            this.formChannel.on('save:return', _.bind(function(saveResult) {
-                if (saveResult) {
-                    swal("Sauvé !", "Votre formulaire a été enregistré sur le serveur !", "success");
-                } else {
-                    swal("Une erreur est survenu !", "Votre formulaire n'a pas été enregistré !\nPensez à faire un export", "error");
-                }
-            }, this));
+            this.formChannel.on('save:return',      this.displaySaveMessage);
 
-            this.formChannel.on('remove', this.removeElement)
+            //  Eevent send from formbuilder.js when export is finished (success or not)
+            this.formChannel.on('exportFinished',   this.displayExportMessage);
 
-            this.formChannel.on('updateFinished', this.updateFormName)
+            this.formChannel.on('remove',           this.removeElement)
+
+            //  Event send when update is done
+            this.formChannel.on('updateFinished',   this.updateFormName)
         },
 
         /**
@@ -99,7 +99,7 @@ define([
          */
         export : function() {
             require(['views/modals/exportProtocol'], _.bind(function(exportProtocolJSON) {
-                $(this.el).append('<div class="modal  fade" id="exportModal"></div>');
+                $('body').append('<div class="modal  fade" id="exportModal"></div>');
                 var modalView = new exportProtocolJSON({
                     el: "#exportModal",
                     URLOptions: this.URLOptions
@@ -122,7 +122,7 @@ define([
          */
         import : function() {
             require(['views/modals/importProtocol', 'utilities/utilities'], _.bind(function(importProtocolModal, Utilities) {
-                $(this.el).append('<div class="modal fade" id="importModal"></div>');
+                $('body').append('<div class="modal fade" id="importModal"></div>');
                 var modalView = new importProtocolModal({
                     el: "#importModal"
                 });
@@ -133,14 +133,26 @@ define([
                     var datas = modalView.getData();
 
                     Utilities.ReadFile(datas['file'], _.bind(function(result) {
-                        if (result !== false) {
+                        try {
+                            if (result !== false) {
 
-                            var jsonParsed = $.parseJSON(result);
+                                var jsonParsed = $.parseJSON(result);
 
-                            this.formChannel.trigger('JSONUpdate', jsonParsed);
+                                this.formChannel.trigger('JSONUpdate', jsonParsed);
 
-                        } else {
-                            swal("Une erreur est survenu !", "Votre formulaire n'a pas pu être importé", "error");
+                            } else {
+                                swal(
+                                    $.t('modal.import.error') || "Une erreur est survenu !",
+                                    $.t('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                    "error"
+                                );
+                            }
+                        } catch (e) {
+                            swal(
+                                $.t('modal.import.error') || "Une erreur est survenu !",
+                                $.t('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                "error"
+                            );
                         }
                     }, this));
 
@@ -157,18 +169,22 @@ define([
             var self = this;
 
             swal({
-                title              : "Etes vous sûr?",
-                text               : "Le formulaire sera définitivement perdu !",
+                title              : $.t('modal.clear.title') || "Etes vous sûr ?",
+                text               : $.t('modal.clear.text') || "Le formulaire sera définitivement perdu !",
                 type               : "warning",
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
-                confirmButtonText  : "Oui, supprimer",
-                cancelButtonText   : "Annuler",
+                confirmButtonText  : $.t('modal.clear.yes') || "Oui, supprimer",
+                cancelButtonText   : $.t('modal.clear.no') || "Annuler",
                 closeOnConfirm     : false,
                 closeOnCancel      : true
             }, function(isConfirm) {
                 if (isConfirm) {
-                    swal("Supprimé !", "Votre formulaire a été supprimé !", "success");
+                    swal(
+                        $.t('modal.clear.deleted') || "Supprimé !",
+                        $.t('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
+                        "success"
+                    );
                     self.collection.clearAll();
                 }
             });
@@ -230,7 +246,11 @@ define([
                 $('#count').find('.first').text(this._viewCount)
 
             }, this), function(err) {
-                swal("Echec de l'ajout!", "Une erreur est survenue lors de l'ajout du champ!", "error");
+                swal(
+                    $.t('modal.field.error')    || "Echec de l'ajout!",
+                    $.t('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ!",
+                    "error"
+                );
             });
         },
 
@@ -295,6 +315,38 @@ define([
 
         updateFormName : function() {
             this.$el.find('h1 label').text( this.collection.name);
+        },
+
+        displayExportMessage : function(result) {
+            if (result) {
+                swal(
+                    $.t('modal.export.success') || "Export réussi !",
+                    "",
+                    "success"
+                )
+            } else {
+                swal(
+                    $.t('modal.export.error') || "Echec de l'export !",
+                    $.t('modal.export.errorMsg') || "Une erreur est survenue lors de l'export",
+                    "error"
+                )
+            }
+        },
+
+        displaySaveMessage : function(result) {
+            if (result) {
+                swal(
+                    $.t('modal.save.success') || "Sauvé !",
+                    $.t('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
+                    "success"
+                );
+            } else {
+                swal(
+                    $.t('modal.save.error') || "Une erreur est survenu !",
+                    $.t('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                    "error"
+                );
+            }
         }
 
     });

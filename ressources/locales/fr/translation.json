@@ -205,6 +205,35 @@
             "cancel" : "Annuler"
         },
         "preField" : "Champs pré configurés"
+    },
+    "modal" : {
+        "clear" : {
+            "title"       : "Etes vous sûr ?",
+            "text"        : "Le formulaire sera définitivement perdu !",
+            "yes"         : "Oui, supprimer",
+            "no"          : "Non, nnuler",
+            "deleted"     : "Supprimé !",
+            "formDeleted" : "Votre formulaire a été supprimé !"
+        },
+        "import" : {
+            "error" : "Une erreur est survenu !",
+            "errorMsg" : "Votre formulaire n'a pas pu être importé"
+        },
+        "export" : {
+            "success" : "Export réussi !",
+            "error" : "Echec de l'export !",
+            "errorMsg" : "Une erreur est survenue lors de l'export"
+        },
+        "save" : {
+            "success"    : "Sauvé !",
+            "successMsg" : "Votre formulaire a été enregistré sur le serveur !",
+            "error"      : "Une erreur est survenu !",
+            "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export"
+        },
+        "field" : {
+            "error" : "Echec de l'ajout !",
+            "errorMsg" : "Une erreur est survenue lors de l'ajout du champ !"
+        }
     }
 
 }
