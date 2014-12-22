@@ -12,8 +12,6 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
     var formbuilder = {
 
-        importedFields : {},
-
         /**
          * Formbuilder constructor
          * Create main object and run the application
@@ -73,6 +71,9 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
         },
 
+        /**
+         * Initialize form channel
+         */
         initFormChannel : function() {
 
             this.formChannel    = Backbone.Radio.channel('form');
@@ -96,13 +97,21 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
 
         },
 
+        /**
+         * Init request radio channel
+         */
         initRequestChannel : function() {
 
             this.requestChannel = Backbone.Radio.channel('request');
 
-            this.requestChannel.on('saveConfiguration', this.saveConfiguration, this);
+            this.requestChannel.on('saveConfiguration', this.saveConfiguratedField, this);
         },
 
+        /**
+         * User save current form on the server
+         *
+         * @param  {Object} formAsJSON Current form as JSON data object
+         */
         saveForm : function(formAsJSON) {
             $.ajax({
                 data        : formAsJSON,
@@ -120,6 +129,11 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             });
         },
 
+        /**
+         * Create copy of a field
+         *
+         * @param  {Integer} modelID ID of the field to copy
+         */
         duplicateField : function(modelID) {
             var modelToCopy     = this.currentCollection.get(modelID),
                 newModelAttr    = modelToCopy.toJSON();
@@ -128,28 +142,55 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             this.currentCollection.addElement(modelToCopy.constructor.type + 'Field', newModelAttr);
         },
 
+        /**
+         * Try to save a field as a configurated field on the server
+         *
+         * @param  {Object} configuration JSON object with new configurated value properties
+         */
         saveConfiguratedField : function(configuration) {
-            $.post(this.URLOptions['configurationURL'], configuration).success(function() {
-                console.log ("on est bon")
-            }).fail(function() {
-                console.log ("fail")
-            })
+            $.post(this.URLOptions['configurationURL'], configuration).success(_.bind(function() {
+                this.requestChannel.trigger('saveConfiguration:return', true);
+            }, this)).fail(_.bind(function() {
+                this.requestChannel.trigger('saveConfiguration:return', false);
+            }, this))
         },
 
+        /**
+         * Return model corresponding to the ID with backbone forms
+         *
+         * @param  {Integer} id Model's id to return
+         */
         getModel : function(id) {
             this.mainChannel.trigger('getModel:return', this.currentCollection.get(id));
         },
 
+        /**
+         * Return the collection in JSON format
+         */
         getCollectionAsJSON : function() {
             this.mainChannel.trigger('getJSON:return', this.currentCollection.getJSON());
         },
 
+        /**
+         * Save form changes (send from settings view)
+         * form values contains collection attributes like descriptionFR, descriptionEN, Name, keywords ...
+         *
+         * @param  {Object} formValues new form values
+         */
         formSaveChanges : function(formValues) {
+
+            console.log (formValues)
+
             this.currentCollection['name']        = formValues['name']
             this.currentCollection['description'] = formValues['description']
             this.currentCollection['keywords']    = formValues['keywords']
         },
 
+        /**
+         * Export form as JSON file
+         *
+         * @param  {Object} datas contains new file name
+         */
         exportForm : function(datas) {
             //  Set attribute with datas parameters
             this.formChannel.trigger('export:return', {
@@ -158,16 +199,13 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
             });
         },
 
+        /**
+         * Update collection with imported JSON data
+         *
+         * @param  {Object} JSONUpdate Imported JSON data object
+         */
         updateWithJSON : function(JSONUpdate) {
             this.currentCollection.updateWithJSON(JSONUpdate['form']);
-        },
-
-        saveConfiguration : function(fieldConfiguration) {
-            $.post(this.URLOptions['fieldConfigurationURL'], fieldConfiguration).success(function() {
-                alert ('field saved');
-            }).fail(function() {
-                alert ('error !')
-            })
         }
 
     };

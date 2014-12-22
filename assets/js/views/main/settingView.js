@@ -45,23 +45,34 @@ define([
             this.initFormChannel();
             this.initRequestChannel();
 
-            _.bindAll(this, 'render', 'createForm', 'initForm', 'selectChanged', 'removeForm', 'resetSelect', 'generateForm', 'saveField');
+            _.bindAll(this,
+                'render',
+                'createForm',
+                'initForm',
+                'selectChanged',
+                'removeForm',
+                'resetSelect',
+                'generateForm',
+                'saveField',
+                'saveConfiguration',
+                'createFormForField',
+                'createFormForCollection'
+            );
         },
 
         /**
          * Register settingView to main radio channel and listen event on main channel
          */
         initMainChannel : function() {
+
             this.mainChannel = Backbone.Radio.channel('global');
 
-            this.mainChannel.on('saveConfiguration', _.bind(function() {
-                this.mainChannel.trigger('fieldConfiguration', this.form.model.toJSON());
-            }, this));
+            this.mainChannel.on('saveConfiguration', this.saveConfiguration, this);
 
-            this.mainChannel.on('getModel:return', _.bind(function(field) {
-                //  Create form with model
-                this.initForm(field);
-            }, this));
+            //  Create a form with backbone forms for field in parameter
+            //  See createFormForField function
+            this.mainChannel.on('getModel:return', this.createFormForField, this);
+
         },
 
         /**
@@ -73,13 +84,19 @@ define([
             this.formChannel = Backbone.Radio.channel('form');
 
             //  Event is sent by formView when user wants to edit form configuration (name, description and keywords)
-            this.formChannel.on('displaySettings', _.bind(function(formObject) {
-                this.generateForm(formObject);
-            }, this));
+            this.formChannel.on('displaySettings', this.createFormForCollection, this);
         },
 
+        /**
+         * Create request channel and listen some events
+         */
         initRequestChannel : function() {
+
             this.requestChannel = Backbone.Radio.channel('request');
+
+            //  Display a message to the user if the field was correctly saved or not
+            this.requestChannel.on('saveConfiguration:return', this.displaySaveConfigurationMessage, this);
+
         },
 
         /**
@@ -379,6 +396,40 @@ define([
 
         checkboxChange : function(e) {
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
+        },
+
+        displaySaveConfigurationMessage : function(result) {
+            if (result) {
+                swal(
+                    $.t('modal.configuration.success') || 'Champs sauvegardé !',
+                    $.t('modal.configuration.successMsg') || 'Votre champs a été enregistré comme champs pré-configuré.',
+                    'success'
+                )
+            } else {
+                swal(
+                    $.t('modal.configuration.error') || 'Champs non sauvegardé !',
+                    $.t('modal.configuration.errorMsg') || 'Votre champs n\a pas pu être sauvegardé.',
+                    'error'
+                )
+            }
+        },
+
+        saveConfiguration : function() {
+            this.mainChannel.trigger('fieldConfiguration', this.form.model.toJSON());
+        },
+
+        createFormForField : function(field) {
+            //  Create form with model
+            this.initForm(field);
+        },
+
+        /**
+         * Generate a form with backbone forms for edit form properties : label, keywords, description ...
+         *
+         * @param  {Object} formObject Form object (contains backbone-form schema)
+         */
+        createFormForCollection : function(formObject) {
+            this.generateForm(formObject);
         }
 
     });

@@ -57,36 +57,11 @@ define(
 
                 //  This event is sent from the main view when export modal view is closed
                 //  and where the model view data are corrects, event sent with the collection
-                this.formChannel.on('export:return', _.bind(function(collectionAndFilename) {
-                    require(['blobjs', 'filesaver'], _.bind(function(Blob, Filesaver) {
-                        try {
-
-                            var isFileSaverSupported = !!new Blob();
-                            var blob = new Blob([JSON.stringify(collectionAndFilename['collection'], null, 2)], {
-                                type: "application/json;charset=utf-8"
-                            });
-
-                            var fs = new Filesaver(blob, collectionAndFilename['filename'] + '.json');
-
-
-                            $('#exportModal').modal('hide').removeData();
-                            this.formChannel.trigger('exportFinished', true)
-                        } catch (e) {
-                            $('#exportModal').modal('hide').removeData();
-                            this.formChannel.trigger('exportFinished', false)
-                        }
-
-                        window.location.hash = '#';
-
-                    }, this));  //  End require
-                }, this));
+                this.formChannel.on('export:return', this.createFileForExport, this);
 
                 //  Event sent from setting view vhen form properties are changed
                 //  see settingView.js
-                this.formChannel.on('edition', _.bind(function(formValues) {
-                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
-                    $('.widgetsPanel').switchClass('hide', 'col-md-4', 500);
-                }, this))
+                this.formChannel.on('edition', this.closeSettingPanel, this);
             },
 
             /**
@@ -98,45 +73,21 @@ define(
 
                 //  Event sent from setting view when backbone forms generation is finished
                 //  Run an nimation for hide panel view and display setting view, I love jQuery !
-                this.mainChannel.on('formCreated', _.bind(function() {
-
-                    $('.dropArea').switchClass('col-md-9', 'col-md-7', 500);
-                    $('.widgetsPanel').animate({
-                        marginLeft : '-33.33333333%'
-                    }, 500)
-
-                }, this));
+                this.mainChannel.on('formCreated', this.openSettingPanel);
 
                 //  Event sent from setting view when field changed are saved
                 //  and the data are correct
                 //  Run an animation for hide setting view and display panel view
-                this.mainChannel.on('formCommit', _.bind(function() {
-                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
-                    $('.widgetsPanel').animate({
-                        marginLeft : 0
-                    }, 300)
-                    window.location.hash = "#";
-                }, this))
+                this.mainChannel.on('formCommit', this.closeSettingPanelAndResetURL, this)
 
                 //  Event sent from setting view when modifications are cancelled
                 //  Run an animation for hide setting view and display panel view
-                this.mainChannel.on('formCancel', _.bind(function() {
-                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 300);
-                    $('.widgetsPanel').animate({
-                        marginLeft : 0
-                    }, 300)
-                    window.location.hash = "#";
-                }, this))
+                this.mainChannel.on('formCancel', this.closeSettingPanelAndResetURL, this)
 
-                /*this.mainChannel.on('fieldConfiguration', _.bind(function(configuration) {
-                    $('.dropArea').switchClass('col-md-7', 'col-md-9', 500);
-                    $('.widgetsPanel').switchClass('hide', 'col-md-3', 500);
-                    window.location.hash = "#";
-                }, this))*/
             },
 
             /**
-             * Initiale route
+             * Initiale router
              */
             home: function() {
                 //  Awesome function !!!
@@ -163,60 +114,62 @@ define(
                 this.mainChannel.trigger('getModel', modelID);
             },
 
-            show: function() {
-                require(['views/modals/diffProtocol', 'utilities/utilities'], _.bind(function(diffModal, Utilities) {
-                    $(this.el).append('<div class="modal  fade" id="compareModal" ></div>');
-                    var modal = new diffModal({
-                        el : '#compareModal'
-                    });
-                    modal.render();
+            /**
+             * Export current form to JSON file
+             * @param  {Object} collectionAndFilename Form as JSON data objects and new file name
+             */
+            createFileForExport : function(collectionAndFilename) {
+                require(['blobjs', 'filesaver'], _.bind(function(Blob, Filesaver) {
+                    try {
 
-                    $('#compareModal').on('hidden.bs.modal', _.bind(function () {
-                        var datas = modal.getData();
+                        var isFileSaverSupported = !!new Blob();
+                        var blob = new Blob([JSON.stringify(collectionAndFilename['collection'], null, 2)], {
+                            type: "application/json;charset=utf-8"
+                        });
 
-                        Utilities.ReadFile(datas['source'], _.bind(function(result) {
-                            if (result !== false) {
-                                var source = result;
+                        var fs = new Filesaver(blob, collectionAndFilename['filename'] + '.json');
 
-                                Utilities.ReadFile(datas['update'], _.bind(function(resultUpdate) {
-                                    if (resultUpdate !== false) {
-                                        var update = resultUpdate;
 
-                                        //  Now we have all we need !
-                                        $('.widgetsPanel').switchClass('col-md-3', 'hide', 250, _.bind(function() {
-                                            console.log ("diff : ", Utilities.GetXMLDiff(source, update, datas['srcName'], datas['updName']))
-                                            $('.dropArea').append(
-                                                Utilities.GetXMLDiff(source, update, datas['srcName'], datas['updName'])
-                                            ).switchClass('col-md-9', 'col-md-12', 250).find('.diff').addClass('col-md-10 col-md-offset-1');
-                                            var acts = {
-                                                quit: new NS.UI.NavBar.Action({
-                                                    handler: _.bind(function() {
-                                                        $('.widgetsPanel').switchClass('hide', 'col-md-3', 250, _.bind(function() {
-                                                            $('.dropArea').switchClass('col-md-12', 'col-md-9', 250).find('table').remove();
-                                                            window.location.hash = "#";
-                                                            this.navbar.setActions(this.mainActions)
-                                                        }, this));
-                                                    }, this),
-                                                    allowedRoles: ["reader"],
-                                                    title: "Quit"
-                                                })
-                                            };
-                                            this.navbar.setActions(acts);
-                                        }, this))
+                        $('#exportModal').modal('hide').removeData();
+                        this.formChannel.trigger('exportFinished', true)
+                    } catch (e) {
+                        $('#exportModal').modal('hide').removeData();
+                        this.formChannel.trigger('exportFinished', false)
+                    }
 
-                                    } else {
-                                        console.log (resultUpdate);
-                                    }
-                                }, this));
+                    window.location.hash = '#';
 
-                            } else {
-                                console.log (result);
-                            }
-                        }, this));
-                    }, this));
+                }, this));  //  End require
+            },
 
-                }, this));
+            /**
+             * Close setting panel
+             */
+            closeSettingPanel : function() {
+                $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
+                $('.widgetsPanel').animate({
+                    marginLeft : 0
+                }, 500)
+            },
+
+            /**
+             * Open settings panel
+             */
+            openSettingPanel : function() {
+                $('.dropArea').switchClass('col-md-8', 'col-md-7', 500);
+                $('.widgetsPanel').animate({
+                    marginLeft : '-33.33333333%'
+                }, 500)
+            },
+
+            /**
+             * Close setting panel and reset URL to #
+             */
+            closeSettingPanelAndResetURL : function() {
+                this.closeSettingPanel();
+                window.location.hash = "#";
             }
+
         });
 
         return AppRouter;
