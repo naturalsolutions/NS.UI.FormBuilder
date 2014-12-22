@@ -248,7 +248,7 @@ define([
             }, this), function(err) {
                 swal(
                     $.t('modal.field.error')    || "Echec de l'ajout!",
-                    $.t('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ!",
+                    $.t('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
                     "error"
                 );
             });

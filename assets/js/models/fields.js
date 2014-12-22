@@ -455,9 +455,6 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                             type : 'List',
                             editorClass : 'itemList',
                             itemType : 'Object',
-                            add : function() {
-                                alert (true)
-                            },
                             itemToString : function(item) {
                                 return 'ID : ' + item.id + ', <b>EN label</b> : ' + item.en + ', FR label : ' + item.fr + ', value : ' + item.value;
                             },
@@ -717,11 +714,11 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.NumericRangeField = models.NumberField.extend({
 
         defaults : function() {
-            return models.NumericField.prototype.defaults()
+            return models.NumberField.prototype.defaults()
         },
 
         schema : function() {
-            return models.NumericField.prototype.schema()
+            return models.NumberField.prototype.schema()
         },
 
     }, {
