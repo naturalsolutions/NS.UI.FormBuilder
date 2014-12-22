@@ -5,7 +5,17 @@
         margin-left : -33.33333333% !important;
     }
 
+    &.col-md-1 {
+        #toggle {
+            text-align: center;
+            span {
+                font-size : 35px;
+            }
+        }
+    }
+
     height: 100%;
+
     .scroll {
         position: relative;
         overflow: hidden;
@@ -13,11 +23,19 @@
         margin-top: 5%;
     }
 
-    #toggle, #untoggle {
-        .exo;
-        font-size : 35px;
-        position: absolute;
-        left : 92%;
+    #toggle {
+        span {
+            font-size : 30px;
+            z-index: 255;
+            color : #555;
+            &.closed {
+                &:before {
+                    content : "\e011";
+                }
+            }
+        }
+        text-align: right;
+        width: 100%;
     }
 
     h1 {

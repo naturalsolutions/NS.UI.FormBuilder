@@ -394,10 +394,18 @@ define([
             }
         },
 
+        /**
+         * Change a checkbox state
+         */
         checkboxChange : function(e) {
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
         },
 
+        /**
+         * Display message when user wants to save field as configurated field
+         *
+         * @param  {Boolean} result if the field was saved
+         */
         displaySaveConfigurationMessage : function(result) {
             if (result) {
                 swal(
@@ -414,10 +422,18 @@ define([
             }
         },
 
+        /**
+         * Save a field as configurated field
+         */
         saveConfiguration : function() {
             this.mainChannel.trigger('fieldConfiguration', this.form.model.toJSON());
         },
 
+        /**
+         * Generate form for edit field properties
+         *
+         * @param  {Object} field Field to edit
+         */
         createFormForField : function(field) {
             //  Create form with model
             this.initForm(field);

@@ -1,40 +1,44 @@
 <div class="scroll">
-    <!--<span id="toggle">&#60;</span>-->
-    <div id="accordion" class="container-fluid">
-        <% for (var n in section) { %>
-            <div class="row">
-                <h3 class="col-md-10 col-md-offset-1 paddingLeft0" >
-                    <span data-i18n="accordion.<%= n %>">
-                        <%= n %>
-                    </span>
-                    <span class="glyphicon glyphicon-chevron-down pull-right"></span>
-                </h3>
-            </div>
-            <div class="row">
-            <% var count = 0, clasS = "" %>
-            <% for (var i in section[n]) { count++; %>
+    <div id="toggle">
+        <span class="glyphicon glyphicon-th-list open"></span>
+    </div>
+    <div id="features">
+        <div id="accordion" class="container-fluid">
+            <% for (var n in section) { %>
+                <div class="row">
+                    <h3 class="col-md-10 col-md-offset-1 paddingLeft0" >
+                        <span data-i18n="accordion.<%= n %>">
+                            <%= n %>
+                        </span>
+                        <span class="glyphicon glyphicon-chevron-down pull-right"></span>
+                    </h3>
+                </div>
+                <div class="row">
+                <% var count = 0, clasS = "" %>
+                <% for (var i in section[n]) { count++; %>
 
-                <%
-                    if (section[n][i]['doubleColumn']) {
-                        clasS = "col-md-10 col-md-offset-1 paddingLeft0 paddingRight0"
-                    } else {
-                        clasS = "col-md-5 " + (count%2 !== 0 ? "col-md-offset-1" : "");
-                    }
-                %>
+                    <%
+                        if (section[n][i]['doubleColumn']) {
+                            clasS = "col-md-10 col-md-offset-1 paddingLeft0 paddingRight0"
+                        } else {
+                            clasS = "col-md-5 " + (count%2 !== 0 ? "col-md-offset-1" : "");
+                        }
+                    %>
 
-                <div class="<%= clasS %>" data-toggle="tooltip" data-placement="right" data-type="<%= i.replace(" Field ", " ") %>">
-                    <div    data-type="<%= i.replace(" Field ", " ") %>"
-                            class="fields"
-                            data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>"
-                            >
-                            <i class="fa fa-plus" data-type="<%= i.replace(" Field ", " ") %>"></i>
-                            <label data-i18n="fields.<%= section[n][i]['i18n'] %>" data-type="<%= i.replace(" Field ", " ") %>">
-                                <%= section[n][i]['i18n'] %>
-                            </label>
+                    <div class="<%= clasS %>" data-toggle="tooltip" data-placement="right" data-type="<%= i.replace(" Field ", " ") %>">
+                        <div    data-type="<%= i.replace(" Field ", " ") %>"
+                                class="fields"
+                                data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>"
+                                >
+                                <i class="fa fa-plus" data-type="<%= i.replace(" Field ", " ") %>"></i>
+                                <label data-i18n="fields.<%= section[n][i]['i18n'] %>" data-type="<%= i.replace(" Field ", " ") %>">
+                                    <%= section[n][i]['i18n'] %>
+                                </label>
+                        </div>
                     </div>
+                <%}; %>
                 </div>
             <%}; %>
-            </div>
-        <%}; %>
+        </div>
     </div>
 </div>

@@ -146,20 +146,32 @@ define(
              * Close setting panel
              */
             closeSettingPanel : function() {
-                $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
-                $('.widgetsPanel').animate({
-                    marginLeft : 0
-                }, 500)
+                if ($('.widgetsPanel').hasClass('col-md-1')) {
+                    $('.dropArea').switchClass('col-md-7 col-md-pull-1', 'col-md-8', 500);
+                    $('.widgetsPanel').switchClass('col-md-1', 'col-md-4', 500);
+
+                    $('.widgetsPanel #features').fadeIn(200);
+            $('#toggle span').switchClass('closed', 'open');
+                } else {
+                    $('.dropArea').switchClass('col-md-7', 'col-md-8', 500);
+                    $('.widgetsPanel').animate({
+                        marginLeft : 0
+                    }, 500)
+                }
             },
 
             /**
              * Open settings panel
              */
             openSettingPanel : function() {
-                $('.dropArea').switchClass('col-md-8', 'col-md-7', 500);
-                $('.widgetsPanel').animate({
-                    marginLeft : '-33.33333333%'
-                }, 500)
+                if ($('.widgetsPanel').hasClass('col-md-1')) {
+                    $('.dropArea').switchClass('col-md-11', 'col-md-7 col-md-pull-1', 500);
+                } else {
+                    $('.dropArea').switchClass('col-md-8', 'col-md-7', 500);
+                    $('.widgetsPanel').animate({
+                        marginLeft : '-33.33333333%'
+                    }, 500)
+                }
             },
 
             /**

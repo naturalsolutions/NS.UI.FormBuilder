@@ -17,8 +17,8 @@ define([
          * @type {Object}
          */
         events : {
-            'click #toggle'   : 'toggle',
-            'click #untoggle' : 'untoggle'
+            'click #toggle span.open'   : 'minimizeWidgetPanel',
+            'click #toggle span.closed' : 'maximizeWidgetPanel'
         },
 
         /**
@@ -76,52 +76,6 @@ define([
             this.settingView.render();
         },
 
-        untoggle : function() {
-            $('.widgetsPanel').animate({
-                marginLeft : 0
-            }, 500, function() {
-                $(this).css({
-                    'position' : 'relative',
-                    'z-index' : 'auto'
-                })
-            });
-            $('.dropArea').switchClass('col-md-12', 'col-md-8', 500).css({
-                'padding-left' : 0,
-                'overflow' : 'hidden'
-            })
-
-            //  Toggle footer div
-            $('footer div:first-child').animate({
-                marginLeft : 0
-            }, 100, function() {
-                $('footer div:last-child:not(.pull-right)').switchClass('col-md-12', 'col-md-8', 500, function() {
-                    $(this).css({
-                        'padding-left' : 15,
-                        'overflow' : 'hidden'
-                    })
-                });
-            });
-        },
-
-        toggle : function() {
-            //  Toggle panels
-            $('.widgetsPanel').animate({
-                marginLeft : - (parseInt($('.widgetsPanel').css('width')) - 50)
-            }, 500, function() {
-                $(this).css({
-                    'position' : 'absolute',
-                    'z-index' : '255'
-                })
-            });
-            $('.dropArea').switchClass('col-md-8', 'col-md-12', 500).css({
-                'padding-left' : 50,
-                'overflow' : 'hidden'
-            })
-
-            //  Display gobach
-            $('#toggle').attr('id', 'untoggle').text('>')
-        },
-
         getSubView : function(subViewID) {
             return this.formView.getSubView(subViewID);
         },
@@ -132,6 +86,20 @@ define([
 
         importJSON : function() {
             return this.formView.importJSON();
+        },
+
+        minimizeWidgetPanel : function() {
+            $('.dropArea').switchClass('col-md-8', 'col-md-11', 300);
+            $('.widgetsPanel').switchClass('col-md-4', 'col-md-1', 300);
+            $('.widgetsPanel #features').fadeOut(200);
+            $('#toggle span').switchClass('open', 'closed')
+        },
+
+        maximizeWidgetPanel : function() {
+            $('.dropArea').switchClass('col-md-11', 'col-md-8', 300);
+            $('.widgetsPanel').switchClass('col-md-1', 'col-md-4', 300);
+            $('.widgetsPanel #features').fadeIn(200);
+            $('#toggle span').switchClass('closed', 'open');
         }
 
     });
