@@ -49,19 +49,6 @@
         }
     },
 
-    "modal" : {
-        "comment" : "Your coment",
-        "filename" : "File name",
-        "save" : {
-            "title" : "Protocol save",
-            "button" : "Save"
-        },
-        "export" : {
-            "title" : "Export",
-            "json" : "Export as JSON file"
-        }
-    },
-
     "nav" : {
         "save" : {
             "title"     : " Save protocol",
@@ -204,6 +191,16 @@
     },
 
     "modal" : {
+        "comment" : "Your coment",
+        "filename" : "File name",
+        "save" : {
+            "title" : "Protocol save",
+            "button" : "Save"
+        },
+        "export" : {
+            "title" : "Export",
+            "json" : "Export as JSON file"
+        },
         "clear" : {
             "title"       : "Are you sure ?",
             "text"        : "The form will be lost !",
@@ -230,6 +227,12 @@
         "field" : {
             "error" : "Field can't be added !",
             "errorMsg" : "An error occured during field addition !"
+        },
+        "configuration" : {
+            "success"    : "Field saved !",
+            "successMsg" : "Your field has been saved as a pre-configurated field.",
+            "error"      : "Field not saved !",
+            "errorMsg"   : "Your field couldn't be saved ."
         }
     }
 }
