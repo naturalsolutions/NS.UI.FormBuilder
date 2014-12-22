@@ -70,33 +70,15 @@ define(
 
 
                             $('#exportModal').modal('hide').removeData();
-                            swal("Export réussi !", "", "success")
+                            this.formChannel.trigger('exportFinished', true)
                         } catch (e) {
                             $('#exportModal').modal('hide').removeData();
-                            swal("Echec de l'export !", "Une erreur est survenue lors de l'export", "error")
+                            this.formChannel.trigger('exportFinished', false)
                         }
 
                         window.location.hash = '#';
 
                     }, this));  //  End require
-                }, this));
-
-                //  Event received when user wants to save his form on the server
-                this.formChannel.on('save', _.bind(function(formAsJSON) {
-                    $.ajax({
-                        data        : formAsJSON,
-                        type        : 'POST',
-                        url         : this.URLOptions['saveURL'],
-                        contentType : 'application/json',
-
-                        //  Trigger event with ajax result on the formView
-                        success: _.bind(function(res) {
-                            this.formChannel.trigger('save:return', true);
-                        }, this),
-                        error: _.bind(function(jqXHR, textStatus, errorThrown) {
-                            this.formChannel.trigger('save:return', false);
-                        }, this)
-                    });
                 }, this));
 
                 //  Event sent from setting view vhen form properties are changed

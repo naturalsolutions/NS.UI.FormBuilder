@@ -109,6 +109,24 @@ define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backb
                 this.currentCollection['description'] = formValues['description']
                 this.currentCollection['keywords']    = formValues['keywords']
             }, this));
+
+            //  Event received when user wants to save his form on the server
+            this.formChannel.on('save', _.bind(function(formAsJSON) {
+                $.ajax({
+                    data        : formAsJSON,
+                    type        : 'POST',
+                    url         : this.URLOptions['saveURL'],
+                    contentType : 'application/json',
+
+                    //  Trigger event with ajax result on the formView
+                    success: _.bind(function(res) {
+                        this.formChannel.trigger('save:return', true);
+                    }, this),
+                    error: _.bind(function(jqXHR, textStatus, errorThrown) {
+                        this.formChannel.trigger('save:return', false);
+                    }, this)
+                });
+            }, this));
         },
 
         initRequestChannel : function() {

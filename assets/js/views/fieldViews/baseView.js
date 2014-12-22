@@ -1,5 +1,5 @@
 
-define(['jquery', 'underscore', 'backbone', 'backbone.radio'], function($, _, Backbone, Radio) {
+define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function($, _, Backbone, Radio) {
 
     /**
      *  Base view
@@ -52,6 +52,8 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio'], function($, _, Ba
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             $(this.el).disableSelection();
+
+            $(this.el).i18n();
             return this;
         },
 
