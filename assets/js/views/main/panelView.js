@@ -14,8 +14,9 @@ define(
         var PanelView = Backbone.View.extend({
 
             events: {
-                'click div.col-md-5': 'appendToDrop',
-                'click div.col-md-10': 'appendToDrop'
+                'click div.col-md-5'       : 'appendToDrop',
+                'click div.col-md-10'      : 'appendToDrop',
+                'click #smallFeatures div' : 'appendToDrop'
             },
 
             initialize: function(collection) {

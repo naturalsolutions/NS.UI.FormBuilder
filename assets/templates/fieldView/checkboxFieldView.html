@@ -27,7 +27,10 @@
                 <div class="checkboxField marginTop0 marginBottom0">
                     <div class="form-group row marginTop0 marginBottom0 paddingTop0 paddingBottom0">
                         <input data-idx=<%=idx %> type="checkbox"  name="<%= name %>" id="<%=id %>_<%= idx %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
-                        <label for="<%=id %>_<%= idx %>"><%= el.fr %></label>
+                        <label for="<%=id %>_<%= idx %>">
+                            <span></span>
+                            <%= el.fr %>
+                        </label>
                     </div>
                 </div>
             <% }); %>

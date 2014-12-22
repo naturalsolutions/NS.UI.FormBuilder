@@ -294,6 +294,44 @@
 
         }
 
+        .checkboxField {
+            input[type="checkbox"] + label {
+                span {
+                    .fa;
+                    &:before {
+                        content : "\f096";
+                    }
+                }
+            }
+            input[type="checkbox"]:checked + label {
+                span {
+                    .fa;
+                    &:before {
+                        content : "\f046";
+                    }
+                }
+            }
+        }
+
+        .radioField {
+            input[type="radio"] + label {
+                span {
+                    .fa;
+                    &:before {
+                        content : "\f10c";
+                    }
+                }
+            }
+            input[type="radio"]:checked + label {
+                span {
+                    .fa;
+                    &:before {
+                        content : "\f192";
+                    }
+                }
+            }
+        }
+
         .radioField, .checkboxField {
             label {
                 color : #888;
