@@ -227,7 +227,7 @@ define([
                 $(".actions").i18n();
 
                 this._viewCount++;
-                $('#count').find('span').text(this._viewCount)
+                $('#count').find('.first').text(this._viewCount)
 
             }, this), function(err) {
                 swal("Echec de l'ajout!", "Une erreur est survenue lors de l'ajout du champ!", "error");
@@ -290,7 +290,7 @@ define([
 
         removeElement : function() {
             this._viewCount--;
-            $('#count').find('span').text(this._viewCount)
+            $('#count').find('span.first').text(this._viewCount)
         },
 
         updateFormName : function() {

@@ -8,7 +8,8 @@
              <span class="reneco settings pull-right"></span>
 
              <span class="pull-right" id="count">
-                 <span><%= this.collection.length == 1 ? 0 : this.collection.length %></span> Champ(s) &nbsp;
+                 <span class="first"><%= this.collection.length == 1 ? 0 : this.collection.length %></span>
+                 <span data-i18n="form.count">Champ(s)</span> &nbsp;
              </span>
         </h1>
     </div>
@@ -26,17 +27,32 @@
 </div>
 <footer>
     <button class="btn gray" id="clearAll">
-        TOUT EFFACER
+        <span data-i18n="form.actions.clear">
+            TOUT EFFACER
+        </span>
     </button>
     <div class="pull-right">
-    <button class="btn reneco red" id="import">
-            IMPORTER <label><span class="reneco import2"></span></label>
+        <button class="btn reneco red" id="import">
+            <span data-i18n="form.actions.import">IMPORTER</span>
+            <label>
+                <span class="reneco import2"></span>
+            </label>
         </button>
         <button class="btn reneco red" id="export">
-            EXPORTER <label><span class="reneco export2"></span></label>
+            <span data-i18n="form.actions.export">
+                EXPORTER
+            </span>
+            <label>
+                <span class="reneco export2"></span>
+            </label>
         </button>
         <button class="btn reneco red" id="save">
-            SAUVER <label><span class="reneco write"></span></label>
+            <span data-i18n="form.actions.save">
+                SAUVER
+            </span>
+            <label>
+                <span class="reneco write"></span>
+            </label>
         </button>
     </div>
 </footer>
