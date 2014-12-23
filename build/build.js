@@ -29,10 +29,10 @@
     },
     shim: {
         blobjs: {
-            exports: "blobjs"
+            exports: "Blob"
         },
         filesaver: {
-            exports: "filesaver"
+            exports: "Filesaver"
         },
         difflib: {
             exports: "difflib"
@@ -72,10 +72,10 @@
             exports: "$"
         },
         i18n: {
-            exports: "$",
             deps: [
                 "jquery"
-            ]
+            ],
+            exports: "$"
         },
         bootstrap: {
             exports: "$",
@@ -142,6 +142,29 @@
     },
 	preserveLicenseComments : false,
 
-    include : ['requirejs', 'backbone']
+    include : [
+        'requirejs',
+        'backbone',
+        'views/fieldViews/TextFieldView',
+        'views/fieldViews/AutocompleteFieldView',
+        'views/fieldViews/BaseView',
+        'views/fieldViews/CheckBoxFieldView',
+        'views/fieldViews/DateFieldView',
+        'views/fieldViews/FileFieldView',
+        'views/fieldViews/HiddenFieldView',
+        'views/fieldViews/HorizontalLineFieldView',
+        'views/fieldViews/TextAreaFieldView',
+        'views/fieldViews/NumberFieldView',
+        'views/fieldViews/PatternFieldView',
+        'views/fieldViews/RadioFieldView',
+        'views/fieldViews/SelectFieldView',
+        'views/fieldViews/SubFormFieldView',
+        'views/fieldViews/TreeViewFieldView',
+        'views/modals/exportProtocol',
+        'views/modals/importProtocol',
+        'views/modals/saveProtocol',
+        'views/fieldViews/ThesaurusFieldView',
+        'views/fieldViews/AutocompleteTreeViewFieldView'
+    ]
 
 })
