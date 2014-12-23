@@ -43,20 +43,12 @@
     </div>
 
     <div id="smallFeatures">
-        <div class="calendar" data-type="DateField">
-            <span class="fa fa-calendar" data-type="DateField"></span>
-        </div>
-        <div class="checkbox" data-type="CheckBoxField">
-            <span class="fa fa-check-square-o" data-type="CheckBoxField"></span>
-        </div>
-        <div class="radio" data-type="RadioField">
-            <span class="fa fa-dot-circle-o" data-type="RadioField"></span>
-        </div>
-        <div class="file" data-type="FileField">
-            <span class="fa fa-file-code-o" data-type="FileField"></span>
-        </div>
-        <div class="select" data-type="SelectField">
-            <span class="fa fa-caret-square-o-down" data-type="SelectField"></span>
-        </div>
+        <% for (var n in section) { %>
+            <% for (var i in section[n]) { count++; %>
+                <div data-type="<%= i.replace(" Field ", " ") %>" data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>" >
+                    <span class="icon<%= i.replace(" Field ", " ") %>" data-type="<%= i.replace(" Field ", " ") %>"></span>
+                </div>
+            <% } %>
+        <% } %>
     </div>
 </div>

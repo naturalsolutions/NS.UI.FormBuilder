@@ -29,8 +29,9 @@ define(
                     if (Fields[i].type !== undefined) {
                         if (Fields[i].section === undefined) {
                             section['other'][i] = {
-                                i18n : i.replace('Field', '').toLowerCase(),
-                                doubleColumn : Fields[i].doubleColumn !== undefined
+                                i18n             : i.replace('Field', '').toLowerCase(),
+                                doubleColumn     : Fields[i].doubleColumn !== undefined,
+                                fontAwesomeClass : Fields[i].fontAwesomeClass
                             }
                         } else {
                             if (section[Fields[i].section] === undefined) {
@@ -38,8 +39,9 @@ define(
                                 section[ Fields[i].section ] = {};
                             }
                             section[ Fields[i].section ][i] = {
-                                i18n : i.replace('Field', '').toLowerCase(),
-                                doubleColumn : Fields[i].doubleColumn !== undefined
+                                i18n             : i.replace('Field', '').toLowerCase(),
+                                doubleColumn     : Fields[i].doubleColumn !== undefined,
+                                fontAwesomeClass : Fields[i].fontAwesomeClass
                             }
                         }
                     }
