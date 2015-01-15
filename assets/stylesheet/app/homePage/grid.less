@@ -1,0 +1,171 @@
+#centerPanel {
+    background : #2a2e31;
+    height: 100%;
+
+    &>div:first-child { height: 100%; }
+
+    h1 {
+        .exo;
+        color          : #ffffff;
+        border-bottom  : 1px #75797b solid;
+        padding-bottom : 30px;
+        margin-bottom  : 25px;
+        padding-left   : 30px;
+        margin-top     : 0;
+        height         : 65px;
+        line-height    : 60px;
+        font-size      : 30px;
+        font-weight    : 100;
+    }
+
+    #grid {
+        height: 80%;
+        margin-right: 30px;
+        table {
+            width: 100%;
+            table-layout:fixed;
+            thead {
+
+                tr {
+
+
+                    th {
+                        .exo;
+                        text-transform : uppercase;
+                        padding-bottom : 15px;
+                        font-weight    : 900;
+
+                        &:first-child {
+                            width : 60%;
+                            padding-left: 20px;
+                        }
+
+                        a {
+                            color : #8c8f90 !important;
+                            font-size : 16px;
+
+                            &:hover {
+                                text-decoration: none !important;
+                                cursor: pointer;
+                            }
+
+                        }
+                    }
+                }
+            }
+
+            tbody {
+
+                tr {
+                    border-bottom: 1px #555 solid;
+
+                    &.clone {
+                        background : #D9BF3D;
+                        color : #222;
+                    }
+
+                    &.focused {
+                        background: #555;
+                    }
+
+
+                    &.selected {
+                        background : #d1d2d4 !important;
+                    }
+
+                    &:not(.formInformation), &:not(.selected) {
+                        &:hover {
+                            cursor: pointer;
+                            background : #1e1e1e;
+                        }
+                    }
+
+                    td {
+                        .exo;
+                        padding-top    : 7px;
+                        padding-bottom : 7px;
+                        color          : #8c8f90;
+                        &:first-child {
+                            padding-left   : 20px;
+                            text-transform : uppercase;
+                        }
+                    }
+
+                }
+            }
+        }
+
+        .formInformation {
+            background : #222 !important;
+            td {
+                padding-top    : 17px;
+                padding-bottom : 17px;
+                text-transform : none !important;
+                vertical-align : top;
+                p {
+                    width  : 90%;
+                    margin : 0 auto;
+                }
+            }
+        }
+    }
+
+    footer {
+        height        : 120px;
+        position      : absolute;
+        bottom        : 0;
+        background    : #2e2b2c;
+        margin-left   : -15px;
+        margin-right  : -15px !important;
+        padding-right : 15px;
+        padding-left  : 15px;
+        width : 100%;
+
+        div {
+            height: 100%;
+        }
+
+        div.pull-left {
+
+            margin-left: 0 !important;
+            display : none;
+
+            button {
+                margin-left: 7px !important;
+            }
+
+        }
+
+        button, a.btn {
+            margin-top: 20px;
+            label:hover {
+                cursor : pointer;
+            }
+            &.red {
+                border-radius : 0px;
+                &:last-child {
+                    margin-left: 17px;
+                }
+            }
+        }
+    }
+
+    .scrollSection {
+        height: 80%;
+        overflow: hidden;
+        .col-md-12:first-child {
+            height: 100%;
+        }
+        #scrollSection {
+            height   : 85%;
+            position : relative;
+            overflow : hidden;
+        }
+        .ps-scrollbar-y-rail {
+            background : black;
+            height     : 550px !important;
+            overflow   : hidden;
+        }
+
+    }
+}

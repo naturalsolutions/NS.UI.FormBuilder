@@ -1,0 +1,432 @@
+@backgroundColor       : #312f30;
+@dropFieldHeaderColor  : #3e3e3f;
+@imputBackgroundColor  : #242021;
+@elementHoverColor     : #57585a;
+@footerBackgroundColor : #2e2b2c;
+
+.mainField {
+    padding-left : 10px;
+    background   : @imputBackgroundColor;
+    border       : 1px #555 solid !important;
+    color        : #555;
+}
+
+.col11centered { margin-left: 4.15555% !important; }
+
+#formPanel {
+    height: 100%;
+    padding-left: 0;
+    padding-right: 0;
+
+    .dropArea {
+
+        position      : relative;
+        overflow      : hidden;
+        height        : 100%;
+        background    : @backgroundColor;
+        margin-bottom : 50px;
+        z-index: 1;
+
+        footer {
+            height        : 120px;
+            position      : absolute;
+            bottom        : 0;
+            background    : @footerBackgroundColor;
+            padding-right : 15px;
+            padding-left  : 15px;
+            padding-top: 7px;
+            width: 100%;
+
+            div {
+                height: 100%;
+            }
+
+            button {
+                margin-top: 15px;
+                label:hover {
+                    cursor : pointer;
+                }
+                &.red {
+                    border-radius : 2px;
+                    &:last-child {
+                        margin-left: 20px;
+                    }
+                }
+            }
+        }
+
+        //  All field element
+        .col-md-10 {
+            padding-right : 40px !important;
+            padding-left  : 40px !important;
+            h1 {
+                .exo;
+                width          : 100%;
+                background     : @backgroundColor;
+                font-size      : 35px;
+                color          : #fff;
+                border-bottom  : 1px #555 solid;
+                label {
+                    .exo;
+                }
+
+                padding-bottom : 15px;
+                overflow       : hidden;
+                margin-bottom  : 0;
+                &:focus { box-shadow: none; }
+            }
+
+            .reneco.settings {
+                color : #555;
+                &:hover {
+                    cursor : pointer;
+                    color : #888;
+                }
+            }
+        }
+
+        //  Main drop section, use perfect scrollbar library
+        .scrollSection {
+            height: 80%;
+            .col-md-12:first-child {
+                height: 100%;
+            }
+            #scrollSection {
+                height   : 100%;
+                position : relative;
+                overflow : hidden;
+            }
+            .ps-scrollbar-y-rail {
+                background : black;
+                height     : 550px !important;
+                overflow   : hidden;
+            }
+
+        }
+
+        .drop {
+            padding: 0;
+            padding-bottom: 200px;
+        }
+
+        //  Class for each field in the drop zone
+        .dropField {
+            .noMarginTop;
+            padding-top   : 0px;
+            margin-left   : 0!important;
+            transition    : all 0.2s ease-in-out;
+            background    : #111;
+            margin-bottom : 20px;
+
+            .element {
+                background : #222;
+                padding: 0 !important;
+                border : 1px solid @dropFieldHeaderColor;
+
+                .row {
+                    //  field banner with label and action
+                    &.paddingBottom5 {
+                        .exo;
+                        transition       : background 0.2s ease-in-out;
+                        height           : 45px;
+                        line-height      : 45px;
+                        color            : white;
+                        background-color : @dropFieldHeaderColor;
+
+                        .col-md-6 {
+                            .exo;
+                            height      : 45px;
+                            line-height : 45px;
+                            color       : white;
+                            .fa-arrows {
+                                margin-right: 10px;
+                            }
+                        }
+                        .right {
+                            color : white;
+                            a {
+                                &:not(.btn) {
+                                    &:nth-child(even) {
+                                        padding-left: 5px;
+                                        padding-right: 5px;
+                                    }
+                                    &:last-child {
+                                        padding-right: 15px;
+                                    }
+                                    i {
+                                        font-size : 25px;
+                                        height    : 30px;
+                                        width     : 30px;
+                                        display   : none;
+                                        color     : white;
+                                    }
+                                }
+                                &.btn {
+                                    //width: 97px;
+                                    margin-top: -15px;
+                                    i {
+                                        height       : 30px;
+                                        width        : 30px;
+                                        padding-right: 5px;
+                                        color        : white;
+                                    }
+                                }
+                            }
+                        }
+                        .fa-arrows { color : white; }
+                    }
+
+                    &:not(.paddingBottom5) {
+                        //  row with input
+                        background : @backgroundColor;
+                        padding-top: 10px;
+                        padding-bottom: 10px;
+                    }
+
+                    .actions {
+                        .trash, .copy { visibility: hidden; }
+                    }
+                }
+
+                &:hover {
+                    border : 1px solid @elementHoverColor;
+                    .row {
+                        &.paddingBottom5 {
+                            background: @elementHoverColor;
+                        }
+                    }
+                    .actions {
+                        .trash, .copy { visibility: visible; }
+                    }
+                }
+
+                a {
+                    color : #aaa;
+                    &:hover {
+                        color : white;
+                    }
+                    &.copy, &.trash {
+                        font-size: 25px;
+                        margin-right: 7px;
+                    }
+                    &.trash {
+                        margin-right: 20px;
+                    }
+                }
+            }
+
+            a.reneco {
+                overflow: hidden;
+                padding-right: 50px;
+                div {
+                    position: absolute;
+                    float: right;
+                    top: 4px;
+                    height: 35px;
+                    width: 35px;
+                    background: #000;
+                    line-height: 35px;
+                    overflow: hidden;
+                    right: 15px;
+                    span {
+                        background: transparent;
+                    }
+                }
+            }
+
+            hr {
+                height     : 1px;
+                margin-top : 0;
+                min-height : 0;
+            }
+
+            //  Display action : edit, copy and delete when field is hovered
+            &:hover {
+                a:not(.btn) {
+                    i {
+                        display: initial !important;
+                    }
+                }
+            }
+
+            //  ---------------------------------------------------
+            //  Style for specific field type
+
+            label { .text(); .exo; &:hover { cursor : default !important; } }
+
+            &.textArea {
+                textarea {
+                    .mainField;
+                    resize       : none;
+                }
+                .span1:last-child {
+                    height      : 48px;
+                }
+            }
+
+            input[type="text"], input[type="number"], select{
+                .mainField;
+            }
+
+            .subformField {
+
+                fieldset {
+                    border         : 1px #222 solid;
+                    min-height     : 100px;
+                    padding-bottom : 10px;
+                    margin-right   : 7px;
+
+                    .subElement {
+                        background    : transparent;
+                        padding-left  : 0;
+                        padding-right : 0;
+                        box-shadow    : 0 0 2px #555;
+                        &:hover {
+                            box-shadow: 0 0 4px #555;
+                            .actions {
+                                display : block !important;
+                            }
+                        }
+                    }
+
+                    .sortableRow { margin-top: 20px; padding-left: 7px; padding-right: 7px; }
+
+                    &.hovered {
+                        background : rgba(200, 210, 220, 0.5) !important;
+                        border : 1px dashed #888 !important;
+                    }
+                }
+
+            }
+
+            .checkboxField {
+                input[type="checkbox"] + label {
+                    span {
+                        .fa;
+                        &:before {
+                            content : "\f096";
+                        }
+                    }
+                }
+                input[type="checkbox"]:checked + label {
+                    span {
+                        .fa;
+                        &:before {
+                            content : "\f046";
+                        }
+                    }
+                }
+            }
+
+            .radioField {
+                input[type="radio"] + label {
+                    span {
+                        .fa;
+                        &:before {
+                            content : "\f10c";
+                        }
+                    }
+                }
+                input[type="radio"]:checked + label {
+                    span {
+                        .fa;
+                        &:before {
+                            content : "\f192";
+                        }
+                    }
+                }
+            }
+
+            .radioField, .checkboxField {
+                label {
+                    color : #888;
+                }
+            }
+
+            input[type="radio"] {
+                margin-left : 0px !important;
+                position    : static !important;
+                width       : 25px;
+            }
+
+            //  Treeview element style
+            .treeview, .thesaurusField, .fancytreeview  {
+
+                background : transparent;
+                ul {
+                    background : transparent;
+                    border : none;
+
+                    span {
+
+                        &.fancytree-node {
+                            //  node element
+                            &:hover {
+                                background: #222;
+                                .fancytree-title {
+                                    background: #222;
+                                    border-color : #222 !important;
+                                }
+                            }
+                        }
+
+                        &.fancytree-active {
+                            //  selected node
+                        }
+
+                        &.fancytree-focused {
+                            //  current node
+                            background: black !important;
+                            border-color: black !important;
+                            .fancytree-title {
+                                background: black;
+                                border-color : black !important;
+                            }
+
+                            &:hover {
+                                .fancytree-title {
+                                    background: black;
+                                    border-color : black !important;
+                                }
+                            }
+                        }
+
+                        .fancytree-title {
+                            .exo;
+                            color : white;
+                        }
+
+                    }
+
+                }
+
+            }
+
+            .fancytreeview { background : #111; }
+
+            .slider {
+                float : left;
+                width: 500px !important;
+            }
+
+            .find {
+                background : #862332;
+                border-radius: 0;
+                border-color: #862332;
+            }
+
+            .displayValue {
+                .exo;
+                color : white;
+            }
+
+            .checkbox, .radio {
+                label {
+                    color : white;
+                }
+            }
+        }
+
+    }
+
+}

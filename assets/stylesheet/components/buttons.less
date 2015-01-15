@@ -1,0 +1,87 @@
+.btn, button {
+    .exo;
+    height     : 35px;
+    margin-top : 12.5px;
+    color      : white;
+
+    &.gray {
+        border-radius : 0 !important;
+        background    : #111;
+        &:hover {
+            color: white;
+        }
+    }
+
+    &.grey {
+        background : #484647;
+    }
+
+    &.red {
+        background    : #892833;
+    }
+
+    &.form {
+        border : none !important;
+        width: 120px;
+        text-transform: uppercase;
+    }
+
+    &.reneco {
+        overflow: hidden;
+        border: none;
+        line-height: 22px;
+        label {
+            height: 38px;
+            position: relative;
+            /* top: -5px; */
+            top: -7px;
+            padding-top: 7px;
+            width: 38px;
+            left: 15px;
+            float: right;
+            text-align: center;
+            padding-right: 5px;
+            span {
+                text-align: center;
+                font-size: 20px;
+            }
+        }
+
+        &.red {
+            label {
+                background: #702029;
+            }
+        }
+
+        &.grey {
+            label {
+                background : #3d3b3c;
+            }
+        }
+    }
+
+    &:hover, &:active, &:focus, &:visited {
+        color      : white;
+        box-shadow : none !important;
+        outline    : none !important;
+        * { color : white; }
+    }
+
+    &.saveButton {
+        background     : transparent !important;
+        box-shadow     : none;
+        outline        : none;
+        border         : 2px #555 solid !important;
+        color          : #555 !important;
+        padding-top    : 7px;
+        padding-bottom : 7px;
+        margin         : 5px auto;
+        width          : 250px;
+        height         : 45px !important;
+        width          : 100%;
+        margin-left    : 0 !important;
+        margin-top     : 30px !important;
+        margin-bottom  : 30px;
+    }
+
+}
