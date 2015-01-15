@@ -21,7 +21,7 @@ module.exports = function(grunt) {
         // Watch less file changes for compile
         watch: {
             stylesheet: {
-                files: ['assets/stylesheet/*.less'],
+                files: ['assets/stylesheet/**/*.less'],
                 tasks: ['less:dist', 'autoprefixer:single_file']
             }
         },
