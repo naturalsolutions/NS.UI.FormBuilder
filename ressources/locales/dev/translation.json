@@ -1,4 +1,5 @@
 {
+
     "fields" : {
         "text"                 : "Text",
         "number"               : "Numeric",
@@ -20,6 +21,16 @@
         "thesaurus"            : "Thesaurus",
         "autocompletetreeview" : "Autocomplete Treeview",
         "numericrange"         : "Numeric with slider"
+    },
+
+    "search" : {
+        "name" : "Name",
+        "keywords" : "Keywords",
+        "date" : {
+            "from" : "From",
+            "to" : "to"
+        },
+        "user" : "User"
     },
 
     "form" : {
@@ -168,7 +179,8 @@
 
     "navbar" : {
         "context" : {
-            "edition" : "edition"
+            "edition" : "edition",
+            "home" : "home"
         },
         "status" : {
             "online" : "Online"

@@ -23,6 +23,16 @@
         "numericrange"         : "Curseur numérique"
     },
 
+    "search" : {
+        "name" : "Nom",
+        "keywords" : "Mots clés",
+        "date" : {
+            "from" : "De",
+            "to" : "à"
+        },
+        "user" : "Utilisateur"
+    },
+
     "form" : {
         "name" : "Nom du protocole",
         "description" : {
@@ -171,7 +181,8 @@
 
     "navbar" : {
         "context" : {
-            "edition" : "édition"
+            "edition" : "édition",
+            "home" : "accueil"
         },
         "status" : {
             "online" : "Connecté"
@@ -201,8 +212,7 @@
         },
         "export" : {
             "title" : "Export",
-            "json"  : "Exporter au format JSON",
-            "xml"   : "Exporter au format XML"
+            "json"  : "Exporter au format JSON"
         },
         "clear" : {
             "title"       : "Etes vous sûr ?",
