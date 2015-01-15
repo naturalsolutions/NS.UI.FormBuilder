@@ -22,21 +22,27 @@
 	    <script data-main="assets/js/config" type="text/javascript" src='libs/requirejs/require.js'></script>
 	</head>
 	<body>
-		<header>
-			<img src="" alt="" class="logo" />
-			<a href="#" class="title">
-				formbuilder
-			</a>
-			<span class="glyphicon glyphicon-chevron-down"></span>
-			<span class="pipe">&#124;</span>
-			<span class="mode" data-i18n="navbar.context.edition">édition</span>
-			<div class="pull-right">
-				<img src="" alt="" class="statusICON">
-				<span class="status" data-i18n="navbar.status.online">online</span>
-				<span class="user">Don MICELI</span>
-			</div>
-		</header>
-	    <section class="container-fluid" id="formBuilder">
-	    </section>
+
+        <header>
+            <img src="" alt="" class="logo" />
+            <a href="#" class="title">
+                formbuilder
+            </a>
+            <span class="glyphicon glyphicon-chevron-down"></span>
+            <span class="pipe">&#124;</span>
+            <span id="navbarContext" class="mode" data-i18n="navbar.context.home">
+                Home
+            </span>
+            <div class="pull-right">
+                <img src="" alt="" class="statusICON">
+                <span class="status" data-i18n="navbar.status.online">online</span>
+                <span class="user">Don MICELI</span>
+            </div>
+        </header>
+
+        <div class="container-fluid" style="height: 100%">
+            <div id="mainRegion" class="row"></div>
+        </div>
+
 	</body>
 </html>
