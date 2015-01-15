@@ -1,0 +1,81 @@
+<div class="row">
+    <h1 class="row">
+        <span class="reneco search"></span>&nbsp;Rechercher
+    </h1>
+
+    <div class="row">
+        <form action="#search" class="col-md-8 col-md-offset-2 form">
+            <h2>Description</h2>
+
+            <div class="form-group">
+                <label for="name" data-i18n="search.name">
+                    Nom
+                </label>
+                <br />
+                <input type="text" name="name" id="name" class="form-control" />
+            </div>
+
+            <br />
+
+            <div class="form-group">
+                <label for="keywords" data-i18n="search.keywords">
+                    Mots clés
+                </label>
+                <br />
+                <input type="text" name="keywords" id="keywords" class="form-control" />
+            </div>
+
+            <br>
+
+            <h2>Date</h2>
+
+            <div class="form-group">
+                <label for="dateFrom" data-i18n="search.date.from">
+                    DE
+                </label>
+                <br>
+                <input type="date" class="form-control" name="dateFrom" id="dateFrom">
+            </div>
+
+            <br>
+
+            <div class="form-group">
+                <label for="dateTo" data-i18n="search.date.to">
+                    à
+                </label>
+                <br>
+                <input type="date" class="form-control" name="dateTo" id="dateTo">
+            </div>
+
+            <h2>Utilisateur</h2>
+
+            <div class="form-group">
+                <label for="user" data-i18n="search.user">
+                    Utilisateur
+                </label>
+                <br />
+                <input type="text" name="user" id="user" class="form-control" />
+            </div>
+
+        </form>
+    </div>
+
+    <footer class="">
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <button class="pull-left btn reneco gray" id="clearForm">
+                    <span data-i18n="form.actions.clear">EFFACER</span>
+                </button>
+
+                <button class="pull-right btn reneco red" id="find">
+                    <span data-i18n="form.actions.find">TROUVER</span>
+                    <label>
+                        <span class="reneco search"></span>
+                    </label>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+</div>
