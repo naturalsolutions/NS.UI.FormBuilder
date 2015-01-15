@@ -1,215 +1,78 @@
 /**
- * @fileOverview formbuilder.js
- *
- * This file init formbuilder application using require JS
- * Create and run backbone router
- *
- * @author          MICELI Antoine (miceli.antoine@gmail.com)
- * @version         1.0
+ * Run the application
+ * At start we run HomePageRouter to display homepage
  */
 
-define(['backbone', 'router', 'models/collection', 'views/main/mainView', 'backbone.radio'], function(Backbone, Router, Collection, MainView, Radio){
+define([
+    'underscore',
+    'marionette',
+    'homePageModule/router/HomePageRouter',
+    'homePageModule/controller/HomePageController',
+    'editionPageModule/router/EditionPageRouter',
+    'editionPageModule/controller/EditionPageController',
+    'backbone.radio'
+], function(_, Marionette, HomePageRouter, HomePageController, EditionPageRouter, EditionPageController, Radio) {
 
-    var formbuilder = {
+    //  Create a marionette application
+    FormbuilderApp = new Backbone.Marionette.Application();
 
-        /**
-         * Formbuilder constructor
-         * Create main object and run the application
-         */
-        initialize : function(options) {
+    //  Add two main region for the layouts
+    FormbuilderApp.addRegions({
+      mainRegion    : '#mainRegion',
+    });
 
-        	//	Init collection
-            this.currentCollection = new Collection({}, {
-                name: "Mon protocole"
-            });
+    FormbuilderApp.addInitializer(function(options){
+        if (window.location.hash != "")
+            window.location.hash = "";
+    });
 
-            //  Keep option
-            this.URLOptions = options['URLOptions'];
+    //  Add a first initializer that create homepage router
+    FormbuilderApp.addInitializer(function(options){
 
-            //  Init main view and render it
-            this.mainView = new MainView({
-                el         : options['el'],
-                form       : this.currentCollection,
-                URLOptions : options['URLOptions']
-            });
-            this.mainView.render();
+        //  Create controller for homepage
+        var homePageRouter = new HomePageRouter({
+            controller : new HomePageController({
+                homePageRegion : this.mainRegion,
+                URLOptions : options.URLOptions
+            })
+        });
 
-            //  Backbone radio configuration
-            this.initMainChannel();
-            this.initFormChannel();
-            this.initRequestChannel();
+    });
 
-            //  Init router
-            this.router = new Router(options);
-            Backbone.history.start();
-        },
+    FormbuilderApp.addInitializer(function(options){
 
-        /**
-         * Initialize and configure main channel
-         */
-        initMainChannel : function() {
+        //  Create controller for homepage
+        var editionPageRouter = new EditionPageRouter({
+            controller : new EditionPageController({
+                editionPageRegion : this.mainRegion,
+                URLOptions : options.URLOptions
+            })
+        });
 
-            this.mainChannel    = Backbone.Radio.channel('global');
+    });
 
-            //  This event is receive from the router when user wants to see field configuration (see router.js)
-            //  Send an event to the setting view
-            this.mainChannel.on('getModel', this.getModel, this);
+    FormbuilderApp.addInitializer(function(options) {
+        //  App global channel, use for communication throug module
+        //  Modules nevers communicate directly, all pass from formbuilder app
+        this.globalChannel = Backbone.Radio.channel('global');
 
+        //  Channel for editionPageModule
+        this.editionPageChannel = Backbone.Radio.channel('editionPage');
 
-            //  Event receive from router when user wants to export current form in JSON
-            //  Send an event to the router with current form in JSON DATA
-            this.mainChannel.on('getJSON', this.getCollectionAsJSON, this);
+        this.globalChannel.on('displayEditionPage', _.bind(function(formToEdit) {
+            this.editionPageChannel.trigger('display', formToEdit);
+        }, this));
 
+        this.globalChannel.on('formImported', _.bind(function(formImportedJSON) {
+            this.editionPageChannel.trigger('formImported', formImportedJSON);
+        }, this))
+    })
 
-            //  This event is received when user want to dusplicate a field
-            //  Add field copy to the collection
-            this.mainChannel.on('copy', this.duplicateField, this);
+    //  Application start callback
+    FormbuilderApp.on('start', function(options) {
+        Backbone.history.start();
+    })
 
-
-            //  Send from setting view when user wants to save a field as new configurated field
-            this.mainChannel.on('fieldConfiguration', this.saveConfiguratedField, this)
-
-        },
-
-        /**
-         * Initialize form channel
-         */
-        initFormChannel : function() {
-
-            this.formChannel    = Backbone.Radio.channel('form');
-
-            //  Event receive when user wants to export a form
-            //  We trigger on the mainchannel with current form as json data
-            this.formChannel.on('export', this.exportForm, this);
-
-
-            //  Update form with imported JSON data
-            this.formChannel.on('JSONUpdate', this.updateWithJSON, this);
-
-
-            //  Event sent from the setting view when user validates form modification (name, description ...)
-            //  See settingView.js
-            this.formChannel.on('edition', this.formSaveChanges, this);
-
-
-            //  Event received when user wants to save his form on the server
-            this.formChannel.on('save', this.saveForm, this);
-
-        },
-
-        /**
-         * Init request radio channel
-         */
-        initRequestChannel : function() {
-
-            this.requestChannel = Backbone.Radio.channel('request');
-
-            this.requestChannel.on('saveConfiguration', this.saveConfiguratedField, this);
-        },
-
-        /**
-         * User save current form on the server
-         *
-         * @param  {Object} formAsJSON Current form as JSON data object
-         */
-        saveForm : function(formAsJSON) {
-            $.ajax({
-                data        : formAsJSON,
-                type        : 'POST',
-                url         : this.URLOptions['saveURL'],
-                contentType : 'application/json',
-
-                //  Trigger event with ajax result on the formView
-                success: _.bind(function(res) {
-                    this.formChannel.trigger('save:return', true);
-                }, this),
-                error: _.bind(function(jqXHR, textStatus, errorThrown) {
-                    this.formChannel.trigger('save:return', false);
-                }, this)
-            });
-        },
-
-        /**
-         * Create copy of a field
-         *
-         * @param  {Integer} modelID ID of the field to copy
-         */
-        duplicateField : function(modelID) {
-            var modelToCopy     = this.currentCollection.get(modelID),
-                newModelAttr    = modelToCopy.toJSON();
-
-            newModelAttr['id'] = this.currentCollection.length;
-            this.currentCollection.addElement(modelToCopy.constructor.type + 'Field', newModelAttr);
-        },
-
-        /**
-         * Try to save a field as a configurated field on the server
-         *
-         * @param  {Object} configuration JSON object with new configurated value properties
-         */
-        saveConfiguratedField : function(configuration) {
-            $.post(this.URLOptions['configurationURL'], configuration).success(_.bind(function() {
-                this.requestChannel.trigger('saveConfiguration:return', true);
-            }, this)).fail(_.bind(function() {
-                this.requestChannel.trigger('saveConfiguration:return', false);
-            }, this))
-        },
-
-        /**
-         * Return model corresponding to the ID with backbone forms
-         *
-         * @param  {Integer} id Model's id to return
-         */
-        getModel : function(id) {
-            this.mainChannel.trigger('getModel:return', this.currentCollection.get(id));
-        },
-
-        /**
-         * Return the collection in JSON format
-         */
-        getCollectionAsJSON : function() {
-            this.mainChannel.trigger('getJSON:return', this.currentCollection.getJSON());
-        },
-
-        /**
-         * Save form changes (send from settings view)
-         * form values contains collection attributes like descriptionFR, descriptionEN, Name, keywords ...
-         *
-         * @param  {Object} formValues new form values
-         */
-        formSaveChanges : function(formValues) {
-
-            console.log (formValues)
-
-            this.currentCollection['name']        = formValues['name']
-            this.currentCollection['description'] = formValues['description']
-            this.currentCollection['keywords']    = formValues['keywords']
-        },
-
-        /**
-         * Export form as JSON file
-         *
-         * @param  {Object} datas contains new file name
-         */
-        exportForm : function(datas) {
-            //  Set attribute with datas parameters
-            this.formChannel.trigger('export:return', {
-                collection : this.currentCollection.getJSON(),
-                filename : datas['filename']
-            });
-        },
-
-        /**
-         * Update collection with imported JSON data
-         *
-         * @param  {Object} JSONUpdate Imported JSON data object
-         */
-        updateWithJSON : function(JSONUpdate) {
-            this.currentCollection.updateWithJSON(JSONUpdate['form']);
-        }
-
-    };
-
-  return formbuilder;
+    return FormbuilderApp;
 
 });
