@@ -8,6 +8,7 @@
  */
 
 require.config({
+
     paths: {
         backbone               : "../../libs/backbone/backbone",
         blobjs                 : "../../libs/blobjs/Blob",
@@ -15,7 +16,7 @@ require.config({
         fancytree              : "../../libs/fancytree/dist/jquery.fancytree-all.min",
         filesaver              : "../../libs/filesaver/FileSaver",
         i18n                   : "../../libs/i18n/i18next",
-        jquery                 : "../../libs/jquery/dist/jquery",
+        jquery                 : "../../libs/jquery/jquery.min",
         "jquery-ui"            : "../../libs/jquery-ui/jquery-ui",
         underscore             : "../../libs/underscore/underscore",
         requirejs              : "../../libs/requirejs/require",
@@ -35,7 +36,10 @@ require.config({
         rangeslider            : "../../libs/rangeslider.js/dist/rangeslider",
         "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select",
         sweetalert             : "../../libs/sweetalert/lib/sweet-alert",
+        marionette             : '../../libs/marionette/lib/backbone.marionette.min',
+        backgrid               : '../../libs/backgrid/lib/backgrid'
     },
+
     shim: {
         blobjs: {
             exports: "Blob"
@@ -130,11 +134,20 @@ require.config({
             deps: [
                 "jquery"
             ]
+        },
+        marionette: {
+            deps: ["backbone"],
+            exports: "Marionette"
+        },
+        'backgrid': {
+            deps: ['jquery', 'underscore', 'backbone'],
+            exports: 'Backgrid'
         }
     }
 });
 
 require(['formbuilder'], function(formbuilder) {
+
     var options = {
         // Specify URL for formBuilder configuration
         // Replace this URL with your own
@@ -150,5 +163,5 @@ require(['formbuilder'], function(formbuilder) {
         el : '#formBuilder'
     }
 
-    formbuilder.initialize(options);
+    formbuilder.start(options);
 });
