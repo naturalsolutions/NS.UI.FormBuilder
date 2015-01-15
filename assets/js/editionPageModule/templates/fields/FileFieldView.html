@@ -1,0 +1,31 @@
+<div class="element padding5">
+    <div class="row paddingBottom5">
+        <label class="col-md-6">
+            <i class="fa fa-arrows"></i>
+            <%= labelFr %><% if (required === true) { %> (*) <% } %>
+        </label>
+        <div class="col-md-6 right actions">
+            <a href="#" class="trash">
+                <span class="reneco trash"></span>
+            </a>
+            <a href="#copy/<%= id %>" class="copy">
+               <span class="reneco duplicate"></span>
+           </a>
+           <a href="#setting/<%= id %>" class="btn reneco gray">
+                <span data-i18n="field.action.edit">
+                    Modifier
+                </span>
+                <div>
+                    <span class="reneco settings"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col11centered">
+            <input type="file" class="hide" />
+            <input type="text" class="form-control col-md-10" name="<%= name %>" id="<%= id%>" />
+            <input type="submit" value="Browse" class="marginLeft20 find btn btn-info paddingLeft10 paddingRight10 noMarginTop" />
+        </div>
+    </div>
+</div>

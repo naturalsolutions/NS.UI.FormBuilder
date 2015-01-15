@@ -1,0 +1,33 @@
+<div class="element padding5">
+    <div class="row paddingBottom5">
+        <label class="col-md-6">
+            <i class="fa fa-arrows"></i>
+            <%= labelFr %><% if (required === true) { %> (*) <% } %>
+        </label>
+        <div class="col-md-6 right actions">
+            <a href="#" class="trash">
+                <span class="reneco trash"></span>
+            </a>
+            <a href="#copy/<%= id %>" class="copy">
+               <span class="reneco duplicate"></span>
+           </a>
+           <a href="#setting/<%= id %>" class="btn reneco gray">
+                <span data-i18n="field.action.edit">
+                    Modifier
+                </span>
+                <div>
+                    <span class="reneco settings"></span>
+                </div>
+            </a>
+        </div>
+    </div>
+        <div class="checkbox">
+            <label>
+                <input type="checkbox"  name="checked" id="<%= id %>" value="checked" <% if (checked){ %>checked<% } %> />
+                <%= checkboxLabel %>
+            </label>
+        </div>
+    </div>
+
+
+</div>
