@@ -2,31 +2,32 @@
 
 ## Screenshoots
 
-![formBuilder](http://s16.postimg.org/722bej4p1/Form_Builder_Google_Chrome_2.jpg)
+![homepage](http://img4.hostingpics.net/pics/865244FormBuilderGoogleChrome.jpg)
 
-## Features
+![editionPage](http://img4.hostingpics.net/pics/463955FormBuilderGoogleChrome2.jpg)
+
+## Presentation
+
+The Formbuilder is a marionette and backbone-forms based web application for JSON form definition.
+The application allows to define backbone-forms schema in order to generate HTML forms.
+
+Formbuilder features :
+
 
 * Graphical form definition
 * Export / Import in JSON file
 * Drag'n drop field position ajustement
 * Model definition based on backone-forms
 
+## Documentations
+
+See our [documentation](docs/index.md)
+
 ## Demo
 
 You can try the formBuilder on [this page](http://naturalsolutions.github.io/NS.UI.FormBuilder/)
 That page is static, so some functionnalities like "save on the cloud" will not work.
 
-### Demo FormBuilder to Backbone forms
+## Back end
 
-When you've imported a JSON file, you can try it on this page [FormBuilder to
-Backbone-forms](http://amiceli.github.io/FormBuilderTobackbone-forms/).
-You can generate a form with your jSON File.
-
-You can also try [this demo](http://amiceli.github.io/backboneformsWizard/). You can
-generate a form with fieldset and wizard.
-
-#### Back end
-
-Check out python back end [repository](https://github.com/NaturalSolutions/NS.Server.FormBuilder)
-
-##### Currently the FormBuilder is not 100% compatible with backbone forms but it's our goal.
+Check out python back end [repository](https://github.com/NaturalSolutions/NS.Server.FormBuilder) built with Flask and SQLAlchemy.
