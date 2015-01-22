@@ -16,7 +16,7 @@ If you want to add a field you hace to inerit from BaseField class :
 
 ## Step 2 : define schema for backbone forms
 
-The formbuilder is based on backbone-forms and we use schema definiton to generate form, see (backbone-forms documentation](https://github.com/powmedia/backbone-forms).
+The formbuilder is based on backbone-forms and we use schema definiton to generate form, see [backbone-forms documentation](https://github.com/powmedia/backbone-forms).
 
 For example for our Awesome field we have one properties **maximum characters size** so :
 
@@ -147,7 +147,7 @@ You awesome field is displayed as a text field with a maxlength :
 
 ## Step 6 : translation
 
-To finish you have to add your file in each translation files in [local folder](https://github.com/NaturalSolutions/NS.UI.FormBuilder/tree/master/ressources/locales).
+To finish you have to add your file in each translation files in [ressources/locales folder](https://github.com/NaturalSolutions/NS.UI.FormBuilder/tree/master/ressources/locales).
 
 For example for our field we have to add
 
@@ -166,6 +166,6 @@ Now if all is good your field appears in the left panel in the edition page (rem
 
 ## Get full code
 
-If you want to add that awesome field on the application or get this code check [examples folder](examples/)
+If you want to add that awesome field on the application or get this code check [examples folder](https://github.com/NaturalSolutions/NS.UI.FormBuilder/tree/master/docs/examples)
 
 back to [summary](index.md)
