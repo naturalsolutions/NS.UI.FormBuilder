@@ -57,7 +57,8 @@
             "export" : "EXPORTER",
             "save"   : "SAUVER",
             "clear"  : "TOUT EFFACER"
-        }
+        },
+        "find" : "Rechercher un formulaire"
     },
 
     "nav" : {
