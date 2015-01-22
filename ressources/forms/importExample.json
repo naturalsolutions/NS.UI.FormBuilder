@@ -1,0 +1,70 @@
+{
+    "name": "Mon premier formulaire",
+    "descriptionFr": "Mon premier formulaire",
+    "descriptionEn": "My first form",
+    "keywordsEn": [
+        "form"
+    ],
+    "keywordsFr": [
+        "formulaire"
+    ],
+    "labelFr": "Mon premier formulaire",
+    "labelEn": "My first form",
+
+    "schema": {
+        "Name": {
+            "id": 1,
+            "labelFr"      : "Nom",
+            "labelEn"      : "Name",
+            "name"         : "name",
+            "readonly"     : false,
+            "editorClass"  : "",
+            "fieldClass"   : "",
+            "fieldSize"    : "Etroit",
+            "endOfLine"    : false,
+            "defaultValue" : "",
+            "help"         : "Enter your name",
+            "size"         : 255,
+            "type"         : "Text",
+            "validators"   : ["required"]
+        },
+        "Age": {
+            "validators"   : [],
+            "id"           : 2,
+            "labelFr"      : "Votre age",
+            "labelEn"      : "Your age",
+            "name"         : "age",
+            "readonly"     : false,
+            "editorClass"  : "",
+            "fieldClass"   : "",
+            "fieldSize"    : "",
+            "endOfLine"    : false,
+            "help"         : "Enter your age",
+            "decimal"      : true,
+            "defaultValue" : 10,
+            "minValue"     : 0,
+            "maxValue"     : 100,
+            "precision"    : 1,
+            "unity"        : "year",
+            "type"         : "NumericRange"
+        },
+        "Folder": {
+            "validators"          : [],
+            "id"                  : 4,
+            "labelFr"             : "Choisisser un dossier",
+            "labelEn"             : "Choose a folder",
+            "name"                : "folder",
+            "readonly"            : false,
+            "editorClass"         : "",
+            "fieldClass"          : "",
+            "fieldSize"           : "",
+            "endOfLine"           : false,
+            "defaultNode"         : 0,
+            "multipleSelection"   : true,
+            "hierarchicSelection" : false,
+            "webServiceURL"       : "",
+            "type"                : "TreeView"
+        }
+    },
+    "fieldsets": []
+}
