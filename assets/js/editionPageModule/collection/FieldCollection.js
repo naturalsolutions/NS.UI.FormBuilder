@@ -312,14 +312,14 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
         updateCollectionAttributes : function(JSONUpdate) {
             this.name          = JSONUpdate["name"];
 
-            this.descriptionFr = JSONUpdate["descriptionFR"];
-            this.descriptionEn = JSONUpdate["descriptionEN"];
+            this.descriptionFr = JSONUpdate["descriptionFr"];
+            this.descriptionEn = JSONUpdate["descriptionEn"];
 
-            this.keywordsFr    = JSONUpdate["keywordsFR"];
-            this.keywordsEn    = JSONUpdate["keywordsEN"];
+            this.keywordsFr    = JSONUpdate["keywordsFr"];
+            this.keywordsEn    = JSONUpdate["keywordsEn"];
 
-            this.labelFr       = JSONUpdate["labelFR"];
-            this.labelEn       = JSONUpdate["labelEN"];
+            this.labelFr       = JSONUpdate["labelFr"];
+            this.labelEn       = JSONUpdate["labelEn"];
         },
 
         /**
@@ -388,6 +388,10 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
                 field = null;
 
             }, this));
+        },
+
+        getAttributesValues : function() {
+            return _.pick(this, _.keys(this.schema));
         }
 
     });
