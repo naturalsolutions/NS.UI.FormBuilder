@@ -69,6 +69,10 @@ define([
             //  Run an animation for hide setting view and display panel view
             this.mainChannel.on('formCommit', this.closeSettingPanelAndResetURL, this)
 
+            //  Event receivre from setting view panel when user save form changed attributes
+            //  Close setting panel and rest some components
+            this.mainChannel.on('editionDone', this.closeSettingPanelAndResetURL, this);
+
             //  Event sent from setting view when modifications are cancelled
             //  Run an animation for hide setting view and display panel view
             this.mainChannel.on('formCancel', this.closeSettingPanelAndResetURL, this)
