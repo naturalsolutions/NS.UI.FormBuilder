@@ -7,8 +7,7 @@ define([
     'i18n',
     'bootstrap-select',
     'perfect-scrollbar',
-    'fuelux',
-    'typeahead'
+    'fuelux'
 ], function($, Marionette, SettingPanelViewTemplate, Radio) {
 
     /**
@@ -306,7 +305,13 @@ define([
         * This function concerns generated form for field AND main form
         */
         saveChange : function() {
-            var isValid = this.form.commit() === undefined;
+            var isValid;
+
+            if (this.$el.find('#getField').is(':visible')) {
+                isValid = this.form.commit() === undefined;
+            } else {
+                isValid = this.form.validate() === null;
+            }
 
             if (isValid) {
                 if (this.$el.find('#getField').is(':visible')) {
@@ -318,7 +323,7 @@ define([
                     values['keywords'] = _.map(pillboxItems, function(num){
                         return num['value'];
                     });
-                    this.formChannel.trigger('edition', values);
+                    this.mainChannel.trigger('editionDone', values);
                 }
 
                 this.removeForm();
@@ -374,7 +379,8 @@ define([
                 }
 
                 this.form = new Backbone.Form({
-                    model: formSchema,
+                    schema: formSchema.schema,
+                    data : formSchema.getAttributesValues()
                 }).render();
 
                 this.$el.find('#form').append(this.form.el)
@@ -387,25 +393,68 @@ define([
                 this.$el.find('#pillboxkeywordsFr').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
                 this.$el.find('#pillboxkeywordsEn').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
 
-                this.$el.find('.field-name input[type="text"]').typeahead({
-                    source: _.bind(function(query, process) {
-                        return $.getJSON(this.URL['protocolAutocomplete'], {query: query}, function(data) {
-                            return process(data.options);
+                this.$el.find('.field-name input[type="text"]').autocomplete({
+                    minLength : 1,
+                    scrollHeight: 220,
+                    appendTo : '.field-name',
+                    source : _.bind(function(req, add) {
+                        return $.getJSON(this.URLOptions['protocolAutocomplete'], function(data) {
+                            var res = [];
+                            for ( var each in data.options) {
+                                if (data.options[each].indexOf(req.term) > 0) {
+                                    res.push(data.options[each])
+                                }
+                            }
+                            return add(res);
                         });
                     }, this)
                 });
 
-                this.$el.find('#pillboxkeywordsFr input[type="text"], #pillboxkeywordsEn input[type="text"]').typeahead({
-                    source: _.bind(function(query, process) {
-                        return $.getJSON(this.URL['keywordAutocomplete'], {query: query}, function(data) {
-                            return process(data.options);
+                this.$el.find('#pillboxkeywordsFr input[type="text"]').autocomplete({
+                    minLength : 1,
+                    scrollHeight: 220,
+                    appendTo : '#pillboxkeywordsFr',
+                    source : _.bind(function(req, add) {
+                        return $.getJSON(this.URLOptions['keywordAutocomplete'], function(data) {
+                            var res = [];
+                            for ( var each in data.options) {
+                                if (data.options[each].indexOf(req.term) > 0) {
+                                    res.push(data.options[each])
+                                }
+                            }
+                            return add(res);
+                        });
+                    }, this)
+                });
+
+                this.$el.find('#pillboxkeywordsEn input[type="text"]').autocomplete({
+                    minLength : 1,
+                    scrollHeight: 220,
+                    appendTo : '#pillboxkeywordsEn',
+                    source : _.bind(function(req, add) {
+                        return $.getJSON(this.URLOptions['keywordAutocomplete'], function(data) {
+                            var res = [];
+                            for ( var each in data.options) {
+                                if (data.options[each].indexOf(req.term) > 0) {
+                                    res.push(data.options[each])
+                                }
+                            }
+                            return add(res);
+                        });
+                    }, this)
+                });
+
+                /*this.$el.find('#pillboxkeywordsFr input[type="text"], #pillboxkeywordsEn input[type="text"]').typeahead({
+                    source: _.bind(function(query, cb) {
+                        return $.getJSON(this.URLOptions['keywordAutocomplete'], {query: query}, function(data) {
+                            return cb(data.options);
                         });
                     }, this),
                     updater: (function(item) {
                         this.$element.parents('.pillbox').pillbox('addItems',-1, [{text :item, value : item}])
                         this.$element.parents('.pillbox').find('.pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item + '"></span>');
                     })
-                });
+                });*/
 
                 this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('added.fu.pillbox', _.bind(function (evt, item) {
                     this.$element.find('.pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
