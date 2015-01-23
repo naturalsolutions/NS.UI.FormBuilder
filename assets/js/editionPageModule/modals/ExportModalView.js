@@ -3,7 +3,6 @@ define([
     'backbone',
     'text!editionPageModule/templates/modals/ExportModalView.html',
     'bootstrap',
-    'typeahead',
     'fuelux'
 ], function(_, Backbone, ExportModalViewTemplate) {
 
