@@ -31,6 +31,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
          * Model constructor
          */
         initialize  : function(options) {
+            _.bindAll(this, 'toJSON');
             this.set('modificationDateDisplay', this.formatDateForDisplay(this.get('modificationDate')) );
             this.set('creationDateDisplay',     this.formatDateForDisplay(this.get('creationDate'))     );
 
@@ -57,6 +58,22 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             newDateMinutes  = newDateMinutes    < 10    ? '0' + newDateMinutes  : newDateMinutes;
 
             return newDateDay + '/' + newDateMonth + '/' + newDateYear + ' - ' + newDateHours + ':' + newDateMinutes;
+        },
+
+        toJSON : function() {
+            return {
+                id               : this.get('id'),
+                name             : this.get('name'),
+                labelFr          : this.get('labelFr'),
+                labelEn          : this.get('labelEn'),
+                creationDate     : this.get('creationDate'),
+                modificationDate : this.get('modificationDate'),
+                curStatus        : this.get('curStatus'),
+                descriptionEn    : this.get('descriptionEn'),
+                descriptionFr    : this.get('descriptionFr'),
+                keywordsFr       : this.get('keywordsFr'),
+                keywordsEn       : this.get('keywordsEn')
+            }
         }
 
     });
