@@ -39,9 +39,9 @@ define([
 
             this.currentSelectedForm = 0;
 
+            this.initGlobalChannel();
             this.initGridChannel();
             this.initHomePageChannel();
-            this.initGlobalChannel();
         },
 
         /**
@@ -379,8 +379,19 @@ define([
             });
         },
 
+        /**
+         * User wants to edit a form of the list
+         */
         editForm : function() {
-            this.globalChannel.trigger('displayEditionPage', this.formCollection.get(this.currentSelectedForm));
+            //  Send an event to the formbuilder
+            //  Two modules never speak directly, all communication pass htrough formbuilder App
+
+            var formToEdit = this.formCollection.get(this.currentSelectedForm);
+
+            //  /!\ AT this point, normally i've to get form fieldset and schema
+            //  But wanting to keep an indenpendant client side mode, for the moment we send only form description
+
+            this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
         importForm : function() {
