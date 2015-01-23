@@ -47,7 +47,7 @@ define([
             this.formChannel.on('export', this.exportFormAsFile, this);
 
             //  Event send from router when user import a form or edit a form from the grid
-            this.formChannel.on('edition', this.editForm, this);
+            this.formChannel.on('formEdition', this.editForm, this);
 
             this.formChannel.on('import', this.import, this);
         },
@@ -96,6 +96,10 @@ define([
         editionAction: function(options) {
             $('#navbarContext').text($.t('navbar.context.edition'))
 
+            this.fieldCollection = new FieldCollection({}, {
+                name : 'New form'
+            });
+
             var editionPageLayout = new EditionPageLayout({
                 fieldCollection : this.fieldCollection,
                 URLOptions      : this.URLOptions
@@ -125,14 +129,17 @@ define([
         },
 
         editForm : function(formToEdit) {
-            var newFieldCollection = new FieldCollection({}, formToEdit.toJSON());
-
-            this.fieldCollection = newFieldCollection;
-
-            this.formChannel.trigger('formToEdit', newFieldCollection);
+            //  Send event to formPanelView
+            this.formChannel.trigger('formToEdit', formToEdit);
         },
 
+        /**
+         * Send event to form view pnale
+         *
+         * @param  {[type]} formImportedJSON imported form JSON data
+         */
         import : function(formImportedJSON) {
+            //  Send event to formview panel for display imported form
             this.formChannel.trigger('formToEdit', formImportedJSON);
         }
 

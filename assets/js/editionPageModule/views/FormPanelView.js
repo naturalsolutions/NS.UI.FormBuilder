@@ -36,7 +36,6 @@ define([
             });
         },
 
-
         /**
          * Form view constructor
          *
@@ -55,6 +54,7 @@ define([
             _.bindAll(this, 'template')
 
             this.initFormChannel();
+            this.initMainChannel();
         },
 
 
@@ -65,7 +65,22 @@ define([
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
 
+            //  Event send form EditionPageController when user want to edit a form from the homepage list
             this.formChannel.on('formToEdit', this.formToEdit, this);
+        },
+
+        /**
+         * Init main channel ONLY for this module and listen some events
+         */
+        initMainChannel : function() {
+            this.mainChannel = Backbone.Radio.channel('edition');
+
+            this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
+        },
+
+        updateCollectionAttributes : function(newCollectionAttributes) {
+            this.collection.updateCollectionAttributes(newCollectionAttributes);
+            this.$el.find('h1 label').text(newCollectionAttributes.name)
         },
 
 
