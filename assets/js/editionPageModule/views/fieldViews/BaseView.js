@@ -25,7 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.model.bind('change', this.render);
 
             this.model.bind('destroy', function() {
-                alert("destroy")
+                //alert("destroy")
             })
 
             this.el = options.el;
