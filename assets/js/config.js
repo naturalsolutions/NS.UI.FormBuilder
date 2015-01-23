@@ -25,7 +25,6 @@ require.config({
         "backbone-forms-list"  : "../../libs/backbone-forms/distribution.amd/editors/list.min",
         bootstrapTemplate      : "../../libs/backbone-forms/distribution/templates/bootstrap3",
         bootstrapAdapter       : "../../libs/bootstrapAdapter/index",
-        typeahead              : "../../libs/typeahead/bootstrap3-typeahead.min",
         "backbone.radio"       : "../../libs/backbone.radio/build/backbone.radio",
         fuelux                 : "../../libs/fuelux/dist/js/fuelux",
         difflib                : "../../libs/jsdifflib/difflib",
@@ -95,13 +94,6 @@ require.config({
             exports: "$",
             deps: [
                 "jquery"
-            ]
-        },
-        typeahead: {
-            exports: "$",
-            deps: [
-                "jquery",
-                "bootstrap"
             ]
         },
         autocompleteTreeView: {

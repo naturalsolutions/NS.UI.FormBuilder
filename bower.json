@@ -1,67 +1,112 @@
 {
-    "name": "formbuilder",
-    "version": "0.0.0",
-    "homepage": "https://github.com/NaturalSolutions/NS.UI.FormBuilder",
-    "authors": [
-        "MICELI Antoine"
+  "name": "formbuilder",
+  "version": "0.0.0",
+  "homepage": "https://github.com/NaturalSolutions/NS.UI.FormBuilder",
+  "authors": [
+    "MICELI Antoine"
+  ],
+  "main": "index.html",
+  "keywords": [
+    "XML"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "jquery"               : null,
+    "jquery.ui"            : null,
+    "backbone"             : null,
+    "underscore"           : null,
+    "backbone.radio"       : null,
+    "bootstrap"            : "3.2.0",
+    "blobjs"               : "https://github.com/eligrey/Blob.js.git",
+    "i18n"                 : "https://github.com/jamuhl/i18next.git",
+    "font-awesome"         : "https://github.com/FortAwesome/Font-Awesome.git",
+    "fancytree"            : "https://github.com/mar10/fancytree.git",
+    "requirejs"            : null,
+    "perfect-scrollbar"    : "https://github.com/noraesae/perfect-scrollbar.git",
+    "backbone-forms"       : "https://github.com/powmedia/backbone-forms.git",
+    "bootstrapAdapter"     : "https://github.com/powmedia/backbone.bootstrap-modal.git",
+    "fuelux"               : null,
+    "jquery-simple-slider" : null,
+    "autocompleteTreeview" : "https://github.com/NaturalSolutions/NS.UI.autocompTree.git",
+    "rangeslider.js"       : "~0.3.6",
+    "bootstrap-select"     : "https://github.com/silviomoreto/bootstrap-select.git",
+    "sweetalert"           : null,
+    "reneco-fonts"         : null,
+    "filesaver"            : "https://github.com/eligrey/FileSaver.js.git",
+    "marionette"           : "~2.3.0",
+    "backgrid"             : "~0.3.5",
+    "moment"               : null
+  },
+  "dependenciesIgnore": {
+    "backbone": [
+      "**/!(backbone.js)"
     ],
-    "main": "index.html",
-    "keywords": [
-        "XML"
+    "jquery": [
+      "**/!(jquery.min.js)"
     ],
-    "license": "MIT",
-    "private": true,
-    "dependencies": {
-        "jquery"               : null,
-        "jquery.ui"            : null,
-        "backbone"             : null,
-        "underscore"           : null,
-        "backbone.radio"       : null,
-        "bootstrap"            : "3.2.0",
-        "blobjs"               : "https://github.com/eligrey/Blob.js.git",
-        "i18n"                 : "https://github.com/jamuhl/i18next.git",
-        "font-awesome"         : "https://github.com/FortAwesome/Font-Awesome.git",
-        "fancytree"            : "https://github.com/mar10/fancytree.git",
-        "requirejs"            : null,
-        "perfect-scrollbar"    : "https://github.com/noraesae/perfect-scrollbar.git",
-        "backbone-forms"       : "https://github.com/powmedia/backbone-forms.git",
-        "bootstrapAdapter"     : "https://github.com/powmedia/backbone.bootstrap-modal.git",
-        "typeahead"            : "https://github.com/bassjobsen/Bootstrap-3-Typeahead.git",
-        "fuelux"               : null,
-        "jquery-simple-slider" : null,
-        "autocompleteTreeview" : "https://github.com/NaturalSolutions/NS.UI.autocompTree.git",
-        "rangeslider.js"       : "~0.3.6",
-        "bootstrap-select"     : "https://github.com/silviomoreto/bootstrap-select.git",
-        "sweetalert"           : null,
-        "reneco-fonts"         : null,
-        "filesaver"            : "https://github.com/eligrey/FileSaver.js.git",
-        "marionette"           : "~2.3.0",
-        "backgrid"             : "~0.3.5",
-        "moment"               : null
-    },
-
-    "dependenciesIgnore": {
-        "backbone"          : ["**/!(backbone.js)"],
-        "jquery"            : ["**/!(jquery.min.js)"],
-        "underscore"        : ["**/!(underscore-min.js)"],
-        "backbone.radio"    : ["**/!(build)"],
-        "bootstrap"         : ["**/!(dist)"],
-        "blobjs"            : ["**/!(Blob.js)"],
-        "i18n"              : ["**/!(i18next.min.js)"],
-        "requirejs"         : ["**/!(require.js)"],
-        "perfect-scrollbar" : ["**/!(min)"],
-        "backbone-forms"    : ["**/!(distribution)"],
-        "bootstrapAdapter"  : ["**/!(src)"],
-        "typeahead"         : ["**/!(bootstrap3-typeahead.min.js)"],
-        "fuelux"            : ["**/!(dist)"],
-        "rangeslider.js"    : ["**/!(dist)"],
-        "bootstrap-select"  : ["**/!(dist)"],
-        "sweetalert"        : ["**/!(lib)"],
-        "filesaver"         : ["**/!(FileSaver.min.js)"],
-        "marionette"        : ["**/!(lib)"],
-        "backgrid"          : ["**/!(lib)"],
-        "moment"            : ["**/!(moment.js)"],
-        "font-awesome"      : ["less", "scss", "*.json", ".*"],
-        "fancytree"         : ["**/*.json", "**/*.md", "**/.*", "**/*.txt"]
-    }
+    "underscore": [
+      "**/!(underscore-min.js)"
+    ],
+    "backbone.radio": [
+      "**/!(build)"
+    ],
+    "bootstrap": [
+      "**/!(dist)"
+    ],
+    "blobjs": [
+      "**/!(Blob.js)"
+    ],
+    "i18n": [
+      "**/!(i18next.min.js)"
+    ],
+    "requirejs": [
+      "**/!(require.js)"
+    ],
+    "perfect-scrollbar": [
+      "**/!(min)"
+    ],
+    "backbone-forms": [
+      "**/!(distribution)"
+    ],
+    "bootstrapAdapter": [
+      "**/!(src)"
+    ],
+    "fuelux": [
+      "**/!(dist)"
+    ],
+    "rangeslider.js": [
+      "**/!(dist)"
+    ],
+    "bootstrap-select": [
+      "**/!(dist)"
+    ],
+    "sweetalert": [
+      "**/!(lib)"
+    ],
+    "filesaver": [
+      "**/!(FileSaver.min.js)"
+    ],
+    "marionette": [
+      "**/!(lib)"
+    ],
+    "backgrid": [
+      "**/!(lib)"
+    ],
+    "moment": [
+      "**/!(moment.js)"
+    ],
+    "font-awesome": [
+      "less",
+      "scss",
+      "*.json",
+      ".*"
+    ],
+    "fancytree": [
+      "**/*.json",
+      "**/*.md",
+      "**/.*",
+      "**/*.txt"
+    ]
+  }
 }
