@@ -16,6 +16,10 @@
         line-height    : 60px;
         font-size      : 30px;
         font-weight    : 100;
+
+        .pull-right {
+            margin-right: 15px;
+        }
     }
 
     #grid {
@@ -61,7 +65,6 @@
 
                     &.clone {
                         background : #D9BF3D;
-                        color : #222;
                     }
 
                     &.focused {
@@ -71,6 +74,10 @@
 
                     &.selected {
                         background : #d1d2d4 !important;
+                        color : #111 !important;
+                        td {
+                            color : #111 !important;
+                        }
                     }
 
                     &:not(.formInformation), &:not(.selected) {
