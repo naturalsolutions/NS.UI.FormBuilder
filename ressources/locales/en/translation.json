@@ -147,23 +147,23 @@
     },
 
     "tooltip" : {
-        "text"                 : "Text field",
-        "number"               : "Numeric field",
-        "date"                 : "Date field",
+        "text"                 : "Text",
+        "number"               : "Numeric",
+        "date"                 : "Date",
         "select"               : "Dropdown list",
         "radio"                : "Radio button",
         "checkbox"             : "Checkbox",
-        "hidden"               : "Hidden field",
+        "hidden"               : "Hidden ",
         "file"                 : "File",
         "treeview"             : "Tree View",
         "textarea"             : "Long text",
-        "pattern"              : "Field with regular expression",
+        "pattern"              : " with regular expression",
         "line"                 : "Horizontal line",
         "autocomplete"         : "Auto complete",
-        "subform"              : "Fieldset",
+        "subform"              : "set",
         "horizontalline"       : "Horizontal line",
         "boolean"              : "Boolean",
-        "autocompletetreeview" : "A TreeView field with searching functionnalité"
+        "autocompletetreeview" : "A TreeView with searching functionnalité"
     },
 
     "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",

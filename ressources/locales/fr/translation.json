@@ -98,7 +98,7 @@
         "readonly"          : "Lecture seule",
         "value"             : "Valeur",
         "default"           : "Valeur par défaut",
-        "url"               : "Adresse service web",
+        "url"               : "Adresse du service web",
         "help"              : "Texte d'aide",
         "size"              : "Taille maximal",
         "file"              : "Fichier par défaut",
@@ -123,7 +123,7 @@
         "pattern"           : "Masque de valeur",
         "multiple"          : "Multiple",
         "legend"            : "Légende",
-        "editorClass"       : "Class CSS de l'éditeur",
+        "editorClass"       : "Classe CSS de l'éditeur",
         "fieldClass"        : "Classe CSS du champs",
         "checked"           : "Sélectionné",
         "checkboxlabel"     : "Label checkbox",
@@ -136,7 +136,7 @@
             "large"  : "Large"
         },
         "eol"           : "Est en fin de ligne",
-        "webServiceURL" : "URL service web pour les données",
+        "webServiceURL" : "URL du service web pour les données",
         "wsUrl"         : "service web URL",
         "ws"            : "Identifiant service web",
         "wslng"         : "Langue d'affichage pour les données",
@@ -148,16 +148,16 @@
     },
 
     "tooltip" : {
-        "text"                 : "Champs texte",
-        "number"               : "Champs numérique",
-        "date"                 : "Champs date",
+        "text"                 : "Texte",
+        "number"               : "Numérique",
+        "date"                 : "Date",
         "select"               : "Liste déroulante",
         "radio"                : "Bouton radio",
         "checkbox"             : "Case à cocher",
-        "hidden"               : "Champs masqué",
+        "hidden"               : "Masqué",
         "file"                 : "Fichier",
         "longtext"             : "Texte long",
-        "pattern"              : "Champs avec expression régulière",
+        "pattern"              : "Zxpression régulière",
         "line"                 : "Ligne horizontale",
         "autocomplete"         : "Auto complétion",
         "table"                : "Présentation",
@@ -165,7 +165,7 @@
         "horizontalline"       : "Séparation",
         "treeview"             : "Arborescence",
         "boolean"              : "Booléen",
-        "autocompletetreeview" : "Champs arborescence avec un champs de recherche"
+        "autocompletetreeview" : "arborescence avec un champs de recherche"
     },
 
     "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
@@ -219,7 +219,7 @@
             "title"       : "Etes vous sûr ?",
             "text"        : "Le formulaire sera définitivement perdu !",
             "yes"         : "Oui, supprimer",
-            "no"          : "Non, nnuler",
+            "no"          : "Non, annuler",
             "deleted"     : "Supprimé !",
             "formDeleted" : "Votre formulaire a été supprimé !"
         },
