@@ -15,6 +15,7 @@ define(['jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n'],
          */
         events : {
             'click #find' : 'runSearch',    //  when user submit form
+            'click #clearForm' : 'clearForm'
         },
 
         /**
@@ -55,6 +56,10 @@ define(['jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n'],
         onRender : function(options) {
             this.$el.i18n(); // run i18nnext translation in the view context
         },
+
+        clearForm : function(evt) {
+            this.$el.find('form').trigger("reset");
+        }
 
     });
 
