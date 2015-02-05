@@ -201,7 +201,7 @@ define([
          */
         clearFooterAction : function() {
             this.$el.find('footer div.pull-left').fadeOut(200)
-            $('#add').switchClass('grey', 'red', 1);
+            $('#add, #import').switchClass('grey', 'red', 1);
         },
 
         /**
@@ -209,7 +209,7 @@ define([
          */
         updateFooterAction : function() {
             this.$el.find('footer div.pull-left').fadeIn(500)
-            $('#add').switchClass('red', 'grey', 1);
+            $('#add, #import').switchClass('red', 'grey', 1);
         },
 
         /**
