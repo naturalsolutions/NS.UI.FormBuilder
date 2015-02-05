@@ -32,11 +32,11 @@
     "rangeslider.js"       : "~0.3.6",
     "bootstrap-select"     : "https://github.com/silviomoreto/bootstrap-select.git",
     "sweetalert"           : null,
-    "reneco-fonts"         : null,
     "filesaver"            : "https://github.com/eligrey/FileSaver.js.git",
     "marionette"           : "~2.3.0",
     "backgrid"             : "~0.3.5",
-    "moment"               : null
+    "moment"               : null,
+    "RenecoFonts"          : "https://github.com/NaturalSolutions/RenecoFonts.git"
   },
   "dependenciesIgnore": {
     "backbone": [
