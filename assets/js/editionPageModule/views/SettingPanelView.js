@@ -457,7 +457,7 @@ define([
                 });*/
 
                 this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('added.fu.pillbox', _.bind(function (evt, item) {
-                    this.$element.find('.pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
+                    $('.glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
                 }, this));
 
                 this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('click', '.reneco', function(evt) {
