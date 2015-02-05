@@ -1,16 +1,27 @@
 <div class="">
-    <h1 class="row">
-        <span id="formsCount"></span>
-        <span data-i18n="forms"> Form(s)</span>
+    <div class="row head">
+        <h1 class="col-md-6">
+            <span id="formsCount"></span>
+            <span data-i18n="forms"> Form(s)</span>
+        </h1>
 
-        <a href="#edition" class="btn reneco red pull-right" id="add">
-            <span data-i18n="form.actions.import">AJOUTER</span>
-            <label>
-                <span class="reneco add"></span>
-            </label>
-        </a>
+        <div class="col-md-6">
+            <a class="btn reneco red" id="import">
+                <span data-i18n="form.actions.import">IMPORTER</span>
+                <label>
+                    <span class="reneco import2"></span>
+                </label>
+            </a>
+            <a href="#edition" class="btn reneco red " id="add">
+                <span data-i18n="form.actions.import">AJOUTER</span>
+                <label>
+                    <span class="reneco add"></span>
+                </label>
+            </a>
+        </div>
 
-    </h1>
+
+    </div>
 
     <div class="row scrollSection">
         <div class="col-md-12">
@@ -51,15 +62,6 @@
                     <span class="reneco edit"></span>
                 </label>
             </button>
-        </div>
-
-        <div class="pull-right">
-            <a class="btn reneco red" id="import">
-                <span data-i18n="form.actions.import">IMPORTER</span>
-                <label>
-                    <span class="reneco import2"></span>
-                </label>
-            </a>
         </div>
 
     </footer>
