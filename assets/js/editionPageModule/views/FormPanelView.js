@@ -194,7 +194,11 @@ define([
                 $('#exportModal').on('hidden.bs.modal', _.bind(function () {
                     var datas = modalView.getData();
                     if( datas['response']) {
+
+                        //  Send event to edition page controller for export form in JSON file
+                        //  We send the filename typed by the user
                         this.formChannel.trigger('export', datas['filename'] );
+
                         $('#exportModal').modal('hide').removeData();
                         $('#exportModal').html('').remove();
                     }
