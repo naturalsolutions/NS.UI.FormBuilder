@@ -144,7 +144,8 @@
             "fr" : "Label en français",
             "en" : "Label en anglais"
         },
-        "name" : "Nom"
+        "name" : "Nom",
+        "linkedField" : "Champ lié"
     },
 
     "tooltip" : {
