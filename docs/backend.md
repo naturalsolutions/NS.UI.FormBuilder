@@ -8,7 +8,6 @@ See [back end repo](https://github.com/NaturalSolutions/NS.Server.FormBuilder)
 ## URL
 
 To connect fron and back end you have to specify these URL.
-We used JSON file for client side mode so some
 
 ### autocompleteURL
 
@@ -42,20 +41,24 @@ Unity list url provider
 
 ### preConfiguredField
 
-pre-configurated provider URL
+pre-configurated provider URL.
+
+A configurated field is a field saved by use for a future use.
+
+For example user create a firstName field because it will be present in many forms.
 
 **default value** : ressources/fieldConfiguration/preConfiguredField.json
 
 ### fieldConfigurationURL
 
-wich to send pre-configurated field
+Wich to send pre-configurated field. Send a POST request so in client side mode (without back end connection) it won't work.
 
 **default value** : configurationSaved
 
-### el
+### linkedFields
 
-HTML parent element for formbuilder application
+Return all linked fields
 
-**default value** : #formbuilder
+**default value** : ressources/linkedFields/linkedFields.json
 
 back to [summary](index.md)
