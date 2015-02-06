@@ -39,7 +39,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             editorClass : '',
             fieldClass  : '',
             fieldSize   : '',
-            endOfLine   : false
+            endOfLine   : false,
+            linkedField : ''
         },
 
         schema : {
@@ -106,6 +107,14 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 template    : checkboxFieldTemplate,
                 title       : $.t('schema.eol')
             },
+            linkedField : {
+                type : 'Select',
+                title       : $.t('schema.linkedField'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            }
+
         },
 
         initialize : function(options) {
