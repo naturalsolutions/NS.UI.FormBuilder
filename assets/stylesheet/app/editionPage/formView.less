@@ -32,10 +32,8 @@
             position      : absolute;
             bottom        : 0;
             background    : @footerBackgroundColor;
-            padding-right : 15px;
-            padding-left  : 15px;
             padding-top: 7px;
-            width: 100%;
+            width: 100% !important;
 
             div {
                 height: 100%;
@@ -142,38 +140,25 @@
                                 margin-right: 10px;
                             }
                         }
-                        .right {
-                            color : white;
-                            a {
-                                &:not(.btn) {
-                                    &:nth-child(even) {
-                                        padding-left: 5px;
-                                        padding-right: 5px;
-                                    }
-                                    &:last-child {
-                                        padding-right: 15px;
-                                    }
-                                    i {
-                                        font-size : 25px;
-                                        height    : 30px;
-                                        width     : 30px;
-                                        display   : none;
-                                        color     : white;
-                                    }
-                                }
-                                &.btn {
-                                    //width: 97px;
-                                    margin-top: -15px;
-                                    i {
-                                        height       : 30px;
-                                        width        : 30px;
-                                        padding-right: 5px;
-                                        color        : white;
-                                    }
-                                }
+                        .fa-arrows { color : white; }
+                    }
+
+                    .actions {
+
+                        span {
+                            color : #aaa;
+                            font-size : 24px;
+                            line-height: 42px;
+                            padding-left: 20px;
+                            &.edit {
+                                color : white;
+                            }
+                            visibility: hidden;
+                            &:hover {
+                                color : white;
+                                cursor: pointer;
                             }
                         }
-                        .fa-arrows { color : white; }
                     }
 
                     &:not(.paddingBottom5) {
@@ -183,9 +168,7 @@
                         padding-bottom: 10px;
                     }
 
-                    .actions {
-                        .trash, .copy, a.btn.reneco { visibility: hidden; }
-                    }
+
                 }
 
                 &:hover {
@@ -195,8 +178,8 @@
                             background: @elementHoverColor;
                         }
                     }
-                    .actions {
-                        .trash, .copy, a.btn.reneco { visibility: visible !important; }
+                    .actions span {
+                        visibility: visible !important;
                     }
                 }
 
@@ -205,7 +188,7 @@
                     &:hover {
                         color : white;
                     }
-                    &.copy, &.trash {
+                    &.copy, &.trash, .reneco.edit {
                         font-size: 25px;
                         margin-right: 7px;
                     }

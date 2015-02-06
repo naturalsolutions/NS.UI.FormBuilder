@@ -168,33 +168,118 @@
 
         height        : 45px;
         background    : white;
-        border        : 2px #aaa solid;
-        text-align    : center;
-        line-height     : 37px;
+        border        : 0.5px #aaa solid;
+        text-align    : left;
+        line-height   : 43px;
         margin-bottom : 10px;
         margin-top    : 10px;
         transition    : all 0.3s ease-in-out;
+        padding-left  : 7px;
+        position      : relative;
+        overflow: hidden;
+
+        vertical-align: middle;
+
         label {
             .exo;
             color         : #555;
             font-size     : 18px;
-            position: relative;
+            transition : all 0.1s ease-in;
         }
+
         i {
-           opacity    : 0;
-           color      : #ccc;
            font-size  : 22px;
-           width      : 0;
-           left       : -20px;
-           position   : relative;
-           top        : 2px;
-           transition : opacity 0.3s ease-in;
+
+            &[class^="picto"] {
+                .fa;
+                color : #aaa;
+                font-size     : 18px;
+                font-style: normal !important;
+
+                &.picto-text:before {
+                    content: "\f031";
+                }
+
+                &.picto-date:before {
+                    .reneco;
+                    content: "\e67a";
+                }
+
+                &.picto-subform {
+                    position: relative;
+                    top: 1px;
+                    &:before {
+                        .reneco;
+                        content : '\e678';
+                    }
+                }
+
+                &.picto-thesaurus {
+                    &:before {
+                        .reneco;
+                        content: '\e691';
+                    }
+                    position: relative;
+                    top: 2px;
+                }
+
+                &.picto-checkbox:before {
+                    .reneco;
+                    content : '\e659';
+                }
+
+                &.picto-radio:before {
+                    content: "\f10c";
+                }
+
+                &.picto-textarea:before {
+                    content: "\f039";
+                }
+
+                &.picto-numericrange:before {
+                    content: "\f1de";
+                }
+
+                &.picto-number:before {
+                    content : '69';
+                }
+
+                &.picto-treeview:before {
+                    content: "\f1bb";
+                }
+
+                &.picto-file:before {
+                    content: "\f1c2";
+                }
+
+                &.picto-select:before {
+                    content: "\f150";
+                }
+
+                &.picto-hidden:before {
+                    content: "\f070";
+                }
+
+           }
+           &.fa-plus {
+                position: absolute;
+                left: 100%;
+                transition : left 0.1s ease-in;
+                top: 13px;
+                color : #aaa;
+           }
         }
+
         &:hover {
             cursor: pointer;
-            outline: 5px #aaa solid;
-            i {
-                opacity: 1;
+            outline: 1px #aaa solid;
+            label {
+                font-size : 14px;
+                color : #111;
+                font-weight: 600;
+            }
+            .fa-plus {
+                left: 85%;
             }
         }
     }
