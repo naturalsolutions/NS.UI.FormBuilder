@@ -160,7 +160,6 @@ define([
          */
         closeSettingPanelAndResetURL : function() {
             this.closeSettingPanel();
-            //window.location.hash = "#edition";
         }
 
     });

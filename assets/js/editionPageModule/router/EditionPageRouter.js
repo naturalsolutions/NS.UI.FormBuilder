@@ -7,7 +7,6 @@ define([
 
         appRoutes: {
             "edition": "editionAction",
-            'setting/:id'  : 'modelSetting',
         },
 
         initialize : function() {
