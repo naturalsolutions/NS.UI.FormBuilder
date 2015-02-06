@@ -27,6 +27,17 @@ define([
 
             this.URLOptions = options['URLOptions'] || {};
 
+            $.getJSON('ressources/linkedFields/linkedFields.json', _.bind(function(linkedFieldsList) {
+                var formattedList = [];
+                for (each in linkedFieldsList) {
+                    formattedList.push({
+                        val : linkedFieldsList[each].linkedField,
+                        label : linkedFieldsList[each].linkedField
+                    });
+                }
+                this.linkedFieldsList = formattedList;
+            }, this));
+
             this.initFormChannel();
         },
 
@@ -40,9 +51,6 @@ define([
             //  Event receive from widgetPanel when user want to add a field on its form
             this.formChannel.on('addElement', this.addElementToCollection, this);
 
-            //  Event receive from formview when user want to edit field properties
-            this.formChannel.on('edition', this.sendModelToSettingView, this);
-
             //  Event receive when user wants to export its form in JSON file
             this.formChannel.on('export', this.exportFormAsFile, this);
 
@@ -50,6 +58,8 @@ define([
             this.formChannel.on('formEdition', this.editForm, this);
 
             this.formChannel.on('import', this.import, this);
+
+            this.formChannel.on('editModel', this.modelSetting, this);
         },
 
 
@@ -77,18 +87,6 @@ define([
                 }
             }, this))
         },
-
-
-        /**
-         * FormChannel event callbacks
-         * Send field model to the setting view
-         *
-         * @param {integer} modelID field id
-         */
-        sendModelToSettingView : function(modelID) {
-            this.formChannel.trigger('modelToEdit', this.fieldCollection.get(modelID));
-        },
-
 
         /**
          * Main controller action, display edition page layout
@@ -125,7 +123,12 @@ define([
         * @param  {integer} ID of the field to duplicate
         */
         modelSetting: function(modelID) {
-            this.formChannel.trigger('edition', modelID);
+            // Send event to setting panel view when user want to edit field properties
+
+            this.formChannel.trigger('modelToEdit', {
+                model : this.fieldCollection.get(modelID),
+                linkedFieldsList : this.linkedFieldsList
+            });
         },
 
         editForm : function(formToEdit) {

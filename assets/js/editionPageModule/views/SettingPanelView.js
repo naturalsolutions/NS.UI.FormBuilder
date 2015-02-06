@@ -153,14 +153,18 @@ define([
                     //  Remove last form and create new with new model
                     this.removeForm()
                     this.form = new Backbone.Form({
-                        model: field,
+                        model: field.model,
                     }).render();
                 } else {
                     //  The form are not created yet
                     this.form = new Backbone.Form({
-                        model: field,
+                        model: field.model,
                     }).render();
                 }
+                //.linkedFIeld.setOptions(field.linkedFIeldsList)
+                this.form.fields.linkedField.editor.setOptions(field.linkedFieldsList)
+
+
 
                 this.$el.find('#form').append(this.form.el)
                 this.$el.find('.scroll').perfectScrollbar('update');
