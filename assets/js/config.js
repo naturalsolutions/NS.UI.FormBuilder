@@ -142,17 +142,40 @@ require.config({
 require(['formbuilder'], function(formbuilder) {
 
     var options = {
+
         // Specify URL for formBuilder configuration
         // Replace this URL with your own
+
         URLOptions : {
+            //  Allow to get some topic for autocomplete functionnalities
             autocompleteURL       : 'ressources/autocomplete/',
+
+            //  Allows to get translation ressources (use i18nnext : http://i18next.com/ )
             translationURL        : 'ressources/locales/',
+
+            //  Get form keywords autocomplete values
             keywordAutocomplete   : 'ressources/autocomplete/keywords.json',
+
+            //  Get all form name for autocomplete
             protocolAutocomplete  : 'ressources/autocomplete/protocols.json',
+
+            //  Get all unities for autocomplete
             unitURL               : 'ressources/autocomplete/units.json',
+
+            //  Returns all pre-configurated field
+            //  A configurated field is a field saved by use for a future use
+            //  For example user create a firstName field because it will be present in many forms
             preConfiguredField    : 'ressources/fieldConfiguration/preConfiguredField.json',
-            fieldConfigurationURL : 'configurationSaved'
+
+            //  Allow to send a pre-configurated field to the server
+            //  Send a POST request, so in client side it won't work, you need to install the back-end : https://github.com/NaturalSolutions/NS.Server.FormBuilder
+            fieldConfigurationURL : 'configurationSaved',
+
+            //  Allow to get linked fields list
+            linkedField : 'ressources/linkedFields/linkedFields.json'
         },
+
+        //  Wich parent HTML element for the application
         el : '#formBuilder'
     }
 
