@@ -172,7 +172,7 @@ require(['formbuilder'], function(formbuilder) {
             fieldConfigurationURL : 'configurationSaved',
 
             //  Allow to get linked fields list
-            linkedField : 'ressources/linkedFields/linkedFields.json'
+            linkedFields : 'ressources/linkedFields/linkedFields.json'
         },
 
         //  Wich parent HTML element for the application

@@ -145,7 +145,10 @@
             "en" : "Label en anglais"
         },
         "name" : "Nom",
-        "linkedField" : "Champ lié"
+        "linkedFieldTable" : "Table du champ lié",
+        "linkedFieldIdentifyingColumn" : "Champ identifiant",
+        "linkedField" : "Champ lié",
+        "formIdentifyingColumn" : "Champ du formulaire identifiant"
     },
 
     "tooltip" : {

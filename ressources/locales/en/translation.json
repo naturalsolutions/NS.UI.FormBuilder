@@ -144,7 +144,10 @@
             "en" : "English label"
         },
         "name" : "Field name",
-        "linkedField" : "Linked to"
+        "linkedFieldTable" : "Linked field table",
+        "linkedFieldIdentifyingColumn" : "Identifying field",
+        "linkedField" : "Linked field",
+        "formIdentifyingColumn" : "Form identifying field"
     },
 
     "tooltip" : {
