@@ -392,10 +392,19 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
             }, this));
         },
 
+        /**
+         * Return collection attributes values
+         * @return {[Object} attributes values
+         */
         getAttributesValues : function() {
             return _.pick(this, _.keys(this.schema));
         },
 
+        /**
+         * Return fields list
+         * @param  {[type]} modelID id of field to excluse of the list
+         * @return {[Array} list of field
+         */
         getFieldList : function(modelID) {
             var fieldsList = [];
 
