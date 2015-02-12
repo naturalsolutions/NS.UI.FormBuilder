@@ -71,8 +71,11 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.model.id = parseInt(idx);
         },
 
+        /**
+         * Send an event on form channel when user wants to edit field properties
+         */
         editModel : function() {
-            this.formChannel.trigger("editModel", this.model.get('id'));
+            this.formChannel.trigger('editModel', this.model.get('id'));
         },
 
         isDropped : function(event, data) {
