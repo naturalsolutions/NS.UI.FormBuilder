@@ -3,9 +3,10 @@ define([
     'text!../templates/EditionPageLayout.html',
     '../views/FormPanelView',
     '../views/WidgetPanelView',
-    '../views/SettingPanelView',
+    '../views/SettingFieldPanelView',
+    '../views/SettingFormPanelView',
     'backbone.radio'
-], function(Marionette, EditionPageLayoutTemplate, FormPanelView, WidgetPanelView, SettingPanelView, Radio ) {
+], function(Marionette, EditionPageLayoutTemplate, FormPanelView, WidgetPanelView, SettingFieldPanelView, SettingFormPanelView, Radio ) {
 
 
     /**
@@ -51,6 +52,17 @@ define([
             this.URLOptions = options.URLOptions;
 
             this.initMainChannel();
+            this.initFormChannel();
+        },
+
+        initFormChannel : function() {
+            this.formChannel = Backbone.Radio.channel('form');
+
+            //  Send by EditionPageController when user wants to edit field properties
+            this.formChannel.on('initFieldSetting', this.initFieldSetting, this);
+
+            //  edit form properties
+            this.formChannel.on('editForm', this.formSetting, this);
         },
 
 
@@ -78,6 +90,22 @@ define([
             this.mainChannel.on('formCancel', this.closeSettingPanelAndResetURL, this)
         },
 
+        /**
+         * Display setting panel view when user wants to edit field properties
+         *
+         * @param  {Object} Model to edit and some options send by editionPageController like pre configurated field and linked fields
+         */
+        initFieldSetting : function(options) {
+            this.settingPanel.show(new SettingFieldPanelView(options));
+        },
+
+        formSetting : function(formToEdit) {
+            this.settingPanel.show(new SettingFormPanelView({
+                URLOptions : this.URLOptions,
+                formToEdit : formToEdit
+            }));
+        },
+
 
         /**
          * Show the setting view
@@ -99,17 +127,12 @@ define([
          * Display ItemView like settingPanel
          */
         onRender : function() {
-
             this.centerPanel.show( new FormPanelView({
                 fieldCollection : this.fieldCollection
             }));
 
             this.leftPanel.show( new WidgetPanelView({
 
-            }));
-
-            this.settingPanel.show(new SettingPanelView({
-                URLOptions : this.URLOptions
             }));
         },
 

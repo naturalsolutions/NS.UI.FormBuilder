@@ -27,20 +27,28 @@ define([
 
             this.URLOptions = options['URLOptions'] || {};
 
-            $.getJSON('ressources/linkedFields/linkedFields.json', _.bind(function(linkedFieldsList) {
-                var formattedList = [];
-                for (each in linkedFieldsList) {
-                    formattedList.push({
-                        val : linkedFieldsList[each].linkedField,
-                        label : linkedFieldsList[each].linkedField
-                    });
-                }
-                this.linkedFieldsList = formattedList;
-            }, this));
-
             this.initFormChannel();
+            this.getLinkedFieldsList();
+            this.getPreConfiguratedFields();
         },
 
+        /**
+         * Get all pre configurated field
+         */
+        getPreConfiguratedFields : function () {
+            $.getJSON(this.URLOptions.preConfiguredField, _.bind(function(fieldList) {
+                this.preConfiguredFieldList = fieldList;
+            }, this))
+        },
+
+        /**
+         * Get all avalaible linked field
+         */
+        getLinkedFieldsList : function() {
+            $.getJSON(this.URLOptions.linkedFields, _.bind(function(linkedFieldsList) {
+                this.linkedFieldsList = linkedFieldsList;
+            }, this));
+        },
 
         /**
          * Init form channel only for edition page module communication
@@ -59,9 +67,9 @@ define([
 
             this.formChannel.on('import', this.import, this);
 
+            //  Event receive from a field field (see BaseView.js) when user wants to edit field properties
             this.formChannel.on('editModel', this.modelSetting, this);
         },
-
 
         /**
          * Export current form (fieldCollection) in JSON file
@@ -123,13 +131,18 @@ define([
         * @param  {integer} ID of the field to duplicate
         */
         modelSetting: function(modelID) {
-            // Send event to setting panel view when user want to edit field properties
 
-            this.formChannel.trigger('modelToEdit', {
-                model : this.fieldCollection.get(modelID),
-                linkedFieldsList : this.linkedFieldsList
+            //  Get many informations with Ajax and send it to the layout
+            //  And the layout display the setting panel
+
+            this.formChannel.trigger('initFieldSetting', {
+                URLOptions             : this.URLOptions,
+                linkedFieldsList       : this.linkedFieldsList,
+                preConfiguredFieldList : this.preConfiguredFieldList,
+                modelToEdit            : this.fieldCollection.get(modelID)
             });
         },
+
 
         editForm : function(formToEdit) {
             //  Send event to formPanelView
@@ -139,7 +152,7 @@ define([
         /**
          * Send event to form view pnale
          *
-         * @param  {[type]} formImportedJSON imported form JSON data
+         * @param  {Object} formImportedJSON imported form JSON data
          */
         import : function(formImportedJSON) {
             //  Send event to formview panel for display imported form

@@ -40,7 +40,12 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             fieldClass  : '',
             fieldSize   : '',
             endOfLine   : false,
-            linkedField : ''
+
+            //  Linked fields values
+            linkedFieldTable             : '',
+            linkedFieldIdentifyingColumn : '',
+            linkedField                  : '',
+            formIdentifyingColumn        : ''
         },
 
         schema : {
@@ -107,13 +112,36 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 template    : checkboxFieldTemplate,
                 title       : $.t('schema.eol')
             },
+
+            //  Linked field section
+            linkedFieldTable : {
+                type : 'Select',
+                title       : $.t('schema.linkedFieldTable'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+            linkedFieldIdentifyingColumn : {
+                type : 'Select',
+                title       : $.t('schema.linkedFieldIdentifyingColumn'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
             linkedField : {
                 type : 'Select',
                 title       : $.t('schema.linkedField'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
-            }
+            },
+            formIdentifyingColumn : {
+                type : 'Select',
+                title       : $.t('schema.formIdentifyingColumn'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
 
         },
 
