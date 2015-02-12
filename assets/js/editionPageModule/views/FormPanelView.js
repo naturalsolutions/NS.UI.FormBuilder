@@ -18,7 +18,7 @@ define([
          * @type {Object}
          */
         events : {
-            'click h1>span'   : 'protocolSettings',
+            'click h1>span'   : 'formSettings',
             'click #export'   : 'export',
             'click #clearAll' : 'clear',
             'click #save'     : 'save'
@@ -88,8 +88,8 @@ define([
         * Send an event to the setting view (settingView.js) to display properties form
         * Channel send on the form channel
         */
-        protocolSettings : function() {
-            this.formChannel.trigger('displaySettings', this.collection);
+        formSettings : function() {
+            this.formChannel.trigger('editForm', this.collection);
         },
 
 
