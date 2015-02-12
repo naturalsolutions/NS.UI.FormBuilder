@@ -139,7 +139,9 @@ define([
                 URLOptions             : this.URLOptions,
                 linkedFieldsList       : this.linkedFieldsList,
                 preConfiguredFieldList : this.preConfiguredFieldList,
-                modelToEdit            : this.fieldCollection.get(modelID)
+                modelToEdit            : this.fieldCollection.get(modelID),
+                fieldsList             : this.fieldCollection.getFieldList(modelID)
+
             });
         },
 

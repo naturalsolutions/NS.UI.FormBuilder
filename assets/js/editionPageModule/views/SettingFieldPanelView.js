@@ -45,6 +45,7 @@ define([
         * View constructor, init grid channel
         */
         initialize : function(options) {
+            this.fieldsList             = options.fieldsList;
             this.URLOptions             = options.URLOptions;
             this.modelToEdit            = options.modelToEdit;
             this.linkedFieldsList       = options.linkedFieldsList;
@@ -146,11 +147,10 @@ define([
                 })
 
                 //  Update linked fields
+                this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
+                this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
                 this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
                 this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
-                this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-
-
 
                 this.$el.find('#form').append(this.form.el)
                 this.$el.find('.scroll').perfectScrollbar('update');

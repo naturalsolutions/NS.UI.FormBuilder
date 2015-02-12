@@ -55,6 +55,9 @@ define([
             this.initFormChannel();
         },
 
+        /**
+         * Init form channel
+         */
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
 
@@ -99,6 +102,11 @@ define([
             this.settingPanel.show(new SettingFieldPanelView(options));
         },
 
+        /**
+         * Display setting panel to edit form properties
+         *
+         * @param  {Object} formToEdit form to edit
+         */
         formSetting : function(formToEdit) {
             this.settingPanel.show(new SettingFormPanelView({
                 URLOptions : this.URLOptions,

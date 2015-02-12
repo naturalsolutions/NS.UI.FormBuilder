@@ -267,6 +267,8 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
                 field['id'] = this.getSize();
 
                 var el      = new Fields[nameType](field);
+
+                el.set('name', 'Field' + this.length)
                 this.add(el);
 
                 //  Send event
@@ -392,6 +394,18 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
 
         getAttributesValues : function() {
             return _.pick(this, _.keys(this.schema));
+        },
+
+        getFieldList : function(modelID) {
+            var fieldsList = [];
+
+            _.each(this.models, function(el, idx) {
+                if (el.constructor.type != undefined && el.get('id') != modelID) {
+                    fieldsList.push(el.get('name'))
+                }
+            })
+
+            return fieldsList;
         }
 
     });
