@@ -25,7 +25,7 @@ define([
         * @type {Object}
         */
         events : {
-            'change select'               : 'selectChanged',
+            'change #getField select'     : 'selectChanged',
             'click #cancel'               : 'cancel',
             'click #saveChange'           : 'saveChange',
             'click #saveButton'           : 'saveField',
@@ -144,13 +144,24 @@ define([
                 var linkedFieldsKeyList = [];
                 _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
                     linkedFieldsKeyList.push(el.key)
-                })
+                });
 
-                //  Update linked fields
-                this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-                this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
-                this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
-                this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+                if (this.fieldsList.length > 0) {
+                    //  Update linked fields
+                    this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
+                    this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
+                    this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
+                    this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+                } else {
+                    //  In this case there is only one field in the form so it can't be a linked field
+                    //  We add hide class to hide editor
+                    this.form.fields.linkedField.$el.addClass('hide');
+                    this.form.fields.formIdentifyingColumn.$el.addClass('hide');
+                    this.form.fields.linkedFieldTable.$el.addClass('hide');
+                    this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
+                }
+
+                
 
                 this.$el.find('#form').append(this.form.el)
                 this.$el.find('.scroll').perfectScrollbar('update');
@@ -264,7 +275,7 @@ define([
         * Event send when user change select value
         * Set value to the current vield
         *
-        * @param  {[Object]} e jQuery event
+        * @param  {Object} e jQuery event
         */
         selectChanged : function(e) {
             var choice = this.fieldWithSameType[ $(e.target).val() ];
@@ -297,27 +308,8 @@ define([
         * This function concerns generated form for field AND main form
         */
         saveChange : function() {
-            var isValid;
-
-            if (this.$el.find('#getField').is(':visible')) {
-                isValid = this.form.commit() === undefined;
-            } else {
-                isValid = this.form.validate() === null;
-            }
-
-            if (isValid) {
-                if (this.$el.find('#getField').is(':visible')) {
-                    this.mainChannel.trigger('formCommit')
-                } else {
-                    var values       = this.form.getValue(),
-                    pillboxItems = $('#pillboxkeywords').pillbox('items');
-
-                    values['keywords'] = _.map(pillboxItems, function(num){
-                        return num['value'];
-                    });
-                    this.mainChannel.trigger('editionDone', values);
-                }
-
+            if (this.form.commit() === undefined) {
+                this.mainChannel.trigger('formCommit')
                 this.removeForm();
             }
         },
