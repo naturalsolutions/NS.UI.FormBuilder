@@ -245,7 +245,24 @@ define([
             });
 
             //  Create grid
+
+            Backgrid.Grid.prototype.removeBodyAction = function() {
+            	console.log ("Try to remove body")
+		   		if( this.removeBody ) {
+	      			this.$el.addClass('remove_body');
+		   		}
+		 	}
+
+		 	Backgrid.Grid.prototype.fixedHeaderAction = function() {
+		 		console.log ("try to fixe header")
+		   		if( this.removeHeader ) {
+		   			console.log ("ici")
+	      			this.$el.addClass('remove_header');
+	  	 		}
+		 	}
+
             this.grid = new Backgrid.Grid({
+
                 row: ClickableRow,
                 columns    : [{
                         name  : 'name',
@@ -266,6 +283,9 @@ define([
                 collection : this.formCollection
             });
 
+            this.grid.removeHeader = true;
+            this.grid.removeBody = false;
+
             // Render the grid and attach the root to your HTML document
             $(this.el).find("#grid").html(this.grid.render().el);
 
@@ -280,6 +300,9 @@ define([
                         suppressScrollX : true
                     });
 
+                    $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
+
+ 
                 }, this)
             });
 

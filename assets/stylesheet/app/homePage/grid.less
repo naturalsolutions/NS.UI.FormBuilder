@@ -24,7 +24,7 @@
         }
     }
 
-    #grid {
+    #grid, #grid2 {
         height: 80%;
         margin-right: 30px;
         table {
@@ -119,9 +119,24 @@
         }
     }
 
+    #grid {
+        table {
+            thead {
+                visibility: hidden;
+                tr{
+                    th {
+                        height: 0px !important;
+                        padding : 0 !important;
+                        overflow: hidden;
+                    }
+                }
+            }
+        }
+    }
+
     footer {
-        height        : 120px;
-        position      : absolute;
+        height        : 80px;
+        position      : fixed;
         bottom        : 0;
         background    : #2e2b2c;
         margin-left   : -15px;
@@ -161,6 +176,9 @@
 
     .scrollSection {
         height: 80%;
+        &.resized {
+            height: 4%;
+        }
         overflow: hidden;
         .col-md-12:first-child {
             height: 100%;
@@ -176,5 +194,16 @@
             overflow   : hidden;
         }
 
+    }
+
+    #scrollSection2 {
+        height: auto;
+        #grid2 {
+            table {
+                tbody {
+                    display : none;
+                }
+            }
+        }
     }
 }
