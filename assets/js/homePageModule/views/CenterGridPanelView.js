@@ -300,9 +300,10 @@ define([
                         suppressScrollX : true
                     });
 
+                    //  Clone table
                     $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
-
- 
+                    //  Keep only one table row to lighten table
+                    $(this.el).find("#grid2 tbody tr").slice(1).remove();
                 }, this)
             });
 
