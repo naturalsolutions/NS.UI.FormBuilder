@@ -157,11 +157,7 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
         * Clear form collection
         */
         clearAll: function () {
-            while (this.models.length > 0) {
-                var el = this.at(this.models.length - 1);
-                el.trigger('destroy', el);
-            }
-            this.count = 0;
+            this.reset();
         },
 
         /**
