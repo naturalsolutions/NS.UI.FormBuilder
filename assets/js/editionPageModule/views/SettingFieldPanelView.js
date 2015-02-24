@@ -6,7 +6,7 @@ define([
     'jquery-ui',
     'i18n',
     'bootstrap-select',
-    'perfect-scrollbar',
+    'slimScroll',
     'fuelux'
 ], function($, Marionette, SettingPanelViewTemplate, Radio) {
 
@@ -266,7 +266,9 @@ define([
         */
         onRender : function(options) {
             this.$el.i18n();
-            this.$el.find('.scroll').perfectScrollbar();
+            this.$el.find('.scroll').slimScroll({
+                height : '100%'
+            });
             this.initForm();
         },
 

@@ -6,7 +6,7 @@ define([
     'jquery-ui',
         'i18n',
     'bootstrap-select',
-    'perfect-scrollbar',
+    'slimScroll',
     'fuelux'
 ], function($, Marionette, SettingFormPanelViewTemplate, Radio) {
 
@@ -77,8 +77,7 @@ define([
                 Backbone.View.prototype.remove.call(this.form);
 
                 //  Update scrollBar
-                this.$el.find('.scroll').scrollTop(0);
-                this.$el.find('.scroll').perfectScrollbar('update');
+                this.$el.find('.scroll').slimScroll({scrollTo : 0});
 
                 this.form = null;
             }, this), 300);
@@ -91,7 +90,7 @@ define([
         */
         onRender : function() {
             this.$el.i18n();
-            this.$el.find('.scroll').perfectScrollbar();
+            this.$el.find('.scroll').slimScroll();
             this.generateForm(this.formToEdit);
         },
 

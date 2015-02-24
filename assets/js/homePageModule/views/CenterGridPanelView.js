@@ -6,7 +6,7 @@ define([
     'backgrid',
     '../collection/FormCollection',
     'backbone.radio',
-    'perfect-scrollbar'
+    'slimScroll'
     ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, FormCollection, Radio) {
 
     /**
@@ -245,22 +245,6 @@ define([
             });
 
             //  Create grid
-
-            Backgrid.Grid.prototype.removeBodyAction = function() {
-            	console.log ("Try to remove body")
-		   		if( this.removeBody ) {
-	      			this.$el.addClass('remove_body');
-		   		}
-		 	}
-
-		 	Backgrid.Grid.prototype.fixedHeaderAction = function() {
-		 		console.log ("try to fixe header")
-		   		if( this.removeHeader ) {
-		   			console.log ("ici")
-	      			this.$el.addClass('remove_header');
-	  	 		}
-		 	}
-
             this.grid = new Backgrid.Grid({
 
                 row: ClickableRow,
@@ -283,9 +267,6 @@ define([
                 collection : this.formCollection
             });
 
-            this.grid.removeHeader = true;
-            this.grid.removeBody = false;
-
             // Render the grid and attach the root to your HTML document
             $(this.el).find("#grid").html(this.grid.render().el);
 
@@ -296,8 +277,9 @@ define([
 
                     //  Wait fetch end before display forms count and scrollbar got backgrid table
                     this.$el.find('#formsCount').text(this.formCollection.length)
-                    $("#scrollSection").perfectScrollbar({
-                        suppressScrollX : true
+                    $("#scrollSection").slimScroll({
+                        height : '90%',
+                        color: '#111',
                     });
 
                     //  Clone table

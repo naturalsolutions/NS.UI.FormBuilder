@@ -3,7 +3,7 @@ define([
     'marionette',
     'text!editionPageModule/templates/FormPanelView.html',
     'i18n',
-    'perfect-scrollbar'
+    'slimScroll'
 ], function($, Marionette, FormPanelViewTemplate) {
 
     /**
@@ -78,6 +78,11 @@ define([
             this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
         },
 
+        /**
+         * Update collection attributes and display its new name when edition is done
+         *
+         * @param  {Object} collection updated attributes
+         */
         updateCollectionAttributes : function(newCollectionAttributes) {
             this.collection.updateCollectionAttributes(newCollectionAttributes);
             this.$el.find('h1 label').text(newCollectionAttributes.name)
@@ -98,7 +103,7 @@ define([
          */
         removeElement : function() {
             this._viewCount--;
-            $('#count').find('.first').text(this._viewCount)
+            this.updateFieldCount();
         },
 
 
@@ -133,14 +138,13 @@ define([
                     vue.render();
                     this._view[id] = vue;
 
-                    $("#scrollSection").scrollTop($("#scrollSection").height());
-                    $("#scrollSection").perfectScrollbar('update');
+                    this.updateScrollBar();
                 }
 
                 $(".actions").i18n();
 
                 this._viewCount++;
-                $('#count').find('.first').text(this._viewCount)
+                this.updateFieldCount();
 
             }, this), function(err) {
                 swal(
@@ -149,6 +153,21 @@ define([
                     "error"
                 );
             });
+        },
+
+        /**
+         * Update field count
+         */
+        updateFieldCount : function() {
+            this.$el.find('.first').text(this._viewCount)
+        },
+
+        /**
+         * Update perfect scrollbar size and position (for example when user add field in the form)
+         */
+        updateScrollBar : function() {
+            var scrollToHeight = this.$el.find('#scrollSection').height();
+            this.$el.find('#scrollSection').slimScroll({ scrollTo: scrollToHeight });
         },
 
 
@@ -165,8 +184,10 @@ define([
             // run i18nnext translation in the view context
             this.$el.i18n();
 
-            $("#scrollSection").perfectScrollbar({
-                suppressScrollX : true
+            this.$el.find('#scrollSection').slimScroll({
+                height        : '90%',
+                railVisible   : true,
+                alwaysVisible : true
             });
         },
 
@@ -236,11 +257,16 @@ define([
                         "success"
                     );
                     self.collection.clearAll();
+                    self._viewCount = 0;
                 }
             });
 
         },
 
+        /**
+         * Display choosen form in the form view for edit it
+         * @param  {Object} form to edit
+         */
         formToEdit : function(formToEdit) {
             this.collection.updateWithJSON(formToEdit);
             this.render();
