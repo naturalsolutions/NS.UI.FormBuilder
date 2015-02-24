@@ -2,46 +2,116 @@
 
 We use backbone radio for communication between and inside module.
 
-In this page you can see all events line inside and out modules.
+In this page we explain event sequences for an use case.
 
-For each event we specify the sender, which data is sent and which callback is executed by the receiver.
+# User wants to delete form
 
-## Edition page modules events
+These events use **homepage channel**.
 
-On this section we explain for each object what events it listent or send for the edition page module
+* **delete form**
+ * Send by CenterGridPanelView
+ * Received by HomePageController
+ * Data : ID of the form to remove
+* **formDeleted**
+ * Send by HomePageController
+ * Received by CenterGridPanelView
+ * Data : if form has been deleted
+
+# User click on a row in the main panel grid
+
+These events pass through **grid channel**.
+
+* **rowClicked**
+ * Send by ClickableRow (see CenterGridPanelView onRender method)
+ * Received by CenterGridPanelView
+ * Data : jQuery clicked element
+
+# User use search form on the home page
+
+These events pass through **grid channel**.
+
+* **search**
+ * Send by leftPanelView
+ * Rceive by CenterGridPanelView
+ * Data : searchData user typed data
+
+# User exports a form
+
+These events pass through **form channel**.
+
+* **export**
+ * Send by FormPanelView
+ * Rceived by EditionPageController
+ * Data filename for futur created file
+* **exportFinished**
+ * Send by EditionPageController
+ * Send by FormPanelView
+ * Data : if form has correcly been exported
+
+# User imports a form
+
+These events pass through **form, global** and **editionPage channels**.
+
+The global chennel allow communication betweens module through formbuilder main app object.
+
+* **formImported** : global channel
+ * Send by CenterGridPanelView
+ * Received by formbuilder
+ * Data : JSON form parsed data
 
 
-- [Edition page controller](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/controller/EditionPageController.js)
-    - **addElement** : receive when user wants to add a field on the form
-        - Sender : [Vidget panel view](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/views/WidgetPanelView.js)
-        - Data : new field class name like TextField
-        - Callback : addElementToCollection
-    - **export** : reveive when user wants to export a form as JSON file
-        - Sender : [Form Panel view](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/views/FormPanelView.js)
-        - Data : new JSON file name
-        - Callback : exportFormAsFile
-    - **edition** : receive when an user wants to edit a field properties
-    - **import** : receive when an user want to import a form with JSON file
+* **formImported** : editionPage channel
+ * Send by : formbuilder
+ * Received by : EditionPageRouter
+ * Data : JSON form parsed data
 
 
-- [Form Panel View](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/views/FormPanelView.js)
-    - **formToEdit** : send when an user want import or choose a form on the grid for edit it
-        - Sender : [Edition page controller](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/controller/EditionPageController.js)
-        - Data : collection imported or choosen as JSON data
-        - Callback : formToEdit
+* **import** : form channel
+ * Send by : EditionPageRouter
+ * Received by : EditionPageController
+ * Data : JSON form parsed data
 
 
-- [Setting panel view](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/views/SettingPanelView.js)
-    - **modelToEdit** : receive when user want to edit a field properties
-        - Sender : [Edition page controller](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/controller/EditionPageController.js)
-        - Data : Field to edit
-        - Callback : displayModelForm
+* **formToEdit** : form channel
+ * Send by : EditionPageController
+ * Rceived by : FormPanelView
+ * Data : JSON form parsed data
+
+# User wants to edit a form properties
+
+These events pass through **form channel**.
+
+* **editForm**
+ * Send by : FormPanelView
+ * Received by : EditionPageLayout
+ * Data : form to edit
+
+# User wants to edit a form field properties
+
+These events pass through **form channel**.
+
+* **editModel**
+ * Send by : BaseView or herited view like TextFieldView
+ * Received by : EditionPageController
+ * Data : ID of model to edit
 
 
-- [Field collection](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/collection/FieldCollection.js)
-    - **remove** : event receive when user wants to remove a field
-        - Sender : [BaseView](https://github.com/NaturalSolutions/NS.UI.FormBuilder/blob/master/assets/js/editionPageModule/views/fieldViews/BaseView.js) or an herited view from BaseView
-        - Data : model to remove ID
-        - Callback : removeElement
+* **initFieldSetting**
+ * Send by : EditionPageController
+ * Received by : EditionPageLayout
+ * Data : some data configuration to init setting view
+
+# User wants to remove a field
+
+These events pass through **form channel**.
+
+* **remove**
+ * Send by : BaseView or herited view like TextFieldView
+ * Received by : FieldCollection
+ * Data : ID of model to edit
+
+This event trigger a simple backbone event. FormPanelView is listening **remove** FieldCollection event to update itself.
+
+
 
 back to [summary](index.md)
