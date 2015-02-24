@@ -20,6 +20,7 @@ define([
             //  Event send from formbuilder js when user want to edit a form from the homepage list
             this.editionPageChannel.on('display', this.displayEditionPage, this);
 
+            //  Event send by formbuilder when user wants to import a form from the hompegae
             this.editionPageChannel.on('formImported', this.formImported, this);
         },
 

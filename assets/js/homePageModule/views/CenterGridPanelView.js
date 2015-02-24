@@ -50,6 +50,8 @@ define([
         initHomePageChannel : function() {
             this.homePageChannel = Backbone.Radio.channel('homepage');
 
+            //  Event send by HomePageController when the form was deleted
+            //  Depend of deleteForm event, see deleteForm method in this class
             this.homePageChannel.on('formDeleted', this.formDeleted, this);
         },
 
@@ -123,6 +125,7 @@ define([
                 closeOnCancel      : true
             }, function(isConfirm) {
                 if (isConfirm){
+                    // Send event to HomePageControll if user choosed to remove a form
                     self.homePageChannel.trigger('deleteForm', self.currentSelectedForm)
                 }
             });

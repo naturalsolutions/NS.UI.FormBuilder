@@ -12,10 +12,12 @@ define(['jquery','marionette', '../layout/HomePageLayout', 'i18n', 'backbone.rad
         initHomePageChannel : function() {
             this.homePageChannel = Backbone.Radio.channel('homepage');
 
+            //  Event send by CenterGridPanelView when user wants to remove a form
             this.homePageChannel.on('deleteForm', this.deleteForm, this);
         },
 
         deleteForm : function(formID) {
+            //  We delete the form and send the result to CenterGridPanelView
             this.homePageChannel.trigger('formDeleted', true)
         },
 
@@ -25,7 +27,6 @@ define(['jquery','marionette', '../layout/HomePageLayout', 'i18n', 'backbone.rad
             //  Init homepage layout and render it in the homepage region
             var homePageLayout = new HomePageLayout();
             this.homePageRegion.show( homePageLayout );
-
 }    });
 
     return HomePageController;
