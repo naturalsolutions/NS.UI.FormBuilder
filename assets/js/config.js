@@ -32,12 +32,12 @@ require.config({
         autocompleteTreeView   : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider" : "../../libs/jquery-simple-slider/js/simple-slider",
         "perfect-scrollbar"    : "../../libs/perfect-scrollbar/min/perfect-scrollbar.min",
-        rangeslider            : "../../libs/rangeslider.js/dist/rangeslider",
         "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select",
         sweetalert             : "../../libs/sweetalert/lib/sweet-alert",
         marionette             : '../../libs/marionette/lib/backbone.marionette.min',
         backgrid               : '../../libs/backgrid/lib/backgrid',
-        moment                 : '../../libs/moment/moment'
+        moment                 : '../../libs/moment/moment',
+        slimScroll             : '../../libs/slimScroll/jquery.slimscroll.min'
     },
 
     shim: {
@@ -83,6 +83,12 @@ require.config({
                 "jquery-ui"
             ],
             exports: "$"
+        },
+        slimScroll: {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
         },
         i18n: {
             exports: "$",
