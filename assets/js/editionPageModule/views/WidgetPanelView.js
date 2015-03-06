@@ -6,7 +6,6 @@ define([
     'backbone.radio',
     'i18n',
     'jquery-ui',
-    'perfect-scrollbar',
     'sweetalert'
 ], function($, Marionette, WidgetPanelViewTemplate, Fields, Radio) {
 
@@ -80,7 +79,10 @@ define([
             // run i18nnext translation in the view context
             this.$el.i18n();
             //  Add scrollbar
-            this.$el.find('.scroll').perfectScrollbar();
+            this.$el.find('.scroll').slimScroll({
+                height : '90%',
+                color: '#111',
+            });
             //  Disable selection on field element
             $('.fields').disableSelection();
             //  Use accordion for each category

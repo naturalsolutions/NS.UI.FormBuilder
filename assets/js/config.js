@@ -31,7 +31,6 @@ require.config({
         diffview               : "../../libs/jsdifflib/diffview",
         autocompleteTreeView   : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider" : "../../libs/jquery-simple-slider/js/simple-slider",
-        "perfect-scrollbar"    : "../../libs/perfect-scrollbar/min/perfect-scrollbar.min",
         "bootstrap-select"     : "../../libs/bootstrap-select/dist/js/bootstrap-select",
         sweetalert             : "../../libs/sweetalert/lib/sweet-alert",
         marionette             : '../../libs/marionette/lib/backbone.marionette.min',
@@ -111,12 +110,6 @@ require.config({
             exports: "$"
         },
         "jquery-simple-slider": {
-            exports: "$",
-            deps: [
-                "jquery"
-            ]
-        },
-        "perfect-scrollbar": {
             exports: "$",
             deps: [
                 "jquery"

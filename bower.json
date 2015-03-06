@@ -62,9 +62,6 @@
     "requirejs": [
       "**/!(require.js)"
     ],
-    "perfect-scrollbar": [
-      "**/!(min)"
-    ],
     "backbone-forms": [
       "**/!(distribution)"
     ],
