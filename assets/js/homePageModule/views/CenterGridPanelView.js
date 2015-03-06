@@ -75,6 +75,10 @@ define([
             //  This event is send form the leftPanelView (see leftPanelView.js in views folder) when a user want to filter the grid via a form
             //  When the event is received we update grid data correspondig to the search
             this.gridChannel.on('search', this.updateGridWithSearch)
+
+            //  Event send from LeftPanelView when user cleared search form
+            //  We reset tje collection and update forms count
+            this.gridChannel.on('resetCollection', this.resetCollection, this);
         },
 
         /**
@@ -292,6 +296,19 @@ define([
                 }, this)
             });
 
+        },
+
+        /**
+         * Backbone radio event callback
+         * Reset collection and update forms count
+         */
+        resetCollection : function() {
+            this.formCollection.fetch({
+                reset : true,
+                success : _.bind(function() {
+                    this.$el.find('#formsCount').text(this.formCollection.length)
+                }, this)
+            });
         },
 
         /**

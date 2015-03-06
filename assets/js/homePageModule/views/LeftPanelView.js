@@ -59,6 +59,7 @@ define(['jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n'],
 
         clearForm : function(evt) {
             this.$el.find('form').trigger("reset");
+            this.gridChannel.trigger('resetCollection');
         }
 
     });
