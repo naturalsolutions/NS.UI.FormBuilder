@@ -1,20 +1,20 @@
-.ui-autocomplete {
-        background : #333;
-        list-style-type: none;
-        color : white;
+.ui-autocomplete { 
+    background      : #333;
+    list-style-type : none;
+    color           : white;
+    z-index         : 255;
+    padding-left    : 0;
+    border          : 1px #555 solid;
+    border-top      : none;
+
+    li {
+        .exo !important;
+        font-size    : 16px;
+        padding      : 5px;
+        padding-left : 10px;
         &:hover {
+            cursor     : pointer;
             background : #444;
         }
-
-        li {
-            .exo !important;
-            font-size: 18px;
-            padding: 7px;
-            &:hover {
-                cursor: pointer;
-                background : #444;
-            }
-        }
-        position: relative !important;
-        z-index: 255 !important;
     }
+}
