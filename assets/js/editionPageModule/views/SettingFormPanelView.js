@@ -90,7 +90,9 @@ define([
         */
         onRender : function() {
             this.$el.i18n();
-            this.$el.find('.scroll').slimScroll();
+            this.$el.find('.scroll').slimScroll({
+                height : '100%'
+            });
             this.generateForm(this.formToEdit);
         },
 
@@ -149,7 +151,6 @@ define([
                 }).render();
 
                 this.$el.find('#form').append(this.form.el)
-                this.$el.find('.scroll').perfectScrollbar('update');
                 this.$el.find('#getField').hide();
 
                 //  Add pillbow for form keywords
