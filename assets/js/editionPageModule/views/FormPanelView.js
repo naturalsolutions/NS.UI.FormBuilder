@@ -137,7 +137,6 @@ define([
                 if (vue !== null) {
                     vue.render();
                     this._view[id] = vue;
-
                     this.updateScrollBar();
                 }
 
@@ -183,6 +182,12 @@ define([
 
             // run i18nnext translation in the view context
             this.$el.i18n();
+
+            this.$el.find('.drop').sortable({
+                axis: "y",
+                handle : '.paddingBottom5'
+            });
+            this.$el.find('.drop').disableSelection();
 
             this.$el.find('#scrollSection').slimScroll({
                 height        : '90%',
