@@ -59,35 +59,50 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
                 title       : $.t('form.name'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators  : ['required']
+                validators  : [{
+                    type : 'required',
+                    message : $.t('form.validation')
+                }]
             },
             labelFr   : {
                 type        : "Text",
                 title       : $.t('form.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators  : ['required']
+                validators  : [{
+                    type : 'required',
+                    message : $.t('form.validation')
+                }]
             },
             labelEn   : {
                 type        : "Text",
                 title       : $.t('form.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators  : ['required']
+                validators  : [{
+                    type : 'required',
+                    message : $.t('form.validation')
+                }]
             },
             descriptionEn : {
                 type        : "TextArea",
                 title       : $.t('form.description.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators  : ['required']
+                validators  : [{
+                    type : 'required',
+                    message : $.t('form.validation')
+                }]
             },
             descriptionFr : {
                 type        : "TextArea",
                 title       : $.t('form.description.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators  : ['required']
+                validators  : [{
+                    type : 'required',
+                    message : $.t('form.validation')
+                }]
             },
             keywordsFr : {
                 type        : 'Text',

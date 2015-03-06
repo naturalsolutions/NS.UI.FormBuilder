@@ -58,7 +58,8 @@
             "save"   : "SAVE",
             "clear"  : "CLEAR ALL"
         },
-        "find" : "Find a form"
+        "find" : "Find a form",
+        "validation" : "This field is required"
     },
 
     "nav" : {

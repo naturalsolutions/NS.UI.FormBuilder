@@ -58,7 +58,8 @@
             "save"   : "SAUVER",
             "clear"  : "TOUT EFFACER"
         },
-        "find" : "Rechercher un formulaire"
+        "find" : "Rechercher un formulaire",
+        "validation" : "Ce champs est requis"
     },
 
     "nav" : {
