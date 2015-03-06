@@ -111,13 +111,19 @@ define([
         */
         saveChange : function() {
             if (this.form.validate() === null) {
-                var values       = this.form.getValue(),
-                    pillboxItems = $('#pillboxkeywords').pillbox('items');
+                var values      = this.form.getValue(),
+                    keywordsFr  = $('#pillboxkeywordsFr').pillbox('items'),
+                    keywordsEn  = $('#pillboxkeywordsEn').pillbox('items');
 
-                    values['keywords'] = _.map(pillboxItems, function(num){
-                        return num['value'];
-                    });
-                    this.mainChannel.trigger('editionDone', values);
+                values['keywordsFr'] = _.map(keywordsFr, function(num){
+                    return num['value'];
+                });
+
+                values['keywordsEn'] = _.map(keywordsEn, function(num){
+                    return num['value'];
+                });
+
+                this.mainChannel.trigger('editionDone', values);
 
                 this.removeForm();
             }
@@ -155,6 +161,16 @@ define([
 
                 //  Add pillbow for form keywords
                 this.$el.find('.field-keywords input[type="text"]').pillbox();
+
+                _.each(formToEdit.keywordsFr, _.bind(function(el, idx) {
+                    this.$el.find('#pillboxkeywordsFr').pillbox('addItems', idx, [{text : el, value : el}])
+                }, this));
+
+                _.each(formToEdit.keywordsEn, _.bind(function(el, idx) {
+                    this.$el.find('#pillboxkeywordsEn').pillbox('addItems', idx, [{text : el, value : el}])
+                }, this));
+
+                $('.glyphicon-close').prop('class', 'reneco close');
 
                 this.$el.find('#pillboxkeywordsFr').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
                 this.$el.find('#pillboxkeywordsEn').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
