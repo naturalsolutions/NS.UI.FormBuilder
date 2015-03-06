@@ -175,56 +175,36 @@ define([
                 this.$el.find('#pillboxkeywordsFr').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
                 this.$el.find('#pillboxkeywordsEn').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
 
-                this.$el.find('.field-name input[type="text"]').autocomplete({
-                    minLength : 1,
-                    scrollHeight: 220,
-                    appendTo : '.field-name',
-                    source : _.bind(function(req, add) {
-                        return $.getJSON(this.URLOptions['protocolAutocomplete'], function(data) {
-                            var res = [];
-                            for ( var each in data.options) {
-                                if (data.options[each].indexOf(req.term) > 0) {
-                                    res.push(data.options[each])
-                                }
-                            }
-                            return add(res);
-                        });
-                    }, this)
-                });
+                $.getJSON(this.URLOptions['protocolAutocomplete'], _.bind(function(data) {
 
-                this.$el.find('#pillboxkeywordsFr input[type="text"]').autocomplete({
-                    minLength : 1,
-                    scrollHeight: 220,
-                    appendTo : '#pillboxkeywordsFr',
-                    source : _.bind(function(req, add) {
-                        return $.getJSON(this.URLOptions['keywordAutocomplete'], function(data) {
-                            var res = [];
-                            for ( var each in data.options) {
-                                if (data.options[each].indexOf(req.term) > 0) {
-                                    res.push(data.options[each])
-                                }
-                            }
-                            return add(res);
-                        });
-                    }, this)
-                });
+                    this.$el.find('.field-name input[type="text"]').autocomplete({
+                        minLength    : 1,
+                        scrollHeight : 220,
+                        appendTo     : '.field-name',
+                        source       : data.options
+                    });
 
-                this.$el.find('#pillboxkeywordsEn input[type="text"]').autocomplete({
-                    minLength : 1,
-                    scrollHeight: 220,
-                    appendTo : '#pillboxkeywordsEn',
-                    source : _.bind(function(req, add) {
-                        return $.getJSON(this.URLOptions['keywordAutocomplete'], function(data) {
-                            var res = [];
-                            for ( var each in data.options) {
-                                if (data.options[each].indexOf(req.term) > 0) {
-                                    res.push(data.options[each])
-                                }
-                            }
-                            return add(res);
-                        });
-                    }, this)
-                });
+                }, this));
+
+                $.getJSON(this.URLOptions['keywordAutocomplete'], _.bind(function(data) {
+
+                    //  Init french keyword pillbox
+                    this.$el.find('#pillboxkeywordsFr input[type="text"]').autocomplete({
+                        minLength : 1,
+                        scrollHeight: 220,
+                        appendTo : '#pillboxkeywordsFr',
+                        source : data.options
+                    });
+
+                    //  Init english keyword pillbox
+                    this.$el.find('#pillboxkeywordsEn input[type="text"]').autocomplete({
+                        minLength : 1,
+                        scrollHeight: 220,
+                        appendTo : '#pillboxkeywordsEn',
+                        source : data.options
+                    });
+                }, this));
+                
 
                 this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('added.fu.pillbox', _.bind(function (evt, item) {
                     $('.glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
