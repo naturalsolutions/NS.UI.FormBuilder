@@ -914,7 +914,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         }
     }, {
         type   : 'Subform',
-        i18n   : 'fieldset'
+        i18n   : 'fieldset',
+        section : 'presentation'
     });
 
     models.ThesaurusField = models.BaseField.extend({
