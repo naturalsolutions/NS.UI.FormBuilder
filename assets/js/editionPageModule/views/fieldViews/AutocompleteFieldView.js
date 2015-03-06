@@ -4,7 +4,7 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/autocompleteView.html',
-    'typeahead'
+    'jquery-ui'
 ], function($, _, Backbone, BaseView, autocompleteTemplate) {
 
     var AutocompleteFieldView = BaseView.extend({
@@ -14,7 +14,7 @@ define([
          */
         events: function() {
             return _.extend(BaseView.prototype.events, {
-                'change input[type="text"]': 'updateModel'
+                
             });
         },
 
@@ -30,27 +30,19 @@ define([
          */
         render : function() {
            BaseView.prototype.render.apply(this, arguments);
-           $(this.el).find('.form-control').typeahead({
-                source: _.bind(function(query, process) {
-                    return $.getJSON(this.model.get('url'), {query : query}, function(data) {
-                        return process(data.options);
-                    });
-                }, this),
-                updater : _.bind(function(item) {
-                    this.model.set('defaultValue', item);
-                    $(this.el).find('.form-control').val(item)
-                }, this)
-            });
-       },
 
-       /**
-        * Change model value when text input value changed
-        *
-        * @param {object} jQuery event
-        */
-        updateModel: function(e) {
-            this.model.set('value', $(e.target).val());
-        }
+           $.getJSON(this.model.get('url'),_.bind(function(data) {
+                
+                $(this.el).find('.form-control').autocomplete({
+                    minLength : 1,
+                    scrollHeight: 220,
+
+                    source: data.options
+                });
+
+            }, this));
+           
+       },
 
     });
 
