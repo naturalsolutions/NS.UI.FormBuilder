@@ -2,9 +2,10 @@ define([
     'jquery',
     'marionette',
     'text!editionPageModule/templates/FormPanelView.html',
+    'sweetalert',
     'i18n',
-    'slimScroll'
-], function($, Marionette, FormPanelViewTemplate) {
+    'slimScroll'    
+], function($, Marionette, FormPanelViewTemplate, swal) {
 
     /**
      * The form view represents the current form. It's a the edition module main view.
@@ -239,7 +240,6 @@ define([
         */
         clear : function() {
             var self = this;
-
             swal({
                 title              : $.t('modal.clear.title') || "Etes vous sûr ?",
                 text               : $.t('modal.clear.text') || "Le formulaire sera définitivement perdu !",
