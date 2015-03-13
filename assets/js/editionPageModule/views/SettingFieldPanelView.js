@@ -71,10 +71,6 @@ define([
             this.mainChannel = Backbone.Radio.channel('edition');
 
             //this.mainChannel.on('saveConfiguration', this.saveConfiguration, this);
-
-            //  Create a form with backbone forms for field in parameter
-            //  See createFormForField function
-            //this.mainChannel.on('getModel:return', this.createFormForField, this);
         },
 
 
@@ -146,25 +142,24 @@ define([
                     linkedFieldsKeyList.push(el.key)
                 });
 
-                if (this.fieldsList.length > 0) {
-                    //  Update linked fields
-                    this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-                    this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
-                    this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
-                    this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
-                } else {
-                    //  In this case there is only one field in the form so it can't be a linked field
-                    //  We add hide class to hide editor
-                    this.form.fields.linkedField.$el.addClass('hide');
-                    this.form.fields.formIdentifyingColumn.$el.addClass('hide');
-                    this.form.fields.linkedFieldTable.$el.addClass('hide');
-                    this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
-                }
-
-                
+                if (! _.contains(['Subform'], this.modelToEdit.constructor.type)) {
+                    if (this.fieldsList.length > 0) {
+                        //  Update linked fields
+                        this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
+                        this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
+                        this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
+                        this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+                    } else {
+                        //  In this case there is only one field in the form so it can't be a linked field
+                        //  We add hide class to hide editor
+                        this.form.fields.linkedField.$el.addClass('hide');
+                        this.form.fields.formIdentifyingColumn.$el.addClass('hide');
+                        this.form.fields.linkedFieldTable.$el.addClass('hide');
+                        this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
+                    }
+                }                
 
                 this.$el.find('#form').append(this.form.el)
-                this.$el.find('.scroll').perfectScrollbar('update');
 
                 // Send an event to editionPageLayout to notify that form is created
                 this.mainChannel.trigger('formCreated');
