@@ -10,7 +10,6 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
          * @type {Object}
          */
         defaults: {
-            id               : 1,
             name             : 'Form',
             labelFr          : 'Formulaire',
             labelEn          : 'Form',
@@ -21,6 +20,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
             descriptionFr    : 'Un formulaire',
             keywordsFr       : ['formulaire'],
             keywordsEn       : ['form'],
+            schema : {},
 
             // display attributes
             creationDateDisplay : "",
@@ -37,6 +37,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
             this.set('creationDate',        new Date(this.get('creationDate'))      );
             this.set('modificationDate',    new Date(this.get('modificationDate'))  );
+
         },
 
         /**
@@ -44,6 +45,9 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
          * @param {string} dateStringToDisplay attribute value to convert in formatted string like 19/06/2014 - 18:10
          */
         formatDateForDisplay : function(dateStringToDisplay) {
+            if (dateStringToDisplay == '') {
+                return '';
+            }
             var newDate         = new Date(dateStringToDisplay),
                 newDateDay      = newDate.getDate(),
                 newDateMonth    = newDate.getMonth() + 1,
@@ -72,7 +76,8 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
                 descriptionEn    : this.get('descriptionEn'),
                 descriptionFr    : this.get('descriptionFr'),
                 keywordsFr       : this.get('keywordsFr'),
-                keywordsEn       : this.get('keywordsEn')
+                keywordsEn       : this.get('keywordsEn'),
+                schema           : this.get('schema')
             }
         }
 
