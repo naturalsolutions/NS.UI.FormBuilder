@@ -37,6 +37,8 @@ define([
         initialize : function(options) {
             _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm')
 
+            this.URLOptions = options.URLOptions;
+
             this.currentSelectedForm = 0;
 
             this.initGlobalChannel();
@@ -228,7 +230,7 @@ define([
 
             //  Create the form collection with an URL
             this.formCollection = new FormCollection({
-                url : options.collectionURL
+                url : this.URLOptions.protocolAutocomplete
             });
 
             // By default grid not fired click event

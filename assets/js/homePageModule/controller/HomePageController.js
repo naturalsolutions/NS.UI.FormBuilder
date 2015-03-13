@@ -6,6 +6,8 @@ define(['jquery','marionette', '../layout/HomePageLayout', 'i18n', 'backbone.rad
             // Kepp homepage region
             this.homePageRegion = options.homePageRegion;
 
+            this.URLOptions = options.URLOptions;
+
             this.initHomePageChannel();
         },
 
@@ -25,7 +27,9 @@ define(['jquery','marionette', '../layout/HomePageLayout', 'i18n', 'backbone.rad
             $('#navbarContext').text($.t('navbar.context.home'))
 
             //  Init homepage layout and render it in the homepage region
-            var homePageLayout = new HomePageLayout();
+            var homePageLayout = new HomePageLayout({
+                URLOptions : this.URLOptions
+            });
             this.homePageRegion.show( homePageLayout );
 }    });
 

@@ -7,6 +7,10 @@ define([
 
     HomePageLayout =  Backbone.Marionette.LayoutView.extend({
 
+        initialize : function(options) {
+            this.URLOptions = options.URLOptions;
+        },
+
         template: HomePageLayoutTemplate,
 
         regions : {
@@ -17,7 +21,9 @@ define([
         onRender : function() {
             //  Create and render item views
             this.leftPanel.show( new LeftPanelView() );
-            this.centerPanel.show( new CenterGridPanelView() );
+            this.centerPanel.show( new CenterGridPanelView({
+                URLOptions : this.URLOptions
+            }));
         }
 
     });
