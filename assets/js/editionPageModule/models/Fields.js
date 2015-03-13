@@ -13,10 +13,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     var checkboxFieldTemplate = _.template('\
         <div class="checkboxField <%= this.editor.schema.editorClass %>">\
             <div class="form-group field-<%= key %>">\
-                <span data-editor></span>\
-                <label class="checkboxLabel" for="<%= editorId %>"><%= title %></label>\
-            </div>\
-            <div class="row padding5 marginLeft10">\
+                <span data-editor><label class="checkboxLabel" for="<%= editorId %>"><%= title %></label></span>\
                 <p class="help-block"><%= help %></p>\
             </div>\
         </div>\
@@ -877,7 +874,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type        : 'Checkbox',
                 editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
-                help        : 'This fieldset can be present many times in one form' ,
+                help        : 'If this fieldset can be present many times in one form <br />' ,
                 title       : $.t('schema.multiple')
             },
             legend   : {
