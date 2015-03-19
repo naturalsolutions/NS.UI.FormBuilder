@@ -230,7 +230,7 @@ define([
 
             //  Create the form collection with an URL
             this.formCollection = new FormCollection({
-                url : this.URLOptions.protocolAutocomplete
+                url : this.URLOptions.formURL
             });
 
             // By default grid not fired click event
