@@ -76,8 +76,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             required : {
                 type        : 'Checkbox',
                 template    : checkboxFieldTemplate,
-                title       : $.t('schema.required'),
-                editorClass : 'leftField',
+                title       : $.t('schema.required')
             },
             readonly : {
                 type        : 'Checkbox',
