@@ -227,7 +227,11 @@
         },
         "import" : {
             "error"    : "Une erreur est survenu !",
-            "errorMsg" : "Votre formulaire n'a pas pu être importé"
+            "errorMsg" : "Votre formulaire n'a pas pu être importer",
+            "title" : "Importer un formulaire",
+            "label"    : "Selectionnez le fichier JSON a importé",
+            "action"   : "Importer",
+            "find"     : "Parcourir"
         },
         "export" : {
             "success"  : "Export réussi !",

@@ -2,7 +2,8 @@ define([
     'underscore',
     'backbone',
     'text!homePageModule/templates/modals/ImportModalView.html',
-    'bootstrap'
+    'bootstrap',
+    'i18n'
 ], function(_, Backbone, exportJSONTemplate) {
 
     var ExportJSONProtocolModalView = Backbone.View.extend({
@@ -26,6 +27,7 @@ define([
             $(this.el).modal({
                 show: true
             });
+            this.$el.i18n();
             return this;
         },
 

@@ -231,9 +231,14 @@
             "formDeleted" : "Your form has been deleted !"
         },
         "import" : {
-            "error" : "An error occured !",
-            "errorMsg" : "Your form can't be imported !"
+            "error"    : "An error occured !",
+            "errorMsg" : "Your form can't be imported !",
+            "title"    : "Import a form",
+            "label"    : "Select JSON file to import",
+            "action"   : "Import",
+            "find"     : "Search"
         },
+
         "export" : {
             "success"    : "Export successful !",
             "error"      : "Export failed !",
