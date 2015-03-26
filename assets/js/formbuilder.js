@@ -10,15 +10,16 @@ define([
     'homePageModule/controller/HomePageController',
     'editionPageModule/router/EditionPageRouter',
     'editionPageModule/controller/EditionPageController',
+
     'backbone.radio'
 ], function(_, Marionette, HomePageRouter, HomePageController, EditionPageRouter, EditionPageController, Radio) {
 
     //  Create a marionette application
-    FormbuilderApp = new Backbone.Marionette.Application();
+    var FormbuilderApp = new Backbone.Marionette.Application();
 
     //  Add two main region for the layouts
     FormbuilderApp.addRegions({
-      mainRegion    : '#mainRegion',
+      mainRegion    : '#mainRegion'
     });
 
     FormbuilderApp.addInitializer(function(options){
@@ -28,7 +29,6 @@ define([
 
     //  Add a first initializer that create homepage router
     FormbuilderApp.addInitializer(function(options){
-
         //  Create controller for homepage
         var homePageRouter = new HomePageRouter({
             controller : new HomePageController({
@@ -36,11 +36,9 @@ define([
                 URLOptions : options.URLOptions
             })
         });
-
     });
 
     FormbuilderApp.addInitializer(function(options){
-
         //  Create controller for homepage
         var editionPageRouter = new EditionPageRouter({
             controller : new EditionPageController({
@@ -48,7 +46,6 @@ define([
                 URLOptions : options.URLOptions
             })
         });
-
     });
 
     FormbuilderApp.addInitializer(function(options) {
