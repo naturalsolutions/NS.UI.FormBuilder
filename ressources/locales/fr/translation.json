@@ -1,4 +1,9 @@
 {
+    "grid" : {
+        "name" : "nom",
+        "creationDate" : "Date de création",
+        "modificationDate" : "Date de modification"
+    },
 
     "fields" : {
         "text"                 : "Texte",
@@ -254,5 +259,4 @@
             "errorMsg"   : "Votre champs n'a pas pu être sauvegardé."
         }
     }
-
 }

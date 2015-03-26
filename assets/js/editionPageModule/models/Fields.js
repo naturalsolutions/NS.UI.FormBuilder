@@ -1,4 +1,6 @@
-define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
+define([
+    'jquery', 'underscore', 'backbone', '../../Translater'
+], function($, _, Backbone, Translater) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -19,17 +21,15 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         </div>\
     ');
 
-    i18n.init({ resGetPath: 'ressources/locales/__lng__/__ns__.json', getAsync : false, lng : 'fr'});
-
-    var models = {};
+    var models = {}, translater = Translater.getTranslater();
 
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
             id          : 0,
             name        : "Field",
-            labelFr     : $.t('schema.label.fr'),
-            labelEn     : $.t('schema.label.en'),
+            labelFr     : translater.getValueFromKey('schema.label.fr'),
+            labelEn     : translater.getValueFromKey('schema.label.en'),
             required    : false,
             readonly    : false,
             isDragged   : false,
@@ -54,21 +54,21 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             labelFr   : {
                 type        : "Text",
-                title       : $.t('schema.label.fr'),
+                title       : translater.getValueFromKey('schema.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators : ['required']
             },
             labelEn   : {
                 type        : "Text",
-                title       : $.t('schema.label.en'),
+                title       : translater.getValueFromKey('schema.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators : ['required']
             },
             name   : {
                 type        : "Text",
-                title       : $.t('schema.name'),
+                title       : translater.getValueFromKey('schema.name'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 fieldClass  : 'marginBottom10'
@@ -76,64 +76,64 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             required : {
                 type        : 'Checkbox',
                 template    : checkboxFieldTemplate,
-                title       : $.t('schema.required')
+                title       : translater.getValueFromKey('schema.required')
             },
             readonly : {
                 type        : 'Checkbox',
                 template    : checkboxFieldTemplate,
-                title       : $.t('schema.readonly')
+                title       : translater.getValueFromKey('schema.readonly')
             },
             editorClass : {
                 type        : "Text",
-                title       : $.t('schema.editorClass'),
+                title       : translater.getValueFromKey('schema.editorClass'),
                 editorClass : 'form-control',
                 fieldClass  : 'marginTop20',
                 template    : fieldTemplate
             },
             fieldClass : {
                 type        : "Text",
-                title       : $.t('schema.fieldClass'),
+                title       : translater.getValueFromKey('schema.fieldClass'),
                 editorClass : 'form-control',
                 template    : fieldTemplate
             },
             fieldSize : {
                 type : 'Select',
-                title       : $.t('schema.fieldSize'),
+                title       : translater.getValueFromKey('schema.fieldSize'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : [$.t('schema.sizeValue.small'), $.t('schema.sizeValue.medium'), $.t('schema.sizeValue.large')]
+                options : [translater.getValueFromKey('schema.sizeValue.small'), translater.getValueFromKey('schema.sizeValue.medium'), translater.getValueFromKey('schema.sizeValue.large')]
             },
             endOfLine : {
                 type        : 'Checkbox',
                 template    : checkboxFieldTemplate,
-                title       : $.t('schema.eol')
+                title       : translater.getValueFromKey('schema.eol')
             },
 
             //  Linked field section
             linkedFieldTable : {
                 type : 'Select',
-                title       : $.t('schema.linkedFieldTable'),
+                title       : translater.getValueFromKey('schema.linkedFieldTable'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
             },
             linkedFieldIdentifyingColumn : {
                 type : 'Select',
-                title       : $.t('schema.linkedFieldIdentifyingColumn'),
+                title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
             },
             linkedField : {
                 type : 'Select',
-                title       : $.t('schema.linkedField'),
+                title       : translater.getValueFromKey('schema.linkedField'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
             },
             formIdentifyingColumn : {
                 type : 'Select',
-                title       : $.t('schema.formIdentifyingColumn'),
+                title       : translater.getValueFromKey('schema.formIdentifyingColumn'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
@@ -173,8 +173,8 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
     models.HiddenField = Backbone.Model.extend({
         defaults: {
             id    : 0,
-            labelFr     : $.t('schema.label.fr'),
-            labelEn     : $.t('schema.label.en'),
+            labelFr     : translater.getValueFromKey('schema.label.fr'),
+            labelEn     : translater.getValueFromKey('schema.label.en'),
             name  : "Field",
             value : ""
         },
@@ -192,14 +192,14 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             },
             labelFr   : {
                 type        : "Text",
-                title       : $.t('schema.label.fr'),
+                title       : translater.getValueFromKey('schema.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators : ['required']
             },
             labelEn   : {
                 type        : "Text",
-                title       : $.t('schema.label.en'),
+                title       : translater.getValueFromKey('schema.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators : ['required']
@@ -208,7 +208,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : $.t('schema.value')
+                title       : translater.getValueFromKey('schema.value')
             }
         }
     }, {
@@ -241,7 +241,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
-                    title       : $.t('schema.default'),
+                    title       : translater.getValueFromKey('schema.default'),
                     fieldClass  : 'advanced',
                     editorClass : 'form-control',
                     template    : fieldTemplate
@@ -250,13 +250,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.help')
+                    title       : translater.getValueFromKey('schema.help')
                 },
                 url: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.url')
+                    title       : translater.getValueFromKey('schema.url')
                 }
             });
         },
@@ -286,7 +286,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
-                    title       : $.t('schema.default'),
+                    title       : translater.getValueFromKey('schema.default'),
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
@@ -294,13 +294,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.help')
+                    title       : translater.getValueFromKey('schema.help')
                 },
                 size: {
                     type        : 'Number',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.size'),
+                    title       : translater.getValueFromKey('schema.size'),
                     validators : [function checkValue(value, formValues) {
                         if (value < 0 || value > 255) {
                             return {
@@ -338,14 +338,14 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.mime')
+                    title       : translater.getValueFromKey('schema.mime')
                 },
                 size: {
                     type        : 'Number',
                     title       : "Maximum size",
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.size')
+                    title       : translater.getValueFromKey('schema.size')
                 }
             });
         },
@@ -362,16 +362,16 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
         schema: {
             title: {
                 type  : "Text",
-                title : $.t('schema.title')
+                title : translater.getValueFromKey('schema.title')
             },
             key: {
                 type  : 'Number',
-                title : $.t('schema.key')
+                title : translater.getValueFromKey('schema.key')
             },
             folder: {
                 type  : 'Checkbox',
                 template : checkboxFieldTemplate,
-                title : $.t('schema.readonly')
+                title : translater.getValueFromKey('schema.readonly')
             }
         },
 
@@ -409,19 +409,19 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultNode: {
                     type  : 'Number',
-                    title : $.t('schema.defaultNode'),
+                    title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
                 multipleSelection: {
                     type  : 'Checkbox',
-                    title : $.t('schema.multipleSelection'),
+                    title : translater.getValueFromKey('schema.multipleSelection'),
                     editorClass : 'form-control',
                     template    : checkboxFieldTemplate
                 },
                 hierarchicSelection: {
                     type  : 'Checkbox',
-                    title : $.t('schema.hierarchic'),
+                    title : translater.getValueFromKey('schema.hierarchic'),
                     editorClass : 'form-control',
                     template    : checkboxFieldTemplate
                 },
@@ -429,7 +429,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.webServiceURL')
+                    title       : translater.getValueFromKey('schema.webServiceURL')
                 }
             });
         },
@@ -472,7 +472,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.webServiceURL')
+                    title       : translater.getValueFromKey('schema.webServiceURL')
                 },
                 itemList : {
                     type : 'Object',
@@ -482,7 +482,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                             type        : 'Text',
                             editorClass : 'form-control',
                             template    : fieldTemplate,
-                            title       : $.t('schema.default')
+                            title       : translater.getValueFromKey('schema.default')
                         },
                         items : {
                             type : 'List',
@@ -498,18 +498,18 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                                 },
                                 value : {
                                     type       : 'Text',
-                                    title      : $.t('schema.real'),
+                                    title      : translater.getValueFromKey('schema.real'),
                                     validators : ['required']
                                 },
                                 en    : {
                                     type : 'Text',
                                     title      : 'Text display in English',
                                     validators : ['required'] ,
-                                    title      : $.t('schema.englishText')
+                                    title      : translater.getValueFromKey('schema.englishText')
                                 },
                                 fr    : {
                                     type       : 'Text',
-                                    title      : $.t('schema.frenchText'),
+                                    title      : translater.getValueFromKey('schema.frenchText'),
                                     validators : ['required']
                                 }
                             }
@@ -600,7 +600,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.format')
+                    title       : translater.getValueFromKey('schema.format')
                 }
             });
         },
@@ -627,7 +627,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Checkbox',
                     editorClass : 'form-control',
                     template    : checkboxFieldTemplate,
-                    title       : $.t('schema.multiline')
+                    title       : translater.getValueFromKey('schema.multiline')
                 }
             });
             schema.size.validators = [function checkValue(value, formValues) {
@@ -657,7 +657,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             var baseSchema = _.pick(
                 models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults, 'help')
             );
-            baseSchema.help = $.t('schema.numericHelp')
+            baseSchema.help = translater.getValueFromKey('schema.numericHelp')
             return _.extend( {}, baseSchema, {
                 minValue     : 0,
                 maxValue     : 100,
@@ -673,20 +673,20 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 type        : 'Checkbox',
                 editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
-                title       : $.t('schema.decimal')
+                title       : translater.getValueFromKey('schema.decimal')
             },
             defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
             minValue: {
                 type        : 'Number',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : $.t('schema.min')
+                title       : translater.getValueFromKey('schema.min')
             },
             maxValue: {
                 type        : 'Number',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : $.t('schema.max'),
+                title       : translater.getValueFromKey('schema.max'),
                 validators : [function checkValue(value, formValues) {
                     if (value < formValues['minValue']) {
                         return {
@@ -701,13 +701,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 editorClass : 'form-control',
                 fieldClass  : 'advanced',
                 template    : fieldTemplate,
-                title       : $.t('schema.precision')
+                title       : translater.getValueFromKey('schema.precision')
             },
             unity: {
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : $.t('schema.unity')
+                title       : translater.getValueFromKey('schema.unity')
             }
         },
 
@@ -773,7 +773,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.pattern')
+                    title       : translater.getValueFromKey('schema.pattern')
                 }
             });
         },
@@ -874,13 +874,13 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                 editorClass : 'form-control',
                 template    : checkboxFieldTemplate,
                 help        : 'If this fieldset can be present many times in one form <br />' ,
-                title       : $.t('schema.multiple')
+                title       : translater.getValueFromKey('schema.multiple')
             },
             legend   : {
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate ,
-                title       : $.t('schema.legend')
+                title       : translater.getValueFromKey('schema.legend')
             }
         },
 
@@ -925,7 +925,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultNode: {
                     type  : 'Text',
-                    title : $.t('schema.defaultNode'),
+                    title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
@@ -933,7 +933,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.webServiceURL')
+                    title       : translater.getValueFromKey('schema.webServiceURL')
                 }
             });
         },
@@ -960,7 +960,7 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 defaultNode: {
                     type  : 'Text',
-                    title : $.t('schema.defaultNode'),
+                    title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 },
@@ -968,19 +968,19 @@ define(['jquery', 'underscore', 'backbone', 'i18n'], function($, _, Backbone) {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.wsUrl')
+                    title       : translater.getValueFromKey('schema.wsUrl')
                 },
                 webservices : {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.ws')
+                    title       : translater.getValueFromKey('schema.ws')
                 },
                 language : {
                     type        : 'Select',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : $.t('schema.wslng'),
+                    title       : translater.getValueFromKey('schema.wslng'),
                     options : ["fr", "en"]
                 }
             });

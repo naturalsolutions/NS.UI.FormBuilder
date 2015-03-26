@@ -1,4 +1,9 @@
 {
+    "grid" : {
+      "name" : "Name",
+      "creationDate" : "Creation date",
+      "modificationDate" : "Modfication date"
+    },
 
     "fields" : {
         "text"                 : "Text",

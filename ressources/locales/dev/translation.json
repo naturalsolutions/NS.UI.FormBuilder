@@ -1,256 +1,261 @@
 {
+  "grid" : {
+    "name" : "Name",
+    "creationDate" : "Creation date",
+    "modificationDate" : "Modfication date"
+  },
 
-    "fields" : {
-        "text"                 : "Text",
-        "number"               : "Numeric",
-        "date"                 : "Date",
-        "select"               : "Select",
-        "radio"                : "Radio button",
-        "checkbox"             : "Checkbox",
-        "hidden"               : "Hidden",
-        "file"                 : "File",
-        "treeview"             : "Tree View",
-        "textarea"             : "Long text",
-        "pattern"              : "Pattern",
-        "line"                 : "Horizontal line",
-        "autocomplete"         : "Auto complete",
-        "table"                : "Presentation",
-        "subform"              : "Fieldset",
-        "horizontalline"       : "Horizontal line",
-        "boolean"              : "Boolean",
-        "thesaurus"            : "Thesaurus",
-        "autocompletetreeview" : "Autocomplete Treeview",
-        "numericrange"         : "Numeric with slider"
+  "fields" : {
+    "text"                 : "Text",
+    "number"               : "Numeric",
+    "date"                 : "Date",
+    "select"               : "Select",
+    "radio"                : "Radio button",
+    "checkbox"             : "Checkbox",
+    "hidden"               : "Hidden",
+    "file"                 : "File",
+    "treeview"             : "Tree View",
+    "textarea"             : "Long text",
+    "pattern"              : "Pattern",
+    "line"                 : "Horizontal line",
+    "autocomplete"         : "Auto complete",
+    "table"                : "Presentation",
+    "subform"              : "Fieldset",
+    "horizontalline"       : "Horizontal line",
+    "boolean"              : "Boolean",
+    "thesaurus"            : "Thesaurus",
+    "autocompletetreeview" : "Autocomplete Treeview",
+    "numericrange"         : "Numeric with slider"
+  },
+
+  "search" : {
+    "name" : "Name",
+    "keywords" : "Keywords",
+    "date" : {
+      "from" : "From",
+      "to" : "to"
     },
+    "user" : "User"
+  },
 
-    "search" : {
-        "name" : "Name",
-        "keywords" : "Keywords",
-        "date" : {
-            "from" : "From",
-            "to" : "to"
-        },
-        "user" : "User"
+  "form" : {
+    "name" : "Protocol name",
+    "description" : {
+      "fr" : "Frendh form description",
+      "en" : "English form description"
     },
-
-    "form" : {
-        "name" : "Protocol name",
-        "description" : {
-            "fr" : "Frendh form description",
-            "en" : "English form description"
-        },
-        "label" : {
-            "fr" : "French form displayed name",
-            "fr" : "English form displayed name"
-        },
-        "keywords" : {
-            "fr" : "French keywords",
-            "en" : "English keywords",
-            "action" : "Add keyword"
-        },
-        "cancel" : "Cancel",
-        "clear" : "Clear form",
-        "title" : "Create new form",
-        "count" : "Field(s)",
-        "actions" : {
-            "import" : "IMPORT",
-            "export" : "EXPORT",
-            "save"   : "SAVE",
-            "clear"  : "CLEAR ALL"
-        },
-        "find" : "Find a form",
-        "validation" : "This field is required"
-    },
-
-    "nav" : {
-        "save" : {
-            "title"     : " Save protocol",
-            "cloud"     : "Save on server",
-            "export"    : "Export to JSON file"
-        },
-        "import" : {
-            "title"     : " Import JSON file",
-            "cloud"     : "Load from server",
-            "import"    : "Import JSON file"
-        },
-
-        "clear"     : " Create new form",
-        "compare"   : " Compare protocols"
-    },
-
     "label" : {
-        "field"     : "Fields",
-        "settings"  : "Settings",
-        "options"   : {
-            "simple"    : "Simple options",
-            "advanced"  : "Advanced options"
-        },
-        "help" : "Clic on field to add it on protocol"
+      "fr" : "French form displayed name",
+      "fr" : "English form displayed name"
     },
-
+    "keywords" : {
+      "fr" : "French keywords",
+      "en" : "English keywords",
+      "action" : "Add keyword"
+    },
+    "cancel" : "Cancel",
+    "clear" : "Clear form",
+    "title" : "Create new form",
+    "count" : "Field(s)",
     "actions" : {
-        "edit"      : "Edit",
-        "delete"    : "Delete",
-        "clone"     : " Clone"
+      "import" : "IMPORT",
+      "export" : "EXPORT",
+      "save"   : "SAVE",
+      "clear"  : "CLEAR ALL"
+    },
+    "find" : "Find a form",
+    "validation" : "This field is required"
+  },
+
+  "nav" : {
+    "save" : {
+      "title"     : " Save protocol",
+      "cloud"     : "Save on server",
+      "export"    : "Export to JSON file"
+    },
+    "import" : {
+      "title"     : " Import JSON file",
+      "cloud"     : "Load from server",
+      "import"    : "Import JSON file"
     },
 
-    "schema" : {
-        "required"          : "Required",
-        "readonly"          : "Read only",
-        "value"             : "Value",
-        "default"           : "Default value",
-        "url"               : "Web service URL",
-        "help"              : "Help text",
-        "size"              : "Maximal size",
-        "file"              : "Default file",
-        "mime"              : "Allowed file type",
-        "title"             : "Title",
-        "key"               : "Key",
-        "folder"            : "Folder",
-        "defaultNode"       : "Default node",
-        "multipleSelection" : "Multiple selection",
-        "hierarchic"        : "Hierarchic selection",
-        "child"             : "Sub node",
-        "real"              : "Real value",
-        "englishText"       : "English displayed text",
-        "frenchText"        : "French displayed text",
-        "format"            : "Display format",
-        "multiline"         : "Multiline",
-        "min"               : "Minimal value",
-        "max"               : "Maximal value",
-        "precision"         : "Step",
-        "unity"             : "Unity",
-        "pattern"           : "Pattern value",
-        "multiple"          : "Multiple",
-        "legend"            : "Legend",
-        "editorClass"       : "Editor CSS class",
-        "fieldClass"        : "Field CSS class",
-        "checked"           : "Selected",
-        "checkboxlabel"     : "Checkbox label",
-        "numericHelp"       : "Enter numeric value",
-        "decimal"           : "Allow decimal value",
-        "fieldSize"         : "Field display size",
-        "sizeValue" : {
-            "small"  : "Small",
-            "medium" : "Medium",
-            "large"  : "Large"
-        },
-        "eol" : "Is the end of the line",
-        "webServiceURL" : "Web service URL pour data list",
-        "wsUrl" : "Web service URL",
-        "ws" : "Web service ID",
-        "wslng" : "Data display language",
-        "label"         : {
-            "fr" : "French label",
-            "en" : "English label"
-        },
-        "name" : "Field name",
-        "linkedFieldTable" : "Linked field table",
-        "linkedFieldIdentifyingColumn" : "Identifying field",
-        "linkedField" : "Linked field",
-        "formIdentifyingColumn" : "Form identifying field"
+    "clear"     : " Create new form",
+    "compare"   : " Compare protocols"
+  },
+
+  "label" : {
+    "field"     : "Fields",
+    "settings"  : "Settings",
+    "options"   : {
+      "simple"    : "Simple options",
+      "advanced"  : "Advanced options"
     },
+    "help" : "Clic on field to add it on protocol"
+  },
 
-    "tooltip" : {
-        "text"                 : "Text",
-        "number"               : "Numeric",
-        "date"                 : "Date",
-        "select"               : "Dropdown list",
-        "radio"                : "Radio button",
-        "checkbox"             : "Checkbox",
-        "hidden"               : "Hidden ",
-        "file"                 : "File",
-        "treeview"             : "Tree View",
-        "textarea"             : "Long text",
-        "pattern"              : " with regular expression",
-        "line"                 : "Horizontal line",
-        "autocomplete"         : "Auto complete",
-        "subform"              : "set",
-        "horizontalline"       : "Horizontal line",
-        "boolean"              : "Boolean",
-        "autocompletetreeview" : "A TreeView with searching functionnalité"
+  "actions" : {
+    "edit"      : "Edit",
+    "delete"    : "Delete",
+    "clone"     : " Clone"
+  },
+
+  "schema" : {
+    "required"          : "Required",
+    "readonly"          : "Read only",
+    "value"             : "Value",
+    "default"           : "Default value",
+    "url"               : "Web service URL",
+    "help"              : "Help text",
+    "size"              : "Maximal size",
+    "file"              : "Default file",
+    "mime"              : "Allowed file type",
+    "title"             : "Title",
+    "key"               : "Key",
+    "folder"            : "Folder",
+    "defaultNode"       : "Default node",
+    "multipleSelection" : "Multiple selection",
+    "hierarchic"        : "Hierarchic selection",
+    "child"             : "Sub node",
+    "real"              : "Real value",
+    "englishText"       : "English displayed text",
+    "frenchText"        : "French displayed text",
+    "format"            : "Display format",
+    "multiline"         : "Multiline",
+    "min"               : "Minimal value",
+    "max"               : "Maximal value",
+    "precision"         : "Step",
+    "unity"             : "Unity",
+    "pattern"           : "Pattern value",
+    "multiple"          : "Multiple",
+    "legend"            : "Legend",
+    "editorClass"       : "Editor CSS class",
+    "fieldClass"        : "Field CSS class",
+    "checked"           : "Selected",
+    "checkboxlabel"     : "Checkbox label",
+    "numericHelp"       : "Enter numeric value",
+    "decimal"           : "Allow decimal value",
+    "fieldSize"         : "Field display size",
+    "sizeValue" : {
+      "small"  : "Small",
+      "medium" : "Medium",
+      "large"  : "Large"
     },
-
-    "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
-
-    "accordion" : {
-        "standard"     : "Standard fields",
-        "autocomplete" : "Fields with autocomplete",
-        "presentation" : "Presentation field",
-        "other"        : "Other fields",
-        "list"         : "List fields"
+    "eol" : "Is the end of the line",
+    "webServiceURL" : "Web service URL pour data list",
+    "wsUrl" : "Web service URL",
+    "ws" : "Web service ID",
+    "wslng" : "Data display language",
+    "label"         : {
+      "fr" : "French label",
+      "en" : "English label"
     },
+    "name" : "Field name",
+    "linkedFieldTable" : "Linked field table",
+    "linkedFieldIdentifyingColumn" : "Identifying field",
+    "linkedField" : "Linked field",
+    "formIdentifyingColumn" : "Form identifying field"
+  },
 
-    "panel" : "Options panel",
+  "tooltip" : {
+    "text"                 : "Text",
+    "number"               : "Numeric",
+    "date"                 : "Date",
+    "select"               : "Dropdown list",
+    "radio"                : "Radio button",
+    "checkbox"             : "Checkbox",
+    "hidden"               : "Hidden ",
+    "file"                 : "File",
+    "treeview"             : "Tree View",
+    "textarea"             : "Long text",
+    "pattern"              : " with regular expression",
+    "line"                 : "Horizontal line",
+    "autocomplete"         : "Auto complete",
+    "subform"              : "set",
+    "horizontalline"       : "Horizontal line",
+    "boolean"              : "Boolean",
+    "autocompletetreeview" : "A TreeView with searching functionnalité"
+  },
 
-    "navbar" : {
-        "context" : {
-            "edition" : "edition",
-            "home" : "home"
-        },
-        "status" : {
-            "online" : "Online"
-        }
+  "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
+
+  "accordion" : {
+    "standard"     : "Standard fields",
+    "autocomplete" : "Fields with autocomplete",
+    "presentation" : "Presentation field",
+    "other"        : "Other fields",
+    "list"         : "List fields"
+  },
+
+  "panel" : "Options panel",
+
+  "navbar" : {
+    "context" : {
+      "edition" : "edition",
+      "home" : "home"
     },
-
-    "field" : {
-        "action" : {
-            "edit" : "Edit"
-        }
-    },
-
-    "settings" : {
-        "actions" : {
-            "saveAsType" : "Save as new type",
-            "save" : "Save changes",
-            "cancel" : "Cancel"
-        },
-        "preField" : "Pre-configurated field"
-    },
-
-    "modal" : {
-        "comment" : "Your coment",
-        "filename" : "File name",
-        "save" : {
-            "title" : "Protocol save",
-            "button" : "Save"
-        },
-        "export" : {
-            "title" : "Export",
-            "json" : "Export as JSON file"
-        },
-        "clear" : {
-            "title"       : "Are you sure ?",
-            "text"        : "The form will be lost !",
-            "yes"         : "Yes, delete it",
-            "no"          : "No, cancel",
-            "deleted"     : "Deleted",
-            "formDeleted" : "Your form has been deleted !"
-        },
-        "import" : {
-            "error" : "An error occured !",
-            "errorMsg" : "Your form can't be imported !"
-        },
-        "export" : {
-            "success" : "Export successful !",
-            "error" : "Export failed !",
-            "errorMsg" : "An error occured during form export"
-        },
-        "save" : {
-            "success" : "Form savad !",
-            "successMsg" : "Your form was successfully saved on the server !",
-            "error" : "An error occured !",
-            "errorMsg" :" Your form wasn't saved. Consider making a export"
-        },
-        "field" : {
-            "error" : "Field can't be added !",
-            "errorMsg" : "An error occured during field addition !"
-        },
-        "configuration" : {
-            "success"    : "Field saved !",
-            "successMsg" : "Your field has been saved as a pre-configurated field.",
-            "error"      : "Field not saved !",
-            "errorMsg"   : "Your field couldn't be saved ."
-        }
+    "status" : {
+      "online" : "Online"
     }
+  },
+
+  "field" : {
+    "action" : {
+      "edit" : "Edit"
+    }
+  },
+
+  "settings" : {
+    "actions" : {
+      "saveAsType" : "Save as new type",
+      "save" : "Save changes",
+      "cancel" : "Cancel"
+    },
+    "preField" : "Pre-configurated field"
+  },
+
+  "modal" : {
+    "comment" : "Your coment",
+    "filename" : "File name",
+    "save" : {
+      "title" : "Protocol save",
+      "button" : "Save"
+    },
+    "export" : {
+      "title" : "Export",
+      "json" : "Export as JSON file"
+    },
+    "clear" : {
+      "title"       : "Are you sure ?",
+      "text"        : "The form will be lost !",
+      "yes"         : "Yes, delete it",
+      "no"          : "No, cancel",
+      "deleted"     : "Deleted",
+      "formDeleted" : "Your form has been deleted !"
+    },
+    "import" : {
+      "error" : "An error occured !",
+      "errorMsg" : "Your form can't be imported !"
+    },
+    "export" : {
+      "success" : "Export successful !",
+      "error" : "Export failed !",
+      "errorMsg" : "An error occured during form export"
+    },
+    "save" : {
+      "success" : "Form savad !",
+      "successMsg" : "Your form was successfully saved on the server !",
+      "error" : "An error occured !",
+      "errorMsg" :" Your form wasn't saved. Consider making a export"
+    },
+    "field" : {
+      "error" : "Field can't be added !",
+      "errorMsg" : "An error occured during field addition !"
+    },
+    "configuration" : {
+      "success"    : "Field saved !",
+      "successMsg" : "Your field has been saved as a pre-configurated field.",
+      "error"      : "Field not saved !",
+      "errorMsg"   : "Your field couldn't be saved ."
+    }
+  }
 }

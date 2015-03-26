@@ -8,7 +8,12 @@
 * @version         1.0
 */
 
-define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, Fields, Radio) {
+define([
+    'backbone',
+    '../models/fields',
+    'backbone.radio',
+    '../../Translater'
+], function (Backbone, Fields, Radio, Translater) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -43,6 +48,8 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
         </div>\
     ');
 
+    var translater = Translater.getTranslater();
+
     /**
     * Implement form object as a fields collection
     */
@@ -56,63 +63,63 @@ define(['backbone', '../models/fields', 'backbone.radio'], function (Backbone, F
         schema : {
             name : {
                 type        : "Text",
-                title       : $.t('form.name'),
+                title       : translater.getValueFromKey('form.name'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
-                    message : $.t('form.validation')
+                    message : translater.getValueFromKey('form.validation')
                 }]
             },
             labelFr   : {
                 type        : "Text",
-                title       : $.t('form.label.fr'),
+                title       : translater.getValueFromKey('form.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
-                    message : $.t('form.validation')
+                    message : translater.getValueFromKey('form.validation')
                 }]
             },
             labelEn   : {
                 type        : "Text",
-                title       : $.t('form.label.en'),
+                title       : translater.getValueFromKey('form.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
-                    message : $.t('form.validation')
+                    message : translater.getValueFromKey('form.validation')
                 }]
             },
             descriptionEn : {
                 type        : "TextArea",
-                title       : $.t('form.description.en'),
+                title       : translater.getValueFromKey('form.description.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
-                    message : $.t('form.validation')
+                    message : translater.getValueFromKey('form.validation')
                 }]
             },
             descriptionFr : {
                 type        : "TextArea",
-                title       : $.t('form.description.fr'),
+                title       : translater.getValueFromKey('form.description.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
-                    message : $.t('form.validation')
+                    message : translater.getValueFromKey('form.validation')
                 }]
             },
             keywordsFr : {
                 type        : 'Text',
-                title       : $.t('form.keywords.fr'),
+                title       : translater.getValueFromKey('form.keywords.fr'),
                 editorClass : 'form-control hide',
                 template    : pillboxTemplate
             },
             keywordsEn : {
                 type        : 'Text',
-                title       : $.t('form.keywords.en'),
+                title       : translater.getValueFromKey('form.keywords.en'),
                 editorClass : 'form-control hide',
                 template    : pillboxTemplate
             }

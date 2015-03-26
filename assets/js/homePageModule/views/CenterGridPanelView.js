@@ -4,10 +4,13 @@ define([
     'marionette',
     'text!../templates/CenterGridPanelView.html',
     'backgrid',
+    '../../Translater',
     '../collection/FormCollection',
     'backbone.radio',
     'slimScroll'
-    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, FormCollection, Radio) {
+    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, Translater, FormCollection, Radio) {
+
+    var translater = Translater.getTranslater();
 
     /**
      * Main view in the homepage layout
@@ -96,14 +99,14 @@ define([
 
             if (result) {
                 swal(
-                    $.t('modal.deleted.title') || 'Formulaire supprimé !',
-                    $.t('modal.deleted.text') || 'Votre formulaire a été supprimé avec succès',
+                    translater.getValueFromKey('modal.deleted.title') || 'Formulaire supprimé !',
+                    translater.getValueFromKey('modal.deleted.text') || 'Votre formulaire a été supprimé avec succès',
                     "success"
                 );
             } else {
                 swal(
-                    $.t('modal.errorDeleted.title') || 'Formulaire n\'a pas pu êtresupprimé !',
-                    $.t('modal.errorDeleted.text') || 'Une erreur est survenue lors de la suppression du formulaire',
+                    translater.getValueFromKey('modal.errorDeleted.title') || 'Formulaire n\'a pas pu êtresupprimé !',
+                    translater.getValueFromKey('modal.errorDeleted.text') || 'Une erreur est survenue lors de la suppression du formulaire',
                     "error"
                 )
             }
@@ -121,13 +124,13 @@ define([
             var self = this;
 
             swal({
-                title              : $.t('modal.clear.title') || "Etes vous sûr ?",
-                text               : $.t('modal.clear.text') || "Le formulaire sera définitivement perdu !",
+                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
                 type               : "warning",
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
-                confirmButtonText  : $.t('modal.clear.yes') || "Oui, supprimer",
-                cancelButtonText   : $.t('modal.clear.no') || "Annuler",
+                confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
+                cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
                 closeOnCancel      : true
             }, function(isConfirm) {
                 if (isConfirm){
@@ -259,17 +262,17 @@ define([
                 row: ClickableRow,
                 columns    : [{
                         name  : 'name',
-                        label : 'Name',
+                        label    : translater.getValueFromKey('grid.name') || 'Name',
                         cell  : 'string',
                         editable : false
                     }, {
                         name     : 'creationDateDisplay',
-                        label    : 'Creation date',
+                        label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
                         cell     : "string",
                         editable : false
                     }, {
                         name     : 'modificationDateDisplay',
-                        label    : 'Modification date',
+                        label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
                         cell     : 'string',
                         editable : false
                     }],
