@@ -7,8 +7,9 @@ define([
     '../../Translater',
     '../collection/FormCollection',
     'backbone.radio',
+    'sweetalert',
     'slimScroll'
-    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, Translater, FormCollection, Radio) {
+    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, Translater, FormCollection, Radio, swal) {
 
     var translater = Translater.getTranslater();
 
@@ -402,7 +403,7 @@ define([
 
             //  Scroll to the end
             $("#scrollSection").scrollTop( $( "#scrollSection" ).prop( "scrollHeight" ) );
-            $("#scrollSection").perfectScrollbar('update');
+            $("#scrollSection").slimScroll('update');
 
             //  Notify the new model
             $('#grid table tr:last-child').addClass('clone', 1000, function() {
@@ -448,16 +449,16 @@ define([
 
                             } else {
                                 swal(
-                                    $.t('modal.import.error') || "Une erreur est survenu !",
-                                    $.t('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                    translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
+                                    translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                     "error"
                                 );
                             }
                         /*} catch (e) {
                             console.log (e)
                             swal(
-                                $.t('modal.import.error') || "Une erreur est survenu !",
-                                $.t('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
+                                translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                 "error"
                             );
                         }*/
