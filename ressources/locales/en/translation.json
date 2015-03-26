@@ -217,12 +217,10 @@
         "comment" : "Your coment",
         "filename" : "File name",
         "save" : {
-            "title" : "Protocol save",
-            "button" : "Save"
+
         },
         "export" : {
-            "title" : "Export",
-            "json" : "Export as JSON file"
+
         },
         "clear" : {
             "title"       : "Are you sure ?",
@@ -237,15 +235,19 @@
             "errorMsg" : "Your form can't be imported !"
         },
         "export" : {
-            "success" : "Export successful !",
-            "error" : "Export failed !",
-            "errorMsg" : "An error occured during form export"
+            "success"    : "Export successful !",
+            "error"      : "Export failed !",
+            "errorMsg"   : "An error occured during form export",
+            "title"      : "Export",
+            "json"       : "Export as JSON file"
         },
         "save" : {
-            "success" : "Form savad !",
+            "success"    : "Form savad !",
             "successMsg" : "Your form was successfully saved on the server !",
-            "error" : "An error occured !",
-            "errorMsg" :" Your form wasn't saved. Consider making a export"
+            "error"      : "An error occured !",
+            "errorMsg"   :" Your form wasn't saved. Consider making a export",
+            "title"      : "Protocol save",
+            "button"     : "Save"
         },
         "field" : {
             "error" : "Field can't be added !",

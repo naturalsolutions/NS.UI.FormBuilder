@@ -217,14 +217,6 @@
     "modal" : {
         "comment"  : "Votre commentaire",
         "filename" : "Nom du fichier",
-        "save" : {
-            "title"  : "Sauvegarde du protocol",
-            "button" : "Sauvegarder"
-        },
-        "export" : {
-            "title" : "Export",
-            "json"  : "Exporter au format JSON"
-        },
         "clear" : {
             "title"       : "Etes vous sûr ?",
             "text"        : "Le formulaire sera définitivement perdu !",
@@ -240,13 +232,17 @@
         "export" : {
             "success"  : "Export réussi !",
             "error"    : "Echec de l'export !",
-            "errorMsg" : "Une erreur est survenue lors de l'export"
+            "errorMsg" : "Une erreur est survenue lors de l'export",
+            "title"    : "Export",
+            "json"     : "Exporter au format JSON"
         },
         "save" : {
             "success"    : "Sauvé !",
             "successMsg" : "Votre formulaire a été enregistré sur le serveur !",
             "error"      : "Une erreur est survenu !",
-            "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export"
+            "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+            "title"      : "Sauvegarde du protocol",
+            "button"     : "Sauvegarder"
         },
         "field" : {
             "error"    : "Echec de l'ajout !",

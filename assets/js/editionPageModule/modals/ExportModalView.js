@@ -3,7 +3,8 @@ define([
     'backbone',
     'text!editionPageModule/templates/modals/ExportModalView.html',
     'bootstrap',
-    'fuelux'
+    'fuelux',
+    'i18n'
 ], function(_, Backbone, ExportModalViewTemplate) {
 
     var ExportJSONProtocolModalView = Backbone.View.extend({
@@ -22,6 +23,7 @@ define([
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
             $(this.el).modal({ show: true });
+            $(this.el).i18n();
             return this;
         },
 
