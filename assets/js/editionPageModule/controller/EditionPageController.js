@@ -61,6 +61,7 @@ define([
 
             //  Event receive when user wants to export its form in JSON file
             this.formChannel.on('export', this.exportFormAsFile, this);
+            this.formChannel.on('save', this.saveForm, this);
 
             //  Event send from router when user import a form or edit a form from the grid
             this.formChannel.on('formEdition', this.editForm, this);
@@ -159,6 +160,23 @@ define([
         import : function(formImportedJSON) {
             //  Send event to formview panel for display imported form
             this.formChannel.trigger('formToEdit', formImportedJSON);
+        },
+
+        saveForm : function(formAsJSON) {
+            $.ajax({
+                data        : formAsJSON,
+                type        : 'POST',
+                url         : this.URLOptions['formSaveURL'],
+                contentType : 'application/json',
+
+                //  Trigger event with ajax result on the formView
+                success: _.bind(function(res) {
+                    this.formChannel.trigger('save:return', true);
+                }, this),
+                error: _.bind(function(jqXHR, textStatus, errorThrown) {
+                    this.formChannel.trigger('save:return', false);
+                }, this)
+            });
         }
 
     });
