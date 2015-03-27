@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-    'text!editionPageModule/templates/fields/datefieldView.html'
-], function($, _, Backbone, BaseView, viewTemplate) {
+    'text!editionPageModule/templates/fields/datefieldView.html',
+    'editionPageModule/editor/DatePickerEditor'
+], function($, _, Backbone, BaseView, viewTemplate, DatePickerEditor) {
 
     var DateFieldView = BaseView.extend({
         events: function() {
@@ -20,6 +21,14 @@ define([
 
        render : function() {
            BaseView.prototype.render.apply(this, arguments);
+
+           var editor = new DatePickerEditor({
+               format : 'DD/MM/YYYY',
+               iconClass : 'fa fa-calendar',
+               fieldClass: 'datepicker-editor'
+           }).render();
+
+           this.$el.find('.col11centered').html(editor.el)
        }
     });
 
