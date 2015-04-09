@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater'
-], function($, _, Backbone, Translater) {
+    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor'
+], function($, _, Backbone, Translater, CheckboxEditor) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -57,30 +57,39 @@ define([
                 title       : translater.getValueFromKey('schema.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators : ['required'],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.label.fr')
+                }
             },
             labelEn   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('schema.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators : ['required'],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.label.en')
+                }
             },
             name   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('schema.name'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                fieldClass  : 'marginBottom10'
+                fieldClass  : 'marginBottom10',
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.name')
+                }
             },
             required : {
-                type        : 'Checkbox',
-                template    : checkboxFieldTemplate,
-                title       : translater.getValueFromKey('schema.required')
+                type        : CheckboxEditor,
+                title       : translater.getValueFromKey('schema.required'),
+                fieldClass : "checkBoxEditor"
             },
             readonly : {
-                type        : 'Checkbox',
-                template    : checkboxFieldTemplate,
+                type        : CheckboxEditor,
+                fieldClass : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.readonly')
             },
             editorClass : {
@@ -104,8 +113,8 @@ define([
                 options : [translater.getValueFromKey('schema.sizeValue.small'), translater.getValueFromKey('schema.sizeValue.medium'), translater.getValueFromKey('schema.sizeValue.large')]
             },
             endOfLine : {
-                type        : 'Checkbox',
-                template    : checkboxFieldTemplate,
+                type        : CheckboxEditor,
+                fieldClass : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.eol')
             },
 
@@ -188,27 +197,39 @@ define([
                 type        : "Text",
                 title       : 'Name',
                 editorClass : 'form-control',
-                template    : fieldTemplate
+                template    : fieldTemplate,
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.name')
+                }
             },
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('schema.label.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators : ['required'],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.label.fr')
+                }
             },
             labelEn   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('schema.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                validators : ['required']
+                validators : ['required'],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.label.en')
+                }
             },
             value: {
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.value')
+                title       : translater.getValueFromKey('schema.value'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.value')
+                }
             }
         }
     }, {
@@ -244,19 +265,28 @@ define([
                     title       : translater.getValueFromKey('schema.default'),
                     fieldClass  : 'advanced',
                     editorClass : 'form-control',
-                    template    : fieldTemplate
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.value')
+                    }
                 },
                 help: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help')
+                    title       : translater.getValueFromKey('schema.help'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.help')
+                    }
                 },
                 url: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.url')
+                    title       : translater.getValueFromKey('schema.url'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.url')
+                    }
                 }
             });
         },
@@ -288,13 +318,19 @@ define([
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.value')
+                    }
                 },
                 help: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help')
+                    title       : translater.getValueFromKey('schema.help'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.help')
+                    }
                 },
                 size: {
                     type        : 'Number',
@@ -308,7 +344,10 @@ define([
                                 message : "La taille doit être comprise en 0 et 255"
                             }
                         }
-                    }]
+                    }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.size')
+                    }
                 }
             })
         },
@@ -338,14 +377,20 @@ define([
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.mime')
+                    title       : translater.getValueFromKey('schema.mime'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.mime')
+                    }
                 },
                 size: {
                     type        : 'Number',
                     title       : "Maximum size",
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.size')
+                    title       : translater.getValueFromKey('schema.size'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.fileSize')
+                    }
                 }
             });
         },
@@ -369,8 +414,8 @@ define([
                 title : translater.getValueFromKey('schema.key')
             },
             folder: {
-                type  : 'Checkbox',
-                template : checkboxFieldTemplate,
+                type        : CheckboxEditor,
+                fieldClass : "checkBoxEditor",
                 title : translater.getValueFromKey('schema.readonly')
             }
         },
@@ -411,25 +456,29 @@ define([
                     type  : 'Number',
                     title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.tree.default')
+                    }
                 },
                 multipleSelection: {
-                    type  : 'Checkbox',
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor",
                     title : translater.getValueFromKey('schema.multipleSelection'),
-                    editorClass : 'form-control',
-                    template    : checkboxFieldTemplate
                 },
                 hierarchicSelection: {
-                    type  : 'Checkbox',
                     title : translater.getValueFromKey('schema.hierarchic'),
-                    editorClass : 'form-control',
-                    template    : checkboxFieldTemplate
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor"
                 },
                 webServiceURL : {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.webServiceURL')
+                    title       : translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.tree.url')
+                    }
                 }
             });
         },
@@ -517,12 +566,12 @@ define([
                     }
                 },
                 expanded: {
-                    type: 'Checkbox',
-                    editorClass : 'form-control', template : fieldTemplate
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor"
                 },
                 multiple: {
-                    type: 'Checkbox',
-                    editorClass : 'form-control', template : fieldTemplate
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor"
                 }
             });
         },
@@ -600,7 +649,10 @@ define([
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.format')
+                    title       : translater.getValueFromKey('schema.format'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.format')
+                    }
                 }
             });
         },
@@ -624,9 +676,8 @@ define([
         schema: function() {
             var schema =  _.extend( {}, models.TextField.prototype.schema(), {
                 multiline : {
-                    type        : 'Checkbox',
-                    editorClass : 'form-control',
-                    template    : checkboxFieldTemplate,
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor",
                     title       : translater.getValueFromKey('schema.multiline')
                 }
             });
@@ -670,9 +721,8 @@ define([
 
         baseSchema : {
             decimal : {
-                type        : 'Checkbox',
-                editorClass : 'form-control',
-                template    : checkboxFieldTemplate,
+                type        : CheckboxEditor,
+                fieldClass : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.decimal')
             },
             defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
@@ -680,7 +730,10 @@ define([
                 type        : 'Number',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.min')
+                title       : translater.getValueFromKey('schema.min'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.num.min')
+                }
             },
             maxValue: {
                 type        : 'Number',
@@ -694,20 +747,29 @@ define([
                             message : "La valeur maximale est inférieure à la valeur minimale"
                         }
                     }
-                }]
+                }],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.num.max')
+                }
             },
             precision: {
                 type        : 'Number',
                 editorClass : 'form-control',
                 fieldClass  : 'advanced',
                 template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.precision')
+                title       : translater.getValueFromKey('schema.precision'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.num.precision')
+                }
             },
             unity: {
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.unity')
+                title       : translater.getValueFromKey('schema.unity'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.num.unity')
+                }
             }
         },
 
@@ -870,9 +932,8 @@ define([
                 fieldClass  : 'advanced'
             },
             multiple : {
-                type        : 'Checkbox',
-                editorClass : 'form-control',
-                template    : checkboxFieldTemplate,
+                type        : CheckboxEditor,
+                fieldClass : "checkBoxEditor",
                 help        : 'If this fieldset can be present many times in one form <br />' ,
                 title       : translater.getValueFromKey('schema.multiple')
             },
@@ -880,7 +941,10 @@ define([
                 type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate ,
-                title       : translater.getValueFromKey('schema.legend')
+                title       : translater.getValueFromKey('schema.legend'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.legend')
+                }
             }
         },
 
@@ -927,13 +991,19 @@ define([
                     type  : 'Text',
                     title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.node.default')
+                    }
                 },
                 webServiceURL : {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.webServiceURL')
+                    title       : translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.node.url')
+                    }
                 }
             });
         },
