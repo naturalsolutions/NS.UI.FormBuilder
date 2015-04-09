@@ -10,7 +10,7 @@ define([
     var ExportJSONProtocolModalView = Backbone.View.extend({
 
         events : {
-            'click .btn-primary' : 'validateProtocolSave'
+            'click button' : 'validateProtocolSave'
         },
 
         initialize : function(options) {
