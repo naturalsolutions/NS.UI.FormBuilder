@@ -39,7 +39,7 @@
 }
 
 .checkboxField {
-	.fontAwesomeField(checkbox, "\f046", "\f096");
+	//.fontAwesomeField(checkbox, "\f046", "\f096");
     &.form-control {
         background : transparent !important;
         border : none !important;
@@ -52,6 +52,24 @@
             color : #aaa183;
         }
     }
+}
+
+.checkboxField input {
+  display : none;
+}
+.checkboxField input + label {
+  color : #aaa;
+  font-size : 20px;
+}
+
+.checkboxField input + label:before {
+  .fa;
+  content: "\f096";
+}
+
+.checkboxField input:checked + label:before {
+  .fa;
+  content: "\f046"
 }
 
 .radioField {
@@ -86,4 +104,11 @@
             }
         }
     }
+}
+
+.checkBoxEditor {
+  margin-bottom: 10px;
+  &>label:first-child {
+    display: none;
+  }
 }
