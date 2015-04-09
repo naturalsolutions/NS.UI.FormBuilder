@@ -40,6 +40,7 @@
 
     "form" : {
         "name" : "Nom du protocole",
+        "tag" : "Tag de destination",
         "description" : {
             "fr" : "Description française du formulaire",
             "en" : "Description anglaise du formulaire"

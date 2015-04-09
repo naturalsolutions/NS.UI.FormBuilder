@@ -71,6 +71,16 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 }]
             },
+            tag : {
+                type        : "Text",
+                title       : translater.getValueFromKey('form.tag'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators  : [{
+                    type : 'required',
+                    message : translater.getValueFromKey('form.validation')
+                }]
+            },
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.label.fr'),
@@ -141,6 +151,7 @@ define([
             this.keywordsEn    = options.keywordsEn     || ["form"];
             this.labelFr       = options.labelFr        || "";
             this.labelEn       = options.labelEn        || "";
+            this.tag           = options.tag            || "";
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -247,6 +258,7 @@ define([
                 keywordsFr    : this.keywordsFr,
                 labelFr       : this.labelFr,
                 labelEn       : this.labelEn,
+                tag           : this.tag,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
@@ -340,6 +352,8 @@ define([
 
             this.labelFr       = JSONUpdate["labelFr"];
             this.labelEn       = JSONUpdate["labelEn"];
+
+            this.tag           = JSONUpdate["tag"];
         },
 
         /**
