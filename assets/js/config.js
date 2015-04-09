@@ -27,8 +27,6 @@ require.config({
         bootstrapAdapter                    : "../../libs/bootstrapAdapter/index",
         "backbone.radio"                    : "../../libs/backbone.radio/build/backbone.radio",
         fuelux                              : "../../libs/fuelux/dist/js/fuelux",
-        difflib                             : "../../libs/jsdifflib/difflib",
-        diffview                            : "../../libs/jsdifflib/diffview",
         autocompleteTreeView                : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider"              : "../../libs/jquery-simple-slider/js/simple-slider",
         "bootstrap-select"                  : "../../libs/bootstrap-select/dist/js/bootstrap-select",
@@ -167,7 +165,7 @@ require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbui
 
             //  Get all form name for autocomplete
             //  Not works if you are in client side mode only
-            formSaveURL  : '/formbuilderWS/form',
+            formSaveURL  : '/form',
 
             //  Get all unities for autocomplete
             unitURL               : 'ressources/autocomplete/units.json',
