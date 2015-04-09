@@ -31,7 +31,8 @@ define(['jquery','marionette', '../layout/HomePageLayout', 'i18n', 'backbone.rad
                 URLOptions : this.URLOptions
             });
             this.homePageRegion.show( homePageLayout );
-}    });
+        }
+    });
 
     return HomePageController;
 
