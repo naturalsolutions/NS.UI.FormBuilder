@@ -264,5 +264,30 @@
       "error"      : "Field not saved !",
       "errorMsg"   : "Your field couldn't be saved ."
     }
+  },
+  "placeholder" : {
+    "label" : {
+      "fr" : "French label of your field",
+      "en" : "English label of your field"
+    },
+    "name" : "Your field name",
+    "value" : "Default value of your field",
+    "help" : "Field help textt",
+    "url" : "Web service URL for autocomplete values",
+    "size" : "Maximum allowed size",
+    "mime" : "Allowed field type",
+    "fileSize" : "Maximum allowed field size",
+    "tree" : {
+      "default" : "Default node at start",
+      "url" : "URL returning tree structure"
+    },
+    "format" : "Allowed date format",
+    "num" : {
+      "min" : "Minimum value",
+      "max" : "Maximum value",
+      "precision" : "Step size",
+      "unity" : "Field unit"
+    },
+    "legend" : "Sub form legend"
   }
 }

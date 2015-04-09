@@ -258,5 +258,31 @@
             "error"      : "Champs non sauvegardé !",
             "errorMsg"   : "Votre champs n'a pas pu être sauvegardé."
         }
+    },
+
+    "placeholder" : {
+        "label" : {
+          "fr" : "Label français de votre champs",
+          "en" : "Label anglais de votre champs"
+        },
+        "name" : "Nom de votre champs",
+        "value" : "Valeur par défaut de votre champs",
+        "help" : "Text d'aide de votre champs",
+        "url" : "URL permettant de récupérer la liste des valeurs",
+        "size" : "Taille maximum de la valeur du champs",
+        "mime" : "Type de fichiers autorisés",
+        "fileSize" : "Taille maximum autoriser pour les fichiers choisis",
+        "tree" : {
+          "default" : "Noeud de départ",
+          "url" : "URL retournant l'arborescence de l'arbre"
+        },
+        "format" : "Format des dates autorisées",
+        "num" : {
+          "min" : "Valeur numérique minimale",
+          "max" : "Valeur numérique maximale",
+          "precision" : "Précision d'incrémentation",
+          "unity" : "Unité du champs"
+        },
+        "legend" : "Légende du regroupement"
     }
 }
