@@ -229,7 +229,7 @@ define([
 
                 //  Update scrollBar
                 this.$el.find('.scroll').scrollTop(0);
-                this.$el.find('.scroll').perfectScrollbar('update');
+                this.$el.find('.scroll').slimScroll('update');
 
                 this.form = null;
             }, this), 300);
@@ -322,7 +322,7 @@ define([
                 //  If something wrong we move to the first incorrect field
                 var offsetTop = $('input[name="' + Object.keys(formCommitResult)[0] + '"]').offset().top;
                 this.$el.find('.scroll').scrollTop( offsetTop );
-                this.$el.find('.scroll').perfectScrollbar('update');
+                this.$el.find('.scroll').slimScroll('update');
 
             } else {
                 var formValue = this.form.getValue();
@@ -365,7 +365,7 @@ define([
                 }).render();
 
                 this.$el.find('#form').append(this.form.el)
-                this.$el.find('.scroll').perfectScrollbar('update');
+                this.$el.find('.scroll').slimScroll('update');
                 this.$el.find('#getField').hide();
 
                 //  Add pillbow for form keywords
