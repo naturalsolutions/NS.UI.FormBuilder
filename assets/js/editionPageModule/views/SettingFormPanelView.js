@@ -110,7 +110,8 @@ define([
         * This function concerns generated form for field AND main form
         */
         saveChange : function() {
-            if (this.form.validate() === null) {
+            var formValidation = this.form.validate();
+            if (formValidation === null) {
                 var values      = this.form.getValue(),
                     keywordsFr  = $('#pillboxkeywordsFr').pillbox('items'),
                     keywordsEn  = $('#pillboxkeywordsEn').pillbox('items');
@@ -126,6 +127,17 @@ define([
                 this.mainChannel.trigger('editionDone', values);
 
                 this.removeForm();
+            } else {
+                if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
+                    //  We display a main information
+                    this.$el.find('.general-error').html(
+                        '   <h2>Erreur générale</h2>' +
+                        '   <p>Un ou plusieurs champs ne sont pas renseigné</p>'
+                    ).show();
+                } else {
+                    $(this.form.el).find('p[data-error]').show();
+                    this.$el.find('.general-error').html('').hide();
+                }
             }
         },
 
