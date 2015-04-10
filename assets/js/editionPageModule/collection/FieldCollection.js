@@ -75,11 +75,7 @@ define([
                 type        : "Text",
                 title       : translater.getValueFromKey('form.tag'),
                 editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                }]
+                template    : fieldTemplate
             },
             labelFr   : {
                 type        : "Text",
