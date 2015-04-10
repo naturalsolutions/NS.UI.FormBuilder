@@ -299,6 +299,10 @@ define([
                     $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
                     //  Keep only one table row to lighten table
                     $(this.el).find("#grid2 tbody tr").slice(1).remove();
+
+                    setTimeout(_.bind(function() {
+                        this.$el.find('.spinner').addClass('end', 1000);
+                    }, this), 1000)
                 }, this)
             });
 
