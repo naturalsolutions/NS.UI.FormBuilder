@@ -73,7 +73,7 @@ define([
             },
             tag : {
                 type        : "Text",
-                title       : translater.getValueFromKey('form.tag'),
+                title       : translater.getValueFromKey('form.tag') + ' <i>(' + translater.getValueFromKey('optional') + ')</i>',
                 editorClass : 'form-control',
                 template    : fieldTemplate
             },
