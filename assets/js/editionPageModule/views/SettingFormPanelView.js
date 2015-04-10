@@ -3,12 +3,13 @@ define([
     'marionette',
     'text!../templates/SettingFormPanelView.html',
     'backbone.radio',
+    '../../Translater',
     'jquery-ui',
         'i18n',
     'bootstrap-select',
     'slimScroll',
     'fuelux'
-], function($, Marionette, SettingFormPanelViewTemplate, Radio) {
+], function($, Marionette, SettingFormPanelViewTemplate, Radio, Translater) {
 
     /**
      * Setting view
@@ -52,6 +53,8 @@ define([
             this.initMainChannel();
 
             _.bindAll(this, 'template', 'generateForm');
+
+            this.translater = Translater.getTranslater();
         },
 
 
@@ -131,8 +134,8 @@ define([
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
                     //  We display a main information
                     this.$el.find('.general-error').html(
-                        '   <h2>Erreur générale</h2>' +
-                        '   <p>Un ou plusieurs champs ne sont pas renseigné</p>'
+                        '   <h2>' + this.translater.getValueFromKey('error.general') + '</h2>' +
+                        '   <p>' + this.translater.getValueFromKey('error.message') + '</p>'
                     ).show();
                 } else {
                     $(this.form.el).find('p[data-error]').show();

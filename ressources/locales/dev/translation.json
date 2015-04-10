@@ -296,5 +296,10 @@
     "legend" : "Sub form legend"
   },
 
-  "optional" : "optional"
+  "optional" : "optional",
+
+  "error" : {
+    "general" : "General error",
+    "message" : "One or more field are empty"
+  }
 }

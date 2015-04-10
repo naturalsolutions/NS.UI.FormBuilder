@@ -291,5 +291,10 @@
         "legend" : "Légende du regroupement"
     },
 
-    "optional" : "facultatif"
+    "optional" : "facultatif",
+
+    "error" : {
+      "general" : "Erreur générale",
+      "message" : "Un ou plusieurs champs ne sont pas renseignés"
+    }
 }
