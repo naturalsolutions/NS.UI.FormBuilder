@@ -20,12 +20,11 @@ define([
         initialize: function(options) {
             // Kepp homepage region
             this.editionPageRegion = options.editionPageRegion;
+            this.URLOptions        = options['URLOptions'] || {};
 
             this.fieldCollection = new FieldCollection({}, {
                 name : 'New form'
             });
-
-            this.URLOptions = options['URLOptions'] || {};
 
             this.initFormChannel();
             this.getLinkedFieldsList();
@@ -103,9 +102,15 @@ define([
         editionAction: function(options) {
             $('#navbarContext').text($.t('navbar.context.edition'))
 
-            this.fieldCollection = new FieldCollection({}, {
+            if (this.fieldCollection.length > 1) {
+                //  A previous was created
+            } else {
+                //  new form
+            }
+
+            /*this.fieldCollection = new FieldCollection({}, {
                 name : 'New form'
-            });
+            });*/
 
             var editionPageLayout = new EditionPageLayout({
                 fieldCollection : this.fieldCollection,
@@ -114,9 +119,8 @@ define([
             this.editionPageRegion.show( editionPageLayout );
         },
 
-
         /**
-         * User wants to add a new fiel into the collection
+         * User wants to add a new field into the collection
          *
          * @param {string} newElementClassName new field class like TextField
          */
