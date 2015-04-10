@@ -1,7 +1,7 @@
 {
   "grid" : {
-    "name" : "Name",
-    "creationDate" : "Creation date",
+    "name"             : "Name",
+    "creationDate"     : "Creation date",
     "modificationDate" : "Modfication date"
   },
 
@@ -29,48 +29,52 @@
   },
 
   "search" : {
-    "name" : "Name",
+    "name"     : "Name",
     "keywords" : "Keywords",
+    "user"     : "User",
     "date" : {
       "from" : "From",
-      "to" : "to"
-    },
-    "user" : "User"
+      "to"   : "to"
+    }
   },
 
   "form" : {
-    "name" : "Protocol name",
-    "tag" : "Destination tag",
+    "name"       : "Protocol name",
+    "tag"        : "Destination tag",
+    "cancel"     : "Cancel",
+    "clear"      : "Clear form",
+    "title"      : "Create new form",
+    "count"      : "Field(s)",
+    "find"       : "Find a form",
+    "validation" : "This field is required",
+
     "description" : {
       "fr" : "Frendh form description",
       "en" : "English form description"
+    },
+    "keywords" : {
+      "fr"     : "French keywords",
+      "en"     : "English keywords",
+      "action" : "Add keyword"
     },
     "label" : {
       "fr" : "French form displayed name",
       "fr" : "English form displayed name"
     },
-    "keywords" : {
-      "fr" : "French keywords",
-      "en" : "English keywords",
-      "action" : "Add keyword"
-    },
-    "cancel" : "Cancel",
-    "clear" : "Clear form",
-    "title" : "Create new form",
-    "count" : "Field(s)",
+
     "actions" : {
       "import" : "IMPORT",
       "export" : "EXPORT",
       "save"   : "SAVE",
-      "clear"  : "CLEAR ALL"
-    },
-    "find" : "Find a form",
-    "validation" : "This field is required"
+      "clear"  : "CLEAR ALL",
+      "find"   : "FIND",
+      "add"    : "ADD"
+    }
   },
 
   "nav" : {
     "save" : {
-      "title"     : " Save protocol",
+      "title"     : " Save form",
       "cloud"     : "Save on server",
       "export"    : "Export to JSON file"
     },

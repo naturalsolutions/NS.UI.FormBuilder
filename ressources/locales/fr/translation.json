@@ -1,7 +1,7 @@
 {
     "grid" : {
-        "name" : "nom",
-        "creationDate" : "Date de création",
+        "name"             : "nom",
+        "creationDate"     : "Date de création",
         "modificationDate" : "Date de modification"
     },
 
@@ -29,43 +29,47 @@
     },
 
     "search" : {
-        "name" : "Nom",
+        "name"     : "Nom",
         "keywords" : "Mots clés",
+        "user"     : "Utilisateur",
         "date" : {
             "from" : "De",
-            "to" : "à"
-        },
-        "user" : "Utilisateur"
+            "to"   : "à"
+        }
     },
 
     "form" : {
-        "name" : "Nom du protocole",
-        "tag" : "Tag de destination",
+        "name"       : "Nom du protocole",
+        "tag"        : "Tag de destination",
+        "cancel"     : "Annuler",
+        "clear"      : "Supprimer",
+        "title"      : "Création d'un nouveau formulaire",
+        "count"      : "Champ(s)",
+        "find"       : "Rechercher un formulaire",
+        "validation" : "Ce champs est requis",
+
         "description" : {
             "fr" : "Description française du formulaire",
             "en" : "Description anglaise du formulaire"
         },
         "keywords" : {
-            "fr" : "Mots clés français",
-            "en" : "Mots clés anglais",
+            "fr"     : "Mots clés français",
+            "en"     : "Mots clés anglais",
             "action" : "Ajouter un mot clé"
         },
         "label" : {
             "fr" : "Intitulé français",
             "en" : "intitulé anglais"
         },
-        "cancel" : "Annuler",
-        "clear" : "Supprimer",
-        "title" : "Création d'un nouveau formulaire",
-        "count" : "Champ(s)",
+
         "actions" : {
             "import" : "IMPORTER",
             "export" : "EXPORTER",
             "save"   : "SAUVER",
-            "clear"  : "TOUT EFFACER"
-        },
-        "find" : "Rechercher un formulaire",
-        "validation" : "Ce champs est requis"
+            "clear"  : "TOUT EFFACER",
+            "find"   : "TROUVER",
+            "add"    : "AJOUTER"
+        }
     },
 
     "nav" : {
