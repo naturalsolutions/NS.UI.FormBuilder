@@ -3,10 +3,13 @@ define([
     'marionette',
     'text!editionPageModule/templates/FormPanelView.html',
     'sweetalert',
+    '../../Translater',
     'i18n',
     'slimScroll'    
-], function($, Marionette, FormPanelViewTemplate, swal) {
+], function($, Marionette, FormPanelViewTemplate, swal, Translater) {
 
+    var translater = Translater.getTranslater();
+    
     /**
      * The form view represents the current form. It's a the edition module main view.
      */
@@ -72,6 +75,9 @@ define([
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
             this.formChannel.on('save:return',      this.displaySaveMessage);
+
+            //  Eevent send from formbuilder.js when export is finished (success or not)
+            this.formChannel.on('exportFinished',   this.displayExportMessage, this);
         },
 
         /**
@@ -152,8 +158,8 @@ define([
 
             }, this), function(err) {
                 swal(
-                    $.t('modal.field.error')    || "Echec de l'ajout!",
-                    $.t('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
+                    translater.getValueFromKey('modal.field.error')    || "Echec de l'ajout!",
+                    translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
                     "error"
                 );
             });
@@ -253,13 +259,13 @@ define([
         clear : function() {
             var self = this;
             swal({
-                title              : $.t('modal.clear.title') || "Etes vous sûr ?",
-                text               : $.t('modal.clear.text') || "Le formulaire sera définitivement perdu !",
+                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
                 type               : "warning",
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
-                confirmButtonText  : $.t('modal.clear.yes') || "Oui, supprimer",
-                cancelButtonText   : $.t('modal.clear.no') || "Annuler",
+                confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
+                cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
                 closeOnConfirm     : false,
                 closeOnCancel      : true
             }, function(isConfirm) {
@@ -269,8 +275,8 @@ define([
                         el.removeView();
                     })
                     swal(
-                        $.t('modal.clear.deleted') || "Supprimé !",
-                        $.t('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
+                        translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
+                        translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
                         "success"
                     );
                     self.collection.clearAll();
@@ -290,17 +296,33 @@ define([
 
         },
 
+        displayExportMessage : function(result) {
+            if (result) {
+                swal(
+                    translater.getValueFromKey('modal.export.success') || "Export réussi !",
+                    "",
+                    "success"
+                )
+            } else {
+                swal(
+                    translater.getValueFromKey('modal.export.error') || "Echec de l'export !",
+                    translater.getValueFromKey('modal.export.errorMsg') || "Une erreur est survenue lors de l'export",
+                    "error"
+                )
+            }
+        },
+
         displaySaveMessage : function(result) {
             if (result) {
                 swal(
-                    $.t('modal.save.success') || "Sauvé !",
-                    $.t('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
+                    translater.getValueFromKey('modal.save.success') || "Sauvé !",
+                    translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
                     "success"
                 );
             } else {
                 swal(
-                    $.t('modal.save.error') || "Une erreur est survenu !",
-                    $.t('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                    translater.getValueFromKey('modal.save.error') || "Une erreur est survenu !",
+                    translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
                     "error"
                 );
             }
