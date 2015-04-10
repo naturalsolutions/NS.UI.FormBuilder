@@ -290,5 +290,7 @@
       "unity" : "Field unit"
     },
     "legend" : "Sub form legend"
-  }
+  },
+
+  "optional" : "optional"
 }

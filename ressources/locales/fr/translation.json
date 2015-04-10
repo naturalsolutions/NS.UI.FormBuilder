@@ -285,5 +285,7 @@
           "unity" : "Unité du champs"
         },
         "legend" : "Légende du regroupement"
-    }
+    },
+
+    "optional" : "facultatif"
 }
