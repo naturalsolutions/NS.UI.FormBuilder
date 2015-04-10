@@ -302,6 +302,7 @@ define([
                 }, this)
             });
 
+            this.$el.i18n();
         },
 
         /**
