@@ -178,6 +178,8 @@ define([
          */
         updateFieldCount : function() {
             this.$el.find('.first').text(this._viewCount)
+
+            this[this._viewCount > 0 ? 'enableFooterActions' : 'disableFooterActions']();
         },
 
         /**
@@ -213,6 +215,8 @@ define([
                 railVisible   : true,
                 alwaysVisible : true
             });
+
+            this[this._viewCount > 0 ? 'enableFooterActions' : 'disableFooterActions']();
         },
 
 
