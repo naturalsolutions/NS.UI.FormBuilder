@@ -178,7 +178,9 @@
         "subform"              : "set",
         "horizontalline"       : "Horizontal line",
         "boolean"              : "Boolean",
-        "autocompletetreeview" : "A TreeView with searching functionnalité"
+        "autocompletetreeview" : "A TreeView with searching functionality",
+      "numericrange"           : "Numeric field with range",
+      "thesaurus"              : "Thesaurus"
     },
 
     "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",

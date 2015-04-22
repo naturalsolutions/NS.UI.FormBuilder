@@ -171,16 +171,18 @@
         "checkbox"             : "Case à cocher",
         "hidden"               : "Masqué",
         "file"                 : "Fichier",
-        "longtext"             : "Texte long",
-        "pattern"              : "Zxpression régulière",
+        "textarea"             : "Texte long",
+        "pattern"              : "Expression régulière",
         "line"                 : "Ligne horizontale",
         "autocomplete"         : "Auto complétion",
         "table"                : "Présentation",
-        "subform"              : "Sous formulaire",
+        "subform"              : "Regroupement",
         "horizontalline"       : "Séparation",
         "treeview"             : "Arborescence",
         "boolean"              : "Booléen",
-        "autocompletetreeview" : "arborescence avec un champs de recherche"
+        "autocompletetreeview" : "arborescence avec un champs de recherche",
+        "numericrange"         : "Curseur numérique",
+        "thesaurus"            : "Thesaurus"
     },
 
     "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
