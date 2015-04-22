@@ -3,12 +3,15 @@ define([
     'marionette',
     'text!../templates/SettingFieldPanelView.html',
     'backbone.radio',
+    '../../Translater',
     'jquery-ui',
     'i18n',
     'bootstrap-select',
     'slimScroll',
     'fuelux'
-], function($, Marionette, SettingPanelViewTemplate, Radio) {
+], function($, Marionette, SettingPanelViewTemplate, Radio, Translater) {
+
+    var translater = Translater.getTranslater();
 
     /**
      * Setting view
@@ -37,7 +40,10 @@ define([
         * Setting view template initialization
         */
         template : function() {
-            return _.template(SettingPanelViewTemplate)();
+            return _.template(SettingPanelViewTemplate)({
+                model : this.modelToEdit,
+                type : this.modelToEdit.constructor.type.charAt(0).toLowerCase() + this.modelToEdit.constructor.type.slice(1)
+            });
         },
 
 
@@ -66,11 +72,8 @@ define([
         * Init main radio channel for communicate in the editionPageModule
         */
         initMainChannel : function() {
-
             //  The edition channel is the main channel ONLY in the editionPageModule
             this.mainChannel = Backbone.Radio.channel('edition');
-
-            //this.mainChannel.on('saveConfiguration', this.saveConfiguration, this);
         },
 
 
@@ -82,21 +85,6 @@ define([
             //  The form channel is used only for the main form object options
             //  save, export, clear and settings
             this.formChannel = Backbone.Radio.channel('form');
-
-            this.formChannel.on('modelToEdit', this.displayModelForm, this)
-
-            //  Event is sent by formView when user wants to edit form configuration (name, description and keywords)
-            this.formChannel.on('displaySettings', this.createFormForCollection, this);
-        },
-
-
-        /**
-        * Generate a form with backbone forms for edit form properties : label, keywords, description ...
-        *
-        * @param  {Object} formObject Form object (contains backbone-form schema)
-        */
-        createFormForCollection : function(formObject) {
-            this.generateForm(formObject);
         },
 
 
@@ -122,7 +110,6 @@ define([
 
             this.createForm();
         },
-
 
         /**
         * Create a form to edit field properties
@@ -245,17 +232,6 @@ define([
             this.$el.find('#getField select').html('<option value="" disabled selected>Select an option</option>');
         },
 
-
-        /**
-         * Display form for edit model in parameter
-         *
-         * @param {Object} modelToEdit Field to edit
-         */
-        displayModelForm : function(modelToEdit) {
-            this.initForm(modelToEdit);
-        },
-
-
         /**
         * View rendering callbak
         */
@@ -266,7 +242,6 @@ define([
             });
             this.initForm();
         },
-
 
         /**
         * Event send when user change select value
@@ -341,114 +316,6 @@ define([
         */
         checkboxChange : function(e) {
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
-        },
-
-
-        /**
-        * Generate form for edit main form object properties
-        *
-        * @param  {Object} formSchema main form object schema
-        */
-        generateForm : function(formSchema) {
-
-            $('*[data-setting="field"]').hide();
-
-            require(['backbone-forms'], _.bind(function() {
-                if (this.form !== null) {
-                    //  Remove last form and create new with new model
-                    this.removeForm()
-                }
-
-                this.form = new Backbone.Form({
-                    schema: formSchema.schema,
-                    data : formSchema.getAttributesValues()
-                }).render();
-
-                this.$el.find('#form').append(this.form.el)
-                this.$el.find('.scroll').slimScroll('update');
-                this.$el.find('#getField').hide();
-
-                //  Add pillbow for form keywords
-                this.$el.find('.field-keywords input[type="text"]').pillbox();
-
-                this.$el.find('#pillboxkeywordsFr').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
-                this.$el.find('#pillboxkeywordsEn').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
-
-                this.$el.find('.field-name input[type="text"]').autocomplete({
-                    minLength : 1,
-                    scrollHeight: 220,
-                    appendTo : '.field-name',
-                    source : _.bind(function(req, add) {
-                        return $.getJSON(this.URLOptions['protocolAutocomplete'], function(data) {
-                            var res = [];
-                            for ( var each in data.options) {
-                                if (data.options[each].indexOf(req.term) > 0) {
-                                    res.push(data.options[each])
-                                }
-                            }
-                            return add(res);
-                        });
-                    }, this)
-                });
-
-                this.$el.find('#pillboxkeywordsFr input[type="text"]').autocomplete({
-                    minLength : 1,
-                    scrollHeight: 220,
-                    appendTo : '#pillboxkeywordsFr',
-                    source : _.bind(function(req, add) {
-                        return $.getJSON(this.URLOptions['keywordAutocomplete'], function(data) {
-                            var res = [];
-                            for ( var each in data.options) {
-                                if (data.options[each].indexOf(req.term) > 0) {
-                                    res.push(data.options[each])
-                                }
-                            }
-                            return add(res);
-                        });
-                    }, this)
-                });
-
-                this.$el.find('#pillboxkeywordsEn input[type="text"]').autocomplete({
-                    minLength : 1,
-                    scrollHeight: 220,
-                    appendTo : '#pillboxkeywordsEn',
-                    source : _.bind(function(req, add) {
-                        return $.getJSON(this.URLOptions['keywordAutocomplete'], function(data) {
-                            var res = [];
-                            for ( var each in data.options) {
-                                if (data.options[each].indexOf(req.term) > 0) {
-                                    res.push(data.options[each])
-                                }
-                            }
-                            return add(res);
-                        });
-                    }, this)
-                });
-
-                /*this.$el.find('#pillboxkeywordsFr input[type="text"], #pillboxkeywordsEn input[type="text"]').typeahead({
-                    source: _.bind(function(query, cb) {
-                        return $.getJSON(this.URLOptions['keywordAutocomplete'], {query: query}, function(data) {
-                            return cb(data.options);
-                        });
-                    }, this),
-                    updater: (function(item) {
-                        this.$element.parents('.pillbox').pillbox('addItems',-1, [{text :item, value : item}])
-                        this.$element.parents('.pillbox').find('.pill:last .glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item + '"></span>');
-                    })
-                });*/
-
-                this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('added.fu.pillbox', _.bind(function (evt, item) {
-                    $('.glyphicon-close').replaceWith('<span class="reneco close" data-parent="' + item['text'] + '"></span>');
-                }, this));
-
-                this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('click', '.reneco', function(evt) {
-                    $(this).parents('div.pillbox').pillbox('removeByText', $(this).data('parent'));
-                });
-
-                this.mainChannel.trigger('formCreated');
-
-            }, this));
-
         }
 
     });

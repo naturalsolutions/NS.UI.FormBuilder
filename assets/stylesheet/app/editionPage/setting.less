@@ -1,5 +1,5 @@
-@settingViewBackgroundColor : #231f20;
-@settingViewInputBackgroundColor : #292c2e;
+@settingViewBackgroundColor : #151515;
+@settingViewInputBackgroundColor : #383737;
 
 .help-block {
     color : red;
@@ -7,14 +7,32 @@
 
 #settingPanel {
 
-    footer {
-      height: 120px;
-      position: absolute;
-      bottom: 0;
-      background: #121212;
-      padding-top: 7px;
-      width: 100% !important;
+    .brand {
+      padding-left: 15px;
+      padding-top: 45px;
+      span {
+        .exo;
+        &:first-child {
+          font-size : 14px;
+          color : #706f6f;
+          text-transform: uppercase;
+        }
+        &:last-child {
+          font-size: 28px;
+          color : white;
+          font-weight: 100; //231f20
+        }
 
+      }
+    }
+
+    footer {
+      height     : 120px;
+      position   : absolute;
+      bottom     : 0;
+      background : #000000;
+      padding-top: 7px;
+      width      : 100% !important;
     }
 
     position: absolute;
@@ -149,18 +167,19 @@
         line-height : 50px;
         height      : 30px;
         text-align  : left;
-        color       : #aaa;
-      font-weight: 500;
+        font-weight : 500;
+        color       : #575656;
     }
 
     input[type="number"], input[type="text"], select, textarea {
         .exo;
         background    : @settingViewInputBackgroundColor;
-        color         : #aaa;
+        color         : white;
         border        : none;
         font-size     : 18px;
         line-height   : 25px;
         height        : 40px;
+      font-weight     : 100;
         &:active, &:hover, &:focus {
             box-shadow : none !important;
         }
@@ -256,7 +275,8 @@
 
     .checkboxField, .radioField {
         label {
-            color : #aaa;
+            color    : #575656;
+          font-weight: 100;
         }
     }
 
