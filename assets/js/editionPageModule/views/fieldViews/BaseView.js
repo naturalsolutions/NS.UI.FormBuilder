@@ -31,10 +31,24 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
 
             this.el = options.el;
             this.initFormChannel();
+            this.initMainChannel();
         },
 
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form')
+
+            //  Disable actions
+            this.formChannel.on('editForm', this.disableActions, this);
+        },
+
+        initMainChannel : function() {
+            //  The edition channel is the main channel ONLY in the editionPageModule
+            this.mainChannel = Backbone.Radio.channel('edition');
+
+            //  Re-enable action when field edition is done
+            this.mainChannel.on('formCancel', this.enableActions, this);
+            this.mainChannel.on('formCommit', this.enableActions, this);
+            this.mainChannel.on('editionDone', this.enableActions, this);
         },
 
         /**
@@ -54,6 +68,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          * Render view
          */
         render: function() {
+            console.log ("render")
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             $(this.el).disableSelection();
@@ -75,7 +90,22 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          * Send an event on form channel when user wants to edit field properties
          */
         editModel : function() {
+            this.disableActions();
             this.formChannel.trigger('editModel', this.model.get('id'));
+        },
+
+        /**
+         * Re-enable actions when the edition is done or cancelled
+         */
+        enableActions : function() {
+            this.$el.find('.actions').removeClass('locked');
+        },
+
+        /**
+         * Disable action when edition panel is displayed (form or field)
+         */
+        disableActions : function() {
+            this.$el.find('.actions').addClass('locked');
         },
 
         isDropped : function(event, data) {
