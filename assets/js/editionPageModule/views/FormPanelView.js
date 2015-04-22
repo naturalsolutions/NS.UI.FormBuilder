@@ -78,6 +78,9 @@ define([
 
             //  Eevent send from formbuilder.js when export is finished (success or not)
             this.formChannel.on('exportFinished',   this.displayExportMessage, this);
+
+            //  Disable footer actions when user wants to edit a field
+            this.formChannel.on('editModel',   this.disableFooterActions, this);
         },
 
         /**
@@ -87,6 +90,9 @@ define([
             this.mainChannel = Backbone.Radio.channel('edition');
 
             this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
+
+            this.mainChannel.on('formCancel', this.enableFooterActions, this);
+            this.mainChannel.on('formCommit', this.enableFooterActions, this);
         },
 
         /**
@@ -95,6 +101,7 @@ define([
          * @param  {Object} collection updated attributes
          */
         updateCollectionAttributes : function(newCollectionAttributes) {
+            this.enableFooterActions();
             this.collection.updateCollectionAttributes(newCollectionAttributes);
             this.$el.find('h1 label').text(newCollectionAttributes.name)
         },
@@ -105,6 +112,7 @@ define([
         * Channel send on the form channel
         */
         formSettings : function() {
+            this.disableFooterActions();
             this.formChannel.trigger('editForm', this.collection);
         },
 
@@ -326,6 +334,14 @@ define([
                     "error"
                 );
             }
+        },
+
+        enableFooterActions : function() {
+            this.$el.find('.col-md-10  button').show();
+        },
+
+        disableFooterActions : function() {
+            this.$el.find('.col-md-10 button').hide();
         }
     });
 
