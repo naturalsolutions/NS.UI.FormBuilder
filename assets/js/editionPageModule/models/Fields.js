@@ -35,7 +35,7 @@ define([
             isDragged   : false,
             editorClass : '',
             fieldClass  : '',
-            fieldSize   : '',
+            fieldSize   : translater.getValueFromKey('schema.sizeValue.small'),
             endOfLine   : false,
 
             //  Linked fields values
@@ -106,9 +106,9 @@ define([
                 template    : fieldTemplate
             },
             fieldSize : {
-                type : 'Select',
+                type : 'Radio',
                 title       : translater.getValueFromKey('schema.fieldSize'),
-                editorClass : 'form-control',
+                editorClass : 'radiosField',
                 template    : fieldTemplate,
                 options : [translater.getValueFromKey('schema.sizeValue.small'), translater.getValueFromKey('schema.sizeValue.medium'), translater.getValueFromKey('schema.sizeValue.large')]
             },

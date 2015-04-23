@@ -116,3 +116,35 @@
 .form-control {
     box-shadow: none!important;
 }
+
+.radiosField {
+    padding-left   : 0;
+    display        : inline-block;
+    width          : 100%;
+    list-style-type: none;
+    li {
+        float: left;
+        width: 33.3% !important;
+
+        input {
+            display : none;
+        }
+
+        label {
+            &:before {
+                .fa;
+                content: "\f10c";
+                padding-right: 5px;
+            }
+        }
+
+        *:checked+label {
+            color : white !important;
+            &:before {
+                .fa;
+                content: "\f192";
+                padding-right: 5px;
+            }
+        }
+    }
+}
