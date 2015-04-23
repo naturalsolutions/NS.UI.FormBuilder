@@ -238,6 +238,9 @@
             "deleted"     : "Deleted",
             "formDeleted" : "Your form has been deleted !"
         },
+        "exit" : {
+          "yes" : "Yes exit"
+        },
         "import" : {
             "error"    : "An error occured !",
             "errorMsg" : "Your form can't be imported !",

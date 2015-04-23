@@ -233,6 +233,9 @@
             "deleted"     : "Supprimé !",
             "formDeleted" : "Votre formulaire a été supprimé !"
         },
+        "exit" : {
+          "yes" : "Oui quitter"
+        },
         "import" : {
             "error"    : "Une erreur est survenu !",
             "errorMsg" : "Votre formulaire n'a pas pu être importer",
