@@ -1,4 +1,6 @@
-define(['jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n'], function($, Marionette, LeftPanelViewTemplate) {
+define([
+    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui'
+], function($, Marionette, LeftPanelViewTemplate) {
 
     /**
      * Left panel view in the homepage layout, contains form to filter grid on the center view
@@ -23,6 +25,7 @@ define(['jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n'],
          */
         initialize : function(options) {
             this.initGridChannel();
+            this.URLOptions = options.URLOptions;
         },
 
         /**
@@ -55,8 +58,38 @@ define(['jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n'],
          */
         onRender : function(options) {
             this.$el.i18n(); // run i18nnext translation in the view context
+            this.enableAutocomplete();
         },
 
+        /**
+         * Enable autocomplete with jquery ui on search form field
+         */
+        enableAutocomplete : function() {
+
+            //  Enable autocomplete for form name search
+            $.getJSON(this.URLOptions.formAutocomplete, _.bind(function(data) {
+                this.$el.find('#name').autocomplete({
+                    source : data.options
+                })
+            }, this));
+
+            $.getJSON(this.URLOptions.keywordAutocomplete, _.bind(function(data) {
+                this.$el.find('#keywords').autocomplete({
+                    source : data.options
+                })
+            }, this));
+
+            $.getJSON(this.URLOptions.usersAutocomplete, _.bind(function(data) {
+                this.$el.find('#user').autocomplete({
+                    source : data.options
+                })
+            }, this));
+        },
+
+        /**
+         * Reset search form values
+         * @param evt jquery Event
+         */
         clearForm : function(evt) {
             this.$el.find('form').trigger("reset");
             this.gridChannel.trigger('resetCollection');
