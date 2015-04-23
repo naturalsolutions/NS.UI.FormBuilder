@@ -34,7 +34,7 @@
         "user"     : "Utilisateur",
         "date" : {
             "from" : "De",
-            "to"   : "à"
+            "to"   : "&#192;"
         }
     },
 
