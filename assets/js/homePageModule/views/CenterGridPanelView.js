@@ -300,13 +300,27 @@ define([
                     //  Keep only one table row to lighten table
                     $(this.el).find("#grid2 tbody tr").slice(1).remove();
 
-                    setTimeout(_.bind(function() {
-                        this.$el.find('.spinner').addClass('end', 1000);
-                    }, this), 1000);
+                    this.hideSpinner();
                 }, this)
             });
 
             this.$el.i18n();
+        },
+
+        /**
+         * Hide spinner when loading is finished
+         */
+        hideSpinner : function(duration) {
+            setTimeout(_.bind(function() {
+                this.$el.find('.spinner').addClass('end', 1000);
+            }, this), duration || 1000);
+        },
+
+        /**
+         * Display spinner
+         */
+        showSpinner : function() {
+            this.$el.find('.spinner').removeClass('end');
         },
 
         /**
@@ -329,6 +343,7 @@ define([
          * @param {Object} searchData user typed data
          */
         updateGridWithSearch : function(searchData) {
+            this.showSpinner();
             this.formCollection.fetch({
                 reset: true,
                 success : _.bind(function() {
@@ -391,6 +406,7 @@ define([
 
             this.formCollection.reset(foundedModels);
             this.$el.find('#formsCount').text(foundedModels.length)
+            this.hideSpinner(500);
         },
 
         /**
