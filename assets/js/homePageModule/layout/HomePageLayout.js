@@ -28,7 +28,10 @@ define([
 
         onRender : function() {
             //  Create and render item views
-            this.leftPanel.show( new LeftPanelView() );
+            this.leftPanel.show( new LeftPanelView({
+                URLOptions : this.URLOptions
+            }) );
+
             this.centerPanel.show( new CenterGridPanelView({
                 URLOptions : this.URLOptions
             }));

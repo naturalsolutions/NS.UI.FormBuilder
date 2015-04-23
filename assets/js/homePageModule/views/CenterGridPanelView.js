@@ -234,7 +234,7 @@ define([
 
             //  Create the form collection with an URL
             this.formCollection = new FormCollection({
-                url : this.URLOptions.formURL
+                url : this.URLOptions.forms
             });
 
             // By default grid not fired click event
@@ -292,7 +292,7 @@ define([
                     this.$el.find('#formsCount').text(this.formCollection.length)
                     $("#scrollSection").slimScroll({
                         height : '90%',
-                        color: '#111',
+                        color: '#111'
                     });
 
                     //  Clone table
@@ -302,7 +302,7 @@ define([
 
                     setTimeout(_.bind(function() {
                         this.$el.find('.spinner').addClass('end', 1000);
-                    }, this), 1000)
+                    }, this), 1000);
                 }, this)
             });
 
