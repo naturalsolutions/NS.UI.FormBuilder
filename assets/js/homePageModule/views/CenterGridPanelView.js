@@ -19,6 +19,9 @@ define([
      */
     var CenterGridPanelView = Backbone.Marionette.ItemView.extend({
 
+        /**
+         * View events
+         */
         events : {
             'click #delete' : 'deleteForm',
             'click #copy'   : 'duplicateForm',
@@ -61,6 +64,9 @@ define([
             this.homePageChannel.on('formDeleted', this.formDeleted, this);
         },
 
+        /**
+         * Init backbone radio channel for globale channel events
+         */
         initGlobalChannel : function() {
             this.globalChannel = Backbone.Radio.channel('global');
         },
@@ -142,7 +148,7 @@ define([
         },
 
         /**
-         * Add additional information after the selected row in the grid
+         * Add additional information after the selected row in the grie
          *
          * @param {object} el    jQuery object, clicked row on the grid
          * @param {object} model Model information to display in the grid
@@ -226,20 +232,15 @@ define([
         },
 
         /**
-         * Do some stuff after rendering view
+         * Return clickable row
          *
-         * @param {[type]} options options give to the view like URL for collection fetching
+         * @returns {Backgrid.Row} custom clickable row
          */
-        onRender: function(options) {
-
-            //  Create the form collection with an URL
-            this.formCollection = new FormCollection({
-                url : this.URLOptions.forms
-            });
+        initClickableRow : function() {
 
             // By default grid not fired click event
             // But we can't create a small clickable row to get the event
-            var ClickableRow = Backgrid.Row.extend({
+            return Backgrid.Row.extend({
                 events: {
                     "click": "onClick"
                 },
@@ -256,29 +257,49 @@ define([
                     });
                 }
             });
+        },
 
-            //  Create grid
+        /**
+         * Initialize backgrid instance
+         */
+        initGrid : function() {
             this.grid = new Backgrid.Grid({
 
-                row: ClickableRow,
+                row: this.initClickableRow(),
                 columns    : [{
-                        name  : 'name',
-                        label    : translater.getValueFromKey('grid.name') || 'Name',
-                        cell  : 'string',
-                        editable : false
-                    }, {
-                        name     : 'creationDateDisplay',
-                        label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
-                        cell     : "string",
-                        editable : false
-                    }, {
-                        name     : 'modificationDateDisplay',
-                        label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
-                        cell     : 'string',
-                        editable : false
-                    }],
+                    name  : 'name',
+                    label    : translater.getValueFromKey('grid.name') || 'Name',
+                    cell  : 'string',
+                    editable : false
+                }, {
+                    name     : 'creationDateDisplay',
+                    label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
+                    cell     : "string",
+                    editable : false
+                }, {
+                    name     : 'modificationDateDisplay',
+                    label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
+                    cell     : 'string',
+                    editable : false
+                }],
                 collection : this.formCollection
             });
+        },
+
+        /**
+         * Do some stuff after rendering view
+         *
+         * @param {[type]} options options give to the view like URL for collection fetching
+         */
+        onRender: function(options) {
+
+            //  Create the form collection with an URL
+            this.formCollection = new FormCollection({
+                url : this.URLOptions.forms
+            });
+
+            //  Create grid
+            this.initGrid();
 
             // Render the grid and attach the root to your HTML document
             $(this.el).find("#grid").html(this.grid.render().el);
@@ -447,6 +468,9 @@ define([
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
+        /**
+         * Import form
+         */
         importForm : function() {
             require([
                 'homePageModule/modals/ImportModalView',
@@ -463,7 +487,7 @@ define([
                     var datas = modalView.getData();
 
                     Utilities.ReadFile(datas['file'], _.bind(function(result) {
-                        //try {
+                        try {
                             if (result !== false) {
 
                                 this.globalChannel.trigger('formImported', $.parseJSON(result));
@@ -475,14 +499,14 @@ define([
                                     "error"
                                 );
                             }
-                        /*} catch (e) {
+                        } catch (e) {
                             console.log (e)
                             swal(
                                 translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
                                 translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                 "error"
                             );
-                        }*/
+                        }
                     }, this));
 
                 }, this));
