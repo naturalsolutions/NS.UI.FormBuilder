@@ -1,11 +1,16 @@
 <div class="row">
     <div class="brand col-md-10 col-md-offset-1">
-    <span data-i18n="type">
-        Type de champ
-    </span>
+        <span class="icon icon-<%= type.toLowerCase() %>">
+
+        </span>
         <br/>
-    <span data-i18n="fields.<%= type %>">
-    </span>
+        <br/>
+        <span data-i18n="type">
+            Type de champ
+        </span>
+        <br/>
+        <span data-i18n="fields.<%= type.toLowerCase() %>">
+        </span>
     </div>
 </div>
 <br />

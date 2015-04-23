@@ -47,6 +47,7 @@
         "count"      : "Field(s)",
         "find"       : "Find a form",
         "validation" : "This field is required",
+        "setting"    : "Form <br />properties",
 
         "description" : {
             "fr" : "Frendh form description",
