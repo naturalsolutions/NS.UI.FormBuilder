@@ -160,8 +160,11 @@ require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbui
             //  Get form keywords autocomplete values
             keywordAutocomplete   : 'ressources/autocomplete/keywords.json',
 
-            //  Get all form name for autocomplete
-            protocolAutocomplete  : 'ressources/autocomplete/protocols.json',
+            formAutocomplete : 'ressources/autocomplete/forms.json',
+
+            forms : 'ressources/forms/formsExample.json',
+
+            usersAutocomplete : 'ressources/autocomplete/users.json',
 
             //  Get all form name for autocomplete
             //  Not works if you are in client side mode only
