@@ -7,11 +7,19 @@
 
 #settingPanel {
 
+    position      : absolute;
+    overflow      : hidden;
+    z-index       : 0;
+    background    : @settingViewBackgroundColor;
+    padding-bottom: 50px;
+    height        : 100%;
+
+
     .brand {
         padding-left: 15px;
         padding-top: 20px;
 
-        é:not(.form) {
+        &:not(.form) {
             span {
 
                 &:not(.icon) {
@@ -64,33 +72,26 @@
     }
 
     footer {
-        height: 120px;
-        position: absolute;
-        bottom: 0;
-        background: #000000;
+        height     : 120px;
+        position   : absolute;
+        bottom     : 0;
+        background : #000000;
         padding-top: 7px;
-        width: 100% !important;
+        width      : 100% !important;
     }
-
-    position: absolute;
-    overflow: hidden;
-    z-index: 0;
-
-    background: @settingViewBackgroundColor;
-
-    //margin-left         : 0;
-    padding-bottom: 50px;
-    height: 100%;
 
     & > div:first-child {
         height: 100%;
     }
 
-    .scroll {
-        position: relative;
-        overflow: hidden;
-        height: 85% !important;
-        padding-bottom: 40px;
+    .slimScrollDiv {
+        height: ~"calc(100% - 140px)" !important;
+        .scroll {
+            position      : relative;
+            overflow      : hidden;
+            height        : 85% !important;
+            padding-bottom: 40px;
+        }
     }
 
     button:not(.selectpicker ) {
@@ -169,13 +170,13 @@
 
     h1 {
         .exo;
-        text-align: center;
+        text-align    : center;
         padding-bottom: 0 !important;
-        margin-bottom: 0 !important;
-        margin-top: 0 !important;
-        color: #fff;
-        height: 70px;
-        line-height: 60px;
+        margin-bottom : 0 !important;
+        margin-top    : 0 !important;
+        color         : #fff;
+        height        : 70px;
+        line-height   : 60px;
         &:hover {
             cursor: pointer;
         }
@@ -204,22 +205,22 @@
 
     label {
         font-family: 'Exo 2', sans-serif;
-        font-size: 18px;
+        font-size  : 18px;
         line-height: 50px;
-        height: 30px;
-        text-align: left;
+        height     : 30px;
+        text-align : left;
         font-weight: 500;
-        color: #575656;
+        color      : #575656;
     }
 
     input[type="number"], input[type="text"], select, textarea {
         .exo;
-        background: @settingViewInputBackgroundColor;
-        color: white;
-        border: none;
-        font-size: 18px;
+        background : @settingViewInputBackgroundColor;
+        color      : white;
+        border     : none;
+        font-size  : 18px;
         line-height: 25px;
-        height: 40px;
+        height     : 40px;
         font-weight: 100;
         &:active, &:hover, &:focus {
             box-shadow: none !important;
@@ -238,12 +239,12 @@
 
     .close, .addOp {
         background: none !important;
-        color: #111 !important;
-        opacity: 0.5 !important;
+        color     : #111 !important;
+        opacity   : 0.5 !important;
         transition: all 0.1s !important;
-        border: none !important;
+        border    : none !important;
         box-shadow: none !important;
-        font-size: 20px;
+        font-size : 20px;
     }
 
     .close {
