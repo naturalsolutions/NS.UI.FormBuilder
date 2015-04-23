@@ -68,7 +68,6 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          * Render view
          */
         render: function() {
-            console.log ("render")
             var renderedContent = this.template(this.model.toJSON());
             $(this.el).html(renderedContent);
             $(this.el).disableSelection();

@@ -26,6 +26,10 @@ define([
 
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
+
+            //  Return to hompage
+            //  Event send by FormPanelView when user click on "exit" button
+            this.formChannel.on('exit', this.exit, this);
         },
 
         /**
@@ -48,6 +52,12 @@ define([
             });
             this.formChannel.trigger('import', formAsJSON)
         },
+
+        exit : function() {
+            this.navigate('#', {
+                trigger : true
+            });
+        }
 
     });
 

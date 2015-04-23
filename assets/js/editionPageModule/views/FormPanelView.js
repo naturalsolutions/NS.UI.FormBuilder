@@ -25,7 +25,8 @@ define([
             'click h1>span'   : 'formSettings',
             'click #export'   : 'export',
             'click #clearAll' : 'clear',
-            'click #save'     : 'save'
+            'click #save'     : 'save',
+            'click #exit'     : 'exit'
         },
 
 
@@ -345,7 +346,26 @@ define([
         },
 
         disableFooterActions : function() {
-            this.$el.find('.col-md-10 button').hide();
+            this.$el.find('.col-md-10 button:not(#exit)').hide();
+        },
+
+        exit : function() {
+            var self = this;
+            swal({
+                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
+                type               : "warning",
+                showCancelButton   : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
+                cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
+                closeOnConfirm     : true,
+                closeOnCancel      : true
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    self.formChannel.trigger('exit');
+                }
+            });
         }
     });
 
