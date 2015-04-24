@@ -1,5 +1,8 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+define([
+    'jquery', 'underscore', 'backbone', '../../Translater'
+], function($, _, Backbone,Translater) {
 
+    var translater = Translater.getTranslater();
     /**
      * Main model for homepage layout representing a form
      */
@@ -10,7 +13,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
          * @type {Object}
          */
         defaults: {
-            name             : 'Form',
+            name             : translater.getValueFromKey('form.new'),
             labelFr          : 'Formulaire',
             labelEn          : 'Form',
             creationDate     : new Date(),
