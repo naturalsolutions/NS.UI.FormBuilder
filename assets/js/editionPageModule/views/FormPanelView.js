@@ -191,7 +191,6 @@ define([
             this.$el.find('#scrollSection').slimScroll({ scrollTo: scrollToHeight });
         },
 
-
         /**
          * Rendering callbask
          */
@@ -206,8 +205,10 @@ define([
             this.$el.i18n();
 
             this.$el.find('.drop').sortable({
-                axis: "y",
-                handle : '.paddingBottom5'
+                axis        : "y",
+                handle      : '.paddingBottom5',
+                containment : '#dropContainer',
+                scroll      : false
             });
             this.$el.find('.drop').disableSelection();
 
@@ -309,6 +310,11 @@ define([
 
         },
 
+        /**
+         * Display a message when the export is finished or failed
+         *
+         * @param result if the export is right done or not
+         */
         displayExportMessage : function(result) {
             if (result) {
                 swal(
@@ -325,6 +331,11 @@ define([
             }
         },
 
+        /**
+         * Display a save message
+         *
+         * @param result if the save is right done or not
+         */
         displaySaveMessage : function(result) {
             if (result) {
                 swal(
@@ -341,14 +352,23 @@ define([
             }
         },
 
+        /**
+         * Display footer actions like export and save
+         */
         enableFooterActions : function() {
             this.$el.find('.col-md-10  button').show();
         },
 
+        /**
+         * Hide footer actions
+         */
         disableFooterActions : function() {
             this.$el.find('.col-md-10 button:not(#exit)').hide();
         },
 
+        /**
+         * Display a confirm dialog when user wants to edit edition mode
+         */
         exit : function() {
             var self = this;
             swal({

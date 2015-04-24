@@ -34,13 +34,21 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.initMainChannel();
         },
 
+        /**
+         * Initialize backbone radio form channel and listen events
+         */
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form')
 
             //  Disable actions
+            //  Send by FormPanelView when user want to edit a field
+            //  The goal is to hide action button like edit, duplicate and remove when the user is in edition mode
             this.formChannel.on('editForm', this.disableActions, this);
         },
 
+        /**
+         * Initialize edition channel, it's the global channel for edition section
+         */
         initMainChannel : function() {
             //  The edition channel is the main channel ONLY in the editionPageModule
             this.mainChannel = Backbone.Radio.channel('edition');
@@ -107,6 +115,12 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.$el.find('.actions').addClass('locked');
         },
 
+        /**
+         * Callback run when the wiew is dropped
+         *
+         * @param event jQuery event
+         * @param data data passed
+         */
         isDropped : function(event, data) {
             $('#' + data['id']).trigger('isDroppedReturn', [{
                 subViewID : this.$el.attr('id'),
