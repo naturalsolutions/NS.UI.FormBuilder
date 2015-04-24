@@ -48,6 +48,7 @@
         "find"       : "Rechercher un formulaire",
         "validation" : "Ce champs est requis",
         "setting"    : "Caractéristiques <br /> du formulaire",
+        "new"        : "Nouveau formulaire",
 
         "description" : {
             "fr" : "Description française du formulaire",

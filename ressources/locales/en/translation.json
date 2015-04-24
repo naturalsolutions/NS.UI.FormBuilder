@@ -48,6 +48,7 @@
         "find"       : "Find a form",
         "validation" : "This field is required",
         "setting"    : "Form <br />properties",
+        "new"        : "New form",
 
         "description" : {
             "fr" : "Frendh form description",
