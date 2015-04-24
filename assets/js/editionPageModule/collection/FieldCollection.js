@@ -162,6 +162,8 @@ define([
             this.formChannel = Backbone.Radio.channel('form');
 
             this.formChannel.on('remove', this.removeElement);
+
+            this.formChannel.on('formToEdit', this.updateWithJSON, this);
         },
 
         /**
