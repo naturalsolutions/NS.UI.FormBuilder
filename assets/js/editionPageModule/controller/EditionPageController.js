@@ -69,6 +69,7 @@ define([
 
             //  Event receive from a field field (see BaseView.js) when user wants to edit field properties
             this.formChannel.on('editModel', this.modelSetting, this);
+
         },
 
         /**
@@ -100,22 +101,13 @@ define([
          * Main controller action, display edition page layout
          */
         editionAction: function(options) {
-            $('#navbarContext').text($.t('navbar.context.edition'))
-
-            if (this.fieldCollection.length > 1) {
-                //  A previous was created
-            } else {
-                //  new form
-            }
-
-            /*this.fieldCollection = new FieldCollection({}, {
-                name : 'New form'
-            });*/
+            $('#navbarContext').text($.t('navbar.context.edition'));
 
             var editionPageLayout = new EditionPageLayout({
                 fieldCollection : this.fieldCollection,
                 URLOptions      : this.URLOptions
             });
+
             this.editionPageRegion.show( editionPageLayout );
         },
 
