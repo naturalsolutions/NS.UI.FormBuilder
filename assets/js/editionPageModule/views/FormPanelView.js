@@ -71,7 +71,7 @@ define([
             this.formChannel = Backbone.Radio.channel('form');
 
             //  Event send form EditionPageController when user want to edit a form from the homepage list
-            this.formChannel.on('formToEdit', this.formToEdit, this);
+            //this.formChannel.on('formToEdit', this.formToEdit, this);
 
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
@@ -191,6 +191,7 @@ define([
             this.$el.find('#scrollSection').slimScroll({ scrollTo: scrollToHeight });
         },
 
+
         /**
          * Rendering callbask
          */
@@ -205,10 +206,8 @@ define([
             this.$el.i18n();
 
             this.$el.find('.drop').sortable({
-                axis        : "y",
-                handle      : '.paddingBottom5',
-                containment : '#dropContainer',
-                scroll      : false
+                axis: "y",
+                handle : '.paddingBottom5'
             });
             this.$el.find('.drop').disableSelection();
 
@@ -301,16 +300,6 @@ define([
         },
 
         /**
-         * Display choosen form in the form view for edit it
-         * @param  {Object} form to edit
-         */
-        formToEdit : function(formToEdit) {
-            this.collection.updateWithJSON(formToEdit);
-            this.render();
-
-        },
-
-        /**
          * Display a message when the export is finished or failed
          *
          * @param result if the export is right done or not
@@ -367,7 +356,7 @@ define([
         },
 
         /**
-         * Display a confirm dialog when user wants to edit edition mode
+         * Display a confirm dialog when user wants to exit
          */
         exit : function() {
             var self = this;
