@@ -6,10 +6,11 @@ define([
     'backgrid',
     '../../Translater',
     '../collection/FormCollection',
+    '../models/FormModel',
     'backbone.radio',
     'sweetalert',
     'slimScroll'
-    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, Translater, FormCollection, Radio, swal) {
+    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, Translater, FormCollection, FormModel, Radio, swal) {
 
     var translater = Translater.getTranslater();
 
@@ -26,6 +27,7 @@ define([
             'click #delete' : 'deleteForm',
             'click #copy'   : 'duplicateForm',
             'click #edit'   : "editForm",
+            'click #add'    : 'addForm',
             'click #import' : 'importForm'
         },
 
@@ -464,6 +466,12 @@ define([
 
             //  /!\ AT this point, normally i've to get form fieldset and schema
             //  But wanting to keep an indenpendant client side mode, for the moment we send only form description
+
+            this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
+        },
+
+        addForm : function() {
+            var formToEdit = new FormModel();
 
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
