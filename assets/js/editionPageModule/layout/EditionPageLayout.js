@@ -108,6 +108,10 @@ define([
          * @param  {Object} formToEdit form to edit
          */
         formSetting : function(formToEdit) {
+            if (this.settingPanel === undefined) {
+                this.addRegion('settingPanel', '#settingPanel');
+                this.settingPanel = this.getRegion('settingPanel');
+            }
             this.settingPanel.show(new SettingFormPanelView({
                 URLOptions : this.URLOptions,
                 formToEdit : formToEdit
@@ -155,6 +159,10 @@ define([
             this.leftPanel.show( new WidgetPanelView({
 
             }));
+        },
+
+        onDestroy : function() {
+            this.mainChannel.reset();
         },
 
 

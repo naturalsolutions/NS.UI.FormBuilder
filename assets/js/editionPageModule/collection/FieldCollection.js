@@ -303,7 +303,7 @@ define([
         * @returns {undefined}
         */
         addElement: function (nameType, properties) {
-            
+
             if (Fields[nameType] != undefined) {
 
                 var field   = properties || {};
