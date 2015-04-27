@@ -180,7 +180,7 @@ define([
         updateFieldCount : function() {
             this.$el.find('.first').text(this._viewCount)
 
-            this[this._viewCount > 0 ? 'enableFooterActions' : 'disableFooterActions']();
+            this[this.collection.length > 1 ? 'enableFooterActions' : 'disableFooterActions']();
         },
 
         /**
@@ -217,7 +217,7 @@ define([
                 alwaysVisible : true
             });
 
-            this[this._viewCount > 0 ? 'enableFooterActions' : 'disableFooterActions']();
+            this.updateFieldCount();
         },
 
 
@@ -372,9 +372,15 @@ define([
                 closeOnCancel      : true
             }, function(isConfirm) {
                 if (isConfirm) {
-                    self.formChannel.trigger('exit');
+                    self.clearFormAndExit();
                 }
             });
+        },
+
+        clearFormAndExit : function() {
+            this.collection.reset();
+            this.formChannel.trigger('exit');
+            this._viewCount = 0;
         }
     });
 
