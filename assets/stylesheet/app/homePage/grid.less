@@ -120,7 +120,24 @@
                 padding-top    : 17px;
                 padding-bottom : 17px;
                 text-transform : none !important;
-                vertical-align : top;
+                vertical-align : text-top;
+                label {
+                    width       : 35px;
+                    height      : 35px;
+                    color       : white;
+                    font-size   : 22px;
+                    text-align  : center;
+                    position    : relative;
+                    margin-right: 10px;
+                    float       : left;
+                    background  : rgba(0, 0, 0, 0.2);
+                    border-right: 2.5px;
+                    overflow    : hidden;
+                    padding-top : 2px;
+                    &:hover {
+                        cursor : pointer;
+                    }
+                }
                 p {
                     width  : 90%;
                     margin : 0 auto;
