@@ -164,6 +164,21 @@ define([
             this.formChannel.on('remove', this.removeElement);
 
             this.formChannel.on('formToEdit', this.updateWithJSON, this);
+
+            //  Event send by BaseView or BaseView herited view for duplicate model
+            this.formChannel.on('copyModel', this.copyModel, this);
+        },
+
+        /**
+         * Duplicate model in the collection
+         *
+         * @param modelToCloneID model to duplicate ID
+         */
+        copyModel : function(modelToCloneID) {
+            var originModel = this.at(modelToCloneID),
+                nameType    = originModel.constructor.type + 'Field'
+
+            this.addElement(nameType, _.omit(originModel.attributes, 'id'));
         },
 
         /**
@@ -288,7 +303,7 @@ define([
         * @returns {undefined}
         */
         addElement: function (nameType, properties) {
-
+            
             if (Fields[nameType] != undefined) {
 
                 var field   = properties || {};

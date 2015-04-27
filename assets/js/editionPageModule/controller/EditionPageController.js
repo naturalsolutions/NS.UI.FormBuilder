@@ -125,7 +125,7 @@ define([
         * This function is run when user wants to configure a field
         * Trigger an event with field ID to the formbuilder object (see formbuilder.js)
         *
-        * @param  {integer} ID of the field to duplicate
+        * @param  {integer} ID of the field to edit
         */
         modelSetting: function(modelID) {
 

@@ -38,13 +38,14 @@ define([
          * @param  {Object} formToEdit form to edit
          */
         displayEditionPage : function(formToEdit) {
+
+            //  Send event to EditionPageController
             this.formChannel.trigger('formEdition', formToEdit);
+
             //  Start edition
             this.navigate('#edition', {
                 trigger : true
             });
-            //  Send event to formview
-
         },
 
         formImported : function(formAsJSON) {
