@@ -23,7 +23,7 @@ define([
 
 
         /**
-         * jQuery event trigerred by the layout
+         * jQuery event triggered by the layout
          * @type {Object}
          */
         events : {
@@ -76,7 +76,7 @@ define([
             this.mainChannel = Backbone.Radio.channel('edition');
 
             //  Event sent from setting view when backbone forms generation is finished
-            //  Run an nimation for hide panel view and display setting view, I love jQuery !
+            //  Run an animation for hide panel view and display setting view, I love jQuery !
             this.mainChannel.on('formCreated', this.displaySettingPanel, this)
 
             //  Event sent from setting view when field changed are saved
@@ -84,7 +84,7 @@ define([
             //  Run an animation for hide setting view and display panel view
             this.mainChannel.on('formCommit', this.closeSettingPanelAndResetURL, this)
 
-            //  Event receivre from setting view panel when user save form changed attributes
+            //  Event receive from setting view panel when user save form changed attributes
             //  Close setting panel and rest some components
             this.mainChannel.on('editionDone', this.closeSettingPanelAndResetURL, this);
 
@@ -112,6 +112,19 @@ define([
                 URLOptions : this.URLOptions,
                 formToEdit : formToEdit
             }));
+        },
+
+        /**
+         * Remove and re-add new region
+         */
+        clearFormSettingView : function() {
+            //  Destroy view and his html content
+            this.$el.find('#settingPanel').html('');
+            this.settingPanel.currentView.destroy();
+
+            //  Re add new region
+            this.addRegion('settingPanel', '#settingPanel');
+            this.settingPanel = this.getRegion('settingPanel');
         },
 
 
@@ -173,7 +186,9 @@ define([
         closeSettingPanel : function() {
             if ($('#widgetPanel').hasClass('col-md-1')) {
                 $('#formPanel').switchClass('col-md-7 col-md-pull-1', 'col-md-8', 500);
-                $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 500);
+                $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 500, _.bind(function() {
+                    this.clearFormSettingView();
+                }, this));
 
                 $('#widgetPanel #features').fadeIn(200);
                 $('#toggle span').switchClass('closed', 'open');
@@ -181,7 +196,9 @@ define([
                 $('#formPanel').switchClass('col-md-7', 'col-md-8', 500);
                 $('#widgetPanel').animate({
                     marginLeft : 0
-                }, 500)
+                }, 500, _.bind(function() {
+                    this.clearFormSettingView();
+                }, this))
             }
         },
 

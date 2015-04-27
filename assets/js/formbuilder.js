@@ -56,7 +56,9 @@ define([
         //  Channel for editionPageModule
         this.editionPageChannel = Backbone.Radio.channel('editionPage');
 
+        //  Event send by CenterGridView when user wants to edit a form present in the grid
         this.globalChannel.on('displayEditionPage', _.bind(function(formToEdit) {
+            //  Send event to editionPageRouter
             this.editionPageChannel.trigger('display', formToEdit);
         }, this));
 
