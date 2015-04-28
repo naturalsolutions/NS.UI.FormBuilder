@@ -70,9 +70,6 @@ define([
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
 
-            //  Event send form EditionPageController when user want to edit a form from the homepage list
-            //this.formChannel.on('formToEdit', this.formToEdit, this);
-
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
             this.formChannel.on('save:return',      this.displaySaveMessage);
@@ -345,14 +342,14 @@ define([
          * Display footer actions like export and save
          */
         enableFooterActions : function() {
-            this.$el.find('.col-md-10  button').show();
+            this.$el.find('footer  button').show();
         },
 
         /**
          * Hide footer actions
          */
         disableFooterActions : function() {
-            this.$el.find('.col-md-10 button:not(#exit)').hide();
+            this.$el.find('footer button:not(#exit)').hide();
         },
 
         /**

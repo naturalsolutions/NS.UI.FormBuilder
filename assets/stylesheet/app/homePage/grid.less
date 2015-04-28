@@ -26,6 +26,10 @@
             height     : 100%;
             line-height: 67px;
             text-align : right;
+
+            button {
+                margin-top: 17.5px;
+            }
         }
 
         .col-md-1 {
@@ -170,28 +174,30 @@
         margin-right  : -15px !important;
         padding-right : 15px;
         padding-left  : 15px;
-        width : 100%;
 
         div {
             height: 100%;
-        }
+            width: 50%;
 
-        div.pull-left {
 
-            margin-left: 0 !important;
-            display : none;
+            &:first-child {
+                margin-left: 0 !important;
+                float: left;
 
-            button {
-                margin-left: 7px !important;
+                button {
+                    margin-left: 7px !important;
+                }
             }
 
+            &:last-child {
+                text-align: right;
+                margin: 0 !important;
+                float: right;
+            }
         }
 
-        button, a.btn {
+        button {
             margin-top: 20px;
-            label:hover {
-                cursor : pointer;
-            }
             &.red {
                 &:last-child {
                     margin-left: 17px;

@@ -11,13 +11,7 @@
         }
     }
 
-    &.grey {
-        background : #484647;
-    }
 
-    &.red {
-        background    : #892833;
-    }
 
     &.form {
         border : none !important;
@@ -46,26 +40,9 @@
                 font-size: 20px;
             }
         }
-
-        &.red {
-            label {
-                background: #702029;
-            }
-        }
-
-        &.grey {
-            label {
-                background : #3d3b3c;
-            }
-        }
     }
 
-    &:hover, &:active, &:focus, &:visited {
-        color      : white;
-        box-shadow : none !important;
-        outline    : none !important;
-        * { color : white; }
-    }
+
 
     &.saveButton {
         background     : transparent !important;
@@ -84,4 +61,73 @@
         margin-bottom  : 30px;
     }
 
+}
+
+button {
+    border        : none !important;
+    box-shadow    : none !important;
+    outline       : none !important;
+    border-radius : 2.8px;
+    height        : 35px;
+    line-height   : 35px;
+    padding       : 0 !important;
+    overflow      : hidden;
+
+    &:hover {
+        cursor: pointer;
+    }
+
+    &:hover, &:active, &:focus, &:visited {
+        color      : white;
+        box-shadow : none !important;
+        outline    : none !important;
+        * { color : white; }
+    }
+
+    &.red {
+        background : #892833;
+        label:last-child {
+            background: #702029;
+        }
+    }
+
+    &.grey {
+        background : #484647;
+        label:last-child {
+            background : #3d3b3c;
+        }
+    }
+
+    &.red {
+        background    : #892833;
+    }
+
+     label {
+         .exo;
+        color      : white;
+        display    : inline-block;
+        float      : left;
+        border     : none !important;
+        box-shasow : none !important;
+
+         &:hover {
+             cursor: pointer;
+         }
+
+         &:first-child {
+             padding-left  : 10px;
+             padding-right : 10px;
+             text-transform: uppercase;
+         }
+
+         &:last-child:not(.empty) {
+             height    : 35px;
+             width     : 40px;
+             float     : right;
+             position  : relative;
+             left      : 1px;
+             font-size : 20px;
+             overflow  : hidden;
+         }
+    }
 }
