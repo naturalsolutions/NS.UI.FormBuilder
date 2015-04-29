@@ -37,7 +37,7 @@
 
     <div class="row" data-setting="field">
         <div class="col-md-6 col-md-offset-3">
-            <button id="saveButton" class="saveButton reneco" data-i18n="settings.actions.saveAsType">
+            <button id="saveButton" class="transparent reneco" data-i18n="settings.actions.saveAsType">
                 Enregistrez comme nouveau type
             </button>
         </div>
@@ -45,12 +45,22 @@
 </div>
 <footer class="row">
     <div class="col-md-10 col-md-offset-1">
-        <button class="btn reneco gray form" id="cancel" data-i18n="settings.actions.cancel">
-            Annuler
+        <button class="reneco grey" id="cancel">
+            <label>
+                <span data-i18n="settings.actions.cancel">
+                    Annuler
+                </span>
+            </label>
+            <label class="empty"></label>
         </button>
         <div class="pull-right">
-            <button class="btn reneco form" id="saveChange" data-i18n="settings.actions.save">
-                Enregistrer
+            <button class="reneco red" id="saveChange">
+                <label>
+                    <span data-i18n="settings.actions.save">
+                        Enregistrer
+                    </span>
+                </label>
+                <label class="empty"></label>
             </button>
         </div>
     </div>
