@@ -230,7 +230,7 @@ define([
          * Display common action form the current selected form like delete, clone, etc ...
          */
         updateFooterAction : function() {
-            this.$el.find('footer div.pull-left').fadeIn(500)
+            this.$el.find('footer button').fadeIn(500)
             $('#add, #import').switchClass('red', 'grey', 1);
         },
 
