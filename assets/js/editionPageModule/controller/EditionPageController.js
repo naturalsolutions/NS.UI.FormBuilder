@@ -158,12 +158,15 @@ define([
             this.formChannel.trigger('formToEdit', formImportedJSON);
         },
 
-        saveForm : function(formAsJSON) {
+        saveForm : function(formAsJSON){
             $.ajax({
-                data        : formAsJSON,
+                data        : JSON.stringify(formAsJSON),
                 type        : 'POST',
                 url         : this.URLOptions['formSaveURL'],
                 contentType : 'application/json',
+                //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                //  The server is already configured to used it
+                crossDomain : true,
 
                 //  Trigger event with ajax result on the formView
                 success: _.bind(function(res) {
