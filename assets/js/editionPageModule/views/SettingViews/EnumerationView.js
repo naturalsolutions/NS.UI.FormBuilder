@@ -72,7 +72,8 @@ define([
     var EnumarationView = Backbone.Marionette.ItemView.extend({
 
         events : {
-            "click #addChoice" : 'addOption'
+            "click #addChoice" : 'addOption',
+            'click #enumGrid tbody tr:last-child td:last-child' : 'trashClick'
         },
 
         /**
@@ -120,11 +121,6 @@ define([
          */
         addOption : function() {
             this.grid.insertRow( this.model.columDefaults );
-
-            var lastTd = this.$el.find('#enumGrid tbody tr:last-child td:last-child');
-            lastTd.html('<span class="reneco trash"></span>');
-
-            lastTd.bind('click', this.trashClick);
         },
 
         /**
@@ -134,8 +130,8 @@ define([
          */
         trashClick : function(e) {
             //  The index of the tr corresponds to the model to remove id
-             var modelToRemoveID = $(e.target).parents('tr').index(),
-                 modelToRemove = this.choices.at(modelToRemoveID);
+            var modelToRemoveID = $(e.target).parents('tr').index(),
+                modelToRemove   = this.choices.at(modelToRemoveID);
 
             //  We remove the element from the collection
             //  The gri is automatically updated

@@ -428,6 +428,12 @@
 
         tbody {
             tr {
+
+                &:first-child {
+                    td:last-child {
+                        visibility: hidden !important;
+                    }
+                }
                 td {
                     .exo;
                     color : #575656;
