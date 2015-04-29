@@ -7,11 +7,6 @@ define([
 ], function($, _, Backbone, BaseView, viewTemplate) {
 
     var RadioFieldView = BaseView.extend({
-        events: function() {
-            return _.extend(BaseView.prototype.events, {
-                'click input[type="radio"]'        : 'updateSetting'
-            });
-        },
 
         initialize : function(options) {
             var opt = options;

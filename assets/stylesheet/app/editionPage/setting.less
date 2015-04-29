@@ -95,22 +95,7 @@
     }
 
     button:not(.selectpicker ) {
-        height: 35px;
         margin-top: 12.5px;
-        color: white;
-        .exo;
-        &.gray {
-            background: #454343;
-            &:hover {
-                color: white;
-            }
-        }
-        &:not(.gray) {
-            background: #862332;
-            &:last-child {
-                margin-left: 20px;
-            }
-        }
     }
 
     hr {
@@ -203,7 +188,7 @@
         }
     }
 
-    label {
+    form label {
         font-family: 'Exo 2', sans-serif;
         font-size  : 18px;
         line-height: 50px;
@@ -416,4 +401,65 @@
         content: "\f070";
     }
 
+}
+
+.table-grid {
+
+    border-top: 1px #222 solid;
+
+    table {
+        width: 100%;
+        margin-top: 5px;
+        thead {
+            tr {
+                th {
+                    a {
+                        color : white;
+                        font-size: 20px;
+                        &:hover {
+                            text-decoration: none !important;
+                        }
+                    }
+                    text-transform: uppercase;
+                    .exo;
+                }
+            }
+        }
+
+        tbody {
+            tr {
+                td {
+                    .exo;
+                    color : #575656;
+                    font-size: 17px;
+                    &:last-child:after {
+                        .reneco;
+                        content: "\e681";
+                        text-align: center;
+                        color : white;
+                    }
+
+                    input[type="checkbox"] {
+                        visibility: hidden;
+
+                        &:after {
+                            .fa;
+                            visibility: visible !important;
+                            content: "\f096";
+                            color : #575656;
+                        }
+
+                        &:checked {
+                            &:after {
+                                .fa;
+                                visibility: visible !important;
+                                content: "\f046";
+                                color : #575656;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

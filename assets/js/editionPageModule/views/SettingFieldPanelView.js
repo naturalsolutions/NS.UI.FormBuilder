@@ -60,6 +60,8 @@ define([
             this.form               = null;
             this.fieldWithSameType  = null;
 
+            this.subSettingView = null;
+
             //  Init backbone radio channel
             this.initFormChannel();
             this.initMainChannel();
@@ -118,7 +120,7 @@ define([
         */
         createForm : function() {
 
-            require(['backbone-forms', "backbone-forms-list", 'modalAdapter'], _.bind(function() {
+            require(['backbone-forms'], _.bind(function() {
 
                 this.form = new Backbone.Form({
                     model: this.modelToEdit
@@ -180,25 +182,53 @@ define([
 
                 } else if (this.modelToEdit.constructor.type === 'TreeView') {
 
-                    $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-                    $('.settings form #defaultNode').fancytree({
-                        source: [
-                            {title: "Node 1", key: "1"},
-                            {title: "Folder 2", key: "2", folder: true, children: [
-                                {title: "Node 2.1", key: "3"},
-                                {title: "Node 2.2", key: "4"}
-                            ]}
-                        ],
-                        selectMode : 1,
-                        activate : _.bind(function(event, data) {
-                            field.set('defaultNode', data.node.key)
-                            this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
-                        }, this)
-                    });
+                    this.setTreeViewConfiguration();
 
-                }
+                } else if (_.contains(['Select', 'CheckBox', 'Radio'], this.modelToEdit.constructor.type)) {
+                     this.setMultipleFieldConfiguration();
+                 }
 
             }, this));
+        },
+
+        /**
+         * For enumeration field like Checkbox, select ... we used a backgrid to manage values
+         * We used the EnumerationView
+         *
+         * At start we used backbone forms modalAdapter but the generated code is hard to maintain add we prefered a "in-live" modification instead of modal view.
+         */
+        setMultipleFieldConfiguration : function() {
+            require(['editionPageModule/views/SettingViews/EnumerationView'], _.bind(function(EnumarationView) {
+                this.$el.find('form').after('<div id="enumarationGrid"></div>');
+
+                this.subSettingView = new EnumarationView({
+                    el : '#enumarationGrid',
+                    model : this.modelToEdit
+                }).render();
+
+
+            }, this));
+        },
+
+        /**
+         * Some field like Treeview need to run specific configuration
+         */
+        setTreeViewConfiguration : function() {
+            $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+            $('.settings form #defaultNode').fancytree({
+                source: [
+                    {title: "Node 1", key: "1"},
+                    {title: "Folder 2", key: "2", folder: true, children: [
+                        {title: "Node 2.1", key: "3"},
+                        {title: "Node 2.2", key: "4"}
+                    ]}
+                ],
+                selectMode : 1,
+                activate : _.bind(function(event, data) {
+                    field.set('defaultNode', data.node.key)
+                    this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
+                }, this)
+            });
         },
 
 
@@ -277,9 +307,14 @@ define([
 
         /**
         * Check generated form values and send events if all is good
-        * This function concerns generated form for field AND main form
         */
         saveChange : function() {
+            if (this.subSettingView !== undefined) {
+                //  In this case wa have a sub setting view
+                //  This view is used for example to set Checkbox values
+                this.subSettingView.commitValues()
+            }
+
             if (this.form.commit() === undefined) {
                 this.mainChannel.trigger('formCommit')
                 this.removeForm();

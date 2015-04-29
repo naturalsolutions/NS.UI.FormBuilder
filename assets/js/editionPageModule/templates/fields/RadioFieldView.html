@@ -12,10 +12,10 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <% _.each(itemList["items"], function(el, idx) {%>
+            <% _.each(choices, function(el, idx) {%>
                 <div class="radioField marginTop0 marginBottom0">
                     <div class="form-group row marginTop0 marginBottom0 paddingTop0 paddingBottom0">
-                        <input data-idx=<%=idx %> type="radio"  name="<%= name %>" id="<%=id %>_<%= idx %>" value="<%= el.value %>" <% if (itemList[ "defaultValue"]==el["id"]){ %>checked<% } %> class="" />
+                        <input data-idx=<%=idx %> type="radio"  name="<%= name %>" id="<%=id %>_<%= idx %>" value="<%= el.value %>" <% if (defaultValue == el["id"]){ %>checked<% } %> />
                         <label for="<%=id %>_<%= idx %>">
                             <span></span>
                             <%= el.fr %>

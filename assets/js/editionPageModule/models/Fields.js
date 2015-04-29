@@ -495,20 +495,22 @@ define([
 
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
-                itemList: {
-                    items: [{
-                        id    : 0,
-                        value : "0",
-                        en    : "My first Option",
-                        fr    : 'Mon option'
+                choices: [
+                    {
+                        id             : 1,
+                        value          : "0",
+                        en             : "My first Option",
+                        fr             : 'Mon option',
+                        isDefaultValue : true
                     }, {
-                        id    : 1,
-                        value : "1",
-                        en    : "My second Option",
-                        fr    : 'Mon option 2'
-                    }],
-                    defaultValue: 1
-                },
+                        id             : 2,
+                        value          : "1",
+                        en             : "My second Option",
+                        fr             : 'Mon option 2',
+                        isDefaultValue : false
+                    }
+                ],
+                defaultValue: 1,    //  the default value refers to the default choice id
                 webServiceURL : "",
                 multiple: false,
                 expanded: false
@@ -523,52 +525,6 @@ define([
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.webServiceURL')
                 },
-                itemList : {
-                    type : 'Object',
-                    title : '',
-                    subSchema : {
-                        defaultValue : {
-                            type        : 'Text',
-                            editorClass : 'form-control',
-                            template    : fieldTemplate,
-                            title       : translater.getValueFromKey('schema.default')
-                        },
-                        items : {
-                            type : 'List',
-                            editorClass : 'itemList',
-                            itemType : 'Object',
-                            itemToString : function(item) {
-                                return 'ID : ' + item.id + ', <b>EN label</b> : ' + item.en + ', FR label : ' + item.fr + ', value : ' + item.value;
-                            },
-                            subSchema : {
-                                id    : {
-                                    type  : 'Number',
-                                    title : "ID"
-                                },
-                                value : {
-                                    type       : 'Text',
-                                    title      : translater.getValueFromKey('schema.real'),
-                                    validators : ['required']
-                                },
-                                en    : {
-                                    type : 'Text',
-                                    title      : 'Text display in English',
-                                    validators : ['required'] ,
-                                    title      : translater.getValueFromKey('schema.englishText')
-                                },
-                                fr    : {
-                                    type       : 'Text',
-                                    title      : translater.getValueFromKey('schema.frenchText'),
-                                    validators : ['required']
-                                }
-                            }
-                        }
-                    }
-                },
-                expanded: {
-                    type        : CheckboxEditor,
-                    fieldClass : "checkBoxEditor"
-                },
                 multiple: {
                     type        : CheckboxEditor,
                     fieldClass : "checkBoxEditor"
@@ -576,6 +532,43 @@ define([
             });
         },
 
+        /**
+         * To manage Enumeration field values we used Backgrid.
+         * So we need to specify which columns use
+         */
+        columns : [{
+            name     : 'en',
+            label    : 'en',
+            cell     : 'string'
+        }, {
+            name     : 'fr',
+            label    : 'fr',
+            cell     : 'string'
+        }, {
+            name     : 'value',
+            label    : 'value',
+            cell     : 'string'
+        }, {
+            name     : 'isDefaultValue',
+            label    : 'is default',
+            cell     : 'boolean'
+        }, {
+            name : 'action',
+            label : 'action',
+            cell : 'string',
+            editable : false
+        }],
+
+        /**
+         * Default value when we add a new row
+         */
+        columDefaults : {
+            en             : 'English value',
+            fr             : 'French label',
+            value          : 'Value',
+            action         : '',
+            isDefaultValue : false
+        },
 
         /**
         * Constructor
@@ -584,51 +577,7 @@ define([
         */
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-        },
-
-        /**
-        * Add an item on an itemList
-        *
-        * @param {integer} listIndex  itemList index
-        * @param {object} element    element to add
-        * @param {boolean} selected   if this element is the defaultValue
-        */
-        addOption: function(listIndex, element, selected) {
-            this.get('items')[listIndex]['items'].push(element);
-            if (selected) {
-                this.get('items')[listIndex]['defaultValue'] = element['id'];
-            }
-
-            this.trigger('change');
-        },
-
-        /**
-        * Remove an item from an itemList
-        *
-        * @param {integer} listIndex  index of the itemList
-        * @param {integer} index      index of element to remove
-        */
-        removeOption: function(listIndex, index) {
-            this.get("items")[listIndex].splice(index, 1);
-            this.trigger('change');
-        },
-
-        /**
-        * Return choosen item list elements
-        *
-        * @param {integer} itemListIndex  itemList index
-        * @returns {array} itemList
-        */
-        getOption: function(itemListIndex) {
-            return this.get('items')[itemListIndex];
-        },
-
-        updateSelectedOption : function(index) {
-            var itemList = this.get('itemList');
-            itemList.defaultValue = index;
-            this.set('itemList', itemList);
         }
-
     });
 
     //  ----------------------------------------------------
@@ -863,11 +812,12 @@ define([
             return models.EnumerationField.prototype.schema();
         },
 
+        subSchema : models.EnumerationField.prototype.subSchema,
+
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
 
             this.set('multiple', true);
-            this.set('expanded', true);
         }
 
     }, {
@@ -877,6 +827,7 @@ define([
     });
 
     models.RadioField = models.EnumerationField.extend({
+
         defaults : function() {
             return models.EnumerationField.prototype.defaults();
         },
@@ -885,10 +836,12 @@ define([
             return models.EnumerationField.constructor.schema;
         },
 
+        subSchema : models.EnumerationField.prototype.subSchema,
+
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
+
             this.set('multiple', false);
-            this.set('expanded', true);
         }
     }, {
         type   : 'Radio',
@@ -905,6 +858,8 @@ define([
         schema : function() {
             return models.EnumerationField.prototype.schema();
         },
+
+        subSchema : models.EnumerationField.prototype.subSchema,
 
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
