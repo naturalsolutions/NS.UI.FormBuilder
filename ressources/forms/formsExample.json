@@ -1,6 +1,6 @@
 [{
     "id"               : 1,
-    "name"             : "morbi odio odio elementum",
+    "name"             : "morbi odio odio elementum 111",
     "labelFr"          : "primis in faucibus orci luctus",
     "labelEn"          : "dapibus nulla",
     "creationDate"     : "2015-03-01T17:24:14Z",
@@ -8,7 +8,29 @@
     "descriptionEn"    : "ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae donec pharetra magna",
     "descriptionFr"    : "libero rutrum ac lobortis vel dapibus at diam nam tristique",
     "keywordsFr"       : ["formulaire", "deux", "premier"],
-    "keywordsEn"       : ["form", "two", "first"]
+    "keywordsEn"       : ["form", "two", "first"],
+    "schema": {
+      "Field1": {
+        "validators"                  : [],
+        "labelFr"                     : "Label en français",
+        "labelEn"                     : "Label en anglais",
+        "name"                        : "Field1",
+        "readonly"                    : false,
+        "editorClass"                 : "",
+        "fieldClass"                  : "",
+        "fieldSize"                   : "",
+        "endOfLine"                   : false,
+        "linkedFieldTable"            : "",
+        "linkedFieldIdentifyingColumn": "",
+        "linkedField"                 : "",
+        "formIdentifyingColumn"       : "",
+        "defaultValue"                : "",
+        "help"                        : "Write some text",
+        "size"                        : 255,
+        "type"                        : "Text"
+      }
+    },
+    "fieldsets": []
 }, {
     "id"               : 2,
     "name"             : "pretium nisl ut volutpat",
