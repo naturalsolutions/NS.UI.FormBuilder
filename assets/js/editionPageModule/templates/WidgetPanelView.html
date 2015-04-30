@@ -1,7 +1,9 @@
-<div class="scroll">
+<di>
+
     <div id="toggle">
         <span class="glyphicon glyphicon-th-list open"></span>
     </div>
+
     <div id="features">
         <div id="accordion" class="container-fluid">
             <% for (var n in section) { %>
@@ -40,13 +42,15 @@
     </div>
 
     <div id="smallFeatures">
-        <% for (var n in section) { %>
-            <% for (var i in section[n]) { count++; %>
-                <div data-type="<%= i.replace(" Field ", " ") %>" data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>" >
-                    <span class="icon<%= i.replace(" Field ", " ") %>" data-type="<%= i.replace(" Field ", " ") %>"></span>
-                </div>
+        <div class="scroll">
+            <% for (var n in section) { %>
+                <% for (var i in section[n]) { count++; %>
+                    <div data-type="<%= i.replace(" Field ", " ") %>" data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>" >
+                        <span class="icon<%= i.replace(" Field ", " ") %>" data-type="<%= i.replace(" Field ", " ") %>"></span>
+                    </div>
+                <% } %>
             <% } %>
-        <% } %>
+        </div>
     </div>
 
 </div>

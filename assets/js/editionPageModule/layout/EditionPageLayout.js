@@ -173,7 +173,7 @@ define([
             $('#formPanel').switchClass('col-md-8', 'col-md-11', 300);
             $('#widgetPanel').switchClass('col-md-4', 'col-md-1', 300);
             $('#widgetPanel #features').fadeOut(200);
-            $('#toggle span').switchClass('open', 'closed')
+            $('#toggle span').switchClass('open', 'closed');
         },
 
 
@@ -182,9 +182,11 @@ define([
          */
         maximizeWidgetPanel : function() {
             $('#formPanel').switchClass('col-md-11', 'col-md-8', 300);
-            $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 300);
-            $('#widgetPanel #features').fadeIn(200);
-            $('#toggle span').switchClass('closed', 'open');
+            $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 300, function() {
+                $('#widgetPanel #features').fadeIn(200);
+                $('#toggle span').switchClass('closed', 'open');
+            });
+
         },
 
 

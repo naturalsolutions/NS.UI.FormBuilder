@@ -28,6 +28,7 @@ define([
         initialize : function(options) {
             this.collection = options.fieldCollection;
             _.bindAll(this, 'template')
+
             this.initSection();
             this.initFormChannel();
         },
@@ -78,16 +79,17 @@ define([
         onRender : function(options) {
             // run i18nnext translation in the view context
             this.$el.i18n();
+
             //  Add scrollbar
             this.$el.find('.scroll').slimScroll({
-                height : '90%',
-                color: '#111',
+                height : '90%'
             });
+
             //  Disable selection on field element
             $('.fields').disableSelection();
             //  Use accordion for each category
             this.$el.find('#accordion').accordion();
-        },
+        }
 
     });
 
