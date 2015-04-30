@@ -72,8 +72,9 @@ define([
     var EnumarationView = Backbone.Marionette.ItemView.extend({
 
         events : {
-            "click #addChoice" : 'addOption',
-            'click #enumGrid tbody tr:last-child td:last-child' : 'trashClick'
+            "click #addChoice"                                  : 'addOption',
+            'click #enumGrid tbody tr:last-child td:last-child' : 'trashClick',
+            'click #enumGrid tbody input[type="checkbox"]'      : 'changeDefaultValue'
         },
 
         /**
@@ -90,10 +91,9 @@ define([
          */
         initialize : function(options) {
             this.model   = options.model;
-
             this.choices = new Choices(this.model.get('choices'));
 
-            _.bindAll(this, 'template', 'addOption', 'trashClick');
+            _.bindAll(this, 'template', 'addOption', 'trashClick', 'changeDefaultValue');
         },
 
         /**
@@ -101,6 +101,41 @@ define([
          */
         onRender : function() {
             this.initGrid();
+        },
+
+        changeDefaultValue : function(e) {
+            var index           = $(e.target).parents('tr').index(),
+                isChecked       = $(e.target).is(':checked'),
+                collectionItem  = this.choices.at(index);
+
+            if(this.model.get('multiple')) {
+
+                //  We can have multiple default values
+                var lastValues = this.model.get('defaultValue');
+
+                if (isChecked) {
+                    lastValues.push(collectionItem.get('id'));
+                } else {
+                    lastValues.splice(lastValues.indexOf(collectionItem.get('id')), 1);
+                }
+
+                this.model.set('defaultValue', lastValues);
+
+            }   else {
+
+                this.clearRadio();
+                $(e.target).prop('checked', isChecked);
+
+                //  If we can have only one default value we have one item array or empty
+                this.model.set('defaultValue', isChecked ? [collectionItem.get('id')] : []);
+            }
+        },
+
+        /**
+         * Set all input unchecked
+         */
+        clearRadio : function() {
+            this.$el.find('#enumGrid tbody input').prop('checked', false);
         },
 
         /**

@@ -498,19 +498,21 @@ define([
                 choices: [
                     {
                         id             : 1,
-                        value          : "0",
+                        value          : "1",
                         en             : "My first Option",
                         fr             : 'Mon option',
                         isDefaultValue : true
                     }, {
                         id             : 2,
-                        value          : "1",
+                        value          : "2",
                         en             : "My second Option",
                         fr             : 'Mon option 2',
                         isDefaultValue : false
                     }
                 ],
-                defaultValue: 1,    //  the default value refers to the default choice id
+                //  the default value refers to the default choice id
+                //  We used an array because we can have multiple default value
+                defaultValue: [1],
                 webServiceURL : "",
                 multiple: false,
                 expanded: false
@@ -833,7 +835,7 @@ define([
         },
 
         schema : function() {
-            return models.EnumerationField.constructor.schema;
+            return _.omit(models.EnumerationField.constructor.schema, 'multiple');
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
