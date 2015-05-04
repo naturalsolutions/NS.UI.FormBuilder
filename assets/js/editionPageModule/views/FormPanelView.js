@@ -204,7 +204,13 @@ define([
 
             this.$el.find('.drop').sortable({
                 axis: "y",
-                handle : '.paddingBottom5'
+                handle : '.paddingBottom5',
+
+                update : _.bind(function( event, ui ) {
+                    for (var v in this._view) {
+                        this._view[v].updateIndex( $('#' + v).index());
+                    }
+                }, this)
             });
             this.$el.find('.drop').disableSelection();
 

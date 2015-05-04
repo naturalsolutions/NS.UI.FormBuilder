@@ -114,6 +114,15 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
         },
 
         /**
+         * Change model order when view is sorted on form panel
+         *
+         * @param {interger} idx new order of the view
+         */
+        updateIndex: function(idx) {
+            this.model.set('order', parseInt(idx) + 1);
+        },
+
+        /**
          * Callback run when the wiew is dropped
          *
          * @param event jQuery event

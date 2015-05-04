@@ -27,6 +27,7 @@ define([
 
         defaults: {
             id          : 0,
+            order       : 1,
             name        : "Field",
             labelFr     : translater.getValueFromKey('schema.label.fr'),
             labelEn     : translater.getValueFromKey('schema.label.en'),
@@ -46,12 +47,6 @@ define([
         },
 
         schema : {
-            id : {
-                type        : "Number",
-                fieldClass  : 'advanced',
-                editorClass : 'form-control',
-                template    : fieldTemplate
-            },
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('schema.label.fr'),
@@ -170,6 +165,9 @@ define([
                 jsonObject[el] = this.get(el);
             }, this));
 
+            jsonObject["id"]    = this.get("id");
+            jsonObject["order"] = this.get("order");
+
             if (this.get('required')) {
                 jsonObject['validators'].push('required');
             }
@@ -181,18 +179,15 @@ define([
 
     models.HiddenField = Backbone.Model.extend({
         defaults: {
-            id    : 0,
+            id          : 0,
+            order       : 1,
             labelFr     : translater.getValueFromKey('schema.label.fr'),
             labelEn     : translater.getValueFromKey('schema.label.en'),
-            name  : "Field",
-            value : ""
+            name        : "Field",
+            value       : ""
         },
 
         schema: {
-            id: {
-                type: 'Number',
-                title : "ID"
-            },
             name   : {
                 type        : "Text",
                 title       : 'Name',
@@ -874,20 +869,14 @@ define([
 
     models.SubformField = Backbone.Model.extend({
         defaults: {
-            id       : 0,
-            fields   : [],
-            legend   : 'Fieldset',
-            multiple : false
+            id          : 0,
+            order       : 1,
+            fields      : [],
+            legend      : 'Fieldset',
+            multiple    : false
         },
 
         schema : {
-            id       : {
-                type        : 'Number',
-                title       : 'ID',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                fieldClass  : 'advanced'
-            },
             multiple : {
                 type        : CheckboxEditor,
                 fieldClass : "checkBoxEditor",
