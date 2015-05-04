@@ -309,7 +309,7 @@ define([
         * Check generated form values and send events if all is good
         */
         saveChange : function() {
-            if (this.subSettingView !== undefined) {
+            if (this.subSettingView !== null) {
                 //  In this case wa have a sub setting view
                 //  This view is used for example to set Checkbox values
                 this.subSettingView.commitValues()
