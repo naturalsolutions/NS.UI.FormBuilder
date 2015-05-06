@@ -6,21 +6,32 @@ define([
     'i18n'
 ], function(_, Backbone, exportJSONTemplate) {
 
+    /**
+     * Model view used to import a form in the formbuilder with a JSON file
+     */
     var ExportJSONProtocolModalView = Backbone.View.extend({
 
+        /**
+         * View events
+         */
         events: {
-            'click .btn-lg': 'importProtocol',
-            'click .find, input[type="text"]' : function() {
-                $(this.el).find('input[type="file"]').trigger('click')
-            },
-            'change input[type="file"]' : 'setText'
+            'click #importForm'               : 'importForm',
+            'click .find, input[type="text"]' : 'triggerClick',
+            'change input[type="file"]'       : 'setText'
         },
 
-        initialize: function(options) {
+        /**
+         * Initialize the view and bind context
+         */
+        initialize: function() {
             this.template = _.template(exportJSONTemplate);
-            _.bindAll(this, 'render', 'importProtocol');
+            _.bindAll(this, 'render', 'importProtocol', 'triggerClick');
         },
 
+        /**
+         * Render view and run model view with bootstrap
+         * @returns {ExportJSONProtocolModalView}
+         */
         render: function() {
             var renderedContent = this.template();
             $(this.el).html(renderedContent);
@@ -31,6 +42,18 @@ define([
             return this;
         },
 
+        /**
+         * Trigger click on the real input file when user clicks on the button
+         */
+        triggerClick : function() {
+            this.$el..find('input[type="file"]').trigger('click')
+        },
+
+        /**
+         * Currently web browsers lock access to input file path, some browser done fake path
+         * So we display only the filename
+         * @param e jquery event
+         */
         setText : function(e) {
             if ($(e.target).val() != "") {
                 var split = $(e.target).val().split('\\');
@@ -38,7 +61,11 @@ define([
             }
         },
 
-        importProtocol: function(e) {
+        /**
+         * Import form
+         * @param e
+         */
+        importForm: function(e) {
             var val         = $(this.el).find('input[type="text"]').val(),
                 fileSelect  = val != "";
 
@@ -49,6 +76,11 @@ define([
             }
         },
 
+        /**
+         * Return datas
+         * 
+         * @returns {{file: *}}
+         */
         getData: function() {
             return {
                 file : $(this.el).find('input[type="file"]')[0]

@@ -16,18 +16,36 @@
                 <input type="file" id="importProtocolFile" class="hide" />
                 <div class="row paddingRight15 paddingLeft15">
                     <input type="text" id="importProtocolFileText" class="control col-md-9" accept="application/json" />
-                    <button class="marginTop0 marginLeft5 btn reneco grey find" data-i18n="modal.import.find">
+                    <!--<button class="marginTop0 marginLeft5 btn reneco grey find" data-i18n="modal.import.find">
                         Find
+                    </button>-->
+
+                    <button class="marginTop0 marginLeft5 reneco grey find">
+                        <label>
+                            <span data-i18n="modal.import.find">
+                                Parcourir
+                            </span>
+                        </label>
+                        <label class="empty"></label>
                     </button>
+
                     <br/>
                     <label class="error"></label>
                 </div>
             </div>
         </div>
         <div class="modal-footer paddingBottom10 paddingTop20">
-            <button type="button" class="btn reneco red" data-i18n="modal.import.action">
+            <!--<button type="button" class="btn reneco red" data-i18n="modal.import.action">
                 Import
+            </button>-->
+
+            <button class="reneco red" id="importForm">
+                <label>
+                    <span data-i18n="modal.import.action">IMPORTER</span>
+                </label>
+                <label class="empty"></label>
             </button>
+
         </div>
     </div>
 </div>
