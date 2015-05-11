@@ -159,7 +159,7 @@ define([
         addFormSection : function(el, model) {
             el.after(
                 '<tr class="formInformation">\
-                    <td colspan="2"><label id="editRow"><span class="reneco edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
+                    <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
                     <td>' + model.get('keywordsFr').join(',') + '</td>\
                 </tr>'
             );
