@@ -143,7 +143,7 @@ define([
 
         /**
          * Update collection with object in parameter
-         * 
+         *
          * @param formToEdit object with new attributes values
          */
         updateCollection : function(formToEdit) {

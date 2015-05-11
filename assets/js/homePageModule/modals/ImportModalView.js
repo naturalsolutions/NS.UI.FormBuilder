@@ -25,7 +25,7 @@ define([
          */
         initialize: function() {
             this.template = _.template(exportJSONTemplate);
-            _.bindAll(this, 'render', 'importProtocol', 'triggerClick');
+            _.bindAll(this, 'render', 'importForm', 'triggerClick');
         },
 
         /**
@@ -46,7 +46,7 @@ define([
          * Trigger click on the real input file when user clicks on the button
          */
         triggerClick : function() {
-            this.$el..find('input[type="file"]').trigger('click')
+            this.$el.find('input[type="file"]').trigger('click')
         },
 
         /**
@@ -78,7 +78,7 @@ define([
 
         /**
          * Return datas
-         * 
+         *
          * @returns {{file: *}}
          */
         getData: function() {

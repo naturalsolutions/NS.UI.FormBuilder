@@ -459,14 +459,10 @@ define([
          * User wants to edit a form of the list
          */
         editForm : function() {
-            //  Send an event to the formbuilder
-            //  Two modules never speak directly, all communication pass htrough formbuilder App
-
             var formToEdit = this.formCollection.get(this.currentSelectedForm);
 
-            //  /!\ AT this point, normally i've to get form fieldset and schema
-            //  But wanting to keep an indenpendant client side mode, for the moment we send only form description
-
+            //  Send an event to the formbuilder
+            //  Two modules never speak directly, all communication pass htrough formbuilder App
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
