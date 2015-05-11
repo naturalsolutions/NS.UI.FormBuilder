@@ -147,7 +147,7 @@ define([
             this.keywordsEn    = options.keywordsEn     || ["form"];
             this.labelFr       = options.labelFr        || "";
             this.labelEn       = options.labelEn        || "";
-            this.tag           = options.tag            || "";
+            this.tag           = "";
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -162,8 +162,6 @@ define([
             this.formChannel = Backbone.Radio.channel('form');
 
             this.formChannel.on('remove', this.removeElement);
-
-            this.formChannel.on('formToEdit', this.updateWithJSON, this);
 
             //  Event send by BaseView or BaseView herited view for duplicate model
             this.formChannel.on('copyModel', this.copyModel, this);
@@ -271,7 +269,7 @@ define([
                 keywordsFr    : this.keywordsFr,
                 labelFr       : this.labelFr,
                 labelEn       : this.labelEn,
-                tag           : this.tag,
+                tag           : this.tag || "",
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
@@ -313,9 +311,6 @@ define([
 
                 el.set('name', 'Field' + this.length)
                 this.add(el);
-
-                //  Send event
-                this.trigger('newElement', el);
             }
 
         },
@@ -332,21 +327,25 @@ define([
 
         /**
          * Update collection : create field and fieldset from JSON data
-         * Send a backbone event to the form view when update is done
          *
          * @param  {object} JSONUpdate JSON data
          */
-        updateWithJSON: function (JSONUpdate) {
+        updateWithJSON : function(JSONUpdate) {
 
-            // Update collection attributes
-            this.updateCollectionAttributes(JSONUpdate);
-            // Create field
-            this.createFieldFromSchema(JSONUpdate);
-            // Create fieldsets
-            this.createFieldsets(JSONUpdate);
+            var fn = _.bind(function(JSONUpdate, callback) {
+                this.updateCollectionAttributes(JSONUpdate);
+                // Create field
+                this.createFieldFromSchema(JSONUpdate);
+                // Create fieldsets
+                this.createFieldsets(JSONUpdate);
 
-            // Send event when update is done
-            this.formChannel.trigger('updateFinished');
+                callback();
+            }, this);
+
+            fn(JSONUpdate, _.bind(function() {
+                this.formChannel.trigger('updateFinished');
+            }, this));
+
         },
 
         /**
@@ -355,6 +354,7 @@ define([
          * @param  {Object} JSONUpdate JSON data
          */
         updateCollectionAttributes : function(JSONUpdate) {
+
             this.name          = JSONUpdate["name"];
 
             this.descriptionFr = JSONUpdate["descriptionFr"];
@@ -432,6 +432,7 @@ define([
                     //  Add the field to the collection
                     this.addElement((el['type']) + 'Field', field)
                 }
+
                 field = null;
 
             }, this));

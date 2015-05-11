@@ -53,8 +53,8 @@ define([
             this._viewCount     = 0;
 
             //  Bind collection events
-            this.collection.bind('newElement', this.addElement, this);  //  new element added on the collection
-            this.collection.bind('remove', this.removeElement, this)    //  element removed from the collection
+            this.collection.bind('add', this.addElement, this);         //  new element added on the collection
+            this.collection.bind('remove', this.removeElement, this);   //  element removed from the collection
 
             _.bindAll(this, 'template')
 
@@ -79,6 +79,9 @@ define([
 
             //  Disable footer actions when user wants to edit a field
             this.formChannel.on('editModel',   this.disableFooterActions, this);
+
+            //  Event send by fieldCollection when the update is done
+            this.formChannel.on('updateFinished', this.updateName, this);
         },
 
         /**
@@ -89,6 +92,8 @@ define([
 
             this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
 
+            //  These events is receive when a user close the setting panel
+            //  When the setting panel is closed we can show footer action
             this.mainChannel.on('formCancel', this.enableFooterActions, this);
             this.mainChannel.on('formCommit', this.enableFooterActions, this);
         },
@@ -144,11 +149,11 @@ define([
                 //  View file successfully loaded
                 var id = "dropField" + newModel['id'];
 
-                $('.drop').append('<div class="dropField " id="' + id  + '" ></div>');
+                $('.drop').append('<div class="dropField" id="' + id  + '" data-order="' + newModel.get('order') + '" ></div>');
 
                 var vue = new fieldView({
-                    el      : '#' + id,
-                    model   : newModel,
+                    el         : '#' + id,
+                    model      : newModel,
                     collection : this.collection
                 });
                 if (vue !== null) {
@@ -212,6 +217,7 @@ define([
                     }
                 }, this)
             });
+
             this.$el.find('.drop').disableSelection();
 
             this.$el.find('#scrollSection').slimScroll({
@@ -221,6 +227,9 @@ define([
             });
 
             this.updateFieldCount();
+
+            //  Send an event to notify the render is done
+            this.formChannel.trigger('renderFinished');
         },
 
 
@@ -384,6 +393,13 @@ define([
             this.collection.reset();
             this.formChannel.trigger('exit');
             this._viewCount = 0;
+        },
+
+        /**
+         * Set H1 text when the update is done
+         */
+        updateName: function () {
+            this.$el.find('h1 label').first().text(this.collection.name)
         }
     });
 

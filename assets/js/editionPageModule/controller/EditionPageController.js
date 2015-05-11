@@ -63,13 +63,12 @@ define([
             this.formChannel.on('save', this.saveForm, this);
 
             //  Event send from router when user import a form or edit a form from the grid
-            this.formChannel.on('formEdition', this.editForm, this);
+            //this.formChannel.on('formEdition', this.editForm, this);
 
             this.formChannel.on('import', this.import, this);
 
             //  Event receive from a field field (see BaseView.js) when user wants to edit field properties
             this.formChannel.on('editModel', this.modelSetting, this);
-
         },
 
         /**
@@ -142,20 +141,23 @@ define([
             });
         },
 
-
-        editForm : function(formToEdit) {
-            //  Send event to formPanelView
-            this.formChannel.trigger('formToEdit', formToEdit);
+        /**
+         * Update collection with object in parameter
+         * 
+         * @param formToEdit object with new attributes values
+         */
+        updateCollection : function(formToEdit) {
+            this.fieldCollection.updateWithJSON(formToEdit);
         },
 
         /**
-         * Send event to form view pnale
+         * Send an event to FieldCollection
          *
          * @param  {Object} formImportedJSON imported form JSON data
          */
         import : function(formImportedJSON) {
-            //  Send event to formview panel for display imported form
-            this.formChannel.trigger('formToEdit', formImportedJSON);
+            //  Update collection with JSON data
+            this.fieldCollection.updateWithJSON(formImportedJSON);
         },
 
         saveForm : function(formAsJSON){
@@ -177,7 +179,6 @@ define([
                 }, this)
             });
         }
-
     });
 
     return EditionPageController;

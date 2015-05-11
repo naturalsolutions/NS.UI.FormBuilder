@@ -6,7 +6,7 @@ define([
     var EditionePageRouter = Backbone.Marionette.AppRouter.extend({
 
         appRoutes: {
-            "edition": "editionAction",
+            "edition": "editionAction"
         },
 
         initialize : function() {
@@ -19,17 +19,17 @@ define([
 
             //  Event send from formbuilder js when user want to edit a form from the homepage list
             this.editionPageChannel.on('display', this.displayEditionPage, this);
-
-            //  Event send by formbuilder when user wants to import a form from the hompegae
-            this.editionPageChannel.on('formImported', this.formImported, this);
         },
 
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
 
-            //  Return to hompage
+            //  Return to homepage
             //  Event send by FormPanelView when user click on "exit" button
             this.formChannel.on('exit', this.exit, this);
+
+            //  Event send by Formbuilder when user wants to import a form from the homepage
+            this.editionPageChannel.on('formImported', this.displayEditionPage, this);
         },
 
         /**
@@ -39,20 +39,22 @@ define([
          */
         displayEditionPage : function(formToEdit) {
 
-            //  Send event to EditionPageController
-            this.formChannel.trigger('formEdition', formToEdit);
+            //  Event send by formPanel view when render is done
+            //  Send data to the controller
+            this.formChannel.on('renderFinished', this.sendJsonDataToController, this);
 
-            //  Start edition
+            //  Keep data in memory
+            this.formAsJSON = formToEdit;
+
+            //  Go to edition page
             this.navigate('#edition', {
                 trigger : true
             });
         },
 
-        formImported : function(formAsJSON) {
-            this.navigate('#edition', {
-                trigger : true
-            });
-            this.formChannel.trigger('import', formAsJSON)
+        sendJsonDataToController : function() {
+            //  Call import controller function
+            this.options.controller.import(this.formAsJSON);
         },
 
         exit : function() {
