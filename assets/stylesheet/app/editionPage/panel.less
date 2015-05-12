@@ -40,95 +40,8 @@
                     margin     : 5px auto;
                 }
                 span {
-                    .fa;
                     font-size: 25px;
                     line-height: 50px;
-
-                    //  For each field we choose an icon
-                    //  You can use font-awesome : http://fortawesome.github.io/Font-Awesome/icons/
-                    //
-                    //  /!\ If you use font awesome take care about your version. Some content value are different on the website and on the css file
-                    //
-                    //  Or use an other font like renecoFont : http://naturalsolutions.github.io/RenecoFonts/
-                    //  Or a background image
-
-                    &.iconDateField:before {
-                        content: "\f073";
-                    }
-
-
-                    &.iconTextField:before {
-                        content: "\f031";
-                    }
-
-                    &.iconTextAreaField:before {
-                        content: "\f039";
-                    }
-
-                    &.iconNumberField:before {
-                        content : '69';
-                    }
-
-                    &.iconNumericRangeField:before {
-                        content: "\f1de";
-                    }
-
-                    &.iconPatternField:before{
-
-                    }
-
-                    &.iconFileField:before {
-                        content: "\f1c2";
-                    }
-
-                    &.iconTreeViewField:before {
-                        content: "\f1bb";
-                    }
-
-                    &.iconSubformField {
-                        .reneco !important;
-                        line-height: 50px !important;
-                        &:before {
-                            content: "\e678";
-                        }
-                    }
-
-                    &.iconThesaurusField {
-                        .reneco !important;
-                        line-height: 50px !important;
-                        &:before {
-                            content: "\e696";
-                        }
-                    }
-
-                    &.iconAutocompleteTreeViewField:before {
-
-                    }
-
-                    &.iconHiddenField:before {
-                        content: "\f070";
-                    }
-
-                    &.iconHorizontalLineField:before {
-                        content: "\f068";
-                    }
-
-                    &.iconAutocompleteField:before {
-
-                    }
-
-                    &.iconCheckBoxField:before {
-                        content: "\f046";
-                    }
-
-                    &.iconRadioField:before {
-                        content: "\f192";
-                    }
-
-                    &.iconSelectField:before {
-                        content: "\f150";
-                    }
-
                 }
             }
         }
@@ -199,82 +112,22 @@
            font-size  : 22px;
 
             &[class^="picto"] {
-                .fa;
-                color : #aaa;
+                color         : #aaa;
                 font-size     : 18px;
-                font-style: normal !important;
-
-                &.picto-text:before {
-                    content: "\f031";
-                }
-
-                &.picto-date:before {
-                    .reneco;
-                    content: "\e67a";
-                }
+                font-style    : normal !important;
 
                 &.picto-subform {
                     position: relative;
                     top: 1px;
-                    &:before {
-                        .reneco;
-                        content : '\e678';
-                    }
                 }
 
                 &.picto-thesaurus {
-                    &:before {
-                        .reneco;
-                        content: '\e691';
-                    }
                     position: relative;
                     top: 2px;
                 }
 
-                &.picto-checkbox:before {
-                    .reneco;
-                    content : '\e659';
-                }
-
-                &.picto-radio:before {
-                    content: "\f10c";
-                }
-
-                &.picto-textarea:before {
-                    content: "\f039";
-                }
-
-                &.picto-numericrange:before {
-                    content: "\f1de";
-                }
-
-                &.picto-number:before {
-                    content : '69';
-                }
-
-                &.picto-treeview:before {
-                    content: "\f1bb";
-                }
-
-                &.picto-file:before {
-                    content: "\f1c2";
-                }
-
-                &.picto-select:before {
-                    content: "\f150";
-                }
-
-                &.picto-hidden:before {
-                    content: "\f070";
-                }
-
-                &.picto-horizontalline:before {
-                    .fa;
-                    content: "\f068";
-                }
-
            }
-           &.fa-plus {
+           &.reneco-add {
                 position: absolute;
                 left: 100%;
                 transition : left 0.1s ease-in;
@@ -291,7 +144,7 @@
                 color : #111;
                 font-weight: 600;
             }
-            .fa-plus {
+            .reneco-add {
                 left: 85%;
             }
         }
