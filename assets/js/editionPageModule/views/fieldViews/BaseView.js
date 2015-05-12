@@ -10,9 +10,9 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          * Events for the intercepted by the view
          */
         events: {
-            'click  .trash'      : 'removeView',
-            'click .duplicate'   : 'copyModel',
-            'click .edit'        : 'editModel',
+            'click #trash'       : 'removeView',
+            'click #duplicate'   : 'copyModel',
+            'click #edit'        : 'editModel',
             'focus input'        : 'updateSetting',
             "isDropped"          : "isDropped"
         },
@@ -24,10 +24,6 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.template   = _.template(options.template);
             _.bindAll(this, 'render', 'removeView', 'editModel', 'copyModel');
             this.model.bind('change', this.render);
-
-            this.model.bind('destroy', function() {
-                //alert("destroy")
-            })
 
             this.el = options.el;
             this.initFormChannel();
@@ -81,6 +77,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             $(this.el).disableSelection();
 
             $(this.el).i18n();
+
             return this;
         },
 
@@ -120,6 +117,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          */
         updateIndex: function(idx) {
             this.model.set('order', parseInt(idx) + 1);
+            this.$el.data('order', parseInt(idx) + 1);
         },
 
         /**
