@@ -1,15 +1,69 @@
 header {
     .exo;
-    height        : 42px;
+    height        : 55px;
     background    : #862332;
-    line-height   : 38px;
+    line-height   : 50px;
     margin-bottom : 0 !important;
 
-    .logo {
-        width        : 20;
-        margin-left  : 7px;
-        margin-right : 7px;
+    .reneco-formbuildersmall {
+        font-size: 20px;
+        position : relative;
+        top      : 1px;
     }
+
+    .icons {
+        float     : left;
+        height    : 50px;
+        overflow  : hidden;
+        margin-top: 7.5px;
+
+        &:first-child {
+            width     : 145px;
+            margin-top: 1.5px;
+            &:after {
+                .exo;
+                color      : white;
+                content    : "online";
+                position   : relative;
+                top        : -5px;
+                left       : -28px;
+                font-size  : 20px;
+            }
+            .reneco-cloud2 {
+                color      : white;
+                font-size  : 40px;
+                font-weight: 100;
+            }
+
+            .reneco-checked {
+                position     : relative;
+                left         : -43px;
+                top          : 2px;
+                color        : white;
+                background   : #66b32d;
+                border-radius: 50px;
+                padding      : 8px;
+            }
+
+        }
+
+        &.last {
+            width        : 40px;
+            height       : 40px;
+            background   : #979797;
+            border-radius: 50px;
+            text-align   : center;
+
+            .reneco-user {
+                color     : #ffffff;
+                font-size : 34px;
+                position  : relative;
+                top       : 8px;
+            }
+        }
+    }
+
+
 
     .title, .mode, .user, .status {
         color           : white;
@@ -18,10 +72,6 @@ header {
         font-size       : 20px;
         margin-left     : 7px;
         margin-right    : 7px;
-    }
-
-    .glyphicon-chevron-down {
-        color : white;
     }
 
     .pipe {
