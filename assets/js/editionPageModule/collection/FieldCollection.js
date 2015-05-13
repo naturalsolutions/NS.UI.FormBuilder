@@ -418,11 +418,19 @@ define([
                 fieldset = fieldset.concat(el["fields"]);
             });
 
-            _.each(JSONUpdate["schema"], _.bind(function (el, idx) {
+            var schema = [];
 
+            _.each(JSONUpdate["schema"], function(element, index) {
+                schema.push(element);
+            });
+
+            schema = _.sortBy(schema, "order");
+
+            _.each(schema, _.bind(function (el, idx) {
+                
                 //  Add field if it is not in the fieldset
 
-                if (!_.contains(fieldset, idx)) {
+                if (!_.contains(fieldset, el.name)) {
                     field = _.pick(el, 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn')
                     if (el["validators"] !== undefined && el["validators"].length > 0) {
                         field['required'] = el["validators"]['required'] !== undefined;
