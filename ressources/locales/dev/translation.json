@@ -25,7 +25,7 @@
     "boolean"              : "Boolean",
     "thesaurus"            : "Thesaurus",
     "autocompletetreeview" : "Autocomplete Treeview",
-    "numericrange"         : "Numeric with slider"
+    "numericrange"         : "Range"
   },
 
   "search" : {
