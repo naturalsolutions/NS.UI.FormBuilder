@@ -4,10 +4,10 @@ define([
     'text!../templates/WidgetPanelView.html',
     '../models/Fields',
     'backbone.radio',
-    'sweetalert',
     'i18n',
-    'jquery-ui'
-], function($, Marionette, WidgetPanelViewTemplate, Fields, Radio, swal) {
+    'jquery-ui',
+    'sweetalert'
+], function($, Marionette, WidgetPanelViewTemplate, Fields, Radio) {
 
 
     var WidgetPanelView = Backbone.Marionette.ItemView.extend({
@@ -15,7 +15,8 @@ define([
         events: {
             'click div.col-md-5'       : 'appendToDrop',
             'click div.col-md-10'      : 'appendToDrop',
-            'click #smallFeatures div' : 'appendToDrop'
+            'click #smallFeatures div' : 'appendToDrop',
+            'click h3'                 : 'displayContent'
         },
 
         template : function() {
@@ -75,6 +76,17 @@ define([
             this.section = section;
         },
 
+        displayContent : function(e) {
+            var accordion = $(e.currentTarget).data('accordion')
+            $('.section[data-accordion!="content-' + accordion + '"]').slideUp(500, function() {
+                $('.section[data-accordion="content-' + accordion + '"]').slideDown(500)
+            });
+        },
+
+        initAccordion : function() {
+            this.$el.find('.section').not(':first').hide();
+        },
+
 
         onRender : function(options) {
             // run i18nnext translation in the view context
@@ -87,8 +99,8 @@ define([
 
             //  Disable selection on field element
             $('.fields').disableSelection();
-            //  Use accordion for each category
-            this.$el.find('#accordion').accordion();
+
+            this.initAccordion();
         }
 
     });

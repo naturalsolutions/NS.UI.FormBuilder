@@ -1,4 +1,4 @@
-<di>
+<div>
 
     <div id="toggle">
         <span class="glyphicon glyphicon-th-list open"></span>
@@ -8,14 +8,14 @@
         <div id="accordion" class="container-fluid">
             <% for (var n in section) { %>
                 <div class="row">
-                    <h3 class="col-md-10 col-md-offset-1 paddingLeft0" >
+                    <h3 class="col-md-10 col-md-offset-1 paddingLeft0" data-accordion="<%= n %>">
                         <span data-i18n="accordion.<%= n %>">
                             <%= n %>
                         </span>
                         <span class="fa fa-caret-down pull-right"></span>
                     </h3>
                 </div>
-                <div class="row">
+                <div class="row section" data-accordion="content-<%= n %>">
                     <% var count = 0, clasS = "" %>
                     <% for (var i in section[n]) { count++; %>
                         <% if (section[n][i]['doubleColumn']) {
@@ -23,7 +23,7 @@
                         } else {
                             clasS = "col-md-5 " + (count%2 !== 0 ? "col-md-offset-1" : "");
                         } %>
-                        <div class="<%= clasS %>" data-toggle="tooltip" data-placement="right" data-type="<%= i.replace(" Field ", " ") %>">
+                        <div class="<%= clasS %>"  data-type="<%= i.replace(" Field ", " ") %>">
                             <div    data-type="<%= i.replace(" Field ", " ") %>"
                                 class="fields"
                                 data-i18n="[title]tooltip.<%= section[n][i]['i18n'] %>"
