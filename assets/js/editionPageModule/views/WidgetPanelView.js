@@ -4,10 +4,10 @@ define([
     'text!../templates/WidgetPanelView.html',
     '../models/Fields',
     'backbone.radio',
+    'sweetalert',
     'i18n',
-    'jquery-ui',
-    'sweetalert'
-], function($, Marionette, WidgetPanelViewTemplate, Fields, Radio) {
+    'jquery-ui'
+], function($, Marionette, WidgetPanelViewTemplate, Fields, Radio, swal) {
 
 
     var WidgetPanelView = Backbone.Marionette.ItemView.extend({
