@@ -490,28 +490,30 @@ define([
                 $('#importModal').on('hidden.bs.modal', _.bind(function () {
                     var datas = modalView.getData();
 
-                    Utilities.ReadFile(datas['file'], _.bind(function(result) {
-                        try {
-                            if (result !== false) {
+                    if (!datas.closed) {
+                        Utilities.ReadFile(datas['file'], _.bind(function (result) {
+                            try {
+                                if (result !== false) {
 
-                                this.globalChannel.trigger('formImported', $.parseJSON(result));
+                                    this.globalChannel.trigger('formImported', $.parseJSON(result));
 
-                            } else {
+                                } else {
+                                    swal(
+                                        translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
+                                        translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                        "error"
+                                    );
+                                }
+                            } catch (e) {
+                                console.log(e)
                                 swal(
                                     translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
                                     translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                     "error"
                                 );
                             }
-                        } catch (e) {
-                            console.log (e)
-                            swal(
-                                translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
-                                translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
-                                "error"
-                            );
-                        }
-                    }, this));
+                        }, this));
+                    }
 
                 }, this));
 

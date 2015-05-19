@@ -17,7 +17,8 @@ define([
         events: {
             'click #importForm'               : 'importForm',
             'click .find, input[type="text"]' : 'triggerClick',
-            'change input[type="file"]'       : 'setText'
+            'change input[type="file"]'       : 'setText',
+            'click .fa-close'                 : 'closeModal'
         },
 
         /**
@@ -26,6 +27,7 @@ define([
         initialize: function() {
             this.template = _.template(exportJSONTemplate);
             _.bindAll(this, 'render', 'importForm', 'triggerClick');
+            this.closed = false;
         },
 
         /**
@@ -76,6 +78,10 @@ define([
             }
         },
 
+        closeModal : function() {
+            this.closed = true;
+        },
+
         /**
          * Return datas
          *
@@ -83,7 +89,8 @@ define([
          */
         getData: function() {
             return {
-                file : $(this.el).find('input[type="file"]')[0]
+                file : $(this.el).find('input[type="file"]')[0],
+                closed : this.closed
             }
         }
 
