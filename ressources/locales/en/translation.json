@@ -156,11 +156,12 @@
             "fr" : "French label",
             "en" : "English label"
         },
-        "name" : "Field name",
-        "linkedFieldTable" : "Linked field table",
+        "name"                         : "Field name",
+        "linkedFieldTable"             : "Linked field table",
         "linkedFieldIdentifyingColumn" : "Identifying field",
-        "linkedField" : "Linked field",
-        "formIdentifyingColumn" : "Form identifying field"
+        "linkedField"                  : "Linked field",
+        "formIdentifyingColumn"        : "Form identifying field",
+      "isLinkedField"                  : "Is a linked Field"
     },
 
     "tooltip" : {

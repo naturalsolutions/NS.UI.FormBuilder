@@ -114,6 +114,61 @@ define([
         },
 
         /**
+         * Enable or disable linked field select if the checkbox is checked or not
+         */
+        bindLinkedFieldSelect : function() {
+            this.form.fields.isLinkedField.editor.$el.find('input').change(_.bind(function(e) {
+                this.disableOrEnableLinkedFields($(e.target).is(':checked'));
+            }, this));
+        },
+
+        /**
+         * Disable or enable linked field select
+         *
+         * @param state if the select will be checked or not
+         */
+        disableOrEnableLinkedFields : function(state) {
+            this.form.fields.linkedField.editor.$el.attr('disabled', !state);
+            this.form.fields.formIdentifyingColumn.editor.$el.attr('disabled', !state);
+            this.form.fields.linkedFieldTable.editor.$el.attr('disabled', !state);
+            this.form.fields.linkedFieldIdentifyingColumn.editor.$el.attr('disabled', !state);
+        },
+
+        /**
+         * A field can be linked to another field
+         * We initialize select field option
+         */
+        initFormLinkedFields : function() {
+
+            var linkedFieldsKeyList = [];
+            _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
+                linkedFieldsKeyList.push(el.key)
+            });
+
+            if (! _.contains(['Subform'], this.modelToEdit.constructor.type)) {
+                if (this.fieldsList.length > 0) {
+                    //  Update linked fields
+                    this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
+                    this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
+                    this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
+                    this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+
+                    //  Disable all select at start
+                    this.disableOrEnableLinkedFields(false);
+                    this.bindLinkedFieldSelect();
+
+                } else {
+                    //  In this case there is only one field in the form so it can't be a linked field
+                    //  We add hide class to hide editor
+                    this.form.fields.linkedField.$el.addClass('hide');
+                    this.form.fields.formIdentifyingColumn.$el.addClass('hide');
+                    this.form.fields.linkedFieldTable.$el.addClass('hide');
+                    this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
+                }
+            }
+        },
+
+        /**
         * Create a form to edit field properties
         *
         * @param  {[Object]} field to edit
@@ -126,27 +181,8 @@ define([
                     model: this.modelToEdit
                 }).render();
 
-                var linkedFieldsKeyList = [];
-                _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
-                    linkedFieldsKeyList.push(el.key)
-                });
-
-                if (! _.contains(['Subform'], this.modelToEdit.constructor.type)) {
-                    if (this.fieldsList.length > 0) {
-                        //  Update linked fields
-                        this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-                        this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
-                        this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
-                        this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
-                    } else {
-                        //  In this case there is only one field in the form so it can't be a linked field
-                        //  We add hide class to hide editor
-                        this.form.fields.linkedField.$el.addClass('hide');
-                        this.form.fields.formIdentifyingColumn.$el.addClass('hide');
-                        this.form.fields.linkedFieldTable.$el.addClass('hide');
-                        this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
-                    }
-                }                
+                //  Init linked field
+                this.initFormLinkedFields();
 
                 this.$el.find('#form').append(this.form.el)
 
@@ -316,6 +352,14 @@ define([
             }
 
             if (this.form.commit() === undefined) {
+                
+                if (!this.modelToEdit.get('isLinkedField')) {
+                    this.modelToEdit.set('linkedField', '');
+                    this.modelToEdit.set('linkedFieldIdentifyingColumn', '');
+                    this.modelToEdit.set('linkedFieldTable', '');
+                    this.modelToEdit.set('formIdentifyingColumn', '');
+                }
+
                 this.mainChannel.trigger('formCommit')
                 this.removeForm();
             }

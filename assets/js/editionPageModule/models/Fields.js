@@ -40,6 +40,7 @@ define([
             endOfLine   : false,
 
             //  Linked fields values
+            isLinkedField                : false,
             linkedFieldTable             : '',
             linkedFieldIdentifyingColumn : '',
             linkedField                  : '',
@@ -109,11 +110,16 @@ define([
             },
             endOfLine : {
                 type        : CheckboxEditor,
-                fieldClass : "checkBoxEditor",
+                fieldClass  : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.eol')
             },
 
             //  Linked field section
+            isLinkedField : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
+            },
             linkedFieldTable : {
                 type : 'Select',
                 title       : translater.getValueFromKey('schema.linkedFieldTable'),
@@ -153,6 +159,11 @@ define([
             return this.getSchemaProperty(index, 'advanced') === "advanced";
         },
 
+        /**
+         * Return the model in JSON object
+         *
+         * @returns {object} fiels as json object
+         */
         getJSON : function() {
 
             var jsonObject                  = {
@@ -172,7 +183,7 @@ define([
                 jsonObject['validators'].push('required');
             }
 
-            return jsonObject;
+            return _.omit(jsonObject, 'isLinkedField');
         }
 
     });
