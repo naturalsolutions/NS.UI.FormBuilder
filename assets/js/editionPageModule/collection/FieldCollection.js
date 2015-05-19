@@ -293,26 +293,33 @@ define([
             return json;
         },
 
-        /**
-        * Add a new field on the form collection
-        *
-        * @param {type} element
-        * @param {type} nameType
-        * @returns {undefined}
-        */
-        addElement: function (nameType, properties) {
+        addField : function(field, ifFieldIsInFieldset) {
+            if (this.isAValidFieldType(field.constructor.type)) {
 
-            if (Fields[nameType] != undefined) {
+                //  Update field
+                field.set('isUnderFieldset', ifFieldIsInFieldset !== undefined ? ifFieldIsInFieldset : false);
+                field.set('id', this.getSize());
+                //  Add it
+                this.add(field);
 
-                var field   = properties || {};
-                field['id'] = this.getSize();
-
-                var el      = new Fields[nameType](field);
-
-                el.set('name', 'Field' + this.length)
-                this.add(el);
             }
+        },
 
+        /**
+         * Add a new field on the form collection
+         *
+         * @param {string} nameType
+         * @param {object} properties
+         * @param {boolean} isUnderFieldset
+         */
+        addElement: function (nameType, properties, isUnderFieldset) {
+
+            //  By default ID is 0 and we need to change the id otherwise it causes bug on the collection
+            properties['id']   = this.getSize();
+            properties['name'] = 'Field' + this.getSize();
+
+            //  Add field
+            this.addField(new Fields[nameType](properties), isUnderFieldset);
         },
 
         /**
@@ -333,11 +340,15 @@ define([
         updateWithJSON : function(JSONUpdate) {
 
             var fn = _.bind(function(JSONUpdate, callback) {
+
+                //  Update form attribute
                 this.updateCollectionAttributes(JSONUpdate);
-                // Create field
-                this.createFieldFromSchema(JSONUpdate);
-                // Create fieldsets
+
+                // Create fieldsets but empty
                 this.createFieldsets(JSONUpdate);
+
+                // Create all fields
+                this.createFieldFromSchema(JSONUpdate);
 
                 callback();
             }, this);
@@ -346,6 +357,35 @@ define([
                 this.formChannel.trigger('updateFinished');
             }, this));
 
+        },
+
+        /**
+         * Check if the string in parameter is a valid field type
+         *
+         * @param typeToBeValidated string to test
+         * @returns {boolean} if the string is a valid field type
+         */
+        isAValidFieldType : function(typeToBeValidated) {
+            return Fields[typeToBeValidated + 'Field'] !== undefined;
+        },
+
+        /**
+         * Create a new field with properties in parameter
+         *
+         * @param {array} newFieldProperties properties array
+         */
+        createFieldWithJSON : function(newFieldProperties) {
+
+            var fieldTmpProperties = _.pick(newFieldProperties, 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn', 'name');
+
+            if (newFieldProperties["validators"] !== undefined && newFieldProperties["validators"].length > 0) {
+
+                fieldTmpProperties['required'] = newFieldProperties["validators"]['required'] !== undefined;
+                fieldTmpProperties['readonly'] = newFieldProperties["validators"]['required'] !== undefined;
+
+            }
+
+            return new Fields[newFieldProperties['type'] + 'Field'](fieldTmpProperties);
         },
 
         /**
@@ -376,7 +416,7 @@ define([
          */
         createFieldsets : function(JSONUpdate) {
 
-            var field = null;
+            var field = null, currentField = null;
 
             _.each(JSONUpdate['fieldsets'], _.bind(function (el, idx) {
 
@@ -385,23 +425,19 @@ define([
                     fields: []
                 };
 
-                _.each(el["fields"], function (name, index) {
-                    if (Fields[JSONUpdate['schema'][name]['type'] + 'Field'] !== undefined) {
+                //  Add all fields for the current fieldset
+                _.each(el["fields"], _.bind(function (name, index) {
 
-                        field.fields.push(
-                            new Fields[JSONUpdate['schema'][name]['type'] + 'Field']({
-                                id          : field['fields'].length,
-                                title       : JSONUpdate['schema'][name]['title'],
-                                help        : JSONUpdate['schema'][name]['help'],
-                                editorClass : JSONUpdate['schema'][name]['editorClass'],
-                                fieldClass  : JSONUpdate['schema'][name]['fieldClass'],
-                                required    : JSONUpdate['schema'][name]['validators']['required'] !== undefined,
-                            })
-                        );
+                    currentField = JSONUpdate['schema'][name];
+
+                    if (this.isAValidFieldType( currentField['type'] )) {
+                        field.fields.push( this.createFieldWithJSON(currentField) );
                     }
-                });
 
-                this.addElement('SubformField', field);
+                }, this));
+
+                //  Create subFormField
+                this.addElement('SubformField', field, false);
 
             }, this));
         },
@@ -412,14 +448,16 @@ define([
          * @param  {Object} JSONUpdate JSON data
          */
         createFieldFromSchema : function(JSONUpdate) {
-            var field = null, fieldset = [];
+
+            var fieldset = [],
+                schema = [];
 
             _.each(JSONUpdate['fieldsets'], function (el, idx) {
                 fieldset = fieldset.concat(el["fields"]);
             });
 
-            var schema = [];
-
+            //  Convert current schema object in array
+            //  We need to convert it in array for sort it by field order
             _.each(JSONUpdate["schema"], function(element, index) {
                 schema.push(element);
             });
@@ -427,22 +465,11 @@ define([
             schema = _.sortBy(schema, "order");
 
             _.each(schema, _.bind(function (el, idx) {
-                
-                //  Add field if it is not in the fieldset
-
-                if (!_.contains(fieldset, el.name)) {
-                    field = _.pick(el, 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn')
-                    if (el["validators"] !== undefined && el["validators"].length > 0) {
-                        field['required'] = el["validators"]['required'] !== undefined;
-                        field['readonly'] = el["validators"]['required'] !== undefined;
-                    }
-
-                    //  Add the field to the collection
-                    this.addElement((el['type']) + 'Field', field)
-                }
-
-                field = null;
-
+                //  Add new field
+                this.addField(
+                    this.createFieldWithJSON(el),
+                    _.contains(fieldset, el.name)
+                );
             }, this));
         },
 

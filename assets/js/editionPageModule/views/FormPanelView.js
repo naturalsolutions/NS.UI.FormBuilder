@@ -60,8 +60,32 @@ define([
 
             this.initFormChannel();
             this.initMainChannel();
+            this.initCollectionChannel();
         },
 
+        /**
+         * Initialize collectionView channel, the collectionView channel is a private channel between the formView and the subForm views
+         * It is used when view are added or removed from a subForm view
+         */
+        initCollectionChannel : function() {
+            //  This channel is used between the form view and all subForm view
+            //  The goal is to pass information when a view is dragged and dropped inside or outside of a subForm view
+            this.collectionChannel = Backbone.Radio.channel('collectionView');
+
+            //  Event send by a subForm view when a BaseView is dropped in
+            this.collectionChannel.on('viewDrop', this.viewDrop, this);
+        },
+
+        /**
+         * Callback executed when a BaseView is dropped in a subForm View
+         *
+         * @param subFormView subForm View where a BaseView was dropped in
+         */
+        viewDrop : function(subFormView) {
+            //  We send to the subFormView the BaseView object
+            //  The subForm view has to move the BaseView from the main form view to its HTML container
+            this.collectionChannel.trigger('viewDropped:' + subFormView.id, this._view[subFormView.viewDroppedId]);
+        },
 
         /**
         * Init form channel
@@ -74,7 +98,7 @@ define([
             //  And we display message with sweet alert
             this.formChannel.on('save:return',      this.displaySaveMessage);
 
-            //  Eevent send from formbuilder.js when export is finished (success or not)
+            //  Event send from Formbuilder.js when export is finished (success or not)
             this.formChannel.on('exportFinished',   this.displayExportMessage, this);
 
             //  Disable footer actions when user wants to edit a field
@@ -136,51 +160,58 @@ define([
          */
         addElement: function (newModel) {
 
-            var viewClassName = newModel.constructor.type + "FieldView";
+            if (!newModel.get('isUnderFieldset')) {
 
-            if (newModel.constructor.type === "Numeric") {
-                newModel.on('change:decimal', function(e) {
-                    e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
-                })
-            }
+                //  We only create view for model who are not in a fieldset
+                //  If a model if in a fieldset, the fieldset view render the subView
 
-            require(['editionPageModule/views/fieldViews/' + viewClassName], _.bind(function(fieldView) {
+                var viewClassName = newModel.constructor.type + "FieldView";
 
-                //  View file successfully loaded
-                var id = "dropField" + newModel['id'];
-
-                $('.drop').append('<div class="dropField" id="' + id  + '" data-order="' + newModel.get('order') + '" ></div>');
-
-                var vue = new fieldView({
-                    el         : '#' + id,
-                    model      : newModel,
-                    collection : this.collection
-                });
-                if (vue !== null) {
-                    vue.render();
-                    this._view[id] = vue;
-                    this.updateScrollBar();
+                if (newModel.constructor.type === "Numeric") {
+                    newModel.on('change:decimal', function (e) {
+                        e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
+                    })
                 }
 
-                $(".actions").i18n();
+                require(['editionPageModule/views/fieldViews/' + viewClassName], _.bind(function (fieldView) {
 
-                this._viewCount++;
-                this.updateFieldCount();
+                    //  View file successfully loaded
+                    var id = "dropField" + newModel['id'];
 
-            }, this), function(err) {
-                swal(
-                    translater.getValueFromKey('modal.field.error')    || "Echec de l'ajout!",
-                    translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
-                    "error"
-                );
-            });
+                    $('.drop').append('<div class="dropField" id="' + id + '" data-order="' + newModel.get('order') + '" ></div>');
+
+                    var vue = new fieldView({
+                        el: '#' + id,
+                        model: newModel,
+                        collection: this.collection
+                    });
+                    if (vue !== null) {
+                        vue.render();
+                        this._view[id] = vue;
+                        this.updateScrollBar();
+                    }
+
+                    $(".actions").i18n();
+
+                    this._viewCount++;
+                    this.updateFieldCount();
+
+                }, this), function (err) {
+                    swal(
+                        translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
+                        translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
+                        "error"
+                    );
+                });
+
+            }
         },
 
         /**
          * Update field count
          */
         updateFieldCount : function() {
-            this.$el.find('.first').text(this._viewCount)
+            this.$el.find('.first').text(this.collection.length - 1);
 
             this[this.collection.length > 1 ? 'enableFooterActions' : 'disableFooterActions']();
         },

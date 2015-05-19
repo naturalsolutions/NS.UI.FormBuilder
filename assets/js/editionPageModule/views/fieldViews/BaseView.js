@@ -13,8 +13,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             'click #trash'       : 'removeView',
             'click #duplicate'   : 'copyModel',
             'click #edit'        : 'editModel',
-            'focus input'        : 'updateSetting',
-            "isDropped"          : "isDropped"
+            'focus input'        : 'updateSetting'
         },
 
         /**
@@ -26,6 +25,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.model.bind('change', this.render);
 
             this.el = options.el;
+
             this.initFormChannel();
             this.initMainChannel();
         },
@@ -77,7 +77,6 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             $(this.el).disableSelection();
 
             $(this.el).i18n();
-
             return this;
         },
 
@@ -118,19 +117,6 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
         updateIndex: function(idx) {
             this.model.set('order', parseInt(idx) + 1);
             this.$el.data('order', parseInt(idx) + 1);
-        },
-
-        /**
-         * Callback run when the wiew is dropped
-         *
-         * @param event jQuery event
-         * @param data data passed
-         */
-        isDropped : function(event, data) {
-            $('#' + data['id']).trigger('isDroppedReturn', [{
-                subViewID : this.$el.attr('id'),
-                subView : this
-            }]);
         }
     });
 
