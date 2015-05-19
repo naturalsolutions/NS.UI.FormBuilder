@@ -314,12 +314,13 @@ define([
          */
         addElement: function (nameType, properties, isUnderFieldset) {
 
-            //  By default ID is 0 and we need to change the id otherwise it causes bug on the collection
-            properties['id']   = this.getSize();
-            properties['name'] = 'Field' + this.getSize();
+            field = properties || {};
+
+            field['id']   = this.getSize();
+            field['name'] = 'Field' + this.getSize();
 
             //  Add field
-            this.addField(new Fields[nameType](properties), isUnderFieldset);
+            this.addField(new Fields[nameType](field), isUnderFieldset);
         },
 
         /**
