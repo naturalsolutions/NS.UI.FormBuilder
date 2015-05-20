@@ -160,6 +160,7 @@ define([
                 } else {
                     //  In this case there is only one field in the form so it can't be a linked field
                     //  We add hide class to hide editor
+                    this.form.fields.isLinkedField.$el.addClass('hide');
                     this.form.fields.linkedField.$el.addClass('hide');
                     this.form.fields.formIdentifyingColumn.$el.addClass('hide');
                     this.form.fields.linkedFieldTable.$el.addClass('hide');

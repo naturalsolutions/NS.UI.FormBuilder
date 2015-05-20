@@ -147,7 +147,7 @@ define([
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
-            },
+            }
 
         },
 
@@ -192,8 +192,7 @@ define([
         defaults: {
             id          : 0,
             order       : 1,
-            labelFr     : translater.getValueFromKey('schema.label.fr'),
-            labelEn     : translater.getValueFromKey('schema.label.en'),
+            title       : translater.getValueFromKey('tooltip.hidden'),
             name        : "Field",
             value       : ""
         },
@@ -208,26 +207,6 @@ define([
                     placeholder : translater.getValueFromKey('placeholder.name')
                 }
             },
-            labelFr   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.label.fr'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators : ['required'],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.label.fr')
-                }
-            },
-            labelEn   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.label.en'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators : ['required'],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.label.en')
-                }
-            },
             value: {
                 type        : 'Text',
                 editorClass : 'form-control',
@@ -236,6 +215,41 @@ define([
                 editorAttrs : {
                     placeholder : translater.getValueFromKey('placeholder.value')
                 }
+            },
+
+            //  Linked field section
+            isLinkedField : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
+            },
+            linkedFieldTable : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.linkedFieldTable'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+            linkedFieldIdentifyingColumn : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+            linkedField : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.linkedField'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+            formIdentifyingColumn : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.formIdentifyingColumn'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
             }
         }
     }, {
@@ -973,7 +987,7 @@ define([
         i18n: 'thesaurus'
     });
 
-    models.AutocompleteTreeView = models.BaseField.extend({
+    models.AutocompleteTreeViewField = models.BaseField.extend({
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 language    : { hasLanguage: true, lng: 'En' },

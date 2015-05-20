@@ -102,7 +102,6 @@ define([
                 }, this)
             });
 
-            console.log ("I am rendered, subform")
             this.renderSubView();
             return this;
         },
