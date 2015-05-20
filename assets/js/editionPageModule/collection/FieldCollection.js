@@ -381,8 +381,8 @@ define([
 
             if (newFieldProperties["validators"] !== undefined && newFieldProperties["validators"].length > 0) {
 
-                fieldTmpProperties['required'] = newFieldProperties["validators"]['required'] !== undefined;
-                fieldTmpProperties['readonly'] = newFieldProperties["validators"]['required'] !== undefined;
+                fieldTmpProperties['required'] = newFieldProperties["validators"].indexOf('required') >= 0;
+                fieldTmpProperties['readonly'] = newFieldProperties["validators"].indexOf('readonly') >= 0;
 
             }
 
