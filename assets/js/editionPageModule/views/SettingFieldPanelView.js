@@ -178,6 +178,8 @@ define([
 
             require(['backbone-forms'], _.bind(function() {
 
+                Backbone.Form.validators.errMessages.required = translater.getValueFromKey('form.validation');
+
                 this.form = new Backbone.Form({
                     model: this.modelToEdit
                 }).render();
