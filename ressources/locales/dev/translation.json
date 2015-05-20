@@ -160,9 +160,7 @@
     "linkedFieldIdentifyingColumn"   : "Identifying field",
     "linkedField"                    : "Linked field",
     "formIdentifyingColumn"          : "Form identifying field",
-    "isLinkedField"                  : "Is a linked Field",
-
-
+    "isLinkedField"                  : "Is a linked Field"
   },
 
   "tooltip" : {
