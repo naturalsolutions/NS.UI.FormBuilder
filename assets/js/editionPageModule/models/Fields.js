@@ -273,7 +273,7 @@ define([
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
-                help         : "Write some text to see a list value",
+                help         : translater.getValueFromKey('placeholder.autocomplete'),
                 url          : "ressources/autocomplete/example.json"
             });
         },
@@ -326,7 +326,7 @@ define([
         defaults : function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
-                help         : "Write some text",
+                help         : translater.getValueFromKey('placeholder.text'),
                 size         : 255,
                 multiline    : false
             });
@@ -387,7 +387,8 @@ define([
         defaults: function() {
             return _.extend({}, models.BaseField.prototype.defaults, {
                 mimeType     : "*",
-                size         : 200 //  specify max file size in ko
+                size         : 200, //  specify max file size in ko,
+                help         : translater.getValueFromKey('placeholder.file')
             })
         },
 
@@ -402,9 +403,17 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.mime')
                     }
                 },
+                help: {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.help'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.help')
+                    }
+                },
                 size: {
                     type        : 'Number',
-                    title       : "Maximum size",
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.size'),
@@ -610,7 +619,8 @@ define([
 
         defaults: function() {
             return _.extend( {}, models.TextField.prototype.defaults(), {
-                format: "dd/mm/yyyy"
+                format: "dd/mm/yyyy",
+                help : translater.getValueFromKey('placeholder.date')
             });
         },
 
@@ -679,7 +689,7 @@ define([
             var baseSchema = _.pick(
                 models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults, 'help')
             );
-            baseSchema.help = translater.getValueFromKey('schema.numericHelp')
+            baseSchema.help = translater.getValueFromKey('placeholder.numeric');
             return _.extend( {}, baseSchema, {
                 minValue     : 0,
                 maxValue     : 100,

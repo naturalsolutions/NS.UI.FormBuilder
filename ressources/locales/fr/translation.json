@@ -140,7 +140,6 @@
         "fieldClass"        : "Classe CSS du champs",
         "checked"           : "Sélectionné",
         "checkboxlabel"     : "Label checkbox",
-        "numericHelp"       : "Saisir une valeur numérique",
         "decimal"           : "Valeur décimal autorisée",
         "fieldSize"         : "Taille d'affichage",
         "sizeValue" : {
@@ -278,25 +277,33 @@
           "fr" : "Label français de votre champs",
           "en" : "Label anglais de votre champs"
         },
-        "name" : "Nom de votre champs",
-        "value" : "Valeur par défaut de votre champs",
-        "help" : "Text d'aide de votre champs",
-        "url" : "URL permettant de récupérer la liste des valeurs",
-        "size" : "Taille maximum de la valeur du champs",
-        "mime" : "Type de fichiers autorisés",
+        "name"     : "Nom de votre champs",
+        "value"    : "Valeur par défaut de votre champs",
+        "help"     : "Text d'aide de votre champs",
+        "url"      : "URL permettant de récupérer la liste des valeurs",
+        "size"     : "Taille maximum de la valeur du champs",
+        "mime"     : "Type de fichiers autorisés",
         "fileSize" : "Taille maximum autoriser pour les fichiers choisis",
         "tree" : {
           "default" : "Noeud de départ",
-          "url" : "URL retournant l'arborescence de l'arbre"
+          "url"     : "URL retournant l'arborescence de l'arbre"
         },
         "format" : "Format des dates autorisées",
         "num" : {
-          "min" : "Valeur numérique minimale",
-          "max" : "Valeur numérique maximale",
+          "min"       : "Valeur numérique minimale",
+          "max"       : "Valeur numérique maximale",
           "precision" : "Précision d'incrémentation",
-          "unity" : "Unité du champs"
+          "unity"     : "Unité du champs"
         },
-        "legend" : "Légende du regroupement"
+        "legend" : "Légende du regroupement",
+
+
+        "text"         : "Entrez une valeur ici",
+        "autocomplete" : "Entrez une valeur pour voir la liste d'autocomplétion",
+        "file"         : "Veuillez choisir un fichier",
+        "numeric"      : "Saisir une valeur numérique",
+        "date"         : "Entrez une date ou cliquez sur le picto"
+
     },
 
     "optional" : "facultatif",

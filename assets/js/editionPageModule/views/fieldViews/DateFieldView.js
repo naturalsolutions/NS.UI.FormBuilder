@@ -29,6 +29,8 @@ define([
            }).render();
 
            this.$el.find('.col11centered').html(editor.el)
+
+           this.$el.find('input').prop('placeholder', this.model.get('help'));
        }
     });
 
