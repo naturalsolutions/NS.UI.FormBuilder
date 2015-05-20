@@ -12,15 +12,6 @@ define([
         </div>\
     ');
 
-    var checkboxFieldTemplate = _.template('\
-        <div class="checkboxField <%= this.editor.schema.editorClass %>">\
-            <div class="form-group field-<%= key %>">\
-                <span data-editor><label class="checkboxLabel" for="<%= editorId %>"><%= title %></label></span>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
     var models = {}, translater = Translater.getTranslater();
 
     models.BaseField = Backbone.Model.extend({
