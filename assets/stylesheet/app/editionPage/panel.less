@@ -2,7 +2,12 @@
     background-image: url('../assets/images/back.jpg');
     height: 100%;
 
-    &>div:first-child { height: 100%; }
+    &>div:first-child {
+        height: 100%;
+        &>div:first-child {
+            height: 100%;
+        }
+    }
 
     &.col-md-4-push-left {
         margin-left : -33.33333333% !important;
@@ -47,14 +52,6 @@
         }
     }
 
-
-
-    /*.scroll {
-        position: relative;
-        overflow: hidden;
-        height: 90%;
-        margin-top: 5%;
-    }*/
 
     #toggle {
         margin-top: 10px;
