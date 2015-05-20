@@ -856,7 +856,7 @@ define([
         },
 
         schema : function() {
-            return _.omit(models.EnumerationField.constructor.schema, 'multiple');
+            return _.omit(models.EnumerationField.prototype.schema(), 'multiple');
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
