@@ -380,12 +380,7 @@ define([
          */
         updateGridWithSearch : function(searchData) {
             this.showSpinner();
-            this.formCollection.fetch({
-                reset: true,
-                success : _.bind(function() {
-                    this.updateCollectionAfterSearch(searchData);
-                }, this)
-            });
+            this.updateCollectionAfterSearch(searchData);
         },
 
         /**
@@ -399,7 +394,7 @@ define([
                 var correspondingCondition = true;
 
                 //  Check if models name contains typed name
-                correspondingCondition = correspondingCondition && (searchData.name ? model.get('name').indexOf(searchData.name.toLowerCase()) >= 0 : true);
+                correspondingCondition = correspondingCondition &&((model.get('name').toLowerCase()).indexOf(searchData.name.toLowerCase()) >=0 );
 
                 //  Check if typed keywords is present in french keywords list or english keywords list
                 if (searchData.keywords != undefined) {
