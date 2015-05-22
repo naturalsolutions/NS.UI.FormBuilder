@@ -315,5 +315,10 @@
   "error" : {
     "general" : "General error",
     "message" : "One or more field are empty"
+  },
+
+  "fetch" : {
+    "error"    : "Error retrieving forms !",
+    "errorMsg" : "Unable to retrieve the list of forms from the server."
   }
 }

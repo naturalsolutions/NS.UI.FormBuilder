@@ -311,5 +311,10 @@
     "error" : {
       "general" : "Erreur générale",
       "message" : "Un ou plusieurs champs ne sont pas renseignés"
+    },
+
+    "fetch" : {
+      "error"    : "Erreur de récupération des formulaires !",
+      "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur."
     }
 }

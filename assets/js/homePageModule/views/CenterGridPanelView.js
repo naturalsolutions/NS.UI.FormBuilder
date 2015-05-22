@@ -310,6 +310,7 @@ define([
             // Fetch some countries from the url
             this.formCollection.fetch({
                 reset: true,
+                timeout:5000,
                 success : _.bind(function() {
                     this.hideSpinner();
 
@@ -324,10 +325,22 @@ define([
                     $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
                     //  Keep only one table row to lighten table
                     $(this.el).find("#grid2 tbody tr").slice(1).remove();
+                }, this),
+                error : _.bind(function() {
+                    this.displayFetchError();
                 }, this)
             });
 
             this.$el.i18n();
+        },
+
+        displayFetchError : function() {
+            swal(
+                translater.getValueFromKey('fetch.error') || "Erreur de récupération des formulaires !",
+                translater.getValueFromKey('fetch.errorMsg') || "Impossible de récupérer la liste des formulaires depuis le serveur",
+                "error"
+            );
+            this.hideSpinner();
         },
 
         /**
