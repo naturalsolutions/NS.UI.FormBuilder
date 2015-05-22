@@ -56,7 +56,7 @@ define([
             this.collection.bind('add', this.addElement, this);         //  new element added on the collection
             this.collection.bind('remove', this.removeElement, this);   //  element removed from the collection
 
-            _.bindAll(this, 'template')
+            _.bindAll(this, 'template', 'save')
 
             this.initFormChannel();
             this.initMainChannel();
@@ -96,7 +96,9 @@ define([
 
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
-            this.formChannel.on('save:return',      this.displaySaveMessage);
+            this.formChannel.on('save:success',      this.displaySucessMessage);
+
+            this.formChannel.on('save:fail',      this.displayFailMessage);
 
             //  Event send from Formbuilder.js when export is finished (success or not)
             this.formChannel.on('exportFinished',   this.displayExportMessage, this);
@@ -305,7 +307,7 @@ define([
          * Trigger an event for the router on the form channel
          */
         save : function() {
-            this.formChannel.trigger('save', this.collection.getJSON());
+            this.collection.save();
         },
 
         /**
@@ -363,25 +365,21 @@ define([
             }
         },
 
-        /**
-         * Display a save message
-         *
-         * @param result if the save is right done or not
-         */
-        displaySaveMessage : function(result) {
-            if (result) {
-                swal(
-                    translater.getValueFromKey('modal.save.success') || "Sauvé !",
-                    translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
-                    "success"
-                );
-            } else {
-                swal(
-                    translater.getValueFromKey('modal.save.error') || "Une erreur est survenu !",
-                    translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-                    "error"
-                );
-            }
+
+        displaySucessMessage : function() {
+            swal(
+                translater.getValueFromKey('modal.save.success') || "Sauvé !",
+                translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
+                "success"
+            );
+        },
+
+        displayFailMessage : function() {
+            swal(
+                translater.getValueFromKey('modal.save.error') || "Une erreur est survenu !",
+                translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                "error"
+            );
         },
 
         /**

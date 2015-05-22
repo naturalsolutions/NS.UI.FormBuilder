@@ -23,7 +23,8 @@ define([
             this.URLOptions        = options['URLOptions'] || {};
 
             this.fieldCollection = new FieldCollection({}, {
-                name : 'New form'
+                name : 'New form',
+                url  : this.URLOptions['formSaveURL']
             });
 
             this.initFormChannel();
@@ -60,7 +61,6 @@ define([
 
             //  Event receive when user wants to export its form in JSON file
             this.formChannel.on('export', this.exportFormAsFile, this);
-            this.formChannel.on('save', this.saveForm, this);
 
             //  Event send from router when user import a form or edit a form from the grid
             //this.formChannel.on('formEdition', this.editForm, this);
@@ -142,15 +142,6 @@ define([
         },
 
         /**
-         * Update collection with object in parameter
-         *
-         * @param formToEdit object with new attributes values
-         */
-        updateCollection : function(formToEdit) {
-            this.fieldCollection.updateWithJSON(formToEdit);
-        },
-
-        /**
          * Send an event to FieldCollection
          *
          * @param  {Object} formImportedJSON imported form JSON data
@@ -158,26 +149,6 @@ define([
         import : function(formImportedJSON) {
             //  Update collection with JSON data
             this.fieldCollection.updateWithJSON(formImportedJSON);
-        },
-
-        saveForm : function(formAsJSON){
-            $.ajax({
-                data        : JSON.stringify(formAsJSON),
-                type        : 'POST',
-                url         : this.URLOptions['formSaveURL'],
-                contentType : 'application/json',
-                //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                //  The server is already configured to used it
-                crossDomain : true,
-
-                //  Trigger event with ajax result on the formView
-                success: _.bind(function(res) {
-                    this.formChannel.trigger('save:return', true);
-                }, this),
-                error: _.bind(function(jqXHR, textStatus, errorThrown) {
-                    this.formChannel.trigger('save:return', false);
-                }, this)
-            });
         }
     });
 

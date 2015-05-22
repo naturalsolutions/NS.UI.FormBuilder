@@ -140,6 +140,9 @@ define([
         initialize: function (models, options) {
             this.count       = 0;
 
+            this.url = options.url;
+
+            this.id            = options.id || 0;
             this.name          = options.name           || 'My form';
             this.descriptionFr = options.descriptionFr  || "";
             this.descriptionEn = options.descriptionEn  || "";
@@ -377,14 +380,7 @@ define([
          */
         createFieldWithJSON : function(newFieldProperties) {
 
-            var fieldTmpProperties = _.pick(newFieldProperties, 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn', 'name');
-
-            if (newFieldProperties["validators"] !== undefined && newFieldProperties["validators"].length > 0) {
-
-                fieldTmpProperties['required'] = newFieldProperties["validators"].indexOf('required') >= 0;
-                fieldTmpProperties['readonly'] = newFieldProperties["validators"].indexOf('readonly') >= 0;
-
-            }
+            var fieldTmpProperties = _.pick(newFieldProperties, 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn', 'name', 'required', 'readonly');
 
             return new Fields[newFieldProperties['type'] + 'Field'](fieldTmpProperties);
         },
@@ -396,6 +392,7 @@ define([
          */
         updateCollectionAttributes : function(JSONUpdate) {
 
+            this.id            = JSONUpdate['id'];
             this.name          = JSONUpdate["name"];
 
             this.descriptionFr = JSONUpdate["descriptionFr"];
@@ -497,8 +494,31 @@ define([
             })
 
             return fieldsList;
-        }
+        },
 
+
+        save : function() {
+            var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
+            var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
+
+            $.ajax({
+                data        : JSON.stringify(this.getJSON()),
+                type        : PostOrPut,
+                url         : url,
+                contentType : 'application/json',
+                //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                //  The server is already configured to used it
+                crossDomain : true,
+
+                //  Trigger event with ajax result on the formView
+                success: _.bind(function() {
+                    this.formChannel.trigger('save:success');
+                }, this),
+                error: _.bind(function() {
+                    this.formChannel.trigger('save:fail');
+                }, this)
+            });
+        }
     });
 
     return Form;
