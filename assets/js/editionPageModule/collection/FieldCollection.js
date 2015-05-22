@@ -392,7 +392,7 @@ define([
          */
         updateCollectionAttributes : function(JSONUpdate) {
 
-            this.id            = JSONUpdate['id'];
+            this.id            = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
             this.name          = JSONUpdate["name"];
 
             this.descriptionFr = JSONUpdate["descriptionFr"];
@@ -464,7 +464,7 @@ define([
 
             _.each(schema, _.bind(function (el, idx) {
                 //  Add new field
-                if (this.isAValidFieldType(el.constructor.type)) {
+                if (this.isAValidFieldType(el['type'])) {
                     this.addField(
                         this.createFieldWithJSON(el),
                         _.contains(fieldset, el.name)
