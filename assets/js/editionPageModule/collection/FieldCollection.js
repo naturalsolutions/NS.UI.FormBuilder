@@ -464,10 +464,12 @@ define([
 
             _.each(schema, _.bind(function (el, idx) {
                 //  Add new field
-                this.addField(
-                    this.createFieldWithJSON(el),
-                    _.contains(fieldset, el.name)
-                );
+                if (this.isAValidFieldType(el.constructor.type)) {
+                    this.addField(
+                        this.createFieldWithJSON(el),
+                        _.contains(fieldset, el.name)
+                    );
+                }
             }, this));
         },
 
