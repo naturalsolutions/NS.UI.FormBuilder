@@ -13,14 +13,6 @@ define(['jquery','marionette', '../layout/HomePageLayout', 'i18n', 'backbone.rad
 
         initHomePageChannel : function() {
             this.homePageChannel = Backbone.Radio.channel('homepage');
-
-            //  Event send by CenterGridPanelView when user wants to remove a form
-            this.homePageChannel.on('deleteForm', this.deleteForm, this);
-        },
-
-        deleteForm : function(formID) {
-            //  We delete the form and send the result to CenterGridPanelView
-            this.homePageChannel.trigger('formDeleted', true)
         },
 
         homeAction: function() {

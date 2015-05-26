@@ -65,6 +65,9 @@ define([
             //  Event send by HomePageController when the form was deleted
             //  Depend of deleteForm event, see deleteForm method in this class
             this.homePageChannel.on('formDeleted', this.formDeleted, this);
+
+            this.homePageChannel.on('destroy:success', this.displayDeleteSuccessMessage, this);
+            this.homePageChannel.on('destroy:error', this.displayDeleteFailMessage, this);
         },
 
         /**
@@ -133,6 +136,8 @@ define([
             // So old school style
             var self = this;
 
+            var formToRemove = self.currentSelectedForm;
+
             swal({
                 title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
                 text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
@@ -144,8 +149,9 @@ define([
                 closeOnCancel      : true
             }, function(isConfirm) {
                 if (isConfirm){
-                    // Send event to HomePageControll if user choosed to remove a form
-                    self.homePageChannel.trigger('deleteForm', self.currentSelectedForm)
+                    // Send event to FormCollection if user chosen to remove a form
+                    //self.homePageChannel.trigger('deleteForm', formToRemove)
+                    self.formCollection.deleteModel(formToRemove);
                 }
             });
         },
@@ -334,6 +340,9 @@ define([
             this.$el.i18n();
         },
 
+        /**
+         * Display error when the front is unable to fetch form list from the server
+         */
         displayFetchError : function() {
             swal(
                 translater.getValueFromKey('fetch.error') || "Erreur de récupération des formulaires !",
@@ -445,11 +454,11 @@ define([
          */
         duplicateForm : function() {
             // clone element
-            this.formCollection.cloneModel(this.currentSelectedForm)
+            this.formCollection.cloneModel(this.currentSelectedForm);
 
             //  Update grid ans collection count
             this.grid.render()
-            this.$el.find('#formsCount').text(this.formCollection.length)
+            this.$el.find('#formsCount').text(this.formCollection.length);
 
             $('tr.selected').removeClass('selected');
 
@@ -474,6 +483,9 @@ define([
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
+        /**
+         * Add new form and edit it
+         */
         addForm : function() {
             var formToEdit = new FormModel();
 
@@ -526,8 +538,38 @@ define([
                 }, this));
 
             }, this));
-        }
+        },
 
+        /**
+         * Display sweet alter message if the form as been deleted
+         */
+        displayDeleteSuccessMessage : function() {
+            //  I've a bug with sweet-alert
+            //  I've to put this swal call in a setTimeout otherwise it doesn't appear
+            //  A discussion is opened on Github : https://github.com/t4t5/sweetalert/issues/253
+            setTimeout(_.bind(function() {
+                swal(
+                    translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
+                    translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
+                    "success"
+                );
+            }, this), 500)
+        },
+
+        /**
+         * Display sweet alter message can't be deleted
+         */
+        displayDeleteFailMessage : function() {
+            //  Same problem as previous function
+            //  A discussion is opened on Github : https://github.com/t4t5/sweetalert/issues/253
+            setTimeout(_.bind(function() {
+                swal(
+                    translater.getValueFromKey('modal.clear.deleteError') || "Non supprimé !",
+                    translater.getValueFromKey('modal.clear.formDeletedError') || "Votre formulaire n'a pas pu être supprimé !",
+                    "error"
+                );
+            }, this), 500)
+        }
     });
 
     return CenterGridPanelView;

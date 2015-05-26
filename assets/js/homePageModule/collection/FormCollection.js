@@ -1,4 +1,8 @@
-define(['backbone', '../models/FormModel'], function (Backbone, FormModel) {
+define([
+    'backbone',
+    '../models/FormModel',
+    'backbone.radio'
+], function (Backbone, FormModel, Radio) {
 
     /**
      * Homepage collection backbone collection, contains all forms
@@ -17,11 +21,17 @@ define(['backbone', '../models/FormModel'], function (Backbone, FormModel) {
          */
         initialize : function(options) {
             this.url = options.url || 'ressources/forms/formsExample.json'; //  get a default URL for client-side mode
+
+            this.initHomePageChannel();
+        },
+
+        initHomePageChannel : function() {
+            this.homePageChannel = Backbone.Radio.channel('homepage');
         },
 
         /**
          * Clone a model
-         * @param  {integer} modelID model to copy ID
+         * @param  {int} modelID model to copy ID
          */
         cloneModel : function(modelID) {
             var original    = this.get(modelID).toJSON();
@@ -29,6 +39,20 @@ define(['backbone', '../models/FormModel'], function (Backbone, FormModel) {
             original.name  += ' (copy)'
 
             this.add(new FormModel(original))
+        },
+
+        deleteModel : function(modelID) {
+            var modelToRemove = this.get(modelID);
+            modelToRemove.urlRoot = this.url;
+
+            modelToRemove.destroy({
+                success : _.bind(function() {
+                    this.homePageChannel.trigger('destroy:success');
+                }, this),
+                error : _.bind(function() {
+                    this.homePageChannel.trigger('destroy:error');
+                }, this)
+            });
         }
 
     });
