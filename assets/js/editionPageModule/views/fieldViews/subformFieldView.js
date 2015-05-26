@@ -17,17 +17,35 @@ define([
         events: function () {
             return _.extend({}, BaseView.prototype.events, {
                 'delete'         : 'deleteSubView',
-                'isDroppedReturn': 'isDroppedReturn'
+                'isDroppedReturn': 'isDroppedReturn',
+
+                //  Duplicate BaseView events
+                'click #sub-trash'       : 'removeView',
+                'click #sub-duplicate'   : 'copyModel',
+                'click #sub-edit'        : 'editModel'
             });
+        },
+
+        removeView : function() {
+            BaseView.prototype.removeView.apply(this);
+        },
+
+        copyModel : function() {
+            BaseView.prototype.copyModel.apply(this);
+        },
+
+        editModel : function() {
+            BaseView.prototype.editModel.apply(this);
         },
 
         initialize: function (options) {
             var opt = options;
             opt.template = viewTemplate;
 
+            BaseView.prototype.initialize.apply(this, [opt]);
             this._subView = []
 
-            BaseView.prototype.initialize.apply(this, [opt]);
+
 
             _.bindAll(this, 'renderSubView', 'render');
 

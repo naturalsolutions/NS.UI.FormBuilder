@@ -934,10 +934,14 @@ define([
         removeModel: function(index) {
             var arr = this.get('fields');
 
-            for (var each in arr) {
-                if (arr[each].get('id') == index) {
-                    delete arr[each];
-                    break;
+            if (isNaN(index)) {
+                arr = [];
+            } else {
+                for (var each in arr) {
+                    if (arr[each].get('id') == index) {
+                        delete arr[each];
+                        break;
+                    }
                 }
             }
 
