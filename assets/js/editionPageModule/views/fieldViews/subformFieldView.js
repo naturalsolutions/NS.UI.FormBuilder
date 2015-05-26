@@ -139,8 +139,11 @@ define([
             delete this._subView[$(event.target).prop('id')];
 
             var index = $(event.target).prop('id').replace('subform', '');
-            this.model.removeModel(index);
-            $(event.target).replaceWith('')
+            index = index.replace('dropField', '');
+
+            this.model.removeModel(parseInt(index));
+
+            $(event.target).replaceWith('');
         }
 
     });

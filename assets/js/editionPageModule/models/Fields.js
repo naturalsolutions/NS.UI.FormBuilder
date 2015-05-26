@@ -933,7 +933,14 @@ define([
 
         removeModel: function(index) {
             var arr = this.get('fields');
-            delete arr[index];
+
+            for (var each in arr) {
+                if (arr[each].get('id') == index) {
+                    delete arr[each];
+                    break;
+                }
+            }
+
             this.set("fields", arr);
         },
 

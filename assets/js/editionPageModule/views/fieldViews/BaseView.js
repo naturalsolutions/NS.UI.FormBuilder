@@ -62,7 +62,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             $(this.el).trigger('delete');
             $(this.el).remove();
             this.remove();
-            this.formChannel.trigger('remove', this.model.get('id'))
+            this.formChannel.trigger('remove', this.model.get('id'));
 
             //  Prevent second trigger, i don't why i've this bug
             return false;
