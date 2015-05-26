@@ -232,12 +232,14 @@
 
     },
     "clear" : {
-      "title"       : "Are you sure ?",
-      "text"        : "The form will be lost !",
-      "yes"         : "Yes, delete it",
-      "no"          : "No, cancel",
-      "deleted"     : "Deleted",
-      "formDeleted" : "Your form has been deleted !"
+      "title"            : "Are you sure ?",
+      "text"             : "The form will be lost !",
+      "yes"              : "Yes, delete it",
+      "no"               : "No, cancel",
+      "deleted"          : "Deleted",
+      "formDeleted"      : "Your form has been deleted !",
+      "deleteError"      : "Form not deleted !",
+      "formDeletedError" : "Your form could not be deleted !"
     },
     "exit" : {
       "yes" : "Yes exit"

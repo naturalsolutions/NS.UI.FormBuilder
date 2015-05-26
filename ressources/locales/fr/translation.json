@@ -227,20 +227,22 @@
         "comment"  : "Votre commentaire",
         "filename" : "Nom du fichier",
         "clear" : {
-            "title"       : "Etes vous sûr ?",
-            "text"        : "Le formulaire sera définitivement perdu !",
-            "yes"         : "Oui, supprimer",
-            "no"          : "Non, annuler",
-            "deleted"     : "Supprimé !",
-            "formDeleted" : "Votre formulaire a été supprimé !"
+            "title"            : "Etes vous sûr ?",
+            "text"             : "Le formulaire sera définitivement perdu !",
+            "yes"              : "Oui, supprimer",
+            "no"               : "Non, annuler",
+            "deleted"          : "Supprimé !",
+            "formDeleted"      : "Votre formulaire a été supprimé !",
+            "deleteError"      : "Non supprimé !",
+            "formDeletedError" : "Votre formulaire n'a pas pu être supprimé !"
         },
         "exit" : {
           "yes" : "Oui quitter"
         },
         "import" : {
             "error"    : "Une erreur est survenu !",
-            "errorMsg" : "Votre formulaire n'a pas pu être importer",
-            "title" : "Importer un formulaire",
+            "errorMsg" : "Votre formulaire n'a pas pu être importé",
+            "title"    : "Importer un formulaire",
             "label"    : "Selectionnez le fichier JSON a importé",
             "action"   : "Importer",
             "find"     : "Parcourir"
