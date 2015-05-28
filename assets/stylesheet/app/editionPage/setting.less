@@ -472,3 +472,41 @@
         }
     }
 }
+
+.checkBoxEditor {
+    margin-bottom: 10px;
+    &>label:first-child {
+        display: none;
+    }
+}
+
+//  radio custom field
+.radiosField {
+    padding-left   : 0;
+    display        : inline-block;
+    width          : 100%;
+    list-style-type: none;
+
+    li {
+        float: left;
+        width: 33.3% !important;
+    }
+
+    input {
+        display : none;
+
+        &+label {
+            color : #aaa;
+            font-size : 20px;
+            &:before {
+                .reneco;
+                content: "\e642";
+            }
+        }
+
+        &:checked+label:before {
+            .reneco;
+            content: "\e641"
+        }
+    }
+}

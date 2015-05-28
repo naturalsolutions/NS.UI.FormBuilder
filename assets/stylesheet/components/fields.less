@@ -1,81 +1,56 @@
-//	--------------------------------------------------
-//	All field style like select, radio, ...
 
-//	Style is separated to beused on setting and form panel
+//
+//  Field style
+//
 
-.fontAwesomeField(@type, @selectedContent, @unSelectedContent) {
+//  remove shadow
+.form-control { box-shadow: none!important; }
 
-    input[type="@{type}"] {
-        display : none;
-    }
-
-    label {
-        &.@{type}Label {
-
-            &:before {
-                .fa;
-                display        : inline-block;
-                color          : #555;
-                font-size      : 24px;
-                content        : @unSelectedContent;
-                letter-spacing : 10px;
-
-                &:hover {
-                    cursor: pointer !important;
-                }
-            }
-
-            &.selected {
-                &:before {
-                    content: @selectedContent;
-                    &:hover {
-                        cursor: pointer !important;
-                    }
-                }
-            }
-        }
-    }
-
-}
-
+//  checkbox custom field
+//  We hide the input and replace with before icon, we use reneco fonts https://github.com/NaturalSolutions/RenecoFonts
 .checkboxField {
-	//.fontAwesomeField(checkbox, "\f046", "\f096");
-    &.form-control {
-        background : transparent !important;
-        border : none !important;
-        margin-bottom : 45px;
-        padding-left : 0;
+    input {
+        display : none;
 
-        .help-block {
-            .exo;
-            font-size : 16px;
-            color : #aaa183;
+        &+label {
+            color : #aaa;
+            font-size : 20px;
+            &:before {
+                .reneco;
+                content: "\e640";
+            }
+        }
+
+        &:checked+label:before {
+            .reneco;
+            content: "\e63f"
         }
     }
 }
 
-.checkboxField input {
-  display : none;
-}
-.checkboxField input + label {
-  color : #aaa;
-  font-size : 20px;
-}
-
-.checkboxField input + label:before {
-  .fa;
-  content: "\f096";
-}
-
-.checkboxField input:checked + label:before {
-  .fa;
-  content: "\f046"
-}
-
+//  checkbox custom field
 .radioField {
-    .fontAwesomeField(radio, "\f192", "\f10c");
+    input {
+        display : none;
+
+        &+label {
+            color : #aaa;
+            font-size : 20px;
+            &:before {
+                .reneco;
+                content: "\e642";
+            }
+        }
+
+        &:checked+label:before {
+            .reneco;
+            content: "\e641"
+        }
+    }
 }
 
+//  override bootstrap select style
+//  bootstrap select library : http://silviomoreto.github.io/bootstrap-select/
 .bootstrap-select {
     box-shadow: none;
     border-radius: 2.5px;
@@ -122,44 +97,7 @@
     }
 }
 
-.checkBoxEditor {
-  margin-bottom: 10px;
-  &>label:first-child {
-    display: none;
-  }
-}
 
-.form-control {
-    box-shadow: none!important;
-}
 
-.radiosField {
-    padding-left   : 0;
-    display        : inline-block;
-    width          : 100%;
-    list-style-type: none;
-    li {
-        float: left;
-        width: 33.3% !important;
 
-        input {
-            display : none;
-        }
 
-        label {
-            &:before {
-                .fa;
-                content: "\f10c";
-                padding-right: 5px;
-            }
-        }
-
-        *:checked+label {
-            &:before {
-                .fa;
-                content: "\f192";
-                padding-right: 5px;
-            }
-        }
-    }
-}

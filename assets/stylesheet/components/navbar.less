@@ -1,16 +1,24 @@
+
+//
+//  Header style
+//
+
 header {
     .exo;
+
     height        : 55px;
     background    : #862332;
     line-height   : 50px;
     margin-bottom : 0 !important;
 
+    //  application icon
     .reneco-formbuildersmall {
         font-size: 20px;
         position : relative;
         top      : 1px;
     }
 
+    //  Left corner icons : user and online status
     .icons {
         float     : left;
         height    : 50px;
@@ -63,8 +71,7 @@ header {
         }
     }
 
-
-
+    //  navbar text
     .title, .mode, .user, .status {
         color           : white;
         text-decoration : none;
@@ -74,18 +81,21 @@ header {
         margin-right    : 7px;
     }
 
+    //  navbar separator
     .pipe {
         color       : white;
         font-weight : 300;
         font-size   : 25px;
         margin-left : 7px;
         margin-top  : -2px;
+        margin-right: 7px;
     }
 
     .pull-right {
         margin-right: 25px;
     }
 
+    //  Define navbar color
     .navbar {
         .container-fluid {
             background: #862332 !important;
@@ -95,34 +105,4 @@ header {
     .navbar-default {
         background: #862332 !important;
     }
-
-    a[data-key="save"]:before {
-        font-family: "Glyphicons Halflings";
-        content: "\e166";
-    }
-
-    a[data-key="import"]:before {
-        font-family: "Glyphicons Halflings";
-        content: "\e198";
-    }
-
-    a[data-key="clear"]:before {
-        font-family: "Glyphicons Halflings";
-        content: "\e020";
-    }
-
-    a[data-key="show"]:before {
-        font-family: "Glyphicons Halflings";
-        content: "\e178";
-    }
-
-    a[data-key="saveConfiguration"]:before {
-        font-family: "Glyphicons Halflings";
-        content: "\e032";
-    }
-
-    .navbar-form, .navbar-user {
-        display: none;
-    }
-
 }

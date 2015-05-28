@@ -1,15 +1,17 @@
+
+//
+//  Modal style
+//  For some modal view we use the sweet-alert library : http://t4t5.github.io/sweetalert/
+//
+
+//  sweet alert style
 .sweet-alert {
-    h2 {
-        .exo;
-    }
-    p {
-        .exo;
-    }
+    h2, p { .exo; }
     width    : auto;
     min-width: 478px;
 }
 
-
+//  Main modal style
 .modal {
     background: transparent;
     margin-top: 100px;
@@ -64,6 +66,7 @@
     }
 }
 
+//  Save and export modal
 #saveModal, #exportModal {
     h2 {
       .exo;
@@ -79,31 +82,13 @@
     }
 }
 
+//  Import modal style
 #importModal {
     .btn-success {
         padding-top: 5px !important;
     }
-}
-
-#importProtocolFileText { float : left;}
-
-#editListModal {
-	//	Modal dialog for enumeration field list edition
-	//	Backbone view : EditListModal
-	width : 1000px;
-	left : 35%;
-	.modal-header {
-		text-align : center;
-		background : #eee;
-		font-weight: 100;
-	}
-	h2 {
-		font-size : 20px;
-	}
-}
-
-#importModal {
     input {
-      margin-left: 0;
+        margin-left: 0;
     }
+    #importProtocolFileText { float : left;}
 }
