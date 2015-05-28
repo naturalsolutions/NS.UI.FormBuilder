@@ -29,7 +29,8 @@ define([
             'click #edit'      : "editForm",
             'click #editRow'   : "editForm",
             'click #add'       : 'addForm',
-            'click #import'    : 'importForm'
+            'click #import'    : 'importForm',
+            'click #export'    : 'exportForm'
         },
 
         /**
@@ -68,6 +69,9 @@ define([
 
             this.homePageChannel.on('destroy:success', this.displayDeleteSuccessMessage, this);
             this.homePageChannel.on('destroy:error', this.displayDeleteFailMessage, this);
+
+            //  Event send from Formbuilder.js when export is finished (success or not)
+            this.homePageChannel.on('exportFinished',   this.displayExportMessage, this);
         },
 
         /**
@@ -204,6 +208,7 @@ define([
                     this.addFormSection(el, model);
                 }
 
+                this.beforeFormSelection = this.currentSelectedForm;
                 this.currentSelectedForm = newSelctedRow;
             }
 
@@ -219,6 +224,7 @@ define([
                 $('tr.selected').removeClass('selected');
             }, this));
 
+            this.beforeFormSelection = this.currentSelectedForm;
             this.currentSelectedForm = -1;
 
             this.clearFooterAction();
@@ -569,6 +575,64 @@ define([
                     "error"
                 );
             }, this), 500)
+        },
+
+        /**
+         * Display a message when the export is finished or failed
+         *
+         * @param result if the export is right done or not
+         */
+        displayExportMessage : function(result) {
+            if (result) {
+                swal(
+                    translater.getValueFromKey('modal.export.success') || "Export réussi !",
+                    "",
+                    "success"
+                )
+            } else {
+                swal(
+                    translater.getValueFromKey('modal.export.error') || "Echec de l'export !",
+                    translater.getValueFromKey('modal.export.errorMsg') || "Une erreur est survenue lors de l'export",
+                    "error"
+                )
+            }
+        },
+
+        /**
+         * Export form
+         *
+         * @param e jquery event
+         */
+        exportForm : function(e) {
+            require(['editionPageModule/modals/ExportModalView'], _.bind(function(ExportModalView) {
+
+                //  Add new element for modal view
+                $('body').append('<div class="modal  fade" id="exportModal"></div>');
+
+                //  Create view and render it
+                var modalView = new ExportModalView({
+                    el: "#exportModal",
+                    URLOptions: this.URLOptions
+                });
+                $('#exportModal').append( modalView.render() );
+                $("#exportModal").i18n();
+
+                //  Listen to view close event
+                //  When modal is closed we get typed data user
+                $('#exportModal').on('hidden.bs.modal', _.bind(function () {
+                    var datas = modalView.getData();
+                    if( datas['response']) {
+
+                        //  Send event to edition page controller for export form in JSON file
+                        //  We send the filename typed by the user
+                        this.homePageChannel.trigger('export', datas['filename'], this.formCollection.get(this.beforeFormSelection).toJSON() );
+
+                        $('#exportModal').modal('hide').removeData();
+                        $('#exportModal').html('').remove();
+                    }
+                }, this));
+
+            }, this));
         }
     });
 
