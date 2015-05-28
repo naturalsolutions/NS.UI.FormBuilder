@@ -21,8 +21,10 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          */
         initialize: function(options) {
             this.template   = _.template(options.template);
-            _.bindAll(this, 'render', 'removeView', 'editModel', 'copyModel');
+            _.bindAll(this, 'render', 'removeView', 'editModel', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
+
+            this.model.bind('destroy', this.destroy_view);
 
             this.el = options.el;
 
@@ -56,16 +58,23 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
         },
 
         /**
-         * Remove view
+         * Remove the view when the model is destroyed
+         */
+        destroy_view: function() {
+            this.undelegateEvents();
+
+            this.$el.removeData().unbind();
+
+            this.remove();
+            Backbone.View.prototype.remove.call(this);
+
+        },
+
+        /**
+         * Send event for remove the view
          */
         removeView: function() {
-            $(this.el).trigger('delete');
-            $(this.el).remove();
-            this.remove();
             this.formChannel.trigger('remove', this.model.get('id'));
-
-            //  Prevent second trigger, i don't why i've this bug
-            return false;
         },
 
         /**

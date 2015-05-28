@@ -139,6 +139,7 @@ define([
         */
         initialize: function (models, options) {
             this.count       = 0;
+            this.countID     = 0;
 
             this.url = options.url;
 
@@ -220,7 +221,7 @@ define([
             };
 
             _.each(model.get('fields'), function (el, idx) {
-                fieldset['fields'].push(el.get('name'));
+                fieldset['fields'].push(el);
             });
 
             return fieldset;
@@ -299,12 +300,14 @@ define([
         addField : function(field, ifFieldIsInFieldset) {
             if (this.isAValidFieldType(field.constructor.type)) {
 
+                this.countID++;
+
                 //  Update field
                 field.set('isUnderFieldset', ifFieldIsInFieldset !== undefined ? ifFieldIsInFieldset : false);
-                field.set('id', this.getSize());
+                field.set('id', this.countID);
+
                 //  Add it
                 this.add(field);
-
             }
         },
 
@@ -317,9 +320,9 @@ define([
          */
         addElement: function (nameType, properties, isUnderFieldset) {
 
-            field = properties || {};
+            var field = properties || {};
 
-            field['id']   = this.getSize();
+            //field['id']   = this.getSize();
             field['name'] = 'Field' + this.getSize();
 
             //  Add field
@@ -333,7 +336,8 @@ define([
          */
         removeElement : function(id) {
             var item = this.get(id);
-            this.remove( item );
+
+            item.trigger('destroy', item);
         },
 
         /**
@@ -414,30 +418,24 @@ define([
          */
         createFieldsets : function(JSONUpdate) {
 
-            var field = null, currentField = null;
+            var field = {
+                legend : "",
+                fields : []
+            };
 
             _.each(JSONUpdate['fieldsets'], _.bind(function (el, idx) {
 
-                field = {
-                    legend: el['legend'],
-                    fields: []
-                };
+                field.legend = el['legend'];
+                field.fields = [];
 
-                //  Add all fields for the current fieldset
-                _.each(el["fields"], _.bind(function (name, index) {
-
-                    currentField = JSONUpdate['schema'][name];
-
-                    if (this.isAValidFieldType( currentField['type'] )) {
-                        field.fields.push( this.createFieldWithJSON(currentField) );
-                    }
-
+                _.each(el["fields"], _.bind(function(element, id) {
+                    field.fields.push(JSONUpdate['schema'][element]['name']);
                 }, this));
 
-                //  Create subFormField
                 this.addElement('SubformField', field, false);
 
             }, this));
+
         },
 
         /**

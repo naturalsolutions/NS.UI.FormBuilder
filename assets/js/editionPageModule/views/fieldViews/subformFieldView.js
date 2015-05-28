@@ -14,19 +14,18 @@ define([
          *
          * @returns {object} view events
          */
-        events: function () {
-            return _.extend({}, BaseView.prototype.events, {
-                'delete'         : 'deleteSubView',
-                'isDroppedReturn': 'isDroppedReturn',
+        events: {
+            /*'delete'         : 'deleteSubView',
+            'isDroppedReturn': 'isDroppedReturn',*/
 
-                //  Duplicate BaseView events
-                'click #sub-trash'       : 'removeView',
-                'click #sub-duplicate'   : 'copyModel',
-                'click #sub-edit'        : 'editModel'
-            });
+            //  Duplicate BaseView events
+            'click #sub-trash'       : 'removeView',
+            'click #sub-duplicate'   : 'copyModel',
+            'click #sub-edit'        : 'editModel'
         },
 
         removeView : function() {
+            console.log ("ici")
             BaseView.prototype.removeView.apply(this);
         },
 
@@ -43,9 +42,8 @@ define([
             opt.template = viewTemplate;
 
             BaseView.prototype.initialize.apply(this, [opt]);
-            this._subView = []
 
-
+            this.model.off('change');
 
             _.bindAll(this, 'renderSubView', 'render');
 
@@ -68,20 +66,13 @@ define([
         },
 
         /**
-         * Event sned by formPanelView when a view is dropped in a subForm view
+         * Event send by formPanelView when a view is dropped in a subForm view
          *
          * @param viewToMove view to move from the form panel to the subForm view
          */
-        viewDropped: function (viewToMove) {
-            var viewToMoveDetech = $(viewToMove.el).detach();
-
-            //  I don't why but the follow code don't work without a setTimeout
-            //  I think the code is ran before the detach finish
-            setTimeout(_.bind(function () {
-                this.$el.find('.subformField fieldset').append(viewToMoveDetech);
-                //  Add new view model
-                this.model.addModel(viewToMove.model)
-            }, this), 1);
+        viewDropped: function (viewToMoveModel) {
+            viewToMoveModel.set('subFormParent', this.model.get('id'));
+            this.addSubView(viewToMoveModel);
         },
 
         render: function () {
@@ -124,45 +115,35 @@ define([
             return this;
         },
 
+        addSubView : function(model) {
+            require(['editionPageModule/views/fieldViews/' + model.constructor.type + 'FieldView'], _.bind(function(fieldView) {
+
+                this.$el.find('fieldset').append('<div class="row sortableRow marginTop0" id="subView' + model.cid + '"></div>');
+
+                var vue = new fieldView({
+                    el         : '#subView' + model.cid,
+                    model      : model
+                });
+                if (vue !== null) {
+                    vue.render();
+                }
+
+                $(".actions").i18n();
+            }, this));
+        },
+
         /**
          * Render subView
          */
         renderSubView: function () {
-            _.each(this.model.get('fields'), _.bind(function (el, idx) {
+            _.each(this.model.collection.models, _.bind(function(model, idx) {
 
-                require(['editionPageModule/views/fieldViews/' + el.constructor.type + 'FieldView'], _.bind(function(fieldView) {
+                if (_.contains(this.model.get('fields'), model.get('name') )) {
+                    this.addSubView(model)
+                }
 
-                    $(this.el + ' fieldset').append('<div class="row sortableRow marginTop0" id="subView' + el.cid + '"></div>');
-
-                    var vue = new fieldView({
-                        el         : '#subView' + el.cid,
-                        model      : el
-                    });
-                    if (vue !== null) {
-                        vue.render();
-                    }
-
-                    $(".actions").i18n();
-                }, this));
-
-            }, this))
+            }, this));
         },
-
-        /**
-         * Remove the subView
-         *
-         * @param event jQuery event
-         */
-        deleteSubView: function (event) {
-            delete this._subView[$(event.target).prop('id')];
-
-            var index = $(event.target).prop('id').replace('subform', '');
-            index = index.replace('dropField', '');
-
-            this.model.removeModel(parseInt(index));
-
-            $(event.target).replaceWith('');
-        }
 
     });
 

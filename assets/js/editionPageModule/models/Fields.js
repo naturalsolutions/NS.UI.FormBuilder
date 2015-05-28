@@ -17,7 +17,7 @@ define([
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
-            id          : 0,
+            //id          : 0,
             order       : 1,
             name        : "Field",
             labelFr     : translater.getValueFromKey('schema.label.fr'),
@@ -894,6 +894,7 @@ define([
     });
 
     models.SubformField = Backbone.Model.extend({
+
         defaults: {
             id          : 0,
             order       : 1,
@@ -918,43 +919,8 @@ define([
                     placeholder : translater.getValueFromKey('placeholder.legend')
                 }
             }
-        },
-
-        initialize: function(options) {
-            _.bindAll(this, 'addModel', 'removeModel', 'updateModel');
-        },
-
-        addModel: function(model) {
-            var arr = this.get('fields');
-            model.set('isDragged', true);
-            arr.push(model);
-            this.set('fields', arr);
-        },
-
-        removeModel: function(index) {
-            var arr = this.get('fields');
-
-            if (isNaN(index)) {
-                arr = [];
-            } else {
-                for (var each in arr) {
-                    if (arr[each].get('id') == index) {
-                        delete arr[each];
-                        break;
-                    }
-                }
-            }
-
-            this.set("fields", arr);
-        },
-
-        updateModel: function(index, from, to) {
-            var arr = this.get('fields');
-            var element = arr[from];
-            arr.splice(from, 1);
-            arr.splice(to, 0, element);
-            this.set('fields', arr);
         }
+
     }, {
         type   : 'Subform',
         i18n   : 'fieldset',

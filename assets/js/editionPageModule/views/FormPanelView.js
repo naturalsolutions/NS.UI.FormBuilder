@@ -82,9 +82,17 @@ define([
          * @param subFormView subForm View where a BaseView was dropped in
          */
         viewDrop : function(subFormView) {
+
+            var droppedView = this._view[subFormView.viewDroppedId],
+                droppedViewModel = droppedView.model;
+
+            droppedView.destroy_view();
+            delete droppedView;
+
+            //subFormView.destroy_view()
             //  We send to the subFormView the BaseView object
             //  The subForm view has to move the BaseView from the main form view to its HTML container
-            this.collectionChannel.trigger('viewDropped:' + subFormView.id, this._view[subFormView.viewDroppedId]);
+            this.collectionChannel.trigger('viewDropped:' + subFormView.id, droppedViewModel);
         },
 
         /**
@@ -147,7 +155,7 @@ define([
 
 
         /**
-         * Update form fields count when an elment was removed
+         * Update form fields count when an element was removed
          */
         removeElement : function() {
             this._viewCount--;
