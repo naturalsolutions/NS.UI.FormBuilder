@@ -330,6 +330,19 @@ define([
         },
 
         /**
+         * Remove sub field from a subForm
+         *
+         * @param subFormId sub form to remove id
+         */
+        destroySubElement : function(subFormId) {
+            this.map(function(model, idx) {
+                if (model.get('subFormParent') == subFormId) {
+                    model.trigger('destroy', model);
+                }
+            })
+        },
+
+        /**
          * Remove element from collection
          *
          * @param  {integer} id model to remove id
@@ -337,6 +350,12 @@ define([
         removeElement : function(id) {
             var item = this.get(id);
 
+            //  If the field is a subForm field we remove all subFormField
+            if (item.constructor.type == 'Subform') {
+                this.destroySubElement(item.get('id'));
+            }
+
+            //  We used trigger instead destroy method, the DELETE ajax request is not send
             item.trigger('destroy', item);
         },
 

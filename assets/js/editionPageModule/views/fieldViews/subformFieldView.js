@@ -15,9 +15,6 @@ define([
          * @returns {object} view events
          */
         events: {
-            /*'delete'         : 'deleteSubView',
-            'isDroppedReturn': 'isDroppedReturn',*/
-
             //  Duplicate BaseView events
             'click #sub-trash'       : 'removeView',
             'click #sub-duplicate'   : 'copyModel',
@@ -25,7 +22,6 @@ define([
         },
 
         removeView : function() {
-            console.log ("ici")
             BaseView.prototype.removeView.apply(this);
         },
 
