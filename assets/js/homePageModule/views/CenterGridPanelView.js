@@ -234,7 +234,9 @@ define([
          * Remove footer action except new and import action
          */
         clearFooterAction : function() {
-            this.$el.find('footer div.pull-left').fadeOut(200)
+            this.$el.find('footer').animate({
+                bottom : '-80px'
+            }, 500);
             $('#add, #import').switchClass('grey', 'red', 1);
         },
 
@@ -242,7 +244,9 @@ define([
          * Display common action form the current selected form like delete, clone, etc ...
          */
         updateFooterAction : function() {
-            this.$el.find('footer button').fadeIn(500)
+            this.$el.find('footer').animate({
+                bottom : '0'
+            }, 500);
             $('#add, #import').switchClass('red', 'grey', 1);
         },
 
