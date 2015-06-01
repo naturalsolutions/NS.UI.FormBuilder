@@ -120,32 +120,37 @@
 
         .formInformation {
             background : #222 !important;
-            td {
-                padding-top    : 17px;
-                padding-bottom : 17px;
-                text-transform : none !important;
-                vertical-align : text-top;
-                label {
-                    width       : 35px;
-                    height      : 35px;
-                    color       : white;
-                    font-size   : 22px;
-                    text-align  : center;
-                    position    : relative;
-                    margin-right: 10px;
-                    float       : left;
-                    background  : rgba(0, 0, 0, 0.2);
-                    border-right: 2.5px;
-                    overflow    : hidden;
-                    padding-top : 2px;
-                    &:hover {
-                        cursor : pointer;
-                    }
+            width: ~'calc(100% - 30px)';
+            position: absolute;
+
+            display: none;
+
+            /*height: 0;
+            overflow: hidden;*/
+
+            padding: 17px;
+            text-transform : none !important;
+            vertical-align : text-top;
+            label {
+                width       : 35px;
+                height      : 35px;
+                color       : white;
+                font-size   : 22px;
+                text-align  : center;
+                position    : relative;
+                margin-right: 10px;
+                float       : left;
+                background  : rgba(0, 0, 0, 0.2);
+                border-right: 2.5px;
+                overflow    : hidden;
+                padding-top : 2px;
+                &:hover {
+                    cursor : pointer;
                 }
-                p {
-                    width  : 90%;
-                    margin : 0 auto;
-                }
+            }
+            p {
+                width  : 90%;
+                margin : 0 auto;
             }
         }
     }

@@ -167,12 +167,22 @@ define([
          * @param {object} model Model information to display in the grid
          */
         addFormSection : function(el, model) {
+
             el.after(
-                '<tr class="formInformation">\
+                '<div class="formInformation"><tr >\
                     <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
                     <td>' + model.get('keywordsFr').join(',') + '</td>\
-                </tr>'
+                </tr></div>'
             );
+
+            $('.formInformation').after('<tr class="padding"></tr>');
+
+            var padding = $('.formInformation').height();
+
+            $('.formInformation').fadeIn(500);
+            $('.padding').animate({
+                height : padding + 30
+            });
             el.addClass('selected');
         },
 
@@ -200,6 +210,7 @@ define([
 
                 if ($('.formInformation').length > 0) {
                     $('.formInformation').fadeOut(100, _.bind(function() {
+                        $('.padding').slideUp(500);
                         $('.formInformation').remove()
                         $('tr.selected').removeClass('selected');
                         this.addFormSection(el, model);
@@ -220,6 +231,7 @@ define([
         clearSelectedRow : function() {
             //  User clicked on the same row
             $('.formInformation').fadeOut(100, _.bind(function() {
+                $('.padding').slideUp(500);
                 $('.formInformation').remove()
                 $('tr.selected').removeClass('selected');
             }, this));
