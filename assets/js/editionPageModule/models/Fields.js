@@ -17,7 +17,6 @@ define([
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
-            //id          : 0,
             order       : 1,
             name        : "Field",
             labelFr     : translater.getValueFromKey('schema.label.fr'),

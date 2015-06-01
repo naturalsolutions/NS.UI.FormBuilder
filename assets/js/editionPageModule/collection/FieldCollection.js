@@ -404,7 +404,7 @@ define([
          */
         createFieldWithJSON : function(newFieldProperties) {
 
-            var fieldTmpProperties = _.pick(newFieldProperties, 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn', 'name', 'required', 'readonly');
+            var fieldTmpProperties = _.pick(newFieldProperties, 'id', 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn', 'name', 'required', 'readonly', 'order');
 
             return new Fields[newFieldProperties['type'] + 'Field'](fieldTmpProperties);
         },
