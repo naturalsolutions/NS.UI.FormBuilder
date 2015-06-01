@@ -241,7 +241,7 @@ define([
                 case 'Radio':
                 case 'CheckBox':
                 case 'Select':
-                    subModel['options'] = $.map(model.get('itemList')['items'], function (item) {
+                    subModel['options'] = $.map(model.get('choices'), function (item) {
                         return {
                             val: item['value'],
                             label: item['en']
@@ -529,8 +529,9 @@ define([
                 //  The server is already configured to used it
                 crossDomain : true,
 
-                //  Trigger event with ajax result on the formView
-                success: _.bind(function() {
+                //  Trigger event with ajax result on the foérmView
+                success: _.bind(function(data) {
+                    this.id = data.form.id;
                     this.formChannel.trigger('save:success');
                 }, this),
                 error: _.bind(function() {
