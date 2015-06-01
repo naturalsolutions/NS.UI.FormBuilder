@@ -7,8 +7,9 @@ module.exports = function(grunt) {
             dist: {
                 options: {
                     paths: ["stylesheet"],
-                    cleancss: false,
+                    cleancss: true,
                     sourceMap: false,
+                    compress : true,
                     sourceMapFilename: 'compressed/formbuilder.css.map',
                     sourceMapRootpath: ''
                 },
