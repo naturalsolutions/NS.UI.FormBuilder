@@ -324,6 +324,7 @@ define([
 
             //field['id']   = this.getSize();
             field['name'] = 'Field' + this.getSize();
+            field['order'] = this.getSize();
 
             //  Add field
             this.addField(new Fields[nameType](field), isUnderFieldset);
