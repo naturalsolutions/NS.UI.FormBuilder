@@ -4,12 +4,13 @@ define([
     'text!../templates/SettingFieldPanelView.html',
     'backbone.radio',
     '../../Translater',
+    'sweetalert',
     'jquery-ui',
     'i18n',
     'bootstrap-select',
     'slimScroll',
     'fuelux'
-], function($, Marionette, SettingPanelViewTemplate, Radio, Translater) {
+], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal) {
 
     var translater = Translater.getTranslater();
 
@@ -87,6 +88,11 @@ define([
             //  The form channel is used only for the main form object options
             //  save, export, clear and settings
             this.formChannel = Backbone.Radio.channel('form');
+
+            //  Event send by EditionPageController when the field has been good saved as pre configurated field
+            this.formChannel.on('configurationSaved:success', this.displayConfigurationSaveSuccess, this);
+            //  Same thing when an error occured on saved
+            this.formChannel.on('configurationSaved:fail', this.displayConfigurationSaveFail, this);
         },
 
 
@@ -97,10 +103,10 @@ define([
         */
         initForm : function() {
             this.currentFieldType  = this.modelToEdit.constructor.type;
-            this.fieldWithSameType = this.preConfiguredFieldList[this.currentFieldType];
+            this.fieldWithSameType = this.preConfiguredFieldList[this.curérentFieldType];
 
             if (this.fieldWithSameType == undefined) {
-                this.$el.find('*[data-setting="field"]').hide();
+                this.$el.find('*[data-setting="field"]').first().hide();
             } else {
                 // Update available pre configurated field
                 _.each(this.fieldWithSameType, _.bind(function(el, idx) {
@@ -383,11 +389,10 @@ define([
 
             } else {
                 var formValue = this.form.getValue();
+                formValue['type'] = this.currentFieldType;
 
-                this.requestChannel.trigger('saveConfiguration', {
-                    type    : this.currentFieldType,
-                    name    : formValue['name'],
-                    content : formValue
+                this.formChannel.trigger('saveConfiguration', {
+                    field : formValue
                 });
             }
         },
@@ -398,6 +403,28 @@ define([
         */
         checkboxChange : function(e) {
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
+        },
+
+        /**
+         * Display success message when field has been saved as pre configurated field
+         */
+        displayConfigurationSaveSuccess : function() {
+            swal(
+                translater.getValueFromKey('configuration.save.success') || "Sauvé !",
+                translater.getValueFromKey('configuration.save.successMSG') || "Votre champs a bien été sauvgeardé",
+                "success"
+            )
+        },
+
+        /**
+         * Display en error message when field couldn't be saved
+         */
+        displayConfigurationSaveFail : function() {
+            swal(
+                translater.getValueFromKey('configuration.save.fail') || "Echec !",
+                translater.getValueFromKey('configuration.save.failMsg') || "Votre champs n'a pas pu être sauvegardé",
+                "error"
+            )
         }
 
     });

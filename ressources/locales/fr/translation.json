@@ -318,5 +318,14 @@
     "fetch" : {
       "error"    : "Erreur de récupération des formulaires !",
       "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur."
+    },
+
+    "configuration" : {
+      "save" : {
+        "success"    : "Sauvé !",
+        "successMsg" : "Votre champs a bien été sauvgeardé",
+        "fail"       : "Echec !",
+        "failMsg"    : "Votre champs n'a pas pu être sauvegardé"
+      }
     }
 }

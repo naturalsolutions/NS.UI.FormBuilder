@@ -69,6 +69,9 @@ define([
 
             //  Event receive from a field field (see BaseView.js) when user wants to edit field properties
             this.formChannel.on('editModel', this.modelSetting, this);
+
+            //  Event send from settingFieldPanel when user wants to save a field as a preconfigurated field
+            this.formChannel.on('saveConfiguration', this.saveConfiguration, this);
         },
 
         /**
@@ -128,7 +131,7 @@ define([
         */
         modelSetting: function(modelID) {
 
-            //  Get many informations with Ajax and send it to the layout
+            //  Get many information with Ajax and send it to the layout
             //  And the layout display the setting panel
 
             this.formChannel.trigger('initFieldSetting', {
@@ -149,6 +152,30 @@ define([
         import : function(formImportedJSON) {
             //  Update collection with JSON data
             this.fieldCollection.updateWithJSON(formImportedJSON);
+        },
+
+        /**
+         * Save field as pre configurated field
+         *
+         * @param fieldToSave field to save
+         */
+        saveConfiguration : function(fieldToSave) {
+            $.ajax({
+                type: "POST",
+                url: this.URLOptions.fieldConfigurationURL,
+                contentType : 'application/json',
+                data: JSON.stringify(fieldToSave),
+                success: _.bind(function() {
+                    this.formChannel.trigger('configurationSaved:success');
+                }, this),
+                dataType: 'json',
+                error : _.bind(function() {
+                    this.formChannel.trigger('configurationSaved:fail');
+                }, this),
+                fail : _.bind(function() {
+                    this.formChannel.trigger('configurationSaved:fail');
+                }, this)
+            });
         }
     });
 

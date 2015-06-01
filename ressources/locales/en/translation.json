@@ -322,5 +322,14 @@
     "fetch" : {
       "error"    : "Error retrieving forms !",
       "errorMsg" : "Unable to retrieve the list of forms from the server."
+    },
+
+  "configuration" : {
+    "save" : {
+      "success"    : "Saved !",
+      "successMsg" : "Your field has been saved",
+      "fail"       : "Fail !",
+      "failMsg"    : "Your couldn't be saved"
     }
+  }
 }
