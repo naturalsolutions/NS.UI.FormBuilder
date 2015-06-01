@@ -303,12 +303,12 @@ define([
                     cell  : 'string',
                     editable : false
                 }, {
-                    name     : 'creationDateDisplay',
+                    name     : 'creationDate',
                     label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
                     cell     : "string",
                     editable : false
                 }, {
-                    name     : 'modificationDateDisplay',
+                    name     : 'modificationDate',
                     label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
                     cell     : 'string',
                     editable : false
