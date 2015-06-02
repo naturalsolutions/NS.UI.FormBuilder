@@ -389,8 +389,10 @@ define([
                 // Create fieldsets but empty
                 this.createFieldsets(JSONUpdate);
 
-                // Create all fields
-                this.createFieldFromSchema(JSONUpdate);
+                if (JSONUpdate["schema"].length > 0) {
+                    // Create all fields
+                    this.createFieldFromSchema(JSONUpdate);
+                }
 
                 callback();
             }, this);
@@ -478,7 +480,6 @@ define([
          * @param  {Object} JSONUpdate JSON data
          */
         createFieldFromSchema : function(JSONUpdate) {
-            
             this.fieldset = {};
             this.schema = [];
 
