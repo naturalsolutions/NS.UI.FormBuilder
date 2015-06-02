@@ -271,6 +271,12 @@
             "successMsg" : "Votre champs a été enregistré comme champs pré-configuré.",
             "error"      : "Champs non sauvegardé !",
             "errorMsg"   : "Votre champs n'a pas pu être sauvegardé."
+        },
+        "duplicate" : {
+          "success"    : "Dupliqué !",
+          "successMsg" : "Votre formulaire a été dupliqué et enregistré sur le serveur !",
+          "error"      : "Une erreur est survenue !",
+          "errorMsg"   : "Votre formulaire n'a pas pas être dupliqué"
         }
     },
 

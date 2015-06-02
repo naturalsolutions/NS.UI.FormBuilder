@@ -34,17 +34,29 @@ define([
          * @param  {int} modelID model to copy ID
          */
         cloneModel : function(modelID) {
+            //  Get information from original form
+            //  We remove id and add "copy" word at the end
             var original    = this.get(modelID).toJSON();
             delete original.id;
             original.name  += ' (copy)';
 
-            var field = new FormModel(original)
+            //  Create field
+            var field = new FormModel(original);
 
+            this.add(field);
+
+            //  Save field
             field.urlRoot = this.url;
 
-            this.add(field)
-
-            field.save();
+            field.save(field, {
+                success : _.bind(function(model, response, options) {
+                    field.id = response.id;
+                    this.homePageChannel.trigger('duplicate:success');
+                }, this),
+                error : _.bind(function(model, response, options) {
+                    this.homePageChannel.trigger('duplicate:error');
+                }, this)
+            });
         },
 
         deleteModel : function(modelID) {

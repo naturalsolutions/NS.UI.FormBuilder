@@ -72,6 +72,10 @@ define([
 
             //  Event send from Formbuilder.js when export is finished (success or not)
             this.homePageChannel.on('exportFinished',   this.displayExportMessage, this);
+
+            //  Duplicate event
+            this.homePageChannel.on('duplicate:error', this.displayDuplicateFail, this);
+            this.homePageChannel.on('duplicate:success', this.displayDuplicateSuccess, this);
         },
 
         /**
@@ -650,6 +654,28 @@ define([
                 }, this));
 
             }, this));
+        },
+
+        /**
+         * Display a message if the form has been duplicated and saved
+         */
+        displayDuplicateFail : function() {
+            swal(
+                translater.getValueFromKey('modal.duplicate.error') || "Une erreur est survenue !",
+                translater.getValueFromKey('modal.duplicate.errorMsg') || "Votre formulaire n'a pas pas être dupliqué !",
+                "error"
+            );
+        },
+
+        /**
+         * Display an error message if an error occurred during duplication or save
+         */
+        displayDuplicateSuccess : function() {
+            swal(
+                translater.getValueFromKey('modal.duplicate.success') || "Dupliqué !",
+                translater.getValueFromKey('modal.duplicate.successMsg') || "Votre formulaire a été dupliqué et enregistré sur le serveur !",
+                "success"
+            );
         }
     });
 

@@ -277,6 +277,12 @@
             "successMsg" : "Your field has been saved as a pre-configurated field.",
             "error"      : "Field not saved !",
             "errorMsg"   : "Your field couldn't be saved ."
+        },
+        "duplicate" : {
+          "success"    : "Duplicated !",
+          "successMsg" : "Your field has been duplicated and saved on the server !",
+          "error"      : "Form not duplicated !",
+          "errorMsg"   : "Your field couldn't be duplicated"
         }
     },
 
