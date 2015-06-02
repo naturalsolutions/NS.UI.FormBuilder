@@ -36,6 +36,17 @@ define([
         initialize  : function(options) {
             _.bindAll(this, 'toJSON');
 
+            var creationDate     = this.get('creationDate'),
+                modificationDate = this.get('modificationDate');
+
+            if (creationDate != null) {
+                creationDate = creationDate.toString();
+                this.set('creationDate', creationDate.substring(0, creationDate.length - 3));
+            }
+            if (modificationDate != null) {
+                modificationDate = modificationDate.toString();
+                this.set('modificationDate', modificationDate.substring(0, modificationDate.length - 3));
+            }
         },
 
         toJSON : function() {
