@@ -478,7 +478,7 @@ define([
          * @param  {Object} JSONUpdate JSON data
          */
         createFieldFromSchema : function(JSONUpdate) {
-
+            
             this.fieldset = {};
             this.schema = [];
 
@@ -489,8 +489,13 @@ define([
             //  Convert current schema object in array
             //  We need to convert it in array for sort it by field order
             _.each(JSONUpdate["schema"], _.bind(function(element, index) {
+                if (element.type == 'Checkboxes') {
+                    element.type = 'CheckBox';
+                }
                 this.schema.push(element);
             }, this));
+
+            this.schema = _.sortBy(this.schema, 'order');
 
             //  When we add the field on the collection, the form panel listen the event and get the adapted view with requireJS
             //  According to the view weight, the views can be created in a wrong order
