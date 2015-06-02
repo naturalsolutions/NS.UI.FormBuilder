@@ -143,7 +143,6 @@ define([
             this.$el.find('h1 label').text(newCollectionAttributes.name)
         },
 
-
         /**
         * Send an event to the setting view (settingView.js) to display properties form
         * Channel send on the form channel
@@ -153,7 +152,6 @@ define([
             this.formChannel.trigger('editForm', this.collection);
         },
 
-
         /**
          * Update form fields count when an element was removed
          */
@@ -161,7 +159,6 @@ define([
             this._viewCount--;
             this.updateFieldCount();
         },
-
 
         /**
          * Create the view for the fresh added element
@@ -199,6 +196,15 @@ define([
                         vue.render();
                         this._view[id] = vue;
                         this.updateScrollBar();
+
+                        //
+                        //  Field queue
+                        //
+                        //  Now the view is rendered so we can send an event to the FieldCollection
+                        //  See FieldCollection createFieldFromSchema method
+
+                        this.formChannel.trigger('nextField');
+
                     }
 
                     $(".actions").i18n();
@@ -233,7 +239,6 @@ define([
             var scrollToHeight = this.$el.find('#scrollSection').height();
             this.$el.find('#scrollSection').slimScroll({ scrollTo: scrollToHeight });
         },
-
 
         /**
          * Rendering callbask
@@ -272,7 +277,6 @@ define([
             //  Send an event to notify the render is done
             this.formChannel.trigger('renderFinished');
         },
-
 
         /**
         * Display modal view when user wants to export him form
@@ -373,7 +377,9 @@ define([
             }
         },
 
-
+        /**
+         * Display a message when the form has been saved
+         */
         displaySucessMessage : function() {
             swal(
                 translater.getValueFromKey('modal.save.success') || "Sauvé !",
@@ -382,6 +388,9 @@ define([
             );
         },
 
+        /**
+         * Display a message if the form couldn't be saved
+         */
         displayFailMessage : function() {
             swal(
                 translater.getValueFromKey('modal.save.error') || "Une erreur est survenu !",
@@ -426,6 +435,10 @@ define([
             });
         },
 
+        /**
+         * Clear form and return to the homepage
+         * The controller does the redirection, the view send just an event
+         */
         clearFormAndExit : function() {
             this.collection.reset();
             this.formChannel.trigger('exit');

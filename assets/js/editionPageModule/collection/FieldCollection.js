@@ -167,8 +167,16 @@ define([
 
             this.formChannel.on('remove', this.removeElement);
 
-            //  Event send by BaseView or BaseView herited view for duplicate model
+            //  Event send by BaseView or BaseView inherited view for duplicate model
             this.formChannel.on('copyModel', this.copyModel, this);
+
+            //
+            //  Field queue events
+            //
+
+            //  Event send form formPanelView for add the next field to the collection
+            //  See createFieldFromSchema method
+            this.formChannel.on('nextField', this.nextField, this);
         },
 
         /**
@@ -180,7 +188,7 @@ define([
             var originModel = this.at(modelToCloneID),
                 nameType    = originModel.constructor.type + 'Field'
 
-            this.addElement(nameType, _.omit(originModel.attributes, 'id'));
+            this.addElement(nameType, _.omit(originModel.attributes, 'id'), false);
         },
 
         /**
@@ -297,6 +305,12 @@ define([
             return json;
         },
 
+        /**
+         * Add field in the form is this is a valid type
+         *
+         * @param field                 field to add
+         * @param ifFieldIsInFieldset   if field in under a fieldset
+         */
         addField : function(field, ifFieldIsInFieldset) {
             if (this.isAValidFieldType(field.constructor.type)) {
 
@@ -465,30 +479,52 @@ define([
          */
         createFieldFromSchema : function(JSONUpdate) {
 
-            var fieldset = [],
-                schema = [];
+            this.fieldset = {};
+            this.schema = [];
 
-            _.each(JSONUpdate['fieldsets'], function (el, idx) {
-                fieldset = fieldset.concat(el["fields"]);
-            });
+            _.each(JSONUpdate['fieldsets'], _.bind(function (el, idx) {
+                this.fieldset = this.fieldset.concat(el["fields"]);
+            }, this));
 
             //  Convert current schema object in array
             //  We need to convert it in array for sort it by field order
-            _.each(JSONUpdate["schema"], function(element, index) {
-                schema.push(element);
-            });
-
-            schema = _.sortBy(schema, "order");
-
-            _.each(schema, _.bind(function (el, idx) {
-                //  Add new field
-                if (this.isAValidFieldType(el['type'])) {
-                    this.addField(
-                        this.createFieldWithJSON(el),
-                        _.contains(fieldset, el.name)
-                    );
-                }
+            _.each(JSONUpdate["schema"], _.bind(function(element, index) {
+                this.schema.push(element);
             }, this));
+
+            //  When we add the field on the collection, the form panel listen the event and get the adapted view with requireJS
+            //  According to the view weight, the views can be created in a wrong order
+            //
+            //  E.G : we have a text field and a long text, the text in first and the long at the end
+            //  If the requireJS request is too long the Long text could be created before the text
+            //
+            //  So i create a minimal queue with backbone event
+            //  When the view is rendered the formPanelView send an event to the collection "Ok next field" and we add the next field in the collection
+
+            var firstFieldToAdd = this.schema[0];
+
+            if (this.isAValidFieldType(firstFieldToAdd.type)) {
+                this.addField( this.createFieldWithJSON(firstFieldToAdd), _.contains(this.fieldset, firstFieldToAdd.name) );
+            }
+
+            this.schema.shift();
+
+            //  Now we wait the formPanelview next event
+        },
+
+        /**
+         * Add the next field on the collection
+         */
+        nextField : function() {
+            if (this.schema.length > 0) {
+                var firstFieldToAdd = this.schema[0];
+
+                if (this.isAValidFieldType(firstFieldToAdd.type)) {
+                    this.addField( this.createFieldWithJSON(firstFieldToAdd), _.contains(this.fieldset, firstFieldToAdd.name) );
+                }
+
+                this.schema.shift();
+            }
         },
 
         /**
@@ -516,7 +552,9 @@ define([
             return fieldsList;
         },
 
-
+        /**
+         * Save collection, send POST or PUT request to the back
+         */
         save : function() {
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
             var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
