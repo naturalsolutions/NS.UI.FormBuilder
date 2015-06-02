@@ -303,12 +303,12 @@ define([
                     cell  : 'string',
                     editable : false
                 }, {
-                    name     : 'creationDate',
+                    name     : 'creationDateDisplay',
                     label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
                     cell     : "string",
                     editable : false
                 }, {
-                    name     : 'modificationDate',
+                    name     : 'modificationDateDisplay',
                     label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
                     cell     : 'string',
                     editable : false
@@ -483,6 +483,7 @@ define([
             this.$el.find('#formsCount').text(this.formCollection.length);
 
             $('tr.selected').removeClass('selected');
+
 
             //  Scroll to the end
             $("#scrollSection").scrollTop( $( "#scrollSection" ).prop( "scrollHeight" ) );

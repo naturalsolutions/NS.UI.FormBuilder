@@ -35,10 +35,16 @@ define([
          */
         cloneModel : function(modelID) {
             var original    = this.get(modelID).toJSON();
-            original.id     = this.length + 1;
-            original.name  += ' (copy)'
+            delete original.id;
+            original.name  += ' (copy)';
 
-            this.add(new FormModel(original))
+            var field = new FormModel(original)
+
+            field.urlRoot = this.url;
+
+            this.add(field)
+
+            field.save();
         },
 
         deleteModel : function(modelID) {
