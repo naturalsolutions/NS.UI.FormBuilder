@@ -538,6 +538,12 @@ define([
             });
         },
 
+        getJSON : function() {
+            var json = models.BaseField.prototype.getJSON.apply(this, arguments);
+            json.choices = JSON.stringify(this.get('choices'));
+            return json;
+        },
+
         schema: function() {
             return _.extend( {}, models.BaseField.prototype.schema, {
                 webServiceURL : {
@@ -596,8 +602,9 @@ define([
         *
         * Get models.BaseField schema and add it on EnumerationField schema
         */
-        initialize: function() {
+        initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
+            this.set('choices', JSON.parse(this.get('choices')));
         }
     });
 

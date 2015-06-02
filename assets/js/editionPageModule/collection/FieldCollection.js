@@ -245,16 +245,7 @@ define([
             var subModel = model.getJSON();
 
             switch (model.constructor.type) {
-
-                case 'Radio':
                 case 'CheckBox':
-                case 'Select':
-                    subModel['options'] = $.map(model.get('choices'), function (item) {
-                        return {
-                            val: item['value'],
-                            label: item['en']
-                        }
-                    });
                     subModel['type'] = (model.constructor.type === "CheckBox") ? 'Checkboxes' : model.constructor.type;
                     break;
 
@@ -389,7 +380,7 @@ define([
                 // Create fieldsets but empty
                 this.createFieldsets(JSONUpdate);
 
-                if (JSONUpdate["schema"].length > 0) {
+                if (_.size(JSONUpdate["schema"]) > 0) {
                     // Create all fields
                     this.createFieldFromSchema(JSONUpdate);
                 }
@@ -419,10 +410,7 @@ define([
          * @param {array} newFieldProperties properties array
          */
         createFieldWithJSON : function(newFieldProperties) {
-
-            var fieldTmpProperties = _.pick(newFieldProperties, 'id', 'title', 'help', 'editorClass', 'fieldClass', 'labelFr', 'labelEn', 'name', 'required', 'readonly', 'order');
-
-            return new Fields[newFieldProperties['type'] + 'Field'](fieldTmpProperties);
+            return new Fields[newFieldProperties['type'] + 'Field'](newFieldProperties);
         },
 
         /**
