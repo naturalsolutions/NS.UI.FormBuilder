@@ -991,7 +991,8 @@ define([
         }
     }, {
         type: 'Thesaurus',
-        i18n: 'thesaurus'
+        i18n: 'thesaurus',
+        doubleColumn : true
     });
 
     models.AutocompleteTreeViewField = models.BaseField.extend({

@@ -23,8 +23,8 @@
         "horizontalline"       : "Séparation",
         "treeview"             : "Arborescence",
         "boolean"              : "Booléen",
-        "thesaurus"            : "Thesaurus",
-        "autocompletetreeview" : "Arborescence avec autocompletion",
+        "thesaurus"            : "Thesaurus sans autocomplétion",
+        "autocompletetreeview" : "Thesaurus avec autocomplétion",
         "numericrange"         : "Curseur"
     },
 
@@ -186,7 +186,7 @@
         "boolean"              : "Booléen",
         "autocompletetreeview" : "arborescence avec un champs de recherche",
         "numericrange"         : "Curseur numérique",
-        "thesaurus"            : "Thesaurus"
+        "thesaurus"            : "Thesaurus sans autocomplétion"
     },
 
     "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
