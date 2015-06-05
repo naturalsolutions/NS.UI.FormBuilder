@@ -26,7 +26,7 @@ define([
             isDragged   : false,
             editorClass : '',
             fieldClass  : '',
-            fieldSize   : 0,
+            fieldSize   : 1,
             endOfLine   : false,
 
             //  Linked fields values
