@@ -318,6 +318,7 @@ define([
                 defaultValue : "",
                 help         : translater.getValueFromKey('placeholder.text'),
                 size         : 255,
+                minimzlSize  : 0,
                 multiline    : false
             });
         },
@@ -340,6 +341,28 @@ define([
                     title       : translater.getValueFromKey('schema.help'),
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.help')
+                    }
+                },
+                minimalSize : {
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.minimalSize'),
+                    validators : [function checkValue(value, formValues) {
+                        if (value < 0 || value > 255) {
+                            return {
+                                type : 'Invalid number',
+                                message : "La taille doit être comprise en 0 et 255"
+                            }
+                        } else if (value >= formValues['size']) {
+                            return {
+                                type : 'Invalid number',
+                                message : translater.getValueFromKey('form.minimal') || "La taille minimale doit être inférieur à la taille maximale"
+                            }
+                        }
+                    }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.minimalSize')
                     }
                 },
                 size: {

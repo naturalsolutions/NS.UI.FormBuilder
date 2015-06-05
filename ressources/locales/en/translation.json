@@ -47,6 +47,7 @@
         "count"      : "Field(s)",
         "find"       : "Find a form",
         "validation" : "This field is required",
+        "minimal"    : "Minimum size must be less than the maximum size",
         "setting"    : "Form <br />properties",
         "new"        : "New form",
 
@@ -114,6 +115,7 @@
         "url"               : "Web service URL",
         "help"              : "Help text",
         "size"              : "Maximal size",
+        "minimalSize"       : "Minimal size",
         "file"              : "Default file",
         "mime"              : "Allowed file type",
         "title"             : "Title",
@@ -298,13 +300,14 @@
         "fr" : "French label of your field",
         "en" : "English label of your field"
       },
-      "name" : "Your field name",
-      "value" : "Default value of your field",
-      "help" : "Field help text",
-      "url" : "Web service URL for autocomplete values",
-      "size" : "Maximum allowed size",
-      "mime" : "Allowed field type",
-      "fileSize" : "Maximum allowed field size",
+      "name"        : "Your field name",
+      "value"       : "Default value of your field",
+      "help"        : "Field help text",
+      "url"         : "Web service URL for autocomplete values",
+      "size"        : "Maximum allowed size",
+      "minimalSize" : "Minimum allowed size",
+      "mime"        : "Allowed field type",
+      "fileSize"    : "Maximum allowed field size",
       "tree" : {
         "default" : "Default node at start",
         "url" : "URL returning tree structure"
