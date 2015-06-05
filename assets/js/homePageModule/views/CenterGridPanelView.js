@@ -510,13 +510,45 @@ define([
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
+        askNewFormName : function() {
+            var self = this;
+
+            swal({
+                title                       : translater.getValueFromKey('modal.newForm.title') || "Nouveau formulaire",
+                text                        : translater.getValueFromKey('modal.newForm.text') || "Saisir le nom du nouveau formulaire",
+                cancelButtonText            : translater.getValueFromKey('modal.newForm.cancelButtonText') || "Annuler",
+                type                        : "input",
+                showCancelButton            : true,
+                closeOnConfirm              : false,
+                animation                   : "slide-from-top",
+                inputPlaceholder            : translater.getValueFromKey('modal.newForm.inputPlaceholder') || "Nom du nouveau formulaire"
+            }, function (inputValue) {
+                if (inputValue === false) return false;
+                if (inputValue === "") {
+                    swal.showInputError(translater.getValueFromKey('modal.newForm.error') || "Le nom ne peut pas être vide");
+                    return false
+                }
+
+                var formToEdit = new FormModel({
+                    name : inputValue
+                });
+
+                swal.close();
+
+                self.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
+
+            });
+        },
+
         /**
          * Add new form and edit it
          */
         addForm : function() {
-            var formToEdit = new FormModel();
 
-            this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
+
+            this.askNewFormName();
+
+
         },
 
         /**

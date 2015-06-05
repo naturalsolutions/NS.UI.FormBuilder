@@ -283,6 +283,13 @@
           "successMsg" : "Your field has been duplicated and saved on the server !",
           "error"      : "Form not duplicated !",
           "errorMsg"   : "Your field couldn't be duplicated"
+        },
+        "newForm" : {
+          "title"            : "New form",
+          "text"             : "Write new form name",
+          "inputPlaceholder" : "New form name",
+          "error"            : "Form name can't be empty",
+          "cancelButtonText" : "Cancel"
         }
     },
 

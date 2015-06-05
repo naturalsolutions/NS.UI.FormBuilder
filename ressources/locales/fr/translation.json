@@ -277,6 +277,13 @@
           "successMsg" : "Votre formulaire a été dupliqué et enregistré sur le serveur !",
           "error"      : "Une erreur est survenue !",
           "errorMsg"   : "Votre formulaire n'a pas pas être dupliqué"
+        },
+        "newForm" : {
+            "title"            : "Nouveau formulaire",
+            "text"             : "Saisir le nom du nouveau formulaire",
+            "inputPlaceholder" : "Nom du nouveau formulaire",
+            "error"            : "Le nom ne peut pas être vide",
+            "cancelButtonText" : "Annuler"
         }
     },
 
