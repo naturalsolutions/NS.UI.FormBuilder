@@ -143,6 +143,7 @@
         "checkboxlabel"     : "Checkbox label",
         "decimal"           : "Allow decimal value",
         "fieldSize"         : "Field display size",
+        "fullpath"          : "Save full path",
         "sizeValue" : {
             "small"  : "Small",
             "medium" : "Medium",

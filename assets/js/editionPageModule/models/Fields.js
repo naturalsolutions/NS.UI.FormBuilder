@@ -960,7 +960,8 @@ define([
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 webServiceURL : 'ressources/thesaurus/thesaurus.json',
-                defaultNode: ""
+                defaultNode: "",
+                fullpath : false
             });
         },
         schema: function() {
@@ -971,7 +972,7 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.node.default')
+                        placeholder : translater.getValueFromKey('placeholder.tree.default')
                     }
                 },
                 webServiceURL : {
@@ -982,6 +983,11 @@ define([
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.node.url')
                     }
+                },
+                fullpath : {
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.fullpath')
                 }
             });
         },
@@ -1031,6 +1037,11 @@ define([
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.wslng'),
                     options : ["fr", "en"]
+                },
+                fullpath : {
+                    type        : CheckboxEditor,
+                    fieldClass : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.fullpath')
                 }
             });
         },

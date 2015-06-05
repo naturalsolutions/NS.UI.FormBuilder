@@ -144,6 +144,7 @@
         "checkboxlabel"     : "Label checkbox",
         "decimal"           : "Valeur décimal autorisée",
         "fieldSize"         : "Taille d'affichage",
+        "fullpath"          : "Chemin entier",
         "sizeValue" : {
             "small"  : "Etroit",
             "medium" : "Moyen",
