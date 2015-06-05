@@ -26,7 +26,7 @@ define([
             isDragged   : false,
             editorClass : '',
             fieldClass  : '',
-            fieldSize   : translater.getValueFromKey('schema.sizeValue.small'),
+            fieldSize   : 0,
             endOfLine   : false,
 
             //  Linked fields values
@@ -96,7 +96,20 @@ define([
                 title       : translater.getValueFromKey('schema.fieldSize'),
                 editorClass : 'radiosField',
                 template    : fieldTemplate,
-                options : [translater.getValueFromKey('schema.sizeValue.small'), translater.getValueFromKey('schema.sizeValue.medium'), translater.getValueFromKey('schema.sizeValue.large')]
+                options : [
+                    {
+                        label : translater.getValueFromKey('schema.sizeValue.small'),
+                        val : 1
+                    },
+                    {
+                        label : translater.getValueFromKey('schema.sizeValue.medium'),
+                        val : 2
+                    },
+                    {
+                        label : translater.getValueFromKey('schema.sizeValue.large'),
+                        val : 3
+                    }
+                ]
             },
             endOfLine : {
                 type        : CheckboxEditor,
@@ -627,7 +640,10 @@ define([
         */
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set('choices', JSON.parse(this.get('choices')));
+
+            if (typeof this.get('choices') === 'string') {
+                this.set('choices', JSON.parse(this.get('choices')));
+            }
         }
     });
 
