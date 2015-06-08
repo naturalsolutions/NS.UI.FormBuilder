@@ -333,6 +333,8 @@ define([
                 url : this.URLOptions.forms
             });
 
+            this.formCollection.reset();
+
             //  Create grid
             this.initGrid();
 
