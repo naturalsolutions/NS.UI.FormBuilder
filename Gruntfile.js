@@ -35,6 +35,8 @@ module.exports = function(grunt) {
         }
     });
 
+    grunt.registerTask('prod', ['less', 'autoprefixer']);
+
     grunt.loadNpmTasks('grunt-contrib-less');
     grunt.loadNpmTasks('grunt-contrib-watch');
     grunt.loadNpmTasks('grunt-autoprefixer');
