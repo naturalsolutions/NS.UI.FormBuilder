@@ -49,6 +49,29 @@
     }
 }
 
+.form-control:focus {
+    border-color: #66afe9;
+    outline: 0;
+    -webkit-box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+    box-shadow: inset 0 1px 1px rgba(0,0,0,.075),0 0 8px rgba(102,175,233,.6);
+}
+
+.neverHasShadow(@color) {
+    outline     : none !important;
+    box-shadow  : none !important;
+    border-color: @color !important;
+
+    &:hover, &:active, &:visited, &:focus, &:blur {
+        box-shadow  : none !important;
+        border-color: @color !important;
+        outline     : none !important;
+    }
+}
+
+.bootstrap-select .btn:focus {
+    outline: none !important;
+}
+
 //  override bootstrap select style
 //  bootstrap select library : http://silviomoreto.github.io/bootstrap-select/
 .bootstrap-select {
@@ -56,8 +79,24 @@
     border-radius: 2.5px;
     background : transparent !important;
 
+    .caret {
+        color : white;
+    }
+
     .btn {
-        background : transparent !important;
+        background   : #292c2e !important;
+        border-color : transparent !important;
+        .neverHasShadow(#292c2e);
+        span {
+            .exo;
+            color : white;
+            text-shadow: none;
+        }
+    }
+
+    .btn-default {
+        border : none !important;
+        box-shadow: none !important;
     }
 
     button {
@@ -79,14 +118,19 @@
 
         ul {
             li {
-                background : #222 !important;
+                .neverHasShadow(#292c2e);
+                background : #292c2e !important;
                 .exo;
-                a { background : #222 !important; }
+                a {
+                    background : #292c2e !important;
+                    .neverHasShadow(#292c2e);
+                }
                 &:hover {
-                    background : #222;
-                    * { background : #222; }
+                    background : #222 !important;
+                    a, span { background : #222 !important; }
                 }
                 span {
+                    .neverHasShadow(#292c2e);
                     &.text {
                         .exo;
                         font-size : 16px;
@@ -94,8 +138,8 @@
                     }
                 }
                 &.selected {
-                    box-shadow: none;
-                    background : #222;
+                    .neverHasShadow(#292c2e);
+                    background : #292c2e;
                 }
             }
         }
