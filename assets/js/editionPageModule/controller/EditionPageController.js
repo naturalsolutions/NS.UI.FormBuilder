@@ -27,6 +27,8 @@ define([
                 url  : this.URLOptions['formSaveURL']
             });
 
+            this.fieldCollection.reset();
+
             this.initFormChannel();
             this.getLinkedFieldsList();
             this.getPreConfiguratedFields();

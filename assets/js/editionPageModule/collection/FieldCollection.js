@@ -138,20 +138,18 @@ define([
         * @param {type} options
         */
         initialize: function (models, options) {
-            this.count       = 0;
-            this.countID     = 0;
+            var opt = options || {};
 
-            this.url = options.url;
-
-            this.id            = options.id || 0;
-            this.name          = options.name           || 'My form';
-            this.descriptionFr = options.descriptionFr  || "";
-            this.descriptionEn = options.descriptionEn  || "";
-            this.keywordsFr    = options.keywordsFr     || ["formulaire"];
-            this.keywordsEn    = options.keywordsEn     || ["form"];
-            this.labelFr       = options.labelFr        || "";
-            this.labelEn       = options.labelEn        || "";
-            this.tag           = "";
+            this.url           = opt.url            || "";
+            this.id            = opt.id             || 0;
+            this.name          = opt.name           || 'My form';
+            this.descriptionFr = opt.descriptionFr  || "";
+            this.descriptionEn = opt.descriptionEn  || "";
+            this.keywordsFr    = opt.keywordsFr     || ["formulaire"];
+            this.keywordsEn    = opt.keywordsEn     || ["form"];
+            this.labelFr       = opt.labelFr        || "";
+            this.labelEn       = opt.labelEn        || "";
+            this.tag           = opt.tag            || "";
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -297,7 +295,7 @@ define([
         },
 
         /**
-         * Add field in the form is this is a valid type
+         * Add field in the form if this is a valid type
          *
          * @param field                 field to add
          * @param ifFieldIsInFieldset   if field in under a fieldset
@@ -305,11 +303,9 @@ define([
         addField : function(field, ifFieldIsInFieldset) {
             if (this.isAValidFieldType(field.constructor.type)) {
 
-                this.countID++;
-
                 //  Update field
                 field.set('isUnderFieldset', ifFieldIsInFieldset !== undefined ? ifFieldIsInFieldset : false);
-                field.set('id', this.countID);
+                field.set('id', this.getSize() + 1);
 
                 //  Add it
                 this.add(field);
@@ -327,7 +323,6 @@ define([
 
             var field = properties || {};
 
-            //field['id']   = this.getSize();
             field['name'] = 'Field' + this.getSize();
             field['order'] = this.getSize();
 

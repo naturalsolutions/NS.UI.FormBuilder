@@ -227,9 +227,9 @@ define([
          * Update field count
          */
         updateFieldCount : function() {
-            this.$el.find('.first').text(this.collection.length - 1);
+            this.$el.find('.first').text(this.collection.length);
 
-            this[this.collection.length > 1 ? 'enableFooterActions' : 'disableFooterActions']();
+            this[this.collection.length > 0 ? 'enableFooterActions' : 'disableFooterActions']();
         },
 
         /**
