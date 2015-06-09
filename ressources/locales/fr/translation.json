@@ -145,6 +145,7 @@
         "decimal"           : "Valeur décimal autorisée",
         "fieldSize"         : "Taille d'affichage",
         "fullpath"          : "Chemin entier",
+        "obsolete"          : "Obsolète",
         "sizeValue" : {
             "small"  : "Etroit",
             "medium" : "Moyen",

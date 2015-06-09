@@ -144,6 +144,7 @@
     "decimal"           : "Allow decimal value",
     "fieldSize"         : "Field display size",
     "fullpath"          : "Save full path",
+    "obsolete"          : "Obsolete",
     "sizeValue" : {
       "small"  : "Small",
       "medium" : "Medium",
