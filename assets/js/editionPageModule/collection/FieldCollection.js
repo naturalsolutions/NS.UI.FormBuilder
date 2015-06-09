@@ -12,8 +12,9 @@ define([
     'backbone',
     '../models/fields',
     'backbone.radio',
-    '../../Translater'
-], function (Backbone, Fields, Radio, Translater) {
+    '../../Translater',
+    '../editor/CheckboxEditor'
+], function (Backbone, Fields, Radio, Translater,CheckboxEditor) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -60,7 +61,7 @@ define([
          * Collection schema for backbone forms generation
          * @type {Object}
          */
-        schema : {
+        schemaDefinition : {
             name : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.name'),
@@ -128,6 +129,11 @@ define([
                 title       : translater.getValueFromKey('form.keywords.en'),
                 editorClass : 'form-control hide',
                 template    : pillboxTemplate
+            },
+            obsolete : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.obsolete')
             }
         },
 
@@ -150,6 +156,7 @@ define([
             this.labelFr       = opt.labelFr        || "";
             this.labelEn       = opt.labelEn        || "";
             this.tag           = opt.tag            || "";
+            this.obsolete      = opt.obsolete       || false;
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -271,6 +278,7 @@ define([
                 labelFr       : this.labelFr,
                 labelEn       : this.labelEn,
                 tag           : this.tag || "",
+                obsolete      : this.obsolete,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
@@ -521,7 +529,7 @@ define([
          * @return {[Object} attributes values
          */
         getAttributesValues : function() {
-            return _.pick(this, _.keys(this.schema));
+            return _.pick(this, _.keys(this.schemaDefinition));
         },
 
         /**

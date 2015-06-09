@@ -167,7 +167,7 @@ define([
                 }
 
                 this.form = new Backbone.Form({
-                    schema: formToEdit.schema,
+                    schema: formToEdit.schemaDefinition,
                     data : formToEdit.getAttributesValues()
                 }).render();
 
