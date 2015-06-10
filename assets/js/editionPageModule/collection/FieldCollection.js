@@ -513,7 +513,7 @@ define([
          * Add the next field on the collection
          */
         nextField : function() {
-            if (this.schema.length > 0) {
+            if (this.schemaDefinition.length > 0) {
                 var firstFieldToAdd = this.schema[0];
 
                 if (this.isAValidFieldType(firstFieldToAdd.type)) {

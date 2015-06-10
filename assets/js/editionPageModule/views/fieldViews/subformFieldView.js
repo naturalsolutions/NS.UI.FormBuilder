@@ -41,6 +41,8 @@ define([
 
             this.model.off('change');
 
+            this.model.bind('change:legend', this.changeLegend, this);
+
             _.bindAll(this, 'renderSubView', 'render');
 
             this.initCollectionViewAndChannel();
@@ -140,6 +142,13 @@ define([
 
             }, this));
         },
+
+        /**
+         * Change fieldset label when legend model attribute changed
+         */
+        changeLegend : function() {
+            this.$el.find('.legend').text(this.model.get('legend'))
+        }
 
     });
 
