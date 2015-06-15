@@ -13,8 +13,9 @@ define([
     '../models/fields',
     'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor'
-], function (Backbone, Fields, Radio, Translater,CheckboxEditor) {
+    '../editor/CheckboxEditor',
+    'pillbox-editor'
+], function (Backbone, Fields, Radio, Translater,CheckboxEditor, PillboxEditor) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -125,10 +126,11 @@ define([
                 template    : pillboxTemplate
             },
             keywordsEn : {
-                type        : 'Text',
+                type        : PillboxEditor,
                 title       : translater.getValueFromKey('form.keywords.en'),
-                editorClass : 'form-control hide',
-                template    : pillboxTemplate
+                closeClass  : 'fa fa-home',
+                /*editorClass : 'form-control hide',
+                template    : pillboxTemplate*/
             },
             obsolete : {
                 type        : CheckboxEditor,
@@ -315,7 +317,7 @@ define([
                 //  Update field
                 field.set('isUnderFieldset', ifFieldIsInFieldset === true);
 
-                if (field.get('id') === 0) {
+                if (field.get('id') === 0 || field.get('id') == undefined) {
                     field.set('id', this.getSize() + 1);
                 }
 
