@@ -170,6 +170,7 @@ define([
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
 
+            //  Event send from BaseView or inherited view when user wants to remove a field
             this.formChannel.on('remove', this.removeElement);
 
             //  Event send by BaseView or BaseView inherited view for duplicate model
@@ -182,7 +183,11 @@ define([
             //  Event send form formPanelView for add the next field to the collection
             //  See createFieldFromSchema method
             this.formChannel.on('nextField', this.nextField, this);
+
+            //  Next fieldset event send by subFormView
+            this.formChannel.on('nextFieldSet', this.createFieldsets, this);
         },
+
 
         /**
          * Duplicate model in the collection
@@ -228,16 +233,11 @@ define([
          * @return {object}       subform data serialized
          */
         getFieldsetFromModel: function (model) {
-            var fieldset = {
-                legend: model.get('legend'),
-                fields: []
+            return {
+                legend   : model.get('legend'),
+                fields   : model.get('fields'),
+                multiple : model.get('multiple')
             };
-
-            _.each(model.get('fields'), function (el, idx) {
-                fieldset['fields'].push(el);
-            });
-
-            return fieldset;
         },
 
         /**
@@ -284,6 +284,7 @@ define([
                 fieldsets     : []
             }, subModel = null;
 
+
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
                     json.fieldsets.push(this.getFieldsetFromModel(model));
@@ -309,14 +310,25 @@ define([
          * @param ifFieldIsInFieldset   if field in under a fieldset
          */
         addField : function(field, ifFieldIsInFieldset) {
+
             if (this.isAValidFieldType(field.constructor.type)) {
-
                 //  Update field
-                field.set('isUnderFieldset', ifFieldIsInFieldset !== undefined ? ifFieldIsInFieldset : false);
-                field.set('id', this.getSize() + 1);
+                field.set('isUnderFieldset', ifFieldIsInFieldset === true);
 
-                //  Add it
+                if (field.get('id') === 0) {
+                    field.set('id', this.getSize() + 1);
+                }
+
                 this.add(field);
+
+                if (ifFieldIsInFieldset) {
+
+                    var fieldset = this.get(field.get('subFormParent'));
+                    fieldset.addField(field);
+
+                }
+
+                return field.get('id');
             }
         },
 
@@ -331,11 +343,16 @@ define([
 
             var field = properties || {};
 
-            field['name'] = 'Field' + this.getSize();
+            //  We check if the field name is the default name or not (if a form was imported the name can be different but can't be modified)
+            field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();
 
-            //  Add field
-            this.addField(new Fields[nameType](field), isUnderFieldset);
+            //
+            //  We add a new file is un the collection
+            //  addField return new added field id
+            //  addElement return so this id
+            //
+            return this.addField(new Fields[nameType](field), isUnderFieldset);
         },
 
         /**
@@ -364,6 +381,11 @@ define([
                 this.destroySubElement(item.get('id'));
             }
 
+            if (item.get('subFormParent') !== undefined) {
+                var fieldSet = this.get(item.get('subFormParent'));
+                fieldSet.removeField(item.get('name'));
+            }
+
             //  We used trigger instead destroy method, the DELETE ajax request is not send
             item.trigger('destroy', item);
         },
@@ -374,27 +396,12 @@ define([
          * @param  {object} JSONUpdate JSON data
          */
         updateWithJSON : function(JSONUpdate) {
+            this.JSONUpdate = JSONUpdate;
 
-            var fn = _.bind(function(JSONUpdate, callback) {
+            //  Update form attribute
+            this.updateCollectionAttributes(JSONUpdate);
 
-                //  Update form attribute
-                this.updateCollectionAttributes(JSONUpdate);
-
-                // Create fieldsets but empty
-                this.createFieldsets(JSONUpdate);
-
-                if (_.size(JSONUpdate["schema"]) > 0) {
-                    // Create all fields
-                    this.createFieldFromSchema(JSONUpdate);
-                }
-
-                callback();
-            }, this);
-
-            fn(JSONUpdate, _.bind(function() {
-                this.formChannel.trigger('updateFinished');
-            }, this));
-
+            this.createFieldsets();
         },
 
         /**
@@ -443,26 +450,32 @@ define([
          *
          * @param  {Object} JSONUpdate JSON data
          */
-        createFieldsets : function(JSONUpdate) {
+        createFieldsets : function() {
 
-            var field = {
-                legend : "",
-                fields : []
-            };
+            if (this.JSONUpdate['fieldsets'].length > 0) {
 
-            _.each(JSONUpdate['fieldsets'], _.bind(function (el, idx) {
+                var fieldset = {
+                    legend   : this.JSONUpdate['fieldsets'][0]['legend'],
+                    fields   : this.JSONUpdate['fieldsets'][0]['fields'],
+                    multiple : this.JSONUpdate['fieldsets'][0]['multiple']
+                };
 
-                field.legend = el['legend'];
-                field.fields = [];
+                var subFormID = this.addElement('SubformField', fieldset, false);
 
-                _.each(el["fields"], _.bind(function(element, id) {
-                    field.fields.push(JSONUpdate['schema'][element]['name']);
+                _.each(fieldset['fields'], _.bind(function(el, idx) {
+                    this.JSONUpdate['schema'][ el ]['subFormParent']   = subFormID;
+                    this.JSONUpdate['schema'][ el ]['isUnderFieldset'] = true;
                 }, this));
 
-                this.addElement('SubformField', field, false);
+                this.JSONUpdate['fieldsets'].shift();
+            } else {
 
-            }, this));
-
+                //  All fieldset was been added, now we can add field
+                if (_.size(this.JSONUpdate["schema"]) > 0) {
+                    // Create all fields
+                    this.createFieldFromSchema(this.JSONUpdate);
+                }
+            }
         },
 
         /**
@@ -471,12 +484,8 @@ define([
          * @param  {Object} JSONUpdate JSON data
          */
         createFieldFromSchema : function(JSONUpdate) {
-            this.fieldset = {};
-            this.schema = [];
 
-            _.each(JSONUpdate['fieldsets'], _.bind(function (el, idx) {
-                this.fieldset = this.fieldset.concat(el["fields"]);
-            }, this));
+            this.schema = [];
 
             //  Convert current schema object in array
             //  We need to convert it in array for sort it by field order
@@ -487,7 +496,9 @@ define([
                 this.schema.push(element);
             }, this));
 
-            this.schema = _.sortBy(this.schema, 'order');
+            this.schema = _.sortBy(this.schema, function(el) {
+                return el.order;
+            });
 
             //  When we add the field on the collection, the form panel listen the event and get the adapted view with requireJS
             //  According to the view weight, the views can be created in a wrong order
@@ -498,13 +509,7 @@ define([
             //  So i create a minimal queue with backbone event
             //  When the view is rendered the formPanelView send an event to the collection "Ok next field" and we add the next field in the collection
 
-            var firstFieldToAdd = this.schema[0];
-
-            if (this.isAValidFieldType(firstFieldToAdd.type)) {
-                this.addField( this.createFieldWithJSON(firstFieldToAdd), _.contains(this.fieldset, firstFieldToAdd.name) );
-            }
-
-            this.schema.shift();
+            this.nextField();
 
             //  Now we wait the formPanelview next event
         },
@@ -513,11 +518,12 @@ define([
          * Add the next field on the collection
          */
         nextField : function() {
-            if (this.schemaDefinition.length > 0) {
+            if (this.schema != undefined && this.schema.length > 0) {
+
                 var firstFieldToAdd = this.schema[0];
 
                 if (this.isAValidFieldType(firstFieldToAdd.type)) {
-                    this.addField( this.createFieldWithJSON(firstFieldToAdd), _.contains(this.fieldset, firstFieldToAdd.name) );
+                    this.addField( this.createFieldWithJSON(firstFieldToAdd), firstFieldToAdd['isUnderFieldset']);
                 }
 
                 this.schema.shift();

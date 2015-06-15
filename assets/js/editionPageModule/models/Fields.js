@@ -165,7 +165,7 @@ define([
         /**
          * Return the model in JSON object
          *
-         * @returns {object} fiels as json object
+         * @returns {object} field as json object
          */
         getJSON : function() {
 
@@ -941,11 +941,12 @@ define([
     models.SubformField = Backbone.Model.extend({
 
         defaults: {
-            id          : 0,
-            order       : 1,
-            fields      : [],
-            legend      : 'Fieldset',
-            multiple    : false
+            id                : 0,
+            order             : 1,
+            fields            : [],
+            fieldsObject      : [],
+            legend            : 'Fieldset',
+            multiple          : false
         },
 
         schema : {
@@ -964,6 +965,25 @@ define([
                     placeholder : translater.getValueFromKey('placeholder.legend')
                 }
             }
+        },
+
+        addField : function(field) {
+            //  Update field array
+            var arr = this.get('fields');
+            arr.push(field.get('name'));
+            this.set('fields', arr);
+
+            //  Send event to the subForm view
+            //  The subForm view will create subView corresponding to the field in parameter
+            this.trigger('fieldAdded', field);
+        },
+
+        removeField : function(field) {
+            var arr     = this.get('fields'),
+                index   = arr.indexOf(field.get('name'));
+            arr.splice(index, 1);
+            this.set('fields', arr);
+            this.trigger('fieldRemoved');
         }
 
     }, {

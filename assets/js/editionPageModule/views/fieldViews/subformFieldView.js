@@ -36,12 +36,13 @@ define([
         initialize: function (options) {
             var opt = options;
             opt.template = viewTemplate;
+            opt.next     = 'nextFieldSet'
 
             BaseView.prototype.initialize.apply(this, [opt]);
 
             this.model.off('change');
-
             this.model.bind('change:legend', this.changeLegend, this);
+            this.model.on('fieldAdded', this.fieldAdded, this);
 
             _.bindAll(this, 'renderSubView', 'render');
 
@@ -70,6 +71,10 @@ define([
          */
         viewDropped: function (viewToMoveModel) {
             viewToMoveModel.set('subFormParent', this.model.get('id'));
+            viewToMoveModel.set('isUnderFieldset', true);
+
+            this.model.addField(viewToMoveModel.get('name'));
+
             this.addSubView(viewToMoveModel);
         },
 
@@ -110,6 +115,7 @@ define([
             });
 
             this.renderSubView();
+
             return this;
         },
 
@@ -131,15 +137,21 @@ define([
         },
 
         /**
+         * Call execute when a field is added into the subForm view
+         * The subForm view create the view for the new added field
+         *
+         * @param element new added field
+         */
+        fieldAdded : function(element) {
+            this.addSubView(element);
+        },
+
+        /**
          * Render subView
          */
         renderSubView: function () {
-            _.each(this.model.collection.models, _.bind(function(model, idx) {
-
-                if (_.contains(this.model.get('fields'), model.get('name') )) {
-                    this.addSubView(model)
-                }
-
+            _.each(this.model.get('fieldsObject'), _.bind(function(model, idx) {
+                this.addSubView(model);
             }, this));
         },
 

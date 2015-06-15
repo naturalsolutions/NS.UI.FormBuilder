@@ -202,15 +202,9 @@ define([
                         //
                         //  Now the view is rendered so we can send an event to the FieldCollection
                         //  See FieldCollection createFieldFromSchema method
-
-                        this.formChannel.trigger('nextField');
-
                     }
 
                     $(".actions").i18n();
-
-                    this._viewCount++;
-                    this.updateFieldCount();
 
                 }, this), function (err) {
                     swal(
@@ -221,6 +215,9 @@ define([
                 });
 
             }
+
+            this._viewCount++;
+            this.updateFieldCount();
         },
 
         /**

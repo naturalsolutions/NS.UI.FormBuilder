@@ -26,7 +26,8 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
 
             this.model.bind('destroy', this.destroy_view);
 
-            this.el = options.el;
+            this.el   = options.el;
+            this.next = options.next || 'nextField';
 
             this.initFormChannel();
             this.initMainChannel();
@@ -64,7 +65,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.undelegateEvents();
 
             this.$el.removeData().unbind();
-
+            this.model.unbind();
             this.remove();
             Backbone.View.prototype.remove.call(this);
 
@@ -86,6 +87,8 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             $(this.el).disableSelection();
 
             $(this.el).i18n();
+
+            this.formChannel.trigger(this.next);
             return this;
         },
 
