@@ -120,17 +120,12 @@ define([
                 }]
             },
             keywordsFr : {
-                type        : 'Text',
-                title       : translater.getValueFromKey('form.keywords.fr'),
-                editorClass : 'form-control hide',
-                template    : pillboxTemplate
+                type        : PillboxEditor,
+                title       : translater.getValueFromKey('form.keywords.fr')
             },
             keywordsEn : {
                 type        : PillboxEditor,
-                title       : translater.getValueFromKey('form.keywords.en'),
-                closeClass  : 'fa fa-home',
-                /*editorClass : 'form-control hide',
-                template    : pillboxTemplate*/
+                title       : translater.getValueFromKey('form.keywords.en')
             },
             obsolete : {
                 type        : CheckboxEditor,

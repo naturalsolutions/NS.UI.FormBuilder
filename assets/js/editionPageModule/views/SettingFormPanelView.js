@@ -8,7 +8,7 @@ define([
         'i18n',
     'bootstrap-select',
     'slimScroll',
-    'fuelux'
+    //'fuelux'
 ], function($, Marionette, SettingFormPanelViewTemplate, Radio, Translater) {
 
     /**
@@ -114,20 +114,9 @@ define([
         */
         saveChange : function() {
             var formValidation = this.form.validate();
+
             if (formValidation === null) {
-                var values      = this.form.getValue(),
-                    keywordsFr  = $('#pillboxkeywordsFr').pillbox('items'),
-                    keywordsEn  = $('#pillboxkeywordsEn').pillbox('items');
-
-                values['keywordsFr'] = _.map(keywordsFr, function(num){
-                    return num['value'];
-                });
-
-                values['keywordsEn'] = _.map(keywordsEn, function(num){
-                    return num['value'];
-                });
-
-                this.mainChannel.trigger('editionDone', values);
+                this.mainChannel.trigger('editionDone', this.form.getValue());
 
                 this.removeForm();
             } else {
@@ -166,70 +155,34 @@ define([
                     this.removeForm()
                 }
 
+                //
+                //  We need to pass keyword value from data to the schema
+                //  Because the pillbox-editor i use get value directly from the schema
+                //
+
+                var datas               = formToEdit.getAttributesValues(),
+                    keywordFr           = [],
+                    keywordEn           = [],
+                    schemaDefinition    = formToEdit.schemaDefinition;
+
+                _.each(datas.keywordsEn, function(el, idx) {
+                    keywordEn.push( typeof el == 'object' ? el : { key : el, value : el });
+                });
+
+                _.each(datas.keywordsFr, function(el, idx) {
+                    keywordFr.push( typeof el == 'object' ? el : { key : el, value : el });
+                });
+
+                schemaDefinition.keywordsFr.value = keywordFr;
+                schemaDefinition.keywordsEn.value = keywordEn;
+
                 this.form = new Backbone.Form({
-                    schema: formToEdit.schemaDefinition,
-                    data : formToEdit.getAttributesValues()
+                    schema: schemaDefinition,
+                    data  : datas
                 }).render();
 
                 this.$el.find('#form').append(this.form.el)
                 this.$el.find('#getField').hide();
-
-                //  Add pillbow for form keywords
-                this.$el.find('.field-keywords input[type="text"]').pillbox();
-
-                _.each(formToEdit.keywordsFr, _.bind(function(el, idx) {
-                    this.$el.find('#pillboxkeywordsFr').pillbox('addItems', idx, [{text : el, value : el}])
-                }, this));
-
-                _.each(formToEdit.keywordsEn, _.bind(function(el, idx) {
-                    this.$el.find('#pillboxkeywordsEn').pillbox('addItems', idx, [{text : el, value : el}])
-                }, this));
-
-                $('.glyphicon-close').prop('class', 'reneco reneco-close');
-
-                this.$el.find('#pillboxkeywordsFr').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
-                this.$el.find('#pillboxkeywordsEn').find('input[type="text"]').prop('placeholder', $.t('form.keywords.action'))
-
-                $.getJSON(this.URLOptions['protocolAutocomplete'], _.bind(function(data) {
-
-                    this.$el.find('.field-name input[type="text"]').autocomplete({
-                        minLength    : 1,
-                        scrollHeight : 220,
-                        appendTo     : '.field-name',
-                        source       : data.options
-                    });
-
-                }, this));
-
-                $.getJSON(this.URLOptions['keywordAutocomplete'], _.bind(function(data) {
-
-                    //  Init french keyword pillbox
-                    this.$el.find('#pillboxkeywordsFr input[type="text"]').autocomplete({
-                        minLength : 1,
-                        scrollHeight: 220,
-                        appendTo : '#pillboxkeywordsFr',
-                        source : data.options
-                    });
-
-                    //  Init english keyword pillbox
-                    this.$el.find('#pillboxkeywordsEn input[type="text"]').autocomplete({
-                        minLength : 1,
-                        scrollHeight: 220,
-                        appendTo : '#pillboxkeywordsEn',
-                        source : data.options
-                    });
-                }, this));
-                
-
-                this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('added.fu.pillbox', _.bind(function (evt, item) {
-                    $('.glyphicon-close').replaceWith('<span class="reneco reneco-close" data-parent="' + item['text'] + '"></span>');
-                }, this));
-
-                this.$el.find('#pillboxkeywordsFr, #pillboxkeywordsEn').on('click', '.reneco', function(evt) {
-                    var value = $(this).data('parent') === undefined ? $(this).parents('li').data('value') : $(this).data('parent');
-
-                    $(this).parents('div.pillbox').pillbox('removeByText', value);
-                });
 
                 this.mainChannel.trigger('formCreated');
 
