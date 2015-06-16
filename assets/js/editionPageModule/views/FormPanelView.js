@@ -400,7 +400,8 @@ define([
          * Display footer actions like export and save
          */
         enableFooterActions : function() {
-            this.$el.find('footer  button').show();
+            if (this.collection.length > 0)
+                this.$el.find('footer button:not(#exit)').show();
         },
 
         /**
