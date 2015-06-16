@@ -8,8 +8,7 @@ define([
     'jquery-ui',
     'i18n',
     'bootstrap-select',
-    'slimScroll',
-    'fuelux'
+    'slimScroll'
 ], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal) {
 
     var translater = Translater.getTranslater();

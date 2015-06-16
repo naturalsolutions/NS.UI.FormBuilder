@@ -25,7 +25,6 @@
     "requirejs"                        : null,
     "backbone-forms"                   : "https://github.com/powmedia/backbone-forms.git",
     "bootstrapAdapter"                 : "https://github.com/powmedia/backbone.bootstrap-modal.git",
-    "fuelux"                           : null,
     "jquery-simple-slider"             : null,
     "autocompleteTreeview"             : "https://github.com/NaturalSolutions/NS.UI.autocompTree.git",
     "bootstrap-select"                 : "https://github.com/silviomoreto/bootstrap-select.git",
@@ -37,7 +36,8 @@
     "slimScroll"                       : "https://github.com/rochal/jQuery-slimScroll.git#~1.3.3",
     "eonasdan-bootstrap-datetimepicker": "https://github.com/Eonasdan/bootstrap-datetimepicker.git#~4.7.14",
     "requirejs-plugins"                : "~1.0.3",
-    "reneco-fonts"                     : "*"
+    "reneco-fonts"                     : "*",
+    "pillbox-editor"                   : "*"
   },
   "dependenciesIgnore": {
     "backbone": [
@@ -69,9 +69,6 @@
     ],
     "bootstrapAdapter": [
       "**/!(src)"
-    ],
-    "fuelux": [
-      "**/!(dist)"
     ],
     "rangeslider.js": [
       "**/!(dist)"

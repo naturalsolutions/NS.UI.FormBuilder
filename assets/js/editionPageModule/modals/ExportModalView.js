@@ -3,7 +3,6 @@ define([
     'backbone',
     'text!editionPageModule/templates/modals/ExportModalView.html',
     'bootstrap',
-    'fuelux',
     'i18n'
 ], function(_, Backbone, ExportModalViewTemplate) {
 
