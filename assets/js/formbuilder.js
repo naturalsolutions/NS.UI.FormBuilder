@@ -23,8 +23,7 @@ define([
     });
 
     FormbuilderApp.addInitializer(function(options){
-        if (window.location.hash != "")
-            window.location.hash = "";
+        window.location.hash = "#";
     });
 
     //  Add a first initializer that create homepage router
