@@ -27,29 +27,6 @@ define([
         </div>\
     ');
 
-    var pillboxTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <p class="help-block" data-error></p>\
-            <div data-editor >\
-                <div data-initialize="pillbox" class="pillbox" id="pillbox<%= key %>">\
-                    <ul class="clearfix pill-group" id="pillbox<%= key %>List">\
-                        <li class="pillbox-input-wrap btn-group">\
-                            <a class="pillbox-more">and <span class="pillbox-more-count"></span> more...</a>\
-                            <input type="text" class="form-control dropdown-toggle pillbox-add-item" placeholder="add item">\
-                            <button type="button" class="dropdown-toggle sr-only">\
-                                <span class="caret"></span>\
-                                <span class="sr-only">Toggle Dropdown</span>\
-                            </button>\
-                            <ul class="suggest dropdown-menu" role="menu" data-toggle="dropdown" data-flip="auto"></ul>\
-                        </li>\
-                    </ul>\
-                </div>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
     var translater = Translater.getTranslater();
 
     /**
@@ -144,16 +121,19 @@ define([
             var opt = options || {};
 
             this.url           = opt.url            || "";
-            this.id            = opt.id             || 0;
-            this.name          = opt.name           || 'My form';
-            this.descriptionFr = opt.descriptionFr  || "";
-            this.descriptionEn = opt.descriptionEn  || "";
-            this.keywordsFr    = opt.keywordsFr     || ["formulaire"];
-            this.keywordsEn    = opt.keywordsEn     || ["form"];
-            this.labelFr       = opt.labelFr        || "";
-            this.labelEn       = opt.labelEn        || "";
-            this.tag           = opt.tag            || "";
-            this.obsolete      = opt.obsolete       || false;
+            this.templateURL   = opt.templateURL    || "";
+
+            this.id              = opt.id             || 0;
+            this.name            = opt.name           || 'My form';
+            this.descriptionFr   = opt.descriptionFr  || "";
+            this.descriptionEn   = opt.descriptionEn  || "";
+            this.keywordsFr      = opt.keywordsFr     || ["formulaire"];
+            this.keywordsEn      = opt.keywordsEn     || ["form"];
+            this.labelFr         = opt.labelFr        || "";
+            this.labelEn         = opt.labelEn        || "";
+            this.tag             = opt.tag            || "";
+            this.obsolete        = opt.obsolete       || false;
+            this.isTemplate      = opt.isTemplate     || false;
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -276,6 +256,7 @@ define([
                 labelEn       : this.labelEn,
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
+                isTemplate    : this.isTemplate,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
@@ -427,19 +408,22 @@ define([
          */
         updateCollectionAttributes : function(JSONUpdate) {
 
-            this.id            = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
-            this.name          = JSONUpdate["name"];
+            this.id                   = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
+            this.name                 = JSONUpdate["name"];
 
-            this.descriptionFr = JSONUpdate["descriptionFr"];
-            this.descriptionEn = JSONUpdate["descriptionEn"];
+            this.descriptionFr        = JSONUpdate["descriptionFr"];
+            this.descriptionEn        = JSONUpdate["descriptionEn"];
 
-            this.keywordsFr    = JSONUpdate["keywordsFr"];
-            this.keywordsEn    = JSONUpdate["keywordsEn"];
+            this.keywordsFr           = JSONUpdate["keywordsFr"];
+            this.keywordsEn           = JSONUpdate["keywordsEn"];
 
-            this.labelFr       = JSONUpdate["labelFr"];
-            this.labelEn       = JSONUpdate["labelEn"];
+            this.labelFr              = JSONUpdate["labelFr"];
+            this.labelEn              = JSONUpdate["labelEn"];
 
-            this.tag           = JSONUpdate["tag"];
+            this.tag                  = JSONUpdate["tag"];
+
+            this.obsolete             = JSONUpdate["obsolete"];
+            this.isTemplate           = JSONUpdate["isTemplate"];
         },
 
         /**
@@ -568,13 +552,34 @@ define([
                 //  The server is already configured to used it
                 crossDomain : true,
 
-                //  Trigger event with ajax result on the foérmView
+                //  Trigger event with ajax result on the formView
                 success: _.bind(function(data) {
                     this.id = data.form.id;
                     this.formChannel.trigger('save:success');
                 }, this),
                 error: _.bind(function() {
                     this.formChannel.trigger('save:fail');
+                }, this)
+            });
+        },
+
+        saveAsTemplate : function() {
+
+            $.ajax({
+                data        : JSON.stringify(this.getJSON()),
+                type        : 'POST',
+                url         : this.templateURL,
+                contentType : 'application/json',
+                //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                //  The server is already configured to used it
+                crossDomain : true,
+
+                //  Trigger event with ajax result on the formView
+                success: _.bind(function(data) {
+                    this.formChannel.trigger('template:success');
+                }, this),
+                error: _.bind(function() {
+                    this.formChannel.trigger('fail:success');
                 }, this)
             });
         }

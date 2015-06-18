@@ -23,8 +23,9 @@ define([
             this.URLOptions        = options['URLOptions'] || {};
 
             this.fieldCollection = new FieldCollection({}, {
-                name : 'New form',
-                url  : this.URLOptions['formSaveURL']
+                name         : 'New form',
+                url          : this.URLOptions['formSaveURL'],
+                templateURL  : this.URLOptions['templateUrl']
             });
 
             this.fieldCollection.reset();
@@ -32,6 +33,17 @@ define([
             this.initFormChannel();
             this.getLinkedFieldsList();
             this.getPreConfiguratedFields();
+            this.initMainChannel();
+        },
+
+        /**
+         * Init main radio channel for communicate in the editionPageModule
+         */
+        initMainChannel : function() {
+            //  The edition channel is the main channel ONLY in the editionPageModule
+            this.mainChannel = Backbone.Radio.channel('edition');
+
+            this.mainChannel.on('saveTemplate', this.saveTemplate, this);
         },
 
         /**
@@ -178,6 +190,17 @@ define([
                     this.formChannel.trigger('configurationSaved:fail');
                 }, this)
             });
+        },
+
+        /**
+         * Save the collection as a for template
+         *
+         * @param templateAttributes new template attributes
+         */
+        saveTemplate : function(templateAttributes) {
+            this.fieldCollection.updateCollectionAttributes(templateAttributes);
+
+            this.fieldCollection.saveAsTemplate();
         }
     });
 

@@ -294,6 +294,12 @@
           "inputPlaceholder" : "New form name",
           "error"            : "Form name can't be empty",
           "cancelButtonText" : "Cancel"
+        },
+        "template" : {
+          "success"    : "Saved !",
+          "successMsg" : "Your form has been saved as template !",
+          "error"      : "Form not saved !",
+          "errorMsg"   : "You form hasn't been saved as template."
         }
     },
 

@@ -37,7 +37,8 @@
     "eonasdan-bootstrap-datetimepicker": "https://github.com/Eonasdan/bootstrap-datetimepicker.git#~4.7.14",
     "requirejs-plugins"                : "~1.0.3",
     "reneco-fonts"                     : "*",
-    "pillbox-editor"                   : "*"
+    "pillbox-editor"                   : "*",
+    "sweetalert2"                      : "~0.2.1"
   },
   "dependenciesIgnore": {
     "backbone": [

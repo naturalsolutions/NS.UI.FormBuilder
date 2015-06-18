@@ -27,7 +27,8 @@ define([
         events : {
             'click #cancel'               : 'cancel',
             'click #saveChange'           : 'saveChange',
-            'change .checkboxField input' : 'checkboxChange'
+            'change .checkboxField input' : 'checkboxChange',
+            'click #saveTemplate'         : 'saveTemplate'
         },
 
 
@@ -188,6 +189,20 @@ define([
 
             }, this));
 
+        },
+
+        /**
+         * Send event to EditionPageController for save current form as template form
+         */
+        saveTemplate : function() {
+
+            var formValidation = this.form.validate();
+
+            if (formValidation === null) {
+                var values = this.form.getValue();
+                values['isTemplate'] = true;
+                this.mainChannel.trigger('saveTemplate', values);
+            }
         }
 
     });

@@ -512,45 +512,52 @@ define([
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
+        /**
+         *
+         * @param name
+         * @param template
+         */
+        createFormModel : function(name, template) {
+            this.homePageChannel.trigger('getTemplate', {name : name, template : template});
+        },
+
+        /**
+         *
+         */
         askNewFormName : function() {
-            var self = this;
 
-            swal({
-                title                       : translater.getValueFromKey('modal.newForm.title') || "Nouveau formulaire",
-                text                        : translater.getValueFromKey('modal.newForm.text') || "Saisir le nom du nouveau formulaire",
-                cancelButtonText            : translater.getValueFromKey('modal.newForm.cancelButtonText') || "Annuler",
-                type                        : "input",
-                showCancelButton            : true,
-                closeOnConfirm              : false,
-                animation                   : "slide-from-top",
-                inputPlaceholder            : translater.getValueFromKey('modal.newForm.inputPlaceholder') || "Nom du nouveau formulaire"
-            }, function (inputValue) {
-                if (inputValue === false) return false;
-                if (inputValue === "") {
-                    swal.showInputError(translater.getValueFromKey('modal.newForm.error') || "Le nom ne peut pas être vide");
-                    return false
-                }
+            $.getJSON(this.URLOptions.templateUrl, _.bind(function(data) {
 
-                var formToEdit = new FormModel({
-                    name : inputValue
+                data.unshift({
+                    id : 0,
+                    name : 'No template'
                 });
 
-                swal.close();
+                $('body').append('<div class="modal fade" id="newFormModal"></div>');
 
-                self.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
+                require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {
+                    var newFormModalView = new NewFormModalView({
+                        el : '#newFormModal',
+                        templates : data,
+                        onClose : _.bind(function(name, template) {
+                            this.createFormModel(name, template);
+                        }, this)
+                    });
 
-            });
+                    newFormModalView.render();
+                }, this));
+
+            }, this));
+
+
+
         },
 
         /**
          * Add new form and edit it
          */
         addForm : function() {
-
-
             this.askNewFormName();
-
-
         },
 
         /**

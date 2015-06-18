@@ -1,0 +1,34 @@
+[{
+  "id"               : 1,
+  "name"             : "Template 1",
+  "labelFr"          : "Template 1",
+  "labelEn"          : "Template 1",
+  "creationDate"     : "Template 1",
+  "modificationDate" : "Template 1",
+  "descriptionEn"    : "Template 1",
+  "descriptionFr"    : "Template 1",
+  "keywordsFr"       : ["template"],
+  "keywordsEn"       : ["template"],
+  "schema": {
+    "Field1": {
+      "validators"                  : [],
+      "labelFr"                     : "Label en français",
+      "labelEn"                     : "Label en anglais",
+      "name"                        : "Field1",
+      "readonly"                    : false,
+      "editorClass"                 : "",
+      "fieldClass"                  : "",
+      "fieldSize"                   : "",
+      "endOfLine"                   : false,
+      "linkedFieldTable"            : "",
+      "linkedFieldIdentifyingColumn": "",
+      "linkedField"                 : "",
+      "formIdentifyingColumn"       : "",
+      "defaultValue"                : "",
+      "help"                        : "Write some text",
+      "size"                        : 255,
+      "type"                        : "Text"
+    }
+  },
+  "fieldsets": []
+}]

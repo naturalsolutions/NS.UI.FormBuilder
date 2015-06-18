@@ -37,7 +37,7 @@ define([
          */
         template : function() {
             return _.template(FormPanelViewTemplate)({
-                collection : this.collection
+                collection : this.collection.getAttributesValues()
             });
         },
 
@@ -105,8 +105,10 @@ define([
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
             this.formChannel.on('save:success',      this.displaySucessMessage);
-
             this.formChannel.on('save:fail',      this.displayFailMessage);
+
+            this.formChannel.on('template:success',      this.displaytemplateMessage);
+            this.formChannel.on('template:fail',      this.displayFailtemplatee);
 
             //  Event send from Formbuilder.js when export is finished (success or not)
             this.formChannel.on('exportFinished',   this.displayExportMessage, this);
@@ -247,7 +249,7 @@ define([
             this.$el.unwrap();
             this.setElement(this.$el);
 
-            // run i18nnext translation in the view context
+            // run i18next translation in the view context
             this.$el.i18n();
 
             this.$el.find('.drop').sortable({
@@ -273,6 +275,8 @@ define([
 
             //  Send an event to notify the render is done
             this.formChannel.trigger('renderFinished');
+
+            this.updateName();
         },
 
         /**
@@ -448,6 +452,23 @@ define([
          */
         updateName: function () {
             this.$el.find('h1 label').first().text(this.collection.name)
+        },
+
+
+        displaytemplateMessage : function() {
+            swal(
+                translater.getValueFromKey('modal.template.success') || "Sauvé !",
+                translater.getValueFromKey('modal.template.successMsg') || "Votre formulaire a été enregistré comme template !",
+                "success"
+            );
+        },
+
+        displayFailtemplatee : function() {
+            swal(
+                translater.getValueFromKey('modal.template.error') || "Une erreur est survenu !",
+                translater.getValueFromKey('modal.template.errorMsg') || "Votre formulaire n'a pas été enregistré comme template.",
+                "error"
+            );
         }
     });
 

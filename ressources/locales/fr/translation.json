@@ -288,6 +288,12 @@
             "inputPlaceholder" : "Nom du nouveau formulaire",
             "error"            : "Le nom ne peut pas être vide",
             "cancelButtonText" : "Annuler"
+        },
+        "template" : {
+          "success"    : "Sauvé !",
+          "successMsg" : "Votre formulaire a été enregistré comme template !",
+          "error"      : "Une erreur est survenue !",
+          "errorMsg"   : "Votre formulaire n'a pas été enregistré comme template."
         }
     },
 
