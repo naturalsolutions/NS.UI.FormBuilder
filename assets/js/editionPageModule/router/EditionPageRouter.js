@@ -58,9 +58,10 @@ define([
         },
 
         exit : function() {
-            this.navigate('#', {
-                trigger : true
-            });
+            this.navigate('#');
+            $('#mainRegion').animate({
+                marginLeft : '0%'
+            }, 750);
         }
 
     });

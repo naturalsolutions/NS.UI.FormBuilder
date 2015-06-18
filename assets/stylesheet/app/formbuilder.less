@@ -1,5 +1,11 @@
+
+//
+//  Main component style
+//
+
 #mainRegion {
     height      : 100%;
+    width: 200%;
 
     &>div:first-child {
         height : 100%;
@@ -57,5 +63,35 @@
 
     }
 
-    @import url('editionPage/all.less');
-    @import url('homePage/all.less');
+body {
+    &>.container-fluid {
+        padding: 0 !important;
+        margin: 0 !important;
+        height: 100%;
+
+        &>.row {
+            margin-left: 0;
+            margin-right: 0;
+        }
+    }
+}
+
+#leftSection{
+    height: 100%;
+    &>div {
+        height: 100%;
+    }
+    padding: 0;
+}
+
+#rightSection{
+    height: 100%;
+    &>div {
+        height: 100%;
+    }
+    padding: 0;
+}
+
+
+@import url('editionPage/all.less');
+@import url('homePage/all.less');

@@ -19,7 +19,8 @@ define([
 
     //  Add two main region for the layouts
     FormbuilderApp.addRegions({
-      mainRegion    : '#mainRegion'
+        leftRegion  : '#leftSection',
+        rightRegion : '#rightSection'
     });
 
     FormbuilderApp.addInitializer(function(options){
@@ -31,7 +32,7 @@ define([
         //  Create controller for homepage
         var homePageRouter = new HomePageRouter({
             controller : new HomePageController({
-                homePageRegion : this.mainRegion,
+                homePageRegion : this.leftRegion,
                 URLOptions : options.URLOptions
             })
         });
@@ -41,7 +42,7 @@ define([
         //  Create controller for homepage
         var editionPageRouter = new EditionPageRouter({
             controller : new EditionPageController({
-                editionPageRegion : this.mainRegion,
+                editionPageRegion : this.rightRegion,
                 URLOptions : options.URLOptions
             })
         });
@@ -59,11 +60,16 @@ define([
         this.globalChannel.on('displayEditionPage', _.bind(function(formToEdit) {
             //  Send event to editionPageRouter
             this.editionPageChannel.trigger('display', formToEdit);
+            setTimeout(function() {
+                $('#mainRegion').animate({
+                    marginLeft : '-100%'
+                }, 750);
+            }, 300);
         }, this));
 
-        this.globalChannel.on('formImported', _.bind(function(formImportedJSON) {
+        /*this.globalChannel.on('formImported', _.bind(function(formImportedJSON) {
             this.editionPageChannel.trigger('formImported', formImportedJSON);
-        }, this))
+        }, this))*/
     })
 
     //  Application start callback

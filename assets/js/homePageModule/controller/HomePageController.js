@@ -90,7 +90,7 @@ define([
         },
 
         homeAction: function() {
-            $('#navbarContext').text($.t('navbar.context.home'))
+            $('#navbarContext').text($.t('navbar.context.home'));
 
             //  Init homepage layout and render it in the homepage region
             var homePageLayout = new HomePageLayout({
