@@ -73,7 +73,7 @@ define([
             viewToMoveModel.set('subFormParent', this.model.get('id'));
             viewToMoveModel.set('isUnderFieldset', true);
 
-            this.model.addField(viewToMoveModel.get('name'));
+            this.model.addField(viewToMoveModel);
 
             this.addSubView(viewToMoveModel);
         },

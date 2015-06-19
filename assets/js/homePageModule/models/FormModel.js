@@ -26,6 +26,8 @@ define([
             schema           : {},
             fieldsets        : [],
             tag              : '',
+            obsolete         : false,
+            isTemplate       : false,
 
             // display attributes
             creationDateDisplay : "",
@@ -70,20 +72,22 @@ define([
             this.set('schema', schema);
 
             return {
-                id                  : this.get('id'),
-                name                : this.get('name'),
-                labelFr             : this.get('labelFr'),
-                labelEn             : this.get('labelEn'),
-                creationDate        : this.get('creationDate'),
-                modificationDate    : this.get('modificationDate'),
-                curStatus           : this.get('curStatus'),
-                descriptionEn       : this.get('descriptionEn'),
-                descriptionFr       : this.get('descriptionFr'),
-                keywordsFr          : this.get('keywordsFr'),
-                keywordsEn          : this.get('keywordsEn'),
-                schema              : this.get('schema'),
-                fieldsets           : this.get('fieldsets'),
-                tag                 : this.get('tag')
+                id                         : this.get('id'),
+                name                       : this.get('name'),
+                labelFr                    : this.get('labelFr'),
+                labelEn                    : this.get('labelEn'),
+                creationDate               : this.get('creationDate'),
+                modificationDate           : this.get('modificationDate'),
+                curStatus                  : this.get('curStatus'),
+                descriptionEn              : this.get('descriptionEn'),
+                descriptionFr              : this.get('descriptionFr'),
+                keywordsFr                 : this.get('keywordsFr'),
+                keywordsEn                 : this.get('keywordsEn'),
+                schema                     : this.get('schema'),
+                fieldsets                  : this.get('fieldsets'),
+                tag                        : this.get('tag'),
+                isTemplate                 : this.get('isTemplate'),
+                obsolete                   : this.get('obsolete')
             }
         }
 

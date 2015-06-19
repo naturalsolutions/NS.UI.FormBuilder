@@ -375,7 +375,6 @@ define([
          */
         updateWithJSON : function(JSONUpdate) {
             this.JSONUpdate = JSONUpdate;
-
             //  Update form attribute
             this.updateCollectionAttributes(JSONUpdate);
 
