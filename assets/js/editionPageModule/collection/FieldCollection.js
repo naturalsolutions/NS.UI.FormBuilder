@@ -444,8 +444,10 @@ define([
                 var subFormID = this.addElement('SubformField', fieldset, false);
 
                 _.each(fieldset['fields'], _.bind(function(el, idx) {
-                    this.JSONUpdate['schema'][ el ]['subFormParent']   = subFormID;
-                    this.JSONUpdate['schema'][ el ]['isUnderFieldset'] = true;
+                    if (this.JSONUpdate['schema'][ el ] !== undefined) {
+                        this.JSONUpdate['schema'][el]['subFormParent'] = subFormID;
+                        this.JSONUpdate['schema'][el]['isUnderFieldset'] = true;
+                    }
                 }, this));
 
                 this.JSONUpdate['fieldsets'].shift();
