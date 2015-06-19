@@ -49,8 +49,8 @@ define([
     });
 
     FormbuilderApp.addInitializer(function(options) {
-        //  App global channel, use for communication throug module
-        //  Modules nevers communicate directly, all pass from formbuilder app
+        //  App global channel, use for communication through module
+        //  Modules never communicate directly, all pass from formbuilder app
         this.globalChannel = Backbone.Radio.channel('global');
 
         //  Channel for editionPageModule
@@ -67,9 +67,16 @@ define([
             }, 300);
         }, this));
 
-        /*this.globalChannel.on('formImported', _.bind(function(formImportedJSON) {
-            this.editionPageChannel.trigger('formImported', formImportedJSON);
-        }, this))*/
+
+        this.globalChannel.on('displayHomePage', _.bind(function() {
+
+
+            $('#mainRegion').animate({
+                marginLeft : '0%'
+            }, 750, _.bind(function() {
+                this.rightRegion.empty();
+            }, this));
+        }, this));
     })
 
     //  Application start callback

@@ -77,12 +77,12 @@ define([
 
             //  Event sent from setting view when backbone forms generation is finished
             //  Run an animation for hide panel view and display setting view, I love jQuery !
-            this.mainChannel.on('formCreated', this.displaySettingPanel, this)
+            this.mainChannel.on('formCreated', this.displaySettingPanel, this);
 
             //  Event sent from setting view when field changed are saved
             //  and the data are correct
             //  Run an animation for hide setting view and display panel view
-            this.mainChannel.on('formCommit', this.closeSettingPanelAndResetURL, this)
+            this.mainChannel.on('formCommit', this.closeSettingPanelAndResetURL, this);
 
             //  Event receive from setting view panel when user save form changed attributes
             //  Close setting panel and rest some components
@@ -162,7 +162,6 @@ define([
         },
 
         onDestroy : function() {
-            this.mainChannel.reset();
         },
 
 

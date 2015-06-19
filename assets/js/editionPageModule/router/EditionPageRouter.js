@@ -12,6 +12,7 @@ define([
         initialize : function() {
             this.initEditionPageChannel();
             this.initFormChannel();
+            this.initGlobalChannel();
         },
 
         initEditionPageChannel : function() {
@@ -30,6 +31,10 @@ define([
 
             //  Event send by Formbuilder when user wants to import a form from the homepage
             this.editionPageChannel.on('formImported', this.displayEditionPage, this);
+        },
+
+        initGlobalChannel : function() {
+            this.globalChannel = Backbone.Radio.channel('global');
         },
 
         /**
@@ -59,9 +64,7 @@ define([
 
         exit : function() {
             this.navigate('#');
-            $('#mainRegion').animate({
-                marginLeft : '0%'
-            }, 750);
+            this.globalChannel.trigger('displayHomePage');
         }
 
     });

@@ -79,7 +79,8 @@ define([
         getTemplate : function(newModel) {
             if( newModel.template == 0) {
                 var formToEdit = new FormModel({
-                    id : 0
+                    id : 0,
+                    name : newModel.name
                 });
 
                 this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
