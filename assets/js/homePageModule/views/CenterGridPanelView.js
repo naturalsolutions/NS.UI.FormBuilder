@@ -385,8 +385,8 @@ define([
          */
         hideSpinner : function(duration) {
             setTimeout(_.bind(function() {
-                this.$el.find('.spinner').addClass('end', 500);
-            }, this), duration || 500);
+                this.$el.find('.spinner').addClass('end', 250);
+            }, this), duration || 250);
         },
 
         /**

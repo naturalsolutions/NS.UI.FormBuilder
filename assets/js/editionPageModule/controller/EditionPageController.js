@@ -164,8 +164,22 @@ define([
          * @param  {Object} formImportedJSON imported form JSON data
          */
         import : function(formImportedJSON) {
-            //  Update collection with JSON data
-            this.fieldCollection.updateWithJSON(formImportedJSON);
+
+            //
+            //  If there isn't .json in the URL, the form list come from server
+            //  And the server returns only form attributes, not schema to lighten AJAX weight
+            //  So we get the schema now
+            //
+
+            if (this.URLOptions.forms.indexOf('.json') < 0) {
+
+                $.getJSON(this.URLOptions.forms + '/' + formImportedJSON['id'], _.bind(function(data){
+                    this.fieldCollection.updateWithJSON(data['form'])
+                }, this));
+
+            } else {
+                this.fieldCollection.updateWithJSON(formImportedJSON)
+            }
         },
 
         /**
