@@ -17,7 +17,8 @@ define([
          */
         events : {
             'click #find' : 'runSearch',    //  when user submit form
-            'click #clearForm' : 'clearForm'
+            'click #clearForm' : 'clearForm',
+            'keyup .form input' : 'removeEmptyClass'
         },
 
         /**
@@ -48,9 +49,16 @@ define([
                     values[field.name] = field.value;
                 }
             });
+
             if (!$.isEmptyObject(values)) {
                 this.gridChannel.trigger('search', values);
+            } else {
+                this.$el.find('form').addClass('empty')
             }
+        },
+
+        removeEmptyClass : function() {
+            this.$el.find('form').removeClass('empty')
         },
 
         /**
