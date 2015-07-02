@@ -62,12 +62,14 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          * Remove the view when the model is destroyed
          */
         destroy_view: function() {
-            this.undelegateEvents();
+            this.$el.slideUp(_.bind(function() {
+                this.undelegateEvents();
 
-            this.$el.removeData().unbind();
-            this.model.unbind();
-            this.remove();
-            Backbone.View.prototype.remove.call(this);
+                this.$el.removeData().unbind();
+                this.model.unbind();
+                this.remove();
+                Backbone.View.prototype.remove.call(this);
+            }, this))
 
         },
 
