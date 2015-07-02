@@ -60,7 +60,9 @@
                         font-weight    : 100;
 
                         &:first-child {
-                            width : 60%;
+                            @media screen and (min-width: 1200px) {
+                                width : 60%;
+                            }
                             padding-left: 20px;
                         }
 
@@ -112,6 +114,11 @@
                         padding-top    : 7px;
                         padding-bottom : 7px;
                         color          : #8c8f90;
+
+                        white-space:nowrap;
+                        overflow:hidden;
+                        text-overflow:ellipsis;
+
                         &:first-child {
                             padding-left   : 20px;
                             text-transform : uppercase;
