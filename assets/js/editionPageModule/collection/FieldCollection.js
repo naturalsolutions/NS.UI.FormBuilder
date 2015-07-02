@@ -507,6 +507,8 @@ define([
                 }
 
                 this.schema.shift();
+            } else {
+                this.formChannel.trigger('collectionUpdateFinished');
             }
         },
 

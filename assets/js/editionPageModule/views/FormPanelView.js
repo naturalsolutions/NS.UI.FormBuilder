@@ -117,7 +117,7 @@ define([
             this.formChannel.on('editModel',   this.disableFooterActions, this);
 
             //  Event send by fieldCollection when the update is done
-            this.formChannel.on('updateFinished', this.updateName, this);
+            this.formChannel.on('collectionUpdateFinished', this.updateName, this);
         },
 
         /**
@@ -241,7 +241,7 @@ define([
         },
 
         /**
-         * Rendering callbask
+         * Rendering callback
          */
         onRender : function(options) {
             //  By default marionette wrap template with a div
