@@ -1,4 +1,4 @@
-#centerPanel {
+#centerPanel, #gridPanel {
     background : #2a2e31;
     height: 100%;
 
@@ -29,6 +29,10 @@
 
             button {
                 margin-top: 17.5px;
+                &#add {
+                    margin-left: 15px;
+                    margin-right: 28px;
+                }
             }
         }
 
@@ -53,7 +57,7 @@
                         .exo;
                         text-transform : uppercase;
                         padding-bottom : 15px;
-                        font-weight    : 900;
+                        font-weight    : 100;
 
                         &:first-child {
                             width : 60%;
@@ -144,10 +148,13 @@
                 &:hover {
                     cursor : pointer;
                 }
+                .exo;
             }
             p {
                 width  : 90%;
                 margin : 0 auto;
+                .exo;
+                color       : white;
             }
         }
     }
@@ -188,7 +195,7 @@
                 float: left;
 
                 button {
-                    margin-left: 7px !important;
+                    margin-left: 20px !important;
                 }
             }
 
@@ -196,6 +203,11 @@
                 text-align: right;
                 margin: 0 !important;
                 float: right;
+                button {
+                    &:last-child {
+                        margin-right: 28px;
+                    }
+                }
             }
         }
 
