@@ -1,8 +1,8 @@
 {
     "grid" : {
         "name"             : "nom",
-        "creationDate"     : "Date de création",
-        "modificationDate" : "Date de modification"
+        "creationDate"     : "Date création",
+        "modificationDate" : "Date modification"
     },
 
     "fields" : {
@@ -30,7 +30,7 @@
 
     "search" : {
         "name"     : "Nom",
-        "keywords" : "Mots clés",
+        "keywords" : "Mots-clés",
         "user"     : "Utilisateur",
         "date" : {
             "from" : "De",
@@ -45,7 +45,7 @@
         "clear"       : "Supprimer",
         "title"       : "Création d'un nouveau formulaire",
         "count"       : "Champ(s)",
-        "find"        : "Rechercher un formulaire",
+        "find"        : "Rechercher",
         "validation"  : "Ce champs est requis",
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
         "setting"     : "Caractéristiques <br /> du formulaire",
