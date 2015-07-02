@@ -6,7 +6,14 @@
                     <%= collection.name %>
                 </label>
 
-                <span class="reneco reneco-settings pull-right"></span>
+                <button class="reneco grey pull-right" id="edit">
+                    <label>
+                        <span data-i18n="form.actions.edit">EDITER</span>
+                    </label>
+                    <label>
+                        <span class="reneco reneco-edit"></span>
+                    </label>
+                </button>
 
                 <span class="pull-right" id="count">
                     <span class="first"><%= collection.length %></span>

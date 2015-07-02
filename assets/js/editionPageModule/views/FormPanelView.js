@@ -22,7 +22,7 @@ define([
          * @type {Object}
          */
         events : {
-            'click h1>span'   : 'formSettings',
+            'click #edit'     : 'formSettings',
             'click #export'   : 'export',
             'click #clearAll' : 'clear',
             'click #save'     : 'save',
@@ -150,6 +150,7 @@ define([
         * Channel send on the form channel
         */
         formSettings : function() {
+            this.$el.find('#edit').animate({opacity : 0.2}).prop('disabled', true);
             this.disableFooterActions();
             this.formChannel.trigger('editForm', this.collection);
         },
@@ -404,8 +405,10 @@ define([
          * Display footer actions like export and save
          */
         enableFooterActions : function() {
-            if (this.collection.length > 0)
+            this.$el.find('#edit').fadeIn('500').prop('disabled', false).animate({opacity : 1});
+            if (this.collection.length > 0) {
                 this.$el.find('footer button:not(#exit)').show();
+            }
         },
 
         /**
