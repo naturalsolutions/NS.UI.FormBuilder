@@ -256,6 +256,7 @@ define([
             this.$el.find('.drop').sortable({
                 axis: "y",
                 handle : '.paddingBottom5',
+                cursor: "move",
 
                 update : _.bind(function( event, ui ) {
                     for (var v in this._view) {
