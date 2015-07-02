@@ -62,25 +62,21 @@
                 .exo;
                 width          : 100%;
                 background     : @backgroundColor;
-                font-size      : 35px;
+                font-size      : 30px;
                 color          : #fff;
                 border-bottom  : 1px #555 solid;
+                padding-bottom : 5px;
+                overflow       : hidden;
+                margin-bottom  : 0;
+                margin-top     : 12px;
+                &:focus { box-shadow: none; }
                 label {
                     .exo;
                 }
-
-                padding-bottom : 15px;
-                overflow       : hidden;
-                margin-bottom  : 0;
-                &:focus { box-shadow: none; }
             }
 
-            .reneco.settings {
-                color : #555;
-                &:hover {
-                    cursor : pointer;
-                    color : #888;
-                }
+            #edit {
+                font-size : 14px;
             }
         }
 
