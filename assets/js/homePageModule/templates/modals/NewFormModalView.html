@@ -13,7 +13,7 @@
                 <label data-i18n="modal.newForm.text">
                     Saisir le nom du nouveau formulaire"
                 </label>
-                <input type="text" id="formName" class="form-control" />
+                <input type="text" id="formName" class="form-control" autofocus />
                 <br/>
                 <label data-i18n="modal.newForm.text">
                     Saisir le nom du nouveau formulaire"
@@ -27,12 +27,14 @@
                 <% } %>
             </div>
         </div>
-        <div class="modal-footer paddingBottom10 paddingTop20">
+        <div class="modal-footer center">
             <button class="reneco red" id="createForm">
                 <label>
                     <span data-i18n="modal.create.action">Créer</span>
                 </label>
-                <label class="empty"></label>
+                <label>
+                    <span class="reneco reneco-add"></span>
+                </label>
             </button>
 
         </div>

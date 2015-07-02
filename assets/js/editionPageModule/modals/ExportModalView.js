@@ -16,6 +16,7 @@ define([
             this.template   = _.template(ExportModalViewTemplate);
             _.bindAll(this, 'render', 'getData');
             this.response = false;
+            this.formName = options.formName || "";
         },
 
         render : function() {
@@ -23,6 +24,8 @@ define([
             $(this.el).html(renderedContent);
             $(this.el).modal({ show: true });
             $(this.el).i18n();
+            $(this.el).find('input[type="text"]').val(this.formName);
+
             return this;
         },
 
