@@ -55,6 +55,8 @@ define([
             this.initGlobalChannel();
             this.initGridChannel();
             this.initHomePageChannel();
+
+            this.scrollSize = options.scrollSize || '90%';
         },
 
         /**
@@ -349,9 +351,10 @@ define([
                     this.hideSpinner();
 
                     //  Wait fetch end before display forms count and scrollbar got backgrid table
-                    this.$el.find('#formsCount').text(this.formCollection.length)
+                    this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );;
+
                     $("#scrollSection").slimScroll({
-                        height : '90%',
+                        height : this.scrollSize,
                         color: '#111'
                     });
 
@@ -431,7 +434,8 @@ define([
                 var correspondingCondition = true;
 
                 //  Check if models name contains typed name
-                correspondingCondition = correspondingCondition &&((model.get('name').toLowerCase()).indexOf(searchData.name.toLowerCase()) >=0 );
+                if (searchData.name != undefined)
+                    correspondingCondition = correspondingCondition &&((model.get('name').toLowerCase()).indexOf(searchData.name.toLowerCase()) >=0 );
 
                 //  Check if typed keywords is present in french keywords list or english keywords list
                 if (searchData.keywords != undefined) {
@@ -473,7 +477,8 @@ define([
             });
 
             this.formCollection.reset(foundedModels);
-            this.$el.find('#formsCount').text(foundedModels.length)
+
+            this.$el.find('#formsCount').text(  $.t("formCount.form", { count: foundedModels.length }) );
             this.hideSpinner(500);
         },
 
@@ -668,13 +673,16 @@ define([
         exportForm : function(e) {
             require(['editionPageModule/modals/ExportModalView'], _.bind(function(ExportModalView) {
 
+                var currentForm = this.formCollection.get(this.beforeFormSelection).toJSON();
+
                 //  Add new element for modal view
                 $('body').append('<div class="modal  fade" id="exportModal"></div>');
 
                 //  Create view and render it
                 var modalView = new ExportModalView({
                     el: "#exportModal",
-                    URLOptions: this.URLOptions
+                    URLOptions: this.URLOptions,
+                    formName : currentForm.name
                 });
                 $('#exportModal').append( modalView.render() );
                 $("#exportModal").i18n();
@@ -687,7 +695,7 @@ define([
 
                         //  Send event to edition page controller for export form in JSON file
                         //  We send the filename typed by the user
-                        this.homePageChannel.trigger('export', datas['filename'], this.formCollection.get(this.beforeFormSelection).toJSON() );
+                        this.homePageChannel.trigger('export', datas['filename'], currentForm );
 
                         $('#exportModal').modal('hide').removeData();
                         $('#exportModal').html('').remove();
