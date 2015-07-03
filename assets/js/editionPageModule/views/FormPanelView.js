@@ -114,7 +114,7 @@ define([
             this.formChannel.on('exportFinished',   this.displayExportMessage, this);
 
             //  Disable footer actions when user wants to edit a field
-            this.formChannel.on('editModel',   this.disableFooterActions, this);
+            this.formChannel.on('editModel',   this.disableFooterActionsAndExit, this);
 
             //  Event send by fieldCollection when the update is done
             this.formChannel.on('collectionUpdateFinished', this.updateName, this);
@@ -151,7 +151,7 @@ define([
         */
         formSettings : function() {
             this.$el.find('#edit').animate({opacity : 0.2}).prop('disabled', true);
-            this.disableFooterActions();
+            this.disableFooterActionsAndExit();
             this.formChannel.trigger('editForm', this.collection);
         },
 
@@ -407,6 +407,7 @@ define([
          */
         enableFooterActions : function() {
             this.$el.find('#edit').fadeIn('500').prop('disabled', false).animate({opacity : 1});
+            this.$el.find('#exit').show();
             if (this.collection.length > 0) {
                 this.$el.find('footer button:not(#exit)').show();
             }
@@ -416,7 +417,16 @@ define([
          * Hide footer actions
          */
         disableFooterActions : function() {
+            console.log ("la")
             this.$el.find('footer button:not(#exit)').hide();
+        },
+
+        /**
+         * Hide all footer action
+         */
+        disableFooterActionsAndExit : function() {
+            console.log ("ici")
+            this.$el.find('footer button').hide();
         },
 
         /**
