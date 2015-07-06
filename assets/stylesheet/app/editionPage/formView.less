@@ -11,6 +11,11 @@
     color        : #555;
 }
 
+.fieldType {
+    color : #68696b !important;
+    padding-left: 7px;
+}
+
 .col11centered { margin-left: 4.15555% !important; }
 
 #formPanel {
@@ -130,10 +135,11 @@
                             height      : 45px;
                             line-height : 40px;
                             color       : white;
-                            .reneco-drag2 {
-                                margin-right: 10px;
-                                position    : relative;
-                                top         : 2px;
+                            i {
+                                font-size : 25px;
+                                position  : relative;
+                                top       : 4px;
+                                color     : #8b8d8f;
                             }
                         }
                         .fa-arrows { color : white; }
@@ -170,7 +176,14 @@
                     border : 1px solid @elementHoverColor;
                     .row {
                         &.paddingBottom5 {
-                            background: @elementHoverColor;
+                            background: #57585a;
+                            cursor : all-scroll !important;
+                            label.col-md-6:hover {
+                                cursor : all-scroll;
+                            }
+                        }
+                        .fieldType {
+                            color : #ddd;
                         }
                     }
                     .actions:not(.locked) span {
@@ -234,7 +247,7 @@
             //  ---------------------------------------------------
             //  Style for specific field type
 
-            label { .text(); .exo; &:hover { cursor : default !important; } }
+            label { .text(); .exo; &:hover { cursor : default; } }
 
             &.textArea {
                 textarea {

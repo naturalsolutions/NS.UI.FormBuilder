@@ -28,7 +28,7 @@
         display    : none;
         text-align : center;
         margin-top : 40px;
-        height: 90%;
+        height     : 90%;
         padding-top: 10px;
 
         div {
@@ -41,9 +41,15 @@
                     width      : 50px;
                     height     : 50px;
                     margin     : 5px auto;
+                    transition : all 0.2s ease-in;
+                    &:hover {
+                        background : #eee;
+                        color      : #555;
+                        cursor     : pointer;
+                    }
                 }
                 span {
-                    font-size: 25px;
+                    font-size  : 25px;
                     line-height: 50px;
                 }
             }
@@ -52,7 +58,7 @@
 
 
     #toggle {
-        margin-top : 14px;
+        margin-top : 9px;
         text-align : right;
         width      : 94%;
         position   : absolute;
@@ -65,19 +71,21 @@
             border       : 1px #555 solid;
             border-radius: 50%;
             padding      : 8px;
+
+            &:hover {
+                cursor: pointer;
+                box-shadow:  0 0 2px #222;
+            }
+
         }
 
         &.closed {
             position: static;
             width: auto;
             text-align: center;
-//            span {
-//                font-size    : 20px;
-//                &:before {
-//                    content : "\e011";
-//                }
-//            }
         }
+
+
     }
 
     h1 {
