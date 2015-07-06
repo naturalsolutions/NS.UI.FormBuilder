@@ -117,7 +117,7 @@ define([
             this.formChannel.on('editModel',   this.disableFooterActionsAndExit, this);
 
             //  Event send by fieldCollection when the update is done
-            this.formChannel.on('collectionUpdateFinished', this.updateName, this);
+            this.formChannel.on('collectionUpdateFinished', this.collectionUpdateFinished, this);
         },
 
         /**
@@ -140,9 +140,10 @@ define([
          * @param  {Object} collection updated attributes
          */
         updateCollectionAttributes : function(newCollectionAttributes) {
+            console.log('newCollectionAttributes : ', newCollectionAttributes)
             this.enableFooterActions();
             this.collection.updateCollectionAttributes(newCollectionAttributes);
-            this.$el.find('h1 label').text(newCollectionAttributes.name)
+            this.updateName();
         },
 
         /**
@@ -235,8 +236,8 @@ define([
         /**
          * Update perfect scrollbar size and position (for example when user add field in the form)
          */
-        updateScrollBar : function() {
-            var scrollToHeight = this.$el.find('#scrollSection').height();
+        updateScrollBar : function(height) {
+            var scrollToHeight = height || this.$el.find('#scrollSection').height();
             this.$el.find('#scrollSection').slimScroll({ scrollTo: scrollToHeight });
         },
 
@@ -417,7 +418,6 @@ define([
          * Hide footer actions
          */
         disableFooterActions : function() {
-            console.log ("la")
             this.$el.find('footer button:not(#exit)').hide();
         },
 
@@ -425,7 +425,6 @@ define([
          * Hide all footer action
          */
         disableFooterActionsAndExit : function() {
-            console.log ("ici")
             this.$el.find('footer button').hide();
         },
 
@@ -465,8 +464,15 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
-            this.$el.find('h1 label').first().text(this.collection.name)
+            this.$el.find('#collectionName').text(this.collection.name)
         },
+
+        collectionUpdateFinished : function() {
+            this.updateName();
+            //this.$el.find('#scrollSection').scrollTop(0);
+            this.$el.find('#scrollSection').animate({ scrollTop: 0 }, "fast");
+        },
+
 
 
         displaytemplateMessage : function() {
