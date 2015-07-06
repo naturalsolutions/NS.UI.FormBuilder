@@ -24,13 +24,14 @@ define([
          * View events
          */
         events : {
-            'click #delete'    : 'deleteForm',
-            'click #copy'      : 'duplicateForm',
-            'click #edit'      : "editForm",
-            'click #editRow'   : "editForm",
-            'click #add'       : 'addForm',
-            'click #import'    : 'importForm',
-            'click #export'    : 'exportForm'
+            'click #delete'        : 'deleteForm',
+            'click #copy'          : 'duplicateForm',
+            'click #edit'          : "editForm",
+            'click .editForm'      : "editForm",
+            'click #editRow'       : "editForm",
+            'click #add'           : 'addForm',
+            'click #import'        : 'importForm',
+            'click #export'        : 'exportForm'
         },
 
         /**
@@ -167,19 +168,40 @@ define([
         },
 
         /**
-         * Add additional information after the selected row in the grie
+         * Add additional information after the selected row in the grid
          *
          * @param {object} el    jQuery object, clicked row on the grid
          * @param {object} model Model information to display in the grid
          */
         addFormSection : function(el, model) {
-
             el.after(
-                '<div class="formInformation"><tr >\
-                    <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
-                    <td>' + model.get('keywordsFr').join(',') + '</td>\
-                </tr></div>'
-            );
+                '<div class="formInformation row ">\
+                    <div class="col-md-12">\
+                        <label class="infos">' +
+                            model.get('descriptionFr')
+                        + '</label>\
+                        <label class="infos">'+
+                            model.get('keywordsFr').join(',')
+                        + '</label>\
+                        <div class="pull-right">\
+                            <button class="reneco grey editForm">\
+                                <label>\
+                                    <span data-i18n="form.actions.edit">EDITER</span>\
+                                </label>\
+                                <label>\
+                                    <span class="reneco reneco-edit"></span>\
+                                </label>\
+                            </button>\
+                        </div>\
+                    </div>\
+                </div>'
+            )
+            //;el.after(
+            //    '<div class="formInformation"><tr >\
+            //        <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
+            //        <td>' + model.get('keywordsFr').join(',') + '</td>\
+            //    </tr></div>'
+            //);
 
             $('.formInformation').after('<tr class="padding"></tr>');
 
@@ -194,7 +216,7 @@ define([
 
         /**
          * Callback for grid channel "rowClicked" event
-         * Display additionnal information for the model in parameter
+         * Display more information for the model in parameter
          *
          * @param {object} elementAndModel contains jQuery row element and the model
          */

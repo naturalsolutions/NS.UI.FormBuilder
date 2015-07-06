@@ -51,6 +51,23 @@ define([
                 modificationDate = modificationDate.toString();
                 this.set('modificationDateDisplay', modificationDate.substring(0, modificationDate.length - 3));
             }
+
+            this.updateKeywords();
+        },
+
+        updateKeywords : function() {
+            var keywordsFr = [], keywordsEn = [];
+
+            _.each(this.get('keywordsFr'), function(el, idx){
+                keywordsFr.push(el.name);
+            });
+
+            _.each(this.get('keywordsEn'), function(el, idx){
+                keywordsEn.push(el.name);
+            });
+
+            this.set('keywordsFr', keywordsFr);
+            this.set('keywordsEn', keywordsEn);
         },
 
         toJSON : function() {

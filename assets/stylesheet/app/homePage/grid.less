@@ -130,38 +130,23 @@
         }
 
         .formInformation {
-            background : #222 !important;
-            width: ~'calc(100% - 30px)';
-            position: absolute;
-
-            display: none;
-
-            padding: 17px;
+            background     : #222 !important;
+            width          : ~'calc(100% - 30px)';
+            position       : absolute;
+            margin-left    : 0 !important;
+            display        : none;
+            padding        : 17px;
             text-transform : none !important;
             vertical-align : text-top;
-            label {
-                width       : 35px;
-                height      : 35px;
-                color       : white;
-                font-size   : 22px;
-                text-align  : center;
-                position    : relative;
-                margin-right: 10px;
-                float       : left;
-                background  : rgba(0, 0, 0, 0.2);
-                border-right: 2.5px;
-                overflow    : hidden;
-                padding-top : 2px;
-                &:hover {
-                    cursor : pointer;
+
+            .infos {
+                color : white;
+                .exo;
+                font-size: 20px;
+                line-height: 34px;
+                &:first-child {
+                    width: 60%;
                 }
-                .exo;
-            }
-            p {
-                width  : 90%;
-                margin : 0 auto;
-                .exo;
-                color       : white;
             }
         }
     }
