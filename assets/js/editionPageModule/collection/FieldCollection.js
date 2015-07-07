@@ -256,12 +256,11 @@ define([
                 labelEn       : this.labelEn,
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
-                isTemplate    : this.isTemplate,
+                isTemplate    : this.isTemplate || false,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
             }, subModel = null;
-
 
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
@@ -354,18 +353,20 @@ define([
         removeElement : function(id) {
             var item = this.get(id);
 
-            //  If the field is a subForm field we remove all subFormField
-            if (item.constructor.type == 'Subform') {
-                this.destroySubElement(item.get('id'));
-            }
+            if (item !== undefined) {
+                //  If the field is a subForm field we remove all subFormField
+                if (item.constructor.type == 'Subform') {
+                    this.destroySubElement(item.get('id'));
+                }
 
-            if (item.get('subFormParent') !== undefined) {
-                var fieldSet = this.get(item.get('subFormParent'));
-                fieldSet.removeField(item.get('name'));
-            }
+                if (item.get('subFormParent') !== undefined) {
+                    var fieldSet = this.get(item.get('subFormParent'));
+                    fieldSet.removeField(item.get('name'));
+                }
 
-            //  We used trigger instead destroy method, the DELETE ajax request is not send
-            item.trigger('destroy', item);
+                //  We used trigger instead destroy method, the DELETE ajax request is not send
+                item.trigger('destroy', item);
+            }
         },
 
         /**
