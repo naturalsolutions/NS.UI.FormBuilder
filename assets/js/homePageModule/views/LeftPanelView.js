@@ -1,5 +1,5 @@
 define([
-    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui'
+    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
 ], function($, Marionette, LeftPanelViewTemplate) {
 
     /**
@@ -67,6 +67,13 @@ define([
         onRender : function(options) {
             this.$el.i18n(); // run i18nnext translation in the view context
             this.enableAutocomplete();
+
+            this.$el.find('#dateFrom').datetimepicker({
+                format : 'DD/MM/YYYY'
+            });
+            this.$el.find('#dateTo').datetimepicker({
+                format : 'DD/MM/YYYY'
+            });
         },
 
         /**

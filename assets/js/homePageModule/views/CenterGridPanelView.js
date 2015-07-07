@@ -445,6 +445,25 @@ define([
             this.updateCollectionAfterSearch(searchData);
         },
 
+        getDateFromString : function(stringDate, resetTime) {
+
+            var dateWithoutTime = (stringDate.split('-')[0]).trim();
+            var dateSplitted    = dateWithoutTime.split('/');
+            var newDate         = new Date();
+
+            newDate.setDate(dateSplitted[0]);
+            newDate.setMonth(dateSplitted[1] - 1);
+            newDate.setYear(dateSplitted[2]);
+
+            if (resetTime) {
+                newDate.setHours(0);
+                newDate.setMinutes(0);
+                newDate.setSeconds(0)
+            }
+
+            return newDate;
+        },
+
         /**
          * Filter collection elements following user typed data
          *
@@ -452,7 +471,7 @@ define([
          */
         updateCollectionAfterSearch: function(searchData) {
 
-            var foundedModels = this.formCollection.filter(function(model) {
+            var foundedModels = this.formCollection.filter(_.bind(function(model) {
                 var correspondingCondition = true;
 
                 //  Check if models name contains typed name
@@ -470,33 +489,27 @@ define([
 
 
                 if (searchData.dateFrom != undefined) {
-                    //  Date comparaison
-                    var creationDate = model.get('creationDate');
-                    creationDate.setHours(0);
-                    creationDate.setMinutes(0);
-                    creationDate.setSeconds(0);
 
-                    var dateFrom = new Date(searchData.dateFrom);
+                    var creationDate = this.getDateFromString(model.get('creationDate'), true),
+                        dateFrom     = this.getDateFromString(searchData.dateFrom);
+
                     dateFrom.setHours(0);
 
                     correspondingCondition = correspondingCondition && (dateFrom - creationDate < 0);
                 }
 
                 if (searchData.dateTo != undefined) {
-                    //  Date comparaison
-                    var creationDate = model.get('creationDate');
-                    creationDate.setHours(0);
-                    creationDate.setMinutes(0);
-                    creationDate.setSeconds(0);
 
-                    var dateTo = new Date(searchData.dateTo);
+                    var creationDate = this.getDateFromString(model.get('creationDate'), true),
+                        dateTo     = this.getDateFromString(searchData.dateTo);
+
                     dateTo.setHours(0);
 
                     correspondingCondition = correspondingCondition && (dateTo - creationDate > 0);
                 }
 
                 return correspondingCondition;
-            });
+            }, this));
 
             this.formCollection.reset(foundedModels);
 
