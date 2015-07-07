@@ -407,8 +407,6 @@
 
 .table-grid {
 
-    border-top: 1px #222 solid;
-
     table {
         width: 100%;
         margin-top: 5px;
@@ -432,21 +430,13 @@
         tbody {
             tr {
 
-                &:first-child {
-                    td:last-child {
-                        visibility: hidden !important;
-                    }
+                td:last-child {
+                    text-align: center;
                 }
                 td {
                     .exo;
                     color : #575656;
                     font-size: 17px;
-                    &:last-child:after {
-                        .reneco;
-                        content: "\e681";
-                        text-align: center;
-                        color : white;
-                    }
 
                     input[type="checkbox"] {
                         visibility: hidden;

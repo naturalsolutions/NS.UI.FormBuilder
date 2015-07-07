@@ -22,11 +22,11 @@ define([
          * @type {Object}
          */
         events : {
-            'click #edit'     : 'formSettings',
-            'click #export'   : 'export',
-            'click #clearAll' : 'clear',
-            'click #save'     : 'save',
-            'click #exit'     : 'exit'
+            'click #editForm'     : 'formSettings',
+            'click #export'       : 'export',
+            'click #clearAll'     : 'clear',
+            'click #save'         : 'save',
+            'click #exit'         : 'exit'
         },
 
 
