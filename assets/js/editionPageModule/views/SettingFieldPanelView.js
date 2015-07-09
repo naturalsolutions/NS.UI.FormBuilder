@@ -66,6 +66,7 @@ define([
             this.initFormChannel();
             this.initMainChannel();
             this.initHookChannel();
+            this.initGlobalChannel()
 
             _.bindAll(this, 'template', 'initForm');
         },
@@ -81,6 +82,10 @@ define([
         initMainChannel : function() {
             //  The edition channel is the main channel ONLY in the editionPageModule
             this.mainChannel = Backbone.Radio.channel('edition');
+        },
+
+        initGlobalChannel : function() {
+            this.globalChannel = Backbone.Radio.channel('global');
         },
 
 
@@ -215,13 +220,14 @@ define([
 
                     $.getJSON('ressources/thesaurus/thesaurus.json', _.bind(function(data) {
 
-                        $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-                        $('.settings form #defaultNode').fancytree({
+                        $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+
+                        $('#defaultNode').fancytree({
                             source: data['d'],
                             checkbox : false,
                             selectMode : 1,
                             activate : _.bind(function(event, data) {
-                                this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
+                                this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
                             }, this)
                         });
 

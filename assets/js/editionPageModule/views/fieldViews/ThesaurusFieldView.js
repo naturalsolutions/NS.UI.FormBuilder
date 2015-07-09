@@ -8,6 +8,7 @@ define([
 ], function($, _, Backbone, BaseView, viewTemplate, Radio) {
 
     var TreeViewFieldView = BaseView.extend({
+
         events: function() {
             return _.extend({}, BaseView.prototype.events, {
             });
@@ -18,20 +19,26 @@ define([
             opt.template = viewTemplate;
 
             BaseView.prototype.initialize.apply(this, [opt]);
-            this.mainChannel = Backbone.Radio.channel('global');
 
-            this.mainChannel.on('nodeSelected' + this.model.get('id'), _.bind(function(data) {
+            this.initGlobalChannel();
+        },
 
-                if (data['node']['children'] !== null) {
-                    this.$el.first('.thesaurusField').fancytree('getTree').reload({
-                        children : data['node']['children']
-                    });
-                } else {
-                    var arr = [];
-                    arr[0] = data.node;
-                    this.$el.first('.thesaurusField').fancytree('getTree').reload(arr);
-                }
-            }, this));
+        initGlobalChannel : function() {
+            this.globalChannel = Backbone.Radio.channel('global');
+
+            this.globalChannel.on('nodeSelected' + this.model.get('id'), this.updateTreeView, this);
+        },
+
+        updateTreeView : function(data) {
+            if (data['node']['children'] !== null) {
+                $('#thesaurus' + this.model.get('id')).fancytree('getTree').reload({
+                    children : data['node']['children']
+                });
+            } else {
+                var arr = [];
+                arr[0] = data.node;
+                this.$el.first('.thesaurusField').fancytree('getTree').reload(arr);
+            }
         },
 
         render : function() {
@@ -42,12 +49,13 @@ define([
                     $('#thesaurus' + this.model.get('id')).fancytree({
                         source: data['d'],
                         checkbox : false,
-                        selectMode : 2
+                        selectMode : 2,
+                        activeNode : 85265
                     });
 
                 }, this)).error(function(a,b , c) {
                     alert ("can't load ressources !");
-                })
+                });
 
             }, this));
         }

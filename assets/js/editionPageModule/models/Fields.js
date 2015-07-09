@@ -1002,15 +1002,6 @@ define([
         },
         schema: function() {
             return _.extend( {}, models.BaseField.prototype.schema, {
-                defaultNode: {
-                    type  : 'Text',
-                    title : translater.getValueFromKey('schema.defaultNode'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.tree.default')
-                    }
-                },
                 webServiceURL : {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -1018,6 +1009,15 @@ define([
                     title       : translater.getValueFromKey('schema.webServiceURL'),
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.node.url')
+                    }
+                },
+                defaultNode: {
+                    type  : 'Text',
+                    title : translater.getValueFromKey('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.tree.default')
                     }
                 },
                 fullpath : {
@@ -1049,17 +1049,17 @@ define([
         },
         schema: function() {
             return _.extend( {}, models.BaseField.prototype.schema, {
-                defaultNode: {
-                    type  : 'Text',
-                    title : translater.getValueFromKey('schema.defaultNode'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                },
                 wsUrl : {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.wsUrl')
+                },
+                defaultNode: {
+                    type  : 'Text',
+                    title : translater.getValueFromKey('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
                 },
                 webservices : {
                     type        : 'Text',

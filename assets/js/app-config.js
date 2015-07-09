@@ -31,7 +31,13 @@ define([
                 }
             }
 
-        ]
+        ],
+
+        config : {
+
+            //  Thesaurus startID
+            startID : 85263
+        }
 
     };
 

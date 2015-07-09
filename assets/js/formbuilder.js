@@ -79,6 +79,21 @@ define([
         }, this));
     })
 
+    FormbuilderApp.addInitializer(function(options) {
+
+        require(['app-config'], _.bind(function(AppConfig) {
+
+            this.configChannel = Backbone.Radio.channel('config');
+
+            this.config = AppConfig['config'];
+
+            this.configChannel.on('get', _.bind(function(configName) {
+                this.configChannel.trigger('get:' + configName, this.config[configName]);
+            }, this));
+
+        }, this));
+    });
+
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
         Backbone.history.start();
