@@ -323,7 +323,42 @@ define([
          * Trigger an event for the router on the form channel
          */
         save : function() {
+            this.checkRules();
+        },
+
+        checkRules : function(callbackAfterRulesCheck) {
+
+            require(['app-config'], _.bind(function(appConfig) {
+
+                var ruleResult  = true;
+
+                _.each(appConfig.rules, _.bind(function(rule) {
+
+                    ruleResult = rule.execute(this.collection.toJSON());
+
+                    if (!ruleResult) {
+                        this.displayRuleMessage(rule.error);
+                        ruleResult = false;
+                    }
+
+                }, this));
+
+                if (!ruleResult){
+                    return false;
+                }
+
+                this.saveCollection();
+
+            }, this));
+
+        },
+
+        saveCollection : function() {
             this.collection.save();
+        },
+
+        displayRuleMessage : function(error) {
+            swal(error.title, error.content, "error");
         },
 
         /**
