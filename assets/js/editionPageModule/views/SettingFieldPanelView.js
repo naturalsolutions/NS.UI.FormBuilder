@@ -65,8 +65,13 @@ define([
             //  Init backbone radio channel
             this.initFormChannel();
             this.initMainChannel();
+            this.initHookChannel();
 
             _.bindAll(this, 'template', 'initForm');
+        },
+
+        initHookChannel : function() {
+            this.hookChannel = Backbone.Radio.channel('hook');
         },
 
 
@@ -345,7 +350,7 @@ define([
         */
         cancel : function(){
             this.removeForm();
-            this.mainChannel.trigger('formCancel')
+            this.mainChannel.trigger('formCancel');
         },
 
 
@@ -356,7 +361,7 @@ define([
             if (this.subSettingView !== null) {
                 //  In this case wa have a sub setting view
                 //  This view is used for example to set Checkbox values
-                this.subSettingView.commitValues()
+                this.subSettingView.commitValues();
             }
 
             if (this.form.commit() === undefined) {
@@ -368,7 +373,9 @@ define([
                     this.modelToEdit.set('formIdentifyingColumn', '');
                 }
 
-                this.mainChannel.trigger('formCommit')
+                this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
+
+                this.mainChannel.trigger('formCommit');
                 this.removeForm();
             }
         },

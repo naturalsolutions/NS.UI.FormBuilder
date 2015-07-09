@@ -106,6 +106,8 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          */
         editModel : function() {
             this.disableActions();
+
+            //  The event is send to EditionPageController
             this.formChannel.trigger('editModel', this.model.get('id'));
         },
 
