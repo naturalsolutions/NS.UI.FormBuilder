@@ -15,7 +15,8 @@ define([
          * View events
          */
         events: {
-            'click #createForm'               : 'createForm'
+            'click #createForm'               : 'createForm',
+            'keypress input[type="text"]'     : 'triggerClick'
         },
 
         /**
@@ -50,6 +51,13 @@ define([
                 this.$el.find('#templateName').val()
             )
             $(this.el).modal('hide').removeData();
+        },
+
+        triggerClick : function(e) {
+            var key = e.which;
+            if(key === 13) {
+                this.$el.find('#createForm').trigger('click');
+            }
         }
 
     });
