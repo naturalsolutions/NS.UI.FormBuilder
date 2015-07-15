@@ -84,20 +84,35 @@ define([
             //  Enable autocomplete for form name search
             $.getJSON(this.URLOptions.formAutocomplete, _.bind(function(data) {
                 this.$el.find('#name').autocomplete({
-                    source : data.options
-                })
+                    source : data.options,
+                    appendTo : '#leftPanel form #name-group',
+                    open : _.bind(function(event, ui) {
+                        var inputWidth = this.$el.find('#name-group input').css('width');
+                        $('.form-group ul, .form-group li').css('width', inputWidth);
+                    }, this)
+                });
             }, this));
 
             $.getJSON(this.URLOptions.keywordAutocomplete, _.bind(function(data) {
                 this.$el.find('#keywords').autocomplete({
-                    source : data.options
-                })
+                    source : data.options,
+                    appendTo : '#leftPanel form #keywords-group',
+                    open : _.bind(function(event, ui) {
+                        var inputWidth = this.$el.find('#name-group input').css('width');
+                        $('.form-group ul, .form-group li').css('width', inputWidth);
+                    }, this)
+                });
             }, this));
 
             $.getJSON(this.URLOptions.usersAutocomplete, _.bind(function(data) {
                 this.$el.find('#user').autocomplete({
-                    source : data.options
-                })
+                    source : data.options,
+                    appendTo : '#leftPanel form #user-group',
+                    open : _.bind(function(event, ui) {
+                        var inputWidth = this.$el.find('#name-group input').css('width');
+                        $('.form-group ul, .form-group li').css('width', inputWidth);
+                    }, this)
+                });
             }, this));
         },
 
