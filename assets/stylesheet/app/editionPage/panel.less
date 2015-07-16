@@ -13,6 +13,17 @@
         margin-left : -33.33333333% !important;
     }
 
+    .slimScrollRail {
+        background : #555 !important;
+        opacity : 0.8 !important;
+        height: 90% !important;
+    }
+
+    .slimScrollBar {
+        background : white !important;
+        opacity : 0.8 !important;
+    }
+
     &.col-md-1 {
         #toggle {
             text-align: center;
@@ -24,8 +35,11 @@
 
     }
 
-    #smallFeatures {
+    #features {
         display    : none;
+    }
+
+    #smallFeatures {
         text-align : center;
         margin-top : 40px;
         height     : 90%;
@@ -42,6 +56,12 @@
                     height     : 50px;
                     margin     : 5px auto;
                     transition : all 0.2s ease-in;
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
                     &:hover {
                         background : #eee;
                         color      : #555;
