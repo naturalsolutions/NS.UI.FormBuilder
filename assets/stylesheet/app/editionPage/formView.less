@@ -82,6 +82,11 @@
                 label {
                     .exo;
                 }
+                #count {
+                    color      : #6e6d71;
+                    font-size  : 21px;
+                    margin-left: 15px;
+                }
             }
 
             .pull-right#editForm {
@@ -134,11 +139,23 @@
                         color            : white;
                         background-color : @dropFieldHeaderColor;
 
+                        .field-icon {
+                            height: 44px;
+                            margin: 0;
+                            padding: 0;
+                            overflow: hidden;
+                            text-align: center;
+                            line-height: 44px;
+                            font-size: 29px;
+                            width: 44px;
+                        }
+
                         .field-label {
                             .exo;
                             height      : 45px;
                             line-height : 40px;
                             color       : white;
+                            padding-left: 0;
                             i {
                                 font-size : 25px;
                                 position  : relative;
