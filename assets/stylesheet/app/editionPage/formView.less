@@ -75,7 +75,7 @@
                 color          : #fff;
                 border-bottom  : 1px #555 solid;
                 padding-bottom : 5px;
-                overflow       : hidden;
+//                overflow       : hidden;
                 margin-bottom  : 0;
                 margin-top     : 12px;
                 &:focus { box-shadow: none; }
@@ -87,6 +87,11 @@
                     font-size  : 21px;
                     margin-left: 15px;
                 }
+            }
+
+            #editForm {
+                position: relative;
+                top: -4px;
             }
 
             .pull-right#editForm {
@@ -129,6 +134,24 @@
                 padding: 0 !important;
                 border : 1px solid @dropFieldHeaderColor;
 
+                @hoverColor : #777;
+
+                &.selected {
+                    border-color : @hoverColor !important;
+                    .paddingBottom5 {
+                        background-color : @hoverColor !important;
+                    }
+                    .fieldType {
+                        color : #222!important;
+                    }
+                    &:hover {
+                        border-color : @hoverColor !important;
+                        .paddingBottom5 {
+                            background : @hoverColor !important;
+                        }
+                    }
+                }
+
                 .row {
                     //  field banner with label and action
                     &.paddingBottom5 {
@@ -167,7 +190,7 @@
                     }
 
                     .actions {
-
+                        padding-right: 15px;
                         span {
                             color : #aaa;
                             font-size : 24px;

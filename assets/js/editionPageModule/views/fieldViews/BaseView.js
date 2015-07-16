@@ -109,6 +109,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
 
             //  The event is send to EditionPageController
             this.formChannel.trigger('editModel', this.model.get('id'));
+            this.$el.find('.element').addClass('selected');
         },
 
         /**
@@ -116,6 +117,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          */
         enableActions : function() {
             this.$el.find('.actions').removeClass('locked');
+            this.$el.find('.element').removeClass('selected');
         },
 
         /**
