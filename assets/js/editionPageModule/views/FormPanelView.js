@@ -271,7 +271,8 @@ define([
             this.$el.find('#scrollSection').slimScroll({
                 height        : '90%',
                 railVisible   : true,
-                alwaysVisible : true
+                alwaysVisible : true,
+                railColor     : "#111"
             });
 
             this.updateFieldCount();

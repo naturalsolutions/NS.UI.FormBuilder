@@ -144,7 +144,7 @@ define([
 
             //  Add scroll bar
             this.$el.find('.scroll').slimScroll({
-                height       : '88%',
+                height       : '89%',
                 railVisible  : true,
                 alwaysVisible: true
             });
