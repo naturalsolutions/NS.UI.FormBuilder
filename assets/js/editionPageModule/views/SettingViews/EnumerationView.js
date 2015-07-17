@@ -2,9 +2,8 @@ define([
     'jquery',
     'marionette',
     'text!../../templates/settingViews/EnumerationViewTemplate.html',
-    '../../modals/EnumerationModalView',
-    'bootstrap'
-], function($, Marionette, EnumerationViewTemplate, EnumerationModalView) {
+    'backgrid',
+], function ($, Marionette, EnumerationViewTemplate, Backgrid) {
 
     /**
      * This model represents a choice of a list
@@ -15,25 +14,29 @@ define([
         /**
          * Default value
          */
-        defaults : {
-            en             : 'french label',
-            fr             : 'English label',
-            value          : 'val',
-            isDefaultValue : false
+        defaults: {
+            en: 'french label',
+            fr: 'English label',
+            value: 'val',
+            isDefaultValue: false
         },
+
+        /*initialize : function(options) {
+         this.set(options)
+         },*/
 
         /**
          * Return a choice as a JSON object
          *
          * @returns {{id: *, en: *, fr: *, value: *}}
          */
-        toJSON : function() {
+        toJSON: function () {
             return {
-                id             : this.get('id'),
-                en             : this.get('en'),
-                fr             : this.get('fr'),
-                value          : this.get('value'),
-                isDefaultValue : this.get('isDefaultValue')
+                id: this.get('id'),
+                en: this.get('en'),
+                fr: this.get('fr'),
+                value: this.get('value'),
+                isDefaultValue: this.get('isDefaultValue')
             }
         }
     });
@@ -54,8 +57,8 @@ define([
          *
          * @returns {boolean} if one attribute has a default value
          */
-        hasADefaultValue : function() {
-            var modelWithDefaultValue = this.filter(function(model) {
+        hasADefaultValue: function () {
+            var modelWithDefaultValue = this.filter(function (model) {
                 return model.get("isDefaultValue");
             });
 
@@ -68,23 +71,15 @@ define([
      */
     var EnumarationView = Backbone.Marionette.ItemView.extend({
 
-        events : {
-            "click #addChoice": 'displayModalWithGrid'
+        events: {
+            "click #addChoice": 'addOption'
         },
 
         /**
          * Use custom template
          */
-        template : function() {
-            var colmuns = _.map(this.model.columns, function(column) {
-                return column.name;
-            });
-            colmuns.pop();
-
-            return _.template(EnumerationViewTemplate)({
-                collection : this.choices.toJSON(),
-                columns : colmuns
-            });
+        template: function () {
+            return _.template(EnumerationViewTemplate)();
         },
 
         /**
@@ -92,27 +87,59 @@ define([
          *
          * @param options options object
          */
-        initialize : function(options) {
-            this.model   = options.model;
+        initialize: function (options) {
+            this.model = options.model;
+
             this.choices = new Choices(this.model.get('choices'));
 
-            _.bindAll(this, 'template', 'displayModalWithGrid');
+            _.bindAll(this, 'template', 'addOption', 'trashClick');
+        },
+
+        /**
+         * Render callback
+         */
+        onRender: function () {
+            this.initGrid();
+        },
+
+        /**
+         * Initialize backgrid and display grid
+         */
+        initGrid: function () {
+            this.grid = new Backgrid.Grid({
+                columns: this.model.columns,
+                collection: this.choices
+            });
+
+            this.$el.find('#enumGrid').html(this.grid.render().el);
         },
 
         /**
          * That callback add a new element on the grid with default attribute
          * The user can edit model attributes on the grid
          */
-        displayModalWithGrid : function() {
-            $('body').append('<div class="modal fade" id="grid-modal"></div>');
+        addOption: function () {
+            this.grid.insertRow(this.model.columDefaults);
 
-            this.enumerationModalView = new EnumerationModalView({
-                el            : '#grid-modal',
-                callback      : _.bind(this.commitValues, this),
-                collection    : this.choices,
-                columns       : this.model.columns,
-                columDefaults : this.model.columDefaults
-            }).render();
+            var lastTd = this.$el.find('#enumGrid tbody tr:last-child td:last-child');
+            lastTd.html('<span class="reneco trash"></span>');
+
+            lastTd.bind('click', this.trashClick);
+        },
+
+        /**
+         * When user clicks on the trash icon we remove corresponding model from the collection
+         *
+         * @param e jquery Click event
+         */
+        trashClick: function (e) {
+            //  The index of the tr corresponds to the model to remove id
+            var modelToRemoveID = $(e.target).parents('tr').index(),
+                modelToRemove = this.choices.at(modelToRemoveID);
+
+            //  We remove the element from the collection
+            //  The gri is automatically updated
+            this.choices.remove(modelToRemove);
         },
 
         /**
@@ -120,14 +147,12 @@ define([
          *
          * @returns {*} List of values or undefined
          */
-        commitValues : function() {
+        commitValues: function () {
             this.model.set('choices', this.choices.toJSON());
-            this.enumerationModalView.close();
-            $('.modal-backdrop').remove();
-            this.render();
         }
 
     });
 
     return EnumarationView;
+
 });

@@ -8,7 +8,8 @@ define([
     'jquery-ui',
     'i18n',
     'bootstrap-select',
-    'slimScroll'
+    'slimScroll',
+    'bootstrap'
 ], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal) {
 
     var translater = Translater.getTranslater();
@@ -32,7 +33,11 @@ define([
             'click #cancel'               : 'cancel',
             'click #saveChange'           : 'saveChange',
             'click #saveButton'           : 'saveField',
-            'change .checkboxField input' : 'checkboxChange'
+            'change .checkboxField input' : 'checkboxChange',
+            'click #myTabs a' : function(e) {
+                e.preventDefault();
+                $(this).tab('show');
+            }
         },
 
 
@@ -214,7 +219,7 @@ define([
                     } else {
                         this.form.$el.find('.field-precision').removeClass('advanced');
                     }
-                }, this))
+                }, this));
 
                  if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
 
@@ -233,11 +238,13 @@ define([
 
                     }, this)).error(function(a,b , c) {
                         alert ("can't load ressources !");
-                    })
+                    });
+
+
 
                 } else if (this.modelToEdit.constructor.type === 'TreeView') {
 
-                    this.setTreeViewConfiguration();
+                     this.setTreeViewConfiguration();
 
                 } else if (_.contains(['Select', 'CheckBox', 'Radio'], this.modelToEdit.constructor.type)) {
                      this.setMultipleFieldConfiguration();
@@ -254,10 +261,11 @@ define([
          */
         setMultipleFieldConfiguration : function() {
             require(['editionPageModule/views/SettingViews/EnumerationView'], _.bind(function(EnumarationView) {
-                this.$el.find('form').after('<div id="enumarationGrid"></div>');
+
+                this.$el.find('.setting-tabs').show();
 
                 this.subSettingView = new EnumarationView({
-                    el : '#enumarationGrid',
+                    el : '#field-values>div',
                     model : this.modelToEdit
                 }).render();
 

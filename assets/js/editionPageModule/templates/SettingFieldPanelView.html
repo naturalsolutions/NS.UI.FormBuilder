@@ -29,9 +29,34 @@
         </div>
     </div>
     <div class="row">
-        <div id="form" class="col-md-10 col-md-offset-1">
-            <!-- form -->
+        <ul class="nav nav-tabs setting-tabs col-md-10 col-md-offset-1" role="tablist">
+            <li role="presentation" class="active">
+                <a href="#home" aria-controls="home" role="tab" data-toggle="tab">
+                    <span>
+                        Paramètre généraux
+                    </span>
+                </a>
+            </li>
+            <li role="presentation">
+                <a href="#field-values" aria-controls="field-values" role="tab" data-toggle="tab">
+                    Liste de valeurs
+                </a>
+            </li>
+        </ul>
+
+        <!-- Tab panes -->
+        <div class="tab-content">
+            <div role="tabpanel" class="tab-pane active" id="home">
+                <div id="form" class="col-md-10 col-md-offset-1">
+                    <!-- form -->
+                </div>
+            </div>
+            <div role="tabpanel" class="tab-pane" id="field-values">
+                <div class="col-md-10 col-md-offset-1">
+                </div>
+            </div>
         </div>
+
     </div>
 
     <div class="row" data-setting="field">

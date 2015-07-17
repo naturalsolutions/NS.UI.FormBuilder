@@ -200,23 +200,26 @@
         color      : #575656;
     }
 
-    input[type="number"], input[type="text"], select, textarea {
-        .exo;
-        background : @settingViewInputBackgroundColor;
-        color      : white;
-        border     : none;
-        font-size  : 18px;
-        line-height: 25px;
-        height     : 40px;
-        font-weight: 100;
-        &:active, &:hover, &:focus {
-            box-shadow: none !important;
-        }
-    }
+    .form-group {
 
-    textarea {
-        resize: none;
-        height: 80px;
+        input[type="number"], input[type="text"], select, textarea {
+            .exo;
+            background: @settingViewInputBackgroundColor;
+            color: white;
+            border: none;
+            font-size: 18px;
+            line-height: 25px;
+            height: 40px;
+            font-weight: 100;
+            &:active, &:hover, &:focus {
+                box-shadow: none !important;
+            }
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+        }
     }
 
     #fieldRequire {
@@ -320,9 +323,52 @@
     }
 
     #form {
+        padding-left : 0;
+        padding-right: 0;
+
         p[data-error] {
             .exo;
             font-size: 18px;
+        }
+    }
+
+    .setting-tabs {
+
+        display: none;
+
+        border-bottom: none;
+
+        li {
+
+            width: 50%;
+            border-bottom: 3px solid rgb(65, 64, 66);
+
+            &.active {
+                border-bottom  : 3px #aaa solid;
+                a {
+                    color          : white;
+                    padding-bottom : 4px;
+                    margin-bottom  : 6px;
+                }
+            }
+
+            &:not(.active) {
+                &:hover {
+                    color : #eee;
+                }
+            }
+
+            a {
+                .exo;
+                color           : #575656;
+                background-color: transparent;
+                border          : none;
+                padding-left    : 0;
+                font-size: 18px;
+                text-align: left;
+                font-weight: 500;
+            }
+
         }
     }
 
@@ -409,12 +455,21 @@
 .table-grid {
 
     table {
-        width: 100%;
-        margin-top: 5px;
+        width     : 100%;
+        margin-top: 15px;
+
         thead {
             tr {
                 th {
                     padding-right: 3px;
+                    &:first-child {
+                        &:after {
+                            .reneco;
+                            content : "\e63f";
+                            color : white;
+                            font-size: 19px;
+                        }
+                    }
                     a {
                         color : white;
                         font-size: 19px;
@@ -431,13 +486,65 @@
         tbody {
             tr {
 
+                border-bottom: 1px #555 solid;
+
                 td:last-child {
                     text-align: center;
+                    &:after {
+                        .reneco;
+                        content  : "\e681";
+                        color    : #575656;
+                        font-size: 17px;
+                    }
+                    &:hover {
+                        a:after {
+                            color : white;
+                        }
+                    }
                 }
                 td {
                     .exo;
                     color : #575656;
-                    font-size: 17px;
+                    font-size: 15px;
+
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+
+                    textarea:hover,
+                    input:hover,
+                    textarea:active,
+                    input:active,
+                    textarea:focus,
+                    input:focus,
+                    button:focus,
+                    button:active,
+                    button:hover
+                    {
+                        outline:0px !important;
+                        -webkit-appearance:none;
+                    }
+
+                    input[type="text"] {
+                        background       : black;
+                        outline          : none !important;
+                        box-shadow       : none !important;
+                        border           : 2px solid rgb(56, 64, 66) !important;
+                        border-radius    : 4px;
+                        width            : auto !important;
+                        height           : auto !important;
+                        font-size        : 15px;
+                        padding-top      : 7px;
+                        padding-bottom   : 7px;
+                        padding-left     : 10px;
+                        color            : white;
+
+                        &:focus, &:blur, &:active {
+                            outline      : none !important;
+                            box-shadow   : none !important;
+                            border       : 2px solid rgb(56, 64, 66) !important;
+                        }
+
+                    }
 
                     input[type="checkbox"] {
                         visibility: hidden;

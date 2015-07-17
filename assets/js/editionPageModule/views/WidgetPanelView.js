@@ -153,7 +153,6 @@ define([
             $('.fields').disableSelection();
 
             this.initAccordion();
-            console.log ("ici")
         }
 
     });

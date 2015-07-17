@@ -1,37 +1,6 @@
 <div>
     <div id="enumGrid" class="table-grid">
-        <table>
-            <thead>
-                <tr>
-                    <% _.each(columns, function(el, idx) { %>
-                        <th>
-                            <a href="">
-                                <%= el %>
-                            </a>
-                        </th>
-                    <% }); %>
-                </tr>
-            </thead>
-            <tbody>
-                <% _.each(collection, function(el, idx) { %>
-                    <tr>
-                        <% _.each(columns, function(column, columnIndex) { %>
-                            <% if (typeof el[column] == "boolean") { %>
-                                <td>
-                                    <% if (el[column]) { %>
-                                    <span class="reneco reneco-checkbox_on"></span>
-                                    <% } else { %>
-                                    <span class="reneco reneco-checkbox_off"></span>
-                                    <% } %>
-                                </td>
-                                <% } else { %>
-                                    <td><%= el[column] %></td>
-                            <% } %>
-                        <% }); %>
-                    </tr>
-                <% }); %>
-            </tbody>
-        </table>
+
     </div>
     <button type="button" class="reneco red" id="addChoice">
         <label>
