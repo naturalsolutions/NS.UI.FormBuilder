@@ -196,13 +196,7 @@ define([
         */
         closeSettingPanel : function() {
             if ($('#widgetPanel').hasClass('col-md-1')) {
-                $('#formPanel').switchClass('col-md-7 col-md-pull-1', 'col-md-8', 500);
-                $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 500, _.bind(function() {
-                    this.clearFormSettingView();
-                }, this));
-
-                $('#widgetPanel #features').fadeIn(200);
-                $('#toggle span').switchClass('closed', 'open');
+                $('#formPanel').switchClass('col-md-7 col-md-pull-1', 'col-md-11', 500);
             } else {
                 $('#formPanel').switchClass('col-md-7', 'col-md-8', 500);
                 $('#widgetPanel').animate({
