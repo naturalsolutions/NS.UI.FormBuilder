@@ -142,9 +142,11 @@ define([
             // run i18nnext translation in the view context
             this.$el.i18n();
 
-            //  Add scrollbar
+            //  Add scroll bar
             this.$el.find('.scroll').slimScroll({
-                height : '90%'
+                height       : '88%',
+                railVisible  : true,
+                alwaysVisible: true
             });
 
             //  Disable selection on field element
