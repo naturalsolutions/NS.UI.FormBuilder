@@ -85,8 +85,6 @@ define([
 
                 this.form = null;
             }, this), 300);
-            //  My prefered music for developpement
-            //  https://www.youtube.com/watch?v=YKhNbKplIYA
         },
 
         /**
@@ -94,10 +92,26 @@ define([
         */
         onRender : function() {
             this.$el.i18n();
-            this.$el.find('.scroll').slimScroll({
-                height : '100%'
-            });
+            //this.$el.find('.scroll').slimScroll({
+            //    height : '100%'
+            //});
+
             this.generateForm(this.formToEdit);
+
+        },
+
+        initScrollBar : function() {
+            this.$el.find('.scroll').slimScroll({
+                height        : '80%',
+                railVisible   : true,
+                alwaysVisible : true,
+                railColor     : "#111",
+                disableFadeOut: true
+            });
+            this.$el.find('.scroll').slimScroll({scrollTo: "0px"});
+            setTimeout(_.bind(function(){
+                this.$el.find('.scroll').scrollTop(0);
+            }, this), 100);
         },
 
         /**
@@ -184,6 +198,8 @@ define([
 
                 this.$el.find('#form').append(this.form.el)
                 this.$el.find('#getField').hide();
+
+                this.initScrollBar();
 
                 this.mainChannel.trigger('formCreated');
 

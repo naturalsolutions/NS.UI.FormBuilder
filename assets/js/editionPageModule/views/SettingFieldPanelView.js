@@ -250,6 +250,8 @@ define([
                      this.setMultipleFieldConfiguration();
                  }
 
+                this.initScrollBar();
+
             }, this));
         },
 
@@ -330,10 +332,21 @@ define([
         */
         onRender : function(options) {
             this.$el.i18n();
-            this.$el.find('.scroll').slimScroll({
-                height : '80%'
-            });
             this.initForm();
+        },
+
+        initScrollBar : function() {
+            this.$el.find('.scroll').slimScroll({
+                height        : '80%',
+                railVisible   : true,
+                alwaysVisible : true,
+                railColor     : "#111",
+                disableFadeOut: true
+            });
+            this.$el.find('.scroll').slimScroll({scrollTo: "0px"});
+            setTimeout(_.bind(function(){
+                this.$el.find('.scroll').scrollTop(0);
+            }, this), 100);
         },
 
         /**

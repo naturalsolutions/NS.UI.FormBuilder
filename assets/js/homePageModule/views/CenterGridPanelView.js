@@ -376,8 +376,10 @@ define([
                     this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );;
 
                     $("#scrollSection").slimScroll({
-                        height : this.scrollSize,
-                        color: '#111'
+                        height       : this.scrollSize,
+                        color        : '#111',
+                        railVisible  : true,
+                        alwaysVisible: true
                     });
 
                     //  Clone table
