@@ -114,7 +114,7 @@ define([
             this.formChannel.on('exportFinished',   this.displayExportMessage, this);
 
             //  Disable footer actions when user wants to edit a field
-            this.formChannel.on('editModel',   this.disableFooterActionsAndExit, this);
+            this.formChannel.on('editModel',   this.disableFooterAndClearField, this);
 
             //  Event send by fieldCollection when the update is done
             this.formChannel.on('collectionUpdateFinished', this.collectionUpdateFinished, this);
@@ -455,6 +455,26 @@ define([
          */
         disableFooterActions : function() {
             this.$el.find('footer button:not(#exit)').hide();
+        },
+
+        /**
+         * Disable current selected field
+         */
+        clearSelectedFied : function(modelToKeepSelect) {
+            var modelToKeepSelectedID = '#dropField' + modelToKeepSelect;
+
+            //this.$el.find('.dropField').not(modelToKeepSelectedID).css('background', 'red');
+
+            this.$el.find('.dropField').not(modelToKeepSelectedID).find('.element').removeClass('selected');
+            this.$el.find('.dropField').not(modelToKeepSelectedID).find('.actions').removeClass('locked');
+        },
+
+        /**
+         *
+         */
+        disableFooterAndClearField : function(modelToEditID) {
+            this.disableFooterActionsAndExit();
+            this.clearSelectedFied(modelToEditID);
         },
 
         /**
