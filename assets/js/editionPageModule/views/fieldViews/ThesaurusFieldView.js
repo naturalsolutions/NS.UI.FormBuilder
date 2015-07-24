@@ -21,12 +21,17 @@ define([
             BaseView.prototype.initialize.apply(this, [opt]);
 
             this.initGlobalChannel();
+            this.initConfigChannel();
         },
 
         initGlobalChannel : function() {
             this.globalChannel = Backbone.Radio.channel('global');
 
             this.globalChannel.on('nodeSelected' + this.model.get('id'), this.updateTreeView, this);
+        },
+
+        initConfigChannel : function() {
+            this.configChannel = Backbone.Radio.channel('config');
         },
 
         updateTreeView : function(data) {
@@ -43,21 +48,31 @@ define([
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
-            require(['jquery-ui', 'fancytree'], _.bind(function() {
-                $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
 
-                    $('#thesaurus' + this.model.get('id')).fancytree({
-                        source: data['d'],
-                        checkbox : false,
-                        selectMode : 2,
-                        activeNode : 85265
+            this.configChannel.on('get:startID', _.bind(function(startID) {
+
+                require(['jquery-ui', 'fancytree'], _.bind(function() {
+                    $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
+
+                        console.log( data.d );
+                        console.log ("startID : ", startID)
+
+                        $('#thesaurus' + this.model.get('id')).fancytree({
+                            source     : data['d'],
+                            checkbox   : false,
+                            selectMode : 2,
+                            activeNode :startID
+                        });
+
+                    }, this)).error(function(a,b , c) {
+                        alert ("can't load ressources !");
                     });
 
-                }, this)).error(function(a,b , c) {
-                    alert ("can't load ressources !");
-                });
+                }, this));
 
             }, this));
+
+            this.configChannel.trigger('get', 'startID');
         }
     });
 
