@@ -84,6 +84,7 @@ define([
             //  Enable autocomplete for form name search
             $.getJSON(this.URLOptions.formAutocomplete, _.bind(function(data) {
                 this.$el.find('#name').autocomplete({
+                    minLength: 2,
                     source : data.options,
                     appendTo : '#leftPanel form #name-group',
                     open : _.bind(function(event, ui) {
@@ -95,6 +96,7 @@ define([
 
             $.getJSON(this.URLOptions.keywordAutocomplete, _.bind(function(data) {
                 this.$el.find('#keywords').autocomplete({
+                    minLength: 2,
                     source : data.options,
                     appendTo : '#leftPanel form #keywords-group',
                     open : _.bind(function(event, ui) {
@@ -106,6 +108,7 @@ define([
 
             $.getJSON(this.URLOptions.usersAutocomplete, _.bind(function(data) {
                 this.$el.find('#user').autocomplete({
+                    minLength: 2,
                     source : data.options,
                     appendTo : '#leftPanel form #user-group',
                     open : _.bind(function(event, ui) {
