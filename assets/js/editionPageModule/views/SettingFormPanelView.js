@@ -7,8 +7,7 @@ define([
     'jquery-ui',
         'i18n',
     'bootstrap-select',
-    'slimScroll',
-    //'fuelux'
+    'slimScroll'
 ], function($, Marionette, SettingFormPanelViewTemplate, Radio, Translater) {
 
     /**

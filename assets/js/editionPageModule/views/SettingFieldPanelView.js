@@ -117,7 +117,7 @@ define([
         */
         initForm : function() {
             this.currentFieldType  = this.modelToEdit.constructor.type;
-            this.fieldWithSameType = this.preConfiguredFieldList[this.curérentFieldType];
+            this.fieldWithSameType = this.preConfiguredFieldList[this.currentFieldType];
 
             if (this.fieldWithSameType == undefined) {
                 this.$el.find('*[data-setting="field"]').first().hide();

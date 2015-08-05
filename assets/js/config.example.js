@@ -26,7 +26,6 @@ require.config({
         bootstrapTemplate                   : "../../libs/backbone-forms/distribution/templates/bootstrap3",
         bootstrapAdapter                    : "../../libs/bootstrapAdapter/index",
         "backbone.radio"                    : "../../libs/backbone.radio/build/backbone.radio",
-        fuelux                              : "../../libs/fuelux/dist/js/fuelux",
         autocompleteTreeView                : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider"              : "../../libs/jquery-simple-slider/js/simple-slider",
         "bootstrap-select"                  : "../../libs/bootstrap-select/dist/js/bootstrap-select",
@@ -35,10 +34,17 @@ require.config({
         backgrid                            : '../../libs/backgrid/lib/backgrid',
         moment                              : '../../libs/moment/moment',
         slimScroll                          : '../../libs/slimScroll/jquery.slimscroll.min',
-        "eonasdan-bootstrap-datetimepicker" : "../../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min"
+        "eonasdan-bootstrap-datetimepicker" : "../../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min",
+        async                               : '../../libs/requirejs-plugins/src/async',
+        'pillbox-editor' 					: "../../libs/pillbox-editor/dist/pillbox-editor.amd",
+        'pillbox' 							: '../../libs/jquery.pillbox.js/js/jquery.pillbox',
+        'jcanvas' 							: '../../libs/jcanvas/jcanvas.min'
     },
 
     shim: {
+        "backbone-forms-list" : {
+            deps : ["modalAdapter"]
+        },
         blobjs: {
             exports: "Blob"
         },
@@ -139,6 +145,18 @@ require.config({
         'backgrid': {
             deps: ['jquery', 'underscore', 'backbone'],
             exports: 'Backgrid'
+        },
+        'pillbox' : {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
+        },
+        jcanvas: {
+            exports: "$",
+            deps: [
+                "jquery"
+            ]
         }
     }
 });
@@ -152,42 +170,45 @@ require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbui
 
         URLOptions : {
             //  Allow to get some topic for autocomplete functionnalities
-            autocompleteURL       : 'ressources/autocomplete/',
+            autocompleteURL       	: 'ressources/autocomplete/',
 
             //  Allows to get translation ressources (use i18nnext : http://i18next.com/ )
-            translationURL        : 'ressources/locales/__lng__/__ns__.json',
+            translationURL        	: 'ressources/locales/__lng__/__ns__.json',
 
             //  Get form keywords autocomplete values
-            keywordAutocomplete   : 'ressources/autocomplete/keywords.json',
+            keywordAutocomplete   	: 'ressources/autocomplete/keywords.json',
 
-            formAutocomplete : 'ressources/autocomplete/forms.json',
+            formAutocomplete 		: 'ressources/autocomplete/forms.json',
 
-            forms : 'ressources/forms/formsExample.json',
+			forms 					: 'ressources/forms/formsExample.json',
 
-            usersAutocomplete : 'ressources/autocomplete/users.json',
+            usersAutocomplete 		: 'ressources/autocomplete/users.json',
 
             //  Get all form name for autocomplete
             //  Not works if you are in client side mode only
-            formSaveURL  : '/form',
+            formSaveURL  			:'/forms',
 
             //  Get all unities for autocomplete
-            unitURL               : 'ressources/autocomplete/units.json',
+            unitURL             	: 'ressources/autocomplete/units.json',
 
             //  Returns all pre-configurated field
             //  A configurated field is a field saved by use for a future use
             //  For example user create a firstName field because it will be present in many forms
-            preConfiguredField    : 'ressources/fieldConfiguration/preConfiguredField.json',
+            preConfiguredField    	: 'ressources/fieldConfiguration/preConfiguredField.json',
 
             //  Allow to send a pre-configurated field to the server
             //  Send a POST request, so in client side it won't work, you need to install the back-end : https://github.com/NaturalSolutions/NS.Server.FormBuilder
-            fieldConfigurationURL : 'configurationSaved',
+            fieldConfigurationURL 	: 'configurationSaved',
 
             //  Allow to get linked fields list
-            linkedFields : 'ressources/linkedFields/linkedFields.json'
-        },
+            linkedFields 			: 'ressources/linkedFields/linkedFields.json',
 
+            //  URL for form templates
+            templateUrl 			: 'ressources/templates/templates.json'
+        },
+		
         //  Wich parent HTML element for the application
-        el : '#formBuilder'
+        el 						: '#formBuilder'
     };
 
     formbuilder.start(options);
