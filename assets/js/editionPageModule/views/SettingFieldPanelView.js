@@ -34,6 +34,7 @@ define([
             'click #saveChange'           : 'saveChange',
             'click #saveButton'           : 'saveField',
             'change .checkboxField input' : 'checkboxChange',
+            'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
                 e.preventDefault();
                 $(this).tab('show');
@@ -66,6 +67,8 @@ define([
             this.fieldWithSameType  = null;
 
             this.subSettingView = null;
+
+            this.hasFieldsChanged = false;
 
             //  Init backbone radio channel
             this.initFormChannel();
@@ -376,8 +379,28 @@ define([
         * Send an event on form channel when user wants to clear current form
         */
         cancel : function(){
-            this.removeForm();
-            this.mainChannel.trigger('formCancel');
+
+            var self = this;
+            var cancelSettingPanel = function(){
+                self.removeForm();
+                self.mainChannel.trigger('formCancel');
+            };
+
+            if (this.hasFieldsChanged){
+                swal({
+                    title: translater.getValueFromKey('configuration.cancel.yousure') || "Vraiment ?",
+                    text: translater.getValueFromKey('configuration.cancel.unsavedchanges') || "Vous avez effectué de changements !",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
+                    cancelButtonText: translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
+                    closeOnConfirm: false }, function(){cancelSettingPanel();
+                    $(".sweet-alert").find("button").trigger("click");});
+            }
+            else {
+                cancelSettingPanel();
+            }
         },
 
 
@@ -430,13 +453,20 @@ define([
             }
         },
 
-
         /**
         * Change a checkbox state
         */
         checkboxChange : function(e) {
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
         },
+
+        /**
+         * Remember field value has changed
+         */
+        formControlChange : function(e) {
+            this.hasFieldsChanged = true;
+        },
+
 
         /**
          * Display success message when field has been saved as pre configurated field

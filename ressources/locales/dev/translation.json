@@ -354,6 +354,12 @@
       "successMsg" : "Your field has been saved",
       "fail"       : "Fail !",
       "failMsg"    : "Your couldn't be saved"
+    },
+    "cancel" : {
+      "yousure" : "Really ?",
+      "unsavedchanges" : "You've made changes!",
+      "yescancel" : "Yes, cancel!",
+      "stay" : "No, continue."
     }
   },
 

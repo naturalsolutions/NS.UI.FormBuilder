@@ -350,6 +350,12 @@
         "successMsg" : "Votre champs a bien été sauvgeardé",
         "fail"       : "Echec !",
         "failMsg"    : "Votre champs n'a pas pu être sauvegardé"
+      },
+      "cancel" : {
+        "yousure" : "Vraiment ?",
+        "unsavedchanges" : "Vous avez effectué de changements !",
+        "yescancel" : "Oui, quitter !",
+        "stay" : "No, continue."
       }
     },
 

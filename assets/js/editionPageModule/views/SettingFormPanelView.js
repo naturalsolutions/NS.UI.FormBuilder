@@ -27,6 +27,7 @@ define([
             'click #cancel'               : 'cancel',
             'click #saveChange'           : 'saveChange',
             'change .checkboxField input' : 'checkboxChange',
+            'change .form-control'        : 'formControlChange',
             'click #saveTemplate'         : 'saveTemplate'
         },
 
@@ -44,6 +45,8 @@ define([
             this.URLOptions = options.URLOptions;
             this.formToEdit = options.formToEdit;
             this.form       = null;
+
+            this.hasFieldsChanged = false;
 
             // I don't know why but i have to specify a model otherwise i've an error on serializeModel callback
             // It's weird bacause i havn't to do this in SettingFieldPanelView
@@ -117,8 +120,28 @@ define([
         * Send an event on form channel when user wants to clear current form
         */
         cancel : function(){
-            this.removeForm();
-            this.mainChannel.trigger('formCancel')
+
+            var self = this;
+            var cancelSettingPanel = function(){
+                self.removeForm();
+                self.mainChannel.trigger('formCancel');
+            };
+
+            if (this.hasFieldsChanged){
+                swal({
+                    title: this.translater.getValueFromKey('configuration.cancel.yousure') || "Vraiment ?",
+                    text: this.translater.getValueFromKey('configuration.cancel.unsavedchanges') || "Vous avez effectué de changements !",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#DD6B55",
+                    confirmButtonText: this.translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
+                    cancelButtonText: this.translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
+                    closeOnConfirm: false }, function(){cancelSettingPanel();
+                    $(".sweet-alert").find("button").trigger("click");});
+            }
+            else {
+                cancelSettingPanel();
+            }
         },
 
 
@@ -155,6 +178,12 @@ define([
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
         },
 
+        /**
+         * Remember form value has changed
+         */
+        formControlChange : function(e) {
+            this.hasFieldsChanged = true;
+        },
 
         /**
         * Generate form for edit main form object properties
