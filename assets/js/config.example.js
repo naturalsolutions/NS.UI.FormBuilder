@@ -29,7 +29,7 @@ require.config({
         autocompleteTreeView                : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider"              : "../../libs/jquery-simple-slider/js/simple-slider",
         "bootstrap-select"                  : "../../libs/bootstrap-select/dist/js/bootstrap-select",
-        sweetalert                          : "../../libs/sweetalert/lib/sweet-alert",
+        sweetalert                          : "../../libs/sweetalert/dist/sweetalert.min",
         marionette                          : '../../libs/marionette/lib/backbone.marionette.min',
         backgrid                            : '../../libs/backgrid/lib/backgrid',
         moment                              : '../../libs/moment/moment',
