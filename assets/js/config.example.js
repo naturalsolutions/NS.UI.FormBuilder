@@ -22,7 +22,7 @@ require.config({
         requirejs                           : "../../libs/requirejs/require",
         "backbone-forms"                    : "../../libs/backbone-forms/distribution.amd/backbone-forms",
         modalAdapter                        : "../../libs/bootstrapAdapter/src/backbone.bootstrap-modal",
-        "backbone-forms-list"               : "../../libs/backbone-forms/distribution.amd/editors/list.min",
+        "backbone-forms-list"               : "../../libs/backbone-forms/distribution.amd/editors/list",
         bootstrapTemplate                   : "../../libs/backbone-forms/distribution/templates/bootstrap3",
         bootstrapAdapter                    : "../../libs/bootstrapAdapter/index",
         "backbone.radio"                    : "../../libs/backbone.radio/build/backbone.radio",
