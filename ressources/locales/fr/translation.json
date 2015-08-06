@@ -114,8 +114,17 @@
         "default"           : "Valeur par défaut",
         "url"               : "Adresse du service web",
         "help"              : "Texte d'aide",
-        "size"              : "Taille maximale",
+        "size"              : "Champ des tailles",
+        "maximalSize"       : "Taille maximale",
         "minimalSize"       : "Taille minimale",
+        "sizes" : {
+            "string" : {
+                "defaultsize" : "From 0 to 255"
+            },
+            "numeric" : {
+                "defaultsize" : "From 0 to 255"
+            }
+        },
         "file"              : "Fichier par défaut",
         "mime"              : "Type de fichier autorisé",
         "title"             : "Intitulé",

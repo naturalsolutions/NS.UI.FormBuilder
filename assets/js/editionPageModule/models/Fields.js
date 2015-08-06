@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor'
-], function($, _, Backbone, Translater, CheckboxEditor) {
+    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config'
+], function($, _, Backbone, Translater, CheckboxEditor, AppConfig) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -330,8 +330,7 @@ define([
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : translater.getValueFromKey('placeholder.text'),
-                size         : 255,
-                minimzlSize  : 0,
+                size         : '',
                 multiline    : false
             });
         },
@@ -356,44 +355,12 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.help')
                     }
                 },
-                minimalSize : {
-                    type        : 'Number',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.minimalSize'),
-                    validators : [function checkValue(value, formValues) {
-                        if (value < 0 || value > 255) {
-                            return {
-                                type : 'Invalid number',
-                                message : "La taille doit être comprise en 0 et 255"
-                            }
-                        } else if (value >= formValues['size']) {
-                            return {
-                                type : 'Invalid number',
-                                message : translater.getValueFromKey('form.minimal') || "La taille minimale doit être inférieur à la taille maximale"
-                            }
-                        }
-                    }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.minimalSize')
-                    }
-                },
                 size: {
-                    type        : 'Number',
+                    type        : 'Select',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.size'),
-                    validators : [function checkValue(value, formValues) {
-                        if (value < 0 || value > 255) {
-                            return {
-                                type : 'Invalid number',
-                                message : "La taille doit être comprise en 0 et 255"
-                            }
-                        }
-                    }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.size')
-                    }
+                    options     : AppConfig.sizes.getStringSizes()
                 }
             })
         },

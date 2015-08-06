@@ -9,13 +9,12 @@
 
 
 define([
-
-], function() {
+    'jquery', 'underscore', 'backbone', 'Translater'
+], function($, _, Backbone, Translater) {
 
     var AppConfiguration = {
 
         rules : [
-
             {
                 error : {
                     'title' : 'Form size exceeded',
@@ -30,15 +29,54 @@ define([
                     return form.length < 5;
                 }
             }
-
         ],
 
         config : {
-
             //  Thesaurus startID
             startID : 85263
-        }
+        },
 
+        sizes : {
+
+            getStringSizes : function(){
+                //var translater = Translater.getTranslater();
+                var toret = [];
+                _.each(this.strings, function(range, label){
+                    if (range.indexOf(";") >= 0){
+                        toret.push({"val" : range, "label" : range.replace(";", " - ")});//[translater.getValueFromKey('schema.sizes.string.'+label)]});
+                    }
+                })
+                return (toret);
+            },
+            strings : {
+                MINIMUM : "0",
+                MAXIMUM : "255",
+                defaultsize : "0;255",
+                fromminto10 : "0;10",
+                fromminto20 : "0;20",
+                fromminto50 : "0;50",
+                fromminto100 : "0;100"
+            },
+
+            getNumericSizes : function(){
+                var translater = Translater.getTranslater();
+                var toret = [];
+                _.each(this.numerics, function(label, range){
+                    if (range.contains(";")){
+                        toret.push({"val" : range, "label" : [translater.getValueFromKey('schema.sizes.numeric.'+label)]});
+                    }
+                })
+                return (toret);
+            },
+            numerics : {
+                MINIMUM : "0",
+                MAXIMUMINT : "2147483647",
+                defaultsize : "0;2147483647",
+                fromminto50 : "0;50",
+                fromminto100 : "0;100",
+                fromminto365 : "0;365"
+            }
+        }
     };
 
     return AppConfiguration;
