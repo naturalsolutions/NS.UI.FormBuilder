@@ -299,7 +299,6 @@ define([
          * @param ifFieldIsInFieldset   if field in under a fieldset
          */
         addField : function(field, ifFieldIsInFieldset) {
-
             if (this.isAValidFieldType(field.constructor.type)) {
                 //  Update field
                 field.set('isUnderFieldset', ifFieldIsInFieldset === true);
@@ -332,9 +331,7 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addElement: function (nameType, properties, isUnderFieldset) {
-
             var field = properties || {};
-
             //  We check if the field name is the default name or not (if a form was imported the name can be different but can't be modified)
             field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();

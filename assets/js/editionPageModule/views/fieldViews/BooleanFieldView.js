@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-    'text!editionPageModule/templates/fields/BooleanFieldView.html'
-], function($, _, Backbone, BaseView, viewTemplate) {
+    'text!editionPageModule/templates/fields/BooleanFieldView.html',
+    'text!editionPageModule/templates/fields/readonly/BooleanFieldView.html'
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var BooleanFieldView = BaseView.extend({
         events: function() {
@@ -13,9 +14,11 @@ define([
             });
         },
 
-        initialize : function(options) {
+        initialize : function(options, readonly) {
             var opt = options;
             opt.template = viewTemplate;
+            if (readonly)
+                opt.template = viewTemplateRO;
 
             BaseView.prototype.initialize.apply(this, [opt]);
         },

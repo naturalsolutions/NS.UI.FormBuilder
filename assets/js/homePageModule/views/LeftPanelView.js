@@ -1,6 +1,6 @@
 define([
-    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
-], function($, Marionette, LeftPanelViewTemplate) {
+    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewRO.html', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
+], function($, Marionette, LeftPanelViewTemplate, LeftPanelViewTemplateRO) {
 
     /**
      * Left panel view in the homepage layout, contains form to filter grid on the center view
@@ -24,7 +24,9 @@ define([
         /**
          * View constructor, init grid channel
          */
-        initialize : function(options) {
+        initialize : function(options, readonly) {
+            if (readonly)
+                this.template = LeftPanelViewTemplateRO;
             this.initGridChannel();
             this.URLOptions = options.URLOptions;
         },

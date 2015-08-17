@@ -71,7 +71,9 @@
             "save"   : "SAVE",
             "clear"  : "CLEAR ALL",
             "find"   : "FIND",
-            "add"    : "ADD"
+            "add"    : "ADD",
+            "viewdetails" : "VIEW DETAILS",
+            "edit"   : "EDIT"
         }
     },
 

@@ -30,11 +30,10 @@ define([
             //  Create and render item views
             this.leftPanel.show( new LeftPanelView({
                 URLOptions : this.URLOptions
-            }) );
-
+            }, Backbone.Radio.channel('global').readonly));
             this.centerPanel.show( new CenterGridPanelView({
                 URLOptions : this.URLOptions
-            }));
+            }, Backbone.Radio.channel('global').readonly));
         },
 
         /**

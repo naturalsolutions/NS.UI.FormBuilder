@@ -3,6 +3,7 @@ define([
     'underscore',
     'marionette',
     'text!../templates/CenterGridPanelView.html',
+    'text!../templates/CenterGridPanelViewRO.html',
     'backgrid',
     '../../Translater',
     '../collection/FormCollection',
@@ -10,7 +11,7 @@ define([
     'backbone.radio',
     'sweetalert',
     'slimScroll'
-    ], function($, _, Marionette, CenterGridPanelViewTemplate, Backgrid, Translater, FormCollection, FormModel, Radio, swal) {
+    ], function($, _, Marionette, CenterGridPanelViewTemplate, CenterGridPanelViewTemplateRO, Backgrid, Translater, FormCollection, FormModel, Radio, swal) {
 
     var translater = Translater.getTranslater();
 
@@ -46,7 +47,9 @@ define([
          *
          * @param  {object} options some options not used here
          */
-        initialize : function(options) {
+        initialize : function(options, readonly) {
+            if (readonly)
+                this.template = CenterGridPanelViewTemplateRO;
             _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm')
 
             this.URLOptions = options.URLOptions;
@@ -185,9 +188,13 @@ define([
                         + '</label>\
                         <div class="pull-right">\
                             <button class="reneco grey editForm">\
-                                <label>\
-                                    <span data-i18n="form.actions.edit">EDITER</span>\
-                                </label>\
+                                <label>'
+                        +
+                            (this.globalChannel.readonly ?
+                                '<span data-i18n="form.actions.viewdetails">VOIR DETAILS</span>' :
+                                '<span data-i18n="form.actions.edit">EDITER</span>')
+                        +
+                                '</label>\
                                 <label>\
                                     <span class="reneco reneco-edit"></span>\
                                 </label>\

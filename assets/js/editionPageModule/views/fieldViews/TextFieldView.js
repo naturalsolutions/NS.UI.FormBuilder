@@ -3,8 +3,9 @@ define([
     'underscore',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-    'text!editionPageModule/templates/fields/TextFieldView.html'
-], function($, _, Backbone, BaseView, viewTemplate) {
+    'text!editionPageModule/templates/fields/TextFieldView.html',
+    'text!editionPageModule/templates/fields/readonly/TextFieldView.html'
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var TextFieldView = BaseView.extend({
 
@@ -17,9 +18,11 @@ define([
             });
         },
 
-        initialize : function(options) {
+        initialize : function(options, readonly) {
             var opt = options;
             opt.template = viewTemplate;
+            if (readonly)
+                opt.template = viewTemplateRO
             BaseView.prototype.initialize.apply(this, [opt]);
         },
 

@@ -154,11 +154,12 @@ define([
         onRender : function() {
             this.centerPanel.show( new FormPanelView({
                 fieldCollection : this.fieldCollection
-            }));
+            }, Backbone.Radio.channel('global').readonly));
 
-            this.leftPanel.show( new WidgetPanelView({
+            if (!Backbone.Radio.channel('global').readonly)
+                this.leftPanel.show( new WidgetPanelView({
 
-            }));
+                }));
         },
 
         onDestroy : function() {

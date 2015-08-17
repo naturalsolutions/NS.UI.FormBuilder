@@ -1,0 +1,16 @@
+<div class="element padding5">
+    <div class="row paddingBottom5">
+        <label class="field-icon pull-left">
+            <i class="reneco reneco-text"></i>
+        </label>
+        <label class="field-label">
+            <%= labelFr %><% if (required === true) { %> (*) <% } %>
+            <span data-i18n="fields.text" class="fieldType"></span>
+        </label>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col11centered">
+            <input type="text" class="form-control" name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
+        </div>
+    </div>
+</div>

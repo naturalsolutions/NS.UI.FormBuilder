@@ -4,8 +4,9 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/autocompleteView.html',
+    'text!editionPageModule/templates/fields/readonly/autocompleteView.html',
     'jquery-ui'
-], function($, _, Backbone, BaseView, autocompleteTemplate) {
+], function($, _, Backbone, BaseView, autocompleteTemplate, autocompleteTemplateRO) {
 
     var AutocompleteFieldView = BaseView.extend({
 
@@ -18,9 +19,11 @@ define([
             });
         },
 
-        initialize : function(options) {
+        initialize : function(options, readonly) {
             var opt = options;
             opt.template = autocompleteTemplate;
+            if (readonly)
+                opt.template = autocompleteTemplateRO;
 
             BaseView.prototype.initialize.apply(this, [opt]);
         },

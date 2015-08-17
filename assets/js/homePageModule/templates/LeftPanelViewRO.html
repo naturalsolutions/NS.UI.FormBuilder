@@ -1,0 +1,81 @@
+<div class="row">
+    <h1 class="row">
+        <span class="reneco reneco-search"></span>&nbsp;<span data-i18n="form.find">Rechercher un formulaire</span>
+    </h1>
+
+    <div class="row">
+        <form action="#search" class="col-md-8 col-md-offset-2 form">
+            <h2>Description</h2>
+
+            <div class="form-group" id="name-group">
+                <label for="name" data-i18n="search.name">
+                    Nom
+                </label>
+                <br />
+                <input type="text" name="name" id="name" class="form-control" />
+            </div>
+
+            <br />
+
+            <div class="form-group" id="keywords-group">
+                <label for="keywords" data-i18n="search.keywords">
+                    Mots clés
+                </label>
+                <br />
+                <input type="text" name="keywords" id="keywords" class="form-control" />
+            </div>
+
+            <br>
+
+            <h2>Date</h2>
+
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label for="dateFrom" data-i18n="search.date.from">
+                        DE
+                    </label>
+                    <br>
+                    <input type="text" class="form-control" name="dateFrom" id="dateFrom">
+                </div>
+
+
+
+                <div class="form-group col-md-6">
+                    <label for="dateTo" data-i18n="[html]search.date.to">
+                        &#192;
+                    </label>
+                    <br>
+                    <input type="text" class="form-control" name="dateTo" id="dateTo">
+                </div>
+            </div>
+
+            <h2 data-i18n="search.user">Utilisateur</h2>
+
+            <div class="form-group" id="user-group">
+                <label for="user" data-i18n="search.user">
+                    Utilisateur
+                </label>
+                <br />
+                <input type="text" name="user" id="user" class="form-control" />
+            </div>
+
+        </form>
+    </div>
+
+    <footer class="">
+
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <button class="reneco pull-right red" id="find">
+                    <label>
+                        <span data-i18n="form.actions.find">TROUVER</span>
+                    </label>
+                    <label>
+                        <span class="reneco reneco-search"></span>
+                    </label>
+                </button>
+            </div>
+        </div>
+    </footer>
+
+</div>

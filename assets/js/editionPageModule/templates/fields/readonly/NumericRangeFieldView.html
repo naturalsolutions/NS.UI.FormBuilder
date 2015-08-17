@@ -1,0 +1,21 @@
+<div class="element padding5">
+    <div class="row paddingBottom5">
+        <label class="field-icon pull-left">
+            <i class="reneco reneco-cursor"></i>
+        </label>
+        <label class="field-label">
+            <%= labelFr %><% if (required === true) { %> (*) <% } %>
+            <span data-i18n="fields.numericrange" class="fieldType"></span>
+        </label>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col11centered slider-field">
+            <input  class="col-sm-6" type="range" min="<%= minValue %>" max="<%= maxValue %>"
+                step="<% if(decimal == true) { %>any<% } else { %><%= precision %><% } %>"
+                name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
+            <label class="displayValue">
+                <%= defaultValue %>
+            </label>
+        </div>
+    </div>
+</div>

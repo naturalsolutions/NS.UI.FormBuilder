@@ -1,13 +1,13 @@
 <div class="element padding5">
     <div class="row paddingBottom5">
         <label class="field-icon pull-left">
-            <i class="reneco reneco-calendar"></i>
+            <i class="reneco reneco-hidden"></i>
         </label>
         <label class="field-label">
-            <%= labelFr %><% if (required === true) { %> (*) <% } %>
-            <span data-i18n="fields.date" class="fieldType"></span>
+            <%= title %>
+            <span data-i18n="fields.hidden" class="fieldType"></span>
         </label>
-        <div class="pull-right actions test11">
+        <div class="pull-right actions">
             <span id="trash" class="reneco reneco-trash"></span>
             <span id="duplicate" class="reneco reneco-duplicate"></span>
            <span id="edit" class="reneco reneco-edit"></span>
@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div class="col-md-11 col11centered">
-
+            <input type="text" class="form-control" name="<%= name %>" id="<%= id%>" value="<%= value %>" disabled="disabled" />
         </div>
     </div>
 </div>

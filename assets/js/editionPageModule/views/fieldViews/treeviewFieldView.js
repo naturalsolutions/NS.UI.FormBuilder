@@ -4,8 +4,9 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/treeviewFieldView.html',
+    'text!editionPageModule/templates/fields/readonly/treeviewFieldView.html',
     'jquery-ui', 'fancytree'
-], function($, _, Backbone, BaseView, viewTemplate) {
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var TreeViewFieldView = BaseView.extend({
         events: function() {
@@ -13,10 +14,11 @@ define([
             });
         },
 
-        initialize : function(options) {
+        initialize : function(options, readonly) {
             var opt = options;
             opt.template = viewTemplate;
-
+            if (readonly)
+                opt.template = viewTemplateRO;
             BaseView.prototype.initialize.apply(this, [opt]);
         },
 

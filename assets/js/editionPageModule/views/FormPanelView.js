@@ -2,11 +2,12 @@ define([
     'jquery',
     'marionette',
     'text!editionPageModule/templates/FormPanelView.html',
+    'text!editionPageModule/templates/FormPanelViewRO.html',
     'sweetalert',
     '../../Translater',
     'i18n',
     'slimScroll'    
-], function($, Marionette, FormPanelViewTemplate, swal, Translater) {
+], function($, Marionette, FormPanelViewTemplate, FormPanelViewTemplateRO, swal, Translater) {
 
     var translater = Translater.getTranslater();
     
@@ -46,7 +47,12 @@ define([
          *
          * @param  {object} options configuration options like web service URL for back end connection
          */
-        initialize : function(options) {
+        initialize : function(options, readonly) {
+            if (readonly)
+                this.template = function(){
+                    return _.template(FormPanelViewTemplateRO)({
+                        collection : this.collection.getAttributesValues()
+                    })};
             this.collection     = options.fieldCollection;
             this._view          = {};
             this.URLOptions     = options.URLOptions;
@@ -195,7 +201,7 @@ define([
                         el: '#' + id,
                         model: newModel,
                         collection: this.collection
-                    });
+                    }, Backbone.Radio.channel('global').readonly);
                     if (vue !== null) {
                         vue.render();
                         this._view[id] = vue;
@@ -488,22 +494,26 @@ define([
          * Display a confirm dialog when user wants to exit
          */
         exit : function() {
-            var self = this;
-            swal({
-                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
-                type               : "warning",
-                showCancelButton   : true,
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
-                cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                closeOnConfirm     : true,
-                closeOnCancel      : true
-            }, function(isConfirm) {
-                if (isConfirm) {
-                    self.clearFormAndExit();
-                }
-            });
+            if (!Backbone.Radio.channel('global').readonly){
+                var self = this;
+                swal({
+                    title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                    text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
+                    type               : "warning",
+                    showCancelButton   : true,
+                    confirmButtonColor : "#DD6B55",
+                    confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
+                    cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
+                    closeOnConfirm     : true,
+                    closeOnCancel      : true
+                }, function(isConfirm) {
+                    if (isConfirm) {
+                        self.clearFormAndExit();
+                    }
+                });
+            }
+            else
+                this.clearFormAndExit();
         },
 
         /**

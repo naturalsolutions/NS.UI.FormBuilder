@@ -4,8 +4,9 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/subformFieldView.html',
+    'text!editionPageModule/templates/fields/readonly/subformFieldView.html',
     'backbone.radio'
-], function ($, _, Backbone, BaseView, viewTemplate, Radio) {
+], function ($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio) {
 
     var SubformFieldView = BaseView.extend({
 
@@ -33,10 +34,12 @@ define([
             BaseView.prototype.editModel.apply(this);
         },
 
-        initialize: function (options) {
+        initialize: function (options, readonly) {
             var opt = options;
             opt.template = viewTemplate;
             opt.next     = 'nextFieldSet'
+            if (readonly)
+                opt.template = viewTemplateRO;
 
             BaseView.prototype.initialize.apply(this, [opt]);
 

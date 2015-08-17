@@ -18,7 +18,9 @@ define([
          * Init backbone radio channel for global channel events
          */
         initGlobalChannel : function() {
-            this.globalChannel = Backbone.Radio.channel('global');
+            this.globalChannel =  Backbone.Radio.channel('global');
+
+            this.globalChannel.readonly = true;
         },
 
         initHomePageChannel : function() {

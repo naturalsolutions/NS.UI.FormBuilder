@@ -71,7 +71,9 @@
             "save"   : "SAUVER",
             "clear"  : "TOUT EFFACER",
             "find"   : "TROUVER",
-            "add"    : "AJOUTER"
+            "add"    : "AJOUTER",
+            "viewdetails" : "VOIR DETAILS",
+            "edit"   : "EDITER"
         }
     },
 
