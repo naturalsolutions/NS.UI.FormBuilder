@@ -131,7 +131,6 @@ define([
          */
         initMainChannel : function() {
             this.mainChannel = Backbone.Radio.channel('edition');
-
             this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
 
             //  These events is receive when a user close the setting panel
@@ -146,7 +145,6 @@ define([
          * @param  {Object} collection updated attributes
          */
         updateCollectionAttributes : function(newCollectionAttributes) {
-            console.log('newCollectionAttributes : ', newCollectionAttributes)
             this.enableFooterActions();
             this.collection.updateCollectionAttributes(newCollectionAttributes);
             this.updateName();

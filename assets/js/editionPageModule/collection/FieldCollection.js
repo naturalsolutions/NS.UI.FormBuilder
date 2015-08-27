@@ -9,13 +9,14 @@
 */
 
 define([
+    'jquery',
     'backbone',
     '../models/fields',
     'backbone.radio',
     '../../Translater',
     '../editor/CheckboxEditor',
     'pillbox-editor'
-], function (Backbone, Fields, Radio, Translater,CheckboxEditor, PillboxEditor) {
+], function ($, Backbone, Fields, Radio, Translater,CheckboxEditor, PillboxEditor) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -59,6 +60,16 @@ define([
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.label.fr'),
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                validators  : [{
+                    type : 'required',
+                    message : translater.getValueFromKey('form.validation')
+                }]
+            },
+            labelEn   : {
+                type        : "Text",
+                title       : translater.getValueFromKey('form.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
@@ -257,6 +268,22 @@ define([
          * @return {object} serialized collection data
          */
         getJSON: function () {
+
+            var getBinaryWeight = function(editModeVal) {
+                var toret = editModeVal;
+                if (!$.isNumeric(editModeVal))
+                {
+                    var loop = 1;
+                    toret = 0;
+                    for (var index in editModeVal) {
+                        if(editModeVal[index])
+                            toret += loop;
+                        loop *= 2;
+                    };
+                }
+                return(toret);
+            };
+
             var json         = {
                 //  form properties
                 name          : this.name,
@@ -288,6 +315,9 @@ define([
                     json.schema[model.get('name')] = subModel;
                 }
             }, this));
+
+            $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
+            console.log("yop");
 
             return json;
         },
@@ -573,7 +603,7 @@ define([
                     this.id = data.form.id;
                     this.formChannel.trigger('save:success');
                 }, this),
-                error: _.bind(function() {
+                error: _.bind(function(xhr, ajaxOptions, thrownError) {
                     this.formChannel.trigger('save:fail');
                 }, this)
             });

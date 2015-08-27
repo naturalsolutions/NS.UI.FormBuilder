@@ -636,15 +636,14 @@ define([
 
                                 } else {
                                     swal(
-                                        translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
+                                        translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
                                         translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                         "error"
                                     );
                                 }
                             } catch (e) {
-                                console.log(e)
                                 swal(
-                                    translater.getValueFromKey('modal.import.error') || "Une erreur est survenu !",
+                                    translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
                                     translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                     "error"
                                 );

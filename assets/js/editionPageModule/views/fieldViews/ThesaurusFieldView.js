@@ -56,9 +56,6 @@ define([
                 require(['jquery-ui', 'fancytree'], _.bind(function() {
                     $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
 
-                        console.log( data.d );
-                        console.log ("startID : ", startID)
-
                         $('#thesaurus' + this.model.get('id')).fancytree({
                             source     : data['d'],
                             checkbox   : false,

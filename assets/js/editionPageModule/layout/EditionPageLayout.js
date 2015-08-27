@@ -99,6 +99,7 @@ define([
          * @param  {Object} Model to edit and some options send by editionPageController like pre configurated field and linked fields
          */
         initFieldSetting : function(options) {
+            setTimeout(function() {}, 1000);
             this.settingPanel.show(new SettingFieldPanelView(options));
         },
 

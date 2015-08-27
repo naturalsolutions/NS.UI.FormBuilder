@@ -20,7 +20,7 @@ define([
         initGlobalChannel : function() {
             this.globalChannel =  Backbone.Radio.channel('global');
 
-            this.globalChannel.readonly = true;
+            this.globalChannel.readonly = false;
         },
 
         initHomePageChannel : function() {

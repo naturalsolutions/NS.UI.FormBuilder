@@ -14,6 +14,7 @@
       "validators"                  : [],
       "labelFr"                     : "Label en français",
       "labelEn"                     : "Label en anglais",
+      "editMode"                    : 7,
       "name"                        : "Field1",
       "readonly"                    : false,
       "editorClass"                 : "",
@@ -26,7 +27,7 @@
       "formIdentifyingColumn"       : "",
       "defaultValue"                : "",
       "help"                        : "Write some text",
-      "size"                        : 255,
+      "size"                        : "0;255",
       "type"                        : "Text"
     }
   },

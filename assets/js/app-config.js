@@ -76,6 +76,60 @@ define([
                 fromminto100 : "0;100",
                 fromminto365 : "0;365"
             }
+        },
+        allowedFields : {
+            // Existing types :
+            // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number,
+            // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
+            //
+            // If you want to display all the types, just set anything but an existing mode (for example 'all')
+            currentmode : 'all',
+            demo : [
+                'Autocomplete',
+                'Text',
+                'Date',
+                'TextArea',
+                'Number',
+                'Select',
+                'Subform',
+                'Thesaurus'
+            ],
+            ecoreleve : [
+                'Autocomplete',
+                'Text',
+                'Date',
+                'TextArea',
+                'Number',
+                'Select',
+                'Subform',
+                'Thesaurus'
+            ],
+            ecollection : [
+                'Autocomplete',
+                'Text',
+                'Date',
+                'TextArea',
+                'Number',
+                'Select',
+                'Subform',
+                'Thesaurus'
+            ],
+            track : [
+                'Autocomplete',
+                'Text',
+                'Date',
+                'TextArea',
+                'Number',
+                'Select',
+                'Subform',
+                'Thesaurus'
+            ],
+            minimalist : [
+                'Text',
+                'Date',
+                'TextArea',
+                'Number'
+            ],
         }
     };
 

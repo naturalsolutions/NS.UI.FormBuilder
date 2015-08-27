@@ -6,10 +6,11 @@ define([
     '../../Translater',
     'backbone.radio',
     'sweetalert',
+    'app-config',
     'i18n',
-    'jquery-ui',
+    'jquery-ui'
 
-], function($, Marionette, WidgetPanelViewTemplate, Fields,Translater, Radio, swal) {
+], function($, Marionette, WidgetPanelViewTemplate, Fields,Translater, Radio, swal, AppConfig) {
 
     //  Get singleton Translater object
     var translater = Translater.getTranslater();
@@ -87,8 +88,18 @@ define([
         initSection : function() {
             var section = { standard : {}, other : {} };
 
+            var checkDisplayMode = function(fieldType){
+                console.log((!(AppConfig.allowedFields.hasOwnProperty(AppConfig.allowedFields.currentmode) &&
+                $.inArray(fieldType, AppConfig.allowedFields[AppConfig.allowedFields.currentmode]) == -1)).toString() +
+                " for " + fieldType + " in " + AppConfig.allowedFields[AppConfig.allowedFields.currentmode]);
+                if (AppConfig.allowedFields.hasOwnProperty(AppConfig.allowedFields.currentmode) &&
+                    $.inArray(fieldType, AppConfig.allowedFields[AppConfig.allowedFields.currentmode]) == -1)
+                    return (false);
+                return (true);
+            }
+
             for (var i in Fields) {
-                if (Fields[i].type !== undefined) {
+                if (Fields[i].type !== undefined && checkDisplayMode(Fields[i].type)) {
                     if (Fields[i].section === undefined) {
                         section['other'][i] = {
                             i18n             : i.replace('Field', '').toLowerCase(),

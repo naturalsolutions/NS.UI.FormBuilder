@@ -112,6 +112,13 @@
     "schema" : {
         "required"          : "Requis",
         "readonly"          : "Lecture seule",
+        "editMode"          : {
+            "visible"           : "Visible",
+            "editable"          : "Editable",
+            "nullable"          : "Nullable",
+            "nullmean"          : "Null signifiant",
+            "editMode"          : "Mode d'édition"
+        },
         "value"             : "Valeur",
         "default"           : "Valeur par défaut",
         "url"               : "Adresse du service web",

@@ -22,7 +22,7 @@ define([
             labelFr     : translater.getValueFromKey('schema.label.fr'),
             labelEn     : translater.getValueFromKey('schema.label.en'),
             required    : false,
-            readonly    : false,
+            editMode    : {visible : true, editable : true, nullable : true, nullmean : false},
             isDragged   : false,
             editorClass : '',
             fieldClass  : '',
@@ -68,15 +68,31 @@ define([
                     placeholder : translater.getValueFromKey('placeholder.name')
                 }
             },
-            required : {
-                type        : CheckboxEditor,
-                title       : translater.getValueFromKey('schema.required'),
-                fieldClass : "checkBoxEditor"
-            },
-            readonly : {
-                type        : CheckboxEditor,
-                fieldClass : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.readonly')
+            editMode : {
+                type        : 'Object',
+                subSchema   : {
+                    visible : {
+                        type: CheckboxEditor,
+                        title: translater.getValueFromKey('schema.editMode.visible'),
+                        fieldClass: "checkBoxEditor"
+                    },
+                    editable : {
+                        type: CheckboxEditor,
+                        title: translater.getValueFromKey('schema.editMode.editable'),
+                        fieldClass: "checkBoxEditor"
+                    },
+                    nullable : {
+                        type: CheckboxEditor,
+                        title: translater.getValueFromKey('schema.editMode.nullable'),
+                        fieldClass: "checkBoxEditor"
+                    },
+                    nullmean : {
+                        type: CheckboxEditor,
+                        title: translater.getValueFromKey('schema.editMode.nullmean'),
+                        fieldClass: "checkBoxEditor"
+                    }
+                },
+                title       : translater.getValueFromKey('schema.editMode.editMode')
             },
             editorClass : {
                 type        : "Text",
@@ -168,7 +184,7 @@ define([
          * @returns {object} field as json object
          */
         getJSON : function() {
-
+            console.log("yo");
             var jsonObject                  = {
                 validators : []
             },
@@ -182,10 +198,9 @@ define([
             jsonObject["id"]    = this.get("id");
             jsonObject["order"] = this.get("order");
 
-            if (this.get('required')) {
+            if (this.get('editMode') & 4 != 4) {
                 jsonObject['validators'].push('required');
             }
-
             return _.omit(jsonObject, 'isLinkedField');
         }
 
@@ -330,7 +345,7 @@ define([
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : translater.getValueFromKey('placeholder.text'),
-                size         : '',
+                valuesize    : AppConfig.sizes.strings.defaultsize,
                 multiline    : false
             });
         },
@@ -355,17 +370,18 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.help')
                     }
                 },
-                size: {
+                valuesize: {
                     type        : 'Select',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.size'),
+                    title       : translater.getValueFromKey('schema.valuesize'),
                     options     : AppConfig.sizes.getStringSizes()
                 }
             })
         },
 
         initialize: function(options) {
+            console.log(options);
             models.BaseField.prototype.initialize.apply(this, arguments);
         }
     }, {
@@ -380,7 +396,7 @@ define([
         defaults: function() {
             return _.extend({}, models.BaseField.prototype.defaults, {
                 mimeType     : "*",
-                size         : 200, //  specify max file size in ko,
+                filesize         : 200, //  specify max file size in ko,
                 help         : translater.getValueFromKey('placeholder.file')
             })
         },
@@ -405,7 +421,7 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.help')
                     }
                 },
-                size: {
+                filesize: {
                     type        : 'Number',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
@@ -542,8 +558,10 @@ define([
         },
 
         getJSON : function() {
+            console.log("yo2");
             var json = models.BaseField.prototype.getJSON.apply(this, arguments);
             json.choices = JSON.stringify(this.get('choices'));
+
             return json;
         },
 
@@ -671,7 +689,7 @@ define([
                     title       : translater.getValueFromKey('schema.multiline')
                 }
             });
-            schema.size.validators = [function checkValue(value, formValues) {
+            schema.valuesize.validators = [function checkValue(value, formValues) {
                 if (value < 0 || value > 8000) {
                     return {
                         type : 'Invalid number',
