@@ -236,7 +236,8 @@ define([
             return {
                 legend   : model.get('legend'),
                 fields   : model.get('fields'),
-                multiple : model.get('multiple')
+                multiple : model.get('multiple'),
+                cid      : model.cid
             };
         },
 
@@ -317,7 +318,6 @@ define([
             }, this));
 
             $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
-            console.log("yop");
 
             return json;
         },

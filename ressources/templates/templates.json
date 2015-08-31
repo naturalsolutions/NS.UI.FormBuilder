@@ -25,6 +25,7 @@
       "linkedFieldIdentifyingColumn": "",
       "linkedField"                 : "",
       "formIdentifyingColumn"       : "",
+      "linkedFieldset"              : "",
       "defaultValue"                : "",
       "help"                        : "Write some text",
       "size"                        : "0;255",

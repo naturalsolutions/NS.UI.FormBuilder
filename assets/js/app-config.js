@@ -26,7 +26,7 @@ define([
                  * @param form
                  */
                 execute : function(form) {
-                    return form.length < 5;
+                    return form.length < 15;
                 }
             }
         ],

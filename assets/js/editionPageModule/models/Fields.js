@@ -28,6 +28,7 @@ define([
             fieldClass  : '',
             fieldSize   : 1,
             endOfLine   : false,
+            linkedFieldset               : '0',
 
             //  Linked fields values
             isLinkedField                : false,
@@ -132,6 +133,12 @@ define([
                 fieldClass  : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.eol')
             },
+            linkedFieldset : {
+                type        : 'Hidden',
+                title       : translater.getValueFromKey('schema.linkedFieldset'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
+            },
 
             //  Linked field section
             isLinkedField : {
@@ -184,7 +191,6 @@ define([
          * @returns {object} field as json object
          */
         getJSON : function() {
-            console.log("yo");
             var jsonObject                  = {
                 validators : []
             },
@@ -200,6 +206,9 @@ define([
 
             if (this.get('editMode') & 4 != 4) {
                 jsonObject['validators'].push('required');
+            }
+            if (this.get('editMode') & 2 != 2) {
+                jsonObject['validators'].push('readonly');
             }
             return _.omit(jsonObject, 'isLinkedField');
         }
@@ -381,7 +390,6 @@ define([
         },
 
         initialize: function(options) {
-            console.log(options);
             models.BaseField.prototype.initialize.apply(this, arguments);
         }
     }, {
@@ -558,7 +566,6 @@ define([
         },
 
         getJSON : function() {
-            console.log("yo2");
             var json = models.BaseField.prototype.getJSON.apply(this, arguments);
             json.choices = JSON.stringify(this.get('choices'));
 

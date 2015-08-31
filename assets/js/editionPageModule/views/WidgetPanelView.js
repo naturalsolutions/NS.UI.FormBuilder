@@ -89,9 +89,6 @@ define([
             var section = { standard : {}, other : {} };
 
             var checkDisplayMode = function(fieldType){
-                console.log((!(AppConfig.allowedFields.hasOwnProperty(AppConfig.allowedFields.currentmode) &&
-                $.inArray(fieldType, AppConfig.allowedFields[AppConfig.allowedFields.currentmode]) == -1)).toString() +
-                " for " + fieldType + " in " + AppConfig.allowedFields[AppConfig.allowedFields.currentmode]);
                 if (AppConfig.allowedFields.hasOwnProperty(AppConfig.allowedFields.currentmode) &&
                     $.inArray(fieldType, AppConfig.allowedFields[AppConfig.allowedFields.currentmode]) == -1)
                     return (false);

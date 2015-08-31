@@ -183,6 +183,7 @@
         "linkedFieldIdentifyingColumn" : "Champ identifiant",
         "linkedField"                  : "Champ lié",
         "formIdentifyingColumn"        : "Champ du formulaire identifiant",
+        "linkedFieldset"               : "Fieldset parent",
         "isLinkedField"                : "Est un champs lié"
     },
 

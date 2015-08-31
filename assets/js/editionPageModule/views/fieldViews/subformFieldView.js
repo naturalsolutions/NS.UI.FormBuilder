@@ -73,12 +73,16 @@ define([
          * @param viewToMove view to move from the form panel to the subForm view
          */
         viewDropped: function (viewToMoveModel) {
-            viewToMoveModel.set('subFormParent', this.model.get('id'));
-            viewToMoveModel.set('isUnderFieldset', true);
+            if (viewToMoveModel.get('subFormParent') == this.model.get('id'))
+                console.log("Error, you are trying to reset his parentform to the field '" + viewToMoveModel.attributes.labelFr + "' !");
+            else {
+                viewToMoveModel.set('subFormParent', this.model.get('id'));
+                viewToMoveModel.set('isUnderFieldset', true);
+                viewToMoveModel.attributes.linkedFieldset = this.model.cid;
+                this.model.addField(viewToMoveModel);
 
-            this.model.addField(viewToMoveModel);
-
-            this.addSubView(viewToMoveModel);
+                this.addSubView(viewToMoveModel);
+            }
         },
 
         render: function () {
