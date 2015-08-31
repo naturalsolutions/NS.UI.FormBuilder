@@ -25,8 +25,10 @@ define([
             editMode    : {visible : true, editable : true, nullable : true, nullmean : false},
             isDragged   : false,
             editorClass : '',
-            fieldClass  : '',
-            fieldSize   : 1,
+            fieldClassEdit  : '',
+            fieldClassDisplay  : '',
+            fieldSizeEdit   : 1,
+            fieldSizeDisplay   : 1,
             endOfLine   : false,
             linkedFieldset               : '0',
 
@@ -102,15 +104,41 @@ define([
                 fieldClass  : 'marginTop20',
                 template    : fieldTemplate
             },
-            fieldClass : {
+            fieldClassEdit : {
                 type        : "Text",
-                title       : translater.getValueFromKey('schema.fieldClass'),
+                title       : translater.getValueFromKey('schema.fieldClassEdit'),
                 editorClass : 'form-control',
                 template    : fieldTemplate
             },
-            fieldSize : {
+            fieldClassDisplay : {
+                type        : "Text",
+                title       : translater.getValueFromKey('schema.fieldClassDisplay'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
+            },
+            fieldSizeEdit : {
                 type : 'Radio',
-                title       : translater.getValueFromKey('schema.fieldSize'),
+                title       : translater.getValueFromKey('schema.fieldSizeEdit'),
+                editorClass : 'radiosField',
+                template    : fieldTemplate,
+                options : [
+                    {
+                        label : translater.getValueFromKey('schema.sizeValue.small'),
+                        val : 1
+                    },
+                    {
+                        label : translater.getValueFromKey('schema.sizeValue.medium'),
+                        val : 2
+                    },
+                    {
+                        label : translater.getValueFromKey('schema.sizeValue.large'),
+                        val : 3
+                    }
+                ]
+            },
+            fieldSizeDisplay : {
+                type : 'Radio',
+                title       : translater.getValueFromKey('schema.fieldSizeDisplay'),
                 editorClass : 'radiosField',
                 template    : fieldTemplate,
                 options : [
