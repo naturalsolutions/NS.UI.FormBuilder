@@ -234,6 +234,7 @@
         "actions" : {
             "saveAsType" : "Save as new type",
             "save" : "Save changes",
+            "validate"   : "Validate",
             "cancel" : "Cancel"
         },
         "preField" : "Pre-configurated field"

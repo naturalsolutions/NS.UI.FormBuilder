@@ -1,6 +1,6 @@
 define([
-    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewRO.html', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
-], function($, Marionette, LeftPanelViewTemplate, LeftPanelViewTemplateRO) {
+    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewNoUser.html', 'app-config', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
+], function($, Marionette, LeftPanelViewTemplate, LeftPanelViewTemplateNoUser, AppConfig) {
 
     /**
      * Left panel view in the homepage layout, contains form to filter grid on the center view
@@ -25,8 +25,8 @@ define([
          * View constructor, init grid channel
          */
         initialize : function(options, readonly) {
-            if (readonly)
-                this.template = LeftPanelViewTemplateRO;
+            if (!AppConfig.displayUserFilter)
+                this.template = LeftPanelViewTemplateNoUser;
             this.initGridChannel();
             this.URLOptions = options.URLOptions;
         },
@@ -108,17 +108,19 @@ define([
                 });
             }, this));
 
-            $.getJSON(this.URLOptions.usersAutocomplete, _.bind(function(data) {
-                this.$el.find('#user').autocomplete({
-                    minLength: 2,
-                    source : data.options,
-                    appendTo : '#leftPanel form #user-group',
-                    open : _.bind(function(event, ui) {
-                        var inputWidth = this.$el.find('#name-group input').css('width');
-                        $('.form-group ul, .form-group li').css('width', inputWidth);
-                    }, this)
-                });
-            }, this));
+            if (AppConfig.displayUserFilter) {
+                $.getJSON(this.URLOptions.usersAutocomplete, _.bind(function(data) {
+                    this.$el.find('#user').autocomplete({
+                        minLength: 2,
+                        source : data.options,
+                        appendTo : '#leftPanel form #user-group',
+                        open : _.bind(function(event, ui) {
+                            var inputWidth = this.$el.find('#name-group input').css('width');
+                            $('.form-group ul, .form-group li').css('width', inputWidth);
+                        }, this)
+                    });
+                }, this));
+            }
         },
 
         /**

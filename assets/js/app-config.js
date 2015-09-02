@@ -13,7 +13,14 @@ define([
 ], function($, _, Backbone, Translater) {
 
     var AppConfiguration = {
+        // Defines whether the app has to be displayed in Read Only mode or not
         readonlyMode : false,
+        // Defines whether you display the User filter on the main page or not
+        displayUserFilter : false,
+        // Path to the thesaurus Web Services
+        thesaurusWSPath : 'ressources/thesaurus/thesaurus.json',
+
+        // Defines the list of rules that will appli to the forms
         rules : [
             {
                 error : {
@@ -36,17 +43,21 @@ define([
             startID : 85263
         },
 
+        // Defines the list of allowed sizes for the different king of
         sizes : {
+            // Returns an Array of JSON Objects containing possible sizes for a specific type (varType)
+            getSizesFromType : function(varType){
+                var toret = [];
+                $.each(this[varType], function(range, label){
+                    if (label.indexOf(";") >= 0){
+                        toret.push({"val" : label, "label" : label.replace(";", " - ")});
+                    }
+                });
+                return (toret);
+            },
 
             getStringSizes : function(){
-                //var translater = Translater.getTranslater();
-                var toret = [];
-                _.each(this.strings, function(range, label){
-                    if (range.indexOf(";") >= 0){
-                        toret.push({"val" : range, "label" : range.replace(";", " - ")});//[translater.getValueFromKey('schema.sizes.string.'+label)]});
-                    }
-                })
-                return (toret);
+                return (this.getSizesFromType('strings'));
             },
             strings : {
                 MINIMUM : "0",
@@ -59,14 +70,7 @@ define([
             },
 
             getNumericSizes : function(){
-                var translater = Translater.getTranslater();
-                var toret = [];
-                _.each(this.numerics, function(label, range){
-                    if (range.contains(";")){
-                        toret.push({"val" : range, "label" : [translater.getValueFromKey('schema.sizes.numeric.'+label)]});
-                    }
-                })
-                return (toret);
+                return (this.getSizesFromType('numerics'));
             },
             numerics : {
                 MINIMUM : "0",
@@ -77,6 +81,8 @@ define([
                 fromminto365 : "0;365"
             }
         },
+
+        // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
         allowedFields : {
             // List of all existing types :
             // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number,

@@ -244,6 +244,7 @@
         "actions" : {
             "saveAsType" : "Enregistrez comme nouveau type",
             "save"       : "Sauvegarder",
+            "validate"   : "Valider",
             "cancel"     : "Annuler"
         },
         "preField" : "Champs pré configurés"
@@ -374,7 +375,7 @@
       },
       "cancel" : {
         "yousure" : "Vraiment ?",
-        "unsavedchanges" : "Vous avez effectué de changements !",
+        "unsavedchanges" : "Vous avez effectué des changements !",
         "yescancel" : "Oui, quitter !",
         "stay" : "No, continue."
       }

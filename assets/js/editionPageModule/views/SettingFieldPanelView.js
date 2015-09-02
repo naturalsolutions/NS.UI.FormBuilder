@@ -5,12 +5,13 @@ define([
     'backbone.radio',
     '../../Translater',
     'sweetalert',
+    'app-config',
     'jquery-ui',
     'i18n',
     'bootstrap-select',
     'slimScroll',
     'bootstrap'
-], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal) {
+], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal, AppConfig) {
 
     var translater = Translater.getTranslater();
 
@@ -226,7 +227,7 @@ define([
 
                  if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
 
-                    $.getJSON('ressources/thesaurus/thesaurus.json', _.bind(function(data) {
+                    $.getJSON(AppConfig.thesaurusWSPath, _.bind(function(data) {
 
                         $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
 
@@ -457,6 +458,7 @@ define([
         * Change a checkbox state
         */
         checkboxChange : function(e) {
+            this.hasFieldsChanged = true;
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
         },
 

@@ -411,7 +411,7 @@ define([
                     type        : 'Select',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.valuesize'),
+                    title       : translater.getValueFromKey('schema.size'),
                     options     : AppConfig.sizes.getStringSizes()
                 }
             })
@@ -1021,7 +1021,7 @@ define([
     models.ThesaurusField = models.BaseField.extend({
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
-                webServiceURL : 'ressources/thesaurus/thesaurus.json',
+                webServiceURL : AppConfig.thesaurusWSPath,
                 defaultNode: "",
                 fullpath : false
             });
