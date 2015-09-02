@@ -13,7 +13,7 @@ define([
 ], function($, _, Backbone, Translater) {
 
     var AppConfiguration = {
-
+        readonlyMode : false,
         rules : [
             {
                 error : {

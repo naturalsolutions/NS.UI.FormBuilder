@@ -1,6 +1,6 @@
 define([
-    'jquery','marionette', '../layout/HomePageLayout', 'backbone.radio', '../models/FormModel', 'i18n'
-], function($, Marionette, HomePageLayout, Radio, FormModel) {
+    'jquery','marionette', '../layout/HomePageLayout', 'backbone.radio', '../models/FormModel', 'app-config', 'i18n'
+], function($, Marionette, HomePageLayout, Radio, FormModel, AppConfig) {
 
     var HomePageController = Marionette.Controller.extend({
 
@@ -20,7 +20,7 @@ define([
         initGlobalChannel : function() {
             this.globalChannel =  Backbone.Radio.channel('global');
 
-            this.globalChannel.readonly = false;
+            this.globalChannel.readonly = AppConfig.readonlyMode;
         },
 
         initHomePageChannel : function() {
