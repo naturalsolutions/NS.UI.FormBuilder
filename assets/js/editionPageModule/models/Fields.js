@@ -666,7 +666,6 @@ define([
         */
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
-
             if (typeof this.get('choices') === 'string') {
                 this.set('choices', JSON.parse(this.get('choices')));
             }
@@ -996,6 +995,7 @@ define([
         addField : function(field) {
             //  Update field array
             var arr = this.get('fields');
+
             arr.push(field.get('name'));
             this.set('fields', arr);
 

@@ -78,7 +78,7 @@ define([
             }
         },
         allowedFields : {
-            // Existing types :
+            // List of all existing types :
             // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number,
             // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
             //

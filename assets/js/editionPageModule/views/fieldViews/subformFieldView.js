@@ -5,8 +5,9 @@ define([
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/subformFieldView.html',
     'text!editionPageModule/templates/fields/readonly/subformFieldView.html',
-    'backbone.radio'
-], function ($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio) {
+    'backbone.radio',
+    '../../models/fields'
+], function ($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, Fields) {
 
     var SubformFieldView = BaseView.extend({
 
@@ -35,6 +36,8 @@ define([
         },
 
         initialize: function (options, readonly) {
+            if (this.model.get("legend") == Fields.SubformField.prototype.defaults.legend)
+                this.model.set("legend", this.model.get('legend') + " " + this.model.get('id'));
             var opt = options;
             opt.template = viewTemplate;
             opt.next     = 'nextFieldSet'
@@ -78,7 +81,8 @@ define([
             else {
                 viewToMoveModel.set('subFormParent', this.model.get('id'));
                 viewToMoveModel.set('isUnderFieldset', true);
-                viewToMoveModel.attributes.linkedFieldset = this.model.cid;
+                viewToMoveModel.attributes.linkedFieldset = this.model.get('legend') + " " + this.model.cid;
+
                 this.model.addField(viewToMoveModel);
 
                 this.addSubView(viewToMoveModel);
@@ -151,6 +155,7 @@ define([
          */
         fieldAdded : function(element) {
             this.addSubView(element);
+
         },
 
         /**
@@ -166,7 +171,11 @@ define([
          * Change fieldset label when legend model attribute changed
          */
         changeLegend : function() {
-            this.$el.find('.legend').text(this.model.get('legend'))
+            this.$el.find('.legend').text(this.model.get('legend'));
+            var that = this;
+            $.each(this.model.get('fields'), function(){
+                this.attributes.linkedFieldset = that.model.get('legend') + " " + that.model.cid;
+            });
         }
 
     });

@@ -270,6 +270,10 @@ define([
          */
         getJSON: function () {
 
+            var fieldsetJSONControl = function(){
+
+            };
+
             var getBinaryWeight = function(editModeVal) {
                 var toret = editModeVal;
                 if (!$.isNumeric(editModeVal))
@@ -317,6 +321,19 @@ define([
                 }
             }, this));
 
+            $.each(json.schema, function(index, inputVal){
+                $.each(json.fieldsets, function(index, fieldsetVal){
+                    if (inputVal.linkedFieldset != fieldsetVal.legend + " " + fieldsetVal.cid &&
+                        $.inArray(inputVal.name, fieldsetVal.fields) != -1){
+                        fieldsetVal.fields = $.grep(fieldsetVal.fields, function(value){
+                            return value != inputVal.name;
+                        });
+                    }
+                });
+            });
+
+
+
             $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
 
             return json;
@@ -336,6 +353,8 @@ define([
                 if (field.get('id') === 0 || field.get('id') == undefined) {
                     field.set('id', this.getSize() + 1);
                 }
+                if (field.get('name') == Fields.BaseField.prototype.defaults.name)
+                    field.set('name', field.get('name') + " " + field.get('id'));
 
                 this.add(field);
 
