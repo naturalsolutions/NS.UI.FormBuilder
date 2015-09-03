@@ -16,7 +16,7 @@ require.config({
         fancytree                           : "../../libs/fancytree/dist/jquery.fancytree-all.min",
         filesaver                           : "../../libs/filesaver/FileSaver.min",
         i18n                                : "../../libs/i18n/i18next.min",
-        jquery                              : "../../libs/jquery/jquery.min",
+        jquery                              : "../../libs/jquery/dist/jquery.min",
         "jquery-ui"                         : "../../libs/jquery-ui/jquery-ui",
         underscore                          : "../../libs/underscore/underscore-min",
         requirejs                           : "../../libs/requirejs/require",
@@ -169,44 +169,31 @@ require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbui
         // Replace this URL with your own
 
         URLOptions : {
-            //  Allow to get some topic for autocomplete functionnalities
-            autocompleteURL       	: 'ressources/autocomplete/',
+			// ***********************************************************************
+			// The app needs the following nodes to have a proper path to the server :
+			// ***********************************************************************
 
-            //  Allows to get translation ressources (use i18nnext : http://i18next.com/ )
-            translationURL        	: 'ressources/locales/__lng__/__ns__.json',
-
-            //  Get form keywords autocomplete values
-            keywordAutocomplete   	: 'ressources/autocomplete/keywords.json',
-
-            formAutocomplete 		: 'ressources/autocomplete/forms.json',
-
-			forms 					: 'ressources/forms/formsExample.json',
-
-            usersAutocomplete 		: 'ressources/autocomplete/users.json',
-
-            //  Get all form name for autocomplete
-            //  Not works if you are in client side mode only
-            formSaveURL  			:'/forms',
-
-            //  Get all unities for autocomplete
-            unitURL             	: 'ressources/autocomplete/units.json',
-
-            //  Returns all pre-configurated field
-            //  A configurated field is a field saved by use for a future use
-            //  For example user create a firstName field because it will be present in many forms
+            formAutocomplete 		: 'ressources/autocomplete/forms.json',			// '/FormbuilderWS/autocomplete/forms'
+			forms 					: 'ressources/forms/formsExample.json',			// '/FormbuilderWS/forms'
+            formSaveURL  			:'/forms',										//  Get all form name for autocomplete, does not work if you are in client side mode only && '/FormbuilderWS/forms'
+			//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms && '/FormbuilderWS/configurations'
             preConfiguredField    	: 'ressources/fieldConfiguration/preConfiguredField.json',
-
-            //  Allow to send a pre-configurated field to the server
-            //  Send a POST request, so in client side it won't work, you need to install the back-end : https://github.com/NaturalSolutions/NS.Server.FormBuilder
+			//  Allow to send a pre-configurated field to the server. Send a POST request, won't work on client side, you need the back-end && '/FormbuilderWS/configurations'
             fieldConfigurationURL 	: 'configurationSaved',
+			
+			// ************************************************
+			// Still don't know what those nodes are used for :
+			// ************************************************
+			
+            autocompleteURL       	: 'ressources/autocomplete/', 					//  Allow to get some topic for autocomplete functionnalities
+            translationURL        	: 'ressources/locales/__lng__/__ns__.json', 	//  Allows to get translation ressources (use i18nnext : http://i18next.com/ )
+            keywordAutocomplete   	: 'ressources/autocomplete/keywords.json', 		//  Get form keywords autocomplete values
+			usersAutocomplete 		: 'ressources/autocomplete/users.json',
+            unitURL             	: 'ressources/autocomplete/units.json',			//  Get all unities for autocomplete
+            linkedFields 			: 'ressources/linkedFields/linkedFields.json',	//  Allow to get linked fields list
+            templateUrl 			: 'ressources/templates/templates.json'			//  URL for form templates
+		},
 
-            //  Allow to get linked fields list
-            linkedFields 			: 'ressources/linkedFields/linkedFields.json',
-
-            //  URL for form templates
-            templateUrl 			: 'ressources/templates/templates.json'
-        },
-		
         //  Wich parent HTML element for the application
         el 						: '#formBuilder'
     };
