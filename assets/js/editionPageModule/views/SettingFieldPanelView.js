@@ -226,24 +226,66 @@ define([
                 }, this));
 
                  if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
-
-                    $.getJSON(AppConfig.thesaurusWSPath, _.bind(function(data) {
+                    var WebServiceUrl = $("[name='webServiceURL']").val() ;
+                    console.log('webServiceURL',WebServiceUrl,AppConfig.config.startID) ;
+                    if (WebServiceUrl.substring(0,5) == 'http:' ) {
 
                         $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
 
-                        $('#defaultNode').fancytree({
-                            source: data['d'],
-                            checkbox : false,
-                            selectMode : 1,
-                            activate : _.bind(function(event, data) {
-                                this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                            }, this)
+                        
+                        
+                        
+                        $.ajax({
+                            data        : JSON.stringify({StartNodeID: AppConfig.config.startID, lng: "fr"}),
+                            type        : 'POST',
+                            url         : WebServiceUrl,
+                            contentType : 'application/json',
+                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                            //  The server is already configured to used it
+                            crossDomain : true,
+
+                            //  Trigger event with ajax result on the formView
+                            success: _.bind(function(data) {
+                                console.log(' YES Thes&aurus' );
+                               $('#defaultNode').fancytree({
+                                source     : data,
+                                checkbox   : false,
+                                selectMode : 1,
+                                activeNode :AppConfig.config.startID,
+                                activate : _.bind(function(event, data) {
+                                    console.log('THIS IN ACTIVATE',this) ;
+                                    this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
+                                }, this)
+
+                            });
+                            }, this),
                         });
 
-                    }, this)).error(function(a,b , c) {
-                        alert ("can't load ressources !");
-                    });
 
+
+                    }
+                    else {
+
+
+
+
+                        $.getJSON(AppConfig.thesaurusWSPath, _.bind(function(data) {
+
+                            $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+
+                            $('#defaultNode').fancytree({
+                                source: data['d'],
+                                checkbox : false,
+                                selectMode : 1,
+                                activate : _.bind(function(event, data) {
+                                    this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
+                                }, this)
+                            });
+
+                        }, this)).error(function(a,b , c) {
+                            alert ("can't load ressources !");
+                        });
+                    }
 
 
                 } else if (this.modelToEdit.constructor.type === 'TreeView') {

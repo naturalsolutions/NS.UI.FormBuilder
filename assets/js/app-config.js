@@ -18,7 +18,7 @@ define([
         // Defines whether you display the User filter on the main page or not
         displayUserFilter : false,
         // Path to the thesaurus Web Services
-        thesaurusWSPath : 'ressources/thesaurus/thesaurus.json',
+        thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusREADServices.svc/json/fastInitForCompleteTree',
 
         // Defines the list of rules that will appli to the forms
         rules : [
@@ -40,7 +40,7 @@ define([
 
         config : {
             //  Thesaurus startID
-            startID : 85263
+            startID : 167920
         },
 
         // Defines the list of allowed sizes for the different king of
@@ -89,7 +89,7 @@ define([
             // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
-            currentmode : 'all',
+            currentmode : 'demo',
             demo : [
                 'Autocomplete',
                 'Text',
