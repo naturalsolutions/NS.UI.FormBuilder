@@ -279,7 +279,7 @@
             "json"       : "Export as JSON file"
         },
         "save" : {
-            "success"    : "Form savad !",
+            "success"    : "Form saved !",
             "successMsg" : "Your form was successfully saved on the server !",
             "error"      : "An error occured !",
             "errorMsg"   :" Your form wasn't saved. Consider making a export",

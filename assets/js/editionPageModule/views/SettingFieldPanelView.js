@@ -152,10 +152,29 @@ define([
          * @param state if the select will be checked or not
          */
         disableOrEnableLinkedFields : function(state) {
-            this.form.fields.linkedField.editor.$el.attr('disabled', !state);
-            this.form.fields.formIdentifyingColumn.editor.$el.attr('disabled', !state);
-            this.form.fields.linkedFieldTable.editor.$el.attr('disabled', !state);
-            this.form.fields.linkedFieldIdentifyingColumn.editor.$el.attr('disabled', !state);
+            if (state)
+            {
+                this.form.fields.linkedField.$el.removeClass('hide');
+                this.form.fields.linkedField.$el.animate({opacity: 1}, 1000);
+                this.form.fields.formIdentifyingColumn.$el.removeClass('hide');
+                this.form.fields.formIdentifyingColumn.$el.animate({opacity: 1}, 1000);
+                this.form.fields.linkedFieldTable.$el.removeClass('hide');
+                this.form.fields.linkedFieldTable.$el.animate({opacity: 1}, 1000);
+                this.form.fields.linkedFieldIdentifyingColumn.$el.removeClass('hide');
+                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 1}, 1000);
+            }
+            else
+            {
+                var that = this;
+                this.form.fields.linkedField.$el.animate({opacity: 0}, 1000, function(){
+                    that.form.fields.linkedField.$el.addClass('hide')});
+                this.form.fields.formIdentifyingColumn.$el.animate({opacity: 0}, 1000, function(){
+                    that.form.fields.formIdentifyingColumn.$el.addClass('hide')});
+                this.form.fields.linkedFieldTable.$el.animate({opacity: 0}, 1000, function(){
+                    that.form.fields.linkedFieldTable.$el.addClass('hide')});
+                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 0}, 1000, function(){
+                    that.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide')});
+            }
         },
 
         /**
