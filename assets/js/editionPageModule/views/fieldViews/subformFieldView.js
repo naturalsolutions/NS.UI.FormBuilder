@@ -115,12 +115,18 @@ define([
                 hoverClass: 'hovered',
                 activeClass: 'hovered',
                 stop: _.bind(function (event, ui) {
-                    var id = $(ui.item).find('.subElement').prop('id'),
+                    console.log(ui.item[0].id) ;
+
+                    var id = ui.item[0].id,
                         from = this._subView.indexOf(id),
                         to = $(ui.item).index() - 1;
 
+
+                    /// HTMLT
                     this._subView.splice(this._subView.indexOf(id), 1);
                     this._subView.splice(to, 0, id);
+
+                    // MAJ Model BB
                     this.model.updateModel(id, from, to);
                 }, this)
             });
