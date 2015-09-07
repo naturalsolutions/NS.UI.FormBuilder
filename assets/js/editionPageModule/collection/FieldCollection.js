@@ -145,6 +145,7 @@ define([
             this.tag             = opt.tag            || "";
             this.obsolete        = opt.obsolete       || false;
             this.isTemplate      = opt.isTemplate     || false;
+            this.fieldstodelete  = [];
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -430,6 +431,9 @@ define([
                 //  We used trigger instead destroy method, the DELETE ajax request is not send
                 item.trigger('destroy', item);
             }
+
+            if (this.id > 0)
+                this.fieldstodelete.push(id);
         },
 
         /**
@@ -607,6 +611,7 @@ define([
         save : function() {
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
             var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
+            var that = this;
 
             $.ajax({
                 data        : JSON.stringify(this.getJSON()),
@@ -620,7 +625,31 @@ define([
                 //  Trigger event with ajax result on the formView
                 success: _.bind(function(data) {
                     this.id = data.form.id;
-                    this.formChannel.trigger('save:success');
+                    var savedid = this.id;
+                    if (data.form.schema) {
+                        $.each(data.form.schema, function (index, inputVal) {
+                            $.each(that.models, function (modelindex, modelinputVal) {
+                                if (modelinputVal.attributes.name == index) {
+                                    that.models[modelindex].attributes.id = inputVal.id;
+                                }
+                            });
+                        });
+                    }
+                    $.each(this.fieldstodelete, function(index, inputVal) {
+                        $.ajax({
+                            data: {},
+                            type: 'DELETE',
+                            url: that.url + "/" + savedid + "/field/" + inputVal,
+                            contentType: 'application/json',
+                            crossDomain: true,
+                            success: _.bind(function (data) {
+                                this.formChannel.trigger('save:success');
+                            }, this),
+                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                this.formChannel.trigger('save:fail');
+                            }, this)
+                        });
+                    });
                 }, this),
                 error: _.bind(function(xhr, ajaxOptions, thrownError) {
                     this.formChannel.trigger('save:fail');

@@ -55,7 +55,7 @@ define([
             if (!$.isEmptyObject(values)) {
                 this.gridChannel.trigger('search', values);
             } else {
-                this.$el.find('form').addClass('empty')
+                this.gridChannel.trigger('resetCollection');
             }
         },
 

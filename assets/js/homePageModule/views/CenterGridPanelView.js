@@ -380,7 +380,7 @@ define([
                     this.hideSpinner();
 
                     //  Wait fetch end before display forms count and scrollbar got backgrid table
-                    this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );;
+                    this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
 
                     $("#scrollSection").slimScroll({
                         height       : this.scrollSize,
@@ -438,7 +438,7 @@ define([
             this.formCollection.fetch({
                 reset : true,
                 success : _.bind(function() {
-                    this.$el.find('#formsCount').text(this.formCollection.length)
+                    this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
                 }, this)
             });
         },
@@ -535,7 +535,7 @@ define([
 
             //  Update grid ans collection count
             this.grid.render()
-            this.$el.find('#formsCount').text(this.formCollection.length);
+            this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
 
             $('tr.selected').removeClass('selected');
 
