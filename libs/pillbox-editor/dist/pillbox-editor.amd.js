@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'backbone-forms'], function($, _, Backbone) {
+define(['jquery', 'underscore', 'backbone', 'pillbox', 'backbone-forms'], function($, _, Backbone, pillbox) {
 
     var PillboxEditor = Backbone.Form.editors.Base.extend({
 
