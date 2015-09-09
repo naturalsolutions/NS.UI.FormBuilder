@@ -218,7 +218,6 @@ define([
         * @param  {[Object]} field to edit
         */
         createForm : function() {
-
             require(['backbone-forms'], _.bind(function() {
 
                 Backbone.Form.validators.errMessages.required = translater.getValueFromKey('form.validation');
@@ -245,15 +244,10 @@ define([
                 }, this));
 
                  if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
-                    var WebServiceUrl = $("[name='webServiceURL']").val() ;
-                    console.log('webServiceURL',WebServiceUrl,AppConfig.config.startID) ;
+                    var WebServiceUrl = $("[name='webServiceURL']").val();
                     if (WebServiceUrl.substring(0,5) == 'http:' ) {
-
                         $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
 
-                        
-                        
-                        
                         $.ajax({
                             data        : JSON.stringify({StartNodeID: AppConfig.config.startID, lng: "fr"}),
                             type        : 'POST',
@@ -265,33 +259,23 @@ define([
 
                             //  Trigger event with ajax result on the formView
                             success: _.bind(function(data) {
-                                console.log(' YES Thes&aurus' );
                                $('#defaultNode').fancytree({
                                 source     : data,
                                 checkbox   : false,
                                 selectMode : 1,
                                 activeNode :AppConfig.config.startID,
                                 activate : _.bind(function(event, data) {
-                                    console.log('THIS IN ACTIVATE',this) ;
                                     this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
                                 }, this)
 
                             });
                             }, this),
                         });
-
-
-
                     }
                     else {
-
-
-
-
                         $.getJSON(AppConfig.thesaurusWSPath, _.bind(function(data) {
 
                             $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-
                             $('#defaultNode').fancytree({
                                 source: data['d'],
                                 checkbox : false,
@@ -355,7 +339,6 @@ define([
                 ],
                 selectMode : 1,
                 activate : _.bind(function(event, data) {
-                    field.set('defaultNode', data.node.key)
                     this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
                 }, this)
             });
@@ -470,25 +453,53 @@ define([
         * Check generated form values and send events if all is good
         */
         saveChange : function() {
-            if (this.subSettingView !== null) {
-                //  In this case wa have a sub setting view
-                //  This view is used for example to set Checkbox values
-                this.subSettingView.commitValues();
-            }
+            var nameCounter = 0;
+            var that = this;
 
-            if (this.form.commit() === undefined) {
-                
-                if (!this.modelToEdit.get('isLinkedField')) {
-                    this.modelToEdit.set('linkedField', '');
-                    this.modelToEdit.set('linkedFieldIdentifyingColumn', '');
-                    this.modelToEdit.set('linkedFieldTable', '');
-                    this.modelToEdit.set('formIdentifyingColumn', '');
+            $.each(this.modelToEdit.collection.models, function(value, index){
+
+                if (index.attributes.name == $("#form [name='name']").val())
+                {
+                    if (that.modelToEdit.attributes.name != $("#form [name='name']").val()){
+                        nameCounter++;
+                    }
+                    else
+                    {
+                        if (that.modelToEdit.attributes.type == "Thesaurus"){
+                        }
+                    }
+                }
+            });
+
+            if (nameCounter == 0) {
+
+                if (this.subSettingView !== null) {
+                    //  In this case wa have a sub setting view
+                    //  This view is used for example to set Checkbox values
+                    this.subSettingView.commitValues();
                 }
 
-                this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
+                if (this.form.commit() === undefined) {
 
-                this.mainChannel.trigger('formCommit');
-                this.removeForm();
+                    if (!this.modelToEdit.get('isLinkedField')) {
+                        this.modelToEdit.set('linkedField', '');
+                        this.modelToEdit.set('linkedFieldIdentifyingColumn', '');
+                        this.modelToEdit.set('linkedFieldTable', '');
+                        this.modelToEdit.set('formIdentifyingColumn', '');
+                    }
+
+                    this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
+
+                    this.mainChannel.trigger('formCommit');
+                    this.removeForm();
+                }
+            }
+            else {
+                swal(
+                    translater.getValueFromKey('configuration.save.fail') || "Echec !",
+                    translater.getValueFromKey('configuration.save.samename') || "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
+                    "error"
+                )
             }
         },
 
@@ -537,7 +548,7 @@ define([
         displayConfigurationSaveSuccess : function() {
             swal(
                 translater.getValueFromKey('configuration.save.success') || "Sauvé !",
-                translater.getValueFromKey('configuration.save.successMSG') || "Votre champs a bien été sauvgeardé",
+                translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",
                 "success"
             )
         },

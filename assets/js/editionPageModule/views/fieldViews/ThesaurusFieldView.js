@@ -24,6 +24,8 @@ define([
 
             this.initGlobalChannel();
             this.initConfigChannel();
+
+            this.rendered = false;
         },
 
         initGlobalChannel : function() {
@@ -34,64 +36,11 @@ define([
 
         initConfigChannel : function() {
             this.configChannel = Backbone.Radio.channel('config');
-        },
-
-        updateTreeView : function(data) {
-
-
-            console.log('UpdateTreeView',data,data['key'])
-
-            var startID = data['node']['key'] ;
-            if (false && this.model.get('webServiceURL').substring(0,5) == 'http:' ) {
-                        var data ;
-                        console.log(' YES WebService' );
-                        $.ajax({
-                            data        : JSON.stringify({StartNodeID: startID, lng: "fr"}),
-                            type        : 'POST',
-                            url         : this.model.get('webServiceURL'),
-                            contentType : 'application/json',
-                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                            //  The server is already configured to used it
-                            crossDomain : true,
-
-                            //  Trigger event with ajax result on the formView
-                            success: _.bind(function(data) {
-                                console.log(' YES Thes&aurus' );
-                                console.log(data,data['children']) ;
-                               $('#thesaurus' + this.model.get('id')).fancytree({
-                                source     : data['children'],
-                                checkbox   : false,
-                                selectMode : 2,
-                                activeNode :startID
-                            });
-                            }, this),
-                        });
-
-
-
-                    }
-                    else {
-                        if (data['node']['children'] !== null) {
-                            $('#thesaurus' + this.model.get('id')).fancytree('getTree').reload({
-                                children : data['node']['children']
-                            });
-                        } else {
-                            var arr = [];
-                            arr[0] = data.node;
-                            this.$el.first('.thesaurusField').fancytree('getTree').reload(arr);
-                        }
-                    }
-        },
-
-        render : function() {
-            BaseView.prototype.render.apply(this, arguments);
 
             this.configChannel.on('get:startID', _.bind(function(startID) {
 
                 require(['jquery-ui', 'fancytree'], _.bind(function() {
                     if (this.model.get('webServiceURL').substring(0,5) == 'http:' ) {
-                        var data ;
-                        console.log(' YES WebService' );
                         $.ajax({
                             data        : JSON.stringify({StartNodeID: startID, lng: "fr"}),
                             type        : 'POST',
@@ -103,18 +52,14 @@ define([
 
                             //  Trigger event with ajax result on the formView
                             success: _.bind(function(data) {
-                                console.log(' YES Thes&aurus' );
-                               $('#thesaurus' + this.model.get('id')).fancytree({
-                                source     : data['children'],
-                                checkbox   : false,
-                                selectMode : 2,
-                                activeNode :startID
-                            });
+                                $('#thesaurus' + this.model.get('id')).fancytree({
+                                    source     : data['children'],
+                                    checkbox   : false,
+                                    selectMode : 2,
+                                    activeNode :startID
+                                });
                             }, this),
                         });
-
-
-
                     }
                     else {
                         $.getJSON(this.model.get('webServiceURL'), _.bind(function(data) {
@@ -133,8 +78,52 @@ define([
                 }, this));
 
             }, this));
+        },
 
-            this.configChannel.trigger('get', 'startID');
+        updateTreeView : function(data) {
+            //TODO HERE I SHOULD CHANGE THE SHIT
+            var startID = data['node']['key'] ;
+            if (false && this.model.get('webServiceURL').substring(0,5) == 'http:' ) {
+                        var data ;
+                        $.ajax({
+                            data        : JSON.stringify({StartNodeID: startID, lng: "fr"}),
+                            type        : 'POST',
+                            url         : this.model.get('webServiceURL'),
+                            contentType : 'application/json',
+                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                            //  The server is already configured to used it
+                            crossDomain : true,
+
+                            //  Trigger event with ajax result on the formView
+                            success: _.bind(function(data) {
+                               $('#thesaurus' + this.model.get('id')).fancytree({
+                                source     : data['children'],
+                                checkbox   : false,
+                                selectMode : 2,
+                                activeNode :startID
+                            });
+                            }, this),
+                        });
+                    }
+                    else {
+                        if (data['node']['children'] !== null) {
+                            $('#thesaurus' + this.model.get('id')).fancytree('getTree').reload({
+                                children : data['node']['children']
+                            });
+                        } else {
+                            var arr = [];
+                            arr[0] = data.node;
+                            this.$el.first('.thesaurusField').fancytree('getTree').reload(arr);
+                        }
+                    }
+        },
+
+        render : function() {
+            if (!this.rendered) {
+                BaseView.prototype.render.apply(this, arguments);
+                this.rendered = true;
+                this.configChannel.trigger('get', 'startID');
+            }
         }
     });
 

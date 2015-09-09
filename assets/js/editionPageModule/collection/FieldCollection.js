@@ -148,7 +148,7 @@ define([
             this.fieldstodelete  = [];
 
             //  Bind
-            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
+            _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 
             this.initFormChannel();
             this.initHookChannel();
@@ -333,8 +333,6 @@ define([
                 });
             });
 
-
-
             $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
 
             return json;
@@ -346,7 +344,7 @@ define([
          * @param field                 field to add
          * @param ifFieldIsInFieldset   if field in under a fieldset
          */
-        addField : function(field, ifFieldIsInFieldset) {
+        addField : function(field, ifFieldIsInFieldset, scrollToBottom) {
             if (this.isAValidFieldType(field.constructor.type)) {
                 //  Update field
                 field.set('isUnderFieldset', ifFieldIsInFieldset === true);
@@ -369,12 +367,23 @@ define([
 
                 }
 
+                if (scrollToBottom){
+                    var scrollArea = $(".slimScrollDiv #scrollSection");
+                    var lastItemofScrollArea = scrollArea.find('div.dropField:last');
+
+                    if (lastItemofScrollArea.offset()){
+                        scrollArea.animate({
+                            scrollTop: lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true)
+                        }, 500);
+                    }
+                }
+
                 return field.get('id');
             }
         },
 
         /**
-         * Add a new field on the form collection
+         * Add a field on the form collection
          *
          * @param {string} nameType
          * @param {object} properties
@@ -391,7 +400,23 @@ define([
             //  addField return new added field id
             //  addElement return so this id
             //
+
             return this.addField(new Fields[nameType](field), isUnderFieldset);
+        },
+
+        /**
+         * Add a new field on the form collection
+         *
+         * @param {string} nameType
+         * @param {object} properties
+         * @param {boolean} isUnderFieldset
+         */
+        addNewElement: function (nameType, properties, isUnderFieldset) {
+            var field = properties || {};
+            field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
+            field['order'] = this.getSize();
+
+            return this.addField(new Fields[nameType](field), isUnderFieldset, true);
         },
 
         /**
@@ -650,6 +675,9 @@ define([
                             }, this)
                         });
                     });
+                    if (this.fieldstodelete.length == 0){
+                        this.formChannel.trigger('save:success');
+                    }
                 }, this),
                 error: _.bind(function(xhr, ajaxOptions, thrownError) {
                     this.formChannel.trigger('save:fail');

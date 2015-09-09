@@ -438,7 +438,7 @@ define([
          */
         displayFailMessage : function() {
             swal(
-                translater.getValueFromKey('modal.save.error') || "Une erreur est survenu !",
+                translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
                 translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
                 "error"
             );
@@ -535,7 +535,7 @@ define([
         collectionUpdateFinished : function() {
             this.updateName();
             //this.$el.find('#scrollSection').scrollTop(0);
-            this.$el.find('#scrollSection').animate({ scrollTop: 0 }, "fast");
+            //this.$el.find('#scrollSection').animate({ scrollTop: 0 }, "fast");
         },
 
 

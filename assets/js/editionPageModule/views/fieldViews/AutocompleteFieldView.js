@@ -37,12 +37,10 @@ define([
            $.getJSON(this.model.get('url'),_.bind(function(data) {
                 
                 $(this.el).find('.form-control').autocomplete({
-                    minLength : 1,
+                    minLength : this.model.get('triggerlength'),
                     scrollHeight: 220,
-
                     source: data.options
                 });
-
             }, this));
            
        },

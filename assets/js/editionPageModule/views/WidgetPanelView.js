@@ -72,7 +72,7 @@ define([
 
             //  Check if the field type is a valid type
             if (Fields[elementClassName] !== undefined) {
-                this.formChannel.trigger('addElement', elementClassName);
+                this.formChannel.trigger('addNewElement', elementClassName);
             } else {
                 swal(
                     translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",

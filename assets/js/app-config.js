@@ -18,7 +18,7 @@ define([
         // Defines whether you display the User filter on the main page or not
         displayUserFilter : false,
         // Path to the thesaurus Web Services
-        thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusREADServices.svc/json/fastInitForCompleteTree',
+        thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusReadServices.svc/json/fastInitForCompleteTree',
 
         // Defines the list of rules that will appli to the forms
         rules : [
@@ -89,7 +89,7 @@ define([
             // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
-            currentmode : 'demo',
+            currentmode : 'full',
             demo : [
                 'Autocomplete',
                 'Text',

@@ -61,6 +61,7 @@ define([
             this.initHomePageChannel();
 
             this.scrollSize = options.scrollSize || '90%';
+            this.importProtocolModalView = null;
         },
 
         /**
@@ -503,6 +504,7 @@ define([
                         dateFrom     = this.getDateFromString(searchData.dateFrom);
 
                     dateFrom.setHours(0);
+                    dateFrom.setDate(dateFrom.getDate()-1);
 
                     correspondingCondition = correspondingCondition && (dateFrom - creationDate < 0);
                 }
@@ -617,15 +619,19 @@ define([
                 'homePageModule/modals/ImportModalView',
                 'editionPageModule/utilities/Utilities'
             ], _.bind(function(importProtocolModal, Utilities) {
-                $('body').append('<div class="modal fade" id="importModal"></div>');
-                var modalView = new importProtocolModal({
-                    el: "#importModal"
-                });
-                modalView.render();
+
+                if ($("body").has("#importModal").length == 0) {
+                    $('body').append('<div class="modal fade" id="importModal"></div>');
+                    this.importProtocolModalView = new importProtocolModal({
+                        el: "#importModal"
+                    });
+                }
+
+                this.importProtocolModalView.render();
                 $("#importModal").i18n();
 
                 $('#importModal').on('hidden.bs.modal', _.bind(function () {
-                    var datas = modalView.getData();
+                    var datas = this.importProtocolModalView.getData();
 
                     if (!datas.closed) {
                         Utilities.ReadFile(datas['file'], _.bind(function (result) {

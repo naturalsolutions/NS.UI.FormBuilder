@@ -123,6 +123,7 @@
         "default"           : "Valeur par défaut",
         "url"               : "Adresse du service web",
         "help"              : "Texte d'aide",
+        "triggerlength"     : "Taille pour déclenchement",
         "size"              : "Champ des tailles",
         "maximalSize"       : "Taille maximale",
         "minimalSize"       : "Taille minimale",
@@ -283,7 +284,7 @@
         "save" : {
             "success"    : "Sauvé !",
             "successMsg" : "Votre formulaire a été enregistré sur le serveur !",
-            "error"      : "Une erreur est survenu !",
+            "error"      : "Une erreur est survenue !",
             "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
             "title"      : "Sauvegarde du protocol",
             "button"     : "Sauvegarder"
@@ -327,6 +328,7 @@
         "name"        : "Nom de votre champs",
         "value"       : "Valeur par défaut de votre champs",
         "help"        : "Text d'aide de votre champs",
+        "triggerlength": "Taille de la chaine pour le déclenchement de l'autocomplétion",
         "url"         : "URL permettant de récupérer la liste des valeurs",
         "size"        : "Taille maximum de la valeur du champs",
         "minimalSize" : "Taille minimum de la valeur du champs",
@@ -371,7 +373,8 @@
         "success"    : "Sauvé !",
         "successMsg" : "Votre champs a bien été sauvgeardé",
         "fail"       : "Echec !",
-        "failMsg"    : "Votre champs n'a pas pu être sauvegardé"
+        "failMsg"    : "Votre champs n'a pas pu être sauvegardé",
+        "samename"   : "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire"
       },
       "cancel" : {
         "yousure" : "Vraiment ?",

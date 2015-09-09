@@ -72,6 +72,7 @@ define([
 
             //  Event receive from widgetPanel when user want to add a field on its form
             this.formChannel.on('addElement', this.addElementToCollection, this);
+            this.formChannel.on('addNewElement', this.addNewElementToCollection, this);
 
             //  Event receive when user wants to export its form in JSON file
             this.formChannel.on('export', this.exportFormAsFile, this);
@@ -128,12 +129,21 @@ define([
         },
 
         /**
+         * User wants to add a field into the collection
+         *
+         * @param {string} elementClassName field class like TextField
+         */
+        addElementToCollection : function(elementClassName) {
+            this.fieldCollection.addElement(elementClassName);
+        },
+
+        /**
          * User wants to add a new field into the collection
          *
          * @param {string} newElementClassName new field class like TextField
          */
-        addElementToCollection : function(newElementClassName) {
-            this.fieldCollection.addElement(newElementClassName);
+        addNewElementToCollection : function(newElementClassName) {
+            this.fieldCollection.addNewElement(newElementClassName);
         },
 
 

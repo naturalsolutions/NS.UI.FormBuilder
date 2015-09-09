@@ -1,5 +1,5 @@
 define([
-    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewNoUser.html', 'app-config', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
+    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewNoUserNoTags.html', 'app-config', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
 ], function($, Marionette, LeftPanelViewTemplate, LeftPanelViewTemplateNoUser, AppConfig) {
 
     /**

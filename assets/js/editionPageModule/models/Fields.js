@@ -329,6 +329,7 @@ define([
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : translater.getValueFromKey('placeholder.autocomplete'),
+                triggerlength: 2,
                 url          : "ressources/autocomplete/example.json"
             });
         },
@@ -352,6 +353,15 @@ define([
                     title       : translater.getValueFromKey('schema.help'),
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.help')
+                    }
+                },
+                triggerlength: {
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.triggerlength'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.triggerlength')
                     }
                 },
                 url: {

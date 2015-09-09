@@ -123,6 +123,7 @@
         "default"           : "Default value",
         "url"               : "Web service URL",
         "help"              : "Help text",
+        "triggerlength"     : "Size for trigger",
         "size"              : "Size range",
         "maximalSize"       : "Maximal size",
         "minimalSize"       : "Minimal size",
@@ -325,6 +326,7 @@
       "name"        : "Your field name",
       "value"       : "Default value of your field",
       "help"        : "Field help text",
+      "triggerlength": "String length for autocomplete trigger",
       "url"         : "Web service URL for autocomplete values",
       "size"        : "Maximum allowed size",
       "minimalSize" : "Minimum allowed size",
@@ -367,7 +369,8 @@
       "success"    : "Saved !",
       "successMsg" : "Your field has been saved",
       "fail"       : "Fail !",
-      "failMsg"    : "Your couldn't be saved"
+      "failMsg"    : "Your couldn't be saved",
+      "samename"   : "Your Field can't have the same name than another field of the form"
     },
     "cancel" : {
       "yousure" : "Really ?",
