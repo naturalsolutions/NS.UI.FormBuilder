@@ -420,18 +420,8 @@ define([
          * @param subFormId sub form to remove id
          */
         destroySubElement : function(subFormId) {
-            console.log("04 ---------------------");
-            console.log(this.map);
             this.map(function(model, idx) {
-                console.log("11 ---------------------");
-                console.log(model);
-                console.log("41 ---------------------");
-                console.log(subFormId);
-                console.log("23 ---------------------");
-                console.log(idx);
                 if (model.get('subFormParent') == subFormId) {
-                    console.log("37 ---------------------");
-                    console.log("triggered destroy !");
                     model.trigger('destroy', model);
                 }
             })
@@ -458,8 +448,6 @@ define([
 
                 this.hookChannel.trigger('field:remove', this, item);
 
-                console.log("98 -----------------");
-                console.log(item);
                 //  We used trigger instead destroy method, the DELETE ajax request is not send
                 item.trigger('destroy', item);
             }
