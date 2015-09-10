@@ -269,7 +269,9 @@
             "title"    : "Import a form",
             "label"    : "Select JSON file to import",
             "action"   : "Import",
-            "find"     : "Search"
+            "find"     : "Search",
+            "success"  : "Success",
+            "successMsg" : "The form has successfully been imported"
         },
 
         "export" : {
@@ -319,74 +321,74 @@
     },
 
     "placeholder" : {
-      "label" : {
-        "fr" : "French label of your field",
-        "en" : "English label of your field"
-      },
-      "name"        : "Your field name",
-      "value"       : "Default value of your field",
-      "help"        : "Field help text",
-      "triggerlength": "String length for autocomplete trigger",
-      "url"         : "Web service URL for autocomplete values",
-      "size"        : "Maximum allowed size",
-      "minimalSize" : "Minimum allowed size",
-      "mime"        : "Allowed field type",
-      "fileSize"    : "Maximum allowed field size",
-      "tree" : {
-        "default" : "Default node at start",
-        "url" : "URL returning tree structure"
-      },
-      "format" : "Allowed date format",
-      "num" : {
-        "min" : "Minimum value",
-        "max" : "Maximum value",
-        "precision" : "Step size",
-        "unity" : "Field unit"
-      },
-      "legend" : "Sub form legend",
+        "label" : {
+          "fr" : "French label of your field",
+          "en" : "English label of your field"
+        },
+        "name"        : "Your field name",
+        "value"       : "Default value of your field",
+        "help"        : "Field help text",
+        "triggerlength": "String length for autocomplete trigger",
+        "url"         : "Web service URL for autocomplete values",
+        "size"        : "Maximum allowed size",
+        "minimalSize" : "Minimum allowed size",
+        "mime"        : "Allowed field type",
+        "fileSize"    : "Maximum allowed field size",
+        "tree" : {
+          "default" : "Default node at start",
+          "url" : "URL returning tree structure"
+        },
+        "format" : "Allowed date format",
+        "num" : {
+          "min" : "Minimum value",
+          "max" : "Maximum value",
+          "precision" : "Step size",
+          "unity" : "Field unit"
+        },
+        "legend" : "Sub form legend",
 
-      "text"         : "Entrez une valeur ici",
-      "autocomplete" : "Write some text to see a list value",
-      "file"         : "Please choose a file",
-      "numeric"      : "Enter numeric value",
-      "date"         : "Enter a data or click on the pico"
+        "text"         : "Entrez une valeur ici",
+        "autocomplete" : "Write some text to see a list value",
+        "file"         : "Please choose a file",
+        "numeric"      : "Enter numeric value",
+        "date"         : "Enter a data or click on the pico"
     },
 
     "optional" : "optional",
 
     "error" : {
-      "general" : "General error",
-      "message" : "One or more field are empty"
+        "general" : "General error",
+        "message" : "One or more field are empty"
     },
 
     "fetch" : {
-      "error"    : "Error retrieving forms !",
-      "errorMsg" : "Unable to retrieve the list of forms from the server."
+        "error"    : "Error retrieving forms !",
+        "errorMsg" : "Unable to retrieve the list of forms from the server."
     },
 
   "configuration" : {
-    "save" : {
-      "success"    : "Saved !",
-      "successMsg" : "Your field has been saved",
-      "fail"       : "Fail !",
-      "failMsg"    : "Your couldn't be saved",
-      "samename"   : "Your Field can't have the same name than another field of the form"
-    },
-    "cancel" : {
-      "yousure" : "Really ?",
-      "unsavedchanges" : "You've made changes!",
-      "yescancel" : "Yes, cancel!",
-      "stay" : "No, continue."
-    }
+      "save" : {
+        "success"    : "Saved !",
+        "successMsg" : "Your field has been saved",
+        "fail"       : "Fail !",
+        "failMsg"    : "Your couldn't be saved",
+        "samename"   : "Your Field can't have the same name than another field of the form"
+      },
+      "cancel" : {
+        "yousure" : "Really ?",
+        "unsavedchanges" : "You've made changes!",
+        "yescancel" : "Yes, cancel!",
+        "stay" : "No, continue."
+      }
   },
 
   "formCount" : {
-    "form": "__count__ Form",
-    "form_plural": "__count__ Forms"
+      "form": "__count__ Form",
+      "form_plural": "__count__ Forms"
   },
 
   "fieldCount" : {
-    "field": "__count__ Field",
-    "field_plural": "__count__ Fields"
+      "field": "__count__ Field",
+      "field_plural": "__count__ Fields"
   }
 }

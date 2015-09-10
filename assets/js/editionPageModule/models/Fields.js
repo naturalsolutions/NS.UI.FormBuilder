@@ -1016,7 +1016,7 @@ define([
 
         removeField : function(field) {
             var arr     = this.get('fields'),
-                index   = arr.indexOf(field.get('name'));
+                index   = arr.indexOf(field);
             arr.splice(index, 1);
             this.set('fields', arr);
             this.trigger('fieldRemoved');

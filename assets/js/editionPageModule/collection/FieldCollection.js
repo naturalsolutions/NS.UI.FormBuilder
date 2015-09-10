@@ -270,11 +270,6 @@ define([
          * @return {object} serialized collection data
          */
         getJSON: function () {
-
-            var fieldsetJSONControl = function(){
-
-            };
-
             var getBinaryWeight = function(editModeVal) {
                 var toret = editModeVal;
                 if (!$.isNumeric(editModeVal))
@@ -425,8 +420,18 @@ define([
          * @param subFormId sub form to remove id
          */
         destroySubElement : function(subFormId) {
+            console.log("04 ---------------------");
+            console.log(this.map);
             this.map(function(model, idx) {
+                console.log("11 ---------------------");
+                console.log(model);
+                console.log("41 ---------------------");
+                console.log(subFormId);
+                console.log("23 ---------------------");
+                console.log(idx);
                 if (model.get('subFormParent') == subFormId) {
+                    console.log("37 ---------------------");
+                    console.log("triggered destroy !");
                     model.trigger('destroy', model);
                 }
             })
@@ -453,6 +458,8 @@ define([
 
                 this.hookChannel.trigger('field:remove', this, item);
 
+                console.log("98 -----------------");
+                console.log(item);
                 //  We used trigger instead destroy method, the DELETE ajax request is not send
                 item.trigger('destroy', item);
             }
@@ -634,10 +641,13 @@ define([
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
+            if (!this.formChannel)
+                this.initFormChannel();
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
             var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
             var that = this;
-
+            var savedFieldsToDelete = this.fieldstodelete;
+            this.fieldstodelete = [];
             $.ajax({
                 data        : JSON.stringify(this.getJSON()),
                 type        : PostOrPut,
@@ -660,7 +670,7 @@ define([
                             });
                         });
                     }
-                    $.each(this.fieldstodelete, function(index, inputVal) {
+                    $.each(this.savedFieldsToDelete, function(index, inputVal) {
                         $.ajax({
                             data: {},
                             type: 'DELETE',
@@ -671,6 +681,7 @@ define([
                                 this.formChannel.trigger('save:success');
                             }, this),
                             error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                this.fieldstodelete.push(inputVal);
                                 this.formChannel.trigger('save:fail');
                             }, this)
                         });

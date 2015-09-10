@@ -43,7 +43,6 @@ define([
          * @param  {Object} formToEdit form to edit
          */
         displayEditionPage : function(formToEdit) {
-
             //  Event send by formPanel view when render is done
             //  Send data to the controller
             this.formChannel.on('renderFinished', this.sendJsonDataToController, this);

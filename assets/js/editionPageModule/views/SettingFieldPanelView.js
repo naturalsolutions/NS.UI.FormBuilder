@@ -455,6 +455,7 @@ define([
         saveChange : function() {
             var nameCounter = 0;
             var that = this;
+            var savedDefaultNode = this.modelToEdit.get("defaultNode");
 
             $.each(this.modelToEdit.collection.models, function(value, index){
 
@@ -462,11 +463,6 @@ define([
                 {
                     if (that.modelToEdit.attributes.name != $("#form [name='name']").val()){
                         nameCounter++;
-                    }
-                    else
-                    {
-                        if (that.modelToEdit.attributes.type == "Thesaurus"){
-                        }
                     }
                 }
             });
@@ -480,6 +476,9 @@ define([
                 }
 
                 if (this.form.commit() === undefined) {
+
+                    if (this.modelToEdit.attributes.type == "Thesaurus")
+                        this.modelToEdit.set("defaultNode", savedDefaultNode);
 
                     if (!this.modelToEdit.get('isLinkedField')) {
                         this.modelToEdit.set('linkedField', '');

@@ -269,7 +269,9 @@
       "title"    : "Import a form",
       "label"    : "Select JSON file to import",
       "action"   : "Import",
-      "find"     : "Search"
+      "find"     : "Search",
+      "success"  : "Success",
+      "successMsg" : "The form has successfully been imported"
     },
 
     "export" : {

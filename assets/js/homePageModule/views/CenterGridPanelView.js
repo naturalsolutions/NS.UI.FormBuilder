@@ -634,11 +634,37 @@ define([
                     var datas = this.importProtocolModalView.getData();
 
                     if (!datas.closed) {
+
                         Utilities.ReadFile(datas['file'], _.bind(function (result) {
                             try {
                                 if (result !== false) {
 
-                                    this.globalChannel.trigger('formImported', $.parseJSON(result));
+                                    $.ajax({
+                                        data        : result,
+                                        type        : "POST",
+                                        url         : this.options.URLOptions.formSaveURL,
+                                        contentType : 'application/json',
+                                        //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                                        //  The server is already configured to used it
+                                        crossDomain : true,
+
+                                        //  Trigger event with ajax result on the formView
+                                        success: _.bind(function(data) {
+                                            this.resetCollection();
+                                            swal(
+                                                translater.getValueFromKey('modal.import.success') || "Succès",
+                                                translater.getValueFromKey('modal.import.successMsg') || "Le formulaire a bien été importé",
+                                                "success"
+                                            );
+                                        }, this),
+                                        error: _.bind(function(xhr, ajaxOptions, thrownError) {
+                                            swal(
+                                                translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
+                                                translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                                "error"
+                                            );
+                                        }, this)
+                                    });
 
                                 } else {
                                     swal(
@@ -670,12 +696,13 @@ define([
             //  I've to put this swal call in a setTimeout otherwise it doesn't appear
             //  A discussion is opened on Github : https://github.com/t4t5/sweetalert/issues/253
             setTimeout(_.bind(function() {
+                this.resetCollection();
                 swal(
                     translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
                     translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
                     "success"
                 );
-            }, this), 500)
+            }, this), 250)
         },
 
         /**

@@ -272,7 +272,9 @@
             "title"    : "Importer un formulaire",
             "label"    : "Selectionnez le fichier JSON a importé",
             "action"   : "Importer",
-            "find"     : "Parcourir"
+            "find"     : "Parcourir",
+            "success"  : "Succès",
+            "successMsg" : "Le formulaire a bien été importé"
         },
         "export" : {
             "success"  : "Export réussi !",
