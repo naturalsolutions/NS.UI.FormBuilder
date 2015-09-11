@@ -64,6 +64,7 @@ define([
         exit : function() {
             this.navigate('#');
             this.globalChannel.trigger('displayHomePage');
+            Backbone.Radio.channel('grid').trigger('resetCollection');
         }
 
     });
