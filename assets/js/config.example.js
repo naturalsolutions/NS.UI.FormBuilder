@@ -173,13 +173,11 @@ require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbui
 			// The app needs the following nodes to have a proper path to the server :
 			// ***********************************************************************
 
-            formAutocomplete 		: 'ressources/autocomplete/forms.json',			// '/FormbuilderWS/autocomplete/forms'
-			forms 					: 'ressources/forms/formsExample.json',			// '/FormbuilderWS/forms'
-            formSaveURL  			:'/forms',										//  Get all form name for autocomplete, does not work if you are in client side mode only && '/FormbuilderWS/forms'
-			//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms && '/FormbuilderWS/configurations'
-            preConfiguredField    	: 'ressources/fieldConfiguration/preConfiguredField.json',
-			//  Allow to send a pre-configurated field to the server. Send a POST request, won't work on client side, you need the back-end && '/FormbuilderWS/configurations'
-            fieldConfigurationURL 	: 'configurationSaved',
+            formAutocomplete 		: 'ressources/autocomplete/forms.json',			// '/FormbuilderWS/autocomplete/forms',
+			forms 					: 'ressources/forms/formsExample.json',			// '/FormbuilderWS/forms',
+            formSaveURL  			:'/forms',										//  Get all form name for autocomplete, does not work if you are in client side mode only && '/FormbuilderWS/forms',
+			preConfiguredField    	: 'ressources/fieldConfiguration/preConfiguredField.json', //  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms && '/FormbuilderWS/configurations',
+			fieldConfigurationURL 	: 'configurationSaved', //  Allow to send a pre-configurated field to the server. Send a POST request, won't work on client side, you need the back-end && '/FormbuilderWS/configurations',
 			
 			// ************************************************
 			// Still don't know what those nodes are used for :
