@@ -100,6 +100,8 @@ define([
          */
         initFieldSetting : function(options) {
             setTimeout(function() {}, 1000);
+            if (this.settingPanel == undefined)
+                this.formSetting(this.formChannel.collection);
             this.settingPanel.show(new SettingFieldPanelView(options));
         },
 

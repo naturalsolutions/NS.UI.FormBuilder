@@ -174,9 +174,8 @@ define([
          * @param {object} newModel new added field
          */
         addElement: function (newModel) {
-
+            console.log("FormPanelView AddElement ...");
             if (!newModel.get('isUnderFieldset')) {
-
                 //  We only create view for model who are not in a fieldset
                 //  If a model if in a fieldset, the fieldset view render the subView
 

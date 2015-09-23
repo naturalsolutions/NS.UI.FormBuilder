@@ -585,12 +585,6 @@ define([
                         value          : "1",
                         en             : "My first Option",
                         fr             : 'Mon option',
-                        isDefaultValue : true
-                    }, {
-                        id             : 2,
-                        value          : "2",
-                        en             : "My second Option",
-                        fr             : 'Mon option 2',
                         isDefaultValue : false
                     }
                 ],

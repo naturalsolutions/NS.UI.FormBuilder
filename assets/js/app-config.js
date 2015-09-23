@@ -89,7 +89,7 @@ define([
             // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
-            currentmode : 'full',
+            currentmode : 'demo',
             demo : [
                 'Autocomplete',
                 'Text',
@@ -98,7 +98,8 @@ define([
                 'Number',
                 'Select',
                 'Subform',
-                'Thesaurus'
+                'Thesaurus',
+                'CheckBox'
             ],
             ecoreleve : [
                 'Autocomplete',

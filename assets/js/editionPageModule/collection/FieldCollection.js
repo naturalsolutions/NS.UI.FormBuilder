@@ -350,7 +350,9 @@ define([
                 if (field.get('name') == Fields.BaseField.prototype.defaults.name)
                     field.set('name', field.get('name') + " " + field.get('id'));
 
-                this.add(field);
+                console.log("Debug 1 ----------------");
+                console.log(this.add(field));
+                console.log("Debug 2 ----------------");
 
                 //  Send event when field is added to the form
                 this.hookChannel.trigger('field:add', this, field);
@@ -363,16 +365,15 @@ define([
                 }
 
                 if (scrollToBottom){
-                    var scrollArea = $(".slimScrollDiv #scrollSection");
+                    var scrollArea = $(".dropArea .slimScrollDiv #scrollSection");
                     var lastItemofScrollArea = scrollArea.find('div.dropField:last');
 
                     if (lastItemofScrollArea.offset()){
                         scrollArea.animate({
-                            scrollTop: lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true)
+                            scrollTop: lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop()
                         }, 500);
                     }
                 }
-
                 return field.get('id');
             }
         },
@@ -420,18 +421,8 @@ define([
          * @param subFormId sub form to remove id
          */
         destroySubElement : function(subFormId) {
-            console.log("04 ---------------------");
-            console.log(this.map);
             this.map(function(model, idx) {
-                console.log("11 ---------------------");
-                console.log(model);
-                console.log("41 ---------------------");
-                console.log(subFormId);
-                console.log("23 ---------------------");
-                console.log(idx);
                 if (model.get('subFormParent') == subFormId) {
-                    console.log("37 ---------------------");
-                    console.log("triggered destroy !");
                     model.trigger('destroy', model);
                 }
             })
@@ -458,14 +449,14 @@ define([
 
                 this.hookChannel.trigger('field:remove', this, item);
 
-                console.log("98 -----------------");
+                console.log("Debug A ----------------");
                 console.log(item);
+
                 //  We used trigger instead destroy method, the DELETE ajax request is not send
                 item.trigger('destroy', item);
-            }
 
-            if (this.id > 0)
                 this.fieldstodelete.push(id);
+            }
         },
 
         /**
@@ -646,8 +637,7 @@ define([
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
             var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
             var that = this;
-            var savedFieldsToDelete = this.fieldstodelete;
-            this.fieldstodelete = [];
+
             $.ajax({
                 data        : JSON.stringify(this.getJSON()),
                 type        : PostOrPut,
@@ -662,14 +652,27 @@ define([
                     this.id = data.form.id;
                     var savedid = this.id;
                     if (data.form.schema) {
+                        console.log("93 ----------------");
                         $.each(data.form.schema, function (index, inputVal) {
                             $.each(that.models, function (modelindex, modelinputVal) {
+                                console.log("61 ---------------");
+                                console.log(modelinputVal.attributes.name + " == " + index);
                                 if (modelinputVal.attributes.name == index) {
+                                    console.log("54 -------------");
+                                    console.log(that.models[modelindex].attributes.id + " is now " + inputVal.id);
                                     that.models[modelindex].attributes.id = inputVal.id;
                                 }
                             });
                         });
                     }
+                    else
+                    {
+                        console.log("95 ----------------");
+                    }
+
+                    var savedFieldsToDelete = this.fieldstodelete;
+                    this.fieldstodelete = [];
+
                     $.each(savedFieldsToDelete, function(index, inputVal) {
                         $.ajax({
                             data: {},
@@ -678,20 +681,21 @@ define([
                             contentType: 'application/json',
                             crossDomain: true,
                             success: _.bind(function (data) {
-                                this.formChannel.trigger('save:success');
                             }, this),
                             error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                this.fieldstodelete.push(inputVal);
-                                this.formChannel.trigger('save:fail');
+                                that.fieldstodelete.push(inputVal);
+                                that.formChannel.trigger('save:fail');
                             }, this)
                         });
                     });
-                    if (this.fieldstodelete.length == 0){
-                        this.formChannel.trigger('save:success');
-                    }
+                    setTimeout(function(){
+                        if (that.fieldstodelete.length == 0){
+                            that.formChannel.trigger('save:success');
+                        }
+                    }, 2000);
                 }, this),
                 error: _.bind(function(xhr, ajaxOptions, thrownError) {
-                    this.formChannel.trigger('save:fail');
+                    that.formChannel.trigger('save:fail');
                 }, this)
             });
         },
