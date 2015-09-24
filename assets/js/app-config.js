@@ -25,7 +25,7 @@ define([
             {
                 error : {
                     'title' : 'Form size exceeded',
-                    'content' : 'Form can\'t have more than 5 fields'
+                    'content' : 'Form can\'t have more than 666 fields'
                 },
 
                 /**
@@ -33,7 +33,7 @@ define([
                  * @param form
                  */
                 execute : function(form) {
-                    return form.length < 15;
+                    return form.length < 666;
                 }
             }
         ],
@@ -109,7 +109,8 @@ define([
                 'Number',
                 'Select',
                 'Subform',
-                'Thesaurus'
+                'Thesaurus',
+                'CheckBox'
             ],
             ecollection : [
                 'Autocomplete',
@@ -119,7 +120,8 @@ define([
                 'Number',
                 'Select',
                 'Subform',
-                'Thesaurus'
+                'Thesaurus',
+                'CheckBox'
             ],
             track : [
                 'Autocomplete',
@@ -129,7 +131,8 @@ define([
                 'Number',
                 'Select',
                 'Subform',
-                'Thesaurus'
+                'Thesaurus',
+                'CheckBox'
             ],
             minimalist : [
                 'Text',

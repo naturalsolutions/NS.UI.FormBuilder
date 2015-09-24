@@ -164,7 +164,7 @@ define([
          * Update form fields count when an element was removed
          */
         removeElement : function() {
-            this._viewCount--;
+            //this._viewCount--;
             this.updateFieldCount();
         },
 
@@ -174,7 +174,6 @@ define([
          * @param {object} newModel new added field
          */
         addElement: function (newModel) {
-            console.log("FormPanelView AddElement ...");
             if (!newModel.get('isUnderFieldset')) {
                 //  We only create view for model who are not in a fieldset
                 //  If a model if in a fieldset, the fieldset view render the subView
@@ -186,7 +185,6 @@ define([
                         e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
                     })
                 }
-
                 require(['editionPageModule/views/fieldViews/' + viewClassName], _.bind(function (fieldView) {
 
                     //  View file successfully loaded

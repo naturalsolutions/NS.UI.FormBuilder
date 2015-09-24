@@ -132,6 +132,10 @@ define([
                 this.rendered = true;
                 this.displayTreeView(this.model.get("defaultNode"));
             }
+            else
+            {
+                $('#dropField'+this.model.get('id')+' .field-label').text(this.model.get('labelFr'));
+            }
         }
     });
 

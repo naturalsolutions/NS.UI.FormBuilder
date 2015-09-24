@@ -615,77 +615,83 @@ define([
          * Import form
          */
         importForm : function() {
-            require([
-                'homePageModule/modals/ImportModalView',
-                'editionPageModule/utilities/Utilities'
-            ], _.bind(function(importProtocolModal, Utilities) {
 
-                if ($("body").has("#importModal").length == 0) {
+            if ($("body").has("#importModal").length == 0) {
+                require([
+                    'homePageModule/modals/ImportModalView',
+                    'editionPageModule/utilities/Utilities'
+                ], _.bind(function(importProtocolModal, Utilities) {
+
                     $('body').append('<div class="modal fade" id="importModal"></div>');
                     this.importProtocolModalView = new importProtocolModal({
                         el: "#importModal"
                     });
-                }
 
-                this.importProtocolModalView.render();
-                $("#importModal").i18n();
+                    this.importProtocolModalView.render();
+                    $("#importModal").i18n();
 
-                $('#importModal').on('hidden.bs.modal', _.bind(function () {
-                    var datas = this.importProtocolModalView.getData();
+                    $('#importModal').on('hidden.bs.modal', _.bind(function () {
+                        var datas = this.importProtocolModalView.getData();
+                        if (!datas.closed) {
+                            Utilities.ReadFile(datas['file'], _.bind(function (result) {
+                                try {
+                                    if (result !== false) {
 
-                    if (!datas.closed) {
+                                        $.ajax({
+                                            data        : result,
+                                            type        : "POST",
+                                            url         : this.options.URLOptions.formSaveURL,
+                                            contentType : 'application/json',
+                                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                                            //  The server is already configured to used it
+                                            crossDomain : true,
 
-                        Utilities.ReadFile(datas['file'], _.bind(function (result) {
-                            try {
-                                if (result !== false) {
+                                            //  Trigger event with ajax result on the formView
+                                            success: _.bind(function(data) {
+                                                this.resetCollection();
+                                                swal(
+                                                    translater.getValueFromKey('modal.import.success') || "Succès",
+                                                    translater.getValueFromKey('modal.import.successMsg') || "Le formulaire a bien été importé",
+                                                    "success"
+                                                );
+                                            }, this),
+                                            error: _.bind(function(xhr, ajaxOptions, thrownError) {
+                                                swal(
+                                                    translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
+                                                    translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                                    "error"
+                                                );
+                                            }, this)
+                                        });
 
-                                    $.ajax({
-                                        data        : result,
-                                        type        : "POST",
-                                        url         : this.options.URLOptions.formSaveURL,
-                                        contentType : 'application/json',
-                                        //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                                        //  The server is already configured to used it
-                                        crossDomain : true,
-
-                                        //  Trigger event with ajax result on the formView
-                                        success: _.bind(function(data) {
-                                            this.resetCollection();
-                                            swal(
-                                                translater.getValueFromKey('modal.import.success') || "Succès",
-                                                translater.getValueFromKey('modal.import.successMsg') || "Le formulaire a bien été importé",
-                                                "success"
-                                            );
-                                        }, this),
-                                        error: _.bind(function(xhr, ajaxOptions, thrownError) {
-                                            swal(
-                                                translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
-                                                translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
-                                                "error"
-                                            );
-                                        }, this)
-                                    });
-
-                                } else {
+                                    } else {
+                                        swal(
+                                            translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
+                                            translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
+                                            "error"
+                                        );
+                                    }
+                                } catch (e) {
                                     swal(
                                         translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
                                         translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
                                         "error"
                                     );
                                 }
-                            } catch (e) {
-                                swal(
-                                    translater.getValueFromKey('modal.import.error') || "Une erreur est survenue !",
-                                    translater.getValueFromKey('modal.import.errorMsg') || "Votre formulaire n'a pas pu être importé",
-                                    "error"
-                                );
-                            }
-                        }, this));
-                    }
+                            }, this));
+                        }
+
+                    }, this));
 
                 }, this));
 
-            }, this));
+            }
+            else
+            {
+                this.importProtocolModalView.closed = false;
+                this.importProtocolModalView.render();
+                $("#importModal").i18n();
+            }
         },
 
         /**

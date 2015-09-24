@@ -146,6 +146,8 @@ define([
             this.obsolete        = opt.obsolete       || false;
             this.isTemplate      = opt.isTemplate     || false;
             this.fieldstodelete  = [];
+            this.fieldsexcludedfromdelete = [];
+            this.totalAddedElements = 0;
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -339,20 +341,20 @@ define([
          * @param field                 field to add
          * @param ifFieldIsInFieldset   if field in under a fieldset
          */
-        addField : function(field, ifFieldIsInFieldset, scrollToBottom) {
+        addField : function(field, ifFieldIsInFieldset, newElement) {
+            this.totalAddedElements++;
+
             if (this.isAValidFieldType(field.constructor.type)) {
                 //  Update field
                 field.set('isUnderFieldset', ifFieldIsInFieldset === true);
 
                 if (field.get('id') === 0 || field.get('id') == undefined) {
-                    field.set('id', this.getSize() + 1);
+                    field.set('id', this.totalAddedElements);
                 }
                 if (field.get('name') == Fields.BaseField.prototype.defaults.name)
                     field.set('name', field.get('name') + " " + field.get('id'));
 
-                console.log("Debug 1 ----------------");
-                console.log(this.add(field));
-                console.log("Debug 2 ----------------");
+                this.add(field);
 
                 //  Send event when field is added to the form
                 this.hookChannel.trigger('field:add', this, field);
@@ -364,7 +366,7 @@ define([
 
                 }
 
-                if (scrollToBottom){
+                if (newElement){
                     var scrollArea = $(".dropArea .slimScrollDiv #scrollSection");
                     var lastItemofScrollArea = scrollArea.find('div.dropField:last');
 
@@ -373,6 +375,8 @@ define([
                             scrollTop: lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop()
                         }, 500);
                     }
+
+                    this.fieldsexcludedfromdelete.push(field.get('id'));
                 }
                 return field.get('id');
             }
@@ -387,8 +391,9 @@ define([
          */
         addElement: function (nameType, properties, isUnderFieldset) {
             var field = properties || {};
+
             //  We check if the field name is the default name or not (if a form was imported the name can be different but can't be modified)
-            field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
+            field['name'] = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();
 
             //
@@ -449,13 +454,13 @@ define([
 
                 this.hookChannel.trigger('field:remove', this, item);
 
-                console.log("Debug A ----------------");
-                console.log(item);
-
                 //  We used trigger instead destroy method, the DELETE ajax request is not send
                 item.trigger('destroy', item);
 
-                this.fieldstodelete.push(id);
+                if ($.inArray(item.get('id'), this.fieldsexcludedfromdelete) == '-1')
+                {
+                    this.fieldstodelete.push(item.get('id'));
+                }
             }
         },
 
@@ -652,22 +657,13 @@ define([
                     this.id = data.form.id;
                     var savedid = this.id;
                     if (data.form.schema) {
-                        console.log("93 ----------------");
                         $.each(data.form.schema, function (index, inputVal) {
                             $.each(that.models, function (modelindex, modelinputVal) {
-                                console.log("61 ---------------");
-                                console.log(modelinputVal.attributes.name + " == " + index);
                                 if (modelinputVal.attributes.name == index) {
-                                    console.log("54 -------------");
-                                    console.log(that.models[modelindex].attributes.id + " is now " + inputVal.id);
                                     that.models[modelindex].attributes.id = inputVal.id;
                                 }
                             });
                         });
-                    }
-                    else
-                    {
-                        console.log("95 ----------------");
                     }
 
                     var savedFieldsToDelete = this.fieldstodelete;
@@ -688,6 +684,9 @@ define([
                             }, this)
                         });
                     });
+
+                    this.fieldsexcludedfromdelete = [];
+
                     setTimeout(function(){
                         if (that.fieldstodelete.length == 0){
                             that.formChannel.trigger('save:success');

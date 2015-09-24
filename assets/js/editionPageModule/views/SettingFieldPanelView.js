@@ -47,10 +47,14 @@ define([
         * Setting view template initialization
         */
         template : function() {
-            return _.template(SettingPanelViewTemplate)({
-                model : this.modelToEdit,
-                type : this.modelToEdit.constructor.type.charAt(0).toLowerCase() + this.modelToEdit.constructor.type.slice(1)
-            });
+            if (this.modelToEdit)
+            {
+                return _.template(SettingPanelViewTemplate)({
+                    model : this.modelToEdit,
+                    type : this.modelToEdit.constructor.type.charAt(0).toLowerCase() + this.modelToEdit.constructor.type.slice(1)
+                });
+            }
+            return ({model: undefined, type:  undefined});
         },
 
 
