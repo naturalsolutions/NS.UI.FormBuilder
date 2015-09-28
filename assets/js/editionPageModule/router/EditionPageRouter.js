@@ -29,6 +29,10 @@ define([
             //  Event send by FormPanelView when user click on "exit" button
             this.formChannel.on('exit', this.exit, this);
 
+            //  Event send by formPanel view when render is done
+            //  Send data to the controller
+            this.formChannel.on('renderFinished', this.sendJsonDataToController, this);
+
             //  Event send by Formbuilder when user wants to import a form from the homepage
             this.editionPageChannel.on('formImported', this.displayEditionPage, this);
         },
@@ -43,9 +47,6 @@ define([
          * @param  {Object} formToEdit form to edit
          */
         displayEditionPage : function(formToEdit) {
-            //  Event send by formPanel view when render is done
-            //  Send data to the controller
-            this.formChannel.on('renderFinished', this.sendJsonDataToController, this);
 
             //  Keep data in memory
             this.formAsJSON = formToEdit;
