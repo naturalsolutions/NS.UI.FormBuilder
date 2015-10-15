@@ -165,6 +165,9 @@ define([
          */
         removeElement : function() {
             //this._viewCount--;
+
+            //console.log("47 ----------------");
+            //console.log(this.model);
             this.updateFieldCount();
         },
 

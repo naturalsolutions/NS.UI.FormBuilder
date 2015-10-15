@@ -82,7 +82,10 @@ define([
             else {
                 viewToMoveModel.set('subFormParent', this.model.get('id'));
                 viewToMoveModel.set('isUnderFieldset', true);
-                viewToMoveModel.attributes.linkedFieldset = this.model.get('legend') + " " + this.model.cid;
+                viewToMoveModel.set('linkedFieldset', this.model.get('legend') + " " + this.model.cid);
+
+                //console.log("50 -------------");
+                //console.log(this.model);
 
                 this.model.addField(viewToMoveModel);
 
@@ -139,6 +142,8 @@ define([
         },
 
         addSubView : function(model) {
+            //console.log("52 ----------------");
+            //console.log(model);
             require(['editionPageModule/views/fieldViews/' + model.constructor.type + 'FieldView'], _.bind(function(fieldView) {
 
                 this.$el.find('fieldset').append('<div class="row sortableRow marginTop0" id="subView' + model.cid + '"></div>');
@@ -150,6 +155,9 @@ define([
                 if (vue !== null) {
                     vue.render();
                 }
+
+                //console.log("56 ----------------");
+                //console.log(model);
 
                 $(".actions").i18n();
             }, this));

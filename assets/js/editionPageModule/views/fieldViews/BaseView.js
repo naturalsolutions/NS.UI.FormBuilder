@@ -27,7 +27,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
             this.model.bind('destroy', this.destroy_view);
 
             this.el   = options.el;
-            this.next = options.next || 'nextField';
+            this.next = 'nextFieldSet2';
 
             this.initFormChannel();
             this.initMainChannel();
@@ -77,6 +77,8 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'i18n'], function(
          * Send event for remove the view
          */
         removeView: function() {
+            //console.log("45 ----------------");
+            //console.log(this.model);
             this.formChannel.trigger('remove', this.model.get('id'));
         },
 

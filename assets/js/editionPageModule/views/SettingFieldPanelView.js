@@ -22,7 +22,7 @@ define([
      * See collection/FieldCollection to see form schema
      * See models/Fields to see form schema for each field type like text field, number, etc ...
      */
-    var SettingPanelView = Backbone.Marionette.ItemView.extend({
+    var SettingFieldPanelView = Backbone.Marionette.ItemView.extend({
 
 
         /**
@@ -124,6 +124,9 @@ define([
         * @param  {Object} field Field with which backbone forms will generate an edition form
         */
         initForm : function() {
+            //console.log("20 ----------------");
+            //console.log(this.modelToEdit);
+
             this.currentFieldType  = this.modelToEdit.constructor.type;
             this.fieldWithSameType = this.preConfiguredFieldList[this.currentFieldType];
 
@@ -491,6 +494,9 @@ define([
                         this.modelToEdit.set('formIdentifyingColumn', '');
                     }
 
+                    //console.log("22 --------------");
+                    //console.log(this.modelToEdit.get('id'));
+
                     this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
 
                     this.mainChannel.trigger('formCommit');
@@ -569,6 +575,6 @@ define([
 
     });
 
-    return SettingPanelView;
+    return SettingFieldPanelView;
 
 });
