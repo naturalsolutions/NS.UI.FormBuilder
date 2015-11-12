@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config'
-], function($, _, Backbone, Translater, CheckboxEditor, AppConfig) {
+    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config', '../../homePageModule/collection/FormCollection'
+], function($, _, Backbone, Translater, CheckboxEditor, AppConfig, FormCollection) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -30,7 +30,7 @@ define([
             fieldSizeEdit   : 1,
             fieldSizeDisplay   : 1,
             endOfLine   : false,
-            linkedFieldset               : '0',
+            linkedFieldset               : '',
 
             //  Linked fields values
             isLinkedField                : false,
@@ -162,7 +162,6 @@ define([
                 title       : translater.getValueFromKey('schema.eol')
             },
             linkedFieldset : {
-                type        : 'Hidden',
                 title       : translater.getValueFromKey('schema.linkedFieldset'),
                 editorClass : 'form-control',
                 template    : fieldTemplate
@@ -756,12 +755,12 @@ define([
             );
             baseSchema.help = translater.getValueFromKey('placeholder.numeric');
             return _.extend( {}, baseSchema, {
-                minValue     : 0,
-                maxValue     : 100,
+                minValue     : '',
+                maxValue     : '',
                 precision    : 1,
                 decimal      : true,
-                defaultValue : 10,
-                unity        : "meters",
+                defaultValue : '',
+                unity        : '',
             })
         },
 
@@ -1034,7 +1033,7 @@ define([
     models.ThesaurusField = models.BaseField.extend({
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
-                webServiceURL : AppConfig.thesaurusWSPath,
+                webServiceURL : AppConfig.paths.thesaurusWSPath,
                 defaultNode: "",
                 fullpath : false
             });
@@ -1128,6 +1127,87 @@ define([
         type: 'AutocompleteTreeView',
         i18n: 'autocomp',
         doubleColumn : true
+    });
+
+    var getFormsList = function(){
+        var toret = [];
+        if (AppConfig.paths){
+            var formCollection = new FormCollection({
+                url : AppConfig.paths.forms
+            });
+
+            formCollection.fetch({
+                async: false,
+                reset : true,
+                success : _.bind(function() {
+                    $.each(formCollection.models, function(index, value){
+                        //toret.push({"val" : value.attributes.id  ,"label" : value.attributes.name});
+                        toret.push({"val" : value.attributes.name  ,"label" : value.attributes.name});
+                    });
+                }, this)
+            });
+            return(toret);
+        }
+    };
+
+    models.ChildFormField = Backbone.Model.extend({
+
+        defaults : {
+            childFormName : "",
+            help : translater.getValueFromKey('placeholder.childform'),
+        },
+        schema: {
+            childFormName: {
+                type        : 'Select',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : translater.getValueFromKey('schema.childFormName'),
+                options     : getFormsList()
+            },
+            help: {
+                type        : 'Hidden',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : translater.getValueFromKey('schema.help'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.help')
+                }
+            }
+        },
+
+        initialize : function(options) {
+            _.bindAll(this, 'getJSON');
+        },
+
+        isAdvanced : function(index) {
+            return this.getSchemaProperty(index, 'advanced') === "advanced";
+        },
+
+        getJSON : function() {
+            var jsonObject                  = {
+                    validators : []
+                },
+                schemaKeys                  = _.keys( typeof this.schema == "function" ? this.schema() : this.schema ),
+                schemaKeysWithoutValidator  = _.without(schemaKeys, 'required');
+
+            _.each(schemaKeysWithoutValidator, _.bind(function(el) {
+                jsonObject[el] = this.get(el);
+            }, this));
+
+            jsonObject["id"]    = this.get("id");
+            jsonObject["order"] = this.get("order");
+
+            if (this.get('editMode') & 4 != 4) {
+                jsonObject['validators'].push('required');
+            }
+            if (this.get('editMode') & 2 != 2) {
+                jsonObject['validators'].push('readonly');
+            }
+            return _.omit(jsonObject, 'isLinkedField');
+        }
+    },{
+        type   : 'ChildForm',
+        i18n   : 'childForm'
     });
 
     return models;

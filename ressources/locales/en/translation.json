@@ -25,7 +25,8 @@
         "boolean"              : "Boolean",
         "thesaurus"            : "Thesaurus",
         "autocompletetreeview" : "Autocomplete Treeview",
-        "numericrange"         : "Range"
+        "numericrange"         : "Range",
+        "childform"            : "Child Form"
     },
 
     "search" : {
@@ -178,7 +179,8 @@
         "linkedField"                    : "Linked field",
         "formIdentifyingColumn"          : "Form identifying field",
         "linkedFieldset"                 : "Parent fieldset",
-        "isLinkedField"                  : "Is a linked Field"
+        "isLinkedField"                  : "Is a linked Field",
+        "childFormName"                  : "Child Form name"
     },
 
     "tooltip" : {
@@ -200,7 +202,8 @@
         "boolean"              : "Boolean",
         "autocompletetreeview" : "A TreeView with searching functionality",
       "numericrange"           : "Numeric field with range",
-      "thesaurus"              : "Thesaurus"
+      "thesaurus"              : "Thesaurus",
+        "childform"            : "Child Form"
     },
 
     "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
@@ -351,7 +354,8 @@
         "autocomplete" : "Write some text to see a list value",
         "file"         : "Please choose a file",
         "numeric"      : "Enter numeric value",
-        "date"         : "Enter a data or click on the pico"
+        "date"         : "Enter a data or click on the pico",
+        "childform"    : "Child form name: "
     },
 
     "optional" : "optional",

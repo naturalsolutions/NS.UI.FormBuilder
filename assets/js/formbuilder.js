@@ -8,14 +8,65 @@ define([
     'marionette',
     'homePageModule/router/HomePageRouter',
     'homePageModule/controller/HomePageController',
+    'homePageModule/layout/HomePageLayout',
     'editionPageModule/router/EditionPageRouter',
     'editionPageModule/controller/EditionPageController',
-
+    'homePageModule/collection/FormCollection',
     'backbone.radio'
-], function(_, Marionette, HomePageRouter, HomePageController, EditionPageRouter, EditionPageController, Radio) {
+], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController, FormCollection, Radio) {
 
     //  Create a marionette application
     var FormbuilderApp = new Backbone.Marionette.Application();
+
+    var fbrouting = function(options){
+
+        var getFromUrl = function(){
+            var myself = this;
+            myself.urlArgs = [];
+
+            var location = window.location.hash.substr(1);
+            myself.urlArgs = location.split('/');
+
+            return (myself.urlArgs);
+        };
+
+        window.setTimeout(function(){
+            var loadHomepage = function(){
+                window.location.hash = "#";
+
+                $('#navbarContext').text($.t('navbar.context.home'));
+
+                //  Init homepage layout and render it in the homepage region
+                var homePageLayout = new HomePageLayout({
+                    URLOptions : options.URLOptions
+                });
+                FormbuilderApp.leftRegion.show(homePageLayout);
+
+                Backbone.Radio.channel('global').trigger('displayHomePage');
+            };
+            var urlArgs = getFromUrl();
+
+            if (urlArgs[0] == "form"){
+                var formCollection = new FormCollection({
+                    url : options.URLOptions.forms
+                });
+                formCollection.fetch({
+                    reset : true,
+                    success : _.bind(function() {
+                        var formInCollection =  formCollection.get(urlArgs[1]);
+                        if (formInCollection)
+                            Backbone.Radio.channel('global').trigger('displayEditionPage',formInCollection.toJSON());
+                        else
+                            loadHomepage();
+                    }, this)
+                });
+            }
+            else if (((urlArgs[0] == "edition" && $("#count").length == 0) || urlArgs[0] == "") && $("#formsCount").length == 0){
+                loadHomepage();
+            }
+        }, 100);
+
+    };
 
     //  Add two main region for the layouts
     FormbuilderApp.addRegions({
@@ -24,7 +75,7 @@ define([
     });
 
     FormbuilderApp.addInitializer(function(options){
-        window.location.hash = "#";
+        fbrouting(options);
     });
 
     //  Add a first initializer that create homepage router
@@ -69,8 +120,6 @@ define([
 
 
         this.globalChannel.on('displayHomePage', _.bind(function() {
-
-
             $('#mainRegion').animate({
                 marginLeft : '0%'
             }, 750, _.bind(function() {
@@ -97,7 +146,13 @@ define([
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
         Backbone.history.start();
-    })
+
+        window.onhashchange = function(e)
+        {
+            console.log(window.location);
+            fbrouting(options);
+        };
+    });
 
     return FormbuilderApp;
 

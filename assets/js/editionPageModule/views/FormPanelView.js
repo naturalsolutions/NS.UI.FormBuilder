@@ -216,8 +216,8 @@ define([
 
                 }, this), function (err) {
                     swal(
-                        translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
-                        translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
+                        translater.getValueFromKey('modal.field.error' + err) || "Echec de l'ajout!",
+                        translater.getValueFromKey('modal.field.errorMsg' + err) || "Une erreur est survenue lors de l'ajout du champ !",
                         "error"
                     );
                 });

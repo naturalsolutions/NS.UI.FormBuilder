@@ -74,6 +74,7 @@ define([
             if (Fields[elementClassName] !== undefined) {
                 this.formChannel.trigger('addNewElement', elementClassName);
             } else {
+                console.log("err 2");
                 swal(
                     translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
                     translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",

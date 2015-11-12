@@ -84,9 +84,6 @@ define([
                 viewToMoveModel.set('isUnderFieldset', true);
                 viewToMoveModel.set('linkedFieldset', this.model.get('legend') + " " + this.model.cid);
 
-                //console.log("50 -------------");
-                //console.log(this.model);
-
                 this.model.addField(viewToMoveModel);
 
                 this.addSubView(viewToMoveModel);

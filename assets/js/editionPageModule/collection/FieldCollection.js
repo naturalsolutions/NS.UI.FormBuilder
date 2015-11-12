@@ -255,6 +255,7 @@ define([
          * @return {object}       model data serialized
          */
         getJSONFromModel: function (model) {
+            console.log(model);
             var subModel = model.getJSON();
 
             switch (model.constructor.type) {
@@ -321,7 +322,18 @@ define([
                         model.set('name', model.get('name') + model.get('id'));
                     }
 
-                    json.schema[model.get('name')] = subModel;
+                    if (model.get('name'))
+                        json.schema[model.get('name')] = subModel;
+                    else {
+                        subModel.parentFormName = json.name;
+                        console.log("129 -----------");
+                        console.log(json.schema);
+                        console.log(Object.keys(json.schema).length);
+
+                        json.schema["childform" + ((Object.keys(json.schema).length + 1) || "1")] = subModel;
+                    }
+                    console.log("748------------");
+                    console.log(subModel);
                 }
             }, this));
 
@@ -337,6 +349,9 @@ define([
             });
 
             $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
+
+            console.log("119 ----------------");
+            console.log(json);
 
             return json;
         },
@@ -517,22 +532,24 @@ define([
          */
         updateCollectionAttributes : function(JSONUpdate) {
 
-            this.id                   = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
-            this.name                 = JSONUpdate["name"];
+            if (JSONUpdate){
+                this.id                   = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
+                this.name                 = JSONUpdate["name"];
 
-            this.descriptionFr        = JSONUpdate["descriptionFr"];
-            this.descriptionEn        = JSONUpdate["descriptionEn"];
+                this.descriptionFr        = JSONUpdate["descriptionFr"];
+                this.descriptionEn        = JSONUpdate["descriptionEn"];
 
-            this.keywordsFr           = JSONUpdate["keywordsFr"];
-            this.keywordsEn           = JSONUpdate["keywordsEn"];
+                this.keywordsFr           = JSONUpdate["keywordsFr"];
+                this.keywordsEn           = JSONUpdate["keywordsEn"];
 
-            this.labelFr              = JSONUpdate["labelFr"];
-            this.labelEn              = JSONUpdate["labelEn"];
+                this.labelFr              = JSONUpdate["labelFr"];
+                this.labelEn              = JSONUpdate["labelEn"];
 
-            this.tag                  = JSONUpdate["tag"];
+                this.tag                  = JSONUpdate["tag"];
 
-            this.obsolete             = JSONUpdate["obsolete"];
-            this.isTemplate           = JSONUpdate["isTemplate"];
+                this.obsolete             = JSONUpdate["obsolete"];
+                this.isTemplate           = JSONUpdate["isTemplate"];
+            }
         },
 
         triggeredCreateFieldsets : function() {
@@ -590,7 +607,7 @@ define([
             var i = 0;
             var that = this;
 
-            if (!that.working)
+            if (!that.working && that.JSONUpdate)
             {
                 that.working = true;
                 that.schema = [];

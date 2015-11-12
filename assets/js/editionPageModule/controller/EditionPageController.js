@@ -185,7 +185,7 @@ define([
             //  So we get the schema now
             //
 
-            if (this.URLOptions.forms.indexOf('.json') < 0 && formImportedJSON.id > 0) {
+            if (this.URLOptions.forms.indexOf('.json') < 0 && formImportedJSON && formImportedJSON.id > 0) {
 
                 $.getJSON(this.URLOptions.forms + '/' + formImportedJSON['id'], _.bind(function(data){
                     this.fieldCollection.updateWithJSON(data['form'])

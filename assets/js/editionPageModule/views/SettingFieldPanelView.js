@@ -195,7 +195,8 @@ define([
                 linkedFieldsKeyList.push(el.key)
             });
 
-            if (! _.contains(['Subform'], this.modelToEdit.constructor.type)) {
+            if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
+                ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
                 if (this.fieldsList.length > 0) {
                     //  Update linked fields
                     this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
@@ -280,7 +281,7 @@ define([
                         });
                     }
                     else {
-                        $.getJSON(AppConfig.thesaurusWSPath, _.bind(function(data) {
+                        $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
 
                             $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
                             $('#defaultNode').fancytree({

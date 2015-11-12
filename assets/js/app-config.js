@@ -17,9 +17,12 @@ define([
         readonlyMode : false,
         // Defines whether you display the User filter on the main page or not
         displayUserFilter : false,
-        // Path to the thesaurus Web Services
-        thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusReadServices.svc/json/fastInitForCompleteTree',
 
+        paths : {
+            // Path to the thesaurus Web Services
+            thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusReadServices.svc/json/fastInitForCompleteTree',
+            forms : '/FormbuilderWS/childforms/0'
+        },
         // Defines the list of rules that will appli to the forms
         rules : [
             {
@@ -97,9 +100,9 @@ define([
                 'TextArea',
                 'Number',
                 'Select',
-                'Subform',
                 'Thesaurus',
-                'CheckBox'
+                'CheckBox',
+				'ChildForm'
             ],
             ecoreleve : [
                 'Autocomplete',
@@ -108,7 +111,6 @@ define([
                 'TextArea',
                 'Number',
                 'Select',
-                'Subform',
                 'Thesaurus',
                 'CheckBox'
             ],
@@ -119,7 +121,6 @@ define([
                 'TextArea',
                 'Number',
                 'Select',
-                'Subform',
                 'Thesaurus',
                 'CheckBox'
             ],
@@ -130,7 +131,6 @@ define([
                 'TextArea',
                 'Number',
                 'Select',
-                'Subform',
                 'Thesaurus',
                 'CheckBox'
             ],
