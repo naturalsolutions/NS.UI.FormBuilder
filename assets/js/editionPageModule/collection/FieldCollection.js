@@ -396,7 +396,6 @@ define([
                             scrollTop: lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop()
                         }, 500);
                     }
-
                     this.fieldsexcludedfromdelete.push(field.get('id'));
                 }
 
@@ -513,6 +512,9 @@ define([
          * @returns {boolean} if the string is a valid field type
          */
         isAValidFieldType : function(typeToBeValidated) {
+            console.log("******* 573 *********");
+            console.log(Fields);
+            console.log(typeToBeValidated + 'Field');
             return Fields[typeToBeValidated + 'Field'] !== undefined;
         },
 
@@ -616,7 +618,7 @@ define([
                     $.each(that.JSONUpdate["schema"], function(subindex, subvalue){
                         if (subvalue.linkedFieldset == value["refid"])
                         {
-                            subvalue.order += 1000;
+                            subvalue.order += 10000;
                             that.schema.push(subvalue);
                             //console.log("285 -------------------");
                             //console.log(that.JSONUpdate["schema"][subindex]);
@@ -660,7 +662,15 @@ define([
                     else
                     {
                         //console.log("Create Field !");
-                        that.createField3(that.JSONUpdate["schema"][first]);
+                        if (that.JSONUpdate["schema"][first].childFormName)
+                        {
+                            console.log("Create Child ! ONE");
+                            that.createField3(that.JSONUpdate["schema"][first], "ChildForm");
+                        }
+                        else
+                        {
+                            that.createField3(that.JSONUpdate["schema"][first]);
+                        }
                         delete that.JSONUpdate["schema"][first];
                     }
                     i++;
@@ -676,15 +686,20 @@ define([
             }
         },
 
-        createField3 : function(fieldObj)
+        createChildFormField : function(childFormObj){
+            this.addElement(fieldObj.type + "Field", fieldObj, false);
+        },
+
+        createField3 : function(fieldObj, fieldType)
         {
             if (fieldObj.type == 'Checkboxes') {
                 fieldObj.type = 'CheckBox';
             }
 
-            if (this.isAValidFieldType(fieldObj.type)) {
+            if (this.isAValidFieldType(fieldObj.type) || this.isAValidFieldType(fieldType)) {
+                console.log("Create Child ! TWO");
                 //console.log("ADDFIELD !!");
-                this.addElement(fieldObj.type + "Field", fieldObj, false);
+                this.addElement((fieldObj.type || fieldType) + "Field", fieldObj, false);
                 //this.addField(this.createFieldWithJSON(fieldObj), fieldObj['isUnderFieldset']);
             }
         },
