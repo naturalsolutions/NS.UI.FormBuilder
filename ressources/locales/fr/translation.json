@@ -51,6 +51,25 @@
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
         "setting"     : "Caractéristiques <br /> du formulaire",
         "new"         : "Nouveau formulaire",
+        "context"     : "Contexte",
+        "activite"    : "Activité",
+        "ordre"       : "Ordre",
+        "typeIndividus" : "Type d'individus",
+        "frequence"   : "Fréquence",
+        "groupe"      : "Groupe",
+        "color"       : "Couleur",
+
+        "actif"       : {
+            "title"    : "Actif",
+            "actif"    : "Actif",
+            "pasactif" : "Inactif"
+        },
+
+        "importapressortie" : {
+            "title"    : "Import après sortie",
+            "only"     : "Oui",
+            "not"      : "Non"
+        },
 
         "description" : {
             "fr" : "Description française du formulaire",

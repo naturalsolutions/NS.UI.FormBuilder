@@ -86,13 +86,13 @@ define([
         },
 
         // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
-        allowedFields : {
+        appMode : {
             // List of all existing types :
             // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number,
             // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
-            currentmode : 'demo',
+            currentmode : 'track',
             demo : [
                 'Autocomplete',
                 'Text',
@@ -112,7 +112,8 @@ define([
                 'Number',
                 'Select',
                 'Thesaurus',
-                'CheckBox'
+                'CheckBox',
+                'ChildForm'
             ],
             ecollection : [
                 'Autocomplete',
@@ -122,7 +123,8 @@ define([
                 'Number',
                 'Select',
                 'Thesaurus',
-                'CheckBox'
+                'CheckBox',
+                'ChildForm'
             ],
             track : [
                 'Autocomplete',
@@ -132,7 +134,8 @@ define([
                 'Number',
                 'Select',
                 'Thesaurus',
-                'CheckBox'
+                'CheckBox',
+                'ChildForm'
             ],
             minimalist : [
                 'Text',

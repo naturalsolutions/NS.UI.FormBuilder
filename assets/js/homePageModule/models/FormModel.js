@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater'
-], function($, _, Backbone,Translater) {
+    'jquery', 'underscore', 'backbone', '../../Translater', 'app-config'
+], function($, _, Backbone,Translater, AppConfig) {
 
     var translater = Translater.getTranslater();
     /**
@@ -28,6 +28,7 @@ define([
             tag              : '',
             obsolete         : false,
             isTemplate       : false,
+            context          : AppConfig.appMode.currentmode,
 
             // display attributes
             creationDateDisplay : "",
@@ -104,7 +105,8 @@ define([
                 fieldsets                  : this.get('fieldsets'),
                 tag                        : this.get('tag'),
                 isTemplate                 : this.get('isTemplate'),
-                obsolete                   : this.get('obsolete')
+                obsolete                   : this.get('obsolete'),
+                context                    : this.get('context')
             }
         }
 
