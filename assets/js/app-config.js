@@ -21,7 +21,7 @@ define([
         paths : {
             // Path to the thesaurus Web Services
             thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusReadServices.svc/json/fastInitForCompleteTree',
-            forms : '/FormbuilderWS/childforms/0'
+            forms : '/FormbuilderWS/allforms'
         },
         // Defines the list of rules that will appli to the forms
         rules : [

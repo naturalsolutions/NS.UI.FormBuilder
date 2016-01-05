@@ -42,6 +42,7 @@ define([
         * View constructor, init grid channel
         */
         initialize : function(options) {
+
             this.URLOptions = options.URLOptions;
             this.formToEdit = options.formToEdit;
             this.form       = null;
@@ -192,6 +193,28 @@ define([
             this.hasFieldsChanged = true;
         },
 
+        initChildForms : function() {
+            $.ajax({
+                data: {},
+                type: 'GET',
+                url: this.URLOptions.childforms + "/" + this.formToEdit.id,
+                contentType: 'application/json',
+                crossDomain: true,
+                success: _.bind(function (data) {
+                    data = JSON.parse(data);
+
+                    $(data).each(function(){
+                        $(".childFormsList").show();
+                        if ($("#childform"+this.id).length == 0)
+                            $(".childList").append("<div id='childform"+this.id+"'><a target=_blank href='#form/"+this.id+"'>"+this.name+"</a></div>");
+                    });
+                }, this),
+                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    console.log("Ajax Error: " + xhr);
+                }, this)
+            });
+        },
+
         /**
         * Generate form for edit main form object properties
         *
@@ -230,6 +253,9 @@ define([
                     schema: schemaDefinition,
                     data  : datas
                 }).render();
+
+                //  Init linked field
+                this.initChildForms();
 
                 this.$el.find('#form').append(this.form.el);
                 this.$el.find('#getField').hide();

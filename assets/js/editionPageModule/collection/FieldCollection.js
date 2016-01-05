@@ -366,7 +366,10 @@ define([
                 });
             });
 
-            $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
+            $.each(json.schema, function(index, val){
+                val.editMode = getBinaryWeight(val.editMode);
+                val.name = val.name.replace(/\s+/g, '');
+            });
 
             return json;
         },
@@ -388,7 +391,7 @@ define([
                     field.set('id', this.totalAddedElements);
                 }
                 if (field.get('name') == Fields.BaseField.prototype.defaults.name)
-                    field.set('name', field.get('name') + " " + field.get('id'));
+                    field.set('name', field.get('name') + field.get('id'));
 
                 this.add(field);
 

@@ -202,6 +202,23 @@ define([
          * @param fieldToSave field to save
          */
         saveConfiguration : function(fieldToSave) {
+            var getBinaryWeight = function(editModeVal) {
+                var toret = editModeVal;
+                if (!$.isNumeric(editModeVal))
+                {
+                    var loop = 1;
+                    toret = 0;
+                    for (var index in editModeVal) {
+                        if(editModeVal[index])
+                            toret += loop;
+                        loop *= 2;
+                    };
+                }
+                return(toret);
+            };
+
+            fieldToSave.field.editMode = getBinaryWeight(fieldToSave.field.editMode);
+
             $.ajax({
                 type: "POST",
                 url: this.URLOptions.fieldConfigurationURL,

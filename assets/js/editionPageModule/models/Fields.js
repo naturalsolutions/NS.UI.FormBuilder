@@ -32,12 +32,14 @@ define([
             endOfLine   : false,
             linkedFieldset               : '',
 
-            //  Linked fields values
+            // Linked fields values
             isLinkedField                : false,
             linkedFieldTable             : '',
             linkedFieldIdentifyingColumn : '',
             linkedField                  : '',
-            formIdentifyingColumn        : ''
+
+            // Input Template
+            applyTemplate                : ''
         },
 
         schema : {
@@ -194,9 +196,10 @@ define([
                 editorClass : 'form-control',
                 options : []
             },
-            formIdentifyingColumn : {
+
+            applyTemplate : {
                 type : 'Select',
-                title       : translater.getValueFromKey('schema.formIdentifyingColumn'),
+                title       : translater.getValueFromKey('schema.applyTemplate'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
@@ -298,11 +301,13 @@ define([
                 editorClass : 'form-control',
                 options : []
             },
-            formIdentifyingColumn : {
+
+            applyTemplate : {
                 type : 'Select',
-                title       : translater.getValueFromKey('schema.formIdentifyingColumn'),
+                title       : translater.getValueFromKey('schema.applyTemplate'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
+                fieldClass  : 'col-xs-10',
                 options : []
             }
         }
@@ -1141,7 +1146,6 @@ define([
                 reset : true,
                 success : _.bind(function() {
                     $.each(formCollection.models, function(index, value){
-                        //toret.push({"val" : value.attributes.id  ,"label" : value.attributes.name});
                         toret.push({"val" : value.attributes.name  ,"label" : value.attributes.name});
                     });
                 }, this)
