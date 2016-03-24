@@ -26,24 +26,31 @@ define([
     var translater = Translater.getTranslater();
 
     var EcoreleveExtention = {
-
         schemaExtention: {
-
+            author : {
+                type        : 'Hidden',
+                title       : translater.getValueFromKey('form.author'),
+                editorClass : 'form-control',
+                template    : fieldTemplate
+            }
         },
 
         propertiesDefaultValues : {
-
+            author : window.user
         },
 
         initializeExtention: function () {
+            console.log("init");
             return(this.propertiesDefaultValues);
         },
 
-        jsonExtention: function () {
+        jsonExtention: function (originalForm) {
+            originalForm.author = window.user;
             return(this.propertiesDefaultValues);
         },
 
         updateAttributesExtention: function () {
+            console.log("updateAttr");
             return(this.propertiesDefaultValues);
         }
     };

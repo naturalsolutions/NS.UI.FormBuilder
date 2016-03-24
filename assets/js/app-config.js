@@ -17,7 +17,13 @@ define([
         readonlyMode : false,
         // Defines whether you display the User filter on the main page or not
         displayUserFilter : false,
-
+		// Authentication mode (portal or anything)
+		authmode : 'portal',
+		// Portal local URL
+		portalURL : 'http://localhost/nsportal_old/front/',
+		// JWT security secret word key
+		securityKey : 'R@n#(0k3Y!-B7N8=',
+		
         paths : {
             // Path to the thesaurus Web Services
             thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusReadServices.svc/json/fastInitForCompleteTree',
@@ -92,7 +98,9 @@ define([
             // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
-            currentmode : 'track',
+			// Modes with "demo" inside their names will not be displayed as a context (so won't the minimalist mode)
+			//
+            currentmode : 'demo',
             demo : [
                 'Autocomplete',
                 'Text',
@@ -105,6 +113,17 @@ define([
 				'ChildForm'
             ],
             ecoreleve : [
+                'Autocomplete',
+                'Text',
+                'Date',
+                'TextArea',
+                'Number',
+                'Select',
+                'Thesaurus',
+                'CheckBox',
+                'ChildForm'
+            ],
+            ecorelevedemo : [
                 'Autocomplete',
                 'Text',
                 'Date',

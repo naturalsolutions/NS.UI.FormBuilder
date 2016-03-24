@@ -48,7 +48,9 @@ define([
          * @param  {object} options some options not used here
          */
         initialize : function(options, readonly) {
-            if (readonly)
+            var context = $("#contextSwitcher .selectedContext").text();
+
+            if (readonly || context.toLowerCase() == "all")
                 this.template = CenterGridPanelViewTemplateRO;
             _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm')
 
@@ -83,6 +85,8 @@ define([
             //  Duplicate event
             this.homePageChannel.on('duplicate:error', this.displayDuplicateFail, this);
             this.homePageChannel.on('duplicate:success', this.displayDuplicateSuccess, this);
+
+            this.homePageChannel.on('setCenterGridPanel', this.setCenterGridPanel, this);
         },
 
         /**
@@ -117,7 +121,7 @@ define([
         /**
          * form deleted event callback
          * Event send form controller
-         * @param  {inter} result if the form was successfully deleted
+         * @param {inter} result if the form was successfully deleted
          */
         formDeleted : function(result) {
 
@@ -178,48 +182,54 @@ define([
          * @param {object} model Model information to display in the grid
          */
         addFormSection : function(el, model) {
-            el.after(
-                '<div class="formInformation row ">\
-                    <div class="col-md-12">\
-                        <label class="infos">' +
-                            model.get('descriptionFr')
-                        + '</label>\
+            var context = $("#contextSwitcher .selectedContext").text();
+            // TODO To Move
+            //alert(context);
+            if (context.toLowerCase() == "all" || context.toLowerCase() == model.get('context'))
+            {
+                el.after(
+                    '<div class="formInformation row ">\
+                        <div class="col-md-12">\
+                            <label class="infos">' +
+                    model.get('descriptionFr')
+                    + '</label>\
                         <label class="infos">'+
-                            model.get('keywordsFr').join(',')
-                        + '</label>\
+                    model.get('keywordsFr').join(',')
+                    + '</label>\
                         <div class="pull-right">\
                             <button class="reneco grey editForm">\
                                 <label>'
-                        +
-                            (this.globalChannel.readonly ?
-                                '<span data-i18n="form.actions.viewdetails">VOIR DETAILS</span>' :
-                                '<span data-i18n="form.actions.edit">EDITER</span>')
-                        +
-                                '</label>\
-                                <label>\
-                                    <span class="reneco reneco-edit"></span>\
-                                </label>\
-                            </button>\
+                    +
+                    (this.globalChannel.readonly ?
+                        '<span data-i18n="form.actions.viewdetails">VOIR DETAILS</span>' :
+                        '<span data-i18n="form.actions.edit">EDITER</span>')
+                    +
+                    '</label>\
+                        <label>\
+                        <span class="reneco reneco-edit"></span>\
+                        </label>\
+                        </button>\
                         </div>\
-                    </div>\
-                </div>'
-            )
-            //;el.after(
-            //    '<div class="formInformation"><tr >\
-            //        <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
-            //        <td>' + model.get('keywordsFr').join(',') + '</td>\
-            //    </tr></div>'
-            //);
+                        </div>\
+                        </div>'
+                );
+                //;el.after(
+                //    '<div class="formInformation"><tr >\
+                //        <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
+                //        <td>' + model.get('keywordsFr').join(',') + '</td>\
+                //    </tr></div>'
+                //);
 
-            $('.formInformation').after('<tr class="padding"></tr>');
+                $('.formInformation').after('<tr class="padding"></tr>');
 
-            var padding = $('.formInformation').height();
+                var padding = $('.formInformation').height();
 
-            $('.formInformation').fadeIn(500);
-            $('.padding').animate({
-                height : padding + 30
-            });
-            el.addClass('selected');
+                $('.formInformation').fadeIn(500);
+                $('.padding').animate({
+                    height : padding + 30
+                });
+                el.addClass('selected');
+            }
         },
 
         /**
@@ -348,6 +358,11 @@ define([
                     label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
                     cell     : 'string',
                     editable : false
+                }, {
+                    name     : 'context',
+                    label    : translater.getValueFromKey('grid.formContext') || 'Form Context',
+                    cell     : 'string',
+                    editable : false
                 }],
                 collection : this.formCollection
             });
@@ -362,7 +377,8 @@ define([
 
             //  Create the form collection with an URL
             this.formCollection = new FormCollection({
-                url : this.URLOptions.forms
+                url : this.URLOptions.forms,
+                context : window.context
             });
 
             this.formCollection.reset();
@@ -556,8 +572,13 @@ define([
          * User wants to edit a form of the list
          */
         editForm : function() {
-            var formToEdit = this.formCollection.get(this.currentSelectedForm);
+            var context = $('.backgrid .selected td:last-child').text() || $("#contextSwitcher .selectedContext").text().toLowerCase();
 
+            window.context = context;
+
+            Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
+
+            var formToEdit = this.formCollection.get(this.currentSelectedForm);
             //  Send an event to the formbuilder
             //  Two modules never speak directly, all communication pass htrough formbuilder App
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
@@ -807,6 +828,16 @@ define([
                 translater.getValueFromKey('modal.duplicate.successMsg') || "Votre formulaire a été dupliqué et enregistré sur le serveur !",
                 "success"
             );
+        },
+
+        setCenterGridPanel : function(context)
+        {
+            this.template = CenterGridPanelViewTemplate;
+            if (context.toLowerCase() == "all")
+                this.template = CenterGridPanelViewTemplateRO;
+            this.currentSelectedForm = 0;
+
+            this.render(this.template);
         }
     });
 

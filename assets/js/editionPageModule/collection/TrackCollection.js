@@ -142,7 +142,7 @@ define([
             return(this.propertiesDefaultValues);
         },
 
-        jsonExtention: function () {
+        jsonExtention: function (originalForm) {
             return(this.propertiesDefaultValues);
         },
 

@@ -47,7 +47,7 @@ define([
             return(this.propertiesDefaultValues);
         },
 
-        jsonExtention: function () {
+        jsonExtention: function (originalForm) {
             return(this.propertiesDefaultValues);
         },
 
@@ -55,8 +55,10 @@ define([
             return(this.propertiesDefaultValues);
         },
 
-        getModeExtention : function () {
+        getModeExtention : function (currentContext) {
             var extentionMode = Extentions[AppConfig.appMode.currentmode.toLowerCase()];
+            if (currentContext)
+                extentionMode = Extentions[currentContext];
             if (!extentionMode)
                 return this;
             return extentionMode;

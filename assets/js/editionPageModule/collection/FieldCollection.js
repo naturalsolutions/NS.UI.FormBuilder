@@ -31,7 +31,6 @@ define([
     ');
 
     var translater = Translater.getTranslater();
-
     var extention = CollectionExtention;
 
     /**
@@ -64,16 +63,6 @@ define([
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.label.fr'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                }]
-            },
-            labelEn   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
@@ -131,6 +120,85 @@ define([
             }
         },
 
+        getDefaultSchema : function (){
+            return ({
+                name : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.name'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                tag : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.tag') + ' <i>(' + translater.getValueFromKey('optional') + ')</i>',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                },
+                labelFr   : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.label.fr'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                labelEn   : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.label.en'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                descriptionEn : {
+                    type        : "TextArea",
+                    title       : translater.getValueFromKey('form.description.en'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                descriptionFr : {
+                    type        : "TextArea",
+                    title       : translater.getValueFromKey('form.description.fr'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                keywordsFr : {
+                    type        : PillboxEditor,
+                    title       : translater.getValueFromKey('form.keywords.fr')
+                },
+                keywordsEn : {
+                    type        : PillboxEditor,
+                    title       : translater.getValueFromKey('form.keywords.en')
+                },
+                obsolete : {
+                    type        : CheckboxEditor,
+                    fieldClass  : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.obsolete')
+                },
+                context : {
+                    type        : "Hidden",
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                }
+            });
+        },
+
         /**
         * Init form collection
         *
@@ -138,7 +206,19 @@ define([
         * @param {type} options
         */
         initialize: function (models, options) {
+            console.log("***************");
+            console.log(models);
+            console.log(options);
+            console.log(this.schemaDefinition);
+            console.log(this);
+
             var that = this;
+
+            this.schemaDefinition = this.getDefaultSchema();
+
+            if (options.context && options.context != "all")
+                setExtention(options.context);
+
             $.each(extention.schemaExtention, function(index, value){
                 that.schemaDefinition[index] = value;
             });
@@ -171,6 +251,10 @@ define([
             $.each(extention.initializeExtention(), function(index, value){
                 that[index] = opt[index] || "";
             });
+
+            var thecontext = window.context || $("#contextSwitcher .selectedContext").text();
+            if (thecontext && thecontext.toLowerCase() != "all")
+                this.context = thecontext;
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -330,9 +414,21 @@ define([
             }, subModel = null;
 
             var that = this;
-            $.each(extention.jsonExtention(), function(index, value){
+            console.log(that);
+            console.log("GONNA GET JSON EXTENTION");
+            console.log("IN THE START");
+            console.log(json);
+
+            $.each(extention.jsonExtention(that), function(index, value){
                 json[index] = that[index];
+                console.log("LOOP JSON EXTENTION");
+                console.log("index = " + index);
+                console.log("json[index] = " + json[index]);
+                console.log("value = " + value);
             });
+
+            console.log("IN THE END");
+            console.log(json);
 
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
@@ -938,8 +1034,14 @@ define([
                     this.formChannel.trigger('fail:success');
                 }, this)
             });
-        }
+        },
     });
+
+    var setExtention = function(extentionToSet){
+        var context = extentionToSet || window.context || $("#contextSwitcher .selectedContext").text();
+        if (context.toLowerCase() != "all")
+            extention = CollectionExtention.getModeExtention(context);
+    };
 
     return Form;
 });

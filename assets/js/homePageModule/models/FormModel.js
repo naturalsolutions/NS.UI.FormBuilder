@@ -28,7 +28,7 @@ define([
             tag              : '',
             obsolete         : false,
             isTemplate       : false,
-            context          : AppConfig.appMode.currentmode,
+            context          : window.context || AppConfig.appMode.currentmode,
 
             // display attributes
             creationDateDisplay : "",

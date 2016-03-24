@@ -2,7 +2,8 @@
   "grid" : {
     "name"             : "Name",
     "creationDate"     : "Creation date",
-    "modificationDate" : "Modfication date"
+    "modificationDate" : "Modfication date",
+    "formContext"      : "Form Context"
   },
 
   "fields" : {
@@ -40,6 +41,7 @@
   },
 
   "form" : {
+    "author"     : "Author",
     "name"       : "Protocol name",
     "tag"        : "Destination tag",
     "cancel"     : "Cancel",

@@ -12,8 +12,9 @@ define([
     'editionPageModule/router/EditionPageRouter',
     'editionPageModule/controller/EditionPageController',
     'homePageModule/collection/FormCollection',
-    'backbone.radio'
-], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController, FormCollection, Radio) {
+    'backbone.radio',
+    'app-config'
+], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController, FormCollection, Radio, AppConfig) {
 
     //  Create a marionette application
     var FormbuilderApp = new Backbone.Marionette.Application();
@@ -92,7 +93,7 @@ define([
     FormbuilderApp.addInitializer(function(options){
         //  Create controller for homepage
         var editionPageRouter = new EditionPageRouter({
-            controller : new EditionPageController({
+                controller : new EditionPageController({
                 editionPageRegion : this.rightRegion,
                 URLOptions : options.URLOptions
             })
@@ -146,6 +147,57 @@ define([
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
         Backbone.history.start();
+
+        if (AppConfig.authmode == 'portal')
+        {
+            $.ajax({
+                data: JSON.stringify({'securityKey' : AppConfig.securityKey}),
+                type: 'POST',
+                url: options.URLOptions.security + "/isCookieValid",
+                contentType: 'application/json',
+                crossDomain: true,
+                async: false,
+                success: _.bind(function (data) {
+                    console.log(data);
+                    window.user = data.username;
+                }, this),
+                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    window.location.href = AppConfig.portalURL;
+                }, this)
+            });
+        }
+
+        // Adding contexts
+        $.each(AppConfig.appMode, function(index, value){
+            if (index.indexOf("demo") == -1 && index != "currentmode" && index != "minimalist")
+            {
+                $("#contextSwitcher").append("<span class='hidden'>"+index+"</span>")
+            }
+        });
+
+        $("#contextSwitcher span").click(function(){
+            if (!$(this).hasClass("selectedContext"))
+            {
+                $("#contextSwitcher .selectedContext").removeClass("selectedContext");
+                $(this).addClass("selectedContext");
+                $(this).trigger("click");
+
+                var context = $("#contextSwitcher .selectedContext").text();
+                window.context = context;
+                Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+                Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+            }
+            else
+            {
+                if ($("#contextSwitcher .hidden").length > 0)
+                    $("#contextSwitcher .hidden").removeClass("hidden");
+                else
+                {
+                    $("#contextSwitcher span").addClass("hidden");
+                    $(this).removeClass("hidden");
+                }
+            }
+        });
 
         window.onhashchange = function(e)
         {
