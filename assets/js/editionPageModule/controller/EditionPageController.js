@@ -22,13 +22,7 @@ define([
             this.editionPageRegion = options.editionPageRegion;
             this.URLOptions        = options['URLOptions'] || {};
 
-            this.fieldCollection = new FieldCollection({}, {
-                name         : 'New form',
-                url          : this.URLOptions['formSaveURL'],
-                templateURL  : this.URLOptions['templateUrl']
-            });
-
-            this.fieldCollection.reset();
+            this.setFieldCollection(null, options['URLOptions']);
 
             this.initFormChannel();
             this.getLinkedFieldsList();
@@ -87,6 +81,8 @@ define([
 
             //  Event send from settingFieldPanel when user wants to save a field as a preconfigurated field
             this.formChannel.on('saveConfiguration', this.saveConfiguration, this);
+
+            this.formChannel.on('setFieldCollection', this.setFieldCollection, this);
         },
 
         /**
@@ -118,7 +114,8 @@ define([
          * Main controller action, display edition page layout
          */
         editionAction: function(options) {
-            $('#navbarContext').text($.t('navbar.context.edition'));
+            // TODO Display Context
+            $('#navbarContext').text($.t('navbar.context.edition') + (window.context?' - '+window.context:''));
 
             var editionPageLayout = new EditionPageLayout({
                 fieldCollection : this.fieldCollection,
@@ -202,6 +199,23 @@ define([
          * @param fieldToSave field to save
          */
         saveConfiguration : function(fieldToSave) {
+            var getBinaryWeight = function(editModeVal) {
+                var toret = editModeVal;
+                if (!$.isNumeric(editModeVal))
+                {
+                    var loop = 1;
+                    toret = 0;
+                    for (var index in editModeVal) {
+                        if(editModeVal[index])
+                            toret += loop;
+                        loop *= 2;
+                    };
+                }
+                return(toret);
+            };
+
+            fieldToSave.field.editMode = getBinaryWeight(fieldToSave.field.editMode);
+
             $.ajax({
                 type: "POST",
                 url: this.URLOptions.fieldConfigurationURL,
@@ -229,6 +243,25 @@ define([
             this.fieldCollection.updateCollectionAttributes(templateAttributes);
 
             this.fieldCollection.saveAsTemplate();
+        },
+
+        setFieldCollection : function(context, urloptions, formName)
+        {
+            var formSaveUrl = null
+            if (urloptions)
+                formSaveUrl = urloptions['formSaveURL'];
+
+            if (this.fieldCollection)
+                this.fieldCollection.reset();
+
+            this.fieldCollection = new FieldCollection({}, {
+                name         : formName || 'New form',
+                url          : this.URLOptions['formSaveURL'] || formSaveUrl,
+                context      : context || "all",
+                URLOptions   : this.URLOptions || ""
+            });
+
+            this.fieldCollection.reset();
         }
     });
 

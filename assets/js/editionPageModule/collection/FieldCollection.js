@@ -15,8 +15,10 @@ define([
     'backbone.radio',
     '../../Translater',
     '../editor/CheckboxEditor',
-    'pillbox-editor'
-], function ($, Backbone, Fields, Radio, Translater,CheckboxEditor, PillboxEditor) {
+    'pillbox-editor',
+    'app-config',
+    './CollectionExtention'
+], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -29,6 +31,7 @@ define([
     ');
 
     var translater = Translater.getTranslater();
+    var extention = CollectionExtention;
 
     /**
     * Implement form object as a fields collection
@@ -60,16 +63,6 @@ define([
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.label.fr'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                }]
-            },
-            labelEn   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.label.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
@@ -119,7 +112,91 @@ define([
                 type        : CheckboxEditor,
                 fieldClass  : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.obsolete')
+            },
+            context : {
+                type        : "Hidden",
+                editorClass : 'form-control',
+                template    : fieldTemplate
             }
+        },
+
+        getDefaultSchema : function (){
+            return ({
+                name : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.name'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                tag : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.tag') + ' <i>(' + translater.getValueFromKey('optional') + ')</i>',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                },
+                labelFr   : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.label.fr'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                labelEn   : {
+                    type        : "Text",
+                    title       : translater.getValueFromKey('form.label.en'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                descriptionEn : {
+                    type        : "TextArea",
+                    title       : translater.getValueFromKey('form.description.en'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                descriptionFr : {
+                    type        : "TextArea",
+                    title       : translater.getValueFromKey('form.description.fr'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    }]
+                },
+                keywordsFr : {
+                    type        : PillboxEditor,
+                    title       : translater.getValueFromKey('form.keywords.fr')
+                },
+                keywordsEn : {
+                    type        : PillboxEditor,
+                    title       : translater.getValueFromKey('form.keywords.en')
+                },
+                obsolete : {
+                    type        : CheckboxEditor,
+                    fieldClass  : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.obsolete')
+                },
+                context : {
+                    type        : "Hidden",
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                }
+            });
         },
 
         /**
@@ -129,6 +206,18 @@ define([
         * @param {type} options
         */
         initialize: function (models, options) {
+
+            var that = this;
+
+            this.schemaDefinition = this.getDefaultSchema();
+
+            if (options.context && options.context != "all")
+                setExtention(options.context);
+
+            $.each(extention.schemaExtention, function(index, value){
+                that.schemaDefinition[index] = value;
+            });
+
             var opt = options || {};
 
             this.url           = opt.url            || "";
@@ -144,13 +233,26 @@ define([
             this.labelEn         = opt.labelEn        || "";
             this.tag             = opt.tag            || "";
             this.obsolete        = opt.obsolete       || false;
+            this.context         = opt.context        || AppConfig.appMode.currentmode;
             this.isTemplate      = opt.isTemplate     || false;
             this.fieldstodelete  = [];
             this.fieldsexcludedfromdelete = [];
             this.totalAddedElements = 0;
             this.checkedfields = 0;
-            this.maxfields = 0
+            this.maxfields = 0;
             this.working = false;
+
+            var that = this;
+
+            extention.initializeExtention(options);
+
+            $.each(extention.jsonExtention(), function(index, value){
+                that[index] = opt[index] || value || "";
+            });
+
+            var thecontext = window.context || $("#contextSwitcher .selectedContext").text();
+            if (thecontext && thecontext.toLowerCase() != "all")
+                this.context = thecontext;
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -185,7 +287,6 @@ define([
             //  Event send by SettingFieldPanelView when a field has changed
             this.formChannel.on('field:change', this.fieldChange, this);
         },
-
 
         initHookChannel : function() {
             this.hookChannel = Backbone.Radio.channel('hook');
@@ -254,8 +355,8 @@ define([
          * @param  {Object} model model to serialize
          * @return {object}       model data serialized
          */
+
         getJSONFromModel: function (model) {
-            console.log(model);
             var subModel = model.getJSON();
 
             switch (model.constructor.type) {
@@ -304,14 +405,19 @@ define([
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
                 isTemplate    : this.isTemplate || false,
+                context       : this.context,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
             }, subModel = null;
 
+            var that = this;
+
+            $.each(extention.jsonExtention(that), function(index, value){
+                json[index] = that[index];
+            });
+
             this.map(_.bind(function (model) {
-                //console.log("94 -----------------");
-                //console.log(model);
                 if (model.constructor.type === 'Subform') {
                     json.fieldsets.push(this.getFieldsetFromModel(model));
                 } else if (model.constructor.type != undefined) {
@@ -326,14 +432,9 @@ define([
                         json.schema[model.get('name')] = subModel;
                     else {
                         subModel.parentFormName = json.name;
-                        console.log("129 -----------");
-                        console.log(json.schema);
-                        console.log(Object.keys(json.schema).length);
 
                         json.schema["childform" + ((Object.keys(json.schema).length + 1) || "1")] = subModel;
                     }
-                    console.log("748------------");
-                    console.log(subModel);
                 }
             }, this));
 
@@ -348,10 +449,10 @@ define([
                 });
             });
 
-            $.each(json.schema, function(index, val){val.editMode = getBinaryWeight(val.editMode);});
-
-            console.log("119 ----------------");
-            console.log(json);
+            $.each(json.schema, function(index, val){
+                val.editMode = getBinaryWeight(val.editMode);
+                val.name = val.name.replace(/\s+/g, '');
+            });
 
             return json;
         },
@@ -373,7 +474,7 @@ define([
                     field.set('id', this.totalAddedElements);
                 }
                 if (field.get('name') == Fields.BaseField.prototype.defaults.name)
-                    field.set('name', field.get('name') + " " + field.get('id'));
+                    field.set('name', field.get('name') + field.get('id'));
 
                 this.add(field);
 
@@ -381,7 +482,6 @@ define([
                 this.hookChannel.trigger('field:add', this, field);
 
                 if (ifFieldIsInFieldset) {
-                    //console.log("IMPOSSIBRU !!!");
                     var fieldset = this.get(field.get('subFormParent'));
                     fieldset.addField(field);
 
@@ -438,8 +538,6 @@ define([
             field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();
 
-            //console.log("67 --------------------");
-            //console.log(isUnderFieldset);
             return this.addField(new Fields[nameType](field), isUnderFieldset, true);
         },
 
@@ -471,8 +569,6 @@ define([
                 }
 
                 if (item.get('subFormParent') !== undefined) {
-                    //console.log("59 -----------------");
-                    //console.log(this.get(item.get('subFormParent')));
                     var fieldSet = this.get(item.get('subFormParent'));
                     fieldSet.removeField(item.get('name'));
                 }
@@ -484,9 +580,6 @@ define([
 
                 if ($.inArray(item.get('id'), this.fieldsexcludedfromdelete) == '-1')
                 {
-                    //console.log("12 ---------------");
-                    //console.log(item);
-
                     this.fieldstodelete.push(item.get('id'));
                 }
             }
@@ -512,9 +605,6 @@ define([
          * @returns {boolean} if the string is a valid field type
          */
         isAValidFieldType : function(typeToBeValidated) {
-            console.log("******* 573 *********");
-            console.log(Fields);
-            console.log(typeToBeValidated + 'Field');
             return Fields[typeToBeValidated + 'Field'] !== undefined;
         },
 
@@ -551,6 +641,13 @@ define([
 
                 this.obsolete             = JSONUpdate["obsolete"];
                 this.isTemplate           = JSONUpdate["isTemplate"];
+
+                this.context              = JSONUpdate["context"];
+
+                var that = this;
+                $.each(extention.jsonExtention(), function(index, value){
+                    that[index] = JSONUpdate[index] || value || "";
+                });
             }
         },
 
@@ -566,16 +663,10 @@ define([
 
                 while (that.maxfields != that.checkedfields && ordervalue < 666){
                     checked = false;
-                    //console.log("checking order " + ordervalue + " (and checkedfields = " + that.checkedfields + "/" + that.maxfields +")");
-
                     $.each(that.JSONUpdate['fieldsets'], function(index, value){
-                        //console.log("FIELDSET> if " + value['order'] + " == " + ordervalue);
                         if (value['order'] == ordervalue)
                         {
-                            {
-                                //console.log("Create Fieldset !");
-                                that.createFieldset(value, index);
-                            }
+                            that.createFieldset(value, index);
                             that.checkedfields++;
                             checked = true;
                             return(false);
@@ -584,13 +675,9 @@ define([
 
                     if (!checked){
                         $.each(that.JSONUpdate['schema'], function(index, value){
-                            //console.log("FIELDS> if " + value.order + " == " + ordervalue);
                             if (value.order == ordervalue)
                             {
-                                {
-                                    //console.log("Create Field !");
-                                    that.createField2(value, index);
-                                }
+                                that.createField2(value, index);
                                 that.checkedfields++;
                                 checked = true;
                                 return(false);
@@ -599,7 +686,6 @@ define([
                     }
                     ordervalue++;
                 }
-                //console.log("DONE ! with ordervalue = " + ordervalue + " and " + that.checkedfields + "/" + that.maxfields);
                 this.formChannel.trigger('collectionUpdateFinished');
                 this.working = false;
             }
@@ -620,15 +706,10 @@ define([
                         {
                             subvalue.order += 10000;
                             that.schema.push(subvalue);
-                            //console.log("285 -------------------");
-                            //console.log(that.JSONUpdate["schema"][subindex]);
                             delete that.JSONUpdate["schema"][subindex];
                         }
                     });
                 });
-                //console.log("279 --------------------");
-                //console.log(that.schema)
-                //console.log(that.JSONUpdate["schema"]);
 
                 if (that.JSONUpdate['fieldsets'].length > 0){
                     that.JSONUpdate['fieldsets'] = _.sortBy(that.JSONUpdate['fieldsets'], function (el) {
@@ -655,39 +736,23 @@ define([
                         else
                         {
                             that.JSONUpdate['fieldsets'][0]["order"] += 10000;
-                            //console.log("Create Fieldset !");
                             that.createFieldset2(that.JSONUpdate['fieldsets'][0]);
                         }
                     }
                     else
                     {
-                        //console.log("Create Field !");
-                        if (that.JSONUpdate["schema"][first].childFormName)
-                        {
-                            console.log("Create Child ! ONE");
-                            that.createField3(that.JSONUpdate["schema"][first], "ChildForm");
-                        }
-                        else
-                        {
-                            that.createField3(that.JSONUpdate["schema"][first]);
-                        }
+                        that.createField3(that.JSONUpdate["schema"][first]);
                         delete that.JSONUpdate["schema"][first];
                     }
                     i++;
-                    //console.log(i);
 
                     if (i > 1000)
                         break;
                 }
 
-                //console.log("DONE !");
                 this.formChannel.trigger('collectionUpdateFinished');
                 that.working = false;
             }
-        },
-
-        createChildFormField : function(childFormObj){
-            this.addElement(fieldObj.type + "Field", fieldObj, false);
         },
 
         createField3 : function(fieldObj, fieldType)
@@ -697,8 +762,6 @@ define([
             }
 
             if (this.isAValidFieldType(fieldObj.type) || this.isAValidFieldType(fieldType)) {
-                console.log("Create Child ! TWO");
-                //console.log("ADDFIELD !!");
                 this.addElement((fieldObj.type || fieldType) + "Field", fieldObj, false);
                 //this.addField(this.createFieldWithJSON(fieldObj), fieldObj['isUnderFieldset']);
             }
@@ -721,13 +784,9 @@ define([
             var subFormID = this.addElement('SubformField', fieldset, false);
 
             $.each(this.schema, _.bind(function(index, value) {
-                //console.log("333 --------------------");
-                //console.log(this.schema);
                 if (this.schema && value && value.linkedFieldset == fieldsetObj["refid"]){
-                    //console.log("334 --------------------");
                     value['subFormParent'] = subFormID;
                     value['isUnderFieldset'] = true;
-                    //console.log(value);
                     this.createField3(value);
                     delete this.schema[index];
                 }
@@ -751,7 +810,6 @@ define([
             var subFormID = this.addElement('SubformField', fieldset, false);
 
             $.each(fieldset['fields'], _.bind(function(index, value) {
-                //console.log("Adding SUBFIELD !");
                 var fieldObj = this.JSONUpdate['schema'][index];
                 fieldObj['subFormParent'] = subFormID;
                 fieldObj['isUnderFieldset'] = true;
@@ -759,14 +817,6 @@ define([
             }, this));
 
             this.JSONUpdate['fieldsets'].splice(fieldsetPosition, 1);
-
-            /*
-                //  All fieldset was been added, now we can add field
-                if (_.size(this.JSONUpdate["schema"]) > 0) {
-                    // Create all fields
-                    this.createFieldFromSchema(this.JSONUpdate);
-                }
-            */
         },
 
 
@@ -850,20 +900,12 @@ define([
 
                 var firstFieldToAdd = this.schema[0];
 
-                //("69 --------------------");
                 var copyof = this.schema;
-                //console.log(copyof.length);
-                //console.log(this.schema[0]);
-                //console.log(firstFieldToAdd['isUnderFieldset']);
-
-                //console.log(this.moncul.gogo());
                 if (this.isAValidFieldType(firstFieldToAdd.type)) {
                     this.addField( this.createFieldWithJSON(firstFieldToAdd), firstFieldToAdd['isUnderFieldset']);
                 }
 
-                //console.log("68 --------------------");
                 this.schema.shift();
-                //console.log(this.schema);
             } else {
                 this.formChannel.trigger('collectionUpdateFinished');
             }
@@ -903,8 +945,7 @@ define([
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
             var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
             var that = this;
-            //console.log("99 ------------------");
-            //console.log(this.getJSON());
+
             $.ajax({
                 data        : JSON.stringify(this.getJSON()),
                 type        : PostOrPut,
@@ -918,18 +959,10 @@ define([
                 success: _.bind(function(data) {
                     this.id = data.form.id;
                     var savedid = this.id;
-                    //console.log("16 --------------");
-                    //console.log(data);
-                    //console.log("19 --------------");
-                    //console.log(this.getJSON());
                     if (data.form.schema) {
                         $.each(data.form.schema, function (index, inputVal) {
                             $.each(that.models, function (modelindex, modelinputVal) {
-                                //console.log("08 --------------");
-                                //console.log(modelinputVal.attributes.name + " == " + index);
                                 if (modelinputVal.attributes.name == index) {
-                                    //console.log("09 --------------");
-                                    //console.log(that.models[modelindex].attributes.id + " = " + inputVal.id);
                                     that.models[modelindex].set('id', inputVal.id);
                                 }
                             });
@@ -988,9 +1021,14 @@ define([
                     this.formChannel.trigger('fail:success');
                 }, this)
             });
-        }
+        },
     });
 
-    return Form;
+    var setExtention = function(extentionToSet){
+        var context = extentionToSet || window.context || $("#contextSwitcher .selectedContext").text();
+        if (context.toLowerCase() != "all")
+            extention = CollectionExtention.getModeExtention(context);
+    };
 
+    return Form;
 });

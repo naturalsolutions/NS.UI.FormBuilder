@@ -459,7 +459,7 @@ define([
          * Hide footer actions
          */
         disableFooterActions : function() {
-            this.$el.find('footer button:not(#exit)').hide();
+            //this.$el.find('footer button:not(#exit)').hide();
         },
 
         /**
@@ -486,7 +486,7 @@ define([
          * Hide all footer action
          */
         disableFooterActionsAndExit : function() {
-            this.$el.find('footer button').hide();
+            //this.$el.find('footer button').hide();
         },
 
         /**

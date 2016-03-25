@@ -2,7 +2,8 @@
     "grid" : {
       "name"             : "Name",
       "creationDate"     : "Creation date",
-      "modificationDate" : "Modfication date"
+      "modificationDate" : "Modfication date",
+      "formContext"      : "Form Context"
     },
 
     "fields" : {
@@ -40,6 +41,7 @@
     },
 
     "form" : {
+        "author"     : "Author",
         "name"       : "Protocol name",
         "tag"        : "Destination tag",
         "cancel"     : "Cancel",
@@ -51,9 +53,28 @@
         "minimal"    : "Minimum size must be less than the maximum size",
         "setting"    : "Form <br />properties",
         "new"        : "New form",
+        "context"    : "Context",
+        "activite"   : "Activity",
+        "ordre"      : "Order",
+        "typeIndividus" : "Bird Type",
+        "frequence"  : "Frequency",
+        "groupe"     : "Group",
+        "color"      : "Color",
+
+        "actif"      : {
+            "title"    : "Active",
+            "actif"    : "Active",
+            "pasactif" : "Inactive"
+        },
+
+        "importapressortie" : {
+            "title"    : "Import after exit",
+            "only"     : "Yes",
+            "not"      : "No"
+        },
 
         "description" : {
-            "fr" : "Frendh form description",
+            "fr" : "French form description",
             "en" : "English form description"
         },
         "keywords" : {
@@ -63,7 +84,7 @@
         },
         "label" : {
             "fr" : "French form displayed name",
-            "fr" : "English form displayed name"
+            "en" : "English form displayed name"
         },
 
         "actions" : {

@@ -34,6 +34,7 @@ define([
             'click #cancel'               : 'cancel',
             'click #saveChange'           : 'saveChange',
             'click #saveButton'           : 'saveField',
+            'click #applyTemplateButton'  : 'applyTemplateField',
             'change .checkboxField input' : 'checkboxChange',
             'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
@@ -163,8 +164,6 @@ define([
             {
                 this.form.fields.linkedField.$el.removeClass('hide');
                 this.form.fields.linkedField.$el.animate({opacity: 1}, 1000);
-                this.form.fields.formIdentifyingColumn.$el.removeClass('hide');
-                this.form.fields.formIdentifyingColumn.$el.animate({opacity: 1}, 1000);
                 this.form.fields.linkedFieldTable.$el.removeClass('hide');
                 this.form.fields.linkedFieldTable.$el.animate({opacity: 1}, 1000);
                 this.form.fields.linkedFieldIdentifyingColumn.$el.removeClass('hide');
@@ -175,8 +174,6 @@ define([
                 var that = this;
                 this.form.fields.linkedField.$el.animate({opacity: 0}, 1000, function(){
                     that.form.fields.linkedField.$el.addClass('hide')});
-                this.form.fields.formIdentifyingColumn.$el.animate({opacity: 0}, 1000, function(){
-                    that.form.fields.formIdentifyingColumn.$el.addClass('hide')});
                 this.form.fields.linkedFieldTable.$el.animate({opacity: 0}, 1000, function(){
                     that.form.fields.linkedFieldTable.$el.addClass('hide')});
                 this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 0}, 1000, function(){
@@ -195,12 +192,17 @@ define([
                 linkedFieldsKeyList.push(el.key)
             });
 
+            var optionsToShow = {"empty":""};
+            $.each(this.preConfiguredFieldList.options, function(key, value){
+                optionsToShow[key] = key;
+            });
+            this.form.fields.applyTemplate.editor.setOptions(optionsToShow);
+
             if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
                 ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
                 if (this.fieldsList.length > 0) {
                     //  Update linked fields
                     this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-                    this.form.fields.formIdentifyingColumn.editor.setOptions(this.fieldsList);
                     this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
                     this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
 
@@ -213,7 +215,6 @@ define([
                     //  We add hide class to hide editor
                     this.form.fields.isLinkedField.$el.addClass('hide');
                     this.form.fields.linkedField.$el.addClass('hide');
-                    this.form.fields.formIdentifyingColumn.$el.addClass('hide');
                     this.form.fields.linkedFieldTable.$el.addClass('hide');
                     this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
                 }
@@ -492,11 +493,7 @@ define([
                         this.modelToEdit.set('linkedField', '');
                         this.modelToEdit.set('linkedFieldIdentifyingColumn', '');
                         this.modelToEdit.set('linkedFieldTable', '');
-                        this.modelToEdit.set('formIdentifyingColumn', '');
                     }
-
-                    //console.log("22 --------------");
-                    //console.log(this.modelToEdit.get('id'));
 
                     this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
 
@@ -513,10 +510,10 @@ define([
             }
         },
 
-
         /**
         * Save current field as a configuration field
         */
+            //TODO
         saveField : function() {
             var formCommitResult = this.form.commit();
             if (formCommitResult) {
@@ -532,6 +529,38 @@ define([
 
                 this.formChannel.trigger('saveConfiguration', {
                     field : formValue
+                });
+            }
+        },
+
+        applyTemplateField : function() {
+            var templateInputName = $("select[name*=applyTemplate]").val();
+            templateInputName = $("select[name*=applyTemplate] option[value='" + templateInputName + "']").text();
+            if (templateInputName.length > 0){
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url: this.URLOptions.fieldConfigurationURL + "/" + templateInputName,
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        var that = this;
+                        console.log("----- 12943 -------");
+                        console.log(that);
+                        console.log(that.modelToEdit.attributes);
+                        $.each(data.result, function(key, value){
+                            console.log("template value key '" + key + "' to set = " + value)
+                            if (that.modelToEdit.attributes[key] && key != "name" && key != "id")
+                            {
+                                console.log("setting " + value + " at key " + key);
+                                that.modelToEdit.attributes[key] =  value;
+                            }
+                        });
+                        that.render();
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr);
+                    }, this)
                 });
             }
         },

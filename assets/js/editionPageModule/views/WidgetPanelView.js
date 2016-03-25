@@ -89,12 +89,14 @@ define([
         initSection : function() {
             var section = { standard : {}, other : {} };
 
+            var context = window.context || $("#contextSwitcher .selectedContext").text().toLowerCase();
+
             var checkDisplayMode = function(fieldType){
-                if (AppConfig.allowedFields.hasOwnProperty(AppConfig.allowedFields.currentmode) &&
-                    $.inArray(fieldType, AppConfig.allowedFields[AppConfig.allowedFields.currentmode]) == -1)
+                if (context == "all" || (AppConfig.appMode.hasOwnProperty(context) &&
+                    $.inArray(fieldType, AppConfig.appMode[context]) == -1))
                     return (false);
                 return (true);
-            }
+            };
 
             for (var i in Fields) {
                 if (Fields[i].type !== undefined && checkDisplayMode(Fields[i].type)) {

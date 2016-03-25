@@ -217,7 +217,15 @@ define([
         /**
          * Callback launch when setting panel needs to be closed
          */
-        closeSettingPanelAndResetURL : function() {
+        closeSettingPanelAndResetURL : function(form) {
+            if (form)
+            {
+                console.log("--- 1029 ----");
+                console.log(this);
+                console.log(this.form);
+                console.log(this.formChannel.collection);
+                console.log(form);
+            }
             this.closeSettingPanel();
         }
 

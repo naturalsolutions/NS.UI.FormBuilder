@@ -32,12 +32,14 @@ define([
             endOfLine   : false,
             linkedFieldset               : '',
 
-            //  Linked fields values
+            // Linked fields values
             isLinkedField                : false,
             linkedFieldTable             : '',
             linkedFieldIdentifyingColumn : '',
             linkedField                  : '',
-            formIdentifyingColumn        : ''
+
+            // Input Template
+            applyTemplate                : ''
         },
 
         schema : {
@@ -194,9 +196,10 @@ define([
                 editorClass : 'form-control',
                 options : []
             },
-            formIdentifyingColumn : {
+
+            applyTemplate : {
                 type : 'Select',
-                title       : translater.getValueFromKey('schema.formIdentifyingColumn'),
+                title       : translater.getValueFromKey('schema.applyTemplate'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
@@ -298,11 +301,13 @@ define([
                 editorClass : 'form-control',
                 options : []
             },
-            formIdentifyingColumn : {
+
+            applyTemplate : {
                 type : 'Select',
-                title       : translater.getValueFromKey('schema.formIdentifyingColumn'),
+                title       : translater.getValueFromKey('schema.applyTemplate'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
+                fieldClass  : 'col-xs-10',
                 options : []
             }
         }
@@ -1141,7 +1146,6 @@ define([
                 reset : true,
                 success : _.bind(function() {
                     $.each(formCollection.models, function(index, value){
-                        //toret.push({"val" : value.attributes.id  ,"label" : value.attributes.name});
                         toret.push({"val" : value.attributes.name  ,"label" : value.attributes.name});
                     });
                 }, this)
@@ -1150,62 +1154,38 @@ define([
         }
     };
 
-    models.ChildFormField = Backbone.Model.extend({
-
-        defaults : {
-            childFormName : "",
-            help : translater.getValueFromKey('placeholder.childform'),
+    models.ChildFormField = models.BaseField.extend({
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                childFormName : "",
+                help : translater.getValueFromKey('placeholder.childform'),
+            });
         },
-        schema: {
-            childFormName: {
-                type        : 'Select',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.childFormName'),
-                options     : getFormsList()
-            },
-            help: {
-                type        : 'Hidden',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.help'),
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.help')
-                }
-            }
-        },
-
-        initialize : function(options) {
-            _.bindAll(this, 'getJSON');
-        },
-
-        isAdvanced : function(index) {
-            return this.getSchemaProperty(index, 'advanced') === "advanced";
-        },
-
-        getJSON : function() {
-            var jsonObject                  = {
-                    validators : []
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                childFormName: {
+                    type        : 'Select',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.childFormName'),
+                    options     : getFormsList()
                 },
-                schemaKeys                  = _.keys( typeof this.schema == "function" ? this.schema() : this.schema ),
-                schemaKeysWithoutValidator  = _.without(schemaKeys, 'required');
+                help: {
+                    type        : 'Hidden',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.help'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.help')
+                    }
+                }
+            });
+        },
 
-            _.each(schemaKeysWithoutValidator, _.bind(function(el) {
-                jsonObject[el] = this.get(el);
-            }, this));
-
-            jsonObject["id"]    = this.get("id");
-            jsonObject["order"] = this.get("order");
-
-            if (this.get('editMode') & 4 != 4) {
-                jsonObject['validators'].push('required');
-            }
-            if (this.get('editMode') & 2 != 2) {
-                jsonObject['validators'].push('readonly');
-            }
-            return _.omit(jsonObject, 'isLinkedField');
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
         }
-    },{
+    }, {
         type   : 'ChildForm',
         i18n   : 'childForm'
     });
