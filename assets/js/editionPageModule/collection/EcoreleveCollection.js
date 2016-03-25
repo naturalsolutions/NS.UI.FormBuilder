@@ -40,18 +40,19 @@ define([
         },
 
         initializeExtention: function () {
-            console.log("init");
-            return(this.propertiesDefaultValues);
+            return(true);
         },
 
         jsonExtention: function (originalForm) {
-            originalForm.author = window.user;
+            if (originalForm)
+            {
+                originalForm.author = window.user;
+            }
             return(this.propertiesDefaultValues);
         },
 
         updateAttributesExtention: function () {
-            console.log("updateAttr");
-            return(this.propertiesDefaultValues);
+            return(true);
         }
     };
 

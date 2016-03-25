@@ -38,15 +38,19 @@ define([
         },
 
         initializeExtention: function () {
-            return(this.propertiesDefaultValues);
+            return(true);
         },
 
         jsonExtention: function (originalForm) {
+            if (originalForm)
+            {
+
+            }
             return(this.propertiesDefaultValues);
         },
 
         updateAttributesExtention: function () {
-            return(this.propertiesDefaultValues);
+            return(true);
         }
     };
 

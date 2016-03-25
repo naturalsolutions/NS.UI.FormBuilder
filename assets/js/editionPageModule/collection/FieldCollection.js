@@ -206,11 +206,6 @@ define([
         * @param {type} options
         */
         initialize: function (models, options) {
-            console.log("***************");
-            console.log(models);
-            console.log(options);
-            console.log(this.schemaDefinition);
-            console.log(this);
 
             var that = this;
 
@@ -248,8 +243,11 @@ define([
             this.working = false;
 
             var that = this;
-            $.each(extention.initializeExtention(), function(index, value){
-                that[index] = opt[index] || "";
+
+            extention.initializeExtention(options);
+
+            $.each(extention.jsonExtention(), function(index, value){
+                that[index] = opt[index] || value || "";
             });
 
             var thecontext = window.context || $("#contextSwitcher .selectedContext").text();
@@ -414,21 +412,10 @@ define([
             }, subModel = null;
 
             var that = this;
-            console.log(that);
-            console.log("GONNA GET JSON EXTENTION");
-            console.log("IN THE START");
-            console.log(json);
 
             $.each(extention.jsonExtention(that), function(index, value){
                 json[index] = that[index];
-                console.log("LOOP JSON EXTENTION");
-                console.log("index = " + index);
-                console.log("json[index] = " + json[index]);
-                console.log("value = " + value);
             });
-
-            console.log("IN THE END");
-            console.log(json);
 
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
@@ -658,8 +645,8 @@ define([
                 this.context              = JSONUpdate["context"];
 
                 var that = this;
-                $.each(extention.updateAttributesExtention(), function(index, value){
-                    that[index] = JSONUpdate[index] || value;
+                $.each(extention.jsonExtention(), function(index, value){
+                    that[index] = JSONUpdate[index] || value || "";
                 });
             }
         },

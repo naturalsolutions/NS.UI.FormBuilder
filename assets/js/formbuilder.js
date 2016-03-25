@@ -151,20 +151,19 @@ define([
         if (AppConfig.authmode == 'portal')
         {
             $.ajax({
-                data: JSON.stringify({'securityKey' : AppConfig.securityKey}),
-                type: 'POST',
-                url: options.URLOptions.security + "/isCookieValid",
-                contentType: 'application/json',
-                crossDomain: true,
-                async: false,
-                success: _.bind(function (data) {
-                    console.log(data);
-                    window.user = data.username;
-                }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                    window.location.href = AppConfig.portalURL;
-                }, this)
-            });
+            data: JSON.stringify({'securityKey' : AppConfig.securityKey}),
+            type: 'POST',
+            url: options.URLOptions.security + "/isCookieValid",
+            contentType: 'application/json',
+            crossDomain: true,
+            async: false,
+            success: _.bind(function (data) {
+                window.user = data.username;
+            }, this),
+            error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                window.location.href = AppConfig.portalURL;
+            }, this)
+        });
         }
 
         // Adding contexts
@@ -182,10 +181,14 @@ define([
                 $(this).addClass("selectedContext");
                 $(this).trigger("click");
 
-                var context = $("#contextSwitcher .selectedContext").text();
-                window.context = context;
-                Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-                Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+                $('#leftPanel input').val('');
+
+                setTimeout(function(){
+                    var context = $("#contextSwitcher .selectedContext").text();
+                    window.context = context;
+                    Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+                    Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+                }, 50);
             }
             else
             {
@@ -201,7 +204,6 @@ define([
 
         window.onhashchange = function(e)
         {
-            console.log(window.location);
             fbrouting(options);
         };
     });

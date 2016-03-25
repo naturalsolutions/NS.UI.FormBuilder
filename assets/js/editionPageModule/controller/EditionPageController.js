@@ -247,11 +247,6 @@ define([
 
         setFieldCollection : function(context, urloptions, formName)
         {
-            console.log("----- Options 976 -------");
-            console.log(urloptions);
-            console.log(context);
-            console.log(formName);
-
             var formSaveUrl = null
             if (urloptions)
                 formSaveUrl = urloptions['formSaveURL'];
@@ -262,7 +257,8 @@ define([
             this.fieldCollection = new FieldCollection({}, {
                 name         : formName || 'New form',
                 url          : this.URLOptions['formSaveURL'] || formSaveUrl,
-                context      : context || "all"
+                context      : context || "all",
+                URLOptions   : this.URLOptions || ""
             });
 
             this.fieldCollection.reset();

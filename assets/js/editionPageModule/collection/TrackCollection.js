@@ -29,10 +29,11 @@ define([
 
         schemaExtention: {
             activite : {
-                type        : "Text",
+                type        : "Select",
                 title       : translater.getValueFromKey('form.activite'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
+                options : [],
                 validators  : [{
                     type : 'required',
                     message : translater.getValueFromKey('form.validation')
@@ -52,8 +53,7 @@ define([
                 title       : translater.getValueFromKey('form.typeIndividus'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : ["Adult (All)", "Adult (Female)", "Adult (Male)", "Adulte (Tous)",
-                    "Nouvel Adulte", "Nouvel Oeuf", "Oeuf"],
+                options : [],
                 validators  : [{
                     type : 'required'
                 }]
@@ -63,7 +63,7 @@ define([
                 title       : translater.getValueFromKey('form.frequence'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : ["Multiple", "Unique", "Unique per day"],
+                options : [],
                 validators  : [{
                     type : 'required'
                 }]
@@ -73,9 +73,7 @@ define([
                 title       : translater.getValueFromKey('form.groupe'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : ["", "gr_A Relacher Vivant", "gr_Adulte Tous", "gr_Adulte Vivant",
-                    "gr_Individus Femelle vivant", "gr_Individus Male vivant", "gr_Individus Mort",
-                    "gr_Oeuf Tous", "gr_Oeuf Vivant"]
+                options : []
             },
             color : {
                 type        : "Text",
@@ -138,16 +136,64 @@ define([
             importapressortie : ""
         },
 
-        initializeExtention: function () {
-            return(this.propertiesDefaultValues);
+        initializeExtention: function (options) {
+            var that = this;
+
+            var dataToSent = {
+                "Activite":"Activite",
+                "Groupe":"Groupe",
+                "TypeIndividus":"TypeIndividus",
+                "Frequence":"Frequence"
+            };
+
+            var setSelectValues = function(datas)
+            {
+                if (datas)
+                {
+                    $.each(JSON.parse(datas), function(index, value)
+                    {
+                        var values = [];
+                        for(var ind in value)
+                            values.push(ind);
+
+                        that.schemaExtention[index.substr(0,1).toLowerCase()+index.substr(1)].options = values.sort();
+                    });
+                }
+            };
+
+            this.getTrackDatas(options, dataToSent, setSelectValues);
+
+            return(true);
         },
 
         jsonExtention: function (originalForm) {
+            if (originalForm)
+            {
+
+            }
             return(this.propertiesDefaultValues);
         },
 
         updateAttributesExtention: function () {
-            return(this.propertiesDefaultValues);
+            return(true);
+        },
+
+        getTrackDatas: function (options, datas, successCallback) {
+            $.ajax({
+                data: JSON.stringify({'datas' : datas}),
+                type: 'POST',
+                url: options.URLOptions.track + "/getData",
+                contentType: 'application/json',
+                crossDomain: true,
+                async: false,
+                success: _.bind(function (data) {
+                    successCallback(data);
+                    return(data);
+                }, this),
+                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    console.log("error ! " + xhr);
+                }, this)
+            });
         }
     };
 
