@@ -545,14 +545,9 @@ define([
                     crossDomain: true,
                     success: _.bind(function (data) {
                         var that = this;
-                        console.log("----- 12943 -------");
-                        console.log(that);
-                        console.log(that.modelToEdit.attributes);
                         $.each(data.result, function(key, value){
-                            console.log("template value key '" + key + "' to set = " + value)
-                            if (that.modelToEdit.attributes[key] && key != "name" && key != "id")
+                            if (that.modelToEdit.attributes[key] != undefined && key != "name" && key != "id")
                             {
-                                console.log("setting " + value + " at key " + key);
                                 that.modelToEdit.attributes[key] =  value;
                             }
                         });

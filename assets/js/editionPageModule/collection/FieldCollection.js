@@ -242,17 +242,11 @@ define([
             this.maxfields = 0;
             this.working = false;
 
-            var that = this;
-
             extention.initializeExtention(options);
 
             $.each(extention.jsonExtention(), function(index, value){
                 that[index] = opt[index] || value || "";
             });
-
-            var thecontext = window.context || $("#contextSwitcher .selectedContext").text();
-            if (thecontext && thecontext.toLowerCase() != "all")
-                this.context = thecontext;
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -641,8 +635,6 @@ define([
 
                 this.obsolete             = JSONUpdate["obsolete"];
                 this.isTemplate           = JSONUpdate["isTemplate"];
-
-                this.context              = JSONUpdate["context"];
 
                 var that = this;
                 $.each(extention.jsonExtention(), function(index, value){

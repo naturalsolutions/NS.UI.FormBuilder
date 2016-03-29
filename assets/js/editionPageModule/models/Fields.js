@@ -1146,7 +1146,8 @@ define([
                 reset : true,
                 success : _.bind(function() {
                     $.each(formCollection.models, function(index, value){
-                        toret.push({"val" : value.attributes.name  ,"label" : value.attributes.name});
+                        if (!value.attributes.context || value.attributes.context == window.context)
+                            toret.push({"val" : value.attributes.name  ,"label" : value.attributes.name});
                     });
                 }, this)
             });
