@@ -1191,6 +1191,33 @@ define([
         i18n   : 'childForm'
     });
 
+    // This input type is EcoReleve Dependent
+    models.ObjectPickerField = models.BaseField.extend({
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                objectType : "Monitored Site"
+            });
+        },
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                objectType: {
+                    type        : 'Select',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.objectType'),
+                    options     : ["Individual", "Monitored Site", "Sensor"]
+                }
+            });
+        },
+
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
+    }, {
+        type   : 'ObjectPicker',
+        i18n   : 'objectpicker'
+    });
+
     return models;
 
 });

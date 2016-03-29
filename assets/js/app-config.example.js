@@ -27,7 +27,7 @@ define([
         paths : {
             // Path to the thesaurus Web Services
             thesaurusWSPath : 'http://localhost/ThesaurusCore/ThesaurusReadServices.svc/json/fastInitForCompleteTree',
-            forms : '/FormbuilderWS/allforms'
+            forms : '/FormbuilderWS/forms/allforms'
         },
         // Defines the list of rules that will appli to the forms
         rules : [
@@ -93,14 +93,32 @@ define([
 
         // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
         appMode : {
-            // List of all existing types :
+            // List of all existing generic types :
             // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number,
-            // NumericRange, Pattern, CheckBox, Radio, Select, Subform, Thesaurus, AutocompleteTreeView
+            // NumericRange, Pattern, CheckBox, Radio, Select, ChildForm, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
 			// Modes with "demo" inside their names will not be displayed as a context (so won't the minimalist mode)
 			//
             currentmode : 'demo',
+            alltypes : [
+                'Hidden',
+                'HorizontalLine',
+                'Autocomplete',
+                'Text',
+                'File',
+                'TreeView',
+                'Date',
+                'Number',
+                'NumericRange',
+                'Pattern',
+                'CheckBox',
+                'Radio',
+                'Select',
+                'ChildForm',
+                'Thesaurus',
+				'AutocompleteTreeView'
+			],
             demo : [
                 'Autocomplete',
                 'Text',
@@ -112,6 +130,7 @@ define([
                 'CheckBox',
 				'ChildForm'
             ],
+			// 'ObjectPicker' type is ecoreleve dependent
             ecoreleve : [
                 'Autocomplete',
                 'Text',
@@ -121,7 +140,8 @@ define([
                 'Select',
                 'Thesaurus',
                 'CheckBox',
-                'ChildForm'
+                'ChildForm',
+				'ObjectPicker'
             ],
             ecollection : [
                 'Autocomplete',

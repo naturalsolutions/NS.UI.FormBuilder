@@ -27,7 +27,8 @@
     "thesaurus"            : "Thesaurus",
     "autocompletetreeview" : "Autocomplete Treeview",
     "numericrange"         : "Range",
-    "childform"            : "Child Form"
+    "childform"            : "Child Form",
+    "objectpicker"         : "Object Picker"
   },
 
   "search" : {
@@ -201,7 +202,9 @@
     "formIdentifyingColumn"          : "Form identifying field",
     "linkedFieldset"                 : "Parent fieldset",
     "isLinkedField"                  : "Is a linked Field",
-    "childFormName"                  : "Child Form name"
+    "childFormName"                  : "Child Form name",
+    "applyTemplate"                  : "Template to apply (validate at bottom of page)",
+    "objectType"                     : "Object Picker"
   },
 
   "tooltip" : {
@@ -222,9 +225,10 @@
     "horizontalline"       : "Horizontal line",
     "boolean"              : "Boolean",
     "autocompletetreeview" : "A TreeView with searching functionality",
-    "numericrange"           : "Numeric field with range",
-    "thesaurus"              : "Thesaurus",
-    "childform"            : "Child Form"
+    "numericrange"         : "Numeric field with range",
+    "thesaurus"            : "Thesaurus",
+    "childform"            : "Child Form",
+    "objectpicker"         : "Object Picker"
   },
 
   "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
@@ -376,7 +380,8 @@
     "file"         : "Please choose a file",
     "numeric"      : "Enter numeric value",
     "date"         : "Enter a data or click on the pico",
-    "childform"    : "Child form name: "
+    "childform"    : "Child form name: ",
+    "objectpicker" : "Object type: "
   },
 
   "optional" : "optional",

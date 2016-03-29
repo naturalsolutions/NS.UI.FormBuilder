@@ -1,7 +1,10 @@
 <div class="row">
     <div class="brand field-brand col-md-10 col-md-offset-1">
-        <span class="picto picto-<%= (type.toLowerCase() == 'childform'?'subform':type.toLowerCase()) %>">
-
+        <!-- Exception for childform, understood as a subform TODO OBJECTPICKER PICTO -->
+        <!-- <span class="picto picto-<%= (type.toLowerCase() == 'childform'?'subform':type.toLowerCase()) %>"> -->
+        <span class="picto picto-<%= (type.toLowerCase() == 'childform'?'subform':(
+            type.toLowerCase() == 'objectpicker'?'pattern':type.toLowerCase()
+        )) %>">
         </span>
         <br/>
         <span data-i18n="type">

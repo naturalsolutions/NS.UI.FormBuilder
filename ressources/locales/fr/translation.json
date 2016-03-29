@@ -27,7 +27,8 @@
         "thesaurus"            : "Thesaurus sans autocomplétion",
         "autocompletetreeview" : "Thesaurus avec autocomplétion",
         "numericrange"         : "Curseur",
-        "childform"            : "Formulaire fils"
+        "childform"            : "Formulaire fils",
+        "objectpicker"         : "Object Picker"
     },
 
     "search" : {
@@ -210,7 +211,9 @@
         "formIdentifyingColumn"        : "Champ du formulaire identifiant",
         "linkedFieldset"               : "Fieldset parent",
         "isLinkedField"                : "Est un champs lié",
-        "childFormName"                : "Nom du formulaire fils"
+        "childFormName"                : "Nom du formulaire fils",
+        "applyTemplate"                : "Schéma à appliquer (valider en bas de page)",
+        "objectType"                   : "Object Picker"
     },
 
     "tooltip" : {
@@ -234,7 +237,8 @@
         "autocompletetreeview" : "arborescence avec un champs de recherche",
         "numericrange"         : "Curseur numérique",
         "thesaurus"            : "Thesaurus sans autocomplétion",
-        "childform"            : "Formulaire Fils"
+        "childform"            : "Formulaire Fils",
+        "objectpicker"         : "Object Picker"
     },
 
     "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
@@ -379,7 +383,8 @@
         "file"         : "Veuillez choisir un fichier",
         "numeric"      : "Saisir une valeur numérique",
         "date"         : "Entrez une date ou cliquez sur le picto",
-        "childform"    : "Nom du formulaire fils : "
+        "childform"    : "Nom du formulaire fils : ",
+        "objectpicker" : "Type d'objet : "
 
     },
 
