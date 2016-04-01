@@ -1040,7 +1040,8 @@ define([
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 webServiceURL : AppConfig.paths.thesaurusWSPath,
                 defaultNode: "",
-                fullpath : false
+                fullpath : false,
+                iscollapsed : false
             });
         },
         schema: function() {
@@ -1067,6 +1068,11 @@ define([
                     type        : CheckboxEditor,
                     fieldClass : "checkBoxEditor",
                     title       : translater.getValueFromKey('schema.fullpath')
+                },
+                iscollapsed : {
+                    type        : CheckboxEditor,
+                    fieldClass  : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.iscollapsed')
                 }
             });
         },
@@ -1134,7 +1140,7 @@ define([
         doubleColumn : true
     });
 
-    var getFormsList = function(){
+    var getFormsList = function(context){
         var toret = [];
         if (AppConfig.paths){
             var formCollection = new FormCollection({
@@ -1146,7 +1152,8 @@ define([
                 reset : true,
                 success : _.bind(function() {
                     $.each(formCollection.models, function(index, value){
-                        if (!value.attributes.context || value.attributes.context == window.context)
+                        if (context.collection.name != value.attributes.name &&
+                            (!value.attributes.context || value.attributes.context == window.context))
                             toret.push({"val" : value.attributes.name  ,"label" : value.attributes.name});
                     });
                 }, this)
@@ -1169,7 +1176,7 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.childFormName'),
-                    options     : getFormsList()
+                    options     : getFormsList(this)
                 },
                 help: {
                     type        : 'Hidden',

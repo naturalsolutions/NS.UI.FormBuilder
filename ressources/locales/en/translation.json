@@ -204,7 +204,8 @@
         "isLinkedField"                  : "Is a linked Field",
         "childFormName"                  : "Child Form name",
         "applyTemplate"                  : "Template to apply (validate at bottom of page)",
-        "objectType"                     : "Object Picker"
+        "objectType"                     : "Object Picker",
+        "iscollapsed"                    : "Tree is collapsed"
     },
 
     "tooltip" : {

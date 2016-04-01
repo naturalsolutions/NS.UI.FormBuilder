@@ -233,36 +233,39 @@ define([
                 //  Because the pillbox-editor i use get value directly from the schema
                 //
 
-                var datas               = formToEdit.getAttributesValues(),
+                if (formToEdit)
+                {
+                    var datas               = formToEdit.getAttributesValues(),
                     keywordFr           = [],
                     keywordEn           = [],
                     schemaDefinition    = formToEdit.schemaDefinition;
 
-                _.each(datas.keywordsEn, function(el, idx) {
-                    keywordEn.push( typeof el == 'object' ? el : { key : el, value : el });
-                });
+                    _.each(datas.keywordsEn, function(el, idx) {
+                        keywordEn.push( typeof el == 'object' ? el : { key : el, value : el });
+                    });
 
-                _.each(datas.keywordsFr, function(el, idx) {
-                    keywordFr.push( typeof el == 'object' ? el : { key : el, value : el });
-                });
+                    _.each(datas.keywordsFr, function(el, idx) {
+                        keywordFr.push( typeof el == 'object' ? el : { key : el, value : el });
+                    });
 
-                schemaDefinition.keywordsFr.value = keywordFr;
-                schemaDefinition.keywordsEn.value = keywordEn;
+                    schemaDefinition.keywordsFr.value = keywordFr;
+                    schemaDefinition.keywordsEn.value = keywordEn;
 
-                this.form = new Backbone.Form({
-                    schema: schemaDefinition,
-                    data  : datas
-                }).render();
+                    this.form = new Backbone.Form({
+                        schema: schemaDefinition,
+                        data  : datas
+                    }).render();
 
-                //  Init linked field
-                this.initChildForms();
+                    //  Init linked field
+                    this.initChildForms();
 
-                this.$el.find('#form').append(this.form.el);
-                this.$el.find('#getField').hide();
+                    this.$el.find('#form').append(this.form.el);
+                    this.$el.find('#getField').hide();
 
-                this.initScrollBar();
+                    this.initScrollBar();
 
-                this.mainChannel.trigger('formCreated');
+                    this.mainChannel.trigger('formCreated');
+                }
 
             }, this));
 

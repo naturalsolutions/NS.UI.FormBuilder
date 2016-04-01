@@ -213,7 +213,8 @@
         "isLinkedField"                : "Est un champs lié",
         "childFormName"                : "Nom du formulaire fils",
         "applyTemplate"                : "Schéma à appliquer (valider en bas de page)",
-        "objectType"                   : "Object Picker"
+        "objectType"                   : "Object Picker",
+        "iscollapsed"                  : "Arbre plié"
     },
 
     "tooltip" : {

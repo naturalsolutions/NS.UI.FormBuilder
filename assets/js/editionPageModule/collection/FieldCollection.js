@@ -382,7 +382,7 @@ define([
                         if(editModeVal[index])
                             toret += loop;
                         loop *= 2;
-                    };
+                    }
                 }
                 return(toret);
             };
@@ -934,6 +934,26 @@ define([
         save : function() {
             if (!this.formChannel)
                 this.initFormChannel();
+
+            var tmpForm =  new Backbone.Form({
+                schema: this.getDefaultSchema(),
+                data  : this.getAttributesValues
+            }).render();
+
+            var formValidation = tmpForm.validate();
+            console.log("-----------");
+            console.log(formValidation);
+            console.log(this.getAttributesValues);
+            console.log("-----------");
+            if (formValidation === null)
+            {
+                alert("peux valider !");
+            }
+            else
+            {
+                alert("peux pas !");
+            }
+
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
             var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
             var that = this;
