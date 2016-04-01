@@ -27,6 +27,7 @@
                 var key     = data.node.key,
                     treeID  = '#treeViewtree'+ this.model.get('id');
                 this.model.set('defaultNode', data.node.key);
+                console.log("02 setting defaultNode with " + data.node.key);
                 $(treeID).fancytree("getTree").activateKey(key);
             }, this));
         },

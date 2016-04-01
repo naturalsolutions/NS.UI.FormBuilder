@@ -80,7 +80,7 @@ define([
             this.initFormChannel();
             this.initMainChannel();
             this.initHookChannel();
-            this.initGlobalChannel()
+            this.initGlobalChannel();
 
             _.bindAll(this, 'template', 'initForm');
         },
@@ -231,6 +231,25 @@ define([
 
                 Backbone.Form.validators.errMessages.required = translater.getValueFromKey('form.validation');
 
+                var getJSONFromBinaryWeight = function(binWeight)
+                {
+                    var toret = {};
+                    toret.nullmean = (binWeight >= 8);
+                    binWeight %= 8;
+                    toret.nullable = (binWeight >= 4);
+                    binWeight %= 4;
+                    toret.editable = (binWeight >= 2);
+                    binWeight %= 2;
+                    toret.visible = (binWeight >= 1);
+                    return (toret);
+                };
+
+                if (this.modelToEdit && this.modelToEdit.attributes.editMode &&
+                    this.modelToEdit.attributes.editMode.visible == undefined)
+                {
+                    this.modelToEdit.set("editMode", getJSONFromBinaryWeight(this.modelToEdit.attributes.editMode));
+                }
+
                 this.form = new Backbone.Form({
                     model: this.modelToEdit
                 }).render();
@@ -243,7 +262,6 @@ define([
                 // Send an event to editionPageLayout to notify that form is created
                 this.mainChannel.trigger('formCreated');
 
-
                  this.form.$el.on('change input[name="decimal"]', _.bind(function(e) {
                     if ($(e.target).is(':checked')) {
                         this.form.$el.find('.field-precision').addClass('advanced');
@@ -254,52 +272,54 @@ define([
 
                  if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
                     var WebServiceUrl = $("[name='webServiceURL']").val();
-                    if (WebServiceUrl.substring(0,5) == 'http:' ) {
-                        $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
 
-                        $.ajax({
-                            data        : JSON.stringify({StartNodeID: AppConfig.config.startID, lng: "fr"}),
-                            type        : 'POST',
-                            url         : WebServiceUrl,
-                            contentType : 'application/json',
-                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                            //  The server is already configured to used it
-                            crossDomain : true,
-
-                            //  Trigger event with ajax result on the formView
-                            success: _.bind(function(data) {
-                               $('#defaultNode').fancytree({
-                                source     : data,
-                                checkbox   : false,
-                                selectMode : 1,
-                                activeNode :AppConfig.config.startID,
-                                activate : _.bind(function(event, data) {
-                                    this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                }, this)
-
-                            });
-                            }, this),
-                        });
-                    }
-                    else {
-                        $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
-
+                    if (WebServiceUrl)
+                    {
+                        if (WebServiceUrl.substring(0,5) == 'http:' ) {
                             $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-                            $('#defaultNode').fancytree({
-                                source: data['d'],
-                                checkbox : false,
-                                selectMode : 1,
-                                activate : _.bind(function(event, data) {
-                                    this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                }, this)
+
+                            $.ajax({
+                                data        : JSON.stringify({StartNodeID: AppConfig.config.startID, lng: "fr"}),
+                                type        : 'POST',
+                                url         : WebServiceUrl,
+                                contentType : 'application/json',
+                                //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                                //  The server is already configured to used it
+                                crossDomain : true,
+
+                                //  Trigger event with ajax result on the formView
+                                success: _.bind(function(data) {
+                                    $('#defaultNode').fancytree({
+                                        source     : data,
+                                        checkbox   : false,
+                                        selectMode : 1,
+                                        activeNode :AppConfig.config.startID,
+                                        activate : _.bind(function(event, data) {
+                                            this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
+                                        }, this)
+
+                                    });
+                                }, this),
                             });
+                        }
+                        else {
+                            $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
 
-                        }, this)).error(function(a,b , c) {
-                            alert ("can't load ressources !");
-                        });
+                                $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+                                $('#defaultNode').fancytree({
+                                    source: data['d'],
+                                    checkbox : false,
+                                    selectMode : 1,
+                                    activate : _.bind(function(event, data) {
+                                        this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
+                                    }, this)
+                                });
+
+                            }, this)).error(function(a,b , c) {
+                                alert ("can't load ressources !");
+                            });
+                        }
                     }
-
-
                 } else if (this.modelToEdit.constructor.type === 'TreeView') {
 
                      this.setTreeViewConfiguration();
@@ -425,7 +445,7 @@ define([
                 this.$el.find('input[name="required"]').prop('checked', false)
             }
 
-            this.$el.find('input[name="endOfLine"]').prop('checked', choice['endOfLine'] != undefined)
+            //this.$el.find('input[name="endOfLine"]').prop('checked', choice['endOfLine'] != undefined)
         },
 
 
@@ -486,8 +506,12 @@ define([
 
                 if (this.form.commit() === undefined) {
 
-                    if (this.modelToEdit.attributes.type == "Thesaurus")
+                    // TODO Should test inpyt Type attribute, but Thesaurus type at first creation seems to be undefined
+                    // TODO   Need to find why to get a proper testing method ...
+                    if (this.modelToEdit.attributes.defaultNode != undefined)
+                    {
                         this.modelToEdit.set("defaultNode", savedDefaultNode);
+                    }
 
                     if (!this.modelToEdit.get('isLinkedField')) {
                         this.modelToEdit.set('linkedField', '');

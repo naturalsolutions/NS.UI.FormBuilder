@@ -86,7 +86,6 @@ define([
         },
 
         updateTreeView : function(data) {
-            //TODO HERE I SHOULD CHANGE THE SHIT
             var startID = data['node']['key'] ;
             var that = this;
 
@@ -102,26 +101,7 @@ define([
                 }
             };
 
-            if (false && this.model.get('webServiceURL').substring(0,5) == 'http:' ) {
-                var data ;
-                $.ajax({
-                    data        : JSON.stringify({StartNodeID: startID, lng: "fr"}),
-                    type        : 'POST',
-                    url         : this.model.get('webServiceURL'),
-                    contentType : 'application/json',
-                    //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                    //  The server is already configured to used it
-                    crossDomain : true,
-
-                    //  Trigger event with ajax result on the formView
-                    success: _.bind(function(data) {
-                        reloadFieldInList();
-                    }, this),
-                });
-            }
-            else {
-                reloadFieldInList();
-            }
+            reloadFieldInList();
 
             this.model.set('defaultNode', startID);
         },

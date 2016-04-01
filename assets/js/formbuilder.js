@@ -125,6 +125,7 @@ define([
                 marginLeft : '0%'
             }, 750, _.bind(function() {
                 this.rightRegion.empty();
+                $('#navbarContext').text($.t('navbar.context.home'));
             }, this));
         }, this));
     })

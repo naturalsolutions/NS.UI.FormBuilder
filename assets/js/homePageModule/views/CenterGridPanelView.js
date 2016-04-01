@@ -4,6 +4,7 @@ define([
     'marionette',
     'text!../templates/CenterGridPanelView.html',
     'text!../templates/CenterGridPanelViewRO.html',
+    'text!../templates/CenterGridPanelViewAllContext.html',
     'backgrid',
     '../../Translater',
     '../collection/FormCollection',
@@ -11,7 +12,8 @@ define([
     'backbone.radio',
     'sweetalert',
     'slimScroll'
-    ], function($, _, Marionette, CenterGridPanelViewTemplate, CenterGridPanelViewTemplateRO, Backgrid, Translater, FormCollection, FormModel, Radio, swal) {
+    ], function($, _, Marionette, CenterGridPanelViewTemplate, CenterGridPanelViewTemplateRO,
+                CenterGridPanelViewTemplateAllContext, Backgrid, Translater, FormCollection, FormModel, Radio, swal) {
 
     var translater = Translater.getTranslater();
 
@@ -50,7 +52,9 @@ define([
         initialize : function(options, readonly) {
             var context = $("#contextSwitcher .selectedContext").text();
 
-            if (readonly || context.toLowerCase() == "all")
+            if (context.toLowerCase() == "all")
+                this.template = CenterGridPanelViewTemplateAllContext;
+            if (readonly)
                 this.template = CenterGridPanelViewTemplateRO;
             _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm')
 
