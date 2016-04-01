@@ -947,11 +947,11 @@ define([
             console.log("-----------");
             if (formValidation === null)
             {
-                alert("peux valider !");
+                //alert("peux valider !");
             }
             else
             {
-                alert("peux pas !");
+                //alert("peux pas !");
             }
 
             var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
