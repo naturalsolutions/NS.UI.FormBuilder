@@ -125,8 +125,6 @@ define([
         * @param  {Object} field Field with which backbone forms will generate an edition form
         */
         initForm : function() {
-            //console.log("20 ----------------");
-            //console.log(this.modelToEdit);
 
             this.currentFieldType  = this.modelToEdit.constructor.type;
             this.fieldWithSameType = this.preConfiguredFieldList[this.currentFieldType];
@@ -315,7 +313,7 @@ define([
                                     }, this)
                                 });
 
-                            }, this)).error(function(a,b , c) {
+                            }, this)).error(function(a,b,c) {
                                 alert ("can't load ressources !");
                             });
                         }
@@ -504,10 +502,12 @@ define([
                     this.subSettingView.commitValues();
                 }
 
-                if (this.form.commit() === undefined) {
+                var commitResult = this.form.commit();
+                if (commitResult === undefined) {
+                    this.modelToEdit.set("validated", true);
 
-                    // TODO Should test inpyt Type attribute, but Thesaurus type at first creation seems to be undefined
-                    // TODO   Need to find why to get a proper testing method ...
+                    // TODO Should test input Type attribute, but Thesaurus type at first creation seems to be undefined
+                    // TODO Need to find why to get a proper testing method ...
                     if (this.modelToEdit.attributes.defaultNode != undefined)
                     {
                         this.modelToEdit.set("defaultNode", savedDefaultNode);
@@ -523,6 +523,10 @@ define([
 
                     this.mainChannel.trigger('formCommit');
                     this.removeForm();
+                }
+                else
+                {
+                    console.log(commitResult);
                 }
             }
             else {

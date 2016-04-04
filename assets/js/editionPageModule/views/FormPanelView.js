@@ -112,6 +112,8 @@ define([
             //  And we display message with sweet alert
             this.formChannel.on('save:success',      this.displaySucessMessage);
             this.formChannel.on('save:fail',      this.displayFailMessage);
+            this.formChannel.on('save:formIncomplete',      this.displayIncompleteFormMessage);
+            this.formChannel.on('save:fieldIncomplete',      this.displayIncompleteFieldMessage);
 
             this.formChannel.on('template:success',      this.displaytemplateMessage);
             this.formChannel.on('template:fail',      this.displayFailtemplatee);
@@ -166,8 +168,6 @@ define([
         removeElement : function() {
             //this._viewCount--;
 
-            //console.log("47 ----------------");
-            //console.log(this.model);
             this.updateFieldCount();
         },
 
@@ -440,6 +440,22 @@ define([
             swal(
                 translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
                 translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                "error"
+            );
+        },
+
+        displayIncompleteFormMessage: function() {
+            swal(
+                translater.getValueFromKey('modal.save.uncompleteFormerror') || "Une erreur est survenue !",
+                translater.getValueFromKey('modal.save.uncompleteForm') || "Votre formulaire n'a pas été totallement renseigné",
+                "error"
+            );
+        },
+
+        displayIncompleteFieldMessage: function() {
+            swal(
+                translater.getValueFromKey('modal.save.uncompleteFielderror') || "Une erreur est survenue !",
+                translater.getValueFromKey('modal.save.uncompleteField') || "Un de vos champs n'a pas été totallement renseigné",
                 "error"
             );
         },

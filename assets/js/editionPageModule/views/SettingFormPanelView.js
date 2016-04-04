@@ -152,20 +152,12 @@ define([
         */
         saveChange : function() {
             var formValidation = this.form.validate();
-            //console.log("007 ------------");
-            //console.log(formValidation);
 
             if (formValidation === null) {
                 this.mainChannel.trigger('editionDone', this.form.getValue());
-                //console.log("009 ------------");
-                //console.log(this);
                 this.removeForm();
             } else {
-                //console.log("012 ------------");
-                //console.log("FAIL !!!");
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
-                    //console.log("014 ------------");
-                    //console.log(this.form.fields);
                     //  We display a main information
                     this.$el.find('.general-error').html(
                         '   <h2>' + this.translater.getValueFromKey('error.general') + '</h2>' +

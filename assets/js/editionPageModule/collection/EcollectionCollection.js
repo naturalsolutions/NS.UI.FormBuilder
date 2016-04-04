@@ -27,14 +27,20 @@ define([
 
     var EcollectionExtention = {
 
-
-
         schemaExtention: {
 
         },
 
         propertiesDefaultValues : {
 
+        },
+
+        getExtractedDatas: function(){
+            return({});
+        },
+
+        getSchemaExtention: function(options){
+            return({});
         },
 
         initializeExtention: function () {

@@ -265,7 +265,8 @@
       "saveAsType" : "Save as new type",
       "save" : "Save changes",
       "validate"   : "Validate",
-      "cancel" : "Cancel"
+      "cancel" : "Cancel",
+      "listOfParentForms" : "List of parent forms:"
     },
     "preField" : "Pre-configurated field"
   },
@@ -273,12 +274,6 @@
   "modal" : {
     "comment" : "Your coment",
     "filename" : "File name",
-    "save" : {
-
-    },
-    "export" : {
-
-    },
     "clear" : {
       "title"            : "Are you sure ?",
       "text"             : "The form will be lost !",
@@ -316,7 +311,11 @@
       "error"      : "An error occured !",
       "errorMsg"   :" Your form wasn't saved. Consider making a export",
       "title"      : "Protocol save",
-      "button"     : "Save"
+      "button"     : "Save",
+      "uncompleteFormerror" : "Uncomplete Form !",
+      "uncompleteForm" : "Some required fields on the form properties are empty !",
+      "uncompleteFielderror" : "Uncomplete Field !",
+      "uncompleteField" : "Some required fields on your inputs properties are empty !"
     },
     "field" : {
       "error" : "Field can't be added !",

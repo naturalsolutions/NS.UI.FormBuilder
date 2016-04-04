@@ -139,8 +139,6 @@ define([
         },
 
         addSubView : function(model) {
-            //console.log("52 ----------------");
-            //console.log(model);
             require(['editionPageModule/views/fieldViews/' + model.constructor.type + 'FieldView'], _.bind(function(fieldView) {
 
                 this.$el.find('fieldset').append('<div class="row sortableRow marginTop0" id="subView' + model.cid + '"></div>');
@@ -152,10 +150,7 @@ define([
                 if (vue !== null) {
                     vue.render();
                 }
-
-                //console.log("56 ----------------");
-                //console.log(model);
-
+                
                 $(".actions").i18n();
             }, this));
         },

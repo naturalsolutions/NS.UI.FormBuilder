@@ -275,7 +275,8 @@
             "saveAsType" : "Enregistrez comme nouveau type",
             "save"       : "Sauvegarder",
             "validate"   : "Valider",
-            "cancel"     : "Annuler"
+            "cancel"     : "Annuler",
+            "listOfParentForms" : "Liste des formulaires parents :"
         },
         "preField" : "Champs pré configurés"
     },
@@ -318,7 +319,11 @@
             "error"      : "Une erreur est survenue !",
             "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
             "title"      : "Sauvegarde du protocol",
-            "button"     : "Sauvegarder"
+            "button"     : "Sauvegarder",
+            "uncompleteFormerror" : "Formulaire incomplet !",
+            "uncompleteForm" : "Certaines zones obligatoires dans les propriétés du formulaire sont vides !",
+            "uncompleteFielderror" : "Champs incomplets !",
+            "uncompleteField" : "Certaines zones obligatoires dans les propriétés de vos champs sont vides !"
         },
         "field" : {
             "error"    : "Echec de l'ajout !",

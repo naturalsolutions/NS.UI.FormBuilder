@@ -39,6 +39,21 @@ define([
             author : window.user
         },
 
+        getExtractedDatas: function(){
+            return({});
+        },
+
+        getSchemaExtention: function(options){
+            return({
+                author : {
+                    type        : 'Hidden',
+                    title       : translater.getValueFromKey('form.author'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate
+                }
+            });
+        },
+
         initializeExtention: function () {
             return(true);
         },

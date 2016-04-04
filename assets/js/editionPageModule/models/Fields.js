@@ -69,6 +69,7 @@ define([
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 fieldClass  : 'marginBottom10',
+                validators : ['required'],
                 editorAttrs : {
                     placeholder : translater.getValueFromKey('placeholder.name')
                 }
@@ -1001,8 +1002,6 @@ define([
         },
 
         addField : function(field) {
-            //console.log("60 ------------------");
-            //console.log(field);
 
             //  Update field array
             var arr = this.get('fields');
@@ -1013,20 +1012,15 @@ define([
             //  Send event to the subForm view
             //  The subForm view will create subView corresponding to the field in parameter
             this.trigger('fieldAdded', field);
-            //console.log(this.get('fields'));
         },
 
         removeField : function(field) {
-            //console.log("51 --------------");
-            //console.log(field);
 
-            //console.log(this.get('fields'));
             var arr     = this.get('fields'),
                 index   = arr.indexOf(field);
             arr.splice(index, 1);
             this.set('fields', arr);
             this.trigger('fieldRemoved');
-            //console.log(this.get('fields'));
         }
 
     }, {
@@ -1176,6 +1170,7 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.childFormName'),
+                    validators  : ['required'],
                     options     : getFormsList(this)
                 },
                 help: {

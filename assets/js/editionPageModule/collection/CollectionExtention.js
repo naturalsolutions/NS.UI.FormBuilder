@@ -43,6 +43,14 @@ define([
 
         },
 
+        getExtractedDatas: function(){
+            return({});
+        },
+
+        getSchemaExtention: function(options){
+            return({});
+        },
+
         initializeExtention: function () {
             return(true);
         },

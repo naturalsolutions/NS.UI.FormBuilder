@@ -155,10 +155,6 @@ define([
             //  Get many information with Ajax and send it to the layout
             //  And the layout display the setting panel
 
-            //console.log("38 -------------------");
-            //console.log(this.fieldCollection);
-            //console.log(modelID);
-
             this.formChannel.trigger('initFieldSetting', {
                 URLOptions             : this.URLOptions,
                 linkedFieldsList       : this.linkedFieldsList,

@@ -38,6 +38,7 @@ define([
     */
     var Form = Backbone.Collection.extend({
         model: Fields.BaseField,
+        options: {},
 
         /**
          * Collection schema for backbone forms generation
@@ -121,7 +122,7 @@ define([
         },
 
         getDefaultSchema : function (){
-            return ({
+            var toret = {
                 name : {
                     type        : "Text",
                     title       : translater.getValueFromKey('form.name'),
@@ -196,7 +197,10 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate
                 }
-            });
+            };
+
+            $.extend(toret, extention.getSchemaExtention(this.options));
+            return (toret);
         },
 
         /**
@@ -209,12 +213,14 @@ define([
 
             var that = this;
 
-            this.schemaDefinition = this.getDefaultSchema();
-
             if (options.context && options.context != "all")
                 setExtention(options.context);
 
-            $.each(extention.schemaExtention, function(index, value){
+            that.options = options;
+
+            this.schemaDefinition = this.getDefaultSchema();
+
+            $.each(extention.getSchemaExtention(options), function(index, value){
                 that.schemaDefinition[index] = value;
             });
 
@@ -932,86 +938,108 @@ define([
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
+            var that = this;
+
             if (!this.formChannel)
                 this.initFormChannel();
 
             var tmpForm =  new Backbone.Form({
                 schema: this.getDefaultSchema(),
-                data  : this.getAttributesValues
+                data  : this.getAttributesValues()
             }).render();
 
             var formValidation = tmpForm.validate();
-            console.log("-----------");
-            console.log(formValidation);
-            console.log(this.getAttributesValues);
-            console.log("-----------");
-            if (formValidation === null)
+
+            var fieldsValidation = true;
+
+            $.each(that.models, function(index, value){
+                var fieldModel = that.get(value.id);
+
+                if (fieldsValidation && !fieldModel.attributes.validated)
+                {
+                    var fieldForm = new Backbone.Form({
+                        model: that.get(value.id)
+                    }).render();
+                    if (fieldForm.validate() != null)
+                    {
+                        fieldsValidation = false;
+                    }
+                }
+            });
+
+            if (formValidation === null && fieldsValidation)
             {
-                //alert("peux valider !");
+                $.each(that.models, function(index, value){
+                    delete that.get(value.id).attributes.validated;
+                });
+
+                var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
+                var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
+
+                $.ajax({
+                    data        : JSON.stringify(this.getJSON()),
+                    type        : PostOrPut,
+                    url         : url,
+                    contentType : 'application/json',
+                    //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                    //  The server is already configured to used it
+                    crossDomain : true,
+
+                    //  Trigger event with ajax result on the formView
+                    success: _.bind(function(data) {
+                        this.id = data.form.id;
+                        var savedid = this.id;
+                        if (data.form.schema) {
+                            $.each(data.form.schema, function (index, inputVal) {
+                                $.each(that.models, function (modelindex, modelinputVal) {
+                                    if (modelinputVal.attributes.name == index) {
+                                        that.models[modelindex].set('id', inputVal.id);
+                                    }
+                                });
+                            });
+                        }
+
+                        var savedFieldsToDelete = this.fieldstodelete;
+                        this.fieldstodelete = [];
+
+                        $.each(savedFieldsToDelete, function(index, inputVal) {
+                            $.ajax({
+                                data: {},
+                                type: 'DELETE',
+                                url: that.url + "/" + savedid + "/field/" + inputVal,
+                                contentType: 'application/json',
+                                crossDomain: true,
+                                success: _.bind(function (data) {
+                                }, this),
+                                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                    that.fieldstodelete.push(inputVal);
+                                    that.formChannel.trigger('save:fail');
+                                }, this)
+                            });
+                        });
+
+                        this.fieldsexcludedfromdelete = [];
+
+                        setTimeout(function(){
+                            if (that.fieldstodelete.length == 0){
+                                that.formChannel.trigger('save:success');
+                            }
+                        }, 1500);
+                    }, this),
+                    error: _.bind(function(xhr, ajaxOptions, thrownError) {
+                        that.formChannel.trigger('save:fail');
+                    }, this)
+                });
             }
             else
             {
-                //alert("peux pas !");
+                if (formValidation != null)
+                    this.formChannel.trigger('save:formIncomplete');
+                else if (!fieldsValidation)
+                    this.formChannel.trigger('save:fieldIncomplete');
             }
 
-            var PostOrPut = this.id > 0 ? 'PUT' : 'POST';
-            var url = this.id > 0 ? (this.url + '/' + this.id) : this.url;
-            var that = this;
 
-            $.ajax({
-                data        : JSON.stringify(this.getJSON()),
-                type        : PostOrPut,
-                url         : url,
-                contentType : 'application/json',
-                //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                //  The server is already configured to used it
-                crossDomain : true,
-
-                //  Trigger event with ajax result on the formView
-                success: _.bind(function(data) {
-                    this.id = data.form.id;
-                    var savedid = this.id;
-                    if (data.form.schema) {
-                        $.each(data.form.schema, function (index, inputVal) {
-                            $.each(that.models, function (modelindex, modelinputVal) {
-                                if (modelinputVal.attributes.name == index) {
-                                    that.models[modelindex].set('id', inputVal.id);
-                                }
-                            });
-                        });
-                    }
-
-                    var savedFieldsToDelete = this.fieldstodelete;
-                    this.fieldstodelete = [];
-
-                    $.each(savedFieldsToDelete, function(index, inputVal) {
-                        $.ajax({
-                            data: {},
-                            type: 'DELETE',
-                            url: that.url + "/" + savedid + "/field/" + inputVal,
-                            contentType: 'application/json',
-                            crossDomain: true,
-                            success: _.bind(function (data) {
-                            }, this),
-                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                that.fieldstodelete.push(inputVal);
-                                that.formChannel.trigger('save:fail');
-                            }, this)
-                        });
-                    });
-
-                    this.fieldsexcludedfromdelete = [];
-
-                    setTimeout(function(){
-                        if (that.fieldstodelete.length == 0){
-                            that.formChannel.trigger('save:success');
-                        }
-                    }, 1500);
-                }, this),
-                error: _.bind(function(xhr, ajaxOptions, thrownError) {
-                    that.formChannel.trigger('save:fail');
-                }, this)
-            });
         },
 
         saveAsTemplate : function() {

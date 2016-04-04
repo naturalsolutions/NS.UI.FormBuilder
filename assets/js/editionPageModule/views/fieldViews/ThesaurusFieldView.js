@@ -78,7 +78,7 @@ define([
                             activeNode: startID
                         });
 
-                    }, this)).error(function (a, b, c) {
+                    }, this)).error(function (a,b,c) {
                         alert("can't load ressources !");
                     });
                 }

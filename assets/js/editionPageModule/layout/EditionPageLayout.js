@@ -102,8 +102,6 @@ define([
             setTimeout(function() {}, 1000);
             if (this.settingPanel == undefined)
                 this.formSetting(this.formChannel.collection);
-            //console.log("31 -------------------");
-            //console.log(options);
             this.settingPanel.show(new SettingFieldPanelView(options));
         },
 
@@ -220,10 +218,6 @@ define([
         closeSettingPanelAndResetURL : function(form) {
             if (form)
             {
-                console.log("--- 1029 ----");
-                console.log(this);
-                console.log(this.form);
-                console.log(this.formChannel.collection);
                 console.log(form);
             }
             this.closeSettingPanel();

@@ -38,11 +38,12 @@ define([
                 $('#navbarContext').text($.t('navbar.context.home'));
 
                 //  Init homepage layout and render it in the homepage region
+                /*
                 var homePageLayout = new HomePageLayout({
                     URLOptions : options.URLOptions
                 });
                 FormbuilderApp.leftRegion.show(homePageLayout);
-
+                */
                 Backbone.Radio.channel('global').trigger('displayHomePage');
             };
             var urlArgs = getFromUrl();
@@ -62,7 +63,7 @@ define([
                     }, this)
                 });
             }
-            else if (((urlArgs[0] == "edition" && $("#count").length == 0) || urlArgs[0] == "") && $("#formsCount").length == 0){
+            else if (urlArgs[0] == "edition" && $("#formsCount").length == 0){
                 loadHomepage();
             }
         }, 100);
