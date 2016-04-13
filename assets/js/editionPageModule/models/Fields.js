@@ -1197,7 +1197,10 @@ define([
     models.ObjectPickerField = models.BaseField.extend({
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
-                objectType : "Monitored Site"
+                objectType : "Monitored Site",
+                wsUrl : "",
+                triggerAutocomplete : 0,
+                linkedLabel : ""
             });
         },
         schema: function() {

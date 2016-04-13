@@ -205,7 +205,10 @@
         "childFormName"                  : "Child Form name",
         "applyTemplate"                  : "Template to apply (validate at bottom of page)",
         "objectType"                     : "Object Picker",
-        "iscollapsed"                    : "Tree is collapsed"
+        "iscollapsed"                    : "Tree is collapsed",
+        "ACTrigger"                      : "Autocomplete Character Trigger",
+        "ACTriggerMinValue"              : "Minimial character trigger is 1",
+        "linkedLabel"                    : "Linked label"
     },
 
     "tooltip" : {
@@ -371,7 +374,8 @@
           "min" : "Minimum value",
           "max" : "Maximum value",
           "precision" : "Step size",
-          "unity" : "Field unit"
+          "unity" : "Field unit",
+          "ACTrigger" : "Autocomplete will fire at"
         },
         "legend" : "Sub form legend",
 
