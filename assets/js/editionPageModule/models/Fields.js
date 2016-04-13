@@ -1148,7 +1148,7 @@ define([
                     $.each(formCollection.models, function(index, value){
                         if (context.collection.name != value.attributes.name &&
                             (!value.attributes.context || value.attributes.context == window.context))
-                            toret.push({"val" : value.attributes..id ,"label" : value.attributes.name});
+                            toret.push({"val" : value.attributes.id ,"label" : value.attributes.name});
                     });
                 }, this)
             });
