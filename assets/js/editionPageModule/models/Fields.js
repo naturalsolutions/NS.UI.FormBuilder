@@ -1207,7 +1207,38 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.objectType'),
-                    options     : ["Individual", "Monitored Site", "Sensor"]
+                    options     : ["Individual", "Monitored Site", "Sensor"],
+                    validators : ['required']
+                },
+                wsUrl : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.wsUrl'),
+                    validators : ['required']
+                },
+                triggerAutocomplete: {
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.ACTrigger'),
+                    validators : [function checkValue(value) {
+                        if (value < 1) {
+                            return {
+                                type : 'Invalid number',
+                                message : translater.getValueFromKey('schema.ACTriggerMinValue')
+                            }
+                        }
+                    }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.num.ACTrigger')
+                    }
+                },
+                linkedLabel : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.linkedLabel')
                 }
             });
         },
