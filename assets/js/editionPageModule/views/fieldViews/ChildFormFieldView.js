@@ -21,11 +21,15 @@ define([
             if (readonly)
                 opt.template = viewTemplateRO;
             BaseView.prototype.initialize.apply(this, [opt]);
+
         },
 
         render: function() {
+            var realChildFormName = $("#settingPanel .tab-content .field-childForm option:selected").text();
+            if (arguments['0'] && realChildFormName && realChildFormName.length > 0)
+                arguments['0'].attributes.childFormName = realChildFormName;
             BaseView.prototype.render.apply(this, arguments);
-        },
+        }
 
     });
 

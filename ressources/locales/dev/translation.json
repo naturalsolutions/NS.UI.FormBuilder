@@ -9,6 +9,7 @@
   "fields" : {
     "text"                 : "Text",
     "number"               : "Numeric",
+    "decimal"              : "Decimal",
     "date"                 : "Date",
     "select"               : "Select",
     "radio"                : "Radio button",
@@ -24,7 +25,7 @@
     "subform"              : "Fieldset",
     "horizontalline"       : "Horizontal line",
     "boolean"              : "Boolean",
-    "thesaurus"            : "Thesaurus",
+    "thesaurus"            : "Hierarchical Selector",
     "autocompletetreeview" : "Autocomplete Treeview",
     "numericrange"         : "Range",
     "childform"            : "Child Form",
@@ -177,8 +178,9 @@
     "checked"           : "Selected",
     "checkboxlabel"     : "Checkbox label",
     "decimal"           : "Allow decimal value",
-    "fieldSizeEdit"         : "Field display size for Edit mode",
-    "fieldSizeDisplay"         : "Field display size for Display mode",
+    "fieldSizeEdit"     : "Field display size for Edit mode",
+    "fieldSizeDisplay"  : "Field display size for Display mode",
+    "fieldSize"         : "Field display size",
     "fullpath"          : "Save full path",
     "obsolete"          : "Obsolete",
     "sizeValue" : {
@@ -202,13 +204,17 @@
     "formIdentifyingColumn"          : "Form identifying field",
     "linkedFieldset"                 : "Parent fieldset",
     "isLinkedField"                  : "Is a linked Field",
-    "childFormName"                  : "Child Form name",
+    "childForm"                      : "Child Form name",
     "applyTemplate"                  : "Template to apply (validate at bottom of page)",
     "objectType"                     : "Object Picker",
     "iscollapsed"                    : "Tree is collapsed",
     "ACTrigger"                      : "Autocomplete Character Trigger",
     "ACTriggerMinValue"              : "Minimial character trigger is 1",
-    "linkedLabel"                    : "Linked label"
+    "linkedLabel"                    : "Linked label",
+    "propagate"                      : "Propagated",
+    "isBinaryWeight"                 : "Is Binary Weight",
+    "preview"                        : "Show preview",
+    "atBeginingOfLine"               : "Is at the begining of the line"
   },
 
   "tooltip" : {
@@ -230,19 +236,23 @@
     "boolean"              : "Boolean",
     "autocompletetreeview" : "A TreeView with searching functionality",
     "numericrange"         : "Numeric field with range",
-    "thesaurus"            : "Thesaurus",
+    "thesaurus"            : "Hierarchical Selector",
     "childform"            : "Child Form",
     "ObjectType"           : "Object Type"
   },
 
-  "clearProtocol" : "You're going to clear this form.<br />If you continue your work will be lost.<br />Do you continue ?",
+  "clearProtocol" : "You're going to clear this form.<br />Unsaved modifications will be lost.<br />Do you continue ?",
 
   "accordion" : {
-    "standard"     : "Standard fields",
     "autocomplete" : "Fields with autocomplete",
+    "file"         : "File selector fields",
+    "tree"         : "Fields with tree selector",
     "presentation" : "Presentation field",
-    "other"        : "Other fields",
-    "list"         : "List fields"
+    "text"         : "Text fields",
+    "numeric"      : "Numeric fields",
+    "list"         : "List fields",
+    "other"        : "Other kind of fields",
+    "reneco"       : "Reneco special fields"
   },
 
   "panel" : "Options panel",
@@ -279,7 +289,7 @@
     "filename" : "File name",
     "clear" : {
       "title"            : "Are you sure ?",
-      "text"             : "The form will be lost !",
+      "text"             : "Unsaved modifications will be lost !",
       "yes"              : "Yes, delete it",
       "no"               : "No, cancel",
       "deleted"          : "Deleted",

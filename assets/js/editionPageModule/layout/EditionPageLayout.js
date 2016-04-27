@@ -140,11 +140,11 @@ define([
          */
         displaySettingPanel : function() {
             if ($('#widgetPanel').hasClass('col-md-1')) {
-                $('#formPanel').switchClass('col-md-11', 'col-md-7 col-md-pull-1', 500);
+                $('#formPanel').switchClass('col-md-11', 'col-md-7 col-md-offset-5', 500);
             } else {
-                $('#formPanel').switchClass('col-md-8', 'col-md-7', 500);
+                $('#formPanel').switchClass('col-md-8', 'col-md-7 col-md-offset-5', 500);
                 $('#widgetPanel').animate({
-                    marginLeft : '-33.33333333%'
+                    marginRight : '-33.33333333%'
                 }, 500)
             }
         },
@@ -156,13 +156,12 @@ define([
          */
         onRender : function() {
             this.centerPanel.show( new FormPanelView({
-                fieldCollection : this.fieldCollection
+                fieldCollection : this.fieldCollection,
+                URLOptions : this.URLOptions
             }, Backbone.Radio.channel('global').readonly));
 
             if (!Backbone.Radio.channel('global').readonly)
-                this.leftPanel.show( new WidgetPanelView({
-
-                }));
+                this.leftPanel.show( new WidgetPanelView({}));
         },
 
         onDestroy : function() {
@@ -200,11 +199,11 @@ define([
         */
         closeSettingPanel : function() {
             if ($('#widgetPanel').hasClass('col-md-1')) {
-                $('#formPanel').switchClass('col-md-7 col-md-pull-1', 'col-md-11', 500);
+                $('#formPanel').switchClass('col-md-7 col-md-offset-5', 'col-md-11', 500);
             } else {
-                $('#formPanel').switchClass('col-md-7', 'col-md-8', 500);
+                $('#formPanel').switchClass('col-md-7 col-md-offset-5', 'col-md-8', 500);
                 $('#widgetPanel').animate({
-                    marginLeft : 0
+                    marginRight : 0
                 }, 500, _.bind(function() {
                     this.clearFormSettingView();
                 }, this))

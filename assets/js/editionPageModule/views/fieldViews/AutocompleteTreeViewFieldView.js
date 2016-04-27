@@ -26,7 +26,10 @@
             this.mainChannel.on('nodeSelected' + this.model.get('id'), _.bind(function(data) {
                 var key     = data.node.key,
                     treeID  = '#treeViewtree'+ this.model.get('id');
+
                 this.model.set('defaultNode', data.node.key);
+                this.model.set('fullpath', data.node.data.fullpath);
+
                 $(treeID).fancytree("getTree").activateKey(key);
             }, this));
         },

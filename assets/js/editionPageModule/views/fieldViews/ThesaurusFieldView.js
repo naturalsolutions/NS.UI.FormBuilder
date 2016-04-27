@@ -87,6 +87,7 @@ define([
 
         updateTreeView : function(data) {
             var startID = data['node']['key'] ;
+            var nodeFullpath = data['node']['data']['fullpath'];
             var that = this;
 
             var reloadFieldInList = function(){
@@ -104,6 +105,7 @@ define([
             reloadFieldInList();
 
             this.model.set('defaultNode', startID);
+            this.model.set('fullpath', nodeFullpath);
         },
 
         render : function() {

@@ -179,7 +179,7 @@ require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbui
 			preConfiguredField    	: 'ressources/fieldConfiguration/preConfiguredField.json', //  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms && '/FormbuilderWS/configurations',
 			fieldConfigurationURL 	: 'configurationSaved', //  Allow to send a pre-configurated field to the server. Send a POST request, won't work on client side, you need the back-end && '/FormbuilderWS/configurations',
             childforms              : '/childforms', // Child forms can get selected passing a parent form ID '/FormbuilderWS/childforms',
-			
+			sqlAutocomplete			: '/sqlAutocomplete', // Used to get values for autocomplete field '/FormbuilderWS/sqlAutocomplete'
 			// ***********************************************************************
 			// RENECO Specific Paths :
 			// ***********************************************************************

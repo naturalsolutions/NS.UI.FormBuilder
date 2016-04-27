@@ -68,7 +68,7 @@ define([
         },
 
         getModeExtention : function (currentContext) {
-            var extentionMode = Extentions[AppConfig.appMode.currentmode.toLowerCase()];
+            var extentionMode = Extentions[window.context];
             if (currentContext)
                 extentionMode = Extentions[currentContext];
             if (!extentionMode)

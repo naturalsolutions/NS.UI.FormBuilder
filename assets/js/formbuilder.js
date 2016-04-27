@@ -170,9 +170,9 @@ define([
 
         // Adding contexts
         $.each(AppConfig.appMode, function(index, value){
-            if (index.indexOf("demo") == -1 && index != "currentmode" && index != "minimalist")
+            if (index.indexOf("demo") == -1 && index != "topcontext" && index != "minimalist")
             {
-                $("#contextSwitcher").append("<span class='hidden'>"+index+"</span>")
+                $("#contextSwitcher").append("<span class='hidden'>"+index+"</span>");
             }
         });
 
@@ -203,6 +203,13 @@ define([
                 }
             }
         });
+
+
+        if ($("#contextSwitcher span").length == 2)
+        {
+            $("#contextSwitcher .selectedContext").remove();
+            $("#contextSwitcher span").trigger("click");
+        }
 
         window.onhashchange = function(e)
         {

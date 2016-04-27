@@ -15,7 +15,7 @@
     </div>
     <div class="row">
         <div class="col-md-11 col11centered">
-            <select name="<% name %>" class="form-control" <% if (multiple) {%> multiple <% }%> >
+            <select name="<% name %>" class="form-control" >
                 <% _.each(choices, function(el, idx) { %>
                     <option data-idx="<%=idx %>" value="<%= el.value %>" <% if (defaultValue.indexOf(el["id"]) >=0){ %> checked <% } %> >
                             <%= el["en"] %>

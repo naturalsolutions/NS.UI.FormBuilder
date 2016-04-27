@@ -1,13 +1,16 @@
 define([
     'jquery',
     'marionette',
-    'text!editionPageModule/templates/FormPanelView.html',
-    'text!editionPageModule/templates/FormPanelViewRO.html',
+    'text!editionPageModule/templates/FormPanel/View.html',
+    'text!editionPageModule/templates/FormPanel/ViewRO.html',
+    'text!editionPageModule/templates/FormPanel/Reneco/View.html',
+    'text!editionPageModule/templates/FormPanel/Reneco/ViewRO.html',
     'sweetalert',
     '../../Translater',
+    '../../app-config',
     'i18n',
     'slimScroll'    
-], function($, Marionette, FormPanelViewTemplate, FormPanelViewTemplateRO, swal, Translater) {
+], function($, Marionette, FormPanelView, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal, Translater, AppConfig) {
 
     var translater = Translater.getTranslater();
     
@@ -37,7 +40,19 @@ define([
          * @return {string} Compiled underscore template
          */
         template : function() {
-            return _.template(FormPanelViewTemplate)({
+            var topcontext = "";
+            if (AppConfig.appMode.topcontext != "classic")
+            {
+                topcontext = AppConfig.appMode.topcontext
+            }
+
+            if (topcontext == "reneco")
+            {
+                return _.template(FormPanelViewReneco)({
+                    collection : this.collection.getAttributesValues()
+                });
+            }
+            return _.template(FormPanelView)({
                 collection : this.collection.getAttributesValues()
             });
         },
@@ -48,11 +63,25 @@ define([
          * @param  {object} options configuration options like web service URL for back end connection
          */
         initialize : function(options, readonly) {
+            var topcontext = "";
+            if (AppConfig.appMode.topcontext != "classic")
+            {
+                topcontext = AppConfig.appMode.topcontext
+            }
+
             if (readonly)
+            {
                 this.template = function(){
-                    return _.template(FormPanelViewTemplateRO)({
+                    return _.template(FormPanelViewRO)({
                         collection : this.collection.getAttributesValues()
                     })};
+                if (topcontext == "reneco")
+                    this.template = function(){
+                        return _.template(FormPanelViewROReneco)({
+                            collection : this.collection.getAttributesValues()
+                        })};
+            }
+
             this.collection     = options.fieldCollection;
             this._view          = {};
             this.URLOptions     = options.URLOptions;
@@ -198,7 +227,8 @@ define([
                     var vue = new fieldView({
                         el: '#' + id,
                         model: newModel,
-                        collection: this.collection
+                        collection: this.collection,
+                        urlOptions: this.URLOptions
                     }, Backbone.Radio.channel('global').readonly);
                     if (vue !== null) {
                         vue.render();
@@ -286,6 +316,12 @@ define([
             this.formChannel.trigger('renderFinished');
 
             this.updateName();
+
+            var that = this;
+            setTimeout(function(){
+                if ($("#formsCount").length > 0)
+                    that.formSettings();
+            }, 500);
         },
 
         /**

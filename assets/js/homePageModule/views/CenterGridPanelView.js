@@ -2,18 +2,22 @@ define([
     'jquery',
     'underscore',
     'marionette',
-    'text!../templates/CenterGridPanelView.html',
-    'text!../templates/CenterGridPanelViewRO.html',
-    'text!../templates/CenterGridPanelViewAllContext.html',
+    'text!../templates/CenterGridPanel/View.html',
+    'text!../templates/CenterGridPanel/ViewRO.html',
+    'text!../templates/CenterGridPanel/ViewAllContext.html',
+    'text!../templates/CenterGridPanel/Reneco/ViewRO.html',
+    'text!../templates/CenterGridPanel/Reneco/ViewAllContext.html',
     'backgrid',
     '../../Translater',
     '../collection/FormCollection',
     '../models/FormModel',
     'backbone.radio',
     'sweetalert',
+    '../../app-config',
     'slimScroll'
-    ], function($, _, Marionette, CenterGridPanelViewTemplate, CenterGridPanelViewTemplateRO,
-                CenterGridPanelViewTemplateAllContext, Backgrid, Translater, FormCollection, FormModel, Radio, swal) {
+    ], function($, _, Marionette, GridPanelView, GridPanelViewRO, GridPanelViewAllContext, GridPanelViewROReneco,
+                GridPanelViewAllContextReneco, Backgrid, Translater, FormCollection, FormModel, Radio, swal,
+                AppConfig) {
 
     var translater = Translater.getTranslater();
 
@@ -41,7 +45,7 @@ define([
          * Custom template from HTML file
          * We prefer use HTML file for each view instead script tag in one file for example
          */
-        template: CenterGridPanelViewTemplate,
+        template: GridPanelView,
 
         /**
          * View construcotr
@@ -52,10 +56,25 @@ define([
         initialize : function(options, readonly) {
             var context = $("#contextSwitcher .selectedContext").text();
 
+            var topcontext = "";
+            if (AppConfig.appMode.topcontext != "classic")
+            {
+                topcontext = AppConfig.appMode.topcontext
+            }
+
             if (context.toLowerCase() == "all")
-                this.template = CenterGridPanelViewTemplateAllContext;
+            {
+                this.template = GridPanelViewAllContext;
+                if (topcontext == "reneco")
+                    this.template = GridPanelViewAllContextReneco;
+            }
+
             if (readonly)
-                this.template = CenterGridPanelViewTemplateRO;
+            {
+                this.template = GridPanelViewRO;
+                if (topcontext == "reneco")
+                    this.template = GridPanelViewROReneco;
+            }
             _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm')
 
             this.URLOptions = options.URLOptions;
@@ -258,15 +277,23 @@ define([
                 var el      = elementAndModel['el'],
                     model   = elementAndModel['model'];
 
-                if ($('.formInformation').length > 0) {
-                    $('.formInformation').fadeOut(100, _.bind(function() {
-                        $('.padding').slideUp(500);
-                        $('.formInformation').remove()
-                        $('tr.selected').removeClass('selected');
+                if (AppConfig.appMode.topcontext == "reneco")
+                {
+                    $('tr.selected').removeClass('selected');
+                    el.addClass('selected');
+                }
+                else
+                {
+                    if ($('.formInformation').length > 0) {
+                        $('.formInformation').fadeOut(100, _.bind(function() {
+                            $('.padding').slideUp(500);
+                            $('.formInformation').remove()
+                            $('tr.selected').removeClass('selected');
+                            this.addFormSection(el, model);
+                        }, this));
+                    } else {
                         this.addFormSection(el, model);
-                    }, this));
-                } else {
-                    this.addFormSection(el, model);
+                    }
                 }
 
                 this.beforeFormSelection = this.currentSelectedForm;
@@ -296,6 +323,7 @@ define([
          * Remove footer action except new and import action
          */
         clearFooterAction : function() {
+            $('tr.selected').removeClass('selected');
             this.$el.find('footer').animate({
                 bottom : '-80px'
             }, 500);
@@ -836,9 +864,9 @@ define([
 
         setCenterGridPanel : function(context)
         {
-            this.template = CenterGridPanelViewTemplate;
+            this.template = GridPanelView;
             if (context.toLowerCase() == "all")
-                this.template = CenterGridPanelViewTemplateRO;
+                this.template = GridPanelViewAllContext;
             this.currentSelectedForm = 0;
 
             this.render(this.template);

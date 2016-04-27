@@ -2,13 +2,14 @@ define([
     'underscore',
     'backbone',
     'text!homePageModule/templates/modals/NewFormModalView.html',
+    'app-config',
     'bootstrap',
     'i18n'
-], function(_, Backbone, exportJSONTemplate) {
+], function(_, Backbone, exportJSONTemplate, AppConfig) {
 
     /**
-     * Model view used to import a form in the formbuilder with a JSON file
-     */
+    * Model view used to import a form in the formbuilder with a JSON file
+    */
     var NewFormModalView = Backbone.View.extend({
 
         /**
@@ -28,6 +29,12 @@ define([
 
             this.templates = options.templates || [];
             this.onClose = options.onClose;
+
+            if (AppConfig.appMode.topcontext == "reneco")
+                this.templates = [];
+
+            console.log("templates = ");
+            console.log(this.templates);
         },
 
         /**
@@ -49,7 +56,7 @@ define([
             this.onClose(
                 this.$el.find('#formName').val(),
                 this.$el.find('#templateName').val()
-            )
+            );
             $(this.el).modal('hide').removeData();
         },
 

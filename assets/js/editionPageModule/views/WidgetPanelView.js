@@ -87,7 +87,8 @@ define([
          * Get Fields information, like section, i18n translation ...
          */
         initSection : function() {
-            var section = { standard : {}, other : {} };
+            var sections = {text: {}, numeric: {}, list: {}, presentation: {}, autocomplete: {}, tree: {}, file: {},
+                other: {}, reneco: {}};
 
             var context = window.context || $("#contextSwitcher .selectedContext").text().toLowerCase();
 
@@ -100,18 +101,23 @@ define([
 
             for (var i in Fields) {
                 if (Fields[i].type !== undefined && checkDisplayMode(Fields[i].type)) {
-                    if (Fields[i].section === undefined) {
-                        section['other'][i] = {
+                    if (Fields[i].section === undefined)
+                    {
+                        sections['other'][i] = {
                             i18n             : i.replace('Field', '').toLowerCase(),
                             doubleColumn     : Fields[i].doubleColumn !== undefined,
                             fontAwesomeClass : Fields[i].fontAwesomeClass
                         }
-                    } else {
-                        if (section[Fields[i].section] === undefined) {
-                            //  create new section
-                            section[ Fields[i].section ] = {};
+                    }
+                    else
+                    {
+                        if (sections[Fields[i].section] === undefined)
+                        {
+                            //  create new sections
+                            sections[ Fields[i].section ] = {};
                         }
-                        section[ Fields[i].section ][i] = {
+
+                        sections[ Fields[i].section ][i] = {
                             i18n             : i.replace('Field', '').toLowerCase(),
                             doubleColumn     : Fields[i].doubleColumn !== undefined,
                             fontAwesomeClass : Fields[i].fontAwesomeClass
@@ -120,7 +126,13 @@ define([
                 }
             }
 
-            this.section = section;
+            for (var section in sections)
+            {
+                if (Object.keys(sections[section]).length == 0)
+                    delete(sections[section]);
+            }
+
+            this.section = sections;
         },
 
         /**
@@ -131,7 +143,7 @@ define([
          * @param e jQuery event
          */
         displayContent : function(e) {
-            var accordion = $(e.currentTarget).data('accordion')
+            var accordion = $(e.currentTarget).data('accordion');
             $('.section[data-accordion!="content-' + accordion + '"]').slideUp(500, function() {
                 $('.section[data-accordion="content-' + accordion + '"]').slideDown(500)
             });

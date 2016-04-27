@@ -29,7 +29,8 @@ define([
             thesaurusWSPath : 'http://localhost/ThesaurusCore/api/thesaurus/fastInitForCompleteTree',
             forms : '/FormbuilderWS/forms/allforms'
         },
-        // Defines the list of rules that will appli to the forms
+
+        // Defines the list of rules that will apply to the forms
         rules : [
             {
                 error : {
@@ -68,6 +69,7 @@ define([
             getStringSizes : function(){
                 return (this.getSizesFromType('strings'));
             },
+
             strings : {
                 MINIMUM : "0",
                 MAXIMUM : "255",
@@ -81,6 +83,7 @@ define([
             getNumericSizes : function(){
                 return (this.getSizesFromType('numerics'));
             },
+
             numerics : {
                 MINIMUM : "0",
                 MAXIMUMINT : "2147483647",
@@ -94,32 +97,15 @@ define([
         // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
         appMode : {
             // List of all existing generic types :
-            // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number,
+            // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number, Decimal,
             // NumericRange, Pattern, CheckBox, Radio, Select, ChildForm, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
 			// Modes with "demo" inside their names will not be displayed as a context (so won't the minimalist mode)
 			//
-            currentmode : 'demo',
-            alltypes : [
-                'Hidden',
-                'HorizontalLine',
-                'Autocomplete',
-                'Text',
-                'File',
-                'TreeView',
-                'Date',
-                'Number',
-                'NumericRange',
-                'Pattern',
-                'CheckBox',
-                'Radio',
-                'Select',
-                'ChildForm',
-                'Thesaurus',
-				'AutocompleteTreeView'
-			],
-            demo : [
+            topcontext : 'classic',
+
+            classic : [
                 'Autocomplete',
                 'Text',
                 'Date',
@@ -130,6 +116,7 @@ define([
                 'CheckBox',
 				'ChildForm'
             ],
+
 			// 'ObjectPicker' type is ecoreleve dependent
             ecoreleve : [
                 'Autocomplete',
@@ -141,8 +128,10 @@ define([
                 'Thesaurus',
                 'CheckBox',
                 'ChildForm',
+
 				'ObjectPicker'
             ],
+
             ecollection : [
                 'Autocomplete',
                 'Text',
@@ -154,6 +143,7 @@ define([
                 'CheckBox',
                 'ChildForm'
             ],
+
             track : [
                 'Autocomplete',
                 'Text',
@@ -164,13 +154,7 @@ define([
                 'Thesaurus',
                 'CheckBox',
                 'ChildForm'
-            ],
-            minimalist : [
-                'Text',
-                'Date',
-                'TextArea',
-                'Number'
-            ],
+            ]
         }
     };
 

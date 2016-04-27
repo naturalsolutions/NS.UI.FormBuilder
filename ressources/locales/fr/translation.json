@@ -9,6 +9,7 @@
     "fields" : {
         "text"                 : "Texte",
         "number"               : "Numérique",
+        "decimal"              : "Décimal",
         "date"                 : "Date",
         "select"               : "Liste déroulante",
         "radio"                : "Bouton radio",
@@ -24,8 +25,8 @@
         "horizontalline"       : "Séparation",
         "treeview"             : "Arborescence",
         "boolean"              : "Booléen",
-        "thesaurus"            : "Thesaurus sans autocomplétion",
-        "autocompletetreeview" : "Thesaurus avec autocomplétion",
+        "thesaurus"            : "Sélecteur Hiérarchisé",
+        "autocompletetreeview" : "Arbre avec autocomplétion",
         "numericrange"         : "Curseur",
         "childform"            : "Formulaire fils",
         "objectpicker"         : "Object Picker"
@@ -186,8 +187,9 @@
         "checked"           : "Sélectionné",
         "checkboxlabel"     : "Label checkbox",
         "decimal"           : "Valeur décimal autorisée",
-        "fieldSizeEdit"         : "Taille d'affichage en mode Edition",
-        "fieldSizeDisplay"         : "Taille d'affichage en mode Affichage",
+        "fieldSizeEdit"     : "Taille d'affichage en mode Edition",
+        "fieldSizeDisplay"  : "Taille d'affichage en mode Affichage",
+        "fieldSize"         : "Taille d'affichage",
         "fullpath"          : "Chemin entier",
         "obsolete"          : "Obsolète",
         "sizeValue" : {
@@ -211,13 +213,17 @@
         "formIdentifyingColumn"        : "Champ du formulaire identifiant",
         "linkedFieldset"               : "Fieldset parent",
         "isLinkedField"                : "Est un champs lié",
-        "childFormName"                : "Nom du formulaire fils",
+        "childForm"                    : "Nom du formulaire fils",
         "applyTemplate"                : "Schéma à appliquer (valider en bas de page)",
         "objectType"                   : "Object Picker",
         "iscollapsed"                  : "Arbre plié",
         "ACTrigger"                    : "Caractère d'execution de l'autocomplétion",
         "ACTriggerMinValue"            : "Le charactère minimum d'execution est 1",
-        "linkedLabel"                  : "Label associé"
+        "linkedLabel"                  : "Label associé",
+        "propagate"                    : "Propagé",
+        "isBinaryWeight"               : "Est un poid binaire",
+        "preview"                      : "Montrer une prévisualisation",
+        "atBeginingOfLine"             : "Est en début de ligne"
     },
 
     "tooltip" : {
@@ -240,19 +246,23 @@
         "boolean"              : "Booléen",
         "autocompletetreeview" : "arborescence avec un champs de recherche",
         "numericrange"         : "Curseur numérique",
-        "thesaurus"            : "Thesaurus sans autocomplétion",
+        "thesaurus"            : "Sélecteur Hiérarchisé",
         "childform"            : "Formulaire Fils",
         "objectpicker"         : "Object Picker"
     },
 
-    "clearProtocol" : "Vous êtes sur le point de créer un nouveau formulaire.<br />Le formulaire actuel sera perdu.<br />Voulez vous continuer ?",
+    "clearProtocol" : "Vous êtes sur le point de purger le formulaire.<br />Les modifications non sauvegardées seront perdues.<br />Voulez vous continuer ?",
 
     "accordion" : {
-        "standard"     : "Champs standards",
-        "autocomplete" : "Champs avec autocomplétion",
+        "text"         : "Champs texte",
+        "numeric"      : "Champs numérique",
+        "list"         : "Listes",
         "presentation" : "Champs de présentation",
-        "other"        : "Autres champs",
-        "list"         : "Champs à choix multiples"
+        "autocomplete" : "Champs avec autocomplétion",
+        "tree"         : "Arbres de selection",
+        "file"         : "Selecteurs de fichier",
+        "other"        : "Autres types de champs",
+        "reneco"       : "Champs spéciaux Reneco"
     },
 
     "panel" : "Paramètres",
@@ -288,7 +298,7 @@
         "filename" : "Nom du fichier",
         "clear" : {
             "title"            : "Etes vous sûr ?",
-            "text"             : "Le formulaire sera définitivement perdu !",
+            "text"             : "Les modifications non sauvegardées seront perdues !",
             "yes"              : "Oui, supprimer",
             "no"               : "Non, annuler",
             "deleted"          : "Supprimé !",

@@ -122,6 +122,8 @@ define([
                 URLOptions      : this.URLOptions
             });
 
+            console.log(editionPageLayout);
+
             this.editionPageRegion.show( editionPageLayout );
         },
 
@@ -131,6 +133,7 @@ define([
          * @param {string} elementClassName field class like TextField
          */
         addElementToCollection : function(elementClassName) {
+            console.log("yo 1");
             this.fieldCollection.addElement(elementClassName);
         },
 

@@ -114,6 +114,11 @@ define([
                 fieldClass  : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.obsolete')
             },
+            propagate : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.propagate')
+            },
             context : {
                 type        : "Hidden",
                 editorClass : 'form-control',
@@ -192,6 +197,11 @@ define([
                     fieldClass  : "checkBoxEditor",
                     title       : translater.getValueFromKey('schema.obsolete')
                 },
+                propagate : {
+                    type        : CheckboxEditor,
+                    fieldClass  : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.propagate')
+                },
                 context : {
                     type        : "Hidden",
                     editorClass : 'form-control',
@@ -239,7 +249,8 @@ define([
             this.labelEn         = opt.labelEn        || "";
             this.tag             = opt.tag            || "";
             this.obsolete        = opt.obsolete       || false;
-            this.context         = opt.context        || AppConfig.appMode.currentmode;
+            this.propagate       = opt.propagate      || false;
+            this.context         = opt.context        || "";
             this.isTemplate      = opt.isTemplate     || false;
             this.fieldstodelete  = [];
             this.fieldsexcludedfromdelete = [];
@@ -404,6 +415,7 @@ define([
                 labelEn       : this.labelEn,
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
+                propagate     : this.propagate,
                 isTemplate    : this.isTemplate || false,
                 context       : this.context,
                 //  form inputs
@@ -439,6 +451,7 @@ define([
             }, this));
 
             $.each(json.schema, function(index, inputVal){
+
                 $.each(json.fieldsets, function(index, fieldsetVal){
                     if (inputVal.linkedFieldset != fieldsetVal.legend + " " + fieldsetVal.cid &&
                         $.inArray(inputVal.name, fieldsetVal.fields) != -1){
@@ -447,11 +460,11 @@ define([
                         });
                     }
                 });
-            });
 
-            $.each(json.schema, function(index, val){
-                val.editMode = getBinaryWeight(val.editMode);
-                val.name = val.name.replace(/\s+/g, '');
+                inputVal.editMode = getBinaryWeight(inputVal.editMode);
+                inputVal.name = inputVal.name.replace(/\s+/g, '');
+
+                delete (inputVal.applyTemplate);
             });
 
             return json;
@@ -462,8 +475,11 @@ define([
          *
          * @param field                 field to add
          * @param ifFieldIsInFieldset   if field in under a fieldset
+         * @param newElement            if field is a new element
          */
         addField : function(field, ifFieldIsInFieldset, newElement) {
+            console.log("adding field");
+            console.log(field);
             this.totalAddedElements++;
 
             if (this.isAValidFieldType(field.constructor.type)) {
@@ -511,19 +527,24 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addElement: function (nameType, properties, isUnderFieldset) {
+            var that = this;
             var field = properties || {};
 
-            //  We check if the field name is the default name or not (if a form was imported the name can be different but can't be modified)
-            field['name'] = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
-            field['order'] = this.getSize();
+            // Temporary fix to have the proper order ! I think all elements are added at once and the renderer does not
+            // add everything following their order but randomly depending on the loading time of each item ... or so ...
+            setTimeout(function(){
+                //  We check if the field name is the default name or not (if a form was imported the name can be different but can't be modified)
+                field['name'] = field['name'] == 'Field' ? 'Field' + that.getSize() : field['name'];
+                field['order'] = that.getSize();
 
-            //
-            //  We add a new file is un the collection
-            //  addField return new added field id
-            //  addElement return so this id
-            //
+                //
+                //  We add a new file is un the collection
+                //  addField return new added field id
+                //  addElement return so this id
+                //
 
-            return this.addField(new Fields[nameType](field), isUnderFieldset);
+                return that.addField(new Fields[nameType](field), isUnderFieldset);
+            }, 10 * field['order']);
         },
 
         /**
@@ -640,6 +661,8 @@ define([
                 this.tag                  = JSONUpdate["tag"];
 
                 this.obsolete             = JSONUpdate["obsolete"];
+                this.propagate            = JSONUpdate["propagate"];
+
                 this.isTemplate           = JSONUpdate["isTemplate"];
 
                 var that = this;

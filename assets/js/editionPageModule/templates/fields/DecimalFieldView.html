@@ -1,0 +1,23 @@
+<div class="element padding5">
+    <div class="row paddingBottom5">
+        <label class="field-icon pull-left">
+            <i class="reneco reneco-numeric"></i>
+        </label>
+        <label class="field-label">
+            <%= labelFr %><% if (required === true) { %> (*) <% } %>
+            <span data-i18n="fields.decimal" class="fieldType"></span>
+        </label>
+        <div class="pull-right actions test22">
+            <span id="trash" class="reneco reneco-trash"></span>
+            <!-- <span id="duplicate" class="reneco reneco-duplicate"></span> -->
+            <span id="edit" class="reneco reneco-edit"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-11 col11centered">
+            <input  class="form-control" type="number" min="<%= minValue %>" max="<%= maxValue %>"
+                    step="<% if(decimal == true) { %>any<% } else { %><%= precision %><% } %>"
+                    name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
+        </div>
+    </div>
+</div>

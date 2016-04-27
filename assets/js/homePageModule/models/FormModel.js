@@ -27,8 +27,9 @@ define([
             fieldsets        : [],
             tag              : '',
             obsolete         : false,
+            propagate        : false,
             isTemplate       : false,
-            context          : window.context || AppConfig.appMode.currentmode,
+            context          : window.context || "",
 
             // display attributes
             creationDateDisplay : "",
@@ -106,6 +107,7 @@ define([
                 tag                        : this.get('tag'),
                 isTemplate                 : this.get('isTemplate'),
                 obsolete                   : this.get('obsolete'),
+                propagate                  : this.get('propagate'),
                 context                    : this.get('context')
             }
         }

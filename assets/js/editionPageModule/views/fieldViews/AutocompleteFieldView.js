@@ -5,8 +5,9 @@ define([
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/autocompleteView.html',
     'text!editionPageModule/templates/fields/readonly/autocompleteView.html',
+    '../../../../../node_modules/sqlite-parser/dist/sqlite-parser',
     'jquery-ui'
-], function($, _, Backbone, BaseView, autocompleteTemplate, autocompleteTemplateRO) {
+], function($, _, Backbone, BaseView, autocompleteTemplate, autocompleteTemplateRO, sqliteParser) {
 
     var AutocompleteFieldView = BaseView.extend({
 
@@ -25,6 +26,7 @@ define([
             if (readonly)
                 opt.template = autocompleteTemplateRO;
 
+            this.URLOptions = options.urlOptions;
             BaseView.prototype.initialize.apply(this, [opt]);
         },
 
@@ -32,18 +34,44 @@ define([
          * Render view
          */
         render : function() {
-           BaseView.prototype.render.apply(this, arguments);
+            var that = this;
 
-           $.getJSON(this.model.get('url'),_.bind(function(data) {
-                
-                $(this.el).find('.form-control').autocomplete({
-                    minLength : this.model.get('triggerlength'),
+            BaseView.prototype.render.apply(that, arguments);
+
+            var setAutocomplete = function(data)
+            {
+                $(that.el).find('.form-control').autocomplete({
+                    minLength : that.model.get('triggerlength'),
                     scrollHeight: 220,
-                    source: data.options
+                    source: data
                 });
-            }, this));
-           
-       },
+            };
+
+            try
+            {
+                sqliteParser(that.model.get('url'));
+
+                $.ajax({
+                    data: JSON.stringify({'sqlQuery' : that.model.get('url'), 'context': window.context}),
+                    type: 'POST',
+                    url: that.URLOptions.sqlAutocomplete,
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        setAutocomplete(data);
+                    }, that),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
+                    }, that)
+                });
+            }
+            catch(err)
+            {
+                $.getJSON(that.model.get('url'),_.bind(function(data) {
+                    setAutocomplete(data.options);
+                }, that));
+            }
+       }
 
     });
 

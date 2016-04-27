@@ -260,7 +260,7 @@ define([
                 // Send an event to editionPageLayout to notify that form is created
                 this.mainChannel.trigger('formCreated');
 
-                 this.form.$el.on('change input[name="decimal"]', _.bind(function(e) {
+                this.form.$el.on('change input[name="decimal"]', _.bind(function(e) {
                     if ($(e.target).is(':checked')) {
                         this.form.$el.find('.field-precision').addClass('advanced');
                     } else {
@@ -268,7 +268,7 @@ define([
                     }
                 }, this));
 
-                 if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
+                if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
                     var WebServiceUrl = $("[name='webServiceURL']").val();
 
                     if (WebServiceUrl)
@@ -483,9 +483,9 @@ define([
             var nameCounter = 0;
             var that = this;
             var savedDefaultNode = this.modelToEdit.get("defaultNode");
+            var savedFullpath = this.modelToEdit.get("fullpath");
 
             $.each(this.modelToEdit.collection.models, function(value, index){
-
                 if (index.attributes.name == $("#form [name='name']").val())
                 {
                     if (that.modelToEdit.attributes.name != $("#form [name='name']").val()){
@@ -511,6 +511,7 @@ define([
                     if (this.modelToEdit.attributes.defaultNode != undefined)
                     {
                         this.modelToEdit.set("defaultNode", savedDefaultNode);
+                        this.modelToEdit.set("fullpath", savedFullpath);
                     }
 
                     if (!this.modelToEdit.get('isLinkedField')) {

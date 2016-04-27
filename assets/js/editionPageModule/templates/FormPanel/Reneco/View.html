@@ -1,0 +1,64 @@
+<div class="dropArea">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <h1>
+                <label id="collectionName">
+                    <%= collection.name %>
+                </label>
+                <span id="count"></span>
+
+                <button class="reneco grey small pull-right" id="editForm">
+                    <span class="reneco reneco-edit"></span>
+                </button>
+            </h1>
+        </div>
+    </div>
+    <div class="row scrollSection paddingTop20">
+        <div class="col-md-12">
+            <div id="scrollSection">
+                <div class="row">
+                    <div class="col-md-10 col-md-offset-1" id="dropContainer">
+                        <div class="col-md-12 drop"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div class="row">
+            <div class="col-md-10 col-md-offset-1">
+                <button class="reneco grey" id="exit">
+                    <label>
+                        <span data-i18n="form.actions.exit">
+                            QUITTER
+                        </span>
+                    </label>
+                    <label class="empty"></label>
+                </button>
+
+                <button class="reneco grey" id="clearAll">
+                    <label>
+                        <span data-i18n="form.actions.clear">
+                        TOUT EFFACER
+                        </span>
+                    </label>
+                    <label class="empty"></label>
+                </button>
+
+                <div class="pull-right">
+                    <button class="reneco red" id="save">
+                        <label>
+                            <span data-i18n="form.actions.save">
+                                SAUVER
+                            </span>
+                        </label>
+                        <label>
+                            <span class="reneco reneco-write"></span>
+                        </label>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+</div>
