@@ -7,7 +7,11 @@
             <%= labelFr %><% if (required === true) { %> (*) <% } %>
             <span data-i18n="fields.radio" class="fieldType"></span>
         </label>
-        <div class="pull-right actions">
+        <% if ($('.sizepreview').hasClass('selected')) { %>
+        <div class="pull-right actions" style="display:none;">
+            <% } else { %>
+            <div class="pull-right actions">
+                <% } %>
             <span id="trash" class="reneco reneco-trash"></span>
             <!-- <span id="duplicate" class="reneco reneco-duplicate"></span> -->
            <span id="edit" class="reneco reneco-edit"></span>
