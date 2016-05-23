@@ -97,7 +97,8 @@
       "find"   : "FIND",
       "add"    : "ADD",
       "viewdetails" : "VIEW DETAILS",
-      "edit"   : "EDIT"
+      "edit"   : "EDIT",
+      "sizepreview" : "Input sizes preview"
     }
   },
 
@@ -180,7 +181,7 @@
     "decimal"           : "Allow decimal value",
     "fieldSizeEdit"     : "Field display size for Edit mode",
     "fieldSizeDisplay"  : "Field display size for Display mode",
-    "fieldSize"         : "Field display size",
+    "fieldSize"         : "Field display size (X/12)",
     "fullpath"          : "Save full path",
     "obsolete"          : "Obsolete",
     "sizeValue" : {
@@ -323,12 +324,14 @@
       "successMsg" : "Your form was successfully saved on the server !",
       "error"      : "An error occured !",
       "errorMsg"   :" Your form wasn't saved. Consider making a export",
+      "errorMsgNoExport"   :" Your form wasn't saved. For some reason ...",
       "title"      : "Protocol save",
       "button"     : "Save",
       "uncompleteFormerror" : "Uncomplete Form !",
       "uncompleteForm" : "Some required fields on the form properties are empty !",
       "uncompleteFielderror" : "Uncomplete Field !",
-      "uncompleteField" : "Some required fields on your inputs properties are empty !"
+      "uncompleteField" : "Some required fields on your inputs properties are empty !",
+      "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : "
     },
     "field" : {
       "error" : "Field can't be added !",

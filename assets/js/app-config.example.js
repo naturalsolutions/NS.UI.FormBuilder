@@ -43,7 +43,7 @@ define([
                  * @param form
                  */
                 execute : function(form) {
-                    return form.length < 666;
+                    return form.length < 667;
                 }
             }
         ],

@@ -38,43 +38,59 @@ define([
 
             BaseView.prototype.render.apply(that, arguments);
 
-            var setAutocomplete = function(data)
-            {
+            var setAutocomplete = function (data) {
                 $(that.el).find('.form-control').autocomplete({
-                    minLength : that.model.get('triggerlength'),
+                    minLength: that.model.get('triggerlength'),
                     scrollHeight: 220,
                     source: data
                 });
             };
 
+            var sqlParsed = false;
+
             try
             {
-                sqliteParser(that.model.get('url'));
-
-                $.ajax({
-                    data: JSON.stringify({'sqlQuery' : that.model.get('url'), 'context': window.context}),
-                    type: 'POST',
-                    url: that.URLOptions.sqlAutocomplete,
-                    contentType: 'application/json',
-                    crossDomain: true,
-                    success: _.bind(function (data) {
-                        setAutocomplete(data);
-                    }, that),
-                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                        console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
-                    }, that)
-                });
+                sqlParsed = sqliteParser(that.model.get('url'));
             }
-            catch(err)
+            catch (err)
             {
-                $.getJSON(that.model.get('url'),_.bind(function(data) {
-                    setAutocomplete(data.options);
-                }, that));
+                console.log(err);
+            }
+
+            if (sqlParsed)
+            {
+                that.model.set('isSQL', true);
+            }
+            else
+            {
+                that.model.set('isSQL', false);
+                try {
+
+                    $.ajax({
+                        data: JSON.stringify({'sqlQuery': that.model.get('url'), 'context': window.context}),
+                        type: 'POST',
+                        url: that.URLOptions.sqlAutocomplete,
+                        contentType: 'application/json',
+                        crossDomain: true,
+                        success: _.bind(function (data) {
+                            setAutocomplete(data);
+                        }, that),
+                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                            console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
+                        }, that)
+                    });
+                }
+                catch (err)
+                {
+                    console.log(err);
+                    $.getJSON(that.model.get('url'), _.bind(function (data) {
+                        setAutocomplete(data.options);
+                    }, that));
+                }
             }
        }
 
     });
 
     return AutocompleteFieldView;
-
 });

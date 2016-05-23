@@ -97,7 +97,8 @@
             "find"   : "TROUVER",
             "add"    : "AJOUTER",
             "viewdetails" : "VOIR DETAILS",
-            "edit"   : "EDITER"
+            "edit"   : "EDITER",
+            "sizepreview" : "Input sizes preview"
         }
     },
 
@@ -189,7 +190,7 @@
         "decimal"           : "Valeur décimal autorisée",
         "fieldSizeEdit"     : "Taille d'affichage en mode Edition",
         "fieldSizeDisplay"  : "Taille d'affichage en mode Affichage",
-        "fieldSize"         : "Taille d'affichage",
+        "fieldSize"         : "Taille d'affichage (X/12)",
         "fullpath"          : "Chemin entier",
         "obsolete"          : "Obsolète",
         "sizeValue" : {
@@ -223,7 +224,8 @@
         "propagate"                    : "Propagé",
         "isBinaryWeight"               : "Est un poid binaire",
         "preview"                      : "Montrer une prévisualisation",
-        "atBeginingOfLine"             : "Est en début de ligne"
+        "atBeginingOfLine"             : "Est en début de ligne",
+        "sizeError"                    : "La taille de l'input doit être entre 1 et 12"
     },
 
     "tooltip" : {
@@ -331,12 +333,14 @@
             "successMsg" : "Votre formulaire a été enregistré sur le serveur !",
             "error"      : "Une erreur est survenue !",
             "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+            "errorMsgNoExport"   : "Votre formulaire n'a pas été enregistré. Pour une raison quelconque ...",
             "title"      : "Sauvegarde du protocol",
             "button"     : "Sauvegarder",
             "uncompleteFormerror" : "Formulaire incomplet !",
             "uncompleteForm" : "Certaines zones obligatoires dans les propriétés du formulaire sont vides !",
             "uncompleteFielderror" : "Champs incomplets !",
-            "uncompleteField" : "Certaines zones obligatoires dans les propriétés de vos champs sont vides !"
+            "uncompleteField" : "Certaines zones obligatoires dans les propriétés de vos champs sont vides !",
+            "inputnamehasothertype" : "Un des champs de ce formulaire existe déjà dans un autre formulaire avec un autre type pour ce contexte comme suis : "
         },
         "field" : {
             "error"    : "Echec de l'ajout !",

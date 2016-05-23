@@ -1050,7 +1050,10 @@ define([
                         }, 1500);
                     }, this),
                     error: _.bind(function(xhr, ajaxOptions, thrownError) {
-                        that.formChannel.trigger('save:fail');
+                        if (xhr.responseText.indexOf("customerror") > -1)
+                            that.formChannel.trigger('save:fail', xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
+                        else
+                            that.formChannel.trigger('save:fail');
                     }, this)
                 });
             }

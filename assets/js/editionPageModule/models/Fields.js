@@ -74,7 +74,7 @@ define([
             editorClass : '',
             fieldClassEdit  : '',
             fieldClassDisplay  : '',
-            fieldSize   : 1,
+            fieldSize   : 12,
             endOfLine   : false,
             linkedFieldset               : '',
 
@@ -166,24 +166,18 @@ define([
                 template    : fieldTemplate
             },
             fieldSize : {
-                type : 'Radio',
-                title       : translater.getValueFromKey('schema.fieldSize'),
-                editorClass : 'radiosField',
+                type        : 'Number',
+                editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : [
-                    {
-                        label : translater.getValueFromKey('schema.sizeValue.small'),
-                        val : 1
-                    },
-                    {
-                        label : translater.getValueFromKey('schema.sizeValue.medium'),
-                        val : 2
-                    },
-                    {
-                        label : translater.getValueFromKey('schema.sizeValue.large'),
-                        val : 3
+                title       : translater.getValueFromKey('schema.fieldSize'),
+                validators : [function checkValue(value, formValues) {
+                    if (value < 1 || value > 12) {
+                        return {
+                            type : 'Invalid number',
+                            message : translater.getValueFromKey('schema.sizeError')
+                        }
                     }
-                ]
+                }]
             },
             endOfLine : {
                 type        : CheckboxEditor,
@@ -283,7 +277,8 @@ define([
                 defaultValue : "",
                 help         : translater.getValueFromKey('placeholder.autocomplete'),
                 triggerlength: 2,
-                url          : "ressources/autocomplete/example.json"
+                url          : "ressources/autocomplete/example.json",
+                isSQL        : false
             });
         },
 
@@ -325,6 +320,11 @@ define([
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.url')
                     }
+                },
+                isSQL: {
+                    type        : CheckboxEditor,
+                    fieldClass  : "hidden",
+                    title       : "isSQL"
                 }
             });
         },
@@ -686,6 +686,7 @@ define([
         defaults : function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
+                isDefaultSQL : false,
                 help         : translater.getValueFromKey('placeholder.text'),
                 valuesize    : AppConfig.sizes.strings.defaultsize
             });
@@ -701,6 +702,11 @@ define([
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.value')
                     }
+                },
+                isDefaultSQL: {
+                    type        : CheckboxEditor,
+                    fieldClass  : "hidden",
+                    title       : "isSQL"
                 },
                 help: {
                     type        : 'Text',
@@ -859,6 +865,14 @@ define([
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 title       : translater.getValueFromKey('schema.min'),
+                validators : [function checkValue(value, formValues) {
+                    if (value > formValues['maxValue']) {
+                        return {
+                            type : 'Invalid number',
+                            message : "La valeur maximale est inférieure à la valeur minimale"
+                        }
+                    }
+                }],
                 editorAttrs : {
                     placeholder : translater.getValueFromKey('placeholder.num.min')
                 }

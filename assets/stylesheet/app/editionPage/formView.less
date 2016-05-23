@@ -99,6 +99,29 @@
             .pull-right#editForm {
                 font-size : 14px;
             }
+
+            .sizepreview {
+                margin-right:20px;
+                margin-top:8px;
+                font-size:small;
+                cursor:pointer;
+                &:hover {
+                    color:#892833;
+                    text-decoration:underline;
+                }
+
+                &.selected {
+                    color:#892833;
+                    font-size:large;
+                    text-decoration:underline;
+                    margin-top:4px;
+
+                    &:hover {
+                        color:white;
+                        text-decoration:line-through;
+                    }
+                }
+            }
         }
 
         //  Main drop section, use perfect scroll bar library
@@ -126,14 +149,14 @@
         //  Class for each field in the drop zone
         .dropField {
             .noMarginTop;
-            padding-top   : 0px;
+            padding   : 0px;
             margin-left   : 0!important;
             background    : #111;
             margin-bottom : 20px;
 
             .element {
                 background : #222;
-                padding: 0 !important;
+                padding: 5px !important;
                 border : 1px solid @dropFieldHeaderColor;
 
                 @hoverColor : #777;
@@ -163,6 +186,7 @@
                         line-height      : 45px;
                         color            : white;
                         background-color : @dropFieldHeaderColor;
+                        overflow: hidden;
 
                         .field-icon {
                             height     : 44px;
@@ -172,7 +196,6 @@
                             text-align : center;
                             line-height: 44px;
                             font-size  : 29px;
-                            width      : 5.15555%!important;
                         }
 
                         .field-label {
@@ -180,7 +203,8 @@
                             height      : 45px;
                             line-height : 40px;
                             color       : white;
-                            padding-left: 0;
+                            display     : inline;
+                            padding-left: 5px;
                             i {
                                 font-size : 25px;
                                 position  : relative;

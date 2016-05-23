@@ -30,7 +30,8 @@ define([
             'click #export'       : 'export',
             'click #clearAll'     : 'clear',
             'click #save'         : 'save',
-            'click #exit'         : 'exit'
+            'click #exit'         : 'exit',
+            'click .sizepreview'  : 'sizepreview'
         },
 
 
@@ -472,12 +473,23 @@ define([
         /**
          * Display a message if the form couldn't be saved
          */
-        displayFailMessage : function() {
-            swal(
-                translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
-                translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-                "error"
-            );
+        displayFailMessage : function(textKey, textValue) {
+            if (textKey)
+            {
+                swal(
+                    translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
+                    translater.getValueFromKey(textKey) + textValue || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                    "error"
+                );
+            }
+            else
+            {
+                swal(
+                    translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
+                    translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                    "error"
+                );
+            }
         },
 
         displayIncompleteFormMessage: function() {
@@ -606,6 +618,29 @@ define([
                 translater.getValueFromKey('modal.template.errorMsg') || "Votre formulaire n'a pas été enregistré comme template.",
                 "error"
             );
+        },
+
+        sizepreview : function() {
+            var previewBtn = $(".sizepreview");
+            console.log(this.collection);
+            if(previewBtn.hasClass("selected"))
+            {
+                previewBtn.removeClass("selected");
+                $.each(this.collection.models, function(index, value){
+                    var currentInput = $(".dropField#dropField" + value.id);
+                    currentInput.removeClass("col-xs-" + value.attributes.fieldSize);
+                });
+                $(".actions").show();
+            }
+            else
+            {
+                previewBtn.addClass("selected");
+                $.each(this.collection.models, function(index, value){
+                    var currentInput = $(".dropField#dropField" + value.id);
+                    currentInput.addClass("col-xs-" + value.attributes.fieldSize);
+                });
+                $(".actions").hide();
+            }
         }
     });
 

@@ -5,7 +5,7 @@
         </label>
         <label class="field-label">
             <%= labelFr %><% if (required === true) { %> (*) <% } %>
-            <span data-i18n="fields.autocomplete" class="fieldType"></span>
+            <span data-i18n="fields.autocomplete" class="fieldType"></span><span style="float:right;margin-left:10px;font-size:x-small"><%= (isSQL?"SQL":"Service") %></span>
         </label>
         <div class="pull-right actions">
             <span id="trash" class="reneco reneco-trash"></span>
