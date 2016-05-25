@@ -478,8 +478,6 @@ define([
          * @param newElement            if field is a new element
          */
         addField : function(field, ifFieldIsInFieldset, newElement) {
-            console.log("adding field");
-            console.log(field);
             this.totalAddedElements++;
 
             if (this.isAValidFieldType(field.constructor.type)) {

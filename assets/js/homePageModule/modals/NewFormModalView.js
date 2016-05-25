@@ -32,9 +32,6 @@ define([
 
             if (AppConfig.appMode.topcontext == "reneco")
                 this.templates = [];
-
-            console.log("templates = ");
-            console.log(this.templates);
         },
 
         /**

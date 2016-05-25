@@ -622,7 +622,6 @@ define([
 
         sizepreview : function() {
             var previewBtn = $(".sizepreview");
-            console.log(this.collection);
             if(previewBtn.hasClass("selected"))
             {
                 previewBtn.removeClass("selected");

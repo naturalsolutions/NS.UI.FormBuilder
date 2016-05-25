@@ -849,7 +849,7 @@ define([
                 precision    : 1,
                 decimal      : true,
                 defaultValue : '',
-                unity        : '',
+                unity        : []
             })
         },
 
@@ -905,13 +905,14 @@ define([
                 }
             },
             unity: {
-                type        : 'Text',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
+                type        : 'Select',
                 title       : translater.getValueFromKey('schema.unity'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
                 editorAttrs : {
                     placeholder : translater.getValueFromKey('placeholder.num.unity')
-                }
+                },
+                options     : []
             }
         },
 

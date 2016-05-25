@@ -207,7 +207,6 @@ define([
         addFormSection : function(el, model) {
             var context = $("#contextSwitcher .selectedContext").text();
             // TODO To Move
-            //alert(context);
             if (context.toLowerCase() == "all" || context.toLowerCase() == model.get('context'))
             {
                 el.after(

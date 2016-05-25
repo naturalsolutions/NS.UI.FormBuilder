@@ -48,20 +48,40 @@ define([
             };
             var urlArgs = getFromUrl();
 
-            if (urlArgs[0] == "form"){
+            console.log(urlArgs);
+            if (urlArgs[0] == "form" || urlArgs[0].indexOf("form") > -1){
                 var formCollection = new FormCollection({
                     url : options.URLOptions.forms
                 });
                 formCollection.fetch({
                     reset : true,
                     success : _.bind(function() {
-                        var formInCollection =  formCollection.get(urlArgs[1]);
+                        var formInCollection = 0;
+
+                        if (urlArgs[0] == "form")
+                            formInCollection = formCollection.get(urlArgs[1]);
+                        else
+                            formInCollection = formCollection.get(urlArgs[0].split('=')[1]);
+
                         if (formInCollection)
-                            Backbone.Radio.channel('global').trigger('displayEditionPage',formInCollection.toJSON());
+                        {
+                            loadHomepage();
+                            window.setTimeout(function() {
+                                Backbone.Radio.channel('global').trigger('displayEditionPage', formInCollection.toJSON());
+                            }, 1500);
+                        }
                         else
                             loadHomepage();
                     }, this)
                 });
+            }
+            else if (urlArgs[0] == "context" || urlArgs[0].indexOf("context") > -1)
+            {
+                loadHomepage();
+                if (urlArgs[0] == "context")
+                    $("#contextSwitcher span:contains('" + urlArgs[1] + "')").trigger("click");
+                else
+                    $("#contextSwitcher span:contains('" + urlArgs[0].split('=')[1] + "')").trigger("click");
             }
             else if (urlArgs[0] == "edition" && $("#formsCount").length == 0){
                 loadHomepage();

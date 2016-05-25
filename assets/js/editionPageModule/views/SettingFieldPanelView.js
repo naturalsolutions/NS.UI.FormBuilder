@@ -6,12 +6,13 @@ define([
     '../../Translater',
     'sweetalert',
     'app-config',
+    './loaders/ContextLoader',
     'jquery-ui',
     'i18n',
     'bootstrap-select',
     'slimScroll',
     'bootstrap'
-], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal, AppConfig) {
+], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal, AppConfig, ContextLoader) {
 
     var translater = Translater.getTranslater();
 
@@ -66,7 +67,7 @@ define([
             this.fieldsList             = options.fieldsList;
             this.URLOptions             = options.URLOptions;
             this.modelToEdit            = options.modelToEdit;
-            this.linkedFieldsList       = options.linkedFieldsList;
+            this.linkedFieldsList       = options.linkedFieldsList[window.context];
             this.preConfiguredFieldList = options.preConfiguredFieldList;
 
             this.form               = null;
@@ -143,6 +144,14 @@ define([
             this.createForm();
         },
 
+        initContextDatas : function() {
+
+            // TODO Idealy, this should be in the contextloaders ...
+            //  Init linked field
+            this.initFormLinkedFields();
+            ContextLoader.initializeLoader(this.form, this.URLOptions, true);
+        },
+
         /**
          * Enable or disable linked field select if the checkbox is checked or not
          */
@@ -184,7 +193,6 @@ define([
          * We initialize select field option
          */
         initFormLinkedFields : function() {
-
             var linkedFieldsKeyList = [];
             _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
                 linkedFieldsKeyList.push(el.key)
@@ -252,8 +260,7 @@ define([
                     model: this.modelToEdit
                 }).render();
 
-                //  Init linked field
-                this.initFormLinkedFields();
+                this.initContextDatas();
 
                 this.$el.find('#form').append(this.form.el)
 
