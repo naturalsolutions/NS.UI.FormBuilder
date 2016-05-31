@@ -9,3 +9,5 @@
 - [Dependancies](dependancies.md)
 
 - [Backend connection](backend.md)
+
+- [Notes](notes.md)
