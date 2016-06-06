@@ -86,7 +86,7 @@ define([
             else if (urlArgs[0] == "edition" && $("#formsCount").length == 0){
                 window.setTimeout(function() {
                     loadHomepage();
-                }, 3000);
+                }, 500);
             }
         }, 100);
 
