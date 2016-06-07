@@ -639,13 +639,15 @@ define([
                 $('body').append('<div class="modal fade" id="newFormModal"></div>');
 
                 require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {
-                    var newFormModalView = new NewFormModalView({
+                    var tmpOptions = {
                         el : '#newFormModal',
                         templates : data,
                         onClose : _.bind(function(name, template) {
                             this.createFormModel(name, template);
                         }, this)
-                    });
+                    };
+
+                    var newFormModalView = new NewFormModalView(tmpOptions);
 
                     newFormModalView.render();
                 }, this));

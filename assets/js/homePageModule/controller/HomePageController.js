@@ -37,10 +37,10 @@ define([
          * @param newModel
          */
         createModelWithJSON : function(newModel) {
+
             $.getJSON(this.URLOptions.templateUrl, _.bind(function (data) {
 
                 var template = {};
-
                 for (var each in data) {
                     if (data[each].id == newModel.template) {
                         template = data[each];
@@ -49,6 +49,11 @@ define([
 
                         break;
                     }
+                }
+
+                if (newModel.name)
+                {
+                    template.name = newModel.name
                 }
 
                 var formToEdit = new FormModel(template);
@@ -79,7 +84,9 @@ define([
          * @param newModel
          */
         getTemplate : function(newModel) {
+
             if( newModel.template == 0) {
+
                 var formToEdit = new FormModel({
                     id : 0,
                     name : newModel.name
