@@ -81,9 +81,9 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 }]
             },
-            descriptionEn : {
+            descriptionFr : {
                 type        : "TextArea",
-                title       : translater.getValueFromKey('form.description.en'),
+                title       : translater.getValueFromKey('form.description.fr'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
@@ -91,9 +91,9 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 }]
             },
-            descriptionFr : {
+            descriptionEn : {
                 type        : "TextArea",
-                title       : translater.getValueFromKey('form.description.fr'),
+                title       : translater.getValueFromKey('form.description.en'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
@@ -932,10 +932,12 @@ define([
 
         /**
          * Return collection attributes values
-         * @return {[Object} attributes values
+         * @return [Object} attributes values
          */
         getAttributesValues : function() {
-            return _.pick(this, _.keys(this.schemaDefinition));
+            var result = _.pick(this, _.keys(this.schemaDefinition));
+
+            return result;
         },
 
         /**
@@ -1045,7 +1047,7 @@ define([
                             if (that.fieldstodelete.length == 0){
                                 that.formChannel.trigger('save:success');
                             }
-                        }, 1500);
+                        }, (that.fieldstodelete.length.length > 0?1500:100));
                     }, this),
                     error: _.bind(function(xhr, ajaxOptions, thrownError) {
                         if (xhr.responseText.indexOf("customerror") > -1)

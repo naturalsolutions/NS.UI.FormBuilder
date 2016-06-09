@@ -68,7 +68,6 @@ define([
             this.formChannel.on('editForm', this.formSetting, this);
         },
 
-
         /**
          * Init main channel ONLY for this module and listen some events
          */
@@ -99,7 +98,6 @@ define([
          * @param  {Object} Model to edit and some options send by editionPageController like pre configurated field and linked fields
          */
         initFieldSetting : function(options) {
-            setTimeout(function() {}, 1000);
             if (this.settingPanel == undefined)
                 this.formSetting(this.formChannel.collection);
             this.settingPanel.show(new SettingFieldPanelView(options));
@@ -115,10 +113,14 @@ define([
                 this.addRegion('settingPanel', '#settingPanel');
                 this.settingPanel = this.getRegion('settingPanel');
             }
-            this.settingPanel.show(new SettingFormPanelView({
-                URLOptions : this.URLOptions,
+            var that = this;
+
+            var formPanel = new SettingFormPanelView({
+                URLOptions : that.URLOptions,
                 formToEdit : formToEdit
-            }));
+            });
+
+            that.settingPanel.show(formPanel);
         },
 
         /**

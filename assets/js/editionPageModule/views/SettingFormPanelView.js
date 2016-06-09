@@ -42,7 +42,6 @@ define([
         * View constructor, init grid channel
         */
         initialize : function(options) {
-
             this.URLOptions = options.URLOptions;
             this.formToEdit = options.formToEdit;
             this.form       = null;
@@ -167,6 +166,11 @@ define([
                     $(this.form.el).find('p[data-error]').show();
                     this.$el.find('.general-error').html('').hide();
                 }
+                swal(
+                    this.translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
+                    this.translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
+                    "error"
+                );
             }
         },
 
@@ -214,6 +218,7 @@ define([
         */
         generateForm : function(formToEdit) {
 
+
             require(['backbone-forms'], _.bind(function() {
                 if (this.form !== null) {
                     //  Remove last form and create new with new model
@@ -227,7 +232,7 @@ define([
 
                 if (formToEdit)
                 {
-                    var datas               = formToEdit.getAttributesValues(),
+                    var datas           = formToEdit.getAttributesValues(),
                     keywordFr           = [],
                     keywordEn           = [],
                     schemaDefinition    = formToEdit.schemaDefinition;

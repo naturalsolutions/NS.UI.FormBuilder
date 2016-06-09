@@ -317,12 +317,6 @@ define([
             this.formChannel.trigger('renderFinished');
 
             this.updateName();
-
-            var that = this;
-            setTimeout(function(){
-                if ($("#formsCount").length > 0)
-                    that.formSettings();
-            }, 500);
         },
 
         /**
@@ -598,6 +592,8 @@ define([
 
         collectionUpdateFinished : function() {
             this.updateName();
+            this.formSettings();
+
             //this.$el.find('#scrollSection').scrollTop(0);
             //this.$el.find('#scrollSection').animate({ scrollTop: 0 }, "fast");
         },

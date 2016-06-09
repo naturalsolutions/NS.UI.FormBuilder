@@ -77,16 +77,6 @@ define([
                 template    : fieldTemplate,
                 options : []
             },
-            color : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.color'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                }]
-            },
             actif : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.actif.title'),
@@ -133,7 +123,6 @@ define([
             typeIndividus : "",
             frequence : "",
             groupe : "",
-            color : "",
             actif : "",
             importapressortie : ""
         },
@@ -195,16 +184,6 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     options : []
-                },
-                color : {
-                    type        : "Text",
-                    title       : translater.getValueFromKey('form.color'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    }]
                 },
                 actif : {
                     type        : 'Select',

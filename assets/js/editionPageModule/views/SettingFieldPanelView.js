@@ -169,6 +169,7 @@ define([
         disableOrEnableLinkedFields : function(state) {
             if (state)
             {
+                this.modelToEdit.set("isLinkedField", true);
                 this.form.fields.linkedField.$el.removeClass('hide');
                 this.form.fields.linkedField.$el.animate({opacity: 1}, 1000);
                 this.form.fields.linkedFieldTable.$el.removeClass('hide');
@@ -206,24 +207,15 @@ define([
 
             if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
                 ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
-                if (this.fieldsList.length > 0) {
-                    //  Update linked fields
-                    this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-                    this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
-                    this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+                //  Update linked fields
+                this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
+                this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
+                this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
 
-                    //  Disable all select at start
-                    this.disableOrEnableLinkedFields(false);
-                    this.bindLinkedFieldSelect();
-
-                } else {
-                    //  In this case there is only one field in the form so it can't be a linked field
-                    //  We add hide class to hide editor
-                    this.form.fields.isLinkedField.$el.addClass('hide');
-                    this.form.fields.linkedField.$el.addClass('hide');
-                    this.form.fields.linkedFieldTable.$el.addClass('hide');
-                    this.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide');
-                }
+                var attr = this.modelToEdit.attributes;
+                //  Disable all select at start
+                this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldIdentifyingColumn && attr.linkedFieldTable);
+                this.bindLinkedFieldSelect();
             }
         },
 
@@ -534,7 +526,11 @@ define([
                 }
                 else
                 {
-                    console.log(commitResult);
+                    swal(
+                        translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
+                        translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
+                        "error"
+                    );
                 }
             }
             else {

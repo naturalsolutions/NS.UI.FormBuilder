@@ -345,12 +345,13 @@ define([
          * @returns {Backgrid.Row} custom clickable row
          */
         initClickableRow : function() {
-
+            var that = this;
             // By default grid not fired click event
             // But we can't create a small clickable row to get the event
             return Backgrid.Row.extend({
                 events: {
-                    "click": "onClick"
+                    "click": "onClick",
+                    "dblclick": "onDblClick"
                 },
 
                 /**
@@ -363,6 +364,10 @@ define([
                         model   : this.model,
                         el      : this.$el
                     });
+                },
+                onDblClick: function() {
+                    this.onClick();
+                    that.editForm();
                 }
             });
         },

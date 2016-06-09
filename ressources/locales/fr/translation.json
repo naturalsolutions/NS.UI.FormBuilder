@@ -92,7 +92,7 @@
         "actions" : {
             "import" : "IMPORTER",
             "export" : "EXPORTER",
-            "save"   : "SAUVER",
+            "save"   : "SAUVER FORMULAIRE",
             "clear"  : "TOUT EFFACER",
             "find"   : "TROUVER",
             "add"    : "AJOUTER",
@@ -215,7 +215,7 @@
         "linkedFieldset"               : "Fieldset parent",
         "isLinkedField"                : "Est un champs lié",
         "childForm"                    : "Nom du formulaire fils",
-        "applyTemplate"                : "Schéma à appliquer (valider en bas de page)",
+        "applyTemplate"                : "Template à appliquer (valider en bas de page)",
         "objectType"                   : "Object Picker",
         "iscollapsed"                  : "Arbre plié",
         "ACTrigger"                    : "Caractère d'execution de l'autocomplétion",
@@ -338,8 +338,10 @@
             "button"     : "Sauvegarder",
             "uncompleteFormerror" : "Formulaire incomplet !",
             "uncompleteForm" : "Certaines zones obligatoires dans les propriétés du formulaire sont vides !",
+            "uncompleteFormProp" : "Au moins un champ obligatoire des propriétés du formulaire est vide !",
             "uncompleteFielderror" : "Champs incomplets !",
             "uncompleteField" : "Certaines zones obligatoires dans les propriétés de vos champs sont vides !",
+            "uncompleteFieldProp" : "Au moins un champ obligatoire des propriétés du champ est vide !",
             "inputnamehasothertype" : "Un des champs de ce formulaire existe déjà dans un autre formulaire avec un autre type pour ce contexte comme suis : "
         },
         "field" : {
@@ -421,7 +423,7 @@
 
     "fetch" : {
       "error"    : "Erreur de récupération des formulaires !",
-      "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur."
+      "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur. Le serveur est-il inactif ?"
     },
 
     "configuration" : {

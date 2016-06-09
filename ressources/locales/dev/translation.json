@@ -92,7 +92,7 @@
     "actions" : {
       "import" : "IMPORT",
       "export" : "EXPORT",
-      "save"   : "SAVE",
+      "save"   : "SAVE FORM",
       "clear"  : "CLEAR ALL",
       "find"   : "FIND",
       "add"    : "ADD",
@@ -329,8 +329,10 @@
       "button"     : "Save",
       "uncompleteFormerror" : "Uncomplete Form !",
       "uncompleteForm" : "Some required fields on the form properties are empty !",
+      "uncompleteFormProp" : "At least one required field of your form is empty !",
       "uncompleteFielderror" : "Uncomplete Field !",
       "uncompleteField" : "Some required fields on your inputs properties are empty !",
+      "uncompleteFieldProp" : "At least one required field of your input is empty !",
       "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : "
     },
     "field" : {
@@ -410,7 +412,7 @@
 
   "fetch" : {
     "error"    : "Error retrieving forms !",
-    "errorMsg" : "Unable to retrieve the list of forms from the server."
+    "errorMsg" : "Unable to retrieve the list of forms from the server. Is the server down ?"
   },
 
   "configuration" : {

@@ -63,7 +63,6 @@ define([
                     this.form.fields.unity.editor.setOptions(unityoptions);
                 }, this),
                 error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                    console.log("error ajax load unities :");
                     console.log(xhr);
                 }, this)
             });

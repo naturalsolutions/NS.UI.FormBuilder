@@ -48,7 +48,6 @@ define([
             };
             var urlArgs = getFromUrl();
 
-            console.log(urlArgs);
             if (urlArgs[0] == "form" || urlArgs[0].indexOf("form") > -1){
                 var formCollection = new FormCollection({
                     url : options.URLOptions.forms
@@ -183,6 +182,8 @@ define([
             async: false,
             success: _.bind(function (data) {
                 window.user = data.username;
+                $("header .user").text(data.username);
+                $("header .icons.last").removeClass("hidden");
             }, this),
             error: _.bind(function (xhr, ajaxOptions, thrownError) {
                 window.location.href = AppConfig.portalURL;
