@@ -276,7 +276,7 @@ define([
                             $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
 
                             $.ajax({
-                                data        : JSON.stringify({StartNodeID: AppConfig.config.startID, lng: "fr"}),
+                                data        : JSON.stringify({StartNodeID: AppConfig.config.startID[this.form.model.collection.context], lng: "fr"}),
                                 type        : 'POST',
                                 url         : WebServiceUrl,
                                 contentType : 'application/json',
@@ -290,7 +290,7 @@ define([
                                         source     : data,
                                         checkbox   : false,
                                         selectMode : 1,
-                                        activeNode :AppConfig.config.startID,
+                                        activeNode :AppConfig.config.startID[this.form.model.collection.context],
                                         activate : _.bind(function(event, data) {
                                             this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
                                         }, this)

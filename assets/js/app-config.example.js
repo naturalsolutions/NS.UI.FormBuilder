@@ -50,7 +50,11 @@ define([
 
         config : {
             //  Thesaurus startID
-            startID : 167920
+            startID : {
+                ecoreleve : '204082',
+                track : '167920',
+                ecollection : '167920'
+                },
         },
 
         // Defines the list of allowed sizes for the different kind of types
