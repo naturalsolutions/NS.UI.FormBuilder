@@ -6,20 +6,60 @@
 							"TInd_OeufID"],
 							
 		"linkedFieldsList":[{
-								"id":1,
-								"key":"TInd_Sexe",
-								"labelEn":"Sex (TInd_Sexe)",
-								"labelFr":"Sexe (TInd_Sexe)",
-								"order":1,
-								"value":"Sexe"
+								"id":9,
+								"key":"TInd_BagueID",
+								"labelEn":"Breeding ring (TInd_BagueID)",
+								"labelFr":"Bague d'adulte (TInd_BagueID)",
+								"order":9,
+								"value":"Bague d'adulte"
 							},
 							{
-								"id":2,
-								"key":"TInd_Pere",
-								"labelEn":"Sire (TInd_Pere)",
-								"labelFr":"Père (TInd_Pere)",
-								"order":2,
-								"value":"Père"
+								"id":8,
+								"key":"TInd_BagueIDRelacher",
+								"labelEn":"Release ring (TInd_BagueIDRelacher)",
+								"labelFr":"Bague de relâcher (TInd_BagueIDRelacher)",
+								"order":8,
+								"value":"Bague de relâcher"
+							},
+							{
+								"id":13,
+								"key":"TInd_BagueJuvenile",
+								"labelEn":"Juvenile ring (TInd_BagueJuvenile)",
+								"labelFr":"Bague de juvénile (TInd_BagueJuvenile)",
+								"order":13,
+								"value":"Bague de juvénile"
+							},
+							{
+								"id":4,
+								"key":"TInd_DateNaissance",
+								"labelEn":"Birth date (TInd_DateNaissance)",
+								"labelFr":"Date de naissance (TInd_DateNaissance)",
+								"order":4,
+								"value":"Date de naissance"
+							},
+							{
+								"id":14,
+								"key":"Tind_DateSortie",
+								"labelEn":"Exit date (Tind_DateSortie)",
+								"labelFr":"Date de sortie (Tind_DateSortie)",
+								"order":14,
+								"value":"Date de sortie"
+							},
+							{
+								"id":20,
+								"key":"TInd_Espece",
+								"labelEn":"Species (TInd_Espece)",
+								"labelFr":"Espèce (TInd_Espece)",
+								"order":20,
+								"value":"Espèce"
+							},
+							{
+								"id":18,
+								"key":"TInd_GroupeGenetique",
+								"labelEn":"Genetic Group (TInd_GroupeGenetique)",
+								"labelFr":"Groupe Génétique (TInd_GroupeGenetique)",
+								"order":18,
+								"value":"Groupe Génétique"
 							},
 							{
 								"id":3,
@@ -30,15 +70,39 @@
 								"value":"Mère"
 							},
 							{
-								"id":5,
-								"key":"TInd_DateNaissance",
-								"labelEn":"Birth date (TInd_DateNaissance)",
-								"labelFr":"Date de naissance (TInd_DateNaissance)",
-								"order":4,
-								"value":"Date de naissance"
+								"id":10,
+								"key":"TInd_OeufID",
+								"labelEn":"Egg number (TInd_OeufID)",
+								"labelFr":"Numéro d'oeuf (TInd_OeufID)",
+								"order":10,
+								"value":"Numéro d'oeuf"
 							},
 							{
-								"id":6,
+								"id":11,
+								"key":"TInd_Origine",
+								"labelEn":"Origin (TInd_Origine)",
+								"labelFr":"Origine (TInd_Origine)",
+								"order":11,
+								"value":"Origine"
+							},
+							{
+								"id":2,
+								"key":"TInd_Pere",
+								"labelEn":"Sire (TInd_Pere)",
+								"labelFr":"Père (TInd_Pere)",
+								"order":2,
+								"value":"Père"
+							},
+							{
+								"id":7,
+								"key":"TInd_Poids",
+								"labelEn":"Weight (TInd_Poids)",
+								"labelFr":"Poids (TInd_Poids)",
+								"order":7,
+								"value":"Poids"
+							},
+							{
+								"id":5,
 								"key":"TInd_Position",
 								"labelEn":"Location (TInd_Position)",
 								"labelFr":"Position (TInd_Position)",
@@ -46,7 +110,31 @@
 								"value":"Position"
 							},
 							{
-								"id":7,
+								"id":19,
+								"key":"TInd_Puce",
+								"labelEn":"PIT (TInd_Puce)",
+								"labelFr":"Puce (TInd_Puce)",
+								"order":19,
+								"value":"Puce"
+							},
+							{
+								"id":15,
+								"key":"TInd_Sentinelle",
+								"labelEn":"Sentinel (TInd_Sentinelle)",
+								"labelFr":"Sentinelle (TInd_Sentinelle)",
+								"order":15,
+								"value":"Sentinelle"
+							},
+							{
+								"id":1,
+								"key":"TInd_Sexe",
+								"labelEn":"Sex (TInd_Sexe)",
+								"labelFr":"Sexe (TInd_Sexe)",
+								"order":1,
+								"value":"Sexe"
+							},
+							{
+								"id":6,
 								"key":"TInd_Status",
 								"labelEn":"Status (TInd_Status)",
 								"labelFr":"Statut (TInd_Status)",
@@ -54,172 +142,20 @@
 								"value":"Statut"
 							},
 							{
-								"id":8,
-								"key":"TInd_Generation",
-								"labelEn":"Generation (TInd_Generation)",
-								"labelFr":"Génération (TInd_Generation)",
-								"order":7,
-								"value":"Génération"
-							},
-							{
-								"id":9,
-								"key":"TInd_Poids",
-								"labelEn":"Weight (TInd_Poids)",
-								"labelFr":"Poids (TInd_Poids)",
-								"order":8,
-								"value":"Poids"
-							},
-							{
-								"id":10,
-								"key":"TInd_BagueIDRelacher",
-								"labelEn":"Release ring (TInd_BagueIDRelacher)",
-								"labelFr":"Bague de relâcher (TInd_BagueIDRelacher)",
-								"order":9,
-								"value":"Bague de relâcher"
-							},
-							{
-								"id":11,
-								"key":"TInd_BagueID",
-								"labelEn":"Breeding ring (TInd_BagueID)",
-								"labelFr":"Bague d'adulte (TInd_BagueID)",
-								"order":10,
-								"value":"Bague d'adulte"
-							},
-							{
-								"id":12,
-								"key":"TInd_OeufID",
-								"labelEn":"Egg number (TInd_OeufID)",
-								"labelFr":"Numéro d'oeuf (TInd_OeufID)",
-								"order":11,
-								"value":"Numéro d'oeuf"
-							},
-							{
-								"id":13,
-								"key":"TInd_MalePossible1",
-								"labelEn":"2nd potential sire (TInd_MalePossible1)",
-								"labelFr":"2ème mâle possible (TInd_MalePossible1)",
-								"order":12,
-								"value":"2ème mâle possible"
-							},
-							{
-								"id":14,
-								"key":"TInd_MalePossible2",
-								"labelEn":"3rd potential sire (TInd_MalePossible2)",
-								"labelFr":"3ème mâle possible (TInd_MalePossible2)",
-								"order":13,
-								"value":"3ème mâle possible"
-							},
-							{
-								"id":15,
-								"key":"TInd_DateMort",
-								"labelEn":"Death date (TInd_DateMort)",
-								"labelFr":"Date de mort (TInd_DateMort)",
-								"order":15,
-								"value":"Date de mort"
-							},
-							{
 								"id":16,
-								"key":"TInd_SpermID",
-								"labelEn":"Sperm identifier (TInd_SpermID)",
-								"labelFr":"Identifiant de sperme (TInd_SpermID)",
-								"order":16,
-								"value":"Identifiant de sperme"
-							},
-							{
-								"id":17,
-								"key":"TInd_Origine",
-								"labelEn":"Origin (TInd_Origine)",
-								"labelFr":"Origine (TInd_Origine)",
-								"order":17,
-								"value":"Origine"
-							},
-							{
-								"id":19,
-								"key":"TInd_StatusSortie",
-								"labelEn":"Exit status (TInd_StatusSortie)",
-								"labelFr":"Statut de sortie (TInd_StatusSortie)",
-								"order":18,
-								"value":"Statut de sortie"
-							},
-							{
-								"id":20,
-								"key":"TInd_BagueJuvenile",
-								"labelEn":"Juvenile ring (TInd_BagueJuvenile)",
-								"labelFr":"Bague de juvénile (TInd_BagueJuvenile)",
-								"order":19,
-								"value":"Bague de juvénile"
-							},
-							{
-								"id":21,
-								"key":"TInd_ApparentementMoyen",
-								"labelEn":"Mean kinship (TInd_ApparentementMoyen)",
-								"labelFr":"Apparentement moyen (TInd_ApparentementMoyen)",
-								"order":20,
-								"value":"Apparentement moyen"
-							},
-							{
-								"id":22,
-								"key":"Tind_DateSortie",
-								"labelEn":"Exit date (Tind_DateSortie)",
-								"labelFr":"Date de sortie (Tind_DateSortie)",
-								"order":22,
-								"value":"Date de sortie"
-							},
-							{
-								"id":23,
-								"key":"Tind_ProtocoleRelacher",
-								"labelEn":"Release protocol (Tind_ProtocoleRelacher)",
-								"labelFr":"Protocole de relâcher (Tind_ProtocoleRelacher)",
-								"order":23,
-								"value":"Protocole de relâcher"
-							},
-							{
-								"id":24,
-								"key":"TInd_MalePossible3",
-								"labelEn":"4th potential sire (TInd_MalePossible3)",
-								"labelFr":"4ème mâle possible (TInd_MalePossible3)",
-								"order":14,
-								"value":"4ème mâle possible"
-							},
-							{
-								"id":25,
 								"key":"TInd_StatusElevage",
 								"labelEn":"Fate (TInd_StatusElevage)",
 								"labelFr":"Statut d'élevage (TInd_StatusElevage)",
-								"order":24,
+								"order":16,
 								"value":"Statut d'élevage"
 							},
 							{
-								"id":26,
-								"key":"Tind_RegimeAlimentaire",
-								"labelEn":"Diet (Tind_RegimeAlimentaire)",
-								"labelFr":"Régime alimentaire (Tind_RegimeAlimentaire)",
-								"order":25,
-								"value":"Régime alimentaire"
-							},
-							{
-								"id":27,
-								"key":"TInd_Consanguinite",
-								"labelEn":"IBC (TInd_Consanguinite)",
-								"labelFr":"Consanguinité (TInd_Consanguinite)",
+								"id":12,
+								"key":"TInd_StatusSortie",
+								"labelEn":"Exit status (TInd_StatusSortie)",
+								"labelFr":"Statut de sortie (TInd_StatusSortie)",
 								"order":12,
-								"value":"Consanguinité"
-							},
-							{
-								"id":30,
-								"key":"TInd_Puce",
-								"labelEn":"PIT (TInd_Puce)",
-								"labelFr":"Puce (TInd_Puce)",
-								"order":26,
-								"value":"Puce"
-							},
-							{
-								"id":31,
-								"key":"TInd_Espece",
-								"labelEn":"Species (TInd_Espece)",
-								"labelFr":"Espèce (TInd_Espece)",
-								"order":0,
-								"value":"Espèce"
+								"value":"Statut de sortie"
 							}],
 		"tablesList":["TIndividus"]
 	},

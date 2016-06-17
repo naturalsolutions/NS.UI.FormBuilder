@@ -373,6 +373,9 @@ define([
 
                     ruleResult = rule.execute(this.collection.toJSON());
 
+                    console.log("----- 01239");
+                    console.log(this.collection.toJSON());
+
                     if (!ruleResult) {
                         this.displayRuleMessage(rule.error);
                         ruleResult = false;
@@ -391,6 +394,9 @@ define([
         },
 
         saveCollection : function() {
+            console.log("----- 28394");
+            console.log(this.collection);
+
             this.collection.save();
         },
 

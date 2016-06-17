@@ -9,7 +9,6 @@
     "fields" : {
         "text"                 : "Text",
         "number"               : "Numeric",
-        "decimal"              : "Decimal",
         "date"                 : "Date",
         "select"               : "Select",
         "radio"                : "Radio button",
@@ -29,7 +28,10 @@
         "autocompletetreeview" : "Autocomplete Treeview",
         "numericrange"         : "Range",
         "childform"            : "Child Form",
-        "objectpicker"         : "Object Picker"
+        "objectpicker"         : "Object Picker",
+        "imageFile"            : "Image File",
+        "decimal"              : "Decimal Numeric",
+        "position"             : "Position"
     },
 
     "search" : {
@@ -205,6 +207,7 @@
         "formIdentifyingColumn"          : "Form identifying field",
         "linkedFieldset"                 : "Parent fieldset",
         "isLinkedField"                  : "Is a linked Field",
+        "showCssProperties"              : "Show Css Properties",
         "childForm"                      : "Child Form name",
         "applyTemplate"                  : "Template to apply (validate at bottom of page)",
         "objectType"                     : "Object Picker",
@@ -216,7 +219,8 @@
         "isBinaryWeight"                 : "Is Binary Weight",
         "preview"                        : "Show preview",
         "atBeginingOfLine"               : "Is at the begining of the line",
-        "sizeError"                      : "Field size must be from 1 to 12"
+        "sizeError"                      : "Field size must be from 1 to 12",
+        "positionPath"                   : "Path of the position"
     },
 
     "tooltip" : {
@@ -237,10 +241,13 @@
         "horizontalline"       : "Horizontal line",
         "boolean"              : "Boolean",
         "autocompletetreeview" : "A TreeView with searching functionality",
-      "numericrange"           : "Numeric field with range",
-      "thesaurus"              : "Hierarchical Selector",
+        "numericrange"         : "Numeric field with range",
+        "thesaurus"            : "Hierarchical Selector",
         "childform"            : "Child Form",
-        "objectpicker"         : "Object Picker"
+        "objectpicker"         : "Object Picker",
+        "imageFile"            : "Image File",
+        "decimal"              : "Decimal Numeric",
+        "position"             : "Position"
     },
 
     "clearProtocol" : "You're going to clear this form.<br />Unsaved modifications will be lost.<br />Do you continue ?",

@@ -65,12 +65,13 @@ define([
 
         defaults: {
             order       : 1,
-            name        : "Field",
-            labelFr     : translater.getValueFromKey('schema.label.fr'),
-            labelEn     : translater.getValueFromKey('schema.label.en'),
+            name        : "",
+            labelFr     : "",
+            labelEn     : "",
             required    : false,
             editMode    : {visible : true, editable : true, nullable : true, nullmean : false},
             isDragged   : false,
+            showCssProperties   : false,
             editorClass : '',
             fieldClassEdit  : '',
             fieldClassDisplay  : '',
@@ -145,6 +146,13 @@ define([
                     }
                 },
                 title       : translater.getValueFromKey('schema.editMode.editMode')
+            },
+
+            //  Css field section
+            showCssProperties : {
+            type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.showCssProperties') || "showCssProperties"
             },
             editorClass : {
                 type        : "Text",
@@ -265,7 +273,7 @@ define([
             if (this.get('editMode') & 2 != 2) {
                 jsonObject['validators'].push('readonly');
             }
-            return _.omit(jsonObject, 'isLinkedField');
+            return _.omit(jsonObject, ['isLinkedField', 'showCssProperties']);
         }
 
     });
@@ -467,6 +475,7 @@ define([
     models.ThesaurusField = models.BaseField.extend({
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
+                defaultValue : "",
                 webServiceURL : AppConfig.paths.thesaurusWSPath,
                 defaultNode: "",
                 fullpath : "",
@@ -475,6 +484,15 @@ define([
         },
         schema: function() {
             return _.extend( {}, models.BaseField.prototype.schema, {
+                defaultValue: {
+                    type        : 'Text',
+                    title       : translater.getValueFromKey('schema.default'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.value')
+                    }
+                },
                 webServiceURL : {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -522,7 +540,7 @@ define([
                 language    : { hasLanguage: true, lng: 'En' },
                 wsUrl       : 'ressources/thesaurus',
                 webservices : 'autocompleteTreeView.json',
-                startId     : '85263',
+                startId     : '0',
                 defaultNode : ""
             });
         },
@@ -675,6 +693,33 @@ define([
         section : 'reneco'
     });
 
+    // This input type is Track Dependent
+    models.PositionField = models.BaseField.extend({
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                positionPath : ""
+            });
+        },
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                positionPath : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.positionPath'),
+                    validators : ['required']
+                }
+            });
+        },
+
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
+    }, {
+        type   : 'Position',
+        i18n   : 'position',
+        section : 'reneco'
+    });
 
     //  ----------------------------------------------------
     //  Field herited by TextField

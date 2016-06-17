@@ -41,7 +41,7 @@
                     language    : { hasLanguage: true, lng : this.model.get('language') },
                     wsUrl       : 'ressources/thesaurus',
                     webservices : 'autocompleteTreeView.json',
-                    startId     : '85263'
+                    startId     : '0'
 	            });
             }, this));
         }

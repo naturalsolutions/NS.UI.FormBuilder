@@ -1,11 +1,11 @@
 <div class="element padding5">
     <div class="row paddingBottom5">
         <label class="field-icon pull-left">
-            <i class="reneco reneco-decimal_input"></i>
+            <i class="reneco reneco-pin"></i>
         </label>
         <label class="field-label">
-            <%= labelFr %><% if (required === true) { %> (*) <% } %>
-            <span data-i18n="fields.decimal" class="fieldType"></span>
+            <%= labelFr %>
+            <span data-i18n="fields.position" class="fieldType"></span>
         </label>
         <% if ($('.sizepreview').hasClass('selected')) { %>
         <div class="pull-right actions" style="display:none;">
@@ -19,9 +19,7 @@
     </div>
     <div class="row">
         <div class="col-md-11 col11centered">
-            <input  class="form-control" type="number" min="<%= minValue %>" max="<%= maxValue %>"
-                    step="<% if(decimal == true) { %>any<% } else { %><%= precision %><% } %>"
-                    name="<%= name %>" id="<%= id%>" placeholder="<%= help %>" value="<%= defaultValue %>" />
+            <div style="color:white; min-height:30px;"><%= positionPath %></div>
         </div>
     </div>
 </div>

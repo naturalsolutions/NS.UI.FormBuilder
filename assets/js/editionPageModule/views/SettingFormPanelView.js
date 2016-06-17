@@ -152,6 +152,9 @@ define([
         saveChange : function() {
             var formValidation = this.form.validate();
 
+            console.log("----- 2349");
+            console.log(this.form);
+
             if (formValidation === null) {
                 this.mainChannel.trigger('editionDone', this.form.getValue());
                 this.removeForm();

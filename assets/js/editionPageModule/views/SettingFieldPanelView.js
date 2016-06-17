@@ -171,21 +171,57 @@ define([
             {
                 this.modelToEdit.set("isLinkedField", true);
                 this.form.fields.linkedField.$el.removeClass('hide');
-                this.form.fields.linkedField.$el.animate({opacity: 1}, 1000);
+                this.form.fields.linkedField.$el.animate({opacity: 1}, 300);
                 this.form.fields.linkedFieldTable.$el.removeClass('hide');
-                this.form.fields.linkedFieldTable.$el.animate({opacity: 1}, 1000);
+                this.form.fields.linkedFieldTable.$el.animate({opacity: 1}, 300);
                 this.form.fields.linkedFieldIdentifyingColumn.$el.removeClass('hide');
-                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 1}, 1000);
+                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 1}, 300);
             }
             else
             {
                 var that = this;
-                this.form.fields.linkedField.$el.animate({opacity: 0}, 1000, function(){
+                this.form.fields.linkedField.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedField.$el.addClass('hide')});
-                this.form.fields.linkedFieldTable.$el.animate({opacity: 0}, 1000, function(){
+                this.form.fields.linkedFieldTable.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedFieldTable.$el.addClass('hide')});
-                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 0}, 1000, function(){
+                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide')});
+            }
+        },
+
+        /**
+         * Enable or disable linked field select if the checkbox is checked or not
+         */
+        bindCssEditorsSelect : function() {
+            this.form.fields.showCssProperties.editor.$el.find('input').change(_.bind(function(e) {
+                this.disableOrEnableCssEditionFields($(e.target).is(':checked'));
+            }, this));
+        },
+
+        /**
+         * Disable or enable linked field select
+         *
+         * @param state if the select will be checked or not
+         */
+        disableOrEnableCssEditionFields : function(state) {
+            if (state)
+            {
+                this.form.fields.editorClass.$el.removeClass('hide');
+                this.form.fields.editorClass.$el.animate({opacity: 1}, 300);
+                this.form.fields.fieldClassEdit.$el.removeClass('hide');
+                this.form.fields.fieldClassEdit.$el.animate({opacity: 1}, 300);
+                this.form.fields.fieldClassDisplay.$el.removeClass('hide');
+                this.form.fields.fieldClassDisplay.$el.animate({opacity: 1}, 300);
+            }
+            else
+            {
+                var that = this;
+                this.form.fields.editorClass.$el.animate({opacity: 0}, 300, function(){
+                    that.form.fields.editorClass.$el.addClass('hide')});
+                this.form.fields.fieldClassEdit.$el.animate({opacity: 0}, 300, function(){
+                    that.form.fields.fieldClassEdit.$el.addClass('hide')});
+                this.form.fields.fieldClassDisplay.$el.animate({opacity: 0}, 300, function(){
+                    that.form.fields.fieldClassDisplay.$el.addClass('hide')});
             }
         },
 
@@ -214,8 +250,10 @@ define([
 
                 var attr = this.modelToEdit.attributes;
                 //  Disable all select at start
+                this.disableOrEnableCssEditionFields(false);
                 this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldIdentifyingColumn && attr.linkedFieldTable);
                 this.bindLinkedFieldSelect();
+                this.bindCssEditorsSelect();
             }
         },
 
@@ -275,8 +313,11 @@ define([
                         if (WebServiceUrl.substring(0,5) == 'http:' ) {
                             $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
 
+                            var startID = AppConfig.config.startID[window.context];
+                            if (!startID)
+                                startID = AppConfig.config.startID.default;
                             $.ajax({
-                                data        : JSON.stringify({StartNodeID: AppConfig.config.startID, lng: "fr"}),
+                                data        : JSON.stringify({StartNodeID: startID, lng: "fr"}),
                                 type        : 'POST',
                                 url         : WebServiceUrl,
                                 contentType : 'application/json',
@@ -290,7 +331,7 @@ define([
                                         source     : data,
                                         checkbox   : false,
                                         selectMode : 1,
-                                        activeNode :AppConfig.config.startID,
+                                        activeNode : startID,
                                         activate : _.bind(function(event, data) {
                                             this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
                                         }, this)

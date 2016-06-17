@@ -32,9 +32,7 @@
                             <div data-type="<%= type %>" class="fields" data-i18n="[title]tooltip.<%= i18n %>">
                                 <!-- Exception for childform, understood as a subform TODO OBJECTPICKER PICTO -->
                                 <!-- <i class="picto-<%= (i18n == 'childform'?'subform':i18n) %>"></i> -->
-                                <i class="picto-<%= (i18n == 'childform'?'subform':(
-                                    i18n=='objectpicker'?'pattern':i18n
-                                )) %>"></i>
+                                <i class="picto-<%= (i18n == 'childform'?'subform':i18n) %>"></i>
                                 <label data-i18n="fields.<%= i18n %>" data-type="<%= type %>">
                                     <%= i18n %>
                                 </label>
@@ -57,9 +55,7 @@
                     <div data-type="<%= type %>" data-i18n="[title]tooltip.<%= i18n %>" >
                         <!-- Exception for childform, understood as a subform TODO OBJECTPICKER PICTO -->
                         <!-- <span class="picto-<%= i18n %>" data-type="<%= (type=='childform'?'subform':type) %>"></span> -->
-                        <span class="picto-<%= i18n %>" data-type="<%= (type=='childform'?'subform':(
-                            type=='objectpicker'?'pattern':type
-                        )) %>"></span>
+                        <span class="picto-<%= i18n %>" data-type="<%= (type=='childform'?'subform':type) %>"></span>
                     </div>
                 <% } %>
             <% } %>

@@ -50,7 +50,12 @@ define([
 
         config : {
             //  Thesaurus startID
-            startID : 167920
+            startID : {
+                default : 0,
+                track : 0,
+                ecoreleve : 0,
+                ecollection : 0
+            }
         },
 
         // Defines the list of allowed sizes for the different kind of types
@@ -144,6 +149,7 @@ define([
                 'ChildForm'
             ],
 
+            // 'Position' type is track dependent
             track : [
                 'Autocomplete',
                 'Text',
@@ -153,7 +159,9 @@ define([
                 'Select',
                 'Thesaurus',
                 'CheckBox',
-                'ChildForm'
+                'ChildForm',
+
+                'Position'
             ]
         }
     };
