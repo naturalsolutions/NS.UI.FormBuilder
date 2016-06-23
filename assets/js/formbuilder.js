@@ -227,7 +227,6 @@ define([
             }
         });
 
-
         if ($("#contextSwitcher span").length == 2)
         {
             $("#contextSwitcher .selectedContext").remove();
@@ -238,6 +237,17 @@ define([
         {
             fbrouting(options);
         };
+
+        $(".logout").click(function(){
+
+            var delete_cookie = function(name) {
+                document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+            };
+
+            delete_cookie(AppConfig.cookieName);
+            setTimeout(function(){window.location.replace(AppConfig.portalURL);},100)
+        });
+
     });
 
     return FormbuilderApp;
