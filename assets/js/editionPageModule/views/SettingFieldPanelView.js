@@ -332,10 +332,10 @@ define([
                                         checkbox   : false,
                                         selectMode : 1,
                                         activeNode : startID,
-                                        activate : _.bind(function(event, data) {
+                                        click : _.bind(function(event, data) {
                                             this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
+                                            console.log("00**************", event, data);
                                         }, this)
-
                                     });
                                 }, this),
                             });
@@ -348,9 +348,10 @@ define([
                                     source: data['d'],
                                     checkbox : false,
                                     selectMode : 1,
-                                    activate : _.bind(function(event, data) {
+                                    click : _.bind(function(event, data) {
                                         this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                    }, this)
+                                        console.log("01**************", event, data);
+                                    }, this),
                                 });
 
                             }, this)).error(function(a,b,c) {
@@ -405,8 +406,9 @@ define([
                     ]}
                 ],
                 selectMode : 1,
-                activate : _.bind(function(event, data) {
+                click : _.bind(function(event, data) {
                     this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
+                    console.log("02**************", event, data);
                 }, this)
             });
         },

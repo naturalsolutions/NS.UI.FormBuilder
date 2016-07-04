@@ -67,7 +67,8 @@ define([
                                 source: data['children'],
                                 checkbox: false,
                                 selectMode: 2,
-                                activeNode: startID
+                                activeNode: startID,
+                                click: function (event, data){console.log("-01**************", event, data);}
                             });
                         }, this),
                     });
@@ -79,7 +80,10 @@ define([
                             source: data['d'],
                             checkbox: false,
                             selectMode: 2,
-                            activeNode: startID
+                            activeNode: startID,
+                            click : _.bind(function(event, data) {
+                                console.log("03**************", event, data);
+                            }, this)
                         });
 
                     }, this)).error(function (a,b,c) {
