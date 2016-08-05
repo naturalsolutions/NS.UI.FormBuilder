@@ -9,6 +9,7 @@ What does the Front of the Formbuilder needs to work ?
 - the "thesaurus" application
 
 
+--------------------------------------------------
 Installation
 -----
 
@@ -28,6 +29,8 @@ Compile with grunt
 
 	grunt prod
 
+
+--------------------------------------------------
 Configuration
 -----
 
@@ -91,6 +94,8 @@ You'll have to set the configuration rules for the app :
 
 		startID : {context1 : 0, context2 : 508, ...}
 
+
+--------------------------------------------------
 Contexts Configuration
 -----
 
