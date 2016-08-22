@@ -200,29 +200,32 @@ define([
         });
 
         $("#contextSwitcher span").click(function(){
-            if (!$(this).hasClass("selectedContext"))
+            if (window.location.hash.indexOf('#edition') == -1)
             {
-                $("#contextSwitcher .selectedContext").removeClass("selectedContext");
-                $(this).addClass("selectedContext");
-                $(this).trigger("click");
+                if (!$(this).hasClass("selectedContext"))
+                {
+                    $("#contextSwitcher .selectedContext").removeClass("selectedContext");
+                    $(this).addClass("selectedContext");
+                    $(this).trigger("click");
 
-                $('#leftPanel input').val('');
+                    $('#leftPanel input').val('');
 
-                setTimeout(function(){
-                    var context = $("#contextSwitcher .selectedContext").text();
-                    window.context = context;
-                    Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-                    Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-                }, 50);
-            }
-            else
-            {
-                if ($("#contextSwitcher .hidden").length > 0)
-                    $("#contextSwitcher .hidden").removeClass("hidden");
+                    setTimeout(function(){
+                        var context = $("#contextSwitcher .selectedContext").text();
+                        window.context = context;
+                        Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+                        Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+                    }, 50);
+                }
                 else
                 {
-                    $("#contextSwitcher span").addClass("hidden");
-                    $(this).removeClass("hidden");
+                    if ($("#contextSwitcher .hidden").length > 0)
+                        $("#contextSwitcher .hidden").removeClass("hidden");
+                    else
+                    {
+                        $("#contextSwitcher span").addClass("hidden");
+                        $(this).removeClass("hidden");
+                    }
                 }
             }
         });

@@ -1,4 +1,4 @@
-<div class="modal-dialog">
+<div class="modal-dialog" xmlns:accept="http://www.w3.org/1999/xhtml">
     <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
@@ -13,9 +13,9 @@
                 <label data-i18n="modal.import.label">
                     Select a JSON file to import
                 </label>
-                <input type="file" id="importProtocolFile" class="hide" />
+                <input type="file" accept=".json" id="importProtocolFile" class="hide" />
                 <div class="row paddingRight15 paddingLeft15">
-                    <input type="text" id="importProtocolFileText" class="control" accept="application/json" />
+                    <input type="text" id="importProtocolFileText" class="control" accept=".json" />
                     <button class="marginTop0 marginLeft5 reneco grey find">
                         <label>
                             <span data-i18n="modal.import.find">

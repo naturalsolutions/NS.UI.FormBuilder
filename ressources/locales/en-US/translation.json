@@ -213,12 +213,20 @@
     "objectType"                     : "Object Picker",
     "iscollapsed"                    : "Tree is collapsed",
     "ACTrigger"                      : "Autocomplete Character Trigger",
-    "ACTriggerMinValue"              : "Minimial character trigger is 1",
+    "ACTriggerMinValue"              : "Minimal character trigger is 1",
     "linkedLabel"                    : "Linked label",
     "propagate"                      : "Propagated",
     "isBinaryWeight"                 : "Is Binary Weight",
     "preview"                        : "Show preview",
-    "atBeginingOfLine"               : "Is at the begining of the line"
+    "atBeginingOfLine"               : "Is at the begining of the line",
+    "sizeError"                      : "Field size must be from 1 to 12",
+    "positionPath"                   : "Path of the position",
+    "nbFixedCol"                     : "Number of fixed columns",
+    "delFirst"                       : "Delete first",
+    "showLines"                      : "Show lines",
+    "nbFixedColMinValue"             : "Minimal value is 1",
+    "minAppearance"                  : "Minimum of appearances",
+    "minValueError"                  : "Minimal value is 0"
   },
 
   "tooltip" : {
@@ -339,7 +347,11 @@
       "uncompleteFielderror" : "Uncomplete Field !",
       "uncompleteField" : "Some required fields on your inputs properties are empty !",
       "uncompleteFieldProp" : "At least one required field of your input is empty !",
-      "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : "
+      "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : ",
+      "hasDuplicateFieldNamesError" : "Invalid form !",
+      "hasDuplicateFieldNames" : "Some of your fields have the same names",
+      "formSimilarName" : "A form with a similar name already exists !",
+      "circularDependency" : "A circular dependency has been found with one of the childforms !!"
     },
     "field" : {
       "error" : "Field can't be added !",
@@ -369,6 +381,10 @@
       "successMsg" : "Your form has been saved as template !",
       "error"      : "Form not saved !",
       "errorMsg"   : "You form hasn't been saved as template."
+    },
+    "editionField" : {
+      "fieldEditAlert" : "Field edition warning",
+      "defaultValueEdit" : "Beware, by editing the 'default value' property, you may want to update the data(s) stored in your database(s) linked to this value"
     }
   },
 
@@ -396,7 +412,8 @@
       "max" : "Maximum value",
       "precision" : "Step size",
       "unity" : "Field unit",
-      "ACTrigger" : "Autocomplete will fire at"
+      "ACTrigger" : "Autocomplete will fire at",
+      "minAppearance"   : "At least 0"
     },
     "legend" : "Sub form legend",
 

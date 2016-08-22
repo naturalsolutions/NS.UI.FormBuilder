@@ -17,8 +17,9 @@ define([
     '../editor/CheckboxEditor',
     'pillbox-editor',
     'app-config',
-    './CollectionExtention'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention) {
+    './CollectionExtention',
+    './staticInputs/ContextStaticInputs'
+], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention, ContextStaticInputs) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -32,6 +33,7 @@ define([
 
     var translater = Translater.getTranslater();
     var extention = CollectionExtention;
+    var staticInputs = ContextStaticInputs;
 
     /**
     * Implement form object as a fields collection
@@ -224,7 +226,10 @@ define([
             var that = this;
 
             if (options.context && options.context != "all")
+            {
                 setExtention(options.context);
+                setStatics(options.context);
+            }
 
             that.options = options;
 
@@ -388,7 +393,7 @@ define([
          *
          * @return {object} serialized collection data
          */
-        getJSON: function () {
+        getJSON: function (PostOrPut) {
             var getBinaryWeight = function(editModeVal) {
                 var toret = editModeVal;
                 if (!$.isNumeric(editModeVal))
@@ -429,6 +434,17 @@ define([
                 json[index] = that[index];
             });
 
+            if (PostOrPut == "POST")
+            {
+                json.schema = staticInputs.getStaticInputs(this);
+
+                json = staticInputs.applyRules(this, json);
+
+                console.log("-------- O34I4O");
+                var loltest = json;
+                console.log(loltest);
+            }
+
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
                     json.fieldsets.push(this.getFieldsetFromModel(model));
@@ -438,6 +454,8 @@ define([
 
                     if (json.schema[model.get('name')] !== undefined) {
                         model.set('name', model.get('name') + model.get('id'));
+                        console.log(model.get('name') + " and " + model.get('id'));
+                        alert("yo !!!");
                     }
 
                     if (model.get('name'))
@@ -449,6 +467,9 @@ define([
                     }
                 }
             }, this));
+
+            console.log(json.schema);
+            console.log(Object.keys(json.schema).length);
 
             $.each(json.schema, function(index, inputVal){
 
@@ -466,6 +487,8 @@ define([
 
                 delete (inputVal.applyTemplate);
             });
+
+            console.log(Object.keys(json.schema).length);
 
             return json;
         },
@@ -964,117 +987,170 @@ define([
             this.showSpinner();
             var that = this;
 
+            var hasDuplicates = function(array) {
+                return (new Set(array)).size !== array.length;
+            };
+
             setTimeout(function()
-                {
-                    if (!that.formChannel)
-                        that.initFormChannel();
+            {
+                if (!that.formChannel)
+                    that.initFormChannel();
 
-                    var tmpForm = new Backbone.Form({
-                        schema: that.getDefaultSchema(),
-                        data: that.getAttributesValues()
-                    }).render();
+                var tmpForm = new Backbone.Form({
+                    schema: that.getDefaultSchema(),
+                    data: that.getAttributesValues()
+                }).render();
 
-                    var formValidation = tmpForm.validate();
+                var formValidation = tmpForm.validate();
 
-                    var fieldsValidation = true;
+                var fieldsValidation = true;
 
-                    $.each(that.models, function (index, value) {
-                        var fieldModel = that.get(value.id);
+                var formValues = [];
+                var formNames = [];
 
-                        if (fieldsValidation && !fieldModel.attributes.validated) {
-                            var fieldForm = new Backbone.Form({
-                                model: that.get(value.id)
-                            }).render();
-                            if (fieldForm.validate() != null) {
-                                fieldsValidation = false;
-                            }
+                $.each(that.models, function (index, value) {
+                    var fieldModel = that.get(value.id);
+
+                    if (!fieldModel.attributes.validated) {
+                        var fieldForm = new Backbone.Form({
+                            model: that.get(value.id)
+                        }).render();
+                        if (fieldForm.validate() != null) {
+                            fieldsValidation = false;
+                            $("#dropField"+value.id+" .field-label span").css("color", "red");
                         }
+                        formValues.push({
+                            id:fieldForm.model.attributes.id,
+                            name:fieldForm.model.attributes.name
+                        });
+                        formNames.push(fieldForm.model.attributes.name);
+                    }
+                });
+
+                var fieldNamesHasDuplicates = hasDuplicates(formNames);
+
+                if (formValidation === null && fieldsValidation && !fieldNamesHasDuplicates) {
+                    $.each(that.models, function (index, value) {
+                        delete that.get(value.id).attributes.validated;
                     });
 
-                    if (formValidation === null && fieldsValidation) {
-                        $.each(that.models, function (index, value) {
-                            delete that.get(value.id).attributes.validated;
-                        });
+                    var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
+                    var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
+                    var dataToSend = JSON.stringify(that.getJSON(PostOrPut));
+                    console.log("------- 503803294 ");
+                    console.log(dataToSend);
 
-                        var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
-                        var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
+                    $.ajax({
+                        data: dataToSend,
+                        type: PostOrPut,
+                        url: url,
+                        contentType: 'application/json',
+                        //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                        //  The server is already configured to used it
+                        crossDomain: true,
 
-                        $.ajax({
-                            data: JSON.stringify(that.getJSON()),
-                            type: PostOrPut,
-                            url: url,
-                            contentType: 'application/json',
-                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                            //  The server is already configured to used it
-                            crossDomain: true,
-
-                            //  Trigger event with ajax result on the formView
-                            success: _.bind(function (data) {
-                                that.id = data.form.id;
-                                var savedid = that.id;
-                                if (data.form.schema) {
-                                    $.each(data.form.schema, function (index, inputVal) {
-                                        $.each(that.models, function (modelindex, modelinputVal) {
-                                            if (modelinputVal.attributes.name == index) {
-                                                that.models[modelindex].set('id', inputVal.id);
-                                            }
-                                        });
-                                    });
-                                }
-
-                                var savedFieldsToDelete = that.fieldstodelete;
-                                that.fieldstodelete = [];
-
-                                $.each(savedFieldsToDelete, function (index, inputVal) {
-                                    $.ajax({
-                                        data: {},
-                                        type: 'DELETE',
-                                        url: that.url + "/" + savedid + "/field/" + inputVal,
-                                        contentType: 'application/json',
-                                        crossDomain: true,
-                                        success: _.bind(function (data) {
-                                        }, that),
-                                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                            that.fieldstodelete.push(inputVal);
-                                            that.formChannel.trigger('save:fail');
-                                        }, that)
+                        //  Trigger event with ajax result on the formView
+                        success: _.bind(function (data) {
+                            console.log("check data after ajax success save collection !");
+                            console.log(data);
+                            that.id = data.form.id;
+                            var savedid = that.id;
+                            if (data.form.schema) {
+                                $.each(data.form.schema, function (index, inputVal) {
+                                    $.each(that.models, function (modelindex, modelinputVal) {
+                                        if (modelinputVal.attributes.name == index) {
+                                            that.models[modelindex].set('id', inputVal.id);
+                                        }
                                     });
                                 });
+                            }
 
-                                that.fieldsexcludedfromdelete = [];
+                            var savedFieldsToDelete = that.fieldstodelete;
+                            that.fieldstodelete = [];
 
-                                var displaySaveSuccess = function(){
-                                    setTimeout(function () {
-                                        if (that.fieldstodelete.length == 0) {
-                                            that.formChannel.trigger('save:success');
-                                            that.showSpinner(true);
-                                        }
-                                        else
-                                            displaySaveSuccess();
-                                    }, 100);
-                                };
+                            $.each(savedFieldsToDelete, function (index, inputVal) {
+                                $.ajax({
+                                    data: {},
+                                    type: 'DELETE',
+                                    url: that.url + "/" + savedid + "/field/" + inputVal,
+                                    contentType: 'application/json',
+                                    crossDomain: true,
+                                    success: _.bind(function (data) {
+                                    }, that),
+                                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                        that.fieldstodelete.push(inputVal);
+                                        that.formChannel.trigger('save:fail');
+                                    }, that)
+                                });
+                            });
 
-                                displaySaveSuccess();
+                            that.fieldsexcludedfromdelete = [];
 
-                            }, that),
-                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                            var displaySaveSuccess = function(){
+                                setTimeout(function () {
+                                    if (that.fieldstodelete.length == 0) {
+                                        that.formChannel.trigger('save:success');
+                                        that.showSpinner(true);
+                                    }
+                                    else
+                                        displaySaveSuccess();
+                                }, 100);
+                            };
+
+                            displaySaveSuccess();
+
+                        }, that),
+                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                            if (xhr.status == 418)
+                            {
+                                that.formChannel.trigger('save:fail', "modal.save.formSimilarName");
+                                $("#collectionName").css('color', "red");
+                            }
+                            else if (xhr.status == 508)
+                            {
+                                that.formChannel.trigger('save:fail', "modal.save.circularDependency");
+                            }
+                            else
+                            {
                                 if (xhr.responseText.indexOf("customerror") > -1)
                                     that.formChannel.trigger('save:fail', xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
                                 else
                                     that.formChannel.trigger('save:fail');
-                                that.showSpinner(true);
-                            }, that)
+                            }
+                            that.showSpinner(true);
+                        }, that)
+                    });
+                }
+                else {
+                    if (formValidation != null)
+                    {
+                        that.formChannel.trigger('save:formIncomplete');
+                        $("#collectionName").css('color', "red");
+                    }
+                    else if (!fieldsValidation)
+                        that.formChannel.trigger('save:fieldIncomplete');
+                    else if (fieldNamesHasDuplicates)
+                    {
+                        that.formChannel.trigger('save:hasDuplicateFieldNames');
+                        var savedNames = [];
+                        $.each(formValues, function(index, value){
+                            if (savedNames.indexOf(value.name) > -1){
+                                $.each(formValues, function(subindex, subvalue){
+                                    if (subvalue.name == value.name)
+                                    {
+                                        $("#dropField"+subvalue.id+" .field-label span").css("color", "red");
+                                    }
+                                });
+                            }
+                            else
+                            {
+                                savedNames.push(value.name);
+                            }
                         });
                     }
-                    else {
-                        if (formValidation != null)
-                            that.formChannel.trigger('save:formIncomplete');
-                        else if (!fieldsValidation)
-                            that.formChannel.trigger('save:fieldIncomplete');
-                        that.showSpinner(true);
-                    }
+                    that.showSpinner(true);
                 }
-            , 10);
+            }, 10);
         },
 
         saveAsTemplate : function() {
@@ -1099,7 +1175,6 @@ define([
         },
 
         showSpinner : function(hide) {
-            console.log("bite !!!");
             if (hide)
             {
                 $(".saveSpinner").hide();
@@ -1118,6 +1193,12 @@ define([
         if (context.toLowerCase() != "all")
             extention = CollectionExtention.getModeExtention(context);
     };
+
+    var setStatics = function(staticsToSet){
+        var context = staticsToSet ||  window.context || $("#contextSwitcher .selectedContext").text();
+        if (context.toLowerCase() != "all")
+            staticInputs = ContextStaticInputs.getStaticMode(context);
+    }
 
     return Form;
 });

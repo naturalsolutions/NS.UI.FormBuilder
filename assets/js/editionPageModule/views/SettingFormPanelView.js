@@ -2,13 +2,15 @@ define([
     'jquery',
     'marionette',
     'text!../templates/SettingFormPanelView.html',
+    'text!../templates/SettingFormPanelViewReneco.html',
     'backbone.radio',
     '../../Translater',
+    '../../app-config',
     'jquery-ui',
         'i18n',
     'bootstrap-select',
     'slimScroll'
-], function($, Marionette, SettingFormPanelViewTemplate, Radio, Translater) {
+], function($, Marionette, SettingFormPanelViewTemplate, SettingFormPanelViewTemplateReneco, Radio, Translater, AppConfig) {
 
     /**
      * Setting view
@@ -35,7 +37,22 @@ define([
         /**
         * Setting view template initialization
         */
-        template : _.template(SettingFormPanelViewTemplate),
+        template : function(){
+            var topcontext = "";
+            if (AppConfig.appMode.topcontext != "classic")
+            {
+                topcontext = AppConfig.appMode.topcontext
+            }
+
+            if (topcontext == "reneco")
+            {
+                return _.template(SettingFormPanelViewTemplateReneco);
+            }
+            else
+            {
+                return _.template(SettingFormPanelViewTemplate);
+            }
+        },
 
 
         /**
@@ -158,6 +175,7 @@ define([
             if (formValidation === null) {
                 this.mainChannel.trigger('editionDone', this.form.getValue());
                 this.removeForm();
+                $("#collectionName").css('color', "white");
             } else {
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
                     //  We display a main information

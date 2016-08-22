@@ -122,7 +122,8 @@ define([
 				'ChildForm'
             ],
 
-			// 'ObjectPicker' type is ecoreleve dependent
+            // 'ObjectPicker' type is ecoreleve dependent
+            // 'SubFormGrid' type is ecoreleve dependent
             ecoreleve : [
                 'Autocomplete',
                 'Text',
@@ -134,7 +135,8 @@ define([
                 'CheckBox',
                 'ChildForm',
 
-				'ObjectPicker'
+				'ObjectPicker',
+                'SubFormGrid'
             ],
 
             ecollection : [

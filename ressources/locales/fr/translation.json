@@ -3,7 +3,7 @@
         "name"             : "nom",
         "creationDate"     : "Date création",
         "modificationDate" : "Date modification",
-        "formContext"      : "Contexte du formulaire"
+        "formContext"      : "Contexte"
     },
 
     "fields" : {
@@ -88,7 +88,7 @@
         },
         "label" : {
             "fr" : "Intitulé français",
-            "en" : "intitulé anglais"
+            "en" : "Intitulé anglais"
         },
 
         "actions" : {
@@ -228,7 +228,14 @@
         "isBinaryWeight"               : "Est un poid binaire",
         "preview"                      : "Montrer une prévisualisation",
         "atBeginingOfLine"             : "Est en début de ligne",
-        "sizeError"                    : "La taille de l'input doit être entre 1 et 12"
+        "sizeError"                    : "La taille doit être comprise entre 1 et 12",
+        "positionPath"                 : "Chemin vers la position",
+        "nbFixedCol"                   : "Nombre de colonnes fixes",
+        "delFirst"                     : "Supprimer le premier",
+        "showLines"                    : "Montrer les lignes",
+        "nbFixedColMinValue"           : "La valeur minimale est 1",
+        "minAppearance"                : "Minimum d'apparitions",
+        "minValueError"                : "La valeur minimale est 0"
     },
 
     "tooltip" : {
@@ -348,7 +355,11 @@
             "uncompleteFielderror" : "Champs incomplets !",
             "uncompleteField" : "Certaines zones obligatoires dans les propriétés de vos champs sont vides !",
             "uncompleteFieldProp" : "Au moins un champ obligatoire des propriétés du champ est vide !",
-            "inputnamehasothertype" : "Un des champs de ce formulaire existe déjà dans un autre formulaire avec un autre type pour ce contexte comme suis : "
+            "inputnamehasothertype" : "Un des champs de ce formulaire existe déjà dans un autre formulaire avec un autre type pour ce contexte comme suis : ",
+            "hasDuplicateFieldNamesError" : "Formulaire invalide !",
+            "hasDuplicateFieldNames" : "Certains de vos champs ont des noms identiques",
+            "formSimilarName" : "Un formulaire avec un nom similaire existe déjà !",
+            "circularDependency" : "Une dépendance circulaire a été détectée parmis vos childforms !!"
         },
         "field" : {
             "error"    : "Echec de l'ajout !",
@@ -378,6 +389,10 @@
           "successMsg" : "Votre formulaire a été enregistré comme template !",
           "error"      : "Une erreur est survenue !",
           "errorMsg"   : "Votre formulaire n'a pas été enregistré comme template."
+        },
+        "editionField" : {
+            "fieldEditAlert" : "Alerte d'édition de champ",
+            "defaultValueEdit" : "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur"
         }
     },
 
@@ -405,7 +420,8 @@
           "max"       : "Valeur numérique maximale",
           "precision" : "Précision d'incrémentation",
           "unity"     : "Unité du champs",
-          "ACTrigger" : "L'autocompletion se lancera à"
+          "ACTrigger" : "L'autocompletion se lancera à",
+          "minAppearance"   : "Au moins 0"
         },
         "legend" : "Légende du regroupement",
 

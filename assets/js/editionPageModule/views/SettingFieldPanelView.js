@@ -522,6 +522,8 @@ define([
         * Check generated form values and send events if all is good
         */
         saveChange : function() {
+            console.log("model to edit after saving input :");
+            console.log(this.modelToEdit);
             var nameCounter = 0;
             var that = this;
             var savedDefaultNode = this.modelToEdit.get("defaultNode");
@@ -566,6 +568,9 @@ define([
 
                     this.mainChannel.trigger('formCommit');
                     this.removeForm();
+
+                    $("#dropField"+this.modelToEdit.get('id')+" .field-label span").css("color", "white");
+                    console.log('$("#dropField"+this.modelToEdit.get("id")+" .field-label span").css("color", "white");');
                 }
                 else
                 {
@@ -640,7 +645,8 @@ define([
         */
         checkboxChange : function(e) {
             this.hasFieldsChanged = true;
-            $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
+            $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected');
+            console.log("selected checkbox setting field ! " + $(e.target).prop('id'));
         },
 
         /**
@@ -648,6 +654,16 @@ define([
          */
         formControlChange : function(e) {
             this.hasFieldsChanged = true;
+            switch(e.currentTarget.name)
+            {
+                case "defaultValue":
+                    swal({
+                        title: translater.getValueFromKey('modal.editionField.fieldEditAlert') || "Alerte d'édition de champ",
+                        text: translater.getValueFromKey('modal.editionField.defaultValueEdit') || "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
+                        type: "info"
+                    });
+                    break;
+            }
         },
 
 

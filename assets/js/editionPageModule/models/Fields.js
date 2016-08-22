@@ -1,6 +1,7 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config', '../../homePageModule/collection/FormCollection'
-], function($, _, Backbone, Translater, CheckboxEditor, AppConfig, FormCollection) {
+    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config',
+    '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
+], function($, _, Backbone, Translater, CheckboxEditor, AppConfig, FormCollection, ExtraProperties) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -75,8 +76,9 @@ define([
             editorClass : '',
             fieldClassEdit  : '',
             fieldClassDisplay  : '',
-            fieldSize   : 12,
+            atBeginingOfLine : false,
             endOfLine   : false,
+            fieldSize   : 12,
             linkedFieldset               : '',
 
             // Linked fields values
@@ -173,6 +175,16 @@ define([
                 editorClass : 'form-control',
                 template    : fieldTemplate
             },
+            atBeginingOfLine : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.atBeginingOfLine') || "atBeginingOfLine"
+            },
+            endOfLine : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.eol') || "endOfLine"
+            },
             fieldSize : {
                 type        : 'Number',
                 editorClass : 'form-control',
@@ -186,11 +198,6 @@ define([
                         }
                     }
                 }]
-            },
-            endOfLine : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.eol')
             },
             linkedFieldset : {
                 title       : translater.getValueFromKey('schema.linkedFieldset'),
@@ -231,11 +238,6 @@ define([
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []
-            },
-            atBeginingOfLine : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.atBeginingOfLine') || "atBeginingOfLine"
             }
 
         },
@@ -591,14 +593,25 @@ define([
 
     models.ChildFormField = models.BaseField.extend({
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ChildForm");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ChildForm"), {
                 childForm : "",
                 childFormName : "",
-                help : translater.getValueFromKey('placeholder.childform'),
+                help : translater.getValueFromKey('placeholder.childform')
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            console.log(toret);
+
+            return toret;
         },
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ChildForm");
+
+            var toret = _.extend( {}, models.BaseField.prototype.schema, {
                 childForm: {
                     type        : 'Select',
                     editorClass : 'form-control',
@@ -620,6 +633,12 @@ define([
                     title       : ""
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            console.log(toret);
+
+            return toret;
         },
 
         initialize: function() {
@@ -648,7 +667,7 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.objectType'),
-                    options     : ["Individual", "Monitored Site", "Sensor"],
+                    options     : ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
                     validators : ['required']
                 },
                 wsUrl : {
@@ -690,6 +709,52 @@ define([
     }, {
         type   : 'ObjectPicker',
         i18n   : 'objectpicker',
+        section : 'reneco'
+    });
+
+    // This input type is EcoReleve Dependent
+    models.SubFormGridField = models.BaseField.extend({
+        defaults: function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                nbFixedCol : "1",
+                delFirst : true,
+                showLines : true
+            });
+        },
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                nbFixedCol: {
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.nbFixedCol'),
+                    validators : [function checkValue(value) {
+                        if (value < 1) {
+                            return {
+                                type : 'Invalid number',
+                                message : translater.getValueFromKey('schema.nbFixedColMinValue')
+                            }
+                        }
+                    }]
+                },
+                delFirst : {
+                    type        : CheckboxEditor,
+                    fieldClass  : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.delFirst')
+                },
+                showLines : {
+                    type        : CheckboxEditor,
+                    fieldClass  : "checkBoxEditor",
+                    title       : translater.getValueFromKey('schema.showLines')
+                }
+            });
+        },
+        initialize: function() {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
+    }, {
+        type   : 'SubFormGrid',
+        i18n   : 'subFormGrid',
         section : 'reneco'
     });
 
