@@ -265,6 +265,8 @@ define([
         createForm : function() {
             require(['backbone-forms'], _.bind(function() {
 
+                var that = this;
+
                 Backbone.Form.validators.errMessages.required = translater.getValueFromKey('form.validation');
 
                 var getJSONFromBinaryWeight = function(binWeight)
@@ -308,11 +310,52 @@ define([
                 if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
                     var WebServiceUrl = $("[name='webServiceURL']").val();
 
+                    var savednode = this.modelToEdit.get('defaultNode');
+
+                    var createFullpathAutocomplete = function(){
+                        $('input[name="fullpath"]').autocomplete({
+                            scrollHeight: 220,
+                            source: function (request, response) {
+                                $.ajax({
+                                    type        : 'POST',
+                                    url         : WebServiceUrl,
+                                    contentType : 'application/json',
+                                    data        : JSON.stringify({
+                                        StartNodeID:$("#defaultNode").fancytree("getActiveNode") || 0,
+                                        deprecated:0,
+                                        lng:"Fr"}),
+                                    success: function (data) {
+                                        console.log(data);
+                                        var transformed = $.map(data.children, function (el) {
+                                            return {
+                                                label: el.fullpath,
+                                                id: el.key,
+                                                data: el
+                                            };
+                                        });
+                                        response(transformed);
+                                    },
+                                    error: function () {
+                                        response([]);
+                                    }
+                                });
+                            },
+                            select: function(event, ui){
+                                console.log( "You selected: " + ui.item.label );
+                                $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setActive();
+                                $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setExpanded(true);
+                                that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), ui.item.data);
+                                console.log($("#defaultNode").fancytree("getTree"));
+                                console.log($("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.label));
+                                $('input[name="fullpath"]').val(ui.item.label);
+                            }
+                        });
+                    };
+
                     if (WebServiceUrl)
                     {
+                        $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
                         if (WebServiceUrl.substring(0,5) == 'http:' ) {
-                            $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-
                             var startID = AppConfig.config.startID[window.context];
                             if (!startID)
                                 startID = AppConfig.config.startID.default;
@@ -334,16 +377,18 @@ define([
                                         activeNode : startID,
                                         click : _.bind(function(event, data) {
                                             this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
+                                            $('input[name="fullpath"]').val(data.node.data.fullpath);
+                                            createFullpathAutocomplete();
                                             console.log("00**************", event, data);
                                         }, this)
                                     });
-                                }, this),
+                                    $('#defaultNode').fancytree("getTree").activateKey(savednode);
+
+                                }, this)
                             });
                         }
                         else {
                             $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
-
-                                $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
                                 $('#defaultNode').fancytree({
                                     source: data['d'],
                                     checkbox : false,
@@ -351,13 +396,15 @@ define([
                                     click : _.bind(function(event, data) {
                                         this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
                                         console.log("01**************", event, data);
-                                    }, this),
+                                    }, this)
                                 });
+                                $('#defaultNode').fancytree("getTree").activateKey(savednode);
 
                             }, this)).error(function(a,b,c) {
                                 alert ("can't load ressources !");
                             });
                         }
+                        createFullpathAutocomplete();
                     }
                 } else if (this.modelToEdit.constructor.type === 'TreeView') {
 

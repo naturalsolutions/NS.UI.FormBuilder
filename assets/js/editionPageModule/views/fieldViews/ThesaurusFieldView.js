@@ -50,6 +50,8 @@ define([
                     startID = AppConfig.config.startID.default;
             }
 
+            console.log("Display tree view with " + startID);
+
             require(['jquery-ui', 'fancytree'], _.bind(function() {
                 if (that.model.get('webServiceURL').substring(0, 5) == 'http:') {
                     $.ajax({
@@ -94,14 +96,31 @@ define([
         },
 
         updateTreeView : function(data) {
-            var startID = data['node']['key'] ;
-            var nodeFullpath = data['node']['data']['fullpath'];
+            var startID = "";
+            var nodeFullpath = "";
+            var children = null;
+
+            if (data['node'])
+            {
+                startID = data['node']['key'] ;
+                nodeFullpath = data['node']['data']['fullpath'];
+                children = data['node']['children'];
+            }
+            else
+            {
+                startID = data['key'] ;
+                nodeFullpath = data['fullpath'];
+                children = data['children'];
+            }
+
             var that = this;
 
+
+
             var reloadFieldInList = function(){
-                if (data['node']['children'] !== null) {
+                if (children !== null) {
                     $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload({
-                        children : data['node']['children']
+                        children : children
                     });
                 } else {
                     var arr = [];
@@ -113,6 +132,7 @@ define([
             reloadFieldInList();
 
             this.model.set('defaultNode', startID);
+            $('input[name="defaultNode"]').val(nodeFullpath);
             this.model.set('fullpath', nodeFullpath);
         },
 

@@ -42,7 +42,7 @@
             display:none;
             max-height: 40px;
             vertical-align: initial;
-            margin: 20px 55px 0px 0px;
+            margin: 15px 50px 0px 63px;
         }
 
         footer {
@@ -67,6 +67,33 @@
                 &.red {
                     &:last-child {
                         margin-left: 20px;
+                    }
+                }
+            }
+        }
+
+        .sizepreview-container{
+            margin-top: 20px;
+
+            .sizepreview {
+                margin-left: 10%;
+                cursor: pointer;
+                color: white;
+                font-size: 15px;
+
+                &:hover {
+                    color:#892833;
+                    text-decoration:underline;
+                }
+
+                &.selected {
+                    color:#892833;
+                    font-size:large;
+                    text-decoration:underline;
+
+                    &:hover {
+                        color:white;
+                        text-decoration:line-through;
                     }
                 }
             }
@@ -105,29 +132,6 @@
 
             .pull-right#editForm {
                 font-size : 14px;
-            }
-
-            .sizepreview {
-                margin-right:20px;
-                margin-top:8px;
-                font-size:small;
-                cursor:pointer;
-                &:hover {
-                    color:#892833;
-                    text-decoration:underline;
-                }
-
-                &.selected {
-                    color:#892833;
-                    font-size:large;
-                    text-decoration:underline;
-                    margin-top:4px;
-
-                    &:hover {
-                        color:white;
-                        text-decoration:line-through;
-                    }
-                }
             }
         }
 

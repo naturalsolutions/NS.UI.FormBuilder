@@ -479,8 +479,8 @@ define([
             return _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 webServiceURL : AppConfig.paths.thesaurusWSPath,
-                defaultNode: "",
                 fullpath : "",
+                defaultNode: "",
                 iscollapsed : false
             });
         },
@@ -504,6 +504,12 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.node.url')
                     }
                 },
+                fullpath: {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.fullpath')
+                },
                 defaultNode: {
                     type  : 'Text',
                     title : translater.getValueFromKey('schema.defaultNode'),
@@ -512,12 +518,6 @@ define([
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.tree.default')
                     }
-                },
-                fullpath: {
-                    type        : 'Hidden',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : ""
                 },
                 iscollapsed : {
                     type        : CheckboxEditor,
@@ -604,8 +604,6 @@ define([
 
             toret = _.extend(toret, toret, extraschema);
 
-            console.log(toret);
-
             return toret;
         },
         schema: function() {
@@ -635,8 +633,6 @@ define([
             });
 
             toret = _.extend(toret, toret, extraschema);
-
-            console.log(toret);
 
             return toret;
         },

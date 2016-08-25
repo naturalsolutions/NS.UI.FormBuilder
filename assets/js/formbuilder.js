@@ -77,6 +77,7 @@ define([
             else if (urlArgs[0] == "context" || urlArgs[0].indexOf("context") > -1)
             {
                 loadHomepage();
+                $("#contextSwitcher .selectedContext").trigger("click");
                 if (urlArgs[0] == "context")
                     $("#contextSwitcher span:contains('" + urlArgs[1] + "')").trigger("click");
                 else
@@ -199,6 +200,10 @@ define([
             }
         });
 
+        $(".headerWhiteArrow").click(function(){
+            $("#contextSwitcher .selectedContext").trigger("click");
+        });
+
         $("#contextSwitcher span").click(function(){
             if (window.location.hash.indexOf('#edition') == -1)
             {
@@ -210,6 +215,10 @@ define([
 
                     $('#leftPanel input').val('');
 
+                    $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
+                    $("header span.pipe:eq(1)").attr("style", "");
+                    $("#contextSwitcher").attr("style", "position:initial;");
+
                     setTimeout(function(){
                         var context = $("#contextSwitcher .selectedContext").text();
                         window.context = context;
@@ -220,11 +229,21 @@ define([
                 else
                 {
                     if ($("#contextSwitcher .hidden").length > 0)
+                    {
                         $("#contextSwitcher .hidden").removeClass("hidden");
+
+                        $("#contextSwitcher .selectedContext").attr("style", "");
+                        $("header span.pipe:eq(1)").attr("style", "margin-left:180px;");
+                        $("#contextSwitcher").attr("style", "");
+                    }
                     else
                     {
                         $("#contextSwitcher span").addClass("hidden");
                         $(this).removeClass("hidden");
+
+                        $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
+                        $("header span.pipe:eq(1)").attr("style", "");
+                        $("#contextSwitcher").attr("style", "position:initial;");
                     }
                 }
             }

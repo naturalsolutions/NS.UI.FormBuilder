@@ -439,10 +439,6 @@ define([
                 json.schema = staticInputs.getStaticInputs(this);
 
                 json = staticInputs.applyRules(this, json);
-
-                console.log("-------- O34I4O");
-                var loltest = json;
-                console.log(loltest);
             }
 
             this.map(_.bind(function (model) {
@@ -454,8 +450,6 @@ define([
 
                     if (json.schema[model.get('name')] !== undefined) {
                         model.set('name', model.get('name') + model.get('id'));
-                        console.log(model.get('name') + " and " + model.get('id'));
-                        alert("yo !!!");
                     }
 
                     if (model.get('name'))
@@ -467,9 +461,6 @@ define([
                     }
                 }
             }, this));
-
-            console.log(json.schema);
-            console.log(Object.keys(json.schema).length);
 
             $.each(json.schema, function(index, inputVal){
 
@@ -487,8 +478,6 @@ define([
 
                 delete (inputVal.applyTemplate);
             });
-
-            console.log(Object.keys(json.schema).length);
 
             return json;
         },
@@ -1037,8 +1026,6 @@ define([
                     var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
                     var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
                     var dataToSend = JSON.stringify(that.getJSON(PostOrPut));
-                    console.log("------- 503803294 ");
-                    console.log(dataToSend);
 
                     $.ajax({
                         data: dataToSend,
@@ -1051,8 +1038,6 @@ define([
 
                         //  Trigger event with ajax result on the formView
                         success: _.bind(function (data) {
-                            console.log("check data after ajax success save collection !");
-                            console.log(data);
                             that.id = data.form.id;
                             var savedid = that.id;
                             if (data.form.schema) {

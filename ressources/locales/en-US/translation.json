@@ -184,7 +184,7 @@
     "fieldSizeEdit"     : "Field display size for Edit mode",
     "fieldSizeDisplay"  : "Field display size for Display mode",
     "fieldSize"         : "Field display size (X/12)",
-    "fullpath"          : "Save full path",
+    "fullpath"          : "Full path",
     "obsolete"          : "Obsolete",
     "sizeValue" : {
       "small"  : "Small",
