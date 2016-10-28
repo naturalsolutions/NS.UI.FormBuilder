@@ -55,6 +55,7 @@
     "count"      : "Field(s)",
     "find"       : "Find a form",
     "validation" : "This field is required",
+    "importance" : "Importance",
     "minimal"    : "Minimum size must be less than the maximum size",
     "setting"    : "Form <br />properties",
     "new"        : "New form",
@@ -227,7 +228,10 @@
     "showLines"                      : "Show lines",
     "nbFixedColMinValue"             : "Minimal value is 1",
     "minAppearance"                  : "Minimum of appearances",
-    "minValueError"                  : "Minimal value is 0"
+    "minValueError"                  : "Minimal value is 0",
+    "maxlength255"                   : "Maximum length is 255",
+    "maxlength55"                    : "Maximum length is 55",
+    "errorbetween1and5"              : "Number must be from 1 to 5"
   },
 
   "tooltip" : {
@@ -292,7 +296,8 @@
 
   "settings" : {
     "actions" : {
-      "saveAsType" : "Save as new type",
+      "saveAsType" : "Save as template",
+      "applyTemplate" : "Apply template",
       "save" : "Save changes",
       "validate"   : "Validate",
       "cancel" : "Cancel",
@@ -307,6 +312,7 @@
     "clear" : {
       "title"            : "Are you sure ?",
       "text"             : "Unsaved modifications will be lost !",
+      "textinput"        : "The input will be forever lost !",
       "yes"              : "Yes, delete it",
       "no"               : "No, cancel",
       "deleted"          : "Deleted",
@@ -338,21 +344,25 @@
     "save" : {
       "success"    : "Form saved !",
       "successMsg" : "Your form was successfully saved on the server !",
+      "successMsgTmp" : "New values for the form parameters saved !",
       "error"      : "An error occured !",
       "errorMsg"   :" Your form wasn't saved. Consider making a export",
       "title"      : "Protocol save",
       "button"     : "Save",
       "uncompleteFormerror" : "Uncomplete Form !",
-      "uncompleteForm" : "Some required fields on the form properties are empty !",
-      "uncompleteFormProp" : "At least one required field of your form is empty !",
+      "uncompleteForm" : "Some required fields on the form properties are empty or invalid !",
+      "uncompleteFormProp" : "At least one required field of your form is empty or invalid !",
       "uncompleteFielderror" : "Uncomplete Field !",
-      "uncompleteField" : "Some required fields on your inputs properties are empty !",
-      "uncompleteFieldProp" : "At least one required field of your input is empty !",
+      "uncompleteField" : "Some required fields on your inputs properties are empty or invalid !",
+      "uncompleteFieldProp" : "At least one required field of your input is empty or invalid !",
       "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : ",
       "hasDuplicateFieldNamesError" : "Invalid form !",
       "hasDuplicateFieldNames" : "Some of your fields have the same names",
       "formSimilarName" : "A form with a similar name already exists !",
-      "circularDependency" : "A circular dependency has been found with one of the childforms !!"
+      "formSimilarFrName" : "A form with a similar french displayed name already exists !",
+      "formSimilarEnName" : "A form with a similar english displayed name already exists !",
+      "circularDependency" : "A circular dependency has been found with one of the childforms !!",
+      "418" : "I'm a teapot !"
     },
     "field" : {
       "error" : "Field can't be added !",
@@ -393,6 +403,17 @@
     "label" : {
       "fr" : "French label of your field",
       "en" : "English label of your field"
+    },
+    "form" : {
+      "name" : "Form name",
+      "label" : {
+        "fr" : "French name",
+        "en" : "English name"
+      },
+      "description" : {
+        "fr" : "French description",
+        "en" : "English description"
+      }
     },
     "name"        : "Your field name",
     "value"       : "Default value of your field",

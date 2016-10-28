@@ -24,7 +24,7 @@ define([
          * View events
          */
         events: {
-            'click div.col-md-5'                 : 'appendToDrop',
+            'click div.col-md-3'                 : 'appendToDrop',
             'click div.col-md-10'                : 'appendToDrop',
             'click #smallFeatures .scroll > div' : 'appendToDrop',
             'click h3'                           : 'displayContent'

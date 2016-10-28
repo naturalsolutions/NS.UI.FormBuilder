@@ -10,7 +10,7 @@ define([
     '../../app-config',
     'i18n',
     'slimScroll'    
-], function($, Marionette, FormPanelView, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal, Translater, AppConfig) {
+], function($, Marionette, FormPanelViewTpl, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal, Translater, AppConfig) {
 
     var translater = Translater.getTranslater();
     
@@ -18,7 +18,6 @@ define([
      * The form view represents the current form. It's a the edition module main view.
      */
     var FormPanelView = Backbone.Marionette.ItemView.extend({
-
 
         /**
          * jQuery events triggered by the form view
@@ -53,7 +52,7 @@ define([
                     collection : this.collection.getAttributesValues()
                 });
             }
-            return _.template(FormPanelView)({
+            return _.template(FormPanelViewTpl)({
                 collection : this.collection.getAttributesValues()
             });
         },
@@ -92,7 +91,7 @@ define([
             this.collection.bind('add', this.addElement, this);         //  new element added on the collection
             this.collection.bind('remove', this.removeElement, this);   //  element removed from the collection
 
-            _.bindAll(this, 'template', 'save')
+            _.bindAll(this, 'template', 'save');
 
             this.initFormChannel();
             this.initMainChannel();
@@ -178,9 +177,9 @@ define([
          * @param  {Object} collection updated attributes
          */
         updateCollectionAttributes : function(newCollectionAttributes) {
+            this.updateName();
             this.enableFooterActions();
             this.collection.updateCollectionAttributes(newCollectionAttributes);
-            this.updateName();
         },
 
         /**
@@ -188,8 +187,8 @@ define([
         * Channel send on the form channel
         */
         formSettings : function() {
-            this.$el.find('#edit').animate({opacity : 0.2}).prop('disabled', true);
-            this.disableFooterActionsAndExit();
+            //this.$el.find('#edit').animate({opacity : 0.2}).prop('disabled', true);
+            //this.disableFooterActionsAndExit();
             this.formChannel.trigger('editForm', this.collection);
         },
 
@@ -282,6 +281,8 @@ define([
          * Rendering callback
          */
         onRender : function(options) {
+
+            this.updateName();
             //  By default marionette wrap template with a div
             //  We remove it and update view HTML element reference
             this.$el = this.$el.children();
@@ -316,8 +317,6 @@ define([
 
             //  Send an event to notify the render is done
             this.formChannel.trigger('renderFinished');
-
-            this.updateName();
         },
 
         /**
@@ -374,9 +373,6 @@ define([
 
                     ruleResult = rule.execute(this.collection.toJSON());
 
-                    console.log("----- 01239");
-                    console.log(this.collection.toJSON());
-
                     if (!ruleResult) {
                         this.displayRuleMessage(rule.error);
                         ruleResult = false;
@@ -395,8 +391,6 @@ define([
         },
 
         saveCollection : function() {
-            console.log("----- 28394");
-            console.log(this.collection);
 
             this.collection.save();
         },
@@ -544,7 +538,7 @@ define([
             //this.$el.find('.dropField').not(modelToKeepSelectedID).css('background', 'red');
 
             this.$el.find('.dropField').not(modelToKeepSelectedID).find('.element').removeClass('selected');
-            this.$el.find('.dropField').not(modelToKeepSelectedID).find('.actions').removeClass('locked');
+            // REMOVED FOR NOW this.$el.find('.dropField').not(modelToKeepSelectedID).find('.actions').removeClass('locked');
         },
 
         /**
@@ -602,11 +596,21 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
-            this.$el.find('#collectionName').text(this.collection.name)
+            console.log("NAME UPDATED ! : ", this.collection.name);
+            this.$el.find('#collectionName').text(this.collection.name);
         },
 
         collectionUpdateFinished : function() {
             this.updateName();
+
+            /*
+            if ($('#collectionName').text().toLowerCase() == "new form")
+            {
+                this.formSettings();
+            }
+            */
+
+            console.log("yo boiz !");
             this.formSettings();
 
             //this.$el.find('#scrollSection').scrollTop(0);

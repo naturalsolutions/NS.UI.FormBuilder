@@ -6,7 +6,7 @@ define([
     var EditionePageRouter = Backbone.Marionette.AppRouter.extend({
 
         appRoutes: {
-            "edition": "editionAction"
+            "edition" : "editionAction"
         },
 
         initialize : function() {
@@ -51,6 +51,8 @@ define([
             //  Keep data in memory
             this.formAsJSON = formToEdit;
 
+            $(".headerWhiteArrow").css("width", "0px");
+
             //  Go to edition page
             this.navigate('#edition', {
                 trigger : true
@@ -63,6 +65,7 @@ define([
         },
 
         exit : function() {
+            this.formChannel.trigger('exitingFormEditing');
             this.navigate('#');
             this.globalChannel.trigger('displayHomePage');
             Backbone.Radio.channel('grid').trigger('resetCollection');

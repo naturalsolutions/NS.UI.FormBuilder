@@ -36,8 +36,7 @@ define([
         },
 
         getExtraPropertiesDefaults: function(inputType){
-            console.log("DEFAULT getExtraPropertiesDefaults oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(inputType);
+
 
             return({
 
@@ -45,8 +44,7 @@ define([
         },
 
         getExtraPropertiesSchema: function(inputType){
-            console.log("DEFAULT getExtraPropertiesSchema oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(inputType);
+
 
             return({
 

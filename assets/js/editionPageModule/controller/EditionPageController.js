@@ -122,6 +122,7 @@ define([
                 URLOptions      : this.URLOptions
             });
 
+            console.log("TEST NEW EditionPageLayout", this.fieldCollection, this.URLOptions);
             this.editionPageRegion.show( editionPageLayout );
         },
 
@@ -218,6 +219,7 @@ define([
                 contentType : 'application/json',
                 data: JSON.stringify(fieldToSave),
                 success: _.bind(function() {
+                    alert("02");
                     this.formChannel.trigger('configurationSaved:success');
                 }, this),
                 dataType: 'json',

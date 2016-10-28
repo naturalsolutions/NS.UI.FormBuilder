@@ -63,6 +63,13 @@ define([
             this.formToEdit = options.formToEdit;
             this.form       = null;
 
+            if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
+                (this.formToEdit.name.toLowerCase() == "new form" && this.formToEdit.id != 0)))
+            {
+                delete this;
+                return;
+            }
+
             this.hasFieldsChanged = false;
 
             // I don't know why but i have to specify a model otherwise i've an error on serializeModel callback
@@ -75,6 +82,11 @@ define([
             _.bindAll(this, 'template', 'generateForm');
 
             this.translater = Translater.getTranslater();
+
+            this.generateForm(this.formToEdit);
+            console.log("*******************");
+            console.log("On Init, generate this form ", this.formToEdit);
+            console.log("*******************");
         },
 
 
@@ -110,13 +122,17 @@ define([
         * View rendering callbak
         */
         onRender : function() {
+            if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
+                (this.formToEdit.name.toLowerCase() == "new form" && this.formToEdit.id != 0)))
+            {
+                delete this;
+                return;
+            }
+
             this.$el.i18n();
             //this.$el.find('.scroll').slimScroll({
             //    height : '100%'
             //});
-
-            this.generateForm(this.formToEdit);
-
         },
 
         initScrollBar : function() {
@@ -169,13 +185,11 @@ define([
         saveChange : function() {
             var formValidation = this.form.validate();
 
-            console.log("----- 2349");
-            console.log(this.form);
-
             if (formValidation === null) {
                 this.mainChannel.trigger('editionDone', this.form.getValue());
-                this.removeForm();
+                //this.removeForm();
                 $("#collectionName").css('color', "white");
+                return (true);
             } else {
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
                     //  We display a main information
@@ -192,6 +206,7 @@ define([
                     this.translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
                     "error"
                 );
+                return (false);
             }
         },
 
@@ -284,6 +299,15 @@ define([
 
                     this.mainChannel.trigger('formCreated');
                 }
+
+                console.log("rendering !", this.formToEdit);
+
+                $.each(this.formToEdit.schemaDefinition, function(index, value){
+                    if (value.validators && value.validators[0].type == "required")
+                    {
+                        $("#settingFormPanel #form label[for="+index+"]").append(" *");
+                    }
+                });
 
             }, this));
 

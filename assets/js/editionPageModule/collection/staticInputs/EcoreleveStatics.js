@@ -18,8 +18,6 @@ define([
         },
 
         getStaticInputs: function(form){
-            console.log("ECORELEVE oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(form);
             return({
 
             });

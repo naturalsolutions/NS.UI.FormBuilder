@@ -18,8 +18,6 @@ define([
         },
 
         getStaticInputs: function(form){
-            console.log("ECOLLECTION oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(form);
             return({
 
             });

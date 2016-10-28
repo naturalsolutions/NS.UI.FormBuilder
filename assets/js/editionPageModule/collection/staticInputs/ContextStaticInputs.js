@@ -26,8 +26,6 @@ define([
         },
 
         getStaticInputs: function(form){
-            console.log("DEFAULT oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(form);
             return({
             });
         },

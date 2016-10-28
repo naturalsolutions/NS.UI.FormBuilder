@@ -166,7 +166,8 @@ define([
          *
          * @param state if the select will be checked or not
          */
-        disableOrEnableLinkedFields : function(state) {
+        disableOrEnableLinkedFields : function(state, disable) {
+            var that = this;
             if (state)
             {
                 this.modelToEdit.set("isLinkedField", true);
@@ -179,13 +180,23 @@ define([
             }
             else
             {
-                var that = this;
                 this.form.fields.linkedField.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedField.$el.addClass('hide')});
                 this.form.fields.linkedFieldTable.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedFieldTable.$el.addClass('hide')});
                 this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide')});
+            }
+
+            if (disable)
+            {
+                if (state)
+                    this.disableOrEnableLinkedFields(false, disable);
+                else
+                {
+                    this.form.fields.isLinkedField.$el.animate({opacity: 0}, 300, function(){
+                        that.form.fields.isLinkedField.$el.addClass('hide')});
+                }
             }
         },
 
@@ -230,31 +241,41 @@ define([
          * We initialize select field option
          */
         initFormLinkedFields : function() {
-            var linkedFieldsKeyList = [];
-            _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
-                linkedFieldsKeyList.push(el.key)
-            });
 
-            var optionsToShow = {"empty":""};
-            $.each(this.preConfiguredFieldList.options, function(key, value){
-                optionsToShow[key] = key;
-            });
-            this.form.fields.applyTemplate.editor.setOptions(optionsToShow);
+            var disable = true;
 
-            if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
-                ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
-                //  Update linked fields
-                this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
-                this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
-                this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+            if (this.linkedFieldsList)
+            {
+                var linkedFieldsKeyList = [];
+                _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
+                    linkedFieldsKeyList.push(el.key)
+                });
 
-                var attr = this.modelToEdit.attributes;
-                //  Disable all select at start
-                this.disableOrEnableCssEditionFields(false);
-                this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldIdentifyingColumn && attr.linkedFieldTable);
-                this.bindLinkedFieldSelect();
-                this.bindCssEditorsSelect();
+                var optionsToShow = {"empty":""};
+                $.each(this.preConfiguredFieldList.options, function(key, value){
+                    optionsToShow[key] = key;
+                });
+                this.form.fields.applyTemplate.editor.setOptions(optionsToShow);
+
+                if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
+                    ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
+                    //  Update linked fields
+                    this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
+                    this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
+                    this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
+                }
+
+                disable = linkedFieldsKeyList.length == 0 || this.linkedFieldsList.tablesList.length == 0 ||
+                    this.linkedFieldsList.identifyingColumns.length == 0;
             }
+
+            var attr = this.modelToEdit.attributes;
+
+            //  Disable all select at start
+            this.disableOrEnableCssEditionFields(false);
+            this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldIdentifyingColumn && attr.linkedFieldTable, disable);
+            this.bindLinkedFieldSelect();
+            this.bindCssEditorsSelect();
         },
 
         /**
@@ -325,7 +346,6 @@ define([
                                         deprecated:0,
                                         lng:"Fr"}),
                                     success: function (data) {
-                                        console.log(data);
                                         var transformed = $.map(data.children, function (el) {
                                             return {
                                                 label: el.fullpath,
@@ -341,12 +361,9 @@ define([
                                 });
                             },
                             select: function(event, ui){
-                                console.log( "You selected: " + ui.item.label );
                                 $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setActive();
                                 $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setExpanded(true);
                                 that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), ui.item.data);
-                                console.log($("#defaultNode").fancytree("getTree"));
-                                console.log($("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.label));
                                 $('input[name="fullpath"]').val(ui.item.label);
                             }
                         });
@@ -379,7 +396,6 @@ define([
                                             this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
                                             $('input[name="fullpath"]').val(data.node.data.fullpath);
                                             createFullpathAutocomplete();
-                                            console.log("00**************", event, data);
                                         }, this)
                                     });
                                     $('#defaultNode').fancytree("getTree").activateKey(savednode);
@@ -395,7 +411,6 @@ define([
                                     selectMode : 1,
                                     click : _.bind(function(event, data) {
                                         this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                        console.log("01**************", event, data);
                                     }, this)
                                 });
                                 $('#defaultNode').fancytree("getTree").activateKey(savednode);
@@ -455,7 +470,6 @@ define([
                 selectMode : 1,
                 click : _.bind(function(event, data) {
                     this.mainChannel.trigger('nodeSelected' + field.get('id'), data);
-                    console.log("02**************", event, data);
                 }, this)
             });
         },
@@ -569,8 +583,6 @@ define([
         * Check generated form values and send events if all is good
         */
         saveChange : function() {
-            console.log("model to edit after saving input :");
-            console.log(this.modelToEdit);
             var nameCounter = 0;
             var that = this;
             var savedDefaultNode = this.modelToEdit.get("defaultNode");
@@ -617,7 +629,6 @@ define([
                     this.removeForm();
 
                     $("#dropField"+this.modelToEdit.get('id')+" .field-label span").css("color", "white");
-                    console.log('$("#dropField"+this.modelToEdit.get("id")+" .field-label span").css("color", "white");');
                 }
                 else
                 {
@@ -654,6 +665,7 @@ define([
                 var formValue = this.form.getValue();
                 formValue['type'] = this.currentFieldType;
 
+                alert("01");
                 this.formChannel.trigger('saveConfiguration', {
                     field : formValue
                 });
@@ -693,7 +705,6 @@ define([
         checkboxChange : function(e) {
             this.hasFieldsChanged = true;
             $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected');
-            console.log("selected checkbox setting field ! " + $(e.target).prop('id'));
         },
 
         /**
@@ -718,6 +729,7 @@ define([
          * Display success message when field has been saved as pre configurated field
          */
         displayConfigurationSaveSuccess : function() {
+            alert("03");
             swal(
                 translater.getValueFromKey('configuration.save.success') || "Sauvé !",
                 translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",

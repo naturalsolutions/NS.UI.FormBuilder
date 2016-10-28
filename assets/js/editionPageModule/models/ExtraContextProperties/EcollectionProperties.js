@@ -28,8 +28,7 @@ define([
         },
 
         getExtraPropertiesDefaults: function(inputType){
-            console.log("ECOLLECTION getExtraPropertiesDefaults oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(inputType);
+
 
             return({
 
@@ -37,8 +36,7 @@ define([
         },
 
         getExtraPropertiesSchema: function(inputType){
-            console.log("ECOLLECTION getExtraPropertiesSchema oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(inputType);
+
 
             return({
 

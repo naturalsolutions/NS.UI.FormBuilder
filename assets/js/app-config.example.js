@@ -76,13 +76,13 @@ define([
             },
 
             strings : {
-                MINIMUM : "0",
+                MINIMUM : "1",
                 MAXIMUM : "255",
-                defaultsize : "0;255",
-                fromminto10 : "0;10",
-                fromminto20 : "0;20",
-                fromminto50 : "0;50",
-                fromminto100 : "0;100"
+                defaultsize : "1;255",
+                fromminto10 : "1;10",
+                fromminto20 : "1;20",
+                fromminto50 : "1;50",
+                fromminto100 : "1;100"
             },
 
             getNumericSizes : function(){
@@ -111,19 +111,32 @@ define([
             topcontext : 'classic',
 
             classic : [
-                'Autocomplete',
-                'Text',
-                'Date',
-                'TextArea',
-                'Number',
-                'Select',
-                'Thesaurus',
-                'CheckBox',
-				'ChildForm'
+                Hidden,
+				HorizontalLine,
+				Autocomplete,
+				Text,
+				File,
+				TreeView,
+				Date,
+				TextArea,
+				Number,
+				Decimal,
+				NumericRange,
+				Pattern,
+				CheckBox,
+				Radio,
+				Select,
+				ChildForm,
+				Thesaurus,
+				AutocompleteTreeView
             ],
 
-            // 'ObjectPicker' type is ecoreleve dependent
-            // 'SubFormGrid' type is ecoreleve dependent
+			/***************
+			/* RENECO APPS *
+			/***************
+			
+            // List of ecoreleve dependant types :
+			// 'ObjectPicker', 'SubFormGrid'
             ecoreleve : [
                 'Autocomplete',
                 'Text',
@@ -151,7 +164,8 @@ define([
                 'ChildForm'
             ],
 
-            // 'Position' type is track dependent
+            // List of track dependant types :
+			// 'Position'
             track : [
                 'Autocomplete',
                 'Text',
@@ -165,6 +179,8 @@ define([
 
                 'Position'
             ]
+			
+			***************/
         }
     };
 

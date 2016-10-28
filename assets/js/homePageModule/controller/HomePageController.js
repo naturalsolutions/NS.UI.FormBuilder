@@ -106,6 +106,7 @@ define([
             var homePageLayout = new HomePageLayout({
                 URLOptions : this.URLOptions
             });
+
             this.homePageRegion.show( homePageLayout );
         },
 

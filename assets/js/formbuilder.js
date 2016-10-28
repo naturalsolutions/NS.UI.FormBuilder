@@ -86,7 +86,7 @@ define([
             else if (urlArgs[0] == "edition" && $("#formsCount").length == 0){
                 window.setTimeout(function() {
                     loadHomepage();
-                }, 500);
+                }, 350);
             }
         }, 100);
 
@@ -150,8 +150,9 @@ define([
                 this.rightRegion.empty();
                 $('#navbarContext').text($.t('navbar.context.home'));
             }, this));
+            $(".headerWhiteArrow").css("width", "");
         }, this));
-    })
+    });
 
     FormbuilderApp.addInitializer(function(options) {
 

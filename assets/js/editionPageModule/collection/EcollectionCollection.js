@@ -35,6 +35,10 @@ define([
 
         },
 
+        rulesList : function() {
+            return({});
+        },
+
         getExtractedDatas: function(){
             return({});
         },

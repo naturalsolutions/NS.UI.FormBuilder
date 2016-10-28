@@ -39,6 +39,10 @@ define([
             author : window.user
         },
 
+        rulesList : function() {
+            return({});
+        },
+
         getExtractedDatas: function(){
             return({});
         },

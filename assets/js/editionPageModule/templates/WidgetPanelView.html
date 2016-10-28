@@ -26,7 +26,7 @@
                             i18n     = section[n][i]['i18n'];
                             isDouble = section[n][i]['doubleColumn'];
 
-                            clasS = isDouble ? "col-md-10 col-md-offset-1 paddingLeft0 paddingRight0" : ("col-md-5 " + (count%2 !== 0 ? "col-md-offset-1" : ""))
+                            clasS = isDouble ? "col-md-10 col-md-offset-1 paddingLeft0 paddingRight0" : ("col-md-3 " + (count%2 !== 0 ? "col-md-offset-1" : ""))
                     %>
                         <div class="<%= clasS %>"  data-type="<%= type %>">
                             <div data-type="<%= type %>" class="fields" data-i18n="[title]tooltip.<%= i18n %>">

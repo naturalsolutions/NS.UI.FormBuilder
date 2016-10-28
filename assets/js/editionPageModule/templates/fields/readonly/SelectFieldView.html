@@ -9,7 +9,7 @@
         </label>
     </div>
     <div class="row">
-        <div class="col-md-11 col11centered">
+        <div class="col-md-12">
             <select name="<% name %>" class="form-control">
                 <% _.each(choices, function(el, idx) { %>
                     <option data-idx="<%=idx %>" value="<%= el.value %>" <% if (defaultValue.indexOf(el["id"]) >=0){ %> checked <% } %> >

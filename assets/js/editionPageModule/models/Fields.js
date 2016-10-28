@@ -70,6 +70,13 @@ define([
             labelFr     : "",
             labelEn     : "",
             required    : false,
+
+            // Linked fields values
+            isLinkedField                : false,
+            linkedFieldTable             : '',
+            linkedFieldIdentifyingColumn : '',
+            linkedField                  : '',
+
             editMode    : {visible : true, editable : true, nullable : true, nullmean : false},
             isDragged   : false,
             showCssProperties   : false,
@@ -81,11 +88,6 @@ define([
             fieldSize   : 12,
             linkedFieldset               : '',
 
-            // Linked fields values
-            isLinkedField                : false,
-            linkedFieldTable             : '',
-            linkedFieldIdentifyingColumn : '',
-            linkedField                  : '',
 
             // Input Template
             applyTemplate                : ''
@@ -123,6 +125,35 @@ define([
                     placeholder : translater.getValueFromKey('placeholder.name')
                 }
             },
+
+            //  Linked field section
+            isLinkedField : {
+                type        : CheckboxEditor,
+                fieldClass  : "checkBoxEditor",
+                title       : translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
+            },
+            linkedFieldTable : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.linkedFieldTable'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+            linkedFieldIdentifyingColumn : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+            linkedField : {
+                type : 'Select',
+                title       : translater.getValueFromKey('schema.linkedField'),
+                template    : fieldTemplate,
+                editorClass : 'form-control',
+                options : []
+            },
+
             editMode : {
                 type        : 'Object',
                 subSchema   : {
@@ -205,33 +236,6 @@ define([
                 template    : fieldTemplate
             },
 
-            //  Linked field section
-            isLinkedField : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
-            },
-            linkedFieldTable : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedFieldTable'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
-            linkedFieldIdentifyingColumn : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
-            linkedField : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedField'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
             applyTemplate : {
                 type : 'Select',
                 title       : translater.getValueFromKey('schema.applyTemplate'),
@@ -278,6 +282,48 @@ define([
             return _.omit(jsonObject, ['isLinkedField', 'showCssProperties']);
         }
 
+    });
+
+    models.BaseFieldExtended = models.BaseField.extend({
+        defaults : function() {
+            return _.extend( {}, models.BaseField.prototype.defaults, {
+                defaultValue : "",
+                isDefaultSQL : false,
+                help         : translater.getValueFromKey('placeholder.text')
+            });
+        },
+
+        schema: function() {
+            return _.extend( {}, models.BaseField.prototype.schema, {
+                defaultValue: {
+                    type        : 'Text',
+                    title       : translater.getValueFromKey('schema.default'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.value')
+                    }
+                },
+                isDefaultSQL: {
+                    type        : CheckboxEditor,
+                    fieldClass  : "hidden",
+                    title       : "isSQL"
+                },
+                help: {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.help'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.help')
+                    }
+                }
+            })
+        },
+
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.apply(this, arguments);
+        }
     });
 
     models.AutocompleteField = models.BaseField.extend({
@@ -475,17 +521,26 @@ define([
     });
 
     models.ThesaurusField = models.BaseField.extend({
+
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
-                defaultValue : "",
-                webServiceURL : AppConfig.paths.thesaurusWSPath,
-                fullpath : "",
-                defaultNode: "",
-                iscollapsed : false
-            });
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Thesaurus");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Thesaurus"), {
+                    defaultValue : "",
+                    webServiceURL : AppConfig.paths.thesaurusWSPath,
+                    fullpath : "",
+                    defaultNode: ""
+                });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Thesaurus");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
@@ -518,13 +573,12 @@ define([
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.tree.default')
                     }
-                },
-                iscollapsed : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.iscollapsed')
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -786,7 +840,6 @@ define([
     //  Field herited by TextField
     //  ----------------------------------------------------
 
-
     models.TextField = models.BaseField.extend({
 
         defaults : function() {
@@ -905,31 +958,32 @@ define([
         section : 'other'
     });
 
-    models.DateField = models.TextField.extend({
+    models.DateField = models.BaseFieldExtended.extend({
 
         defaults: function() {
-            return _.extend( {}, models.TextField.prototype.defaults(), {
+            return _.extend( {}, models.BaseFieldExtended.prototype.defaults(), {
                 format: "dd/mm/yyyy",
                 help : translater.getValueFromKey('placeholder.date')
             });
         },
 
         schema: function() {
-            return _.extend( {}, models.TextField.prototype.schema(), {
+            return _.extend( {}, models.BaseFieldExtended.prototype.schema(), {
                 format: {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.format'),
                     editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.format')
+                        placeholder : translater.getValueFromKey('placeholder.format'),
+                        disabled : (AppConfig.appMode.topcontext == "reneco")
                     }
                 }
             });
         },
 
         initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+            models.BaseFieldExtended.prototype.initialize.apply(this, arguments);
         }
     }, {
         type   : "Date",

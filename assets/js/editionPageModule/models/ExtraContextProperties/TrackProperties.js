@@ -28,8 +28,6 @@ define([
         },
 
         getExtraPropertiesDefaults: function(inputType){
-            console.log("TRACK getExtraPropertiesDefaults oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(inputType);
 
             return({
 
@@ -37,8 +35,6 @@ define([
         },
 
         getExtraPropertiesSchema: function(inputType){
-            console.log("TRACK getExtraPropertiesSchema oooooooooooooOOOOOOOOOOOooooooooooooo");
-            console.log(inputType);
 
             return({
 

@@ -54,6 +54,7 @@
         "count"       : "Champ(s)",
         "find"        : "Rechercher",
         "validation"  : "Ce champs est requis",
+        "importance"  : "Importance",
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
         "setting"     : "Caractéristiques <br /> du formulaire",
         "new"         : "Nouveau formulaire",
@@ -235,7 +236,10 @@
         "showLines"                    : "Montrer les lignes",
         "nbFixedColMinValue"           : "La valeur minimale est 1",
         "minAppearance"                : "Minimum d'apparitions",
-        "minValueError"                : "La valeur minimale est 0"
+        "minValueError"                : "La valeur minimale est 0",
+        "maxlength255"                 : "Maximum length is 255",
+        "maxlength55"                  : "Maximum length is 55",
+        "errorbetween1and5"            : "La valeur doit être comprise entre 1 et 5"
     },
 
     "tooltip" : {
@@ -300,7 +304,8 @@
 
     "settings" : {
         "actions" : {
-            "saveAsType" : "Enregistrez comme nouveau type",
+            "saveAsType" : "Enregistrez comme nouveau template",
+            "applyTemplate" : "Appliquer le template",
             "save"       : "Sauvegarder",
             "validate"   : "Valider",
             "cancel"     : "Annuler",
@@ -314,6 +319,7 @@
         "clear" : {
             "title"            : "Etes vous sûr ?",
             "text"             : "Les modifications non sauvegardées seront perdues !",
+            "textinput"        : "Le champ sera définitivement perdu !",
             "yes"              : "Oui, supprimer",
             "no"               : "Non, annuler",
             "deleted"          : "Supprimé !",
@@ -344,6 +350,7 @@
         "save" : {
             "success"    : "Sauvé !",
             "successMsg" : "Votre formulaire a été enregistré sur le serveur !",
+            "successMsgTmp" : "Nouveaux paramètres du formulaire enregistrés !",
             "error"      : "Une erreur est survenue !",
             "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
             "errorMsgNoExport"   : "Votre formulaire n'a pas été enregistré. Pour une raison quelconque ...",
@@ -359,7 +366,10 @@
             "hasDuplicateFieldNamesError" : "Formulaire invalide !",
             "hasDuplicateFieldNames" : "Certains de vos champs ont des noms identiques",
             "formSimilarName" : "Un formulaire avec un nom similaire existe déjà !",
-            "circularDependency" : "Une dépendance circulaire a été détectée parmis vos childforms !!"
+            "formSimilarFrName" : "Un formulaire avec un nom d'affchage français similaire existe déjà !",
+            "formSimilarEnName" : "Un formulaire avec un nom d'affichage anglais similaire existe déjà !",
+            "circularDependency" : "Une dépendance circulaire a été détectée parmis vos childforms !!",
+            "418" : "Je suis une théière !"
         },
         "field" : {
             "error"    : "Echec de l'ajout !",
@@ -400,6 +410,17 @@
         "label" : {
           "fr" : "Label français de votre champs",
           "en" : "Label anglais de votre champs"
+        },
+        "form" : {
+            "name" : "Nom du formulaire",
+            "label" : {
+                "fr" : "Nom français",
+                "en" : "Nom anglais"
+            },
+            "description" : {
+                "fr" : "Description française",
+                "en" : "Description anglaise"
+            }
         },
         "name"        : "Nom de votre champs",
         "value"       : "Valeur par défaut de votre champs",

@@ -617,6 +617,7 @@ define([
             var formToEdit = this.formCollection.get(this.currentSelectedForm);
             //  Send an event to the formbuilder
             //  Two modules never speak directly, all communication pass htrough formbuilder App
+            // TODO TODO
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
         },
 
@@ -643,19 +644,27 @@ define([
 
                 $('body').append('<div class="modal fade" id="newFormModal"></div>');
 
-                require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {
-                    var tmpOptions = {
-                        el : '#newFormModal',
-                        templates : data,
-                        onClose : _.bind(function(name, template) {
-                            this.createFormModel(name, template);
-                        }, this)
-                    };
+                if (AppConfig.appMode.topcontext != "reneco")
+                {
+                    require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {
+                        var tmpOptions = {
+                            el : '#newFormModal',
+                            templates : data,
+                            onClose : _.bind(function(name, template) {
+                                this.createFormModel(name, template);
+                            }, this)
+                        };
 
-                    var newFormModalView = new NewFormModalView(tmpOptions);
+                        var newFormModalView = new NewFormModalView(tmpOptions);
 
-                    newFormModalView.render();
-                }, this));
+                        newFormModalView.render();
+                    }, this));
+                }
+                else
+                {
+                    //this.globalChannel.trigger('displayEditionPage', {});
+                    this.createFormModel("", null);
+                }
 
             }, this));
 

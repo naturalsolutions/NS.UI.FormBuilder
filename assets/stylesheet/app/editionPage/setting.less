@@ -5,11 +5,17 @@
     color: red;
 }
 
-#settingPanel {
+#settingFormPanel {
+    position: absolute;
+}
 
-    position      : absolute;
+#settingFieldPanel {
+    position: relative;
+}
+
+#settingFormPanel, #settingFieldPanel {
+
     overflow      : hidden;
-    z-index       : 0;
     background    : @settingViewBackgroundColor;
     padding-bottom: 50px;
     height        : 100%;

@@ -41,9 +41,9 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 }]
             },
-            ordre : {
+            importance : {
                 type        : 'Number',
-                title       : translater.getValueFromKey('form.ordre'),
+                title       : translater.getValueFromKey('form.importance'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
@@ -89,7 +89,7 @@ define([
                     },
                     {
                         label : translater.getValueFromKey('form.actif.pasactif'),
-                        val : 2
+                        val : 0
                     }
                 ],
                 validators  : [{
@@ -108,7 +108,7 @@ define([
                     },
                     {
                         label : translater.getValueFromKey('form.importapressortie.not'),
-                        val : 2
+                        val : 0
                     }
                 ],
                 validators  : [{
@@ -119,12 +119,34 @@ define([
 
         propertiesDefaultValues : {
             activite : "",
-            ordre : "",
+            importance : "",
             typeIndividus : "",
             frequence : "",
             groupe : "",
             actif : "",
             importapressortie : ""
+        },
+
+        txtUnder255: function(value){
+            if (value.length > 255) {
+                return {
+                    type : 'String too wide',
+                    message : translater.getValueFromKey('schema.maxlength255')
+                }
+            }
+        },
+
+        txtUnder55: function(value){
+            if (value.length > 50) {
+                return {
+                    type : 'String too wide',
+                    message : translater.getValueFromKey('schema.maxlength55')
+                }
+            }
+        },
+
+        rulesList : function() {
+            return({});
         },
 
         getExtractedDatas: function(){
@@ -149,14 +171,23 @@ define([
                         message : translater.getValueFromKey('form.validation')
                     }]
                 },
-                ordre : {
+                importance : {
                     type        : 'Number',
-                    title       : translater.getValueFromKey('form.ordre'),
+                    title       : translater.getValueFromKey('form.importance'),
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required'
-                    }]
+                    validators  : [
+                        function test(value) {
+                            if (value < 1 || value > 5) {
+                                return {
+                                    type: 'Invalid value',
+                                    message: translater.getValueFromKey('schema.errorbetween1and5')
+                                };
+                            }
+                        },{
+                            type : 'required'
+                        }
+                    ]
                 },
                 typeIndividus : {
                     type        : 'Select',
@@ -197,7 +228,7 @@ define([
                         },
                         {
                             label : translater.getValueFromKey('form.actif.pasactif'),
-                            val : 2
+                            val : 0
                         }
                     ],
                     validators  : [{
@@ -216,7 +247,7 @@ define([
                         },
                         {
                             label : translater.getValueFromKey('form.importapressortie.not'),
-                            val : 2
+                            val : 0
                         }
                     ],
                     validators  : [{

@@ -6,8 +6,9 @@ define([
     'jquery',
     'backbone',
     '../../../Translater',
+    '../../editor/CheckboxEditor',
     'app-config'
-], function ($, Backbone, Translater, AppConfig) {
+], function ($, Backbone, Translater, CheckboxEditor, AppConfig) {
 
     var translater = Translater.getTranslater();
 
@@ -45,6 +46,18 @@ define([
                         editorAttrs : {
                             placeholder : translater.getValueFromKey('placeholder.num.minAppearance')
                         }
+                    }
+                }
+            },
+            Thesaurus:{
+                defaults: {
+                    iscollapsed : false
+                },
+                schema: {
+                    iscollapsed : {
+                        type        : CheckboxEditor,
+                        fieldClass  : "checkBoxEditor",
+                        title       : translater.getValueFromKey('schema.iscollapsed')
                     }
                 }
             }

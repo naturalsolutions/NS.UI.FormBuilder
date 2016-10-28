@@ -43,6 +43,10 @@ define([
 
         },
 
+        rulesList : function() {
+            return({});
+        },
+
         getExtractedDatas: function(){
             return({});
         },
@@ -65,6 +69,10 @@ define([
 
         updateAttributesExtention: function () {
             return(true);
+        },
+
+        setRulesExtention: function(){
+
         },
 
         getModeExtention : function (currentContext) {

@@ -35,6 +35,8 @@ define([
     var extention = CollectionExtention;
     var staticInputs = ContextStaticInputs;
 
+    var globalloop = 0;
+
     /**
     * Implement form object as a fields collection
     */
@@ -55,13 +57,18 @@ define([
                 validators  : [{
                     type : 'required',
                     message : translater.getValueFromKey('form.validation')
-                }]
-            },
-            tag : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.tag') + ' <i>(' + translater.getValueFromKey('optional') + ')</i>',
-                editorClass : 'form-control',
-                template    : fieldTemplate
+                },
+                function test(value) {
+                    if (value.length > 50) {
+                        return {
+                            type: 'String too wide',
+                            message: translater.getValueFromKey('schema.maxlength50')
+                        };
+                    }
+                }],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.form.name')
+                }
             },
             labelFr   : {
                 type        : "Text",
@@ -71,7 +78,18 @@ define([
                 validators  : [{
                     type : 'required',
                     message : translater.getValueFromKey('form.validation')
-                }]
+                },
+                function test(value) {
+                    if (value.length > 50) {
+                        return {
+                            type: 'String too wide',
+                            message: translater.getValueFromKey('schema.maxlength50')
+                        };
+                    }
+                }],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.form.label.fr')
+                }
             },
             labelEn   : {
                 type        : "Text",
@@ -81,7 +99,18 @@ define([
                 validators  : [{
                     type : 'required',
                     message : translater.getValueFromKey('form.validation')
-                }]
+                },
+                function test(value) {
+                    if (value.length > 50) {
+                        return {
+                            type: 'String too wide',
+                            message: translater.getValueFromKey('schema.maxlength50')
+                        };
+                    }
+                }],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.form.label.en')
+                }
             },
             descriptionFr : {
                 type        : "TextArea",
@@ -91,7 +120,18 @@ define([
                 validators  : [{
                     type : 'required',
                     message : translater.getValueFromKey('form.validation')
-                }]
+                },
+                function test(value) {
+                    if (value.length > 255) {
+                        return {
+                            type: 'String too wide',
+                            message: translater.getValueFromKey('schema.maxlength255')
+                        };
+                    }
+                }],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.form.description.fr')
+                }
             },
             descriptionEn : {
                 type        : "TextArea",
@@ -101,7 +141,18 @@ define([
                 validators  : [{
                     type : 'required',
                     message : translater.getValueFromKey('form.validation')
-                }]
+                },
+                function test(value) {
+                    if (value.length > 255) {
+                        return {
+                            type: 'String too wide',
+                            message: translater.getValueFromKey('schema.maxlength255')
+                        };
+                    }
+                }],
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.form.description.en')
+                }
             },
             keywordsFr : {
                 type        : PillboxEditor,
@@ -138,13 +189,18 @@ define([
                     validators  : [{
                         type : 'required',
                         message : translater.getValueFromKey('form.validation')
-                    }]
-                },
-                tag : {
-                    type        : "Text",
-                    title       : translater.getValueFromKey('form.tag') + ' <i>(' + translater.getValueFromKey('optional') + ')</i>',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
+                    },
+                        function test(value) {
+                            if (value.length > 55) {
+                                return {
+                                    type: 'String too wide',
+                                    message: translater.getValueFromKey('schema.maxlength55')
+                                };
+                            }
+                        }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.form.name')
+                    }
                 },
                 labelFr   : {
                     type        : "Text",
@@ -154,7 +210,18 @@ define([
                     validators  : [{
                         type : 'required',
                         message : translater.getValueFromKey('form.validation')
-                    }]
+                    },
+                        function test(value) {
+                            if (value.length > 55) {
+                                return {
+                                    type: 'String too wide',
+                                    message: translater.getValueFromKey('schema.maxlength55')
+                                };
+                            }
+                        }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.form.label.fr')
+                    }
                 },
                 labelEn   : {
                     type        : "Text",
@@ -164,17 +231,18 @@ define([
                     validators  : [{
                         type : 'required',
                         message : translater.getValueFromKey('form.validation')
-                    }]
-                },
-                descriptionEn : {
-                    type        : "TextArea",
-                    title       : translater.getValueFromKey('form.description.en'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    }]
+                    },
+                        function test(value) {
+                            if (value.length > 55) {
+                                return {
+                                    type: 'String too wide',
+                                    message: translater.getValueFromKey('schema.maxlength55')
+                                };
+                            }
+                        }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.form.label.en')
+                    }
                 },
                 descriptionFr : {
                     type        : "TextArea",
@@ -184,7 +252,39 @@ define([
                     validators  : [{
                         type : 'required',
                         message : translater.getValueFromKey('form.validation')
-                    }]
+                    },
+                        function test(value) {
+                            if (value.length > 255) {
+                                return {
+                                    type: 'String too wide',
+                                    message: translater.getValueFromKey('schema.maxlength255')
+                                };
+                            }
+                        }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.form.description.fr')
+                    }
+                },
+                descriptionEn : {
+                    type        : "TextArea",
+                    title       : translater.getValueFromKey('form.description.en'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    validators  : [{
+                        type : 'required',
+                        message : translater.getValueFromKey('form.validation')
+                    },
+                        function test(value) {
+                            if (value.length > 255) {
+                                return {
+                                    type: 'String too wide',
+                                    message: translater.getValueFromKey('schema.maxlength255')
+                                };
+                            }
+                        }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.form.description.en')
+                    }
                 },
                 keywordsFr : {
                     type        : PillboxEditor,
@@ -269,6 +369,12 @@ define([
             $.each(extention.jsonExtention(), function(index, value){
                 that[index] = opt[index] || value || "";
             });
+
+            $.each(extention.rulesList(), function(index, value){
+                that.schemaDefinition[index].validators.push(value);
+            });
+
+            console.log(that.schemaDefinition);
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
@@ -502,6 +608,18 @@ define([
                 if (field.get('name') == Fields.BaseField.prototype.defaults.name)
                     field.set('name', field.get('name'));
 
+                /*
+                console.log(this.getSize());
+                console.log(field.get('order'));
+                console.log("FINAL ACT");
+
+                this.on('add', function(value){
+                    console.log("**********");
+                    console.log("added : ", value);
+                    console.log("**********");
+                });
+                */
+
                 this.add(field);
 
                 //  Send event when field is added to the form
@@ -525,6 +643,7 @@ define([
                     this.fieldsexcludedfromdelete.push(field.get('id'));
                 }
 
+                this.nextFieldNew();
                 return field.get('id');
             }
         },
@@ -540,21 +659,11 @@ define([
             var that = this;
             var field = properties || {};
 
-            // Temporary fix to have the proper order ! I think all elements are added at once and the renderer does not
-            // add everything following their order but randomly depending on the loading time of each item ... or so ...
-            setTimeout(function(){
-                //  We check if the field name is the default name or not (if a form was imported the name can be different but can't be modified)
-                // field['name'] = field['name'] == 'Field' ? 'Field' + that.getSize() : field['name'];
-                field['order'] = that.getSize();
+            field['order'] = that.getSize();
 
-                //
-                //  We add a new file is un the collection
-                //  addField return new added field id
-                //  addElement return so this id
-                //
+            var toret = that.addField(new Fields[nameType](field), isUnderFieldset);
 
-                return that.addField(new Fields[nameType](field), isUnderFieldset);
-            }, 10 * field['order']);
+            return toret;
         },
 
         /**
@@ -723,6 +832,7 @@ define([
         },
 
         triggeredCreateFieldsets2 : function() {
+
             var i = 0;
             var that = this;
 
@@ -767,12 +877,13 @@ define([
                         else
                         {
                             that.JSONUpdate['fieldsets'][0]["order"] += 10000;
-                            that.createFieldset2(that.JSONUpdate['fieldsets'][0]);
+                            alert("fieldsets workaround has been removed long time ago !!");
+                            //that.createFieldset2(that.JSONUpdate['fieldsets'][0]);
                         }
                     }
                     else
                     {
-                        that.createField3(that.JSONUpdate["schema"][first]);
+                        this.schema.push(that.JSONUpdate["schema"][first]);
                         delete that.JSONUpdate["schema"][first];
                     }
                     i++;
@@ -781,8 +892,9 @@ define([
                         break;
                 }
 
-                this.formChannel.trigger('collectionUpdateFinished');
-                that.working = false;
+                globalloop = 0;
+
+                this.nextFieldNew();
             }
         },
 
@@ -926,6 +1038,31 @@ define([
         /**
          * Add the next field on the collection
          */
+        nextFieldNew : function() {
+            var that = this;
+
+            setTimeout(function() {
+                if (globalloop > 100)
+                    return;
+                if (that.schema != undefined && that.schema.length > 0) {
+
+                    var firstFieldToAdd = that.schema[0];
+
+                    that.schema.shift();
+
+                    that.createField3(firstFieldToAdd);
+
+                }
+                else {
+                    that.formChannel.trigger('collectionUpdateFinished');
+                    that.working = false;
+                }
+            }, 25);
+        },
+
+        /**
+         * Add the next field on the collection
+         */
         nextField : function() {
             if (this.schema != undefined && this.schema.length > 0) {
 
@@ -973,6 +1110,9 @@ define([
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
+            // TODO TODO
+            // console.log(this.saveChange());
+
             this.showSpinner();
             var that = this;
 
@@ -1088,7 +1228,22 @@ define([
                         error: _.bind(function (xhr, ajaxOptions, thrownError) {
                             if (xhr.status == 418)
                             {
-                                that.formChannel.trigger('save:fail', "modal.save.formSimilarName");
+                                if (xhr.responseText.indexOf("ERR:NAME") !== -1)
+                                {
+                                    that.formChannel.trigger('save:fail', "modal.save.formSimilarName");
+                                }
+                                else if (xhr.responseText.indexOf("ERR:FRNAME") !== -1)
+                                {
+                                    that.formChannel.trigger('save:fail', "modal.save.formSimilarFrName");
+                                }
+                                else if (xhr.responseText.indexOf("ERR:ENNAME") !== -1)
+                                {
+                                    that.formChannel.trigger('save:fail', "modal.save.formSimilarEnName");
+                                }
+                                else
+                                {
+                                    that.formChannel.trigger('save:fail', "modal.save.418");
+                                }
                                 $("#collectionName").css('color', "red");
                             }
                             else if (xhr.status == 508)
