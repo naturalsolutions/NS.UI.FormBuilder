@@ -4,11 +4,6 @@
         <!-- <span class="picto picto-<%= (type.toLowerCase() == 'childform'?'subform':type.toLowerCase()) %>"> -->
         <span class="picto picto-<%= (type.toLowerCase() == 'childform'?'subform':type.toLowerCase()) %>">
         </span>
-        <br/>
-        <span data-i18n="type">
-            Type de champ
-        </span>
-        <br/>
         <span data-i18n="fields.<%= type.toLowerCase() %>">
         </span>
     </div>
@@ -61,13 +56,13 @@
     </div>
 
     <div class="row" data-setting="field">
-        <div class="col-md-4 col-md-offset-1">
-            <button id="applyTemplateButton" class="transparent reneco" data-i18n="settings.actions.applyTemplate">
+        <div class="col-md-6">
+            <button id="applyTemplateButton" class="transparent reneco2" data-i18n="settings.actions.applyTemplate">
                 Appliquer le template
             </button>
         </div>
-        <div class="col-md-3 col-md-offset-2">
-            <button id="saveButton" class="transparent reneco" data-i18n="settings.actions.saveAsType">
+        <div class="col-md-6">
+            <button id="saveButton" class="transparent reneco2" data-i18n="settings.actions.saveAsType">
                 Enregistrer comme nouveau type
             </button>
         </div>

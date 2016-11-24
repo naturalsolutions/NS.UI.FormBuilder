@@ -40,7 +40,18 @@ define([
         initGrid : function() {
             this.grid = new Backgrid.Grid({
                 columns    : this.columns,
-                collection : this.choices
+                collection : this.choices,
+                events : {
+                    click : function(data){
+                        var defaultval = $(data.target).find("input").val();
+                        if (defaultval == "My first Option" || defaultval == "Mon option" ||
+                            defaultval == "English value" || defaultval == "French label" ||
+                            defaultval == "1" || defaultval == "Value")
+                        {
+                            $(data.target).find("input").val("");
+                        }
+                    }
+                }
             });
 
             $('#enum-grid').html(this.grid.render().el);

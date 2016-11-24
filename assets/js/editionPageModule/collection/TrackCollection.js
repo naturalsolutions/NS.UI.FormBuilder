@@ -178,10 +178,10 @@ define([
                     template    : fieldTemplate,
                     validators  : [
                         function test(value) {
-                            if (value < 1 || value > 5) {
+                            if (value < 0 || value > 5) {
                                 return {
                                     type: 'Invalid value',
-                                    message: translater.getValueFromKey('schema.errorbetween1and5')
+                                    message: translater.getValueFromKey('schema.errorbetween0and5')
                                 };
                             }
                         },{
@@ -290,6 +290,9 @@ define([
                 $.each(valuesArray, function(index, value){
                     valuesArray[index] = {label: value, val: value};
                 });
+
+                if (valuesArray[valuesArray.length - 1].val == "null")
+                    valuesArray.pop();
 
                 return(valuesArray);
             };

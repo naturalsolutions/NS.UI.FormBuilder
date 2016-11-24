@@ -47,14 +47,14 @@ define([
             $.ajax({
                 data        : "",
                 type        : 'GET',
-                url         : this.options.unities + "/" + window.context,
+                url         : this.options.unities + "/" + window.context + "/fr",
                 contentType : 'application/json',
                 crossDomain : true,
                 success: _.bind(function(data) {
+                    var jsondata = JSON.parse(data);
                     var unityoptions = [];
-                    $.each(data.unities, function(index, value){
-                        if (value.name && value.name.length > 0)
-                            unityoptions.push(value.name);
+                    $.each(jsondata.unities, function(index, value){
+                        unityoptions.push(value);
                     });
                     this.form.fields.unity.editor.setOptions(unityoptions);
                 }, this),

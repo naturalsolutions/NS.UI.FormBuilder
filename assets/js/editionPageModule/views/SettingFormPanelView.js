@@ -59,34 +59,33 @@ define([
         * View constructor, init grid channel
         */
         initialize : function(options) {
+
             this.URLOptions = options.URLOptions;
             this.formToEdit = options.formToEdit;
             this.form       = null;
 
+            /*
             if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
                 (this.formToEdit.name.toLowerCase() == "new form" && this.formToEdit.id != 0)))
             {
+                console.log("XXX yo, i'm here !", this.formToEdit, JSON.stringify(this.formToEdit));
                 delete this;
                 return;
             }
+            */
 
             this.hasFieldsChanged = false;
 
             // I don't know why but i have to specify a model otherwise i've an error on serializeModel callback
             // It's weird bacause i havn't to do this in SettingFieldPanelView
-            this.model = new Backbone.Model({})
+            this.model = new Backbone.Model({});
 
             //  Init backbone radio channel
             this.initMainChannel();
 
-            _.bindAll(this, 'template', 'generateForm');
-
             this.translater = Translater.getTranslater();
 
             this.generateForm(this.formToEdit);
-            console.log("*******************");
-            console.log("On Init, generate this form ", this.formToEdit);
-            console.log("*******************");
         },
 
 
@@ -96,6 +95,9 @@ define([
         initMainChannel : function() {
             //  The edition channel is the main channel ONLY in the editionPageModule
             this.mainChannel = Backbone.Radio.channel('edition');
+
+            //  Event send by BaseView or BaseView inherited view for duplicate model
+            this.mainChannel.on('triggerFormSettingsRender', this.triggerRender, this);
         },
 
 
@@ -122,17 +124,26 @@ define([
         * View rendering callbak
         */
         onRender : function() {
+
+            /*
             if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
                 (this.formToEdit.name.toLowerCase() == "new form" && this.formToEdit.id != 0)))
             {
+                console.log("XXX yo i'm here again !", this.formToEdit, JSON.stringify(this.formToEdit));
                 delete this;
                 return;
             }
+            */
 
             this.$el.i18n();
             //this.$el.find('.scroll').slimScroll({
             //    height : '100%'
             //});
+        },
+
+        triggerRender : function()
+        {
+            this.render();
         },
 
         initScrollBar : function() {
@@ -254,6 +265,22 @@ define([
         */
         generateForm : function(formToEdit) {
 
+            if (this.generatedAlready)
+            {
+                delete this;
+                return;
+            }
+
+            this.generatedAlready = true;
+
+            /*
+            if (this.formToEdit.length == 0)
+            {
+                console.log("XXX yo i'm finally here !", this.formToEdit, JSON.stringify(this.formToEdit));
+                delete this;
+                return;
+            }
+            */
 
             require(['backbone-forms'], _.bind(function() {
                 if (this.form !== null) {
@@ -299,8 +326,6 @@ define([
 
                     this.mainChannel.trigger('formCreated');
                 }
-
-                console.log("rendering !", this.formToEdit);
 
                 $.each(this.formToEdit.schemaDefinition, function(index, value){
                     if (value.validators && value.validators[0].type == "required")

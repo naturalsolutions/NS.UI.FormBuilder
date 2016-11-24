@@ -5,7 +5,15 @@
 
 input[type="submit"].reneco { color : white; }
 
-button.reneco {
+button.reneco2 {
+    line-height : initial !important;
+    overflow : initial !important;
+    padding: 8px !important;
+    margin: 5px !important;
+    width: 100% !important;
+}
+
+button.reneco, button.reneco2 {
     .exo;
     border        : none;
     box-shadow    : none !important;
@@ -42,10 +50,6 @@ button.reneco {
         }
     }
 
-    &.red {
-        background    : #892833;
-    }
-
     &.transparent {
         background     : transparent !important;
         box-shadow     : none;
@@ -54,41 +58,40 @@ button.reneco {
         color          : #555 !important;
         padding-top    : 7px;
         padding-bottom : 7px;
-        margin         : 5px auto;
-        width          : 250px;
+        margin-left    : 16px;
+        min-width      : 130px;
         height         : 45px !important;
-        margin-left    : 0 !important;
         margin-top     : 30px !important;
         margin-bottom  : 30px;
     }
 
-     label {
-         .exo;
+    label {
+        .exo;
         color      : white;
         display    : inline-block;
         float      : left;
         border     : none !important;
-        box-shasow : none !important;
+        box-shadow : none !important;
 
-         &:hover {
-             cursor: pointer;
-         }
+        &:hover {
+            cursor: pointer;
+        }
 
-         &:first-child {
-             padding-left  : 10px;
-             padding-right : 10px;
-             text-transform: uppercase;
-         }
+        &:first-child {
+            padding-left  : 10px;
+            padding-right : 10px;
+            text-transform: uppercase;
+        }
 
-         &:last-child:not(.empty) {
-             height    : 35px;
-             width     : 40px;
-             float     : right;
-             position  : relative;
-             left      : 1px;
-             font-size : 20px;
-             overflow  : hidden;
-         }
+        &:last-child:not(.empty) {
+            height    : 35px;
+            width     : 40px;
+            float     : right;
+            position  : relative;
+            left      : 1px;
+            font-size : 20px;
+            overflow  : hidden;
+        }
     }
 
     &.small {
@@ -123,3 +126,4 @@ button.reneco {
         }
     }
 }
+

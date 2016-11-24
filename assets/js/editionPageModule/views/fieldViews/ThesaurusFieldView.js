@@ -45,12 +45,10 @@ define([
             var that = this;
             if (startID == "")
             {
-                startID = AppConfig.config.startID[window.context];
+                startID = AppConfig.config.startID.thesaurus[window.context];
                 if (!startID)
-                    startID = AppConfig.config.startID.default;
+                    startID = AppConfig.config.startID.thesaurus.default;
             }
-
-            console.log("Display tree view with " + startID);
 
             require(['jquery-ui', 'fancytree'], _.bind(function() {
                 if (that.model.get('webServiceURL').substring(0, 5) == 'http:') {
@@ -70,7 +68,7 @@ define([
                                 checkbox: false,
                                 selectMode: 2,
                                 activeNode: startID,
-                                click: function (event, data){console.log("-01**************", event, data);}
+                                click: function (event, data){/*console.log("-01**************", event, data);*/}
                             });
                         }, this),
                     });
@@ -84,7 +82,7 @@ define([
                             selectMode: 2,
                             activeNode: startID,
                             click : _.bind(function(event, data) {
-                                console.log("03**************", event, data);
+                                //console.log("03**************", event, data);
                             }, this)
                         });
 
@@ -114,8 +112,6 @@ define([
             }
 
             var that = this;
-
-
 
             var reloadFieldInList = function(){
                 if (children !== null) {

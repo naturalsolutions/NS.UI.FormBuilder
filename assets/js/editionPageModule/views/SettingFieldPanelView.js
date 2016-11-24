@@ -148,7 +148,9 @@ define([
 
             // TODO Idealy, this should be in the contextloaders ...
             //  Init linked field
+
             this.initFormLinkedFields();
+
             ContextLoader.initializeLoader(this.form, this.URLOptions, true);
         },
 
@@ -204,9 +206,12 @@ define([
          * Enable or disable linked field select if the checkbox is checked or not
          */
         bindCssEditorsSelect : function() {
-            this.form.fields.showCssProperties.editor.$el.find('input').change(_.bind(function(e) {
-                this.disableOrEnableCssEditionFields($(e.target).is(':checked'));
-            }, this));
+            if (this.form.fields.showCssProperties)
+            {
+                this.form.fields.showCssProperties.editor.$el.find('input').change(_.bind(function(e) {
+                    this.disableOrEnableCssEditionFields($(e.target).is(':checked'));
+                }, this));
+            }
         },
 
         /**
@@ -215,24 +220,27 @@ define([
          * @param state if the select will be checked or not
          */
         disableOrEnableCssEditionFields : function(state) {
-            if (state)
+            if (this.form.fields.showCssProperties)
             {
-                this.form.fields.editorClass.$el.removeClass('hide');
-                this.form.fields.editorClass.$el.animate({opacity: 1}, 300);
-                this.form.fields.fieldClassEdit.$el.removeClass('hide');
-                this.form.fields.fieldClassEdit.$el.animate({opacity: 1}, 300);
-                this.form.fields.fieldClassDisplay.$el.removeClass('hide');
-                this.form.fields.fieldClassDisplay.$el.animate({opacity: 1}, 300);
-            }
-            else
-            {
-                var that = this;
-                this.form.fields.editorClass.$el.animate({opacity: 0}, 300, function(){
-                    that.form.fields.editorClass.$el.addClass('hide')});
-                this.form.fields.fieldClassEdit.$el.animate({opacity: 0}, 300, function(){
-                    that.form.fields.fieldClassEdit.$el.addClass('hide')});
-                this.form.fields.fieldClassDisplay.$el.animate({opacity: 0}, 300, function(){
-                    that.form.fields.fieldClassDisplay.$el.addClass('hide')});
+                if (state)
+                {
+                    this.form.fields.editorClass.$el.removeClass('hide');
+                    this.form.fields.editorClass.$el.animate({opacity: 1}, 300);
+                    this.form.fields.fieldClassEdit.$el.removeClass('hide');
+                    this.form.fields.fieldClassEdit.$el.animate({opacity: 1}, 300);
+                    this.form.fields.fieldClassDisplay.$el.removeClass('hide');
+                    this.form.fields.fieldClassDisplay.$el.animate({opacity: 1}, 300);
+                }
+                else
+                {
+                    var that = this;
+                    this.form.fields.editorClass.$el.animate({opacity: 0}, 300, function(){
+                        that.form.fields.editorClass.$el.addClass('hide')});
+                    this.form.fields.fieldClassEdit.$el.animate({opacity: 0}, 300, function(){
+                        that.form.fields.fieldClassEdit.$el.addClass('hide')});
+                    this.form.fields.fieldClassDisplay.$el.animate({opacity: 0}, 300, function(){
+                        that.form.fields.fieldClassDisplay.$el.addClass('hide')});
+                }
             }
         },
 
@@ -328,13 +336,17 @@ define([
                     }
                 }, this));
 
-                if (_.contains(['Thesaurus', 'AutocompleteTreeView'], this.modelToEdit.constructor.type)) {
+                if (_.contains(['Thesaurus', 'AutocompleteTreeView', 'Position'], this.modelToEdit.constructor.type)) {
+                    var pathname = "fullpath";
+                    if (this.modelToEdit.constructor.type == "Position")
+                        pathname = "positionPath";
+
                     var WebServiceUrl = $("[name='webServiceURL']").val();
 
                     var savednode = this.modelToEdit.get('defaultNode');
 
                     var createFullpathAutocomplete = function(){
-                        $('input[name="fullpath"]').autocomplete({
+                        $('input[name="'+pathname+'"]').autocomplete({
                             scrollHeight: 220,
                             source: function (request, response) {
                                 $.ajax({
@@ -364,7 +376,7 @@ define([
                                 $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setActive();
                                 $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setExpanded(true);
                                 that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), ui.item.data);
-                                $('input[name="fullpath"]').val(ui.item.label);
+                                $('input[name="'+pathname+'"]').val(ui.item.label);
                             }
                         });
                     };
@@ -373,11 +385,15 @@ define([
                     {
                         $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
                         if (WebServiceUrl.substring(0,5) == 'http:' ) {
-                            var startID = AppConfig.config.startID[window.context];
+
+                            var startID = AppConfig.config.startID[this.modelToEdit.constructor.type.toLowerCase()][window.context];
                             if (!startID)
-                                startID = AppConfig.config.startID.default;
+                                startID = AppConfig.config.startID[this.modelToEdit.constructor.type.toLowerCase()].default;
+
+                            var tosend = JSON.stringify({StartNodeID: startID, lng: "fr"});
+
                             $.ajax({
-                                data        : JSON.stringify({StartNodeID: startID, lng: "fr"}),
+                                data        : tosend,
                                 type        : 'POST',
                                 url         : WebServiceUrl,
                                 contentType : 'application/json',
@@ -387,6 +403,7 @@ define([
 
                                 //  Trigger event with ajax result on the formView
                                 success: _.bind(function(data) {
+                                    console.log(data);
                                     $('#defaultNode').fancytree({
                                         source     : data,
                                         checkbox   : false,
@@ -394,7 +411,7 @@ define([
                                         activeNode : startID,
                                         click : _.bind(function(event, data) {
                                             this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                            $('input[name="fullpath"]').val(data.node.data.fullpath);
+                                            $('input[name="'+pathname+'"]').val(data.node.data.fullpath);
                                             createFullpathAutocomplete();
                                         }, this)
                                     });
@@ -570,8 +587,11 @@ define([
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
                     cancelButtonText: translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
-                    closeOnConfirm: false }, function(){cancelSettingPanel();
-                    $(".sweet-alert").find("button").trigger("click");});
+                    closeOnConfirm: false }, function(){
+                        cancelSettingPanel();
+                        $(".sweet-overlay").remove();
+                        $(".sweet-alert").remove();
+                    });
             }
             else {
                 cancelSettingPanel();
@@ -665,7 +685,6 @@ define([
                 var formValue = this.form.getValue();
                 formValue['type'] = this.currentFieldType;
 
-                alert("01");
                 this.formChannel.trigger('saveConfiguration', {
                     field : formValue
                 });
@@ -729,7 +748,6 @@ define([
          * Display success message when field has been saved as pre configurated field
          */
         displayConfigurationSaveSuccess : function() {
-            alert("03");
             swal(
                 translater.getValueFromKey('configuration.save.success') || "Sauvé !",
                 translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",

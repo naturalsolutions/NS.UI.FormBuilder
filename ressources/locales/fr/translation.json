@@ -221,7 +221,7 @@
         "childForm"                    : "Nom du formulaire fils",
         "applyTemplate"                : "Template à appliquer (valider en bas de page)",
         "objectType"                   : "Object Picker",
-        "iscollapsed"                  : "Arbre plié",
+        "iscollapsed"                  : "Arbre replié",
         "ACTrigger"                    : "Caractère d'execution de l'autocomplétion",
         "ACTriggerMinValue"            : "Le charactère minimum d'execution est 1",
         "linkedLabel"                  : "Label associé",
@@ -237,9 +237,9 @@
         "nbFixedColMinValue"           : "La valeur minimale est 1",
         "minAppearance"                : "Minimum d'apparitions",
         "minValueError"                : "La valeur minimale est 0",
-        "maxlength255"                 : "Maximum length is 255",
-        "maxlength55"                  : "Maximum length is 55",
-        "errorbetween1and5"            : "La valeur doit être comprise entre 1 et 5"
+        "maxlength255"                 : "La longueur maximale est 255",
+        "maxlength55"                  : "La longueur maximale est 55",
+        "errorbetween0and5"            : "La valeur doit être comprise entre 0 et 5"
     },
 
     "tooltip" : {
@@ -288,8 +288,8 @@
 
     "navbar" : {
         "context" : {
-            "edition" : "édition",
-            "home" : "accueil"
+            "edition" : "Edition",
+            "home" : "Accueil"
         },
         "status" : {
             "online" : "Connecté"
@@ -322,10 +322,10 @@
             "textinput"        : "Le champ sera définitivement perdu !",
             "yes"              : "Oui, supprimer",
             "no"               : "Non, annuler",
-            "deleted"          : "Supprimé !",
-            "formDeleted"      : "Votre formulaire a été supprimé !",
-            "deleteError"      : "Non supprimé !",
-            "formDeletedError" : "Votre formulaire n'a pas pu être supprimé !"
+            "deleted"          : "Champs supprimés !",
+            "formDeleted"      : "Votre formulaire a été vidé !",
+            "deleteError"      : "Champs non supprimé !",
+            "formDeletedError" : "Votre formulaire n'a pas pu être vidé !"
         },
         "exit" : {
           "yes" : "Oui quitter"
@@ -366,7 +366,7 @@
             "hasDuplicateFieldNamesError" : "Formulaire invalide !",
             "hasDuplicateFieldNames" : "Certains de vos champs ont des noms identiques",
             "formSimilarName" : "Un formulaire avec un nom similaire existe déjà !",
-            "formSimilarFrName" : "Un formulaire avec un nom d'affchage français similaire existe déjà !",
+            "formSimilarFrName" : "Un formulaire avec un nom d'affichage français similaire existe déjà !",
             "formSimilarEnName" : "Un formulaire avec un nom d'affichage anglais similaire existe déjà !",
             "circularDependency" : "Une dépendance circulaire a été détectée parmis vos childforms !!",
             "418" : "Je suis une théière !"
@@ -461,7 +461,9 @@
 
     "error" : {
       "general" : "Erreur générale",
-      "message" : "Un ou plusieurs champs ne sont pas renseignés"
+      "message" : "Un ou plusieurs champs ne sont pas renseignés",
+      "cookieCheck" : "Votre identité ne peut être vérifiée",
+      "serverAvailable" : "Merci de bien vouloir vous reconnecter"
     },
 
     "fetch" : {

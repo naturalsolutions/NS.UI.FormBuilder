@@ -7,10 +7,18 @@
 
 #settingFormPanel {
     position: absolute;
+    .slimScrollDiv {
+        height: ~"calc(100% - 198px)" !important;
+        margin-top: 5px;
+    }
 }
 
 #settingFieldPanel {
     position: relative;
+    .slimScrollDiv {
+        height: ~"calc(100% - 186px)" !important;
+        margin-top: 15px;
+    }
 }
 
 #settingFormPanel, #settingFieldPanel {
@@ -26,7 +34,7 @@
         padding-bottom: 10px;
 
         &.field-brand {
-            top: 40px;
+            top: 32px;
         }
 
         &:not(.form) {
@@ -40,7 +48,7 @@
                     text-transform: uppercase;
 
                     &:last-child {
-                        font-size     : 28px;
+                        font-size     : 24px;
                         color         : white;
                         font-weight   : 100;
                         text-transform: none;
@@ -50,12 +58,13 @@
                 &.picto
                 {
                     float         : left;
-                    width         : 119px;
-                    height        : 119px;
+                    width         : 80px;
+                    height        : 80px;
                     text-align    : center;
                     vertical-align: bottom;
-                    font-size     : 105px;
+                    font-size     : 80px;
                     color         : #706f6f;
+                    margin-right  : 10px;
                 }
             }
         }
@@ -64,12 +73,12 @@
             span {
                 &:first-child {
                     .reneco;
-                    padding-top   : 26px;
+                    padding-top   : 40px;
                     float         : left;
-                    width         : 119px;
-                    height        : 119px;
+                    width         : 90px;
+                    height        : 90px;
                     vertical-align: bottom;
-                    font-size     : 105px;
+                    font-size     : 80px;
                     color         : #706f6f;
                 }
                 &:last-child {
@@ -85,9 +94,9 @@
     footer {
         height     : 80px;
         position   : absolute;
-        bottom     : 55px;
+        bottom     : 30px;
         background : #000;
-        padding-top: 7px;
+        padding-top: 0px;
         width      : 100%!important;
         overflow   : hidden;
     }
@@ -97,11 +106,11 @@
     }
 
     .slimScrollDiv {
-        height: ~"calc(100% - 140px)" !important;
         .scroll {
             position      : relative;
             overflow      : hidden;
-            padding-bottom: 40px;
+            width: auto !important;
+            height: 100% !important;
         }
     }
 
@@ -200,7 +209,7 @@
     }
 
     form label {
-        font-family: 'Exo 2', sans-serif;
+        font-family: 'ProximaNovaLight', sans-serif;
         font-size  : 18px;
         line-height: 50px;
         height     : 30px;
@@ -210,7 +219,7 @@
     }
 
     .outerform {
-        font-family: 'Exo 2', sans-serif;
+        font-family: 'ProximaNovaLight', sans-serif;
         font-size  : 18px;
         line-height: 40px;
         height     : 30px;
@@ -387,7 +396,7 @@
                 background-color: transparent;
                 border          : none;
                 padding-left    : 0;
-                font-size: 18px;
+                font-size: 14px;
                 text-align: left;
                 font-weight: 500;
             }

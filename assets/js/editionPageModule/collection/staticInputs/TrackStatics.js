@@ -14,29 +14,6 @@ define([
     var TrackStatics = {
 
         staticInputs: {
-            "Description": {
-                "validators": [],
-                "labelFr": "Description",
-                "labelEn": "Description",
-                "name": "Description",
-                "editMode": 5,
-                "editorClass": "",
-                "fieldClassEdit": "",
-                "fieldClassDisplay": "",
-                "atBeginingOfLine": true,
-                "endOfLine": true,
-                "fieldSize": "12",
-                "linkedFieldset": "",
-                "linkedFieldTable": "",
-                "linkedFieldIdentifyingColumn": "",
-                "linkedField": "",
-                "defaultValue": "",
-                "isDefaultSQL": true,
-                "help": "",
-                "valuesize": "0;255",
-                "order": 1,
-                "type": "TextArea"
-            },
             "Individual": {
                 "validators": [],
                 "labelFr": "Individu",
@@ -110,7 +87,7 @@ define([
             },
             "eventDate": {
                 "validators": [],
-                "labelFr": "Date de l'évènement",
+                "labelFr": "Date de l'evenement",
                 "labelEn": "Event date",
                 "name": "eventDate",
                 "editMode": 3,

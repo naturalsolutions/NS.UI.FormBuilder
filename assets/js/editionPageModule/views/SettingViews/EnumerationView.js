@@ -15,10 +15,11 @@ define([
          * Default value
          */
         defaults: {
-            en: 'french label',
-            fr: 'English label',
-            value: 'val',
-            isDefaultValue: false
+
+            isDefaultValue: false,
+            fr: 'French label',
+            en: 'English label',
+            value: 'val'
         },
 
         /*initialize : function(options) {
@@ -33,10 +34,10 @@ define([
         toJSON: function () {
             return {
                 id: this.get('id'),
-                en: this.get('en'),
+                isDefaultValue: this.get('isDefaultValue'),
                 fr: this.get('fr'),
-                value: this.get('value'),
-                isDefaultValue: this.get('isDefaultValue')
+                en: this.get('en'),
+                value: this.get('value')
             }
         }
     });
@@ -108,7 +109,18 @@ define([
         initGrid: function () {
             this.grid = new Backgrid.Grid({
                 columns: this.model.columns,
-                collection: this.choices
+                collection: this.choices,
+                events : {
+                    click : function(data){
+                        var defaultval = $(data.target).find("input").val();
+                        if (defaultval == "My first Option" || defaultval == "Mon option" ||
+                            defaultval == "English value" || defaultval == "French label" ||
+                            defaultval == "1" || defaultval == "Value")
+                        {
+                            $(data.target).find("input").val("");
+                        }
+                    }
+                }
             });
 
             this.$el.find('#enumGrid').html(this.grid.render().el);

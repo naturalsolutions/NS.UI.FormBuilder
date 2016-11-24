@@ -374,13 +374,13 @@ define([
                 that.schemaDefinition[index].validators.push(value);
             });
 
-            console.log(that.schemaDefinition);
-
             //  Bind
             _.bindAll(this, 'clearAll', 'getSize', 'addElement', 'addNewElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 
             this.initFormChannel();
             this.initHookChannel();
+
+            this.formChannel = Backbone.Radio.channel('form');
         },
 
         /**
@@ -452,6 +452,12 @@ define([
         * Clear form collection
         */
         clearAll: function () {
+            /* TODO Ugly, must find a better way */
+            var that = this;
+            $.each($(".dropField"), function(index, value){
+                that.fieldstodelete.push($(value).attr("id").replace("dropField", ""));
+            });
+            $(".dropField").remove();
             this.reset();
         },
 
@@ -515,6 +521,15 @@ define([
                 return(toret);
             };
 
+            var setUnexistingStuff = function(mymodel){
+                var compulsoryProps = ['editorClass', 'fieldClassEdit', 'fieldClassDisplay'];
+
+                $.each(compulsoryProps, function(index, value){
+                    if (!mymodel[value])
+                        mymodel[value] =  '';
+                });
+            };
+
             var json         = {
                 //  form properties
                 name          : this.name,
@@ -565,6 +580,7 @@ define([
 
                         json.schema["childform" + ((Object.keys(json.schema).length + 1) || "1")] = subModel;
                     }
+
                 }
             }, this));
 
@@ -583,7 +599,11 @@ define([
                 inputVal.name = inputVal.name.replace(/\s+/g, '');
 
                 delete (inputVal.applyTemplate);
+
+                setUnexistingStuff(inputVal);
             });
+
+            console.log("json schema to send = ", json);
 
             return json;
         },

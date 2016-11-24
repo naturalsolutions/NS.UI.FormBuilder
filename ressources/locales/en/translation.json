@@ -231,7 +231,7 @@
         "minValueError"                  : "Minimal value is 0",
         "maxlength255"                   : "Maximum length is 255",
         "maxlength55"                    : "Maximum length is 55",
-        "errorbetween1and5"              : "Number must be from 1 to 5"
+        "errorbetween0and5"              : "Number must be from 0 to 5"
     },
 
     "tooltip" : {
@@ -280,8 +280,8 @@
 
     "navbar" : {
         "context" : {
-            "edition" : "edition",
-            "home" : "home"
+            "edition" : "Edition",
+            "home" : "Home"
         },
         "status" : {
             "online" : "Online"
@@ -315,10 +315,10 @@
             "textinput"        : "The input will be forever lost !",
             "yes"              : "Yes, delete it",
             "no"               : "No, cancel",
-            "deleted"          : "Deleted",
-            "formDeleted"      : "Your form has been deleted !",
-            "deleteError"      : "Form not deleted !",
-            "formDeletedError" : "Your form could not be deleted !"
+            "deleted"          : "Fields deleted",
+            "formDeleted"      : "Your form has been emptied !",
+            "deleteError"      : "Fields not deleted !",
+            "formDeletedError" : "Your form could not be emptied !"
         },
         "exit" : {
           "yes" : "Yes exit"
@@ -452,7 +452,9 @@
 
     "error" : {
         "general" : "General error",
-        "message" : "One or more field are empty"
+        "message" : "One or more field are empty",
+        "cookieCheck" : "Your identity could not be verified",
+        "serverAvailable" : "Thanks for reloging yourself"
     },
 
     "fetch" : {

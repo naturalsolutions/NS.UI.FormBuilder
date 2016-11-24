@@ -1,6 +1,8 @@
 define([
-    'jquery','marionette', '../layout/HomePageLayout', 'backbone.radio', '../models/FormModel', 'app-config', 'i18n'
-], function($, Marionette, HomePageLayout, Radio, FormModel, AppConfig) {
+    'jquery','marionette', '../layout/HomePageLayout', 'backbone.radio', '../models/FormModel', 'app-config', '../../Translater', 'i18n'
+], function($, Marionette, HomePageLayout, Radio, FormModel, AppConfig, Translater) {
+
+    var translater = Translater.getTranslater();
 
     var HomePageController = Marionette.Controller.extend({
 
@@ -87,6 +89,8 @@ define([
 
             if( newModel.template == 0) {
 
+                if (!newModel.name || newModel.name.length == 0)
+                    newModel.name = translater.getValueFromKey('modal.newForm.title') || "New Form";
                 var formToEdit = new FormModel({
                     id : 0,
                     name : newModel.name

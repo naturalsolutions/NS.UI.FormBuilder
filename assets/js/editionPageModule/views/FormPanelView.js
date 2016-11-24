@@ -177,9 +177,9 @@ define([
          * @param  {Object} collection updated attributes
          */
         updateCollectionAttributes : function(newCollectionAttributes) {
+            this.collection.updateCollectionAttributes(newCollectionAttributes);
             this.updateName();
             this.enableFooterActions();
-            this.collection.updateCollectionAttributes(newCollectionAttributes);
         },
 
         /**
@@ -187,8 +187,7 @@ define([
         * Channel send on the form channel
         */
         formSettings : function() {
-            //this.$el.find('#edit').animate({opacity : 0.2}).prop('disabled', true);
-            //this.disableFooterActionsAndExit();
+
             this.formChannel.trigger('editForm', this.collection);
         },
 
@@ -420,7 +419,7 @@ define([
                 if (isConfirm) {
                     _.map(self._view, function(el) {
                         el.removeView();
-                    })
+                    });
                     swal(
                         translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
                         translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
@@ -428,6 +427,7 @@ define([
                     );
                     self.collection.clearAll();
                     self._viewCount = 0;
+                    self.updateFieldCount();
                 }
             });
 
@@ -596,25 +596,13 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
-            console.log("NAME UPDATED ! : ", this.collection.name);
+            console.log("updating name with ", this.collection.name);
             this.$el.find('#collectionName').text(this.collection.name);
         },
 
         collectionUpdateFinished : function() {
             this.updateName();
-
-            /*
-            if ($('#collectionName').text().toLowerCase() == "new form")
-            {
-                this.formSettings();
-            }
-            */
-
-            console.log("yo boiz !");
             this.formSettings();
-
-            //this.$el.find('#scrollSection').scrollTop(0);
-            //this.$el.find('#scrollSection').animate({ scrollTop: 0 }, "fast");
         },
 
 

@@ -114,6 +114,8 @@ define([
          * Main controller action, display edition page layout
          */
         editionAction: function(options) {
+            delete this.currentEditionPageLayout;
+
             // TODO Display Context
             $('#navbarContext').text($.t('navbar.context.edition') + (window.context?' - '+window.context:''));
 
@@ -122,8 +124,9 @@ define([
                 URLOptions      : this.URLOptions
             });
 
-            console.log("TEST NEW EditionPageLayout", this.fieldCollection, this.URLOptions);
             this.editionPageRegion.show( editionPageLayout );
+
+            this.currentEditionPageLayout = editionPageLayout;
         },
 
         /**
@@ -211,7 +214,18 @@ define([
                 return(toret);
             };
 
+            var setUnexistingStuff = function(mymodel){
+                var compulsoryProps = ['editorClass', 'fieldClassEdit', 'fieldClassDisplay'];
+
+                $.each(compulsoryProps, function(index, value){
+                    if (!mymodel[value])
+                        mymodel[value] =  '';
+                });
+            };
+
             fieldToSave.field.editMode = getBinaryWeight(fieldToSave.field.editMode);
+
+            setUnexistingStuff(fieldToSave.field);
 
             $.ajax({
                 type: "POST",
@@ -219,7 +233,6 @@ define([
                 contentType : 'application/json',
                 data: JSON.stringify(fieldToSave),
                 success: _.bind(function() {
-                    alert("02");
                     this.formChannel.trigger('configurationSaved:success');
                 }, this),
                 dataType: 'json',

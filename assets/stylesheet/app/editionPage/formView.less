@@ -46,9 +46,9 @@
         }
 
         footer {
-            height        : 81px;
+            height        : 80px;
             position      : absolute;
-            bottom        : 55px;
+            bottom        : 30px;
             background    : @footerBackgroundColor;
             width         : 100% !important;
 
@@ -60,7 +60,7 @@
                 &.grey:first-child {
                     margin-right: 20px;
                 }
-                margin-top: 22.5px;
+                margin-top: 12px;
                 label:hover {
                     cursor : pointer;
                 }
@@ -137,7 +137,7 @@
 
         //  Main drop section, use perfect scroll bar library
         .scrollSection {
-            height: 90%;
+            height: ~"calc(100% - 150px)";
             overflow: hidden;
             .col-md-12:first-child {
                 height: 100%;

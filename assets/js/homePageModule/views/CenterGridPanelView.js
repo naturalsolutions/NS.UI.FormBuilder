@@ -79,13 +79,14 @@ define([
 
             this.URLOptions = options.URLOptions;
 
-            this.currentSelectedForm = 0;
+            this.currentSelectedForm = -1;
+            this.clearFooterAction();
 
             this.initGlobalChannel();
             this.initGridChannel();
             this.initHomePageChannel();
 
-            this.scrollSize = options.scrollSize || '90%';
+            this.scrollSize = options.scrollSize || '100%';
             this.importProtocolModalView = null;
         },
 
@@ -314,7 +315,6 @@ define([
 
             this.beforeFormSelection = this.currentSelectedForm;
             this.currentSelectedForm = -1;
-
             this.clearFooterAction();
         },
 
@@ -334,7 +334,7 @@ define([
          */
         updateFooterAction : function() {
             this.$el.find('footer').animate({
-                bottom : '0'
+                bottom : '-25px'
             }, 500);
             $('#add, #import').switchClass('red', 'grey', 1);
         },
@@ -346,6 +346,7 @@ define([
          */
         initClickableRow : function() {
             var that = this;
+            var selectedForm = this.currentSelectedForm;
             // By default grid not fired click event
             // But we can't create a small clickable row to get the event
             return Backgrid.Row.extend({
@@ -366,7 +367,8 @@ define([
                     });
                 },
                 onDblClick: function() {
-                    this.onClick();
+                    if (that.currentSelectedForm == -1)
+                        this.onClick();
                     that.editForm();
                 }
             });
@@ -376,6 +378,7 @@ define([
          * Initialize backgrid instance
          */
         initGrid : function() {
+
             this.grid = new Backgrid.Grid({
 
                 row: this.initClickableRow(),
@@ -400,6 +403,7 @@ define([
                     cell     : 'string',
                     editable : false
                 }],
+
                 collection : this.formCollection
             });
         },
@@ -446,6 +450,11 @@ define([
                     $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
                     //  Keep only one table row to lighten table
                     $(this.el).find("#grid2 tbody tr").slice(1).remove();
+
+                    var that = this;
+                    $(this.el).find("#grid2 th a").on("click", function(){
+                        $(that.el).find("#grid th."+$(this).parent().attr('class').replace(/ /g, ".")+" a").click();
+                    });
                 }, this),
                 error : _.bind(function() {
                     this.displayFetchError();
@@ -459,11 +468,16 @@ define([
          * Display error when the front is unable to fetch form list from the server
          */
         displayFetchError : function() {
-            swal(
-                translater.getValueFromKey('fetch.error') || "Erreur de récupération des formulaires !",
-                translater.getValueFromKey('fetch.errorMsg') || "Impossible de récupérer la liste des formulaires depuis le serveur",
-                "error"
-            );
+            /* DISABLED FOR NOW
+            setTimeout(function(){
+                swal(
+                    translater.getValueFromKey('fetch.error') || "Erreur de récupération des formulaires !",
+                    translater.getValueFromKey('fetch.errorMsg') || "Impossible de récupérer la liste des formulaires depuis le serveur",
+                    "error"
+                );
+            }, 50);
+            */
+
             this.hideSpinner();
         },
 
@@ -619,6 +633,7 @@ define([
             //  Two modules never speak directly, all communication pass htrough formbuilder App
             // TODO TODO
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
+            this.hideContextList();
         },
 
         /**
@@ -663,8 +678,9 @@ define([
                 else
                 {
                     //this.globalChannel.trigger('displayEditionPage', {});
-                    this.createFormModel("", null);
+                    this.createFormModel("", 0);
                 }
+                this.hideContextList();
 
             }, this));
 
@@ -882,9 +898,26 @@ define([
             this.template = GridPanelView;
             if (context.toLowerCase() == "all")
                 this.template = GridPanelViewAllContext;
-            this.currentSelectedForm = 0;
+            this.currentSelectedForm = -1;
+            this.clearFooterAction();
 
             this.render(this.template);
+        },
+
+        hideContextList : function()
+        {
+            console.log("hiding context list");
+
+            console.log($("#contextSwitcher .hidden"));
+
+            if ($("#contextSwitcher .hidden").length == 0)
+            {
+                $("#contextSwitcher span").addClass("hidden");
+                $("#contextSwitcher .selectedContext").removeClass("hidden");
+                $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
+                $("header span.pipe:eq(1)").attr("style", "");
+                $("#contextSwitcher").attr("style", "position:initial;");
+            }
         }
     });
 

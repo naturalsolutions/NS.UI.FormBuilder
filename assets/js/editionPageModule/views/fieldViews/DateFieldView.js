@@ -30,7 +30,7 @@ define([
                fieldClass: 'datepicker-editor'
            }).render();
 
-           this.$el.find('.col11centered').html(editor.el);
+           this.$el.find('.datepickerlocation').html(editor.el);
 
            this.$el.find('input').prop('placeholder', this.model.get('help'));
        }

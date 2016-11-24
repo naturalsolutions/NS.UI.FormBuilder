@@ -161,49 +161,13 @@ require.config({
     }
 });
 
-require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbuilder) {
+define([
+    'jquery', 'underscore', 'backbone', 'Translater', 'app-config'
+], function($, _, Backbone, Translater, AppConfig) {
 
-    var options = {
+	require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbuilder) {
 
-        // Specify URL for formBuilder configuration
-        // Replace this URL with your own
+		formbuilder.start(AppConfig.config.options);
+	});
 
-        URLOptions : {
-			// ***********************************************************************
-			// The app needs the following nodes to have a proper path to the server :
-			// ***********************************************************************
-
-            formAutocomplete 		: 'ressources/autocomplete/forms.json',						// '/FormbuilderWS/autocomplete/forms',
-			forms 					: 'ressources/forms/formsExample.json',						// '/FormbuilderWS/forms',
-            formSaveURL  			: '/forms',													//  Get all form name for autocomplete, does not work if you are in client side mode only && '/FormbuilderWS/forms',
-			preConfiguredField    	: 'ressources/fieldConfiguration/preConfiguredField.json', 	//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms && '/FormbuilderWS/configurations',
-			fieldConfigurationURL 	: 'configurationSaved', 									//  Allow to send a pre-configurated field to the server. Send a POST request, won't work on client side, you need the back-end && '/FormbuilderWS/configurations',
-            childforms              : '/childforms', 											// Child forms can get selected passing a parent form ID && '/FormbuilderWS/childforms',
-			sqlAutocomplete			: '/sqlAutocomplete', 										// Used to get values for autocomplete field && '/FormbuilderWS/sqlAutocomplete',
-            unities            		: 'ressources/autocomplete/units.json',						// Get all unities for autocomplete && '/FormBuilderWS/unities', 
-			
-			// ***********************************************************************
-			// RENECO Specific Paths :
-			// ***********************************************************************
-			
-			security				: '/Security', 												// Used for security chekings purpose (jwt among others ?) && '/FormbuilderWS/Security',
-			track					: '/Track', 												// Used for track data linking && '/FormbuilderWS/Track',
-			
-			// ************************************************
-			// Still don't know what those nodes are used for :
-			// ************************************************
-			
-            autocompleteURL       	: 'ressources/autocomplete/', 								//  Allow to get some topic for autocomplete functionnalities
-            translationURL        	: 'ressources/locales/__lng__/__ns__.json', 				//  Allows to get translation ressources (use i18nnext : http://i18next.com/ )
-            keywordAutocomplete   	: 'ressources/autocomplete/keywords.json', 					//  Get form keywords autocomplete values
-			usersAutocomplete 		: 'ressources/autocomplete/users.json',
-            linkedFields 			: 'ressources/linkedFields/linkedFields.json',				//  Allow to get linked fields list
-            templateUrl 			: 'ressources/templates/templates.json'						//  URL for form templates
-		},
-
-        //  Wich parent HTML element for the application
-        el 						: '#formBuilder'
-    };
-
-    formbuilder.start(options);
 });

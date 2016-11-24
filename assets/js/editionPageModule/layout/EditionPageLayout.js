@@ -53,7 +53,6 @@ define([
          * @param  {Object} options configuration parameters
          */
         initialize : function(options) {
-            console.log("INITED EDITIONPAGELAYOUT WITH COLLECTION", options.fieldCollection);
             this.fieldCollection = options.fieldCollection;
             this.testCollection = options.fieldCollection;
             this.URLOptions = options.URLOptions;
@@ -99,7 +98,7 @@ define([
 
             //  Event sent from setting view when modifications are cancelled
             //  Run an animation for hide setting view and display panel view
-            this.mainChannel.on('formCancel', this.closeSettingPanelDefault, this, true)
+            this.mainChannel.on('formCancel', this.closeSettingPanelDefault, this)
         },
 
         /**
@@ -131,12 +130,25 @@ define([
          * @param  {Object} formToEdit form to edit
          */
         formSetting : function(formToEdit) {
+            if (this.savedFTE)
+            {
+                if (this.savedFTE.name == formToEdit.name)
+                {
+                    return;
+                }
+                else
+                {
+                    delete this;
+                    return;
+                }
+            }
+
+            this.savedFTE = formToEdit;
+
             if (this.settingFormPanel == undefined) {
                 this.addRegion('settingFormPanel', '#settingFormPanel');
                 this.settingFormPanel = this.getRegion('settingFormPanel');
             }
-
-            console.log("Creating new SettingFormPanelView ***************");
 
             var that = this;
 
@@ -192,7 +204,7 @@ define([
          * Display ItemView like settingPanel
          */
         onRender : function() {
-            this.centerPanel.show( new FormPanelView({
+            this.centerPanel.show(new FormPanelView({
                 fieldCollection : this.fieldCollection,
                 URLOptions : this.URLOptions
             }, Backbone.Radio.channel('global').readonly));
@@ -210,14 +222,13 @@ define([
         },
 
         exitFormEdition : function() {
-            console.log("Yo, i'm here for real real real !");
+            console.log("exitFormEdition called");
         },
 
         /**
          * Animate widget panel to put it in small size
          */
         minimizeWidgetPanel : function() {
-            //console.log("minimizeWidgetPanel removed for now");
             /*
             $('#formPanel').switchClass('col-md-8', 'col-md-11', 300);
             $('#widgetPanel').switchClass('col-md-4', 'col-md-1', 300);
@@ -232,7 +243,6 @@ define([
         * Animate widget panel to put it in large size
          */
         maximizeWidgetPanel : function() {
-            //console.log("maximizeWidgetPanel removed for now");
             /*
             $('#formPanel').switchClass('col-md-11', 'col-md-8', 300);
             $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 300, function() {

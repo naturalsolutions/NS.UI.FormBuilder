@@ -40,7 +40,7 @@ define([
         var toret = [];
         if (AppConfig.paths){
             var formCollection = new FormCollection({
-                url : AppConfig.paths.forms
+                url : AppConfig.config.options.allforms
             });
 
             formCollection.fetch({
@@ -71,11 +71,7 @@ define([
             labelEn     : "",
             required    : false,
 
-            // Linked fields values
-            isLinkedField                : false,
-            linkedFieldTable             : '',
-            linkedFieldIdentifyingColumn : '',
-            linkedField                  : '',
+            // Linked fields values GONE
 
             editMode    : {visible : true, editable : true, nullable : true, nullmean : false},
             isDragged   : false,
@@ -181,31 +177,8 @@ define([
                 title       : translater.getValueFromKey('schema.editMode.editMode')
             },
 
-            //  Css field section
-            showCssProperties : {
-            type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.showCssProperties') || "showCssProperties"
-            },
-            editorClass : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.editorClass'),
-                editorClass : 'form-control',
-                fieldClass  : 'marginTop20',
-                template    : fieldTemplate
-            },
-            fieldClassEdit : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.fieldClassEdit'),
-                editorClass : 'form-control',
-                template    : fieldTemplate
-            },
-            fieldClassDisplay : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.fieldClassDisplay'),
-                editorClass : 'form-control',
-                template    : fieldTemplate
-            },
+            //  Css field section GONE
+
             atBeginingOfLine : {
                 type        : CheckboxEditor,
                 fieldClass  : "checkBoxEditor",
@@ -247,6 +220,42 @@ define([
         },
 
         initialize : function(options) {
+            if (AppConfig.appMode.topcontext != "reneco")
+            {
+                $.extend(this.schema, this.schema, {
+                    showCssProperties : {
+                        type        : CheckboxEditor,
+                        fieldClass  : "checkBoxEditor",
+                        title       : translater.getValueFromKey('schema.showCssProperties') || "showCssProperties"
+                    },
+                    editorClass : {
+                        type        : "Text",
+                        title       : translater.getValueFromKey('schema.editorClass'),
+                        editorClass : 'form-control',
+                        fieldClass  : 'marginTop20',
+                        template    : fieldTemplate
+                    },
+                    fieldClassEdit : {
+                        type        : "Text",
+                        title       : translater.getValueFromKey('schema.fieldClassEdit'),
+                        editorClass : 'form-control',
+                        template    : fieldTemplate
+                    },
+                    fieldClassDisplay : {
+                        type        : "Text",
+                        title       : translater.getValueFromKey('schema.fieldClassDisplay'),
+                        editorClass : 'form-control',
+                        template    : fieldTemplate
+                    }
+                });
+
+                $.extend(this.defaults, this.defaults, {
+                    isLinkedField                : false,
+                    linkedFieldTable             : '',
+                    linkedFieldIdentifyingColumn : '',
+                    linkedField                  : ''
+                });
+            }
             _.bindAll(this, 'getJSON');
         },
 
@@ -812,17 +821,37 @@ define([
     models.PositionField = models.BaseField.extend({
         defaults: function() {
             return _.extend( {}, models.BaseField.prototype.defaults, {
-                positionPath : ""
+                webServiceURL : AppConfig.paths.positionWSPath,
+                positionPath : "",
+                defaultNode: ""
             });
         },
         schema: function() {
             return _.extend( {}, models.BaseField.prototype.schema, {
+                webServiceURL : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.node.url')
+                    }
+                },
                 positionPath : {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.positionPath'),
                     validators : ['required']
+                },
+                defaultNode: {
+                    type  : 'Text',
+                    title : translater.getValueFromKey('schema.defaultNode'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.tree.default')
+                    }
                 }
             });
         },
@@ -962,23 +991,32 @@ define([
 
         defaults: function() {
             return _.extend( {}, models.BaseFieldExtended.prototype.defaults(), {
-                format: "dd/mm/yyyy",
+                format: (AppConfig.appMode.topcontext == "reneco" ? "DD/MM/YYYY" : "DD/MM/YYYY"),
                 help : translater.getValueFromKey('placeholder.date')
             });
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseFieldExtended.prototype.schema(), {
-                format: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.format'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.format'),
-                        disabled : (AppConfig.appMode.topcontext == "reneco")
-                    }
+
+            var formatFieldProps = {
+                type        : 'Text',
+                editorClass : 'form-control',
+                template    : fieldTemplate,
+                title       : translater.getValueFromKey('schema.format'),
+                editorAttrs : {
+                    placeholder : translater.getValueFromKey('placeholder.format')
                 }
+            };
+
+            if (AppConfig.appMode.topcontext == "reneco")
+            {
+                formatFieldProps.type = 'Select';
+                delete formatFieldProps.editorAttrs;
+                formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
+            }
+
+            return _.extend( {}, models.BaseFieldExtended.prototype.schema(), {
+                format: formatFieldProps
             });
         },
 
@@ -1153,10 +1191,10 @@ define([
                 choices: [
                     {
                         id             : 1,
-                        value          : "1",
-                        en             : "My first Option",
+                        isDefaultValue : false,
                         fr             : 'Mon option',
-                        isDefaultValue : false
+                        en             : "My first Option",
+                        value          : "1"
                     }
                 ],
                 //  the default value refers to the default choice id
@@ -1189,13 +1227,13 @@ define([
                 cell     : 'boolean'
             },
             {
-                name     : 'en',
-                label    : 'en',
+                name     : 'fr',
+                label    : 'fr',
                 cell     : 'string'
             },
             {
-                name     : 'fr',
-                label    : 'fr',
+                name     : 'en',
+                label    : 'en',
                 cell     : 'string'
             },
             {
@@ -1215,11 +1253,12 @@ define([
          * Default value when we add a new row
          */
         columDefaults : {
-            en             : 'English value',
+
+            isDefaultValue : false,
             fr             : 'French label',
+            en             : 'English value',
             value          : 'Value',
-            action         : '',
-            isDefaultValue : false
+            action         : ''
         },
 
         /**

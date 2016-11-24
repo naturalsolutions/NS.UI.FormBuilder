@@ -13,8 +13,13 @@ define([
     'editionPageModule/controller/EditionPageController',
     'homePageModule/collection/FormCollection',
     'backbone.radio',
-    'app-config'
-], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController, FormCollection, Radio, AppConfig) {
+    'app-config',
+    'sweetalert',
+    'Translater'
+], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController,
+            FormCollection, Radio, AppConfig, swal, Translater) {
+
+    var translater = Translater.getTranslater();
 
     //  Create a marionette application
     var FormbuilderApp = new Backbone.Marionette.Application();
@@ -188,7 +193,13 @@ define([
                 $("header .icons.last").removeClass("hidden");
             }, this),
             error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                window.location.href = AppConfig.portalURL;
+                swal({
+                    title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
+                    text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
+                    type: "error"
+                }, function(){
+                    window.location.href = AppConfig.portalURL;
+                });
             }, this)
         });
         }
