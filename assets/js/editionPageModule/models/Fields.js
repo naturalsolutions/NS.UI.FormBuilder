@@ -658,8 +658,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ChildForm");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ChildForm"), {
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 childForm : "",
                 childFormName : "",
                 help : translater.getValueFromKey('placeholder.childform')
@@ -1277,11 +1276,15 @@ define([
     models.SelectField = models.EnumerationField.extend({
 
         defaults : function() {
-            return models.EnumerationField.prototype.defaults();
+            return _.extend({},
+                models.EnumerationField.prototype.defaults(),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
         },
 
         schema : function() {
-            return models.EnumerationField.prototype.schema();
+            return _.extend({},
+                models.EnumerationField.prototype.schema(),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,

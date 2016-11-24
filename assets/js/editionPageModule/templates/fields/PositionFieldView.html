@@ -4,7 +4,7 @@
             <i class="reneco reneco-pin"></i>
         </label>
         <label class="field-label">
-            <%= labelFr %>
+            <%= labelFr %><% if (required === true) { %> (*) <% } %>
             <span data-i18n="fields.position" class="fieldType"></span>
         </label>
         <% if ($('.sizepreview').hasClass('selected')) { %>
@@ -19,7 +19,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div style="color:white; min-height:30px;"><%= positionPath %></div>
+            <div class="col-md-12 positionField paddingLeft0 paddingRight0" id="position<%= id %>"></div>
         </div>
     </div>
 </div>

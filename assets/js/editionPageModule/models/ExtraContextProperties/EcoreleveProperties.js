@@ -60,6 +60,28 @@ define([
                         title       : translater.getValueFromKey('schema.iscollapsed')
                     }
                 }
+            },
+            Select:{
+                defaults: {
+                    defaultValue : "",
+                    isDefaultSQL : false
+                },
+                schema: {
+                    defaultValue: {
+                        type        : 'Text',
+                        title       : translater.getValueFromKey('schema.default'),
+                        editorClass : 'form-control',
+                        template    : fieldTemplate,
+                        editorAttrs : {
+                            placeholder : translater.getValueFromKey('placeholder.valueSQL')
+                        }
+                    },
+                    isDefaultSQL: {
+                        type        : CheckboxEditor,
+                        fieldClass  : "hidden",
+                        title       : "isSQL"
+                    }
+                }
             }
         },
 

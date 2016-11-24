@@ -4,8 +4,10 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/PositionFieldView.html',
-    'text!editionPageModule/templates/fields/readonly/PositionFieldView.html'
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
+    'text!editionPageModule/templates/fields/readonly/PositionFieldView.html',
+    'backbone.radio',
+    'app-config'
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, AppConfig) {
 
     var PositionFieldView = BaseView.extend({
 

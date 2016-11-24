@@ -156,7 +156,10 @@ define([
             },
             keywordsFr : {
                 type        : PillboxEditor,
-                title       : translater.getValueFromKey('form.keywords.fr')
+                title       : translater.getValueFromKey('form.keywords.fr'),
+                editorAttrs : {
+                    placeholder : "testage"
+                }
             },
             keywordsEn : {
                 type        : PillboxEditor,
@@ -1203,7 +1206,7 @@ define([
                             if (data.form.schema) {
                                 $.each(data.form.schema, function (index, inputVal) {
                                     $.each(that.models, function (modelindex, modelinputVal) {
-                                        if (modelinputVal.attributes.name == index) {
+                                        if (modelinputVal.attributes.name == inputVal.name) {
                                             that.models[modelindex].set('id', inputVal.id);
                                         }
                                     });

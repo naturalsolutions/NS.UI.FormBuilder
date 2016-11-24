@@ -213,8 +213,8 @@ define([
                     this.$el.find('.general-error').html('').hide();
                 }
                 swal(
-                    this.translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
-                    this.translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
+                    this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Erreur",
+                    this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Champ obligatoire non renseigné",
                     "error"
                 );
                 return (false);
@@ -310,6 +310,9 @@ define([
 
                     schemaDefinition.keywordsFr.value = keywordFr;
                     schemaDefinition.keywordsEn.value = keywordEn;
+
+                    console.log(schemaDefinition.keywordsFr, schemaDefinition.keywordsFr.value);
+                    console.log(schemaDefinition.keywordsEn, schemaDefinition.keywordsEn.value);
 
                     this.form = new Backbone.Form({
                         schema: schemaDefinition,
