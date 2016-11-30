@@ -492,7 +492,7 @@ define([
 
             switch (model.constructor.type) {
                 case 'CheckBox':
-                    subModel['type'] = (model.constructor.type === "CheckBox") ? 'Checkbox' : model.constructor.type;
+                    subModel['type'] = (model.constructor.type === "CheckBox") ? 'Checkboxes' : model.constructor.type;
                     break;
 
                 default:
