@@ -22,6 +22,7 @@ define([
         initialize : function(options, readonly) {
             var opt = options;
             opt.template = viewTemplate;
+            console.log("coucou FIELD !");
             if (readonly)
                 opt.template = viewTemplateRO
             BaseView.prototype.initialize.apply(this, [opt]);

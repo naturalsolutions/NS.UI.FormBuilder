@@ -17,10 +17,18 @@ define([
 
         },
 
+        compulsoryInputs: [
+
+        ],
+
         getStaticInputs: function(form){
             return({
 
             });
+        },
+
+        getCompulsoryInputs: function(){
+            return(TrackStatics.compulsoryInputs);
         },
 
         applyRules: function(form, json)

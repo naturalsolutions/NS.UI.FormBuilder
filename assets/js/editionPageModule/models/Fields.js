@@ -38,9 +38,9 @@ define([
 
     var getFormsList = function(context){
         var toret = [];
-        if (AppConfig.paths){
+        if (AppConfig.config.options.URLOptions){
             var formCollection = new FormCollection({
-                url : AppConfig.config.options.allforms
+                url : AppConfig.config.options.URLOptions.allforms
             });
 
             formCollection.fetch({
@@ -80,7 +80,6 @@ define([
             fieldClassEdit  : '',
             fieldClassDisplay  : '',
             atBeginingOfLine : false,
-            endOfLine   : false,
             fieldSize   : 12,
             linkedFieldset               : '',
 
@@ -135,13 +134,6 @@ define([
                 editorClass : 'form-control',
                 options : []
             },
-            linkedFieldIdentifyingColumn : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
             linkedField : {
                 type : 'Select',
                 title       : translater.getValueFromKey('schema.linkedField'),
@@ -183,11 +175,6 @@ define([
                 type        : CheckboxEditor,
                 fieldClass  : "checkBoxEditor",
                 title       : translater.getValueFromKey('schema.atBeginingOfLine') || "atBeginingOfLine"
-            },
-            endOfLine : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.eol') || "endOfLine"
             },
             fieldSize : {
                 type        : 'Number',
@@ -252,7 +239,6 @@ define([
                 $.extend(this.defaults, this.defaults, {
                     isLinkedField                : false,
                     linkedFieldTable             : '',
-                    linkedFieldIdentifyingColumn : '',
                     linkedField                  : ''
                 });
             }
@@ -875,7 +861,8 @@ define([
                 defaultValue : "",
                 isDefaultSQL : false,
                 help         : translater.getValueFromKey('placeholder.text'),
-                valuesize    : AppConfig.sizes.strings.defaultsize
+                valuesize    : AppConfig.sizes.strings.defaultsize,
+                maxLength    : 255
             });
         },
 
@@ -909,7 +896,25 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.size'),
-                    options     : AppConfig.sizes.getStringSizes()
+                    options     : AppConfig.sizes.getStringSizes(),
+                    fieldClass  : "hidden"
+                },
+                maxLength: {
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.maxTextLength'),
+                    validators : [function checkValue(value, formValues) {
+                        if (value < 1 || value > 255) {
+                            return {
+                                type : translater.getValueFromKey('schema.maxTextLengthError'),
+                                message : translater.getValueFromKey('schema.maxTextLengthMin')
+                            }
+                        }
+                    }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('schema.maxlength255')
+                    }
                 }
             })
         },
@@ -989,10 +994,17 @@ define([
     models.DateField = models.BaseFieldExtended.extend({
 
         defaults: function() {
-            return _.extend( {}, models.BaseFieldExtended.prototype.defaults(), {
-                format: (AppConfig.appMode.topcontext == "reneco" ? "DD/MM/YYYY" : "DD/MM/YYYY"),
+            var toret = _.extend( {}, models.BaseFieldExtended.prototype.defaults(), {
+                format: (AppConfig.appMode.topcontext == "reneco" ? "DD/MM/YYYY" : ""),
                 help : translater.getValueFromKey('placeholder.date')
             });
+
+            if (AppConfig.appMode.topcontext == "reneco")
+            {
+                toret.fieldSize = 2;
+            }
+
+            return (toret);
         },
 
         schema: function() {
@@ -1395,13 +1407,6 @@ define([
             linkedFieldTable : {
                 type : 'Select',
                 title       : translater.getValueFromKey('schema.linkedFieldTable'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
-            linkedFieldIdentifyingColumn : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
                 options : []

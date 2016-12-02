@@ -24,11 +24,9 @@ define([
                 "fieldClassEdit": "",
                 "fieldClassDisplay": "",
                 "atBeginingOfLine": true,
-                "endOfLine": true,
                 "fieldSize": "6",
                 "linkedFieldset": "",
                 "linkedFieldTable": null,
-                "linkedFieldIdentifyingColumn": null,
                 "linkedField": null,
                 "defaultValue": "",
                 "help": "Bird ring",
@@ -48,11 +46,9 @@ define([
                 "fieldClassEdit": "",
                 "fieldClassDisplay": "",
                 "atBeginingOfLine": true,
-                "endOfLine": true,
                 "fieldSize": "6",
                 "linkedFieldset": "",
                 "linkedFieldTable": "",
-                "linkedFieldIdentifyingColumn": "",
                 "linkedField": "",
                 "defaultValue": "",
                 "help": "Egg ring",
@@ -72,11 +68,9 @@ define([
                 "fieldClassEdit": "",
                 "fieldClassDisplay": "",
                 "atBeginingOfLine": true,
-                "endOfLine": true,
                 "fieldSize": "6",
                 "linkedFieldset": "",
                 "linkedFieldTable": "",
-                "linkedFieldIdentifyingColumn": "",
                 "linkedField": "",
                 "defaultValue": "",
                 "isDefaultSQL": true,
@@ -95,11 +89,9 @@ define([
                 "fieldClassEdit": "",
                 "fieldClassDisplay": "",
                 "atBeginingOfLine": true,
-                "endOfLine": true,
                 "fieldSize": 6,
                 "linkedFieldset": "",
                 "linkedFieldTable": "",
-                "linkedFieldIdentifyingColumn": "",
                 "linkedField": "",
                 "defaultValue": "",
                 "isDefaultSQL": false,
@@ -119,11 +111,9 @@ define([
                 "fieldClassEdit": "",
                 "fieldClassDisplay": "",
                 "atBeginingOfLine": true,
-                "endOfLine": true,
                 "fieldSize": "6",
                 "linkedFieldset": "",
                 "linkedFieldTable": "",
-                "linkedFieldIdentifyingColumn": "",
                 "linkedField": "",
                 "defaultValue": "",
                 "isDefaultSQL": true,
@@ -134,6 +124,14 @@ define([
             }
         },
 
+        compulsoryInputs: [
+            "Individual",
+            "Egg",
+            "UserReadonly",
+            "eventDate",
+            "TSai_PK_ID"
+        ],
+
         getStaticInputs: function(){
             var toret = TrackStatics.staticInputs;
             $.each(toret, function(index, value){
@@ -141,6 +139,10 @@ define([
                     value.id = 0;
             });
             return(toret);
+        },
+
+        getCompulsoryInputs: function(){
+            return(TrackStatics.compulsoryInputs);
         },
 
         applyRules: function(form, json)

@@ -25,7 +25,16 @@ define([
 
         },
 
+        compulsoryInputs: [
+
+        ],
+
         getStaticInputs: function(form){
+            return({
+            });
+        },
+
+        getCompulsoryInputs: function(){
             return({
             });
         },

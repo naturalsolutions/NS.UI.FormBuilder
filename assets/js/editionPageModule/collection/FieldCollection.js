@@ -558,6 +558,13 @@ define([
                 json[index] = that[index];
             });
 
+            if (json.actif)
+            {
+                json.actif = 1;
+                if (json.obsolete)
+                    json.actif = 0;
+            }
+
             if (PostOrPut == "POST")
             {
                 json.schema = staticInputs.getStaticInputs(this);
@@ -684,6 +691,7 @@ define([
 
             field['order'] = that.getSize();
 
+            console.log("coucou !");
             var toret = that.addField(new Fields[nameType](field), isUnderFieldset);
 
             return toret;
@@ -701,6 +709,7 @@ define([
             // field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();
 
+            console.log("coucou2 !");
             return this.addField(new Fields[nameType](field), isUnderFieldset, true);
         },
 
@@ -1361,7 +1370,7 @@ define([
         var context = staticsToSet ||  window.context || $("#contextSwitcher .selectedContext").text();
         if (context.toLowerCase() != "all")
             staticInputs = ContextStaticInputs.getStaticMode(context);
-    }
+    };
 
     return Form;
 });

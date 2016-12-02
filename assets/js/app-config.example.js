@@ -44,14 +44,15 @@ define([
         ],
 
         config : {
-            //  Thesaurus startID
             startID : {
+				// Thesaurus startID
 				thesaurus :{
 					default : 0,
 					track : 0,
 					ecoreleve : 0,
 					ecollection : 0
 				},
+				// Position startID
 				position :{
 					default : 0,
 					track : 0,
@@ -217,7 +218,6 @@ define([
                 'Date',
                 'TextArea',
                 'Number',
-                'Select',
                 'Thesaurus',
                 'CheckBox',
                 'ChildForm',
@@ -226,7 +226,21 @@ define([
             ]
 			
 			***************/
-        }
+        },
+		
+		allowedConvert : {
+			default : [
+				['Text', 'TextArea', 'Date', 'Pattern'],
+				['Number', 'Decimal', 'NumericRange'],
+				['Select', 'CheckBox', 'Radio']
+			],
+			allOpen : [
+				['Autocomplete', 'File', 'TreeView', 'Thesaurus', 'AutocompleteTreeView',
+				'ChildForm', 'ObjectPicker', 'SubFormGrid', 'Position', 'Text', 'TextArea',
+				'Date', 'Pattern', 'Number', 'Decimal', 'NumericRange', 'Select', 'CheckBox',
+				'Radio']
+			]
+		}
     };
 
     return AppConfiguration;

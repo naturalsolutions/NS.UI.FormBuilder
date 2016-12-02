@@ -1,9 +1,12 @@
 <div>
 
+    <!--
     <div id="toggle" class="closed">
         <span class="glyphicon glyphicon-th-list"></span>
     </div>
+    -->
 
+    <!--
     <div id="features">
         <div id="accordion" class="container-fluid">
             <% var type = '', i18n = ''; %>
@@ -30,8 +33,6 @@
                     %>
                         <div class="<%= clasS %>"  data-type="<%= type %>">
                             <div data-type="<%= type %>" class="fields" data-i18n="[title]tooltip.<%= i18n %>">
-                                <!-- Exception for childform, understood as a subform TODO OBJECTPICKER PICTO -->
-                                <!-- <i class="picto-<%= (i18n == 'childform'?'subform':i18n) %>"></i> -->
                                 <i class="picto-<%= (i18n == 'childform'?'subform':i18n) %>"></i>
                                 <label data-i18n="fields.<%= i18n %>" data-type="<%= type %>">
                                     <%= i18n %>
@@ -44,7 +45,7 @@
             <%}; %>
         </div>
     </div>
-
+    -->
     <div id="smallFeatures">
         <div class="scroll">
             <% for (var n in section) {

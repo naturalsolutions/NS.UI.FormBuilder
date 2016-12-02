@@ -8,11 +8,14 @@ define([
     'sweetalert',
     '../../Translater',
     '../../app-config',
+    '../collection/staticInputs/ContextStaticInputs',
     'i18n',
     'slimScroll'    
-], function($, Marionette, FormPanelViewTpl, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal, Translater, AppConfig) {
+], function($, Marionette, FormPanelViewTpl, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal,
+            Translater, AppConfig, ContextStaticInputs) {
 
     var translater = Translater.getTranslater();
+    var staticInputs = ContextStaticInputs;
     
     /**
      * The form view represents the current form. It's a the edition module main view.
@@ -64,6 +67,7 @@ define([
          */
         initialize : function(options, readonly) {
             var topcontext = "";
+
             if (AppConfig.appMode.topcontext != "classic")
             {
                 topcontext = AppConfig.appMode.topcontext
@@ -96,6 +100,8 @@ define([
             this.initFormChannel();
             this.initMainChannel();
             this.initCollectionChannel();
+
+            setStatics(options.context);
         },
 
         /**
@@ -229,7 +235,8 @@ define([
                         model: newModel,
                         collection: this.collection,
                         urlOptions: this.URLOptions
-                    }, Backbone.Radio.channel('global').readonly);
+                    }, Backbone.Radio.channel('global').readonly ||
+                        $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
                     if (vue !== null) {
                         vue.render();
                         this._view[id] = vue;
@@ -645,6 +652,12 @@ define([
             }
         }
     });
+
+    var setStatics = function(staticsToSet){
+        var context = staticsToSet ||  window.context || $("#contextSwitcher .selectedContext").text();
+        if (context.toLowerCase() != "all")
+            staticInputs = ContextStaticInputs.getStaticMode(context);
+    };
 
     return FormPanelView;
 

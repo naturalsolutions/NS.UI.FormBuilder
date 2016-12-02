@@ -180,6 +180,9 @@
         "multiline"         : "Multi ligne",
         "min"               : "Valeur minimale",
         "max"               : "Valeur maximale",
+        "maxTextLength"     : "Longueur maximale",
+        "maxTextLengthError": "Longueur invalide",
+        "maxTextLengthMinMax": "La longueur doit être supérieure à 0 et inférieure à 256 !",
         "precision"         : "Précision",
         "unity"             : "Unité",
         "pattern"           : "Masque de saisie",
@@ -195,7 +198,7 @@
         "fieldSizeDisplay"  : "Taille d'affichage en mode Affichage",
         "fieldSize"         : "Taille d'affichage (X/12)",
         "fullpath"          : "Chemin entier",
-        "obsolete"          : "Obsolète",
+        "obsolete"          : "Inactif",
         "sizeValue" : {
             "small"  : "Etroit",
             "medium" : "Moyen",
@@ -309,7 +312,9 @@
             "save"       : "Sauvegarder",
             "validate"   : "Valider",
             "cancel"     : "Annuler",
-            "listOfParentForms" : "Liste des formulaires parents :"
+            "listOfParentForms" : "Liste des formulaires parents :",
+            "convertType" : "Convertir le champ",
+            "chooseNewType" : "Choisissez un nouveau type d'input :"
         },
         "preField" : "Champs pré configurés"
     },

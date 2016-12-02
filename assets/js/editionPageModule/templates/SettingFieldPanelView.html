@@ -55,7 +55,7 @@
 
     </div>
 
-    <div class="row" data-setting="field">
+    <div class="row templatingArea" data-setting="field">
         <div class="col-md-6">
             <button id="applyTemplateButton" class="transparent reneco2" data-i18n="settings.actions.applyTemplate">
                 Appliquer le template
@@ -67,6 +67,24 @@
             </button>
         </div>
     </div>
+
+    <div class="row convertArea" data-setting="field">
+        <div class="col-md-6 col-md-offset-3 convertStep1">
+            <button id="convertTypeButton" class="transparent reneco2" data-i18n="settings.actions.convertType">
+                Convertir le champ
+            </button>
+        </div>
+        <div class="col-md-12 convertStep2">
+            <div class="col-md-6 chooseTypeLabel" data-i18n="settings.actions.chooseNewType">
+                Choisissez un nouveau type d'input :
+            </div>
+            <div class="col-md-6">
+                <select id="inputTypeList">
+                </select>
+            </div>
+        </div>
+    </div>
+
 </div>
 <footer class="row">
     <div class="col-md-10 col-md-offset-1">

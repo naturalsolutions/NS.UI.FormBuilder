@@ -36,6 +36,7 @@ define([
             'click #saveChange'           : 'saveChange',
             'click #saveButton'           : 'saveField',
             'click #applyTemplateButton'  : 'applyTemplateField',
+            'click #convertTypeButton'    : 'showConvertType',
             'change .checkboxField input' : 'checkboxChange',
             'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
@@ -177,8 +178,6 @@ define([
                 this.form.fields.linkedField.$el.animate({opacity: 1}, 300);
                 this.form.fields.linkedFieldTable.$el.removeClass('hide');
                 this.form.fields.linkedFieldTable.$el.animate({opacity: 1}, 300);
-                this.form.fields.linkedFieldIdentifyingColumn.$el.removeClass('hide');
-                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 1}, 300);
             }
             else
             {
@@ -186,8 +185,6 @@ define([
                     that.form.fields.linkedField.$el.addClass('hide')});
                 this.form.fields.linkedFieldTable.$el.animate({opacity: 0}, 300, function(){
                     that.form.fields.linkedFieldTable.$el.addClass('hide')});
-                this.form.fields.linkedFieldIdentifyingColumn.$el.animate({opacity: 0}, 300, function(){
-                    that.form.fields.linkedFieldIdentifyingColumn.$el.addClass('hide')});
             }
 
             if (disable)
@@ -270,7 +267,6 @@ define([
                     //  Update linked fields
                     this.form.fields.linkedField.editor.setOptions(linkedFieldsKeyList);
                     this.form.fields.linkedFieldTable.editor.setOptions(this.linkedFieldsList.tablesList);
-                    this.form.fields.linkedFieldIdentifyingColumn.editor.setOptions(this.linkedFieldsList.identifyingColumns);
                 }
 
                 disable = linkedFieldsKeyList.length == 0 || this.linkedFieldsList.tablesList.length == 0 ||
@@ -281,7 +277,7 @@ define([
 
             //  Disable all select at start
             this.disableOrEnableCssEditionFields(false);
-            this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldIdentifyingColumn && attr.linkedFieldTable, disable);
+            this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldTable, disable);
             this.bindLinkedFieldSelect();
             this.bindCssEditorsSelect();
         },
@@ -448,6 +444,67 @@ define([
 
                 this.initScrollBar();
 
+                var getAllFieldsetsNames = function()
+                {
+                    var toret = [];
+
+                    $.each(that.modelToEdit.collection.models, function(index, value){
+                        var linkedFieldset = value.attributes.linkedFieldset;
+                        if (linkedFieldset && linkedFieldset.length > 0)
+                            toret.push(linkedFieldset);
+                    });
+
+                    return (toret);
+                };
+
+                var elLinkedFieldset = $("[name='linkedFieldset']");
+
+                if (elLinkedFieldset.length > 0)
+                {
+                    elLinkedFieldset.autocomplete({
+                        minLength: 1,
+                        source : getAllFieldsetsNames()
+                    });
+                }
+
+                var getCompatibleInputs = function()
+                {
+                    var toret = [];
+                    var compatibilityToUse = AppConfig.allowedConvert.default;
+
+                    if (AppConfig.allowedConvert[window.context])
+                        compatibilityToUse = AppConfig.allowedConvert[window.context];
+
+                    console.log(compatibilityToUse);
+
+                    $.each(compatibilityToUse, function(index, value){
+                        console.log(that.modelToEdit.constructor.type);
+                        console.log(value);
+                        if (_.contains(value, that.modelToEdit.constructor.type))
+                        {
+                            $.each(value, function(subindex, subvalue){
+                                console.log(subvalue);
+                                if (subvalue != that.modelToEdit.constructor.type)
+                                    toret.push(subvalue);
+                            });
+                        }
+                    });
+
+                    console.log(toret);
+
+                    return(toret);
+                };
+
+                $.each(getCompatibleInputs(), function(index, value){
+                    if (value != that.modelToEdit.constructor.type)
+                    {
+                        $('#inputTypeList').append($('<option>', {
+                            value: value,
+                            text: value
+                        }));
+                    }
+                });
+
             }, this));
         },
 
@@ -562,8 +619,6 @@ define([
                 this.form.setValue({'required': false});
                 this.$el.find('input[name="required"]').prop('checked', false)
             }
-
-            //this.$el.find('input[name="endOfLine"]').prop('checked', choice['endOfLine'] != undefined)
         },
 
 
@@ -639,7 +694,6 @@ define([
 
                     if (!this.modelToEdit.get('isLinkedField')) {
                         this.modelToEdit.set('linkedField', '');
-                        this.modelToEdit.set('linkedFieldIdentifyingColumn', '');
                         this.modelToEdit.set('linkedFieldTable', '');
                     }
 
@@ -743,6 +797,10 @@ define([
             }
         },
 
+        showConvertType : function() {
+            $(".convertStep1").hide();
+            $(".convertStep2").show();
+        },
 
         /**
          * Display success message when field has been saved as pre configurated field

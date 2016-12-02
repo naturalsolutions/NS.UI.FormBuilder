@@ -172,6 +172,9 @@
         "multiline"         : "Multiline",
         "min"               : "Minimal value",
         "max"               : "Maximal value",
+        "maxTextLength"     : "Maximum length",
+        "maxTextLengthError": "Invalid length",
+        "maxTextLengthMin"  : "Length must be above 0 and below 256 !",
         "precision"         : "Step",
         "unity"             : "Unity",
         "pattern"           : "Pattern value",
@@ -187,7 +190,7 @@
         "fieldSizeDisplay"  : "Field display size for Display mode",
         "fieldSize"         : "Field display size (X/12)",
         "fullpath"          : "Full path",
-        "obsolete"          : "Obsolete",
+        "obsolete"          : "Inactive",
         "sizeValue" : {
             "small"  : "Small",
             "medium" : "Medium",
@@ -301,7 +304,9 @@
             "save" : "Save changes",
             "validate"   : "Validate",
             "cancel" : "Cancel",
-            "listOfParentForms" : "List of parent forms:"
+            "listOfParentForms" : "List of parent forms:",
+            "convertType" : "Convert the input",
+            "chooseNewType" : "Choose a new input type:"
         },
         "preField" : "Pre-configurated field"
     },

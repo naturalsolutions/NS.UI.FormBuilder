@@ -214,11 +214,15 @@ define([
                     title       : translater.getValueFromKey('form.groupe'),
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    options : []
+                    options : [],
+                    validators  : [{
+                        type : 'required'
+                    }]
                 },
                 actif : {
                     type        : 'Select',
                     title       : translater.getValueFromKey('form.actif.title'),
+                    fieldClass  : "hidden",
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     options : [

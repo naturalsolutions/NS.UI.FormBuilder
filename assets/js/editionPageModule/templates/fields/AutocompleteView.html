@@ -5,7 +5,8 @@
         </label>
         <label class="field-label">
             <%= labelFr %><% if (required === true) { %> (*) <% } %>
-            <span data-i18n="fields.autocomplete" class="fieldType"></span><span style="float:right;margin-left:10px;font-size:x-small"><%= (isSQL?"SQL":"Service") %></span>
+            <span data-i18n="fields.autocomplete" class="fieldType"></span><span style="float:right;margin-right:10px;font-size:x-small">
+            <%= (isSQL && url!=""?"SQL":"") %><%= (!isSQL && url!=""?"Service":"") %></span>
         </label>
         <% if ($('.sizepreview').hasClass('selected')) { %>
         <div class="pull-right actions" style="display:none;">
