@@ -28,7 +28,7 @@ define([
         },
 
         getCompulsoryInputs: function(){
-            return(TrackStatics.compulsoryInputs);
+            return(EcoreleveStatics.compulsoryInputs);
         },
 
         applyRules: function(form, json)

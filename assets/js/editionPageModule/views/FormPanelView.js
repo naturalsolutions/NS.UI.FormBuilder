@@ -67,6 +67,8 @@ define([
          */
         initialize : function(options, readonly) {
             var topcontext = "";
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+            var that = this;
 
             if (AppConfig.appMode.topcontext != "classic")
             {
@@ -91,6 +93,39 @@ define([
             this.URLOptions     = options.URLOptions;
             this._viewCount     = 0;
 
+            if (context == "track")
+            {
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url:  this.URLOptions.trackTypes + "/" + "fr",
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        that.collection.tracktypes = data.types;
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr);
+                    }, this)
+                });
+            }
+
+            $.ajax({
+                data: {},
+                type: 'GET',
+                url:  this.URLOptions.forms + "/getAllInputNames/" + context,
+                contentType: 'application/json',
+                crossDomain: true,
+                success: _.bind(function (data) {
+                    data = JSON.parse(data);
+                    that.collection.contextInputNames = data;
+                }, this),
+                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    console.log("Ajax Error: " + xhr);
+                }, this)
+            });
+
             //  Bind collection events
             this.collection.bind('add', this.addElement, this);         //  new element added on the collection
             this.collection.bind('remove', this.removeElement, this);   //  element removed from the collection
@@ -101,7 +136,7 @@ define([
             this.initMainChannel();
             this.initCollectionChannel();
 
-            setStatics(options.context);
+            setStatics(context);
         },
 
         /**
@@ -313,7 +348,7 @@ define([
             this.$el.find('.drop').disableSelection();
 
             this.$el.find('#scrollSection').slimScroll({
-                height        : '90%',
+                height        : 'calc(100% - 20px)',
                 railVisible   : true,
                 alwaysVisible : true,
                 railColor     : "#111"
@@ -603,7 +638,6 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
-            console.log("updating name with ", this.collection.name);
             this.$el.find('#collectionName').text(this.collection.name);
         },
 

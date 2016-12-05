@@ -19,6 +19,12 @@
         height: ~"calc(100% - 186px)" !important;
         margin-top: 15px;
     }
+
+    #defaultNode {
+        max-height: 400px;
+        overflow: auto;
+    }
+
 }
 
 #settingFormPanel, #settingFieldPanel {
@@ -404,24 +410,55 @@
         }
     }
 
-    .templatingArea {
-        margin-right: 7px;
-        margin-left: -3px;
-    }
-
     .convertArea {
 
         .convertStep2 {
             display: none;
-            margin-top: 10px;
-            padding-bottom: 30px;
+            padding-bottom: 20px;
         }
 
         .chooseTypeLabel {
             margin-top: 20px;
         }
+
+        #convertTypeButton, #convertActionButton {
+            margin-top: 20px !important;
+        }
     }
 
+    .loadTemplateArea {
+
+        margin-top: -20px;
+
+        .chooseTemplateLabel {
+            padding-right: 0;
+            margin-top: 30px;
+        }
+
+        .bootstrap-select {
+            width:100%;
+            padding-right: 15px;
+        }
+
+        #applyTemplateButton {
+            margin-top: 10px !important;
+            margin-bottom: 10px !important;
+            height: 35px !important;
+            width: 30px !important;
+        }
+
+        hr {
+            margin-bottom: -10px;
+            width: 100%;
+        }
+    }
+
+    .saveTemplateArea {
+
+        #saveButton {
+            margin-top: 20px !important;
+        }
+    }
 }
 
 /* icons */

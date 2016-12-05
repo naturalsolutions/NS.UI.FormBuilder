@@ -234,6 +234,7 @@
         "atBeginingOfLine"             : "Est en début de ligne",
         "sizeError"                    : "La taille doit être comprise entre 1 et 12",
         "positionPath"                 : "Chemin vers la position",
+        "defaultPath"                  : "Chemin par défaut",
         "nbFixedCol"                   : "Nombre de colonnes fixes",
         "delFirst"                     : "Supprimer le premier",
         "showLines"                    : "Montrer les lignes",
@@ -242,7 +243,8 @@
         "minValueError"                : "La valeur minimale est 0",
         "maxlength255"                 : "La longueur maximale est 255",
         "maxlength55"                  : "La longueur maximale est 55",
-        "errorbetween0and5"            : "La valeur doit être comprise entre 0 et 5"
+        "errorbetween0and5"            : "La valeur doit être comprise entre 0 et 5",
+        "trackType"                    : "Type Track"
     },
 
     "tooltip" : {
@@ -308,13 +310,19 @@
     "settings" : {
         "actions" : {
             "saveAsType" : "Enregistrez comme nouveau template",
-            "applyTemplate" : "Appliquer le template",
+            "applyTemplate" : "Appliquer",
+            "chooseNewTemplate" : "Appliquer un template :",
             "save"       : "Sauvegarder",
             "validate"   : "Valider",
             "cancel"     : "Annuler",
             "listOfParentForms" : "Liste des formulaires parents :",
             "convertType" : "Convertir le champ",
-            "chooseNewType" : "Choisissez un nouveau type d'input :"
+            "chooseNewType" : "Choisissez un nouveau type d'input :",
+            "convertAction" : "Convertir",
+            "convertTitle" : "Confirmation de convertion",
+            "convertValidate" : "L'input sera convertit sans retour possible !",
+            "convertYes" : "Oui, convertir",
+            "convertNo" : "Annuler"
         },
         "preField" : "Champs pré configurés"
     },
@@ -413,8 +421,8 @@
 
     "placeholder" : {
         "label" : {
-          "fr" : "Label français de votre champs",
-          "en" : "Label anglais de votre champs"
+          "fr" : "Label français de votre champ",
+          "en" : "Label anglais de votre champ"
         },
         "form" : {
             "name" : "Nom du formulaire",
@@ -427,10 +435,10 @@
                 "en" : "Description anglaise"
             }
         },
-        "name"        : "Nom de votre champs",
-        "value"       : "Valeur par défaut de votre champs",
+        "name"        : "Nom de votre champ",
+        "value"       : "Valeur par défaut de votre champ",
         "valueSQL"    : "Requête SQL comme valeur par défaut",
-        "help"        : "Text d'aide de votre champs",
+        "help"        : "Text d'aide de votre champ",
         "triggerlength": "Taille de la chaine pour le déclenchement de l'autocomplétion",
         "url"         : "URL permettant de récupérer la liste des valeurs",
         "size"        : "Taille maximum de la valeur du champs",
@@ -483,7 +491,9 @@
         "successMsg" : "Votre champs a bien été sauvgeardé",
         "fail"       : "Echec !",
         "failMsg"    : "Votre champs n'a pas pu être sauvegardé",
-        "samename"   : "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire"
+        "samename"   : "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
+        "loadsuccess": "Chargement réussit !",
+        "loadsuccessMsg": "Le template a bien été chargé"
       },
       "cancel" : {
         "yousure" : "Vraiment ?",

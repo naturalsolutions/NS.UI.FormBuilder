@@ -81,7 +81,7 @@ define([
             },
             "eventDate": {
                 "validators": [],
-                "labelFr": "Date de l'evenement",
+                "labelFr": "Date de saisie",
                 "labelEn": "Event date",
                 "name": "eventDate",
                 "editMode": 3,

@@ -10,8 +10,8 @@
 </div>
 <br />
 <div class="scroll">
+
     <div class="row">
-        
         <div class="col-md-10 col-md-offset-1" data-setting="field">
             <div class="form-group" id="getField">
                 <label class="control-label" data-i18n="settings.preField">
@@ -21,9 +21,26 @@
                     <option value="" disabled selected>Select an option</option>
                 </select>
             </div>
-            <hr />
+            <hr/>
         </div>
     </div>
+
+    <div class="row loadTemplateArea" data-setting="field">
+        <div class="col-md-5 chooseTemplateLabel" data-i18n="settings.actions.chooseNewTemplate">
+            Appliquer un template :
+        </div>
+        <div class="col-md-7">
+            <select id="templateList">
+            </select>
+        </div>
+        <div class="col-md-6 col-md-offset-3">
+            <button id="applyTemplateButton" class="transparent reneco2" data-i18n="settings.actions.applyTemplate">
+                Appliquer
+            </button>
+        </div>
+        <hr />
+    </div>
+
     <div class="row">
         <ul class="nav nav-tabs setting-tabs col-md-10 col-md-offset-1" role="tablist">
             <li role="presentation" class="active">
@@ -55,13 +72,8 @@
 
     </div>
 
-    <div class="row templatingArea" data-setting="field">
-        <div class="col-md-6">
-            <button id="applyTemplateButton" class="transparent reneco2" data-i18n="settings.actions.applyTemplate">
-                Appliquer le template
-            </button>
-        </div>
-        <div class="col-md-6">
+    <div class="row saveTemplateArea" data-setting="field">
+        <div class="col-md-6 col-md-offset-3">
             <button id="saveButton" class="transparent reneco2" data-i18n="settings.actions.saveAsType">
                 Enregistrer comme nouveau type
             </button>
@@ -81,6 +93,11 @@
             <div class="col-md-6">
                 <select id="inputTypeList">
                 </select>
+            </div>
+            <div class="col-md-6 col-md-offset-3">
+                <button id="convertActionButton" class="transparent reneco2" data-i18n="settings.actions.convertAction">
+                    Convertir
+                </button>
             </div>
         </div>
     </div>

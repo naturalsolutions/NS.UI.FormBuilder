@@ -225,6 +225,7 @@
     "atBeginingOfLine"               : "Is at the begining of the line",
     "sizeError"                      : "Field size must be from 1 to 12",
     "positionPath"                   : "Path of the position",
+    "defaultPath"                    : "Default path",
     "nbFixedCol"                     : "Number of fixed columns",
     "delFirst"                       : "Delete first",
     "showLines"                      : "Show lines",
@@ -233,7 +234,8 @@
     "minValueError"                  : "Minimal value is 0",
     "maxlength255"                   : "Maximum length is 255",
     "maxlength55"                    : "Maximum length is 55",
-    "errorbetween0and5"              : "Number must be from 0 to 5"
+    "errorbetween0and5"              : "Number must be from 0 to 5",
+    "trackType"                      : "Track type"
   },
 
   "tooltip" : {
@@ -298,13 +300,19 @@
   "settings" : {
     "actions" : {
       "saveAsType" : "Save as template",
-      "applyTemplate" : "Apply template",
+      "applyTemplate" : "Apply",
+      "chooseNewTemplate" : "Apply a template:",
       "save" : "Save changes",
       "validate"   : "Validate",
       "cancel" : "Cancel",
       "listOfParentForms" : "List of parent forms:",
       "convertType" : "Convert the input",
-      "chooseNewType" : "Choose a new input type:"
+      "chooseNewType" : "Choose a new input type:",
+      "convertAction" : "Convert",
+      "convertTitle" : "Conversion validation",
+      "convertValidate" : "The input will be converted without possible return !",
+      "convertYes" : "Yes, convert",
+      "convertNo" : "Don't"
     },
     "preField" : "Pre-configurated field"
   },
@@ -473,7 +481,9 @@
       "successMsg" : "Your field has been saved",
       "fail"       : "Fail !",
       "failMsg"    : "Your couldn't be saved",
-      "samename"   : "Your Field can't have the same name than another field of the form"
+      "samename"   : "Your Field can't have the same name than another field of the form",
+      "loadsuccess": "Successful loading !",
+      "loadsuccessMsg": "Your template has been loaded"
     },
     "cancel" : {
       "yousure" : "Really ?",

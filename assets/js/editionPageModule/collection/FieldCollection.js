@@ -608,8 +608,6 @@ define([
                 inputVal.editMode = getBinaryWeight(inputVal.editMode);
                 inputVal.name = inputVal.name.replace(/\s+/g, '');
 
-                delete (inputVal.applyTemplate);
-
                 setUnexistingStuff(inputVal);
             });
 
@@ -691,7 +689,6 @@ define([
 
             field['order'] = that.getSize();
 
-            console.log("coucou !");
             var toret = that.addField(new Fields[nameType](field), isUnderFieldset);
 
             return toret;
@@ -709,7 +706,6 @@ define([
             // field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();
 
-            console.log("coucou2 !");
             return this.addField(new Fields[nameType](field), isUnderFieldset, true);
         },
 
@@ -1176,7 +1172,10 @@ define([
                         var fieldForm = new Backbone.Form({
                             model: that.get(value.id)
                         }).render();
-                        if (fieldForm.validate() != null) {
+                        console.log("checking if 1 inside 2", fieldModel.attributes.name,staticInputs.getCompulsoryInputs());
+                        if (fieldForm.validate() != null &&
+                            $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
+                        {
                             fieldsValidation = false;
                             $("#dropField"+value.id+" .field-label span").css("color", "red");
                         }

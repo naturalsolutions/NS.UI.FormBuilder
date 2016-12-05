@@ -311,9 +311,6 @@ define([
                     schemaDefinition.keywordsFr.value = keywordFr;
                     schemaDefinition.keywordsEn.value = keywordEn;
 
-                    console.log(schemaDefinition.keywordsFr, schemaDefinition.keywordsFr.value);
-                    console.log(schemaDefinition.keywordsEn, schemaDefinition.keywordsEn.value);
-
                     this.form = new Backbone.Form({
                         schema: schemaDefinition,
                         data  : datas

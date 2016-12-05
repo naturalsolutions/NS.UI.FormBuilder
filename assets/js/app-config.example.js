@@ -74,7 +74,7 @@ define([
 					formAutocomplete 		: '/FormbuilderWS/autocomplete/forms',
 					forms 					: '/FormbuilderWS/forms',
 					formSaveURL  			: '/FormbuilderWS/forms',							//  Get all form name for autocomplete, does not work if you are in client side mode only
-					preConfiguredField    	: '/FormbuilderWS/configurations', 					//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms
+                    preConfiguredField    	: '/FormbuilderWS/configurations', 					//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms
 					fieldConfigurationURL 	: '/FormbuilderWS/configurations',					//  Allow to send a pre-configurated field to the server. Send a POST request, won't work on client side, you need the back-end
 					childforms              : '/FormbuilderWS/childforms',						// Child forms can get selected passing a parent form ID
 					sqlAutocomplete			: '/FormbuilderWS/sqlAutocomplete', 				// Used to get values for autocomplete field
@@ -85,9 +85,10 @@ define([
 					// ***********************************************************************
 					
 					security				: '/FormbuilderWS/Security',						// Used for security chekings purpose (jwt among others ?)
-					track					: '/FormbuilderWS/Track',							// Used for track data linking
-					
-					// ************************************************
+                    track					: '/FormbuilderWS/Track',							// Used for track data linking
+                    trackTypes				: '/FormbuilderWS/TrackTypes',						// Used to get track types (THIS PATH SHOULD BE TEMPORARY)
+
+                    // ************************************************
 					// Still don't know what those nodes are used for :
 					// ************************************************
 					

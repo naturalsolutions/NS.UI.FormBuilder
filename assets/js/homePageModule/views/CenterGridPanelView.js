@@ -906,10 +906,6 @@ define([
 
         hideContextList : function()
         {
-            console.log("hiding context list");
-
-            console.log($("#contextSwitcher .hidden"));
-
             if ($("#contextSwitcher .hidden").length == 0)
             {
                 $("#contextSwitcher span").addClass("hidden");

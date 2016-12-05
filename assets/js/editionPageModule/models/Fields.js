@@ -81,11 +81,7 @@ define([
             fieldClassDisplay  : '',
             atBeginingOfLine : false,
             fieldSize   : 12,
-            linkedFieldset               : '',
-
-
-            // Input Template
-            applyTemplate                : ''
+            linkedFieldset               : ''
         },
 
         schema : {
@@ -194,16 +190,7 @@ define([
                 title       : translater.getValueFromKey('schema.linkedFieldset'),
                 editorClass : 'form-control',
                 template    : fieldTemplate
-            },
-
-            applyTemplate : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.applyTemplate'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
             }
-
         },
 
         initialize : function(options) {
@@ -324,17 +311,25 @@ define([
     models.AutocompleteField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Autocomplete");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 help         : translater.getValueFromKey('placeholder.autocomplete'),
                 triggerlength: 2,
                 url          : "ressources/autocomplete/example.json",
                 isSQL        : false
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Autocomplete");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
@@ -378,6 +373,10 @@ define([
                     title       : "isSQL"
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function(options) {
@@ -393,16 +392,24 @@ define([
     models.FileField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend({}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("File");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 mimeType     : "*",
                 filesize     : 200, //  specify max file size in ko,
                 help         : translater.getValueFromKey('placeholder.file'),
                 preview      : false
-            })
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
-            return _.extend({}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("File");
+
+            var toret =  _.extend({}, models.BaseField.prototype.schema, {
                 mimeType: {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -436,6 +443,10 @@ define([
                     title       : translater.getValueFromKey('schema.preview') || "preview"
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -450,7 +461,9 @@ define([
     models.TreeViewField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("TreeView");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 node: [{
                     title: "Node 1",
                     key: "1"
@@ -470,11 +483,17 @@ define([
                 defaultNode: 0,
                 multipleSelection: true,
                 hierarchicSelection: false
-            })
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("TreeView");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 defaultNode: {
                     type  : 'Number',
                     title : translater.getValueFromKey('schema.defaultNode'),
@@ -504,6 +523,10 @@ define([
                     }
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -520,8 +543,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Thesaurus");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Thesaurus"), {
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                     defaultValue : "",
                     webServiceURL : AppConfig.paths.thesaurusWSPath,
                     fullpath : "",
@@ -587,16 +609,24 @@ define([
 
     models.AutocompleteTreeViewField = models.BaseField.extend({
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("AutocompleteTreeView");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 language    : { hasLanguage: true, lng: 'En' },
                 wsUrl       : 'ressources/thesaurus',
                 webservices : 'autocompleteTreeView.json',
                 startId     : '0',
                 defaultNode : ""
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("AutocompleteTreeView");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 wsUrl : {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -629,6 +659,10 @@ define([
                     title       : ""
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -697,15 +731,23 @@ define([
     // This input type is EcoReleve Dependent
     models.ObjectPickerField = models.BaseField.extend({
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ObjectPicker");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 objectType : "Monitored Site",
                 wsUrl : "",
                 triggerAutocomplete : 0,
                 linkedLabel : ""
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ObjectPicker");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 objectType: {
                     type        : 'Select',
                     editorClass : 'form-control',
@@ -745,6 +787,10 @@ define([
                     title       : translater.getValueFromKey('schema.linkedLabel')
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -759,14 +805,22 @@ define([
     // This input type is EcoReleve Dependent
     models.SubFormGridField = models.BaseField.extend({
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("SubFormGrid");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 nbFixedCol : "1",
                 delFirst : true,
                 showLines : true
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("SubFormGrid");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 nbFixedCol: {
                     type        : 'Number',
                     editorClass : 'form-control',
@@ -792,6 +846,10 @@ define([
                     title       : translater.getValueFromKey('schema.showLines')
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
@@ -805,14 +863,23 @@ define([
     // This input type is Track Dependent
     models.PositionField = models.BaseField.extend({
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 webServiceURL : AppConfig.paths.positionWSPath,
                 positionPath : "",
+                defaultPath : "",
                 defaultNode: ""
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 webServiceURL : {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -829,16 +896,26 @@ define([
                     title       : translater.getValueFromKey('schema.positionPath'),
                     validators : ['required']
                 },
+                defaultPath : {
+                    type        : 'Text',
+                    title       : translater.getValueFromKey('schema.defaultPath'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.value')
+                    }
+                },
                 defaultNode: {
                     type  : 'Text',
                     title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.tree.default')
-                    }
+                    template    : fieldTemplate
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -857,17 +934,25 @@ define([
     models.TextField = models.BaseField.extend({
 
         defaults : function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Text");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 defaultValue : "",
                 isDefaultSQL : false,
                 help         : translater.getValueFromKey('placeholder.text'),
                 valuesize    : AppConfig.sizes.strings.defaultsize,
                 maxLength    : 255
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Text");
+
+            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
                 defaultValue: {
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
@@ -916,7 +1001,11 @@ define([
                         placeholder : translater.getValueFromKey('schema.maxlength255')
                     }
                 }
-            })
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function(options) {
@@ -931,12 +1020,19 @@ define([
     models.TextAreaField = models.TextField.extend({
 
         defaults : function() {
-            return _.extend( {}, models.TextField.prototype.defaults(), {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("TextArea");
+
+            var toret = _.extend( {}, models.TextField.prototype.defaults(), {
 
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("TextArea");
             var schema =  _.extend( {}, models.TextField.prototype.schema(), {
 
             });
@@ -950,7 +1046,60 @@ define([
                 }
             }];
 
-            return schema;
+            var toret =  _.extend( {}, schema, {
+                defaultValue: {
+                    type        : 'Text',
+                    title       : translater.getValueFromKey('schema.default'),
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.value')
+                    }
+                },
+                isDefaultSQL: {
+                    type        : CheckboxEditor,
+                    fieldClass  : "hidden",
+                    title       : "isSQL"
+                },
+                help: {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.help'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.help')
+                    }
+                },
+                valuesize: {
+                    type        : 'Select',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.size'),
+                    options     : AppConfig.sizes.getStringSizes(),
+                    fieldClass  : "hidden"
+                },
+                maxLength: {
+                    type        : 'Number',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.maxTextLength'),
+                    validators : [function checkValue(value, formValues) {
+                        if (value < 1 || value > 255) {
+                            return {
+                                type : translater.getValueFromKey('schema.maxTextLengthError'),
+                                message : translater.getValueFromKey('schema.maxTextLengthMin')
+                            }
+                        }
+                    }],
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('schema.maxlength255')
+                    }
+                }
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -965,13 +1114,21 @@ define([
 
     models.PatternField = models.TextField.extend({
         defaults: function() {
-            return _.extend( {}, models.TextField.prototype.defaults(), {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Pattern");
+
+            var toret = _.extend( {}, models.TextField.prototype.defaults(), {
                 pattern: ""
-            })
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
-            return _.extend( {}, models.TextField.prototype.schema(), {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Pattern");
+
+            var toret =  _.extend( {}, models.TextField.prototype.schema(), {
                 pattern: {
                     type        : 'Text',
                     editorClass : 'form-control',
@@ -979,6 +1136,10 @@ define([
                     title       : translater.getValueFromKey('schema.pattern')
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -994,6 +1155,8 @@ define([
     models.DateField = models.BaseFieldExtended.extend({
 
         defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Date");
+
             var toret = _.extend( {}, models.BaseFieldExtended.prototype.defaults(), {
                 format: (AppConfig.appMode.topcontext == "reneco" ? "DD/MM/YYYY" : ""),
                 help : translater.getValueFromKey('placeholder.date')
@@ -1004,10 +1167,13 @@ define([
                 toret.fieldSize = 2;
             }
 
-            return (toret);
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Date");
 
             var formatFieldProps = {
                 type        : 'Text',
@@ -1026,9 +1192,14 @@ define([
                 formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
             }
 
-            return _.extend( {}, models.BaseFieldExtended.prototype.schema(), {
+
+            var toret =  _.extend( {}, models.BaseFieldExtended.prototype.schema(), {
                 format: formatFieldProps
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -1048,18 +1219,25 @@ define([
     models.NumberField = models.TextField.extend({
 
         defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
+
             var baseSchema = _.pick(
                 models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults, 'help')
             );
             baseSchema.help = translater.getValueFromKey('placeholder.numeric');
-            return _.extend( {}, baseSchema, {
+
+            var toret = _.extend( {}, baseSchema, {
                 minValue     : '',
                 maxValue     : '',
                 precision    : 1,
                 decimal      : true,
                 defaultValue : '',
                 unity        : []
-            })
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         baseSchema : {
@@ -1126,6 +1304,7 @@ define([
         },
 
         schema : function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
             var schema = _.extend( {}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema), 'help'), this.baseSchema);
 
             schema.defaultValue.type = 'Number';
@@ -1144,8 +1323,20 @@ define([
                     return undefined;
                 }
 
-            }]
-            return schema;
+            }];
+
+            var toret =  _.extend( {}, schema, {
+                pattern: {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.pattern')
+                }
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         initialize: function() {
@@ -1160,12 +1351,21 @@ define([
     models.DecimalField = models.NumberField.extend({
 
         defaults : function() {
-            return models.NumberField.prototype.defaults()
+            return _.extend({},
+                models.NumberField.prototype.defaults(),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Decimal"));
         },
 
         schema : function() {
-            return models.NumberField.prototype.schema()
-        },
+            return _.extend({},
+                models.NumberField.prototype.schema(),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+
+            /* TODO KEEP AS EXAMPLE OF THE OLD WAY
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal");
+            return models.NumberField.prototype.schema();
+            */
+        }
 
     }, {
         type   : 'Decimal',
@@ -1176,12 +1376,16 @@ define([
     models.NumericRangeField = models.NumberField.extend({
 
         defaults : function() {
-            return models.NumberField.prototype.defaults()
+            return _.extend({},
+                models.NumberField.prototype.defaults(),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("NumericRange"));
         },
 
         schema : function() {
-            return models.NumberField.prototype.schema()
-        },
+            return _.extend({},
+                models.NumberField.prototype.schema(),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange"));
+        }
 
     }, {
         type   : 'NumericRange',
@@ -1198,7 +1402,9 @@ define([
     models.EnumerationField = models.BaseField.extend({
 
         defaults: function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Enumeration");
+
+            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 choices: [
                     {
                         id             : 1,
@@ -1213,6 +1419,10 @@ define([
                 defaultValue: [1],
                 expanded: false
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         getJSON : function() {
@@ -1223,8 +1433,8 @@ define([
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
-            });
+            return _.extend( {}, models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"));
         },
 
         /**
@@ -1313,19 +1523,31 @@ define([
     models.CheckBoxField = models.EnumerationField.extend({
 
         defaults : function() {
-            return _.extend( {}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("CheckBox");
+
+            var toret = _.extend( {}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
                 isBinaryWeight : false
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema: function() {
-            return _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("CheckBox");
+
+            var toret =  _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema, {
                 isBinaryWeight : {
                     type        : CheckboxEditor,
                     fieldClass  : "checkBoxEditor",
                     title       : translater.getValueFromKey('schema.isBinaryWeight') || "isBinaryWeight"
                 }
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
@@ -1343,13 +1565,19 @@ define([
     models.RadioField = models.EnumerationField.extend({
 
         defaults : function() {
-            return _.extend( {}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Radio");
+
+            var toret = _.extend( {}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
             });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
         },
 
         schema : function() {
-            return _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema, {
-            });
+            return _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio"));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
@@ -1365,7 +1593,7 @@ define([
 
 
     //  ----------------------------------------------------
-    //  Other Fields
+    //  Other Fields (might be deprecated)
     //  ----------------------------------------------------
 
 
@@ -1416,15 +1644,6 @@ define([
                 title       : translater.getValueFromKey('schema.linkedField'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
-                options : []
-            },
-
-            applyTemplate : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.applyTemplate'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                fieldClass  : 'col-xs-10',
                 options : []
             }
         }

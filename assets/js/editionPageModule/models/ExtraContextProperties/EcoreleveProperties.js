@@ -85,13 +85,15 @@ define([
             }
         },
 
-        getExtraPropertiesDefaults: function(inputType){
+        getExtraPropertiesDefaults: function(inputType, avoid){
             var toret = {};
+            if (!avoid)
+                toret = this.getExtraPropertiesDefaults("all", true);
 
             $.each(this.extraProperties, function(index, value){
                 if (index == inputType)
                 {
-                    toret = value.defaults;
+                    toret = _.extend(toret, value.defaults);
                     return(toret);
                 }
             });
@@ -99,13 +101,15 @@ define([
             return(toret);
         },
 
-        getExtraPropertiesSchema: function(inputType){
+        getExtraPropertiesSchema: function(inputType, avoid){
             var toret = {};
+            if (!avoid)
+                toret = this.getExtraPropertiesSchema("all", true);
 
             $.each(this.extraProperties, function(index, value){
                 if (index == inputType)
                 {
-                    toret = value.schema;
+                    toret = _.extend(toret, value.schema);
                     return(toret);
                 }
             });

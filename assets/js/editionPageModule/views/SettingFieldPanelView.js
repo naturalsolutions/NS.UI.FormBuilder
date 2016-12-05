@@ -37,6 +37,7 @@ define([
             'click #saveButton'           : 'saveField',
             'click #applyTemplateButton'  : 'applyTemplateField',
             'click #convertTypeButton'    : 'showConvertType',
+            'click #convertActionButton'  : 'convertAction',
             'change .checkboxField input' : 'checkboxChange',
             'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
@@ -151,6 +152,7 @@ define([
             //  Init linked field
 
             this.initFormLinkedFields();
+            this.initExtraPropertiesValues();
 
             ContextLoader.initializeLoader(this.form, this.URLOptions, true);
         },
@@ -256,11 +258,26 @@ define([
                     linkedFieldsKeyList.push(el.key)
                 });
 
-                var optionsToShow = {"empty":""};
+                var hideTemplateApply = true;
+
                 $.each(this.preConfiguredFieldList.options, function(key, value){
-                    optionsToShow[key] = key;
+                    if ( $("#templateList option[value='"+key+"']").length == 0) {
+                        $('#templateList').append($('<option>', {
+                            value: key,
+                            text: key
+                        }));
+                    }
+                    hideTemplateApply = false;
                 });
-                this.form.fields.applyTemplate.editor.setOptions(optionsToShow);
+
+                if (hideTemplateApply)
+                {
+                    $(".loadTemplateArea").hide();
+                }
+                else
+                {
+                    $("#templateList").selectpicker("refresh");
+                }
 
                 if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
                     ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
@@ -280,6 +297,17 @@ define([
             this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldTable, disable);
             this.bindLinkedFieldSelect();
             this.bindCssEditorsSelect();
+        },
+
+        initExtraPropertiesValues : function(){
+
+            console.log("MYMODELTOEDIT", this.modelToEdit, this.modelToEdit.collection.tracktypes);
+
+            if (this.modelToEdit.collection.tracktypes)
+            {
+                console.log("MYMODELTOEDIT", this.modelToEdit.collection.tracktypes);
+                this.form.fields.trackType.editor.setOptions(this.modelToEdit.collection.tracktypes);
+            }
         },
 
         /**
@@ -399,7 +427,6 @@ define([
 
                                 //  Trigger event with ajax result on the formView
                                 success: _.bind(function(data) {
-                                    console.log(data);
                                     $('#defaultNode').fancytree({
                                         source     : data,
                                         checkbox   : false,
@@ -457,13 +484,36 @@ define([
                     return (toret);
                 };
 
-                var elLinkedFieldset = $("[name='linkedFieldset']");
+                var getAllInputNames = function()
+                {
+                    var toret = [];
+
+                    $.each(that.modelToEdit.collection.models, function(index, value){
+                        var linkedFieldset = value.attributes.linkedFieldset;
+                        if (linkedFieldset && linkedFieldset.length > 0)
+                            toret.push(linkedFieldset);
+                    });
+
+                    return (toret);
+                };
+
+                var elLinkedFieldset = $("#settingFieldPanel [name='linkedFieldset']");
 
                 if (elLinkedFieldset.length > 0)
                 {
                     elLinkedFieldset.autocomplete({
                         minLength: 1,
                         source : getAllFieldsetsNames()
+                    });
+                }
+
+                var elFieldName = $("#settingFieldPanel [name='name']");
+
+                if (elFieldName.length > 0)
+                {
+                    elFieldName.autocomplete({
+                        minLength: 1,
+                        source : this.modelToEdit.collection.contextInputNames
                     });
                 }
 
@@ -475,35 +525,39 @@ define([
                     if (AppConfig.allowedConvert[window.context])
                         compatibilityToUse = AppConfig.allowedConvert[window.context];
 
-                    console.log(compatibilityToUse);
-
                     $.each(compatibilityToUse, function(index, value){
-                        console.log(that.modelToEdit.constructor.type);
-                        console.log(value);
                         if (_.contains(value, that.modelToEdit.constructor.type))
                         {
                             $.each(value, function(subindex, subvalue){
-                                console.log(subvalue);
                                 if (subvalue != that.modelToEdit.constructor.type)
                                     toret.push(subvalue);
                             });
                         }
                     });
-
-                    console.log(toret);
-
                     return(toret);
                 };
 
+                var hideTypeConverter = true;
                 $.each(getCompatibleInputs(), function(index, value){
-                    if (value != that.modelToEdit.constructor.type)
+                    if ( $("#inputTypeList option[value='"+value+"']").length == 0)
                     {
                         $('#inputTypeList').append($('<option>', {
                             value: value,
                             text: value
                         }));
+                        hideTypeConverter = false;
                     }
                 });
+
+                // TODO MAKE THE CONVERTER TOOL WORK AND THEN SET : if (hideTypeConverter)
+                if (true)
+                {
+                    $(".convertArea").hide();
+                }
+                else
+                {
+                    $("#inputTypeList").selectpicker("refresh");
+                }
 
             }, this));
         },
@@ -746,8 +800,7 @@ define([
         },
 
         applyTemplateField : function() {
-            var templateInputName = $("select[name*=applyTemplate]").val();
-            templateInputName = $("select[name*=applyTemplate] option[value='" + templateInputName + "']").text();
+            var templateInputName = $("#templateList option:selected").text();
             if (templateInputName.length > 0){
                 $.ajax({
                     data: {},
@@ -764,6 +817,11 @@ define([
                             }
                         });
                         that.render();
+                        swal(
+                            translater.getValueFromKey('configuration.save.loadsuccess') || "Chargement réussit !",
+                            translater.getValueFromKey('configuration.save.loadsuccessMsg') || "Le template a bien été chargé",
+                            "success"
+                        );
                     }, this),
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
                         console.log("Ajax Error: " + xhr);
@@ -800,6 +858,22 @@ define([
         showConvertType : function() {
             $(".convertStep1").hide();
             $(".convertStep2").show();
+        },
+
+        convertAction : function() {
+            swal({
+                title              : translater.getValueFromKey('settings.actions.convertTitle') || "Confirmation de convertion",
+                text               : translater.getValueFromKey('settings.actions.convertValidate') || "L'input sera convertit sans retour possible !",
+                type               : "warning",
+                showCancelButton   : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText  : translater.getValueFromKey('settings.actions.convertYes') || "Oui, convertir",
+                cancelButtonText   : translater.getValueFromKey('settings.actions.convertNo') || "Annuler"
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    //TODO CONVERT BRO !
+                }
+            });
         },
 
         /**

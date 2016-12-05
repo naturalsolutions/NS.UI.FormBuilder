@@ -28,7 +28,7 @@ define([
         },
 
         getCompulsoryInputs: function(){
-            return(TrackStatics.compulsoryInputs);
+            return(EcollectionStatics.compulsoryInputs);
         },
 
         applyRules: function(form, json)

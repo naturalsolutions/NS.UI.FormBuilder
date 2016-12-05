@@ -27,20 +27,36 @@ define([
 
         },
 
-        getExtraPropertiesDefaults: function(inputType){
+        getExtraPropertiesDefaults: function(inputType, avoid){
+            var toret = {};
+            if (!avoid)
+                toret = this.getExtraPropertiesDefaults("all", true);
 
-
-            return({
-
+            $.each(this.extraProperties, function(index, value){
+                if (index == inputType)
+                {
+                    toret = _.extend(toret, value.defaults);
+                    return(toret);
+                }
             });
+
+            return(toret);
         },
 
-        getExtraPropertiesSchema: function(inputType){
+        getExtraPropertiesSchema: function(inputType, avoid){
+            var toret = {};
+            if (!avoid)
+                toret = this.getExtraPropertiesSchema("all", true);
 
-
-            return({
-
+            $.each(this.extraProperties, function(index, value){
+                if (index == inputType)
+                {
+                    toret = _.extend(toret, value.schema);
+                    return(toret);
+                }
             });
+
+            return(toret);
         },
 
         initializeStatics: function () {
