@@ -34,7 +34,6 @@ define([
                         editorClass : 'form-control',
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.trackType'),
-                        validators  : ['required'],
                         options     : []
                     }
                 }

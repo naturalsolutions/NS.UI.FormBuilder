@@ -301,11 +301,8 @@ define([
 
         initExtraPropertiesValues : function(){
 
-            console.log("MYMODELTOEDIT", this.modelToEdit, this.modelToEdit.collection.tracktypes);
-
             if (this.modelToEdit.collection.tracktypes)
             {
-                console.log("MYMODELTOEDIT", this.modelToEdit.collection.tracktypes);
                 this.form.fields.trackType.editor.setOptions(this.modelToEdit.collection.tracktypes);
             }
         },

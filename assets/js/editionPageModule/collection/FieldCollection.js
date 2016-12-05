@@ -1172,7 +1172,6 @@ define([
                         var fieldForm = new Backbone.Form({
                             model: that.get(value.id)
                         }).render();
-                        console.log("checking if 1 inside 2", fieldModel.attributes.name,staticInputs.getCompulsoryInputs());
                         if (fieldForm.validate() != null &&
                             $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
                         {
