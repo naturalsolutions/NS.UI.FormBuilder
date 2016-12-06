@@ -37,6 +37,9 @@ define([
     });
 
     var getFormsList = function(context){
+        //TODO CHANGE THIS CRAP, LOAD FORMSLIST ON FORM LOADING AND NOT ON FIELD SETTINGS PANEL OPENING
+        if (this.getFormsListResult && context.collection.name == this.savedCollectionName)
+            return (this.getFormsListResult);
         var toret = [];
         if (AppConfig.config.options.URLOptions){
             var formCollection = new FormCollection({
@@ -54,6 +57,10 @@ define([
                     });
                 }, this)
             });
+
+            this.getFormsListResult = toret;
+            this.savedCollectionName = context.collection.name;
+
             return(toret);
         }
     };
@@ -808,6 +815,8 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("SubFormGrid");
 
             var toret = _.extend( {}, models.BaseField.prototype.defaults, {
+                childForm : "",
+                childFormName : "",
                 nbFixedCol : "1",
                 delFirst : true,
                 showLines : true
@@ -821,6 +830,20 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("SubFormGrid");
 
             var toret =  _.extend( {}, models.BaseField.prototype.schema, {
+                childForm: {
+                    type        : 'Select',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.childForm'),
+                    validators  : ['required'],
+                    options     : getFormsList(this)
+                },
+                childFormName: {
+                    type        : 'Hidden',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : ""
+                },
                 nbFixedCol: {
                     type        : 'Number',
                     editorClass : 'form-control',

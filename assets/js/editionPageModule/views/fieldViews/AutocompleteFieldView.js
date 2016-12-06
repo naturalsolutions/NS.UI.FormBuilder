@@ -39,6 +39,12 @@ define([
             BaseView.prototype.render.apply(that, arguments);
 
             var setAutocomplete = function (data) {
+                /*
+                console.log("setAutocomplete", that.model.get('triggerlength'));
+                console.log("setAutocomplete", data);
+                console.log("setAutocomplete", $(that.el));
+                console.log("setAutocomplete", $(that.el).find('.form-control'));
+                */
                 $(that.el).find('.form-control').autocomplete({
                     minLength: that.model.get('triggerlength'),
                     scrollHeight: 220,
@@ -64,28 +70,31 @@ define([
             else
             {
                 that.model.set('isSQL', false);
-                try {
-
-                    $.ajax({
-                        data: JSON.stringify({'sqlQuery': that.model.get('url'), 'context': window.context}),
-                        type: 'POST',
-                        url: that.URLOptions.sqlAutocomplete,
-                        contentType: 'application/json',
-                        crossDomain: true,
-                        success: _.bind(function (data) {
-                            setAutocomplete(data);
-                        }, that),
-                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                            console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
-                        }, that)
-                    });
-                }
-                catch (err)
+                if (!that.autocompleteLoaded)
                 {
-                    console.log(err);
-                    $.getJSON(that.model.get('url'), _.bind(function (data) {
-                        setAutocomplete(data.options);
-                    }, that));
+                    that.autocompleteLoaded = true;
+                    try {
+                        $.ajax({
+                            data: JSON.stringify({'sqlQuery': that.model.get('url'), 'context': window.context}),
+                            type: 'POST',
+                            url: that.URLOptions.sqlAutocomplete,
+                            contentType: 'application/json',
+                            crossDomain: true,
+                            success: _.bind(function (data) {
+                                setAutocomplete(data);
+                            }, that),
+                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
+                            }, that)
+                        });
+                    }
+                    catch (err)
+                    {
+                        console.log(err);
+                        $.getJSON(that.model.get('url'), _.bind(function (data) {
+                            setAutocomplete(data.options);
+                        }, that));
+                    }
                 }
             }
        }

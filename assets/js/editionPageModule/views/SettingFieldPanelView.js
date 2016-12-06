@@ -7,12 +7,13 @@ define([
     'sweetalert',
     'app-config',
     './loaders/ContextLoader',
+    '../models/fields',
     'jquery-ui',
     'i18n',
     'bootstrap-select',
     'slimScroll',
     'bootstrap'
-], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal, AppConfig, ContextLoader) {
+], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal, AppConfig, ContextLoader, Fields) {
 
     var translater = Translater.getTranslater();
 
@@ -313,6 +314,12 @@ define([
         * @param  {[Object]} field to edit
         */
         createForm : function() {
+            if (this.todelete)
+            {
+                delete this;
+                return;
+            }
+            this.todelete = true;
             require(['backbone-forms'], _.bind(function() {
 
                 var that = this;
@@ -531,24 +538,29 @@ define([
                             });
                         }
                     });
+
+                    console.log("getCompatibleInputs", toret);
+
                     return(toret);
                 };
 
                 var hideTypeConverter = true;
                 $.each(getCompatibleInputs(), function(index, value){
+                    console.log("each", "getCompatibleInputs", index, value);
                     if ( $("#inputTypeList option[value='"+value+"']").length == 0)
                     {
                         $('#inputTypeList').append($('<option>', {
                             value: value,
                             text: value
                         }));
-                        hideTypeConverter = false;
                     }
+                    hideTypeConverter = false;
                 });
 
                 // TODO MAKE THE CONVERTER TOOL WORK AND THEN SET : if (hideTypeConverter)
-                if (true)
+                if (hideTypeConverter)
                 {
+                    console.log("hideTypeConverter", "hide");
                     $(".convertArea").hide();
                 }
                 else
@@ -679,6 +691,10 @@ define([
         cancel : function(){
 
             var self = this;
+            console.log("cancel", this.form);
+
+            self.globalChannel.trigger('nodeReset' + self.modelToEdit.get('id'));
+
             var cancelSettingPanel = function(){
                 self.removeForm();
                 self.mainChannel.trigger('formCancel');
@@ -858,6 +874,7 @@ define([
         },
 
         convertAction : function() {
+            var that = this;
             swal({
                 title              : translater.getValueFromKey('settings.actions.convertTitle') || "Confirmation de convertion",
                 text               : translater.getValueFromKey('settings.actions.convertValidate') || "L'input sera convertit sans retour possible !",
@@ -868,7 +885,10 @@ define([
                 cancelButtonText   : translater.getValueFromKey('settings.actions.convertNo') || "Annuler"
             }, function(isConfirm) {
                 if (isConfirm) {
-                    //TODO CONVERT BRO !
+                    that.formChannel.trigger('remove', that.modelToEdit.attributes.id);
+                    var fieldType = $("#inputTypeList option:selected").text() + 'Field';
+                    that.modelToEdit.attributes.id = 0;
+                    that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes);
                 }
             });
         },

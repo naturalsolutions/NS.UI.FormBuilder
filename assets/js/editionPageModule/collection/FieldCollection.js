@@ -684,14 +684,11 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addElement: function (nameType, properties, isUnderFieldset) {
-            var that = this;
             var field = properties || {};
+            field['order'] = this.getSize();
 
-            field['order'] = that.getSize();
-
-            var toret = that.addField(new Fields[nameType](field), isUnderFieldset);
-
-            return toret;
+            console.log("addElement", properties);
+            return this.addField(new Fields[nameType](field), isUnderFieldset);
         },
 
         /**
@@ -703,10 +700,11 @@ define([
          */
         addNewElement: function (nameType, properties, isUnderFieldset) {
             var field = properties || {};
-            // field['name']  = field['name'] == 'Field' ? 'Field' + this.getSize() : field['name'];
             field['order'] = this.getSize();
 
-            return this.addField(new Fields[nameType](field), isUnderFieldset, true);
+            console.log("addNewElement", nameType, properties, isUnderFieldset);
+
+            return this.addField(new Fields[nameType](field), isUnderFieldset);
         },
 
         /**
@@ -730,6 +728,7 @@ define([
         removeElement : function(id) {
             var item = this.get(id);
 
+            console.log("removeElement", id);
             if (item !== undefined) {
                 //  If the field is a subForm field we remove all subFormField
                 if (item.constructor.type == 'Subform') {
@@ -748,6 +747,7 @@ define([
 
                 if ($.inArray(item.get('id'), this.fieldsexcludedfromdelete) == '-1')
                 {
+                    console.log("todelete will be", item.get('id'));
                     this.fieldstodelete.push(item.get('id'));
                 }
             }

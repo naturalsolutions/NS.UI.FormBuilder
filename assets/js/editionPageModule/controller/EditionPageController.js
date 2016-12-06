@@ -143,8 +143,8 @@ define([
          *
          * @param {string} newElementClassName new field class like TextField
          */
-        addNewElementToCollection : function(newElementClassName) {
-            this.fieldCollection.addNewElement(newElementClassName);
+        addNewElementToCollection : function(newElementClassName, attributes) {
+            this.fieldCollection.addNewElement(newElementClassName, attributes, false);
         },
 
 

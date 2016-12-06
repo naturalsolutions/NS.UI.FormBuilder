@@ -33,6 +33,7 @@ define([
             this.globalChannel = Backbone.Radio.channel('global');
 
             this.globalChannel.on('nodeSelected' + this.model.get('id'), this.updateTreeView, this);
+            this.globalChannel.on('nodeReset' + this.model.get('id'), this.resetTreeView, this);
         },
 
         initConfigChannel : function() {
@@ -114,22 +115,53 @@ define([
             var that = this;
 
             var reloadFieldInList = function(){
+                console.log("RELOAD FIELD IN LIST");
                 if (children !== null) {
+
+                    console.log("reloadFieldInList children");
                     $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload({
                         children : children
                     });
                 } else {
-                    var arr = [];
-                    arr[0] = data.node;
-                    that.$el.first('.thesaurusField').fancytree('getTree').reload(arr);
+                    console.log("reloadFieldInList arr");
+                    that.$el.first('.thesaurusField').fancytree('getTree').reload(that.savedArr);
                 }
             };
+
+            if (!that.savedDefaultNode)
+            {
+                that.savedDefaultNode = this.model.get('defaultNode');
+                that.savedFullpath = this.model.get('fullpath');
+                var arr = [];
+                arr[0] = data.node;
+                that.savedArr = arr;
+            }
 
             reloadFieldInList();
 
             this.model.set('defaultNode', startID);
             $('input[name="defaultNode"]').val(nodeFullpath);
             this.model.set('fullpath', nodeFullpath);
+        },
+
+        resetTreeView : function()
+        {
+            var that = this;
+
+            console.log("resetTreeView");
+            console.log($('#thesaurus' + that.model.get('id')).fancytree('getTree'));
+            console.log("saves", that.savedDefaultNode, that.savedFullpath, that.savedArr);
+
+            this.displayTreeView(that.savedDefaultNode);
+            /*
+            if (that.savedDefaultNode)
+            {
+                this.model.set('defaultNode', that.savedDefaultNode);
+                $('input[name="defaultNode"]').val(that.savedFullpath);
+                this.model.set('fullpath', that.savedFullpath);
+                $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload(that.savedArr);
+            }
+            */
         },
 
         render : function() {

@@ -9,10 +9,11 @@ define([
     '../../Translater',
     '../../app-config',
     '../collection/staticInputs/ContextStaticInputs',
+    '../models/fields',
     'i18n',
     'slimScroll'    
 ], function($, Marionette, FormPanelViewTpl, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal,
-            Translater, AppConfig, ContextStaticInputs) {
+            Translater, AppConfig, ContextStaticInputs, Fields) {
 
     var translater = Translater.getTranslater();
     var staticInputs = ContextStaticInputs;
@@ -247,6 +248,7 @@ define([
          * @param {object} newModel new added field
          */
         addElement: function (newModel) {
+            console.log("addElement", newModel);
             if (!newModel.get('isUnderFieldset')) {
                 //  We only create view for model who are not in a fieldset
                 //  If a model if in a fieldset, the fieldset view render the subView
@@ -629,6 +631,7 @@ define([
          * The controller does the redirection, the view send just an event
          */
         clearFormAndExit : function() {
+            Fields.getFormsListResult = undefined;
             this.collection.reset();
             this.formChannel.trigger('exit');
             this._viewCount = 0;
