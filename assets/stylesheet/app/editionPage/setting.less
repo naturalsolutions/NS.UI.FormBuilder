@@ -5,6 +5,11 @@
     color: red;
 }
 
+#formOriginalIdArea {
+    float:right;
+    display:none;
+}
+
 #settingFormPanel {
     position: absolute;
     .slimScrollDiv {
@@ -16,13 +21,19 @@
 #settingFieldPanel {
     position: relative;
     .slimScrollDiv {
-        height: ~"calc(100% - 186px)" !important;
+        height: ~"calc(100% - 228px)" !important;
         margin-top: 15px;
     }
 
     #defaultNode {
         max-height: 400px;
         overflow: auto;
+    }
+
+    #originalIDArea {
+        display: none;
+        color: white;
+        margin-top: 20px;
     }
 
 }
@@ -33,7 +44,7 @@
     background    : @settingViewBackgroundColor;
     padding-bottom: 50px;
     height        : 100%;
-
+    font-family: 'ProximaNovaLight', sans-serif;
 
     .brand {
         padding-left  : 0px;
@@ -458,6 +469,35 @@
         #saveButton {
             margin-top: 20px !important;
         }
+    }
+
+    .addFileText {
+        width:70%;
+        display:inline;
+    }
+
+    input[type=submit] {
+        background: #862332;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        border-color: #862332;
+        color:white;
+    }
+
+    #formAssociatedFileListLabel {
+        display:none;
+        font-size:18px;
+        color:#575656;
+    }
+
+    #formLinkedFilesList {
+        color:white;
+        font-size:12px;
+    }
+
+    .removeFileAssoc {
+        margin-left: 10px;
+        cursor: pointer;
     }
 }
 

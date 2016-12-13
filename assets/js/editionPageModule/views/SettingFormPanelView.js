@@ -30,7 +30,11 @@ define([
             'click #saveChange'           : 'saveChange',
             'change .checkboxField input' : 'checkboxChange',
             'change .form-control'        : 'formControlChange',
-            'click #saveTemplate'         : 'saveTemplate'
+            'click #saveTemplate'         : 'saveTemplate',
+            'click .addFileText'          : 'triggerFileClick',
+            'click .addFileBtn'           : 'triggerFileClick',
+            'change .formAddFileRealAdd'  : 'associationFileSelected',
+            'click .removeFileAssoc'      : 'deleteFileAssociation'
         },
 
 
@@ -63,6 +67,7 @@ define([
             this.URLOptions = options.URLOptions;
             this.formToEdit = options.formToEdit;
             this.form       = null;
+            this.formFilesBinaryList = [];
 
             /*
             if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
@@ -197,9 +202,18 @@ define([
             var formValidation = this.form.validate();
 
             if (formValidation === null) {
-                this.mainChannel.trigger('editionDone', this.form.getValue());
-                //this.removeForm();
+
+                var filesToSend = [];
+                $.each(this.formFilesBinaryList, function(index, value){
+                    if (value.filedata)
+                    {
+                        filesToSend.push(value);
+                    }
+                });
+
+                this.mainChannel.trigger('editionDone', _.extend({}, this.form.getValue(), {fileList:filesToSend}));
                 $("#collectionName").css('color', "white");
+                //this.removeForm();
                 return (true);
             } else {
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
@@ -258,12 +272,23 @@ define([
             });
         },
 
+        displayContextExtentions : function() {
+            var context = window.context;
+            $.each($(".formExtension"), function(index, value){
+                if ($(this).attr("context") == context || $(this).attr("topcontext") == AppConfig.appMode.topcontext)
+                {
+                    $(this).show();
+                }
+            })
+        },
+
         /**
         * Generate form for edit main form object properties
         *
         * @param  {Object} formSchema main form object schema
         */
         generateForm : function(formToEdit) {
+            var that = this;
 
             if (this.generatedAlready)
             {
@@ -316,7 +341,7 @@ define([
                         data  : datas
                     }).render();
 
-                    //  Init linked field
+                    // Init linked field
                     this.initChildForms();
 
                     this.$el.find('#form').append(this.form.el);
@@ -324,15 +349,27 @@ define([
 
                     this.initScrollBar();
 
+                    // Init contextual form extentions
+                    this.displayContextExtentions();
+
                     this.mainChannel.trigger('formCreated');
                 }
 
                 $.each(this.formToEdit.schemaDefinition, function(index, value){
                     if (value.validators && value.validators[0].type == "required")
                     {
-                        $("#settingFormPanel #form label[for="+index+"]").append(" *");
+                        $("#settingFormPanel #form label[for="+index+"]").append(" <span style='color: red;'>*</span>");
                     }
                 });
+
+                if (formToEdit.fileList)
+                {
+                    $.each(formToEdit.fileList, function(index, value){
+                        $('#formAssociatedFileListLabel').show();
+                        $("#formLinkedFilesList").append("<span>"+value.name+"<br/></span>");
+                        that.formFilesBinaryList.push({"id":""+value.Pk_ID, "name":""+value.name});
+                    })
+                }
 
             }, this));
 
@@ -350,6 +387,42 @@ define([
                 values['isTemplate'] = true;
                 this.mainChannel.trigger('saveTemplate', values);
             }
+        },
+
+        triggerFileClick : function(){
+            $(".formAddFileRealAdd").trigger("click");
+        },
+
+        associationFileSelected : function(){
+            var that = this;
+            var flRdr = new FileReader();
+            var myFile2 = $('.formAddFileRealAdd')[0].files[0];
+
+            var fileLoaded = function(){
+                that.formFilesBinaryList.push({"name":""+myFile2.name, "filedata":""+flRdr.result});
+                $("#formLinkedFilesList").append("<span>"+myFile2.name+"<a class='removeFileAssoc' value='"+myFile2.name+"'>" +
+                    "Remove</a><br/></span>");
+
+                $('#formAssociatedFileListLabel').show();
+            };
+
+            flRdr.onload = fileLoaded;
+            flRdr.readAsDataURL(myFile2);
+        },
+
+        deleteFileAssociation : function(el){
+            var that = this;
+
+            $.each(that.formFilesBinaryList, function(index, fileObj){
+                if (fileObj.name == $(el.target).attr("value"))
+                {
+                    that.formFilesBinaryList.splice(index, 1);
+                    $(el.target).parent().remove();
+                    if (that.formFilesBinaryList.length == 0)
+                        $('#formAssociatedFileListLabel').hide();
+                    return false;
+                }
+            });
         }
 
     });

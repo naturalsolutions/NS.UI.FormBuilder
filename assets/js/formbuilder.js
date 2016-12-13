@@ -181,27 +181,27 @@ define([
         if (AppConfig.authmode == 'portal')
         {
             $.ajax({
-            data: JSON.stringify({'securityKey' : AppConfig.securityKey}),
-            type: 'POST',
-            url: options.URLOptions.security + "/isCookieValid",
-            contentType: 'application/json',
-            crossDomain: true,
-            async: false,
-            success: _.bind(function (data) {
-                window.user = data.username;
-                $("header .user").text(data.username);
-                $("header .icons.last").removeClass("hidden");
-            }, this),
-            error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                swal({
-                    title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
-                    text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
-                    type: "error"
-                }, function(){
-                    window.location.href = AppConfig.portalURL;
-                });
-            }, this)
-        });
+                data: JSON.stringify({'securityKey' : AppConfig.securityKey}),
+                type: 'POST',
+                url: options.URLOptions.security + "/isCookieValid",
+                contentType: 'application/json',
+                crossDomain: true,
+                async: false,
+                success: _.bind(function (data) {
+                    window.user = data.username;
+                    $("header .user").text(data.username);
+                    $("header .icons.last").removeClass("hidden");
+                }, this),
+                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    swal({
+                        title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
+                        text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
+                        type: "error"
+                    }, function(){
+                        window.location.href = AppConfig.portalURL;
+                    });
+                }, this)
+            });
         }
 
         // Adding contexts
@@ -280,6 +280,23 @@ define([
 
             delete_cookie(AppConfig.cookieName);
             setTimeout(function(){window.location.replace(AppConfig.portalURL);},100)
+        });
+
+        window.trees = [];
+        $.each(AppConfig.paths, function(index, value){
+            $.ajax({
+                type        : 'POST',
+                url         : value,
+                contentType : 'application/json',
+                data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
+                timeout     : 10000,
+                success: function (data) {
+                    window.trees[value] = data;
+                },
+                error: function () {
+
+                }
+            });
         });
 
     });

@@ -360,6 +360,9 @@ define([
             this.propagate       = opt.propagate      || false;
             this.context         = opt.context        || "";
             this.isTemplate      = opt.isTemplate     || false;
+            this.fileList        = opt.fileList       || [];
+            this.originalID      = opt.originalID     || 0;
+
             this.fieldstodelete  = [];
             this.fieldsexcludedfromdelete = [];
             this.totalAddedElements = 0;
@@ -547,6 +550,8 @@ define([
                 propagate     : this.propagate,
                 isTemplate    : this.isTemplate || false,
                 context       : this.context,
+                fileList      : this.fileList || [],
+                originalID    : this.originalID || 0,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
@@ -611,7 +616,25 @@ define([
                 setUnexistingStuff(inputVal);
             });
 
-            console.log("json schema to send = ", json);
+            $.each(json, function(index, value){
+                try{
+                    json[index] = json[index].trim();
+                }
+                catch(e){
+
+                }
+            });
+
+            $.each(json.schema, function(topindex, topvalue){
+                $.each(topvalue, function(index, value){
+                    try{
+                        json.schema[topindex][index] = json.schema[topindex][index].trim();
+                    }
+                    catch(e){
+
+                    }
+                });
+            });
 
             return json;
         },
@@ -636,18 +659,6 @@ define([
                 if (field.get('name') == Fields.BaseField.prototype.defaults.name)
                     field.set('name', field.get('name'));
 
-                /*
-                console.log(this.getSize());
-                console.log(field.get('order'));
-                console.log("FINAL ACT");
-
-                this.on('add', function(value){
-                    console.log("**********");
-                    console.log("added : ", value);
-                    console.log("**********");
-                });
-                */
-
                 this.add(field);
 
                 //  Send event when field is added to the form
@@ -663,9 +674,14 @@ define([
                     var scrollArea = $(".dropArea .slimScrollDiv #scrollSection");
                     var lastItemofScrollArea = scrollArea.find('div.dropField:last');
 
+                    var scrollTo = lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop();
+
+                    console.log("scrollTo", scrollTo);
+                    console.log(lastItemofScrollArea.offset().top, "+", lastItemofScrollArea.outerHeight(true), "+", scrollArea.scrollTop());
+
                     if (lastItemofScrollArea.offset()){
                         scrollArea.animate({
-                            scrollTop: lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop()
+                            scrollTop: scrollTo
                         }, 500);
                     }
                     this.fieldsexcludedfromdelete.push(field.get('id'));
@@ -687,7 +703,6 @@ define([
             var field = properties || {};
             field['order'] = this.getSize();
 
-            console.log("addElement", properties);
             return this.addField(new Fields[nameType](field), isUnderFieldset);
         },
 
@@ -702,9 +717,7 @@ define([
             var field = properties || {};
             field['order'] = this.getSize();
 
-            console.log("addNewElement", nameType, properties, isUnderFieldset);
-
-            return this.addField(new Fields[nameType](field), isUnderFieldset);
+            return this.addField(new Fields[nameType](field), isUnderFieldset, true);
         },
 
         /**
@@ -728,7 +741,6 @@ define([
         removeElement : function(id) {
             var item = this.get(id);
 
-            console.log("removeElement", id);
             if (item !== undefined) {
                 //  If the field is a subForm field we remove all subFormField
                 if (item.constructor.type == 'Subform') {
@@ -747,7 +759,6 @@ define([
 
                 if ($.inArray(item.get('id'), this.fieldsexcludedfromdelete) == '-1')
                 {
-                    console.log("todelete will be", item.get('id'));
                     this.fieldstodelete.push(item.get('id'));
                 }
             }
@@ -812,7 +823,12 @@ define([
 
                 this.isTemplate           = JSONUpdate["isTemplate"];
 
+                this.fileList             = JSONUpdate["fileList"];
+
+                this.originalID           = JSONUpdate["originalID"];
+
                 var that = this;
+
                 $.each(extention.jsonExtention(), function(index, value){
                     that[index] = JSONUpdate[index] || value || "";
                 });
@@ -1129,7 +1145,7 @@ define([
                 if (el.constructor.type != undefined && el.get('id') != modelID) {
                     fieldsList.push(el.get('name'))
                 }
-            })
+            });
 
             return fieldsList;
         },

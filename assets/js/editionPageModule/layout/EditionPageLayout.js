@@ -85,7 +85,7 @@ define([
 
             //  Event sent from setting view when backbone forms generation is finished
             //  Run an animation for hide panel view and display setting view, I love jQuery !
-            //this.mainChannel.on('formCreated', this.displaySettingPanel, this);
+            // this.mainChannel.on('formCreated', this.displaySettingPanel, this);
 
             //  Event sent from setting view when field changed are saved
             //  and the data are correct
@@ -98,7 +98,11 @@ define([
 
             //  Event sent from setting view when modifications are cancelled
             //  Run an animation for hide setting view and display panel view
-            this.mainChannel.on('formCancel', this.closeSettingPanelDefault, this)
+            this.mainChannel.on('formCancel', this.closeSettingPanelDefault, this);
+
+            this.mainChannel.on('setTemplateList', this.setTemplateList, this);
+
+            this.mainChannel.on('unsetTemplateList', this.unsetTemplateList, this);
         },
 
         /**
@@ -112,16 +116,8 @@ define([
                 this.addRegion('settingFieldPanel', '#settingFieldPanel');
                 this.settingFieldPanel =  this.getRegion('settingFieldPanel');
             }
-            if ($('#widgetPanel').hasClass('col-md-1')) {
-                $('#formPanel').switchClass('col-md-8', 'col-md-6', 500);
-            }
 
-            if ($('#settingFieldPanel').hasClass('col-md-0')) {
-                $('#settingFieldPanel').switchClass('col-md-0', 'col-md-3', 500);
-                $('#widgetPanel').hide();
-            }
-
-            this.settingFieldPanel.show(new SettingFieldPanelView(options));
+            this.settingFieldPanel.show(new SettingFieldPanelView(options, this.savedTemplateList));
         },
 
         /**
@@ -214,6 +210,7 @@ define([
         },
 
         onDestroy : function() {
+
             delete this.formChannel;
             delete this.mainChannel;
             delete this.settingFieldPanel;
@@ -222,7 +219,7 @@ define([
         },
 
         exitFormEdition : function() {
-            console.log("exitFormEdition called");
+            this.destroy();
         },
 
         /**
@@ -300,6 +297,14 @@ define([
         closeSettingPanelAndCommit : function(form) {
 
             this.closeSettingPanelDefault(form);
+        },
+
+        setTemplateList : function(templateList) {
+            this.savedTemplateList = templateList;
+        },
+
+        unsetTemplateList : function() {
+            this.savedTemplateList = undefined;
         }
     });
 

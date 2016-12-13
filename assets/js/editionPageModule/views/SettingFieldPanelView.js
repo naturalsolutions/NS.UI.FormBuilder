@@ -58,20 +58,22 @@ define([
                     model : this.modelToEdit,
                     type : this.modelToEdit.constructor.type.charAt(0).toLowerCase() + this.modelToEdit.constructor.type.slice(1)
                 });
+
             }
             return ({model: undefined, type:  undefined});
         },
 
-
         /**
         * View constructor, init grid channel
         */
-        initialize : function(options) {
+        initialize : function(options, defaultTemplateList) {
             this.fieldsList             = options.fieldsList;
             this.URLOptions             = options.URLOptions;
             this.modelToEdit            = options.modelToEdit;
             this.linkedFieldsList       = options.linkedFieldsList[window.context];
             this.preConfiguredFieldList = options.preConfiguredFieldList;
+
+            this.savedTemplateFieldList = defaultTemplateList;
 
             this.form               = null;
             this.fieldWithSameType  = null;
@@ -129,27 +131,55 @@ define([
         * @param  {Object} field Field with which backbone forms will generate an edition form
         */
         initForm : function() {
+            var that = this;
+            var callBackTemplateRequest = function(fieldList){
 
-            this.currentFieldType  = this.modelToEdit.constructor.type;
-            this.fieldWithSameType = this.preConfiguredFieldList[this.currentFieldType];
+                that.preConfiguredFieldList = fieldList;
 
-            if (this.fieldWithSameType == undefined) {
-                this.$el.find('*[data-setting="field"]').first().hide();
-            } else {
-                // Update available pre configurated field
-                _.each(this.fieldWithSameType, _.bind(function(el, idx) {
-                    this.$el.find('#getField select').append('<option value="' + idx + '">' + idx + '</option>');
-                }, this));
+                that.currentFieldType  = that.modelToEdit.constructor.type;
+                that.fieldWithSameType = that.preConfiguredFieldList[that.currentFieldType];
+
+                if (that.fieldWithSameType == undefined) {
+                    that.$el.find('*[data-setting="field"]').first().hide();
+                } else {
+                    // Update available pre configurated field
+                    _.each(that.fieldWithSameType, _.bind(function(el, idx) {
+                        that.$el.find('#getField select').append('<option value="' + idx + '">' + idx + '</option>');
+                    }, that));
+                }
+
+                that.$el.find('select').selectpicker();
+
+                that.createForm();
+
+                if ($('#widgetPanel').hasClass('col-md-1')) {
+                    $('#formPanel').switchClass('col-md-8', 'col-md-6', 500);
+                }
+
+                if ($('#settingFieldPanel').hasClass('col-md-0')) {
+                    $('#settingFieldPanel').switchClass('col-md-0', 'col-md-3', 500);
+                    $('#widgetPanel').hide();
+                }
+
+                $(".actions").show();
+            };
+
+            if (that.savedTemplateFieldList)
+            {
+                callBackTemplateRequest(that.savedTemplateFieldList);
             }
-
-            this.$el.find('select').selectpicker();
-
-            this.createForm();
+            else
+            {
+                $.getJSON(that.URLOptions.preConfiguredField, _.bind(function(fieldList) {
+                    that.mainChannel.trigger('setTemplateList', fieldList);
+                    callBackTemplateRequest(fieldList);
+                }, that));
+            }
         },
 
         initContextDatas : function() {
 
-            // TODO Idealy, this should be in the contextloaders ...
+            // TODO Idealy, this should be in the contextloaders ... :
             //  Init linked field
 
             this.initFormLinkedFields();
@@ -373,32 +403,41 @@ define([
 
                     var savednode = this.modelToEdit.get('defaultNode');
 
+                    var callbackWSCall = function(data){
+                        var transformed = $.map(data.children, function (el) {
+                            return {
+                                label: el.fullpath,
+                                id: el.key,
+                                data: el
+                            };
+                        });
+                        response(transformed);
+                    };
+
                     var createFullpathAutocomplete = function(){
                         $('input[name="'+pathname+'"]').autocomplete({
                             scrollHeight: 220,
                             source: function (request, response) {
-                                $.ajax({
-                                    type        : 'POST',
-                                    url         : WebServiceUrl,
-                                    contentType : 'application/json',
-                                    data        : JSON.stringify({
-                                        StartNodeID:$("#defaultNode").fancytree("getActiveNode") || 0,
-                                        deprecated:0,
-                                        lng:"Fr"}),
-                                    success: function (data) {
-                                        var transformed = $.map(data.children, function (el) {
-                                            return {
-                                                label: el.fullpath,
-                                                id: el.key,
-                                                data: el
-                                            };
-                                        });
-                                        response(transformed);
-                                    },
-                                    error: function () {
-                                        response([]);
-                                    }
-                                });
+                                if (window.trees[WebServiceUrl]) {
+                                    callBackWSCall(window.trees[WebServiceUrl]);
+                                }
+                                else {
+                                    $.ajax({
+                                        type        : 'POST',
+                                        url         : WebServiceUrl,
+                                        contentType : 'application/json',
+                                        data        : JSON.stringify({
+                                            StartNodeID:$("#defaultNode").fancytree("getActiveNode") || 0,
+                                            deprecated:0,
+                                            lng:"Fr"}),
+                                        success: function (data) {
+                                            callbackWSCall(data);
+                                        },
+                                        error: function () {
+                                            response([]);
+                                        }
+                                    });
+                                }
                             },
                             select: function(event, ui){
                                 $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setActive();
@@ -420,35 +459,43 @@ define([
 
                             var tosend = JSON.stringify({StartNodeID: startID, lng: "fr"});
 
-                            $.ajax({
-                                data        : tosend,
-                                type        : 'POST',
-                                url         : WebServiceUrl,
-                                contentType : 'application/json',
-                                //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                                //  The server is already configured to used it
-                                crossDomain : true,
+                            var callbackWSCall = function(data){
+                                $('#defaultNode').fancytree({
+                                    source     : data,
+                                    checkbox   : false,
+                                    selectMode : 1,
+                                    activeNode : startID,
+                                    click : _.bind(function(event, data) {
+                                        that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), data);
+                                        $('input[name="'+pathname+'"]').val(data.node.data.fullpath);
+                                        createFullpathAutocomplete();
+                                    }, this)
+                                });
+                                $('#defaultNode').fancytree("getTree").activateKey(savednode);
+                            };
 
-                                //  Trigger event with ajax result on the formView
-                                success: _.bind(function(data) {
-                                    $('#defaultNode').fancytree({
-                                        source     : data,
-                                        checkbox   : false,
-                                        selectMode : 1,
-                                        activeNode : startID,
-                                        click : _.bind(function(event, data) {
-                                            this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                            $('input[name="'+pathname+'"]').val(data.node.data.fullpath);
-                                            createFullpathAutocomplete();
-                                        }, this)
-                                    });
-                                    $('#defaultNode').fancytree("getTree").activateKey(savednode);
+                            if (window.trees[WebServiceUrl]) {
+                                callbackWSCall(window.trees[WebServiceUrl]);
+                            }
+                            else {
+                                $.ajax({
+                                    data: tosend,
+                                    type: 'POST',
+                                    url: WebServiceUrl,
+                                    contentType: 'application/json',
+                                    //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                                    //  The server is already configured to used it
+                                    crossDomain: true,
 
-                                }, this)
-                            });
+                                    //  Trigger event with ajax result on the formView
+                                    success: _.bind(function (data) {
+                                        callbackWSCall(data);
+                                    }, this)
+                                });
+                            }
                         }
                         else {
-                            $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
+                            var callBackWSCall = function(data){
                                 $('#defaultNode').fancytree({
                                     source: data['d'],
                                     checkbox : false,
@@ -458,10 +505,18 @@ define([
                                     }, this)
                                 });
                                 $('#defaultNode').fancytree("getTree").activateKey(savednode);
+                            };
 
-                            }, this)).error(function(a,b,c) {
-                                alert ("can't load ressources !");
-                            });
+                            if (window.trees[AppConfig.paths.thesaurusWSPath]) {
+                                callBackWSCall(window.trees[AppConfig.paths.thesaurusWSPath]);
+                            }
+                            else {
+                                $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
+                                    callBackWSCall(data);
+                                }, this)).error(function(a,b,c) {
+                                    alert ("can't load ressources !");
+                                });
+                            }
                         }
                         createFullpathAutocomplete();
                     }
@@ -539,14 +594,11 @@ define([
                         }
                     });
 
-                    console.log("getCompatibleInputs", toret);
-
                     return(toret);
                 };
 
                 var hideTypeConverter = true;
                 $.each(getCompatibleInputs(), function(index, value){
-                    console.log("each", "getCompatibleInputs", index, value);
                     if ( $("#inputTypeList option[value='"+value+"']").length == 0)
                     {
                         $('#inputTypeList').append($('<option>', {
@@ -557,15 +609,26 @@ define([
                     hideTypeConverter = false;
                 });
 
-                // TODO MAKE THE CONVERTER TOOL WORK AND THEN SET : if (hideTypeConverter)
                 if (hideTypeConverter)
                 {
-                    console.log("hideTypeConverter", "hide");
                     $(".convertArea").hide();
                 }
                 else
                 {
                     $("#inputTypeList").selectpicker("refresh");
+                }
+
+                $.each(that.modelToEdit.collection.schemaDefinition, function(index, value){
+                    if (value.validators && value.validators[0].type == "required")
+                    {
+                        $("#settingFieldPanel #form label[for="+that.modelToEdit.cid+"_"+index+"]").append(" <span style='color: red;'>*</span>");
+                    }
+                });
+
+                if(that.modelToEdit.attributes.originalID && that.modelToEdit.attributes.originalID > 0)
+                {
+                    $("#originalIDArea").show();
+                    $("#fieldOriginalID").text(that.modelToEdit.attributes.originalID);
                 }
 
             }, this));
@@ -630,8 +693,6 @@ define([
 
                 this.form = null;
             }, this), 300);
-            //  My prefered music for developpement
-            //  https://www.youtube.com/watch?v=YKhNbKplIYA
         },
 
 
@@ -688,11 +749,9 @@ define([
         /**
         * Send an event on form channel when user wants to clear current form
         */
-        cancel : function(){
+        cancel : function(event, avoidUserValidation){
 
             var self = this;
-            console.log("cancel", this.form);
-
             self.globalChannel.trigger('nodeReset' + self.modelToEdit.get('id'));
 
             var cancelSettingPanel = function(){
@@ -700,7 +759,7 @@ define([
                 self.mainChannel.trigger('formCancel');
             };
 
-            if (this.hasFieldsChanged){
+            if (this.hasFieldsChanged && !avoidUserValidation){
                 swal({
                     title: translater.getValueFromKey('configuration.cancel.yousure') || "Vraiment ?",
                     text: translater.getValueFromKey('configuration.cancel.unsavedchanges') || "Vous avez effectué de changements !",
@@ -766,8 +825,8 @@ define([
 
                     this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
 
-                    this.mainChannel.trigger('formCommit');
                     this.removeForm();
+                    this.mainChannel.trigger('formCommit');
 
                     $("#dropField"+this.modelToEdit.get('id')+" .field-label span").css("color", "white");
                 }
@@ -813,6 +872,8 @@ define([
         },
 
         applyTemplateField : function() {
+            var that = this;
+
             var templateInputName = $("#templateList option:selected").text();
             if (templateInputName.length > 0){
                 $.ajax({
@@ -821,21 +882,20 @@ define([
                     url: this.URLOptions.fieldConfigurationURL + "/" + templateInputName,
                     contentType: 'application/json',
                     crossDomain: true,
-                    success: _.bind(function (data) {
-                        var that = this;
+                    success: function (data) {
                         $.each(data.result, function(key, value){
                             if (that.modelToEdit.attributes[key] != undefined && key != "name" && key != "id")
                             {
                                 that.modelToEdit.attributes[key] =  value;
                             }
                         });
-                        that.render();
+                        that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
                         swal(
                             translater.getValueFromKey('configuration.save.loadsuccess') || "Chargement réussit !",
                             translater.getValueFromKey('configuration.save.loadsuccessMsg') || "Le template a bien été chargé",
                             "success"
                         );
-                    }, this),
+                    },
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
                         console.log("Ajax Error: " + xhr);
                     }, this)
@@ -889,6 +949,7 @@ define([
                     var fieldType = $("#inputTypeList option:selected").text() + 'Field';
                     that.modelToEdit.attributes.id = 0;
                     that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes);
+                    that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
                 }
             });
         },
@@ -897,6 +958,7 @@ define([
          * Display success message when field has been saved as pre configurated field
          */
         displayConfigurationSaveSuccess : function() {
+            this.mainChannel.trigger('unsetTemplateList');
             swal(
                 translater.getValueFromKey('configuration.save.success') || "Sauvé !",
                 translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",

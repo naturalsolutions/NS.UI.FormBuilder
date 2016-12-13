@@ -123,7 +123,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
          * Send an event on form channel when user wants to edit field properties
          */
         editModel : function() {
-            this.disableActions();
+            $(".actions").hide();
 
             //  The event is send to EditionPageController
             this.formChannel.trigger('editModel', this.model.get('id'));

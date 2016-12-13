@@ -314,9 +314,12 @@
             "convertTitle" : "Conversion validation",
             "convertValidate" : "The input will be converted without possible return !",
             "convertYes" : "Yes, convert",
-            "convertNo" : "Don't"
+            "convertNo" : "Don't",
+            "choosefile" : "Associate a file",
+            "browse" : "Browse"
         },
-        "preField" : "Pre-configurated field"
+        "preField" : "Pre-configurated field",
+        "linkedFilesList" : "List of associated files:"
     },
 
     "modal" : {

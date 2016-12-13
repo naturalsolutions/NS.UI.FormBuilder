@@ -43,7 +43,7 @@ define([
         var toret = [];
         if (AppConfig.config.options.URLOptions){
             var formCollection = new FormCollection({
-                url : AppConfig.config.options.URLOptions.allforms
+                url : AppConfig.config.options.URLOptions.allforms + "/" + window.context
             });
 
             formCollection.fetch({
@@ -51,9 +51,12 @@ define([
                 reset : true,
                 success : _.bind(function() {
                     $.each(formCollection.models, function(index, value){
-                        if (context.collection.name != value.attributes.name &&
-                            (!value.attributes.context || value.attributes.context == window.context))
+                        if ((context.collection.name != value.attributes.name &&
+                            (!value.attributes.context || value.attributes.context == window.context)) &&
+                            !value.attributes.obsolete)
+                        {
                             toret.push({"val" : value.attributes.id ,"label" : value.attributes.name});
+                        }
                     });
                 }, this)
             });
@@ -184,7 +187,8 @@ define([
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 title       : translater.getValueFromKey('schema.fieldSize'),
-                validators : [function checkValue(value, formValues) {
+                validators : ['required',
+                    function checkValue(value, formValues) {
                     if (value < 1 || value > 12) {
                         return {
                             type : 'Invalid number',

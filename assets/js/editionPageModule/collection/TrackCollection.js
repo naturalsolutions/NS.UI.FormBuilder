@@ -176,7 +176,9 @@ define([
                     title       : translater.getValueFromKey('form.importance'),
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    validators  : [
+                    validators  : [{
+                            type : 'required'
+                        },
                         function test(value) {
                             if (value < 0 || value > 5) {
                                 return {
@@ -184,8 +186,6 @@ define([
                                     message: translater.getValueFromKey('schema.errorbetween0and5')
                                 };
                             }
-                        },{
-                            type : 'required'
                         }
                     ]
                 },

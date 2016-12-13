@@ -248,7 +248,6 @@ define([
          * @param {object} newModel new added field
          */
         addElement: function (newModel) {
-            console.log("addElement", newModel);
             if (!newModel.get('isUnderFieldset')) {
                 //  We only create view for model who are not in a fieldset
                 //  If a model if in a fieldset, the fieldset view render the subView
@@ -642,6 +641,11 @@ define([
          */
         updateName: function () {
             this.$el.find('#collectionName').text(this.collection.name);
+            if (this.collection.originalID && this.collection.originalID > 0)
+            {
+                this.$el.find('#formOriginalIdArea').show();
+                this.$el.find('#formOriginalID').text(this.collection.originalID);
+            }
         },
 
         collectionUpdateFinished : function() {

@@ -312,7 +312,7 @@
             "saveAsType" : "Enregistrez comme nouveau template",
             "applyTemplate" : "Appliquer",
             "chooseNewTemplate" : "Appliquer un template :",
-            "save"       : "Sauvegarder",
+            "save"       : "Sauver modifications",
             "validate"   : "Valider",
             "cancel"     : "Annuler",
             "listOfParentForms" : "Liste des formulaires parents :",
@@ -322,9 +322,12 @@
             "convertTitle" : "Confirmation de convertion",
             "convertValidate" : "L'input sera convertit sans retour possible !",
             "convertYes" : "Oui, convertir",
-            "convertNo" : "Annuler"
+            "convertNo" : "Annuler",
+            "choosefile" : "Associer un fichier",
+            "browse" : "Parcourir"
         },
-        "preField" : "Champs pré configurés"
+        "preField" : "Champs pré configurés",
+        "linkedFilesList" : "Liste des fichiers associés :"
     },
     "modal" : {
         "comment"  : "Votre commentaire",
