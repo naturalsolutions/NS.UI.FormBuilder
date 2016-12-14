@@ -72,7 +72,7 @@ define([
                             loadHomepage();
                             window.setTimeout(function() {
                                 Backbone.Radio.channel('global').trigger('displayEditionPage', formInCollection.toJSON());
-                            }, 1500);
+                            }, 2000);
                         }
                         else
                             loadHomepage();
@@ -91,9 +91,9 @@ define([
             else if (urlArgs[0] == "edition" && $("#formsCount").length == 0){
                 window.setTimeout(function() {
                     loadHomepage();
-                }, 350);
+                }, 500);
             }
-        }, 100);
+        }, 200);
 
     };
 
@@ -144,7 +144,7 @@ define([
                 $('#mainRegion').animate({
                     marginLeft : '-100%'
                 }, 750);
-            }, 300);
+            }, 500);
         }, this));
 
 
@@ -236,7 +236,7 @@ define([
                         window.context = context;
                         Backbone.Radio.channel('form').trigger('setFieldCollection', context);
                         Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-                    }, 50);
+                    }, 100);
                 }
                 else
                 {
@@ -279,7 +279,7 @@ define([
             };
 
             delete_cookie(AppConfig.cookieName);
-            setTimeout(function(){window.location.replace(AppConfig.portalURL);},100)
+            setTimeout(function(){window.location.replace(AppConfig.portalURL);},200)
         });
 
         window.trees = [];

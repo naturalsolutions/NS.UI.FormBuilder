@@ -1101,7 +1101,7 @@ define([
                     that.formChannel.trigger('collectionUpdateFinished');
                     that.working = false;
                 }
-            }, 25);
+            }, 50);
         },
 
         /**
@@ -1265,7 +1265,7 @@ define([
                                     }
                                     else
                                         displaySaveSuccess();
-                                }, 100);
+                                }, 200);
                             };
 
                             displaySaveSuccess();
@@ -1336,7 +1336,7 @@ define([
                     }
                     that.showSpinner(true);
                 }
-            }, 10);
+            }, 20);
         },
 
         saveAsTemplate : function() {

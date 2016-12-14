@@ -487,7 +487,7 @@ define([
         hideSpinner : function(duration) {
             setTimeout(_.bind(function() {
                 this.$el.find('.spinner').addClass('end', 250);
-            }, this), duration || 250);
+            }, this), duration || 400);
         },
 
         /**
@@ -792,7 +792,7 @@ define([
                     translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
                     "success"
                 );
-            }, this), 250)
+            }, this), 500)
         },
 
         /**

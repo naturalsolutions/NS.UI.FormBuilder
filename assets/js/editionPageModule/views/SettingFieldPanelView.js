@@ -692,7 +692,7 @@ define([
                 this.$el.find('.scroll').slimScroll('update');
 
                 this.form = null;
-            }, this), 300);
+            }, this), 500);
         },
 
 
@@ -722,7 +722,7 @@ define([
             this.$el.find('.scroll').slimScroll({scrollTo: "0px"});
             setTimeout(_.bind(function(){
                 this.$el.find('.scroll').scrollTop(0);
-            }, this), 100);
+            }, this), 200);
         },
 
         /**
