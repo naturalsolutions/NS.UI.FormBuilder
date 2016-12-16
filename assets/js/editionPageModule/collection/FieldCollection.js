@@ -1101,7 +1101,7 @@ define([
                     that.formChannel.trigger('collectionUpdateFinished');
                     that.working = false;
                 }
-            }, 50);
+            }, 35);
         },
 
         /**

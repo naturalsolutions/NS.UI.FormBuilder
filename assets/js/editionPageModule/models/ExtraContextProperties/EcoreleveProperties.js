@@ -82,6 +82,20 @@ define([
                         title       : "isSQL"
                     }
                 }
+            },
+            all:{
+                defaults: {
+                    linkedFieldIdentifyingColumn: ""
+                },
+                schema: {
+                    linkedFieldIdentifyingColumn: {
+                        type        : 'Text',
+                        editorClass : 'form-control',
+                        fieldClass  : "hidden",
+                        template    : fieldTemplate,
+                        title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn')
+                    }
+                }
             }
         },
 

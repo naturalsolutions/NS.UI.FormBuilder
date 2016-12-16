@@ -925,6 +925,10 @@ define([
                         type: "info"
                     });
                     break;
+                case "linkedFieldTable":
+                    if (window.context == "ecoreleve")
+                        $("input[name='linkedFieldIdentifyingColumn']").val("FK_" + $(e.currentTarget).val());
+                    break;
             }
         },
 
