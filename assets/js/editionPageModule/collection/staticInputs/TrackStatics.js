@@ -154,9 +154,9 @@ define([
             delete toret.schema;
 
             $.each(savedSchema, function(index, value){
-
                 if (!(value.name.toLowerCase() == "egg" && json.typeIndividus.toLowerCase().indexOf("oeuf") == -1)
-                && !(value.name.toLowerCase() == "individual" && json.typeIndividus.toLowerCase().indexOf("oeuf") != -1))
+                && !(value.name.toLowerCase() == "individual" && json.typeIndividus.toLowerCase().indexOf("oeuf") != -1)
+                && !(json.groupe.toLowerCase() == "null" && (value.name.toLowerCase() == "egg" || value.name.toLowerCase() == "individual")))
                 {
                     toadd.push(index);
                 }

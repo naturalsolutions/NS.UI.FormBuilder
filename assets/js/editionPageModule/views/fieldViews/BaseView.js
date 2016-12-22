@@ -66,6 +66,8 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
          */
         destroy_view: function() {
             this.$el.slideUp(_.bind(function() {
+                // TODO undelegate ?
+                console.log("undelegate !", "destroy_view");
                 this.undelegateEvents();
 
                 this.$el.removeData().unbind();
@@ -95,6 +97,9 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
                 if (isConfirm) {
                     self.formChannel.trigger('remove', self.model.get('id'));
                 }
+
+                window.onkeydown = null;
+                window.onfocus = null;
             });
         },
 

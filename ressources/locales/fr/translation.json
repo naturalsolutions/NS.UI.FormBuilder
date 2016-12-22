@@ -182,7 +182,7 @@
         "max"               : "Valeur maximale",
         "maxTextLength"     : "Longueur maximale",
         "maxTextLengthError": "Longueur invalide",
-        "maxTextLengthMinMax": "La longueur doit être supérieure à 0 et inférieure à 256 !",
+        "maxTextLengthMin"  : "La longueur doit être compris entre 1 et 255 !",
         "precision"         : "Précision",
         "unity"             : "Unité",
         "pattern"           : "Masque de saisie",
@@ -234,7 +234,7 @@
         "atBeginingOfLine"             : "Est en début de ligne",
         "sizeError"                    : "La taille doit être comprise entre 1 et 12",
         "positionPath"                 : "Chemin vers la position",
-        "defaultPath"                  : "Chemin par défaut",
+        "defaultPath"                  : "Valeur par défaut",
         "nbFixedCol"                   : "Nombre de colonnes fixes",
         "delFirst"                     : "Supprimer le premier",
         "showLines"                    : "Montrer les lignes",
@@ -357,7 +357,7 @@
             "successMsg" : "Le formulaire a bien été importé"
         },
         "export" : {
-            "success"  : "Export réussi !",
+            "success"  : "Export réussit !",
             "error"    : "Echec de l'export !",
             "errorMsg" : "Une erreur est survenue lors de l'export",
             "title"    : "Export",
@@ -447,7 +447,7 @@
         "size"        : "Taille maximum de la valeur du champs",
         "minimalSize" : "Taille minimum de la valeur du champs",
         "mime"        : "Type de fichiers autorisés",
-        "fileSize"    : "Taille maximum autoriser pour les fichiers choisis",
+        "fileSize"    : "Taille maximum autorisée pour les fichiers choisis",
         "tree" : {
           "default" : "Noeud de départ",
           "url"     : "URL retournant l'arborescence de l'arbre"

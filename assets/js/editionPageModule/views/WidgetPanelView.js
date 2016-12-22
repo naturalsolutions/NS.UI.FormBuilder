@@ -74,11 +74,15 @@ define([
             if (Fields[elementClassName] !== undefined) {
                 this.formChannel.trigger('addNewElement', elementClassName);
             } else {
-                swal(
-                    translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
-                    translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
-                    "error"
-                );
+                swal({
+                    title:translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
+                    text:translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
+                    type:"error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
             }
         },
 

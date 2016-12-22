@@ -288,11 +288,15 @@ define([
                     $(".actions").i18n();
 
                 }, this), function (err) {
-                    swal(
-                        translater.getValueFromKey('modal.field.error' + err) || "Echec de l'ajout!",
-                        translater.getValueFromKey('modal.field.errorMsg' + err) || "Une erreur est survenue lors de l'ajout du champ !",
-                        "error"
-                    );
+                    swal({
+                        title: translater.getValueFromKey('modal.field.error' + err) || "Echec de l'ajout!",
+                        text: translater.getValueFromKey('modal.field.errorMsg' + err) || "Une erreur est survenue lors de l'ajout du champ !",
+                        type: "error",
+                        closeOnConfirm: true
+                    }, function(){
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
                 });
 
             }
@@ -438,7 +442,11 @@ define([
         },
 
         displayRuleMessage : function(error) {
-            swal(error.title, error.content, "error");
+            swal({title:error.title, text:error.content, type:"error",
+                closeOnConfirm: true}, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         /**
@@ -455,7 +463,7 @@ define([
                 confirmButtonColor : "#DD6B55",
                 confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
                 cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                closeOnConfirm     : false,
+                closeOnConfirm     : true,
                 closeOnCancel      : true
             }, function(isConfirm) {
 
@@ -463,15 +471,23 @@ define([
                     _.map(self._view, function(el) {
                         el.removeView();
                     });
-                    swal(
-                        translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
-                        translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
-                        "success"
-                    );
+                    swal({
+                        title:translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
+                        text:translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
+                        type:"success",
+                        closeOnConfirm: true
+                    }, function(){
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
+
                     self.collection.clearAll();
                     self._viewCount = 0;
                     self.updateFieldCount();
                 }
+
+                window.onkeydown = null;
+                window.onfocus = null;
             });
 
         },
@@ -483,17 +499,25 @@ define([
          */
         displayExportMessage : function(result) {
             if (result) {
-                swal(
-                    translater.getValueFromKey('modal.export.success') || "Export réussi !",
-                    "",
-                    "success"
-                )
+                swal({
+                    title:translater.getValueFromKey('modal.export.success') || "Export réussi !",
+                    text:"",
+                    type:"success",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
             } else {
-                swal(
-                    translater.getValueFromKey('modal.export.error') || "Echec de l'export !",
-                    translater.getValueFromKey('modal.export.errorMsg') || "Une erreur est survenue lors de l'export",
-                    "error"
-                )
+                swal({
+                    title:translater.getValueFromKey('modal.export.error') || "Echec de l'export !",
+                    text:translater.getValueFromKey('modal.export.errorMsg') || "Une erreur est survenue lors de l'export",
+                    type:"error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
             }
         },
 
@@ -501,11 +525,15 @@ define([
          * Display a message when the form has been saved
          */
         displaySucessMessage : function() {
-            swal(
-                translater.getValueFromKey('modal.save.success') || "Sauvé !",
-                translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
-                "success"
-            );
+            swal({
+                title: translater.getValueFromKey('modal.save.success') || "Sauvé !",
+                text: translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
+                type: "success",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         /**
@@ -514,44 +542,64 @@ define([
         displayFailMessage : function(textKey, textValue) {
             if (textKey)
             {
-                swal(
-                    translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
-                    translater.getValueFromKey(textKey) + (textValue?textValue:"") || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-                    "error"
-                );
+                swal({
+                    title:translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
+                    text:translater.getValueFromKey(textKey) + (textValue ? textValue : "") || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                    type:"error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
             }
             else
             {
-                swal(
-                    translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
-                    translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-                    "error"
-                );
+                swal({
+                    title:translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
+                    text:translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
+                    type:"error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
             }
         },
 
         displayIncompleteFormMessage: function() {
-            swal(
-                translater.getValueFromKey('modal.save.uncompleteFormerror') || "Une erreur est survenue !",
-                translater.getValueFromKey('modal.save.uncompleteForm') || "Votre formulaire n'a pas été totallement renseigné",
-                "error"
-            );
+            swal({
+                title:translater.getValueFromKey('modal.save.uncompleteFormerror') || "Une erreur est survenue !",
+                text:translater.getValueFromKey('modal.save.uncompleteForm') || "Votre formulaire n'a pas été totallement renseigné",
+                type:"error",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         displayIncompleteFieldMessage: function() {
-            swal(
-                translater.getValueFromKey('modal.save.uncompleteFielderror') || "Une erreur est survenue !",
-                translater.getValueFromKey('modal.save.uncompleteField') || "Un de vos champs n'a pas été totallement renseigné",
-                "error"
-            );
+            swal({
+                title:translater.getValueFromKey('modal.save.uncompleteFielderror') || "Une erreur est survenue !",
+                text:translater.getValueFromKey('modal.save.uncompleteField') || "Un de vos champs n'a pas été totallement renseigné",
+                type:"error",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         displayHasDuplicateFieldNames: function() {
-            swal(
-                translater.getValueFromKey('modal.save.hasDuplicateFieldNamesError') || "Une erreur est survenue !",
-                translater.getValueFromKey('modal.save.hasDuplicateFieldNames') || "Certains de vos champs ont des noms identiques",
-                "error"
-            );
+            swal({
+                title:translater.getValueFromKey('modal.save.hasDuplicateFieldNamesError') || "Une erreur est survenue !",
+                text:translater.getValueFromKey('modal.save.hasDuplicateFieldNames') || "Certains de vos champs ont des noms identiques",
+                type:"error",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         /**
@@ -619,6 +667,9 @@ define([
                     if (isConfirm) {
                         self.clearFormAndExit();
                     }
+
+                    window.onkeydown = null;
+                    window.onfocus = null;
                 });
             }
             else
@@ -656,19 +707,27 @@ define([
 
 
         displaytemplateMessage : function() {
-            swal(
-                translater.getValueFromKey('modal.template.success') || "Sauvé !",
-                translater.getValueFromKey('modal.template.successMsg') || "Votre formulaire a été enregistré comme template !",
-                "success"
-            );
+            swal({
+                title:translater.getValueFromKey('modal.template.success') || "Sauvé !",
+                text:translater.getValueFromKey('modal.template.successMsg') || "Votre formulaire a été enregistré comme template !",
+                type:"success",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         displayFailtemplatee : function() {
-            swal(
-                translater.getValueFromKey('modal.template.error') || "Une erreur est survenu !",
-                translater.getValueFromKey('modal.template.errorMsg') || "Votre formulaire n'a pas été enregistré comme template.",
-                "error"
-            );
+            swal({
+                title:translater.getValueFromKey('modal.template.error') || "Une erreur est survenu !",
+                text:translater.getValueFromKey('modal.template.errorMsg') || "Votre formulaire n'a pas été enregistré comme template.",
+                type:"error",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         sizepreview : function() {

@@ -196,9 +196,12 @@ define([
                     swal({
                         title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
                         text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
-                        type: "error"
+                        type: "error",
+                        closeOnConfirm: true
                     }, function(){
                         window.location.href = AppConfig.portalURL;
+                        window.onkeydown = null;
+                        window.onfocus = null;
                     });
                 }, this)
             });
@@ -299,6 +302,28 @@ define([
             });
         });
 
+    });
+
+    $("body").on("keydown", function (e) {
+        e.originalEvent.defaultPrevented = false;
+        //console.log("even", e);
+        //console.log("down", e.keyCode);
+        if (e.keyCode = 9)
+        {
+            //console.log(e.isDefaultPrevented(), e.isImmediatePropagationStopped(), e.isPropagationStopped());
+            //console.log(e.target, e.originalEvent);
+            var knowdefaultprev = e.originalEvent.defaultPrevented;
+            //console.log(e.originalEvent.defaultPrevented);
+            //console.log(knowdefaultprev);
+
+            if (e.originalEvent.defaultPrevented)
+            {
+                console.log("*\n**\n**\n**\n**\n**\n* DEFAULT UNPREVENTED !!!");
+                e.originalEvent.defaultPrevented = false;
+            }
+
+            $(this).next().focus();
+        }
     });
 
     return FormbuilderApp;

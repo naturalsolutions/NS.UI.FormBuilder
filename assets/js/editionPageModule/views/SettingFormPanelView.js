@@ -34,7 +34,8 @@ define([
             'click .addFileText'          : 'triggerFileClick',
             'click .addFileBtn'           : 'triggerFileClick',
             'change .formAddFileRealAdd'  : 'associationFileSelected',
-            'click .removeFileAssoc'      : 'deleteFileAssociation'
+            'click .removeFileAssoc'      : 'deleteFileAssociation',
+            'click .downloadFileAssoc'    : 'downloadFileAssoc'
         },
 
 
@@ -113,6 +114,8 @@ define([
             //  I know it's bad but it works for the moment ;)
             setTimeout(_.bind(function() {
                 this.$el.find('#form').html('');
+                // TODO undelegate ?
+                console.log("undelegate !", "removeForm Form");
                 this.form.undelegateEvents();
                 this.form.$el.removeData().unbind();
                 this.form.remove();
@@ -185,8 +188,11 @@ define([
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: this.translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
                     cancelButtonText: this.translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
-                    closeOnConfirm: false }, function(){cancelSettingPanel();
-                    $(".sweet-alert").find("button").trigger("click");});
+                    closeOnConfirm: true }, function(){cancelSettingPanel();
+                    $(".sweet-alert").find("button").trigger("click");
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
             }
             else {
                 cancelSettingPanel();
@@ -205,7 +211,7 @@ define([
 
                 var filesToSend = [];
                 $.each(this.formFilesBinaryList, function(index, value){
-                    if (value.filedata)
+                    if (!value.id && !value.Pk_ID)
                     {
                         filesToSend.push(value);
                     }
@@ -216,6 +222,7 @@ define([
                 //this.removeForm();
                 return (true);
             } else {
+                console.log("Please report the following error : ", formValidation);
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
                     //  We display a main information
                     this.$el.find('.general-error').html(
@@ -226,11 +233,15 @@ define([
                     $(this.form.el).find('p[data-error]').show();
                     this.$el.find('.general-error').html('').hide();
                 }
-                swal(
-                    this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Erreur",
-                    this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Champ obligatoire non renseigné",
-                    "error"
-                );
+                swal({
+                    title:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Erreur",
+                    text:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Champ obligatoire non renseigné",
+                    type:"error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
                 return (false);
             }
         },
@@ -366,8 +377,9 @@ define([
                 {
                     $.each(formToEdit.fileList, function(index, value){
                         $('#formAssociatedFileListLabel').show();
-                        $("#formLinkedFilesList").append("<span>"+value.name+"<br/></span>");
-                        that.formFilesBinaryList.push({"id":""+value.Pk_ID, "name":""+value.name});
+                        $("#formLinkedFilesList").append("<span>"+value.name+"<a class='downloadFileAssoc' filedata='"+value.filedata+"'" +
+                            " fileName='"+value.name+"'>Download</a><br/></span>");
+                        that.formFilesBinaryList.push({"id":""+value.Pk_ID, "name":""+value.name, "filedata":value.filedata});
                     })
                 }
 
@@ -423,6 +435,25 @@ define([
                     return false;
                 }
             });
+        },
+
+        downloadFileAssoc : function(el){
+            console.log($(el.target).attr("value"));
+            console.log($(el.target).attr("fileData"));
+            console.log($(el.target).attr("fileName"));
+
+            var file = window.URL.createObjectURL(new Blob([$(el.target).attr("fileData")]));
+            var a = document.createElement("a");
+            a.href = file;
+            a.download = $(el.target).attr("fileName") || "FBLinkedFile";
+            document.body.appendChild(a);
+            a.click();
+
+            /*
+            var blob = new Blob([$(el.target).attr("value")]);
+            var objectUrl = URL.createObjectURL(blob);
+            window.open(objectUrl);
+            */
         }
 
     });

@@ -42,7 +42,6 @@ define([
             'change .checkboxField input' : 'checkboxChange',
             'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
-                e.preventDefault();
                 $(this).tab('show');
             }
         },
@@ -122,6 +121,7 @@ define([
             this.formChannel.on('configurationSaved:success', this.displayConfigurationSaveSuccess, this);
             //  Same thing when an error occured on saved
             this.formChannel.on('configurationSaved:fail', this.displayConfigurationSaveFail, this);
+            this.formChannel.on('cancelFieldEdition', this.cancel, this);
         },
 
 
@@ -561,7 +561,7 @@ define([
                 if (elLinkedFieldset.length > 0)
                 {
                     elLinkedFieldset.autocomplete({
-                        minLength: 1,
+                        minLength: 0,
                         source : getAllFieldsetsNames()
                     });
                 }
@@ -618,12 +618,15 @@ define([
                     $("#inputTypeList").selectpicker("refresh");
                 }
 
+                /* TODO FIND A WAY TO GET SHE SCHEMADEFINITION FOR THE INPUTS
                 $.each(that.modelToEdit.collection.schemaDefinition, function(index, value){
                     if (value.validators && value.validators[0].type == "required")
                     {
+                        console.log("compulsory field ! ", index, value);
                         $("#settingFieldPanel #form label[for="+that.modelToEdit.cid+"_"+index+"]").append(" <span style='color: red;'>*</span>");
                     }
                 });
+                */
 
                 if(that.modelToEdit.attributes.originalID && that.modelToEdit.attributes.originalID > 0)
                 {
@@ -682,10 +685,15 @@ define([
             //  I know it's bad but it works for the moment ;)
             setTimeout(_.bind(function() {
                 this.$el.find('#form').html('');
-                this.form.undelegateEvents();
-                this.form.$el.removeData().unbind();
-                this.form.remove();
-                Backbone.View.prototype.remove.call(this.form);
+
+                if (this.form){
+                    // TODO undelegate ?
+                    console.log("undelegate !", "removeForm Field");
+                    this.form.undelegateEvents();
+                    this.form.$el.removeData().unbind();
+                    this.form.remove();
+                    Backbone.View.prototype.remove.call(this.form);
+                }
 
                 //  Update scrollBar
                 this.$el.find('.scroll').scrollTop(0);
@@ -749,9 +757,15 @@ define([
         /**
         * Send an event on form channel when user wants to clear current form
         */
-        cancel : function(event, avoidUserValidation){
-
+        cancel : function(event, avoidUserValidation, idCondition){
             var self = this;
+
+            if (idCondition && self.form)
+            {
+                if (self.form.model.id != idCondition)
+                    return ;
+            }
+
             self.globalChannel.trigger('nodeReset' + self.modelToEdit.get('id'));
 
             var cancelSettingPanel = function(){
@@ -768,10 +782,12 @@ define([
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
                     cancelButtonText: translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
-                    closeOnConfirm: false }, function(){
+                    closeOnConfirm: true }, function(){
                         cancelSettingPanel();
                         $(".sweet-overlay").remove();
                         $(".sweet-alert").remove();
+                        window.onkeydown = null;
+                        window.onfocus = null;
                     });
             }
             else {
@@ -832,19 +848,27 @@ define([
                 }
                 else
                 {
-                    swal(
-                        translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
-                        translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
-                        "error"
-                    );
+                    swal({
+                        title:translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
+                        text:translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
+                        type:"error",
+                        closeOnConfirm: true
+                    }, function(){
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
                 }
             }
             else {
-                swal(
-                    translater.getValueFromKey('configuration.save.fail') || "Echec !",
-                    translater.getValueFromKey('configuration.save.samename') || "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
-                    "error"
-                )
+                swal({
+                    title:translater.getValueFromKey('configuration.save.fail') || "Echec !",
+                    text:translater.getValueFromKey('configuration.save.samename') || "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
+                    type:"error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
             }
         },
 
@@ -884,17 +908,22 @@ define([
                     crossDomain: true,
                     success: function (data) {
                         $.each(data.result, function(key, value){
-                            if (that.modelToEdit.attributes[key] != undefined && key != "name" && key != "id")
+                            if (key != "name" && key != "id")
                             {
                                 that.modelToEdit.attributes[key] =  value;
                             }
                         });
+
                         that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
-                        swal(
-                            translater.getValueFromKey('configuration.save.loadsuccess') || "Chargement réussit !",
-                            translater.getValueFromKey('configuration.save.loadsuccessMsg') || "Le template a bien été chargé",
-                            "success"
-                        );
+                        swal({
+                            title:translater.getValueFromKey('configuration.save.loadsuccess') || "Chargement réussit !",
+                            text:translater.getValueFromKey('configuration.save.loadsuccessMsg') || "Le template a bien été chargé",
+                            type:"success",
+                            closeOnConfirm: true
+                        }, function(){
+                            window.onkeydown = null;
+                            window.onfocus = null;
+                        });
                     },
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
                         console.log("Ajax Error: " + xhr);
@@ -922,7 +951,11 @@ define([
                     swal({
                         title: translater.getValueFromKey('modal.editionField.fieldEditAlert') || "Alerte d'édition de champ",
                         text: translater.getValueFromKey('modal.editionField.defaultValueEdit') || "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
-                        type: "info"
+                        type: "info",
+                        closeOnConfirm: true
+                    }, function(){
+                        window.onkeydown = null;
+                        window.onfocus = null;
                     });
                     break;
                 case "linkedFieldTable":
@@ -946,15 +979,19 @@ define([
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
                 confirmButtonText  : translater.getValueFromKey('settings.actions.convertYes') || "Oui, convertir",
-                cancelButtonText   : translater.getValueFromKey('settings.actions.convertNo') || "Annuler"
+                cancelButtonText   : translater.getValueFromKey('settings.actions.convertNo') || "Annuler",
+                closeOnConfirm: true
             }, function(isConfirm) {
                 if (isConfirm) {
-                    that.formChannel.trigger('remove', that.modelToEdit.attributes.id);
+                    that.formChannel.trigger('remove', that.modelToEdit.attributes.id, true);
                     var fieldType = $("#inputTypeList option:selected").text() + 'Field';
                     that.modelToEdit.attributes.id = 0;
                     that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes);
                     that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
                 }
+
+                window.onkeydown = null;
+                window.onfocus = null;
             });
         },
 
@@ -963,22 +1000,30 @@ define([
          */
         displayConfigurationSaveSuccess : function() {
             this.mainChannel.trigger('unsetTemplateList');
-            swal(
-                translater.getValueFromKey('configuration.save.success') || "Sauvé !",
-                translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",
-                "success"
-            )
+            swal({
+                title:translater.getValueFromKey('configuration.save.success') || "Sauvé !",
+                text:translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",
+                type:"success",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         /**
          * Display en error message when field couldn't be saved
          */
         displayConfigurationSaveFail : function() {
-            swal(
-                translater.getValueFromKey('configuration.save.fail') || "Echec !",
-                translater.getValueFromKey('configuration.save.failMsg') || "Votre champs n'a pas pu être sauvegardé",
-                "error"
-            )
+            swal({
+                title:translater.getValueFromKey('configuration.save.fail') || "Echec !",
+                text:translater.getValueFromKey('configuration.save.failMsg') || "Votre champs n'a pas pu être sauvegardé",
+                type:"error",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         }
 
     });

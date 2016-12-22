@@ -234,10 +234,7 @@ define([
                             label : translater.getValueFromKey('form.actif.pasactif'),
                             val : 0
                         }
-                    ],
-                    validators  : [{
-                        type : 'required'
-                    }]
+                    ]
                 },
                 importapressortie : {
                     type        : 'Select',
@@ -295,8 +292,10 @@ define([
                     valuesArray[index] = {label: value, val: value};
                 });
 
+                /* IGNORES NULL VALUES
                 if (valuesArray[valuesArray.length - 1].val == "null")
                     valuesArray.pop();
+                    */
 
                 return(valuesArray);
             };

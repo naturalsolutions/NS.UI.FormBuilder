@@ -573,7 +573,6 @@ define([
             if (PostOrPut == "POST")
             {
                 json.schema = staticInputs.getStaticInputs(this);
-
                 json = staticInputs.applyRules(this, json);
             }
 
@@ -738,7 +737,7 @@ define([
          *
          * @param  {integer} id model to remove id
          */
-        removeElement : function(id) {
+        removeElement : function(id, avoidSettingsClosure) {
             var item = this.get(id);
 
             if (item !== undefined) {
@@ -761,6 +760,9 @@ define([
                 {
                     this.fieldstodelete.push(item.get('id'));
                 }
+
+                if (!avoidSettingsClosure)
+                    this.formChannel.trigger('cancelFieldEdition', null, true, item.get('id'));
             }
         },
 
@@ -1188,12 +1190,19 @@ define([
                         var fieldForm = new Backbone.Form({
                             model: that.get(value.id)
                         }).render();
-                        if (fieldForm.validate() != null &&
-                            $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
+
+                        if (!fieldForm.staticfield)
                         {
-                            fieldsValidation = false;
-                            $("#dropField"+value.id+" .field-label span").css("color", "red");
+                            var fieldformresult = fieldForm.validate();
+                            if (fieldformresult != null &&
+                                $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
+                            {
+                                console.log(fieldformresult);
+                                fieldsValidation = false;
+                                $("#dropField"+value.id+" .field-label span").css("color", "red");
+                            }
                         }
+
                         formValues.push({
                             id:fieldForm.model.attributes.id,
                             name:fieldForm.model.attributes.name
@@ -1269,7 +1278,6 @@ define([
                             };
 
                             displaySaveSuccess();
-
                         }, that),
                         error: _.bind(function (xhr, ajaxOptions, thrownError) {
                             if (xhr.status == 418)
@@ -1314,7 +1322,10 @@ define([
                         $("#collectionName").css('color', "red");
                     }
                     else if (!fieldsValidation)
+                    {
+                        console.log("fieldsValidation has ", fieldsValidation);
                         that.formChannel.trigger('save:fieldIncomplete');
+                    }
                     else if (fieldNamesHasDuplicates)
                     {
                         that.formChannel.trigger('save:hasDuplicateFieldNames');

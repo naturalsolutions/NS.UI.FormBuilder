@@ -59,9 +59,11 @@ define([
                     activeNode: startID,
                     click: function (event, data){/*console.log("-01**************", event, data);*/}
                 });
-                $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload({
-                    children : $('#thesaurus' + that.model.get('id')).fancytree("getTree").getNodeByKey(startID).children
-                });
+                if ($('#thesaurus' + that.model.get('id')).fancytree("getTree").getNodeByKey){
+                    $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload({
+                        children : $('#thesaurus' + that.model.get('id')).fancytree("getTree").getNodeByKey(startID).children
+                    });
+                }
             };
 
             var callbackWSCallOther = function(data){

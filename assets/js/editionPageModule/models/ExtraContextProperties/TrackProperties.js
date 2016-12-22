@@ -26,7 +26,7 @@ define([
         extraProperties: {
             all:{
                 defaults: {
-                    trackType : ""
+                    trackType: ""
                 },
                 schema: {
                     trackType: {
@@ -34,8 +34,17 @@ define([
                         editorClass : 'form-control',
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.trackType'),
-                        options     : []
+                        options     : [],
+                        after       : "name"
                     }
+                }
+            }
+        },
+
+        exceptions: {
+            hide: {
+                AutocompleteField : {
+                    triggerlength : true
                 }
             }
         },
@@ -70,6 +79,11 @@ define([
             });
 
             return(toret);
+        },
+
+        getHideExceptionForProperty: function(input, property)
+        {
+            return(this.exceptions.hide[input] && this.exceptions.hide[input][property]);
         },
 
         initializeStatics: function () {

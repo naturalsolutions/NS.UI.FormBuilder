@@ -1,11 +1,3 @@
-/**
- * @fileOverview config.js
- *
- * RequireJS configuration file
- *
- * @author          MICELI Antoine (miceli.antoine@gmail.com)
- * @version         1.0
- */
 
 require.config({
 

@@ -287,11 +287,15 @@ define([
         closeSettingPanelAndSuccess : function(form) {
 
             this.closeSettingPanelDefault(form);
-            swal(
-                translater.getValueFromKey('modal.save.success') || "Sauvé !",
-                translater.getValueFromKey('modal.save.successMsgTmp') || "Sauvegardé !",
-                "success"
-            )
+            swal({
+                title: translater.getValueFromKey('modal.save.success') || "Sauvé !",
+                text: translater.getValueFromKey('modal.save.successMsgTmp') || "Sauvegardé !",
+                type:"success",
+                closeOnConfirm: true
+            }, function(){
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         },
 
         closeSettingPanelAndCommit : function(form) {

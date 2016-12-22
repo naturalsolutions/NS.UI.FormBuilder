@@ -106,6 +106,7 @@ define([
 			}
         },
 
+		/* DEPRECATED
         // Defines the list of allowed sizes for the different kind of types
         sizes : {
             // Returns an Array of JSON Objects containing possible sizes for a specific type (varType)
@@ -146,6 +147,7 @@ define([
                 fromminto365 : "0;365"
             }
         },
+		*/
 
         // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
         appMode : {

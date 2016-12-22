@@ -72,6 +72,30 @@ define([
     //  Field herited by BaseField
     //  ----------------------------------------------------
 
+    var reorderProperties = function(jsonobject){
+        var toOrder = {};
+        $.each(jsonobject, function(index, value){
+            if (value.after)
+            {
+                toOrder[index] = value;
+                delete jsonobject[index];
+            }
+        });
+
+        var toret = {};
+        $.each(jsonobject, function(index, value){
+            toret[index] = value;
+            $.each(toOrder, function(subindex, subvalue){
+               if(subvalue.after == index){
+                   toret[subindex] = subvalue;
+                   delete toOrder[subindex];
+               }
+            });
+        });
+
+        return toret;
+    };
+
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
@@ -361,7 +385,7 @@ define([
                     }
                 },
                 triggerlength: {
-                    type        : 'Number',
+                    type        : (ExtraProperties.getPropertiesContext().getHideExceptionForProperty('AutocompleteField','triggerlength')?'Hidden':'Number'),
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.triggerlength'),
@@ -385,9 +409,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function(options) {
@@ -455,9 +477,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -535,9 +555,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -604,9 +622,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -671,9 +687,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -725,9 +739,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -799,9 +811,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -874,9 +884,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
@@ -894,8 +902,8 @@ define([
 
             var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                 webServiceURL : AppConfig.paths.positionWSPath,
-                positionPath : "",
                 defaultPath : "",
+                positionPath : "",
                 defaultNode: ""
             });
 
@@ -916,13 +924,6 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.node.url')
                     }
                 },
-                positionPath : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.positionPath'),
-                    validators : ['required']
-                },
                 defaultPath : {
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.defaultPath'),
@@ -932,6 +933,13 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.value')
                     }
                 },
+                positionPath : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.positionPath'),
+                    validators : ['required']
+                },
                 defaultNode: {
                     type  : 'Text',
                     title : translater.getValueFromKey('schema.defaultNode'),
@@ -940,9 +948,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -967,7 +973,7 @@ define([
                 defaultValue : "",
                 isDefaultSQL : false,
                 help         : translater.getValueFromKey('placeholder.text'),
-                valuesize    : AppConfig.sizes.strings.defaultsize,
+                minLength    : 1,
                 maxLength    : 255
             });
 
@@ -1003,13 +1009,11 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.help')
                     }
                 },
-                valuesize: {
-                    type        : 'Select',
+                minLength: {
+                    type        : 'Hidden',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.size'),
-                    options     : AppConfig.sizes.getStringSizes(),
-                    fieldClass  : "hidden"
+                    title       : translater.getValueFromKey('schema.min')
                 },
                 maxLength: {
                     type        : 'Number',
@@ -1030,9 +1034,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function(options) {
@@ -1064,15 +1066,6 @@ define([
 
             });
 
-            schema.valuesize.validators = [function checkValue(value, formValues) {
-                if (value < 0 || value > 8000) {
-                    return {
-                        type : 'Invalid number',
-                        message : "La taille doit être comprise en 0 et 8000"
-                    }
-                }
-            }];
-
             var toret =  _.extend( {}, schema, {
                 defaultValue: {
                     type        : 'Text',
@@ -1097,14 +1090,6 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.help')
                     }
                 },
-                valuesize: {
-                    type        : 'Select',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.size'),
-                    options     : AppConfig.sizes.getStringSizes(),
-                    fieldClass  : "hidden"
-                },
                 maxLength: {
                     type        : 'Number',
                     editorClass : 'form-control',
@@ -1124,9 +1109,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -1164,9 +1147,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -1224,9 +1205,7 @@ define([
                 format: formatFieldProps
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         initialize: function() {
@@ -1361,7 +1340,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
+            toret = reorderProperties(_.extend(toret, toret, extraschema));
 
             return toret;
         },
@@ -1384,9 +1363,9 @@ define([
         },
 
         schema : function() {
-            return _.extend({},
+            return reorderProperties(_.extend({},
                 models.NumberField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal")));
 
             /* TODO KEEP AS EXAMPLE OF THE OLD WAY
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal");
@@ -1409,9 +1388,9 @@ define([
         },
 
         schema : function() {
-            return _.extend({},
+            return reorderProperties(_.extend({},
                 models.NumberField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange"));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange")));
         }
 
     }, {
@@ -1460,8 +1439,8 @@ define([
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"));
+            return reorderProperties(_.extend( {}, models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration")));
         },
 
         /**
@@ -1531,9 +1510,9 @@ define([
         },
 
         schema : function() {
-            return _.extend({},
+            return reorderProperties(_.extend({},
                 models.EnumerationField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select")));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
@@ -1572,9 +1551,7 @@ define([
                 }
             });
 
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
+            return reorderProperties(_.extend(toret, toret, extraschema));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
@@ -1603,8 +1580,8 @@ define([
         },
 
         schema : function() {
-            return _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio"));
+            return reorderProperties(_.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio")));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
