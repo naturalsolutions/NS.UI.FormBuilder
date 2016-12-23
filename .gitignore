@@ -6,6 +6,5 @@ compressed/
 build/formbuilder.min.js
 /nbproject/private/
 nbproject/
-assets/js/config.js
 assets/js/app-config.js
 .idea/
