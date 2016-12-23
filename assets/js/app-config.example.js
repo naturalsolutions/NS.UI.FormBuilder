@@ -152,7 +152,7 @@ define([
         // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
         appMode : {
             // List of all existing generic types :
-            // Hidden, HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number, Decimal,
+            // HorizontalLine, Autocomplete, Text, File, TreeView, Date, TextArea, Number, Decimal,
             // NumericRange, Pattern, CheckBox, Radio, Select, ChildForm, Thesaurus, AutocompleteTreeView
             //
             // If you want to display all the types, just set anything but an existing mode (for example 'all')
@@ -161,7 +161,6 @@ define([
             topcontext : 'classic',
 
             classic : [
-                Hidden,
 				HorizontalLine,
 				Autocomplete,
 				Text,
