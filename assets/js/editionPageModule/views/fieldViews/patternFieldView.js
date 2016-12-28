@@ -4,7 +4,7 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/patternFieldView.html',
-    'text!editionPageModule/templates/fields/readonlyp/atternFieldView.html'
+    'text!editionPageModule/templates/fields/readonly/patternFieldView.html'
 ], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var PatternFieldView = BaseView.extend({

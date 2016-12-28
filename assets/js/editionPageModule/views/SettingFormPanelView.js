@@ -64,7 +64,6 @@ define([
         * View constructor, init grid channel
         */
         initialize : function(options) {
-
             this.URLOptions = options.URLOptions;
             this.formToEdit = options.formToEdit;
             this.form       = null;
@@ -104,6 +103,7 @@ define([
 
             //  Event send by BaseView or BaseView inherited view for duplicate model
             this.mainChannel.on('triggerFormSettingsRender', this.triggerRender, this);
+            this.mainChannel.on('manualSaveChange', this.saveChange, this);
         },
 
 
@@ -114,8 +114,6 @@ define([
             //  I know it's bad but it works for the moment ;)
             setTimeout(_.bind(function() {
                 this.$el.find('#form').html('');
-                // TODO undelegate ?
-                console.log("undelegate !", "removeForm Form");
                 this.form.undelegateEvents();
                 this.form.$el.removeData().unbind();
                 this.form.remove();
@@ -188,7 +186,8 @@ define([
                     confirmButtonColor: "#DD6B55",
                     confirmButtonText: this.translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
                     cancelButtonText: this.translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
-                    closeOnConfirm: true }, function(){cancelSettingPanel();
+                    closeOnConfirm: true }, function(){
+                    cancelSettingPanel();
                     $(".sweet-alert").find("button").trigger("click");
                         window.onkeydown = null;
                         window.onfocus = null;
@@ -204,11 +203,17 @@ define([
         * Check generated form values and send events if all is good
         * This function concerns generated form for field AND main form
         */
-        saveChange : function() {
+        saveChange : function(callbackSuccess) {
+            if (this.hasbeendestoyed || this.form.data.context == "all"){
+                if (this.form.data.context == "all")
+                    console.log("Error ! A form might not be created inside the 'all' context !");
+                this.destroy();
+                return(false);
+            }
+
             var formValidation = this.form.validate();
 
             if (formValidation === null) {
-
                 var filesToSend = [];
                 $.each(this.formFilesBinaryList, function(index, value){
                     if (!value.id && !value.Pk_ID)
@@ -219,8 +224,12 @@ define([
 
                 this.mainChannel.trigger('editionDone', _.extend({}, this.form.getValue(), {fileList:filesToSend}));
                 $("#collectionName").css('color', "white");
+
+                if (callbackSuccess)
+                    callbackSuccess();
+
                 //this.removeForm();
-                return (true);
+                //return (true);
             } else {
                 console.log("Please report the following error : ", formValidation);
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
@@ -242,7 +251,8 @@ define([
                     window.onkeydown = null;
                     window.onfocus = null;
                 });
-                return (false);
+
+                //return (false);
             }
         },
 
@@ -383,6 +393,24 @@ define([
                     })
                 }
 
+                $('select#typeIndividus').on('change', function(){
+                    var groupselect = $('select#groupe');
+
+                    if($(this).val().toLowerCase().indexOf("nouvel") !== -1){
+                        $(groupselect).find('option[value="null"]').show();
+                        $(groupselect).val('null');
+                        $(groupselect).attr("disabled", true);
+                    }
+                    else
+                    {
+                        if ($(groupselect).find('option[value="null"]').is(':selected')){
+                            $(groupselect).val([]);
+                        }
+                        $(groupselect).find('option[value="null"]').hide();
+                        $(groupselect).attr("disabled", false);
+                    }
+                });
+
             }, this));
 
         },
@@ -438,22 +466,35 @@ define([
         },
 
         downloadFileAssoc : function(el){
-            console.log($(el.target).attr("value"));
-            console.log($(el.target).attr("fileData"));
-            console.log($(el.target).attr("fileName"));
 
-            var file = window.URL.createObjectURL(new Blob([$(el.target).attr("fileData")]));
+            var stringtobinarray = function(datastr){
+                var binary = atob(datastr);
+                var array = [];
+                for (var i = 0; i < binary.length; i++) {
+                    array.push(binary.charCodeAt(i));
+                }
+                return(array);
+            };
+
+            var filename = $(el.target).attr("fileName");
+            var filedata = $(el.target).attr("fileData");
+            var filetype = filedata.split(";")[0].split(":")[1];
+            var rawdata = stringtobinarray(filedata.split(";")[1].split(",")[1]);
+
+            var file = new File([new Blob([new Uint8Array(rawdata)], { type: filetype })],
+                filename, {type: filetype, lastModified: Date.now()});
+
+            var todlfile = window.URL.createObjectURL(file);
+
             var a = document.createElement("a");
-            a.href = file;
+            a.href = todlfile;
             a.download = $(el.target).attr("fileName") || "FBLinkedFile";
             document.body.appendChild(a);
             a.click();
+        },
 
-            /*
-            var blob = new Blob([$(el.target).attr("value")]);
-            var objectUrl = URL.createObjectURL(blob);
-            window.open(objectUrl);
-            */
+        onDestroy : function(){
+            this.hasbeendestoyed = true;
         }
 
     });

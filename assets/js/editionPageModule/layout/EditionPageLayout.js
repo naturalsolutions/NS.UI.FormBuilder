@@ -277,6 +277,7 @@ define([
          * Callback launch when setting panel needs to be closed
          */
         closeSettingPanelDefault : function(form) {
+
             if (form)
             {
                 //console.log(form);
@@ -287,6 +288,8 @@ define([
         closeSettingPanelAndSuccess : function(form) {
 
             this.closeSettingPanelDefault(form);
+            //TODO DEPRECATED
+            /*
             swal({
                 title: translater.getValueFromKey('modal.save.success') || "Sauvé !",
                 text: translater.getValueFromKey('modal.save.successMsgTmp') || "Sauvegardé !",
@@ -296,6 +299,7 @@ define([
                 window.onkeydown = null;
                 window.onfocus = null;
             });
+            */
         },
 
         closeSettingPanelAndCommit : function(form) {

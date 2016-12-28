@@ -67,7 +67,6 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
         destroy_view: function() {
             this.$el.slideUp(_.bind(function() {
                 // TODO undelegate ?
-                console.log("undelegate !", "destroy_view");
                 this.undelegateEvents();
 
                 this.$el.removeData().unbind();

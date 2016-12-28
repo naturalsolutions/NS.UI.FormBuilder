@@ -563,6 +563,8 @@ define([
                     elLinkedFieldset.autocomplete({
                         minLength: 0,
                         source : getAllFieldsetsNames()
+                    }).focus(function(){
+                        $(this).autocomplete("search");
                     });
                 }
 
@@ -688,7 +690,6 @@ define([
 
                 if (this.form){
                     // TODO undelegate ?
-                    console.log("undelegate !", "removeForm Field");
                     this.form.undelegateEvents();
                     this.form.$el.removeData().unbind();
                     this.form.remove();
@@ -783,11 +784,12 @@ define([
                     confirmButtonText: translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
                     cancelButtonText: translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
                     closeOnConfirm: true }, function(){
-                        cancelSettingPanel();
-                        $(".sweet-overlay").remove();
-                        $(".sweet-alert").remove();
-                        window.onkeydown = null;
-                        window.onfocus = null;
+                    //TODO Find out why this timeout fixes the "hiding right panel issue"
+                        setTimeout(function(){
+                            cancelSettingPanel();
+                            window.onkeydown = null;
+                            window.onfocus = null;
+                        }, 50);
                     });
             }
             else {
@@ -907,12 +909,16 @@ define([
                     contentType: 'application/json',
                     crossDomain: true,
                     success: function (data) {
+                        var modattr = that.modelToEdit.attributes;
                         $.each(data.result, function(key, value){
                             if (key != "name" && key != "id")
                             {
-                                that.modelToEdit.attributes[key] =  value;
+                                modattr[key] =  value;
                             }
                         });
+
+                        modattr.isLinkedField = modattr.linkedField && modattr.linkedField.length > 0 &&
+                            modattr.linkedFieldTable && modattr.linkedFieldTable.length > 0;
 
                         that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
                         swal({
@@ -968,6 +974,8 @@ define([
         showConvertType : function() {
             $(".convertStep1").hide();
             $(".convertStep2").show();
+            var scrollableFieldSettings = $('#settingFieldPanel .slimScrollDiv .scroll');
+            $(scrollableFieldSettings).scrollTop($(scrollableFieldSettings)[0].scrollHeight);
         },
 
         convertAction : function() {

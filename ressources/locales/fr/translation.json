@@ -357,7 +357,7 @@
             "successMsg" : "Le formulaire a bien été importé"
         },
         "export" : {
-            "success"  : "Export réussit !",
+            "success"  : "Export réussi !",
             "error"    : "Echec de l'export !",
             "errorMsg" : "Une erreur est survenue lors de l'export",
             "title"    : "Export",
@@ -495,7 +495,7 @@
         "fail"       : "Echec !",
         "failMsg"    : "Votre champs n'a pas pu être sauvegardé",
         "samename"   : "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
-        "loadsuccess": "Chargement réussit !",
+        "loadsuccess": "Chargement réussi !",
         "loadsuccessMsg": "Le template a bien été chargé"
       },
       "cancel" : {

@@ -575,8 +575,8 @@ define([
             var toret = _.extend( {}, models.BaseField.prototype.defaults, {
                     defaultValue : "",
                     webServiceURL : AppConfig.paths.thesaurusWSPath,
-                    fullpath : "",
-                    defaultNode: ""
+                    defaultNode: "",
+                    fullpath : ""
                 });
 
             toret = _.extend(toret, toret, extraschema);
@@ -605,12 +605,6 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.node.url')
                     }
                 },
-                fullpath: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.fullpath')
-                },
                 defaultNode: {
                     type  : 'Text',
                     title : translater.getValueFromKey('schema.defaultNode'),
@@ -619,6 +613,12 @@ define([
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('placeholder.tree.default')
                     }
+                },
+                fullpath: {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.fullpath')
                 }
             });
 
@@ -901,10 +901,10 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
 
             var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                webServiceURL : AppConfig.paths.positionWSPath,
                 defaultPath : "",
-                positionPath : "",
-                defaultNode: ""
+                webServiceURL : AppConfig.paths.positionWSPath,
+                defaultNode: "",
+                positionPath : ""
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -915,15 +915,6 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
 
             var toret =  _.extend( {}, models.BaseField.prototype.schema, {
-                webServiceURL : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.node.url')
-                    }
-                },
                 defaultPath : {
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.defaultPath'),
@@ -933,18 +924,27 @@ define([
                         placeholder : translater.getValueFromKey('placeholder.value')
                     }
                 },
-                positionPath : {
+                webServiceURL : {
                     type        : 'Text',
                     editorClass : 'form-control',
                     template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.positionPath'),
-                    validators : ['required']
+                    title       : translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs : {
+                        placeholder : translater.getValueFromKey('placeholder.node.url')
+                    }
                 },
                 defaultNode: {
                     type  : 'Text',
                     title : translater.getValueFromKey('schema.defaultNode'),
                     editorClass : 'form-control',
                     template    : fieldTemplate
+                },
+                positionPath : {
+                    type        : 'Text',
+                    editorClass : 'form-control',
+                    template    : fieldTemplate,
+                    title       : translater.getValueFromKey('schema.positionPath'),
+                    validators : ['required']
                 }
             });
 

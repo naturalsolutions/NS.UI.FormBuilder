@@ -406,7 +406,11 @@ define([
          * Trigger an event for the router on the form channel
          */
         save : function() {
-            this.checkRules();
+            //TODO DEPRECATED, RULES MANAGER FOR FORM VALIDATION
+            //TODO find a better way ... collection save is send inside a callback
+            //this.checkRules();
+
+            this.saveCollection();
         },
 
         checkRules : function(callbackAfterRulesCheck) {
@@ -437,7 +441,6 @@ define([
         },
 
         saveCollection : function() {
-
             this.collection.save();
         },
 

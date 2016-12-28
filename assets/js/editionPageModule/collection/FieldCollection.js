@@ -385,6 +385,7 @@ define([
 
             this.initFormChannel();
             this.initHookChannel();
+            this.initMainChannel();
 
             this.formChannel = Backbone.Radio.channel('form');
         },
@@ -418,6 +419,10 @@ define([
 
         initHookChannel : function() {
             this.hookChannel = Backbone.Radio.channel('hook');
+        },
+
+        initMainChannel : function () {
+            this.mainChannel = Backbone.Radio.channel('edition');
         },
 
         fieldChange : function(id) {
@@ -1156,198 +1161,201 @@ define([
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
-            // TODO TODO
-            // console.log(this.saveChange());
 
-            this.showSpinner();
             var that = this;
+            var callbackSuccess = function(){
+                // TODO TODO
+                // console.log(that.saveChange());
 
-            var hasDuplicates = function(array) {
-                return (new Set(array)).size !== array.length;
-            };
+                that.showSpinner();
 
-            setTimeout(function()
-            {
-                if (!that.formChannel)
-                    that.initFormChannel();
+                var hasDuplicates = function(array) {
+                    return (new Set(array)).size !== array.length;
+                };
 
-                var tmpForm = new Backbone.Form({
-                    schema: that.getDefaultSchema(),
-                    data: that.getAttributesValues()
-                }).render();
+                setTimeout(function()
+                {
+                    if (!that.formChannel)
+                        that.initFormChannel();
 
-                var formValidation = tmpForm.validate();
+                    var tmpForm = new Backbone.Form({
+                        schema: that.getDefaultSchema(),
+                        data: that.getAttributesValues()
+                    }).render();
 
-                var fieldsValidation = true;
+                    var formValidation = tmpForm.validate();
 
-                var formValues = [];
-                var formNames = [];
+                    var fieldsValidation = true;
 
-                $.each(that.models, function (index, value) {
-                    var fieldModel = that.get(value.id);
+                    var formValues = [];
+                    var formNames = [];
 
-                    if (!fieldModel.attributes.validated) {
-                        var fieldForm = new Backbone.Form({
-                            model: that.get(value.id)
-                        }).render();
-
-                        if (!fieldForm.staticfield)
-                        {
-                            var fieldformresult = fieldForm.validate();
-                            if (fieldformresult != null &&
-                                $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
-                            {
-                                console.log(fieldformresult);
-                                fieldsValidation = false;
-                                $("#dropField"+value.id+" .field-label span").css("color", "red");
-                            }
-                        }
-
-                        formValues.push({
-                            id:fieldForm.model.attributes.id,
-                            name:fieldForm.model.attributes.name
-                        });
-                        formNames.push(fieldForm.model.attributes.name);
-                    }
-                });
-
-                var fieldNamesHasDuplicates = hasDuplicates(formNames);
-
-                if (formValidation === null && fieldsValidation && !fieldNamesHasDuplicates) {
                     $.each(that.models, function (index, value) {
-                        delete that.get(value.id).attributes.validated;
+                        var fieldModel = that.get(value.id);
+
+                        if (!fieldModel.attributes.validated) {
+                            var fieldForm = new Backbone.Form({
+                                model: that.get(value.id)
+                            }).render();
+
+                            if (!fieldForm.staticfield)
+                            {
+                                var fieldformresult = fieldForm.validate();
+                                if (fieldformresult != null &&
+                                    $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
+                                {
+                                    fieldsValidation = false;
+                                    $("#dropField"+value.id+" .field-label span").css("color", "red");
+                                }
+                            }
+
+                            formValues.push({
+                                id:fieldForm.model.attributes.id,
+                                name:fieldForm.model.attributes.name
+                            });
+                            formNames.push(fieldForm.model.attributes.name);
+                        }
                     });
 
-                    var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
-                    var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
-                    var dataToSend = JSON.stringify(that.getJSON(PostOrPut));
+                    var fieldNamesHasDuplicates = hasDuplicates(formNames);
 
-                    $.ajax({
-                        data: dataToSend,
-                        type: PostOrPut,
-                        url: url,
-                        contentType: 'application/json',
-                        //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                        //  The server is already configured to used it
-                        crossDomain: true,
+                    if (formValidation === null && fieldsValidation && !fieldNamesHasDuplicates) {
+                        $.each(that.models, function (index, value) {
+                            delete that.get(value.id).attributes.validated;
+                        });
 
-                        //  Trigger event with ajax result on the formView
-                        success: _.bind(function (data) {
-                            that.id = data.form.id;
-                            var savedid = that.id;
-                            if (data.form.schema) {
-                                $.each(data.form.schema, function (index, inputVal) {
-                                    $.each(that.models, function (modelindex, modelinputVal) {
-                                        if (modelinputVal.attributes.name == inputVal.name) {
-                                            that.models[modelindex].set('id', inputVal.id);
-                                        }
+                        var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
+                        var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
+                        var dataToSend = JSON.stringify(that.getJSON(PostOrPut));
+
+                        $.ajax({
+                            data: dataToSend,
+                            type: PostOrPut,
+                            url: url,
+                            contentType: 'application/json',
+                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                            //  The server is already configured to used it
+                            crossDomain: true,
+
+                            //  Trigger event with ajax result on the formView
+                            success: _.bind(function (data) {
+                                that.id = data.form.id;
+                                var savedid = that.id;
+                                if (data.form.schema) {
+                                    $.each(data.form.schema, function (index, inputVal) {
+                                        $.each(that.models, function (modelindex, modelinputVal) {
+                                            if (modelinputVal.attributes.name == inputVal.name) {
+                                                that.models[modelindex].set('id', inputVal.id);
+                                            }
+                                        });
+                                    });
+                                }
+
+                                var savedFieldsToDelete = that.fieldstodelete;
+                                that.fieldstodelete = [];
+
+                                $.each(savedFieldsToDelete, function (index, inputVal) {
+                                    $.ajax({
+                                        data: {},
+                                        type: 'DELETE',
+                                        url: that.url + "/" + savedid + "/field/" + inputVal,
+                                        contentType: 'application/json',
+                                        crossDomain: true,
+                                        success: _.bind(function (data) {
+                                        }, that),
+                                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                            that.fieldstodelete.push(inputVal);
+                                            that.formChannel.trigger('save:fail');
+                                        }, that)
                                     });
                                 });
-                            }
 
-                            var savedFieldsToDelete = that.fieldstodelete;
-                            that.fieldstodelete = [];
+                                that.fieldsexcludedfromdelete = [];
 
-                            $.each(savedFieldsToDelete, function (index, inputVal) {
-                                $.ajax({
-                                    data: {},
-                                    type: 'DELETE',
-                                    url: that.url + "/" + savedid + "/field/" + inputVal,
-                                    contentType: 'application/json',
-                                    crossDomain: true,
-                                    success: _.bind(function (data) {
-                                    }, that),
-                                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                        that.fieldstodelete.push(inputVal);
-                                        that.formChannel.trigger('save:fail');
-                                    }, that)
-                                });
-                            });
+                                var displaySaveSuccess = function(){
+                                    setTimeout(function () {
+                                        if (that.fieldstodelete.length == 0) {
+                                            that.formChannel.trigger('save:success');
+                                            that.showSpinner(true);
+                                        }
+                                        else
+                                            displaySaveSuccess();
+                                    }, 200);
+                                };
 
-                            that.fieldsexcludedfromdelete = [];
-
-                            var displaySaveSuccess = function(){
-                                setTimeout(function () {
-                                    if (that.fieldstodelete.length == 0) {
-                                        that.formChannel.trigger('save:success');
-                                        that.showSpinner(true);
+                                displaySaveSuccess();
+                            }, that),
+                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                if (xhr.status == 418)
+                                {
+                                    if (xhr.responseText.indexOf("ERR:NAME") !== -1)
+                                    {
+                                        that.formChannel.trigger('save:fail', "modal.save.formSimilarName");
+                                    }
+                                    else if (xhr.responseText.indexOf("ERR:FRNAME") !== -1)
+                                    {
+                                        that.formChannel.trigger('save:fail', "modal.save.formSimilarFrName");
+                                    }
+                                    else if (xhr.responseText.indexOf("ERR:ENNAME") !== -1)
+                                    {
+                                        that.formChannel.trigger('save:fail', "modal.save.formSimilarEnName");
                                     }
                                     else
-                                        displaySaveSuccess();
-                                }, 200);
-                            };
-
-                            displaySaveSuccess();
-                        }, that),
-                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                            if (xhr.status == 418)
-                            {
-                                if (xhr.responseText.indexOf("ERR:NAME") !== -1)
-                                {
-                                    that.formChannel.trigger('save:fail', "modal.save.formSimilarName");
-                                }
-                                else if (xhr.responseText.indexOf("ERR:FRNAME") !== -1)
-                                {
-                                    that.formChannel.trigger('save:fail', "modal.save.formSimilarFrName");
-                                }
-                                else if (xhr.responseText.indexOf("ERR:ENNAME") !== -1)
-                                {
-                                    that.formChannel.trigger('save:fail', "modal.save.formSimilarEnName");
-                                }
-                                else
-                                {
-                                    that.formChannel.trigger('save:fail', "modal.save.418");
-                                }
-                                $("#collectionName").css('color', "red");
-                            }
-                            else if (xhr.status == 508)
-                            {
-                                that.formChannel.trigger('save:fail', "modal.save.circularDependency");
-                            }
-                            else
-                            {
-                                if (xhr.responseText.indexOf("customerror") > -1)
-                                    that.formChannel.trigger('save:fail', xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
-                                else
-                                    that.formChannel.trigger('save:fail');
-                            }
-                            that.showSpinner(true);
-                        }, that)
-                    });
-                }
-                else {
-                    if (formValidation != null)
-                    {
-                        that.formChannel.trigger('save:formIncomplete');
-                        $("#collectionName").css('color', "red");
-                    }
-                    else if (!fieldsValidation)
-                    {
-                        console.log("fieldsValidation has ", fieldsValidation);
-                        that.formChannel.trigger('save:fieldIncomplete');
-                    }
-                    else if (fieldNamesHasDuplicates)
-                    {
-                        that.formChannel.trigger('save:hasDuplicateFieldNames');
-                        var savedNames = [];
-                        $.each(formValues, function(index, value){
-                            if (savedNames.indexOf(value.name) > -1){
-                                $.each(formValues, function(subindex, subvalue){
-                                    if (subvalue.name == value.name)
                                     {
-                                        $("#dropField"+subvalue.id+" .field-label span").css("color", "red");
+                                        that.formChannel.trigger('save:fail', "modal.save.418");
                                     }
-                                });
-                            }
-                            else
-                            {
-                                savedNames.push(value.name);
-                            }
+                                    $("#collectionName").css('color', "red");
+                                }
+                                else if (xhr.status == 508)
+                                {
+                                    that.formChannel.trigger('save:fail', "modal.save.circularDependency");
+                                }
+                                else
+                                {
+                                    if (xhr.responseText.indexOf("customerror") > -1)
+                                        that.formChannel.trigger('save:fail', xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
+                                    else
+                                        that.formChannel.trigger('save:fail');
+                                }
+                                that.showSpinner(true);
+                            }, that)
                         });
                     }
-                    that.showSpinner(true);
-                }
-            }, 20);
+                    else {
+                        if (formValidation != null)
+                        {
+                            that.formChannel.trigger('save:formIncomplete');
+                            $("#collectionName").css('color', "red");
+                        }
+                        else if (!fieldsValidation)
+                        {
+                            that.formChannel.trigger('save:fieldIncomplete');
+                        }
+                        else if (fieldNamesHasDuplicates)
+                        {
+                            that.formChannel.trigger('save:hasDuplicateFieldNames');
+                            var savedNames = [];
+                            $.each(formValues, function(index, value){
+                                if (savedNames.indexOf(value.name) > -1){
+                                    $.each(formValues, function(subindex, subvalue){
+                                        if (subvalue.name == value.name)
+                                        {
+                                            $("#dropField"+subvalue.id+" .field-label span").css("color", "red");
+                                        }
+                                    });
+                                }
+                                else
+                                {
+                                    savedNames.push(value.name);
+                                }
+                            });
+                        }
+                        that.showSpinner(true);
+                    }
+                }, 20);
+            };
+
+            this.mainChannel.trigger('manualSaveChange', callbackSuccess);
         },
 
         saveAsTemplate : function() {
