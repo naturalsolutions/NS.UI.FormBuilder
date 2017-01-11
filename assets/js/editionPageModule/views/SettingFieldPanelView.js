@@ -620,15 +620,15 @@ define([
                     $("#inputTypeList").selectpicker("refresh");
                 }
 
-                /* TODO FIND A WAY TO GET SHE SCHEMADEFINITION FOR THE INPUTS
-                $.each(that.modelToEdit.collection.schemaDefinition, function(index, value){
-                    if (value.validators && value.validators[0].type == "required")
+                $.each(that.form.fields, function(index, value){
+                    if (value.schema.validators && value.schema.validators[0] == "required")
                     {
                         console.log("compulsory field ! ", index, value);
-                        $("#settingFieldPanel #form label[for="+that.modelToEdit.cid+"_"+index+"]").append(" <span style='color: red;'>*</span>");
+
+                        $(value.$el).find("label").append(" <span style='color: red;'>*</span>");
+                        //$("#settingFieldPanel #form label[for="+that.modelToEdit.cid+"_"+index+"]").append(" <span style='color: red;'>*</span>");
                     }
                 });
-                */
 
                 if(that.modelToEdit.attributes.originalID && that.modelToEdit.attributes.originalID > 0)
                 {
@@ -850,6 +850,10 @@ define([
                 }
                 else
                 {
+                    this.$el.find('.scroll').scrollTop(0);
+                    this.$el.find('.scroll').scrollTop( $($("#settingFieldPanel [name='" + Object.keys(commitResult)[0] + "']")).offset().top -
+                        this.$el.find('.scroll').offset().top - 60);
+
                     swal({
                         title:translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
                         text:translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
@@ -882,10 +886,14 @@ define([
             var formCommitResult = this.form.commit();
             if (formCommitResult) {
 
-                //  If something wrong we move to the first incorrect field
-                var offsetTop = $('input[name="' + Object.keys(formCommitResult)[0] + '"]').offset().top;
-                this.$el.find('.scroll').scrollTop( offsetTop );
-                this.$el.find('.scroll').slimScroll('update');
+                console.log(this.$el.find('.scroll'));
+                console.log(this.$el.find('.scroll').offset().top);
+                console.log($("#settingFormPanel [name='" + Object.keys(formCommitResult)[0] + "']"));
+                console.log($($("#settingFormPanel [name='" + Object.keys(formCommitResult)[0] + "']")).offset().top);
+
+                this.$el.find('.scroll').scrollTop(0);
+                this.$el.find('.scroll').scrollTop( $($("#settingFieldPanel [name='" + Object.keys(formCommitResult)[0] + "']")).offset().top -
+                    this.$el.find('.scroll').offset().top - 60);
 
             } else {
                 var formValue = this.form.getValue();

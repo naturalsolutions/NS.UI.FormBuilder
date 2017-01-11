@@ -1020,14 +1020,16 @@ define([
                     editorClass : 'form-control',
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.maxTextLength'),
-                    validators : [function checkValue(value, formValues) {
-                        if (value < 1 || value > 255) {
-                            return {
-                                type : translater.getValueFromKey('schema.maxTextLengthError'),
-                                message : translater.getValueFromKey('schema.maxTextLengthMin')
+                    validators : ['required',
+                        function checkValue(value, formValues) {
+                            if (value < 1 || value > 255) {
+                                return {
+                                    type : translater.getValueFromKey('schema.maxTextLengthError'),
+                                    message : translater.getValueFromKey('schema.maxTextLengthMin')
+                                }
                             }
                         }
-                    }],
+                    ],
                     editorAttrs : {
                         placeholder : translater.getValueFromKey('schema.maxlength255')
                     }

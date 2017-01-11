@@ -568,12 +568,7 @@ define([
                 json[index] = that[index];
             });
 
-            if (json.actif)
-            {
-                json.actif = 1;
-                if (json.obsolete)
-                    json.actif = 0;
-            }
+            console.log("json.propagate", json.propagate);
 
             if (PostOrPut == "POST")
             {
@@ -615,7 +610,7 @@ define([
                 });
 
                 inputVal.editMode = getBinaryWeight(inputVal.editMode);
-                inputVal.name = inputVal.name.replace(/\s+/g, '');
+                //inputVal.name = inputVal.name.replace(/\s+/g, '');
 
                 setUnexistingStuff(inputVal);
             });
@@ -640,6 +635,15 @@ define([
                 });
             });
 
+            json.actif = "nique ta mere!";
+            if (json.actif)
+            {
+                json.actif = true;
+                if (json.obsolete)
+                    json.actif = false;
+            }
+
+            console.log("json to return", json);
             return json;
         },
 
@@ -1244,6 +1248,7 @@ define([
                                 if (data.form.schema) {
                                     $.each(data.form.schema, function (index, inputVal) {
                                         $.each(that.models, function (modelindex, modelinputVal) {
+                                            console.log(modelinputVal.attributes.name + " == " + inputVal.name);
                                             if (modelinputVal.attributes.name == inputVal.name) {
                                                 that.models[modelindex].set('id', inputVal.id);
                                             }
@@ -1251,25 +1256,20 @@ define([
                                     });
                                 }
 
-                                var savedFieldsToDelete = that.fieldstodelete;
-                                that.fieldstodelete = [];
-
-                                $.each(savedFieldsToDelete, function (index, inputVal) {
-                                    $.ajax({
-                                        data: {},
-                                        type: 'DELETE',
-                                        url: that.url + "/" + savedid + "/field/" + inputVal,
-                                        contentType: 'application/json',
-                                        crossDomain: true,
-                                        success: _.bind(function (data) {
-                                        }, that),
-                                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                            that.fieldstodelete.push(inputVal);
-                                            that.formChannel.trigger('save:fail');
-                                        }, that)
-                                    });
+                                $.ajax({
+                                    data: JSON.stringify({fieldstodelete:that.fieldstodelete}),
+                                    type: 'DELETE',
+                                    url: that.url + "/" + savedid + "/deletefields",
+                                    contentType: 'application/json',
+                                    crossDomain: true,
+                                    success: _.bind(function (data) {
+                                    }, that),
+                                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                        that.formChannel.trigger('save:fail');
+                                    }, that)
                                 });
 
+                                that.fieldstodelete = [];
                                 that.fieldsexcludedfromdelete = [];
 
                                 var displaySaveSuccess = function(){

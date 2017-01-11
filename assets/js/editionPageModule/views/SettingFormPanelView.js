@@ -239,7 +239,11 @@ define([
                 //this.removeForm();
                 //return (true);
             } else {
-                console.log("Please report the following error : ", formValidation);
+
+                this.$el.find('.scroll').scrollTop(0);
+                this.$el.find('.scroll').scrollTop( $($("#settingFormPanel [name='" + Object.keys(formValidation)[0] + "']")).offset().top -
+                    this.$el.find('.scroll').offset().top - 60);
+
                 if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
                     //  We display a main information
                     this.$el.find('.general-error').html(

@@ -695,6 +695,9 @@ define([
          */
         updateName: function () {
             this.$el.find('#collectionName').text(this.collection.name);
+            console.log("this.collection.originalID", this.collection.originalID);
+            console.log("this.collection", this.collection);
+            console.log("this", this);
             if (this.collection.originalID && this.collection.originalID > 0)
             {
                 this.$el.find('#formOriginalIdArea').show();
