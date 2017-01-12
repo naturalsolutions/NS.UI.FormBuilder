@@ -132,13 +132,14 @@ define([
         */
         initForm : function() {
             var that = this;
+
             var callBackTemplateRequest = function(fieldList){
 
                 that.preConfiguredFieldList = fieldList;
 
-                that.currentFieldType  = that.modelToEdit.constructor.type;
                 that.fieldWithSameType = that.preConfiguredFieldList[that.currentFieldType];
 
+                /*
                 if (that.fieldWithSameType == undefined) {
                     that.$el.find('*[data-setting="field"]').first().hide();
                 } else {
@@ -147,21 +148,11 @@ define([
                         that.$el.find('#getField select').append('<option value="' + idx + '">' + idx + '</option>');
                     }, that));
                 }
+                */
 
                 that.$el.find('select').selectpicker();
 
-                that.createForm();
-
-                if ($('#widgetPanel').hasClass('col-md-1')) {
-                    $('#formPanel').switchClass('col-md-8', 'col-md-6', 500);
-                }
-
-                if ($('#settingFieldPanel').hasClass('col-md-0')) {
-                    $('#settingFieldPanel').switchClass('col-md-0', 'col-md-3', 500);
-                    $('#widgetPanel').hide();
-                }
-
-                $(".actions").show();
+                that.initInputTemplateList();
             };
 
             if (that.savedTemplateFieldList)
@@ -175,6 +166,21 @@ define([
                     callBackTemplateRequest(fieldList);
                 }, that));
             }
+
+            that.currentFieldType  = that.modelToEdit.constructor.type;
+
+            that.createForm();
+
+            if ($('#widgetPanel').hasClass('col-md-1')) {
+                $('#formPanel').switchClass('col-md-8', 'col-md-6', 500);
+            }
+
+            if ($('#settingFieldPanel').hasClass('col-md-0')) {
+                $('#settingFieldPanel').switchClass('col-md-0', 'col-md-3', 500);
+                $('#widgetPanel').hide();
+            }
+
+            $(".actions").show();
         },
 
         initContextDatas : function() {
@@ -274,6 +280,31 @@ define([
             }
         },
 
+        initInputTemplateList: function() {
+
+            var hideTemplateApply = true;
+
+            $.each(this.preConfiguredFieldList.options, function(key, value){
+                if ( $("#templateList option[value='"+key+"']").length == 0) {
+                    $('#templateList').append($('<option>', {
+                        value: key,
+                        text: key
+                    }));
+                }
+                hideTemplateApply = false;
+            });
+
+            if (hideTemplateApply)
+            {
+                $(".loadTemplateArea").hide();
+            }
+            else
+            {
+                $("#templateList").selectpicker("refresh");
+                $(".loadTemplateArea").show();
+            }
+        },
+
         /**
          * A field can be linked to another field
          * We initialize select field option
@@ -288,27 +319,6 @@ define([
                 _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
                     linkedFieldsKeyList.push(el.key)
                 });
-
-                var hideTemplateApply = true;
-
-                $.each(this.preConfiguredFieldList.options, function(key, value){
-                    if ( $("#templateList option[value='"+key+"']").length == 0) {
-                        $('#templateList').append($('<option>', {
-                            value: key,
-                            text: key
-                        }));
-                    }
-                    hideTemplateApply = false;
-                });
-
-                if (hideTemplateApply)
-                {
-                    $(".loadTemplateArea").hide();
-                }
-                else
-                {
-                    $("#templateList").selectpicker("refresh");
-                }
 
                 if (! _.contains(['Subform'], this.modelToEdit.constructor.type) &&
                     ! _.contains(['ChildForm'], this.modelToEdit.constructor.type)) {
