@@ -33,7 +33,7 @@ define([
                 "triggerlength": 2,
                 "url": "",
                 "isSQL": false,
-                "order": 1,
+                "order": 0,
                 "type": "Autocomplete"
             },
             "Egg": {
@@ -55,7 +55,7 @@ define([
                 "triggerlength": 3,
                 "url": "unknowWebService",
                 "isSQL": false,
-                "order": 2,
+                "order": 0,
                 "type": "Autocomplete"
             },
             "UserReadonly": {
@@ -76,7 +76,7 @@ define([
                 "isDefaultSQL": true,
                 "help": "",
                 "valuesize": "0;255",
-                "order": 3,
+                "order": 1,
                 "type": "Text"
             },
             "eventDate": {
@@ -98,7 +98,7 @@ define([
                 "help": "",
                 "valuesize": "0;20",
                 "format": "dd/mm/yyyy",
-                "order": 4,
+                "order": 2,
                 "type": "Date"
             },
             "TSai_PK_ID": {
@@ -119,7 +119,7 @@ define([
                 "isDefaultSQL": true,
                 "help": "",
                 "valuesize": "0;20",
-                "order": 5,
+                "order": 3,
                 "type": "Text"
             }
         },
