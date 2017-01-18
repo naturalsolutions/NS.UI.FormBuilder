@@ -418,7 +418,8 @@
         },
         "editionField" : {
             "fieldEditAlert" : "Alerte d'édition de champ",
-            "defaultValueEdit" : "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur"
+            "defaultValueEdit" : "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
+            "propagationactivated" : "Assurez vous que vos règles ont bien été configurées avant de sauvegarder avec la propagation activée !"
         }
     },
 

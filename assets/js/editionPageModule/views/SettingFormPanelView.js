@@ -273,14 +273,33 @@ define([
         * Change a checkbox state
         */
         checkboxChange : function(e) {
-            $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected')
+            var clickedLabel = $('label[for="' + $(e.target).prop('id') + '"]');
+            clickedLabel.toggleClass('selected');
+            this.formControlChange(e, clickedLabel.hasClass('selected'));
         },
 
         /**
          * Remember form value has changed
          */
-        formControlChange : function(e) {
+        formControlChange : function(e, checkboxIsSelected) {
             this.hasFieldsChanged = true;
+
+            switch(e.currentTarget.name)
+            {
+                case "propagate":
+                    if (checkboxIsSelected){
+                        swal({
+                            title: this.translater.getValueFromKey('modal.editionField.fieldEditAlert') || "Alerte d'édition de champ",
+                            text: this.translater.getValueFromKey('modal.editionField.propagationactivated') || "Attention, vérifie ta conf de propagation !",
+                            type: "info",
+                            closeOnConfirm: true
+                        }, function(){
+                            window.onkeydown = null;
+                            window.onfocus = null;
+                        });
+                    }
+                    break;
+            }
         },
 
         initChildForms : function() {

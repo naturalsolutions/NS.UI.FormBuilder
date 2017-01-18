@@ -960,15 +960,17 @@ define([
         * Change a checkbox state
         */
         checkboxChange : function(e) {
-            this.hasFieldsChanged = true;
-            $('label[for="' + $(e.target).prop('id') + '"]').toggleClass('selected');
+            var clickedLabel = $('label[for="' + $(e.target).prop('id') + '"]');
+            clickedLabel.toggleClass('selected');
+            this.formControlChange(e, clickedLabel.hasClass('selected'));
         },
 
         /**
          * Remember field value has changed
          */
-        formControlChange : function(e) {
+        formControlChange : function(e, checkboxIsSelected) {
             this.hasFieldsChanged = true;
+
             switch(e.currentTarget.name)
             {
                 case "defaultValue":
