@@ -27,7 +27,7 @@ Install library dependancies
 
 Compile with grunt
 
-	grunt prod
+	grunt build
 
 
 --------------------------------------------------
@@ -44,7 +44,7 @@ Must be renamed into
 
 	assets/js/config.js
 
-You'll have to rewrite the paths for the server calls with proper values (for the **URLOptions** item)
+
 
 **App-config.js**
 
@@ -53,8 +53,10 @@ You'll have to rewrite the paths for the server calls with proper values (for th
 Must be renamed into
 
 	assets/js/app-config.js
+	
+You'll have to rewrite the paths for the server calls with proper values (for the **URLOptions** item)
 
-You'll have to set the configuration rules for the app :
+You'll also have to set the configuration rules for the app :
 
 - Weather the application interface is readonly or not
 		
@@ -81,10 +83,11 @@ You'll have to set the configuration rules for the app :
 	- Path leading to thesaurs webservices
 		
 			thesaurusWSPath : "http://path/to/thesaurus/webservices/"
+			
+	- Path leading to position webservices
 		
-	- Path to the server to get the list of all the form names
-
-			forms : "/path/to/allforms/webservice/"
+			thesaurusWSPath : "http://path/to/thesaurus/webservices/"
+		
 
 - The list of all application contexts you want to find in the formbuilder
 
