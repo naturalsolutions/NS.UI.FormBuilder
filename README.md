@@ -6,8 +6,10 @@ What does the Front of the Formbuilder needs to work ?
 - npm
 - bower
 - grunt
-- the "thesaurus" application
 
+**optional**
+- the "thesaurus" application (for thesaurus inputs)
+- the "position" application (for position inputs)
 
 --------------------------------------------------
 Installation
