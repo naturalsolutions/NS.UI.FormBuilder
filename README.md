@@ -34,7 +34,7 @@ Compile with grunt
 Configuration
 -----
 
-Rename and edit the following configuration files :
+Rename and edit as following :
 
 **App-config.js**
 
