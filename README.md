@@ -70,7 +70,7 @@ You'll also have to set the configuration rules for the app :
 
 		securityKey : "yourSecurityKey"
 		
-- Some paths to reach various webservices :
+- Some paths to reach various webservices (optional, if you want to use their linked inputs) :
 
 	- Path leading to thesaurs webservices
 		
@@ -78,14 +78,14 @@ You'll also have to set the configuration rules for the app :
 			
 	- Path leading to position webservices
 		
-			thesaurusWSPath : "http://path/to/thesaurus/webservices/"
+			positionWSPath : "http://path/to/position/webservices/"
 		
 
 - The list of all application contexts you want to find in the formbuilder
 
 	**See next chapter** for a full description of what you should put there
 
-- The start ID of the thesaurus for each of your contexts
+- The start ID for the thesaurus and position for each of your contexts (optional, if you want to use their linked inputs) :
 
 		startID : {context1 : 0, context2 : 508, ...}
 
@@ -127,3 +127,6 @@ For the **appMode** option, you will have to indicate the list of contexts you w
 - ChildForm
 - Thesaurus
 - AutocompleteTreeView
+
+
+**This documentation is slightly out of date and lacks some informations, should be updated soon**
