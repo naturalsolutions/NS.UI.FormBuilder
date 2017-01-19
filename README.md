@@ -36,16 +36,6 @@ Configuration
 
 Rename and edit the following configuration files :
 
-**Config.js**
-
-	assets/js/config.example.js
-
-Must be renamed into
-
-	assets/js/config.js
-
-
-
 **App-config.js**
 
 	assets/js/app-config.example.js
