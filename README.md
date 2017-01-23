@@ -6,8 +6,10 @@ What does the Front of the Formbuilder needs to work ?
 - npm
 - bower
 - grunt
-- the "thesaurus" application
 
+**optional**
+- the "thesaurus" application (for thesaurus inputs)
+- the "position" application (for position inputs)
 
 --------------------------------------------------
 Installation
@@ -27,24 +29,14 @@ Install library dependancies
 
 Compile with grunt
 
-	grunt prod
+	grunt build
 
 
 --------------------------------------------------
 Configuration
 -----
 
-Rename and edit the following configuration files :
-
-**Config.js**
-
-	assets/js/config.example.js
-
-Must be renamed into
-
-	assets/js/config.js
-
-You'll have to rewrite the paths for the server calls with proper values (for the **URLOptions** item)
+Rename and edit as following :
 
 **App-config.js**
 
@@ -53,8 +45,10 @@ You'll have to rewrite the paths for the server calls with proper values (for th
 Must be renamed into
 
 	assets/js/app-config.js
+	
+You'll have to rewrite the paths for the server calls with proper values (for the **URLOptions** item)
 
-You'll have to set the configuration rules for the app :
+You'll also have to set the configuration rules for the app :
 
 - Weather the application interface is readonly or not
 		
@@ -76,21 +70,22 @@ You'll have to set the configuration rules for the app :
 
 		securityKey : "yourSecurityKey"
 		
-- Some paths to reach various webservices :
+- Some paths to reach various webservices (optional, if you want to use their linked inputs) :
 
 	- Path leading to thesaurs webservices
 		
 			thesaurusWSPath : "http://path/to/thesaurus/webservices/"
+			
+	- Path leading to position webservices
 		
-	- Path to the server to get the list of all the form names
-
-			forms : "/path/to/allforms/webservice/"
+			positionWSPath : "http://path/to/position/webservices/"
+		
 
 - The list of all application contexts you want to find in the formbuilder
 
 	**See next chapter** for a full description of what you should put there
 
-- The start ID of the thesaurus for each of your contexts
+- The start ID for the thesaurus and position for each of your contexts (optional, if you want to use their linked inputs) :
 
 		startID : {context1 : 0, context2 : 508, ...}
 
@@ -132,3 +127,6 @@ For the **appMode** option, you will have to indicate the list of contexts you w
 - ChildForm
 - Thesaurus
 - AutocompleteTreeView
+
+
+**This documentation is slightly out of date and lacks some informations, should be updated soon**
