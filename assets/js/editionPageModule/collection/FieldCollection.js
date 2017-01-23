@@ -682,15 +682,15 @@ define([
                     var scrollArea = $(".dropArea .slimScrollDiv #scrollSection");
                     var lastItemofScrollArea = scrollArea.find('div.dropField:last');
 
-                    var scrollTo = lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop();
-
-                    console.log("scrollTo", scrollTo);
-                    console.log(lastItemofScrollArea.offset().top, "+", lastItemofScrollArea.outerHeight(true), "+", scrollArea.scrollTop());
-
                     if (lastItemofScrollArea.offset()){
-                        scrollArea.animate({
-                            scrollTop: scrollTo
-                        }, 500);
+                        var scrollTo = lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop();
+
+                        console.log("scrollTo", scrollTo);
+                        console.log(lastItemofScrollArea.offset().top, "+", lastItemofScrollArea.outerHeight(true), "+", scrollArea.scrollTop());
+
+                            scrollArea.animate({
+                                scrollTop: scrollTo
+                            }, 500);
                     }
                     this.fieldsexcludedfromdelete.push(field.get('id'));
                 }
