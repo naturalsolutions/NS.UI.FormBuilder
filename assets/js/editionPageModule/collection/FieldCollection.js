@@ -1223,6 +1223,12 @@ define([
 
                     var fieldNamesHasDuplicates = hasDuplicates(formNames);
 
+                    if (formValidation != null && Object.keys(formValidation).length == 1 &&
+                        formValidation.importance && $('input#importance').val() == 0)
+                    {
+                        formValidation = null;
+                    }
+
                     if (formValidation === null && fieldsValidation && !fieldNamesHasDuplicates) {
                         $.each(that.models, function (index, value) {
                             delete that.get(value.id).attributes.validated;
