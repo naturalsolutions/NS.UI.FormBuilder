@@ -1326,6 +1326,7 @@ define([
                         {
                             that.formChannel.trigger('save:formIncomplete');
                             $("#collectionName").css('color', "red");
+                            console.log("Useful information:", formValidation);
                         }
                         else if (!fieldsValidation)
                         {
