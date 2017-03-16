@@ -10,18 +10,8 @@ define([
     '../../Translater',
     '../editor/CheckboxEditor',
     'pillbox-editor',
-    'app-config',
-    './EcollectionCollection',
-    './EcoreleveCollection',
-    './TrackCollection',
-    './PositionCollection'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig,
-             EcollectionCollection, EcoreleveCollection, TrackCollection, PositionCollection) {
-
-    var Extentions = {"track" : TrackCollection,
-                        "ecoreleve" : EcoreleveCollection,
-                        "ecollection" : EcollectionCollection,
-                        "position" : PositionCollection};
+    'app-config'
+], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -35,7 +25,7 @@ define([
 
     var translater = Translater.getTranslater();
 
-    var CollectionExtention = {
+    var PositionExtention = {
 
         schemaExtention: {
 
@@ -71,21 +61,8 @@ define([
 
         updateAttributesExtention: function () {
             return(true);
-        },
-
-        setRulesExtention: function(){
-
-        },
-
-        getModeExtention : function (currentContext) {
-            var extentionMode = Extentions[window.context];
-            if (currentContext)
-                extentionMode = Extentions[currentContext];
-            if (!extentionMode)
-                return this;
-            return extentionMode;
         }
     };
 
-    return CollectionExtention.getModeExtention();
+    return PositionExtention;
 });

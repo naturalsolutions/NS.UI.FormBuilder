@@ -161,23 +161,23 @@ define([
             topcontext : 'classic',
 
             classic : [
-				HorizontalLine,
-				Autocomplete,
-				Text,
-				File,
-				TreeView,
-				Date,
-				TextArea,
-				Number,
-				Decimal,
-				NumericRange,
-				Pattern,
-				CheckBox,
-				Radio,
-				Select,
-				ChildForm,
-				Thesaurus,
-				AutocompleteTreeView
+				'HorizontalLine',
+				'Autocomplete',
+				'Text',
+				'File',
+				'TreeView',
+				'Date',
+				'TextArea',
+				'Number',
+				'Decimal',
+				'NumericRange',
+				'Pattern',
+				'CheckBox',
+				'Radio',
+				'Select',
+				'ChildForm',
+				'Thesaurus',
+				'AutocompleteTreeView'
             ],
 
 			/***************
@@ -226,6 +226,26 @@ define([
                 'ChildForm',
 
                 'Position'
+            ],
+
+            position : [
+				'HorizontalLine',
+				'Autocomplete',
+				'Text',
+				'File',
+				'TreeView',
+				'Date',
+				'TextArea',
+				'Number',
+				'Decimal',
+				'NumericRange',
+				'Pattern',
+				'CheckBox',
+				'Radio',
+				'Select',
+				'ChildForm',
+				'Thesaurus',
+				'AutocompleteTreeView'
             ]
 			
 			***************/

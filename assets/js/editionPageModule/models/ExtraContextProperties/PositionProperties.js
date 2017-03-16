@@ -6,18 +6,8 @@ define([
     'jquery',
     'backbone',
     '../../../Translater',
-    'app-config',
-    './TrackProperties',
-    './EcoreleveProperties',
-    './EcollectionProperties',
-    './PositionProperties'
-], function ($, Backbone, Translater, AppConfig,
-             TrackProperties, EcoreleveProperties, EcollectionProperties, PositionProperties) {
-
-    var contextExtraProperties = {"track" : TrackProperties,
-                            "ecoreleve" : EcoreleveProperties,
-                            "ecollection" : EcollectionProperties,
-                            "position" : PositionProperties};
+    'app-config'
+], function ($, Backbone, Translater, AppConfig) {
 
     var translater = Translater.getTranslater();
 
@@ -31,7 +21,7 @@ define([
         </div>\
     ');
 
-    var ExtraProperties = {
+    var PositionProperties = {
 
         extraProperties: {
 
@@ -82,17 +72,8 @@ define([
 
         initializeStatics: function () {
             return(true);
-        },
-
-        getPropertiesContext : function (currentContext) {
-            var propertiesContext = contextExtraProperties[window.context];
-            if (currentContext)
-                propertiesContext = contextExtraProperties[currentContext];
-            if (!propertiesContext)
-                return this;
-            return propertiesContext;
         }
     };
 
-    return ExtraProperties.getPropertiesContext();
+    return PositionProperties;
 });

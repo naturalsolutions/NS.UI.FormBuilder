@@ -13,13 +13,15 @@ define([
     'app-config',
     './TrackLoader',
     './EcoreleveLoader',
-    './EcollectionLoader'
+    './EcollectionLoader',
+    './PositionLoader'
 ], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig,
-             TrackLoader, EcoreleveLoader, EcollectionLoader) {
+             TrackLoader, EcoreleveLoader, EcollectionLoader, PositionLoader) {
 
     var Loaders = {"track" : TrackLoader,
                         "ecoreleve" : EcoreleveLoader,
-                        "ecollection" : EcollectionLoader};
+                        "ecollection" : EcollectionLoader,
+                        "position" : PositionLoader};
 
     var translater = Translater.getTranslater();
 
@@ -40,32 +42,7 @@ define([
             if (this.currentloader != this)
                 return(this.currentloader.loadFormDatas());
 
-            if (this.form.fields.unity)
-            {
-                this.loadUnities();
-            }
             return(true);
-        },
-
-        loadUnities: function(){
-            $.ajax({
-                data        : JSON.stringify({}),
-                type        : 'GET',
-                url         : this.options.unities,
-                contentType : 'application/json',
-                crossDomain : true,
-                success: _.bind(function(data) {
-                    var unityoptions = [];
-                    $.each(data.unities, function(index, value){
-                        if (value.name && value.name.length > 0)
-                            unityoptions.push(value.name);
-                    });
-                    this.form.fields.unity.editor.setOptions(unityoptions);
-                }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                    console.log(xhr);
-                }, this)
-            });
         },
 
         getModeLoader : function (currentContext) {

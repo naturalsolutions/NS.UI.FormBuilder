@@ -15,9 +15,9 @@ define([
     var loader = ContextLoader;
 
     /**
-    * Implement form object as a fields collection
-    */
-    var EcorelevetLoader = {
+     * Implement form object as a fields collection
+     */
+    var EcollectionLoader = {
 
         initializeLoader: function (form, URLoptions) {
             this.form = form;
@@ -35,5 +35,5 @@ define([
         }
     };
 
-    return EcorelevetLoader.getThisLoader();
+    return EcollectionLoader.getThisLoader();
 });

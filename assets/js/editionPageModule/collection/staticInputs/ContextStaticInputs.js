@@ -9,13 +9,15 @@ define([
     'app-config',
     './TrackStatics',
     './EcoreleveStatics',
-    './EcollectionStatics'
+    './EcollectionStatics',
+    './PositionStatics'
 ], function ($, Backbone, Translater, AppConfig,
-             TrackStatics, EcoreleveStatics, EcollectionStatics) {
+             TrackStatics, EcoreleveStatics, EcollectionStatics, PositionStatics) {
 
     var staticInputs = {"track" : TrackStatics,
                         "ecoreleve" : EcoreleveStatics,
-                        "ecollection" : EcollectionStatics};
+                        "ecollection" : EcollectionStatics,
+                        "postiion" : PositionStatics};
 
     var translater = Translater.getTranslater();
 

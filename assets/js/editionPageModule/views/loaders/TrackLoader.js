@@ -1,12 +1,3 @@
-/**
-* @fileOverview collection.js
-*
-* Describe form model for the application
-* Inherited from Backbone collection
-*
-* @author          MICELI Antoine (miceli.antoine@gmail.com)
-* @version         1.0
-*/
 
 define([
     'jquery',

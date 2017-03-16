@@ -655,6 +655,9 @@ define([
          * @param newElement            if field is a new element
          */
         addField : function(field, ifFieldIsInFieldset, newElement) {
+            console.log("2 - addField - FieldCollection");
+            console.log(field, ifFieldIsInFieldset, newElement);
+
             this.totalAddedElements++;
 
             if (this.isAValidFieldType(field.constructor.type)) {
@@ -695,7 +698,8 @@ define([
                     this.fieldsexcludedfromdelete.push(field.get('id'));
                 }
 
-                this.nextFieldNew();
+                var that = this;
+                //setTimeout(function(){that.nextFieldNew();}, 1000);
                 return field.get('id');
             }
         },
@@ -708,10 +712,16 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addElement: function (nameType, properties, isUnderFieldset) {
+            console.log("5 - addElement - FieldCollection");
+            console.log(nameType, properties, isUnderFieldset);
+
             var field = properties || {};
             field['order'] = this.getSize();
 
-            return this.addField(new Fields[nameType](field), isUnderFieldset);
+            var toret = this.addField(new Fields[nameType](field), isUnderFieldset);
+            var that = this;
+            setTimeout(function(){that.nextFieldNew();}, 10);
+            return toret;
         },
 
         /**
@@ -722,10 +732,16 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addNewElement: function (nameType, properties, isUnderFieldset) {
+            console.log("1 - addNewElement - FieldCollection");
+            console.log(nameType, properties, isUnderFieldset);
+
             var field = properties || {};
             field['order'] = this.getSize();
 
-            return this.addField(new Fields[nameType](field), isUnderFieldset, true);
+            var toret = this.addField(new Fields[nameType](field), isUnderFieldset, true);
+            var that = this;
+            setTimeout(function(){that.nextFieldNew();}, 10);
+            return toret;
         },
 
         /**
@@ -781,6 +797,10 @@ define([
          * @param  {object} JSONUpdate JSON data
          */
         updateWithJSON : function(JSONUpdate) {
+
+            console.log("-2 - updateWithJSON - FieldCollection");
+            console.log(JSONUpdate);
+
             this.JSONUpdate = JSONUpdate;
             //  Update form attribute
             this.updateCollectionAttributes(JSONUpdate);
@@ -888,6 +908,9 @@ define([
 
         triggeredCreateFieldsets2 : function() {
 
+            console.log("-1 - triggeredCreateFieldsets2 - FieldCollection");
+            console.log("No params");
+
             var i = 0;
             var that = this;
 
@@ -955,6 +978,9 @@ define([
 
         createField3 : function(fieldObj, fieldType)
         {
+            console.log("4 - createField3 - FieldCollection");
+            console.log(fieldObj, fieldType);
+
             if (fieldObj.type == 'Checkboxes') {
                 fieldObj.type = 'CheckBox';
             }
@@ -1032,6 +1058,8 @@ define([
 
             if (this.isAValidFieldType(fieldToAdd.type)) {
                 this.addField(this.createFieldWithJSON(fieldToAdd), fieldToAdd['isUnderFieldset']);
+                var that = this;
+                setTimeout(function(){that.nextFieldNew();}, 10);
             }
 
             this.schema.shift();
@@ -1048,6 +1076,8 @@ define([
 
             if (this.isAValidFieldType(fieldObj.type)) {
                 this.addField(this.createFieldWithJSON(fieldObj), fieldObj['isUnderFieldset']);
+                var that = this;
+                setTimeout(function(){that.nextFieldNew();}, 10);
             }
 
             delete this.JSONUpdate["schema"][fieldPosition];
@@ -1094,6 +1124,8 @@ define([
          * Add the next field on the collection
          */
         nextFieldNew : function() {
+            console.log("3 - nextFieldNew - FieldCollection");
+            console.log("No params");
             var that = this;
 
             setTimeout(function() {
@@ -1126,6 +1158,8 @@ define([
                 var copyof = this.schema;
                 if (this.isAValidFieldType(firstFieldToAdd.type)) {
                     this.addField( this.createFieldWithJSON(firstFieldToAdd), firstFieldToAdd['isUnderFieldset']);
+                    var that = this;
+                    setTimeout(function(){that.nextFieldNew();}, 10);
                 }
 
                 this.schema.shift();
@@ -1359,7 +1393,7 @@ define([
                         }
                         that.showSpinner(true);
                     }
-                }, 20);
+                }, 10);
             };
 
             this.mainChannel.trigger('manualSaveChange', callbackSuccess);
