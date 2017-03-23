@@ -1317,20 +1317,23 @@ define([
 
             schema.defaultValue.type = 'Number';
             schema.defaultValue.validators = [function checkValue(value, formValues) {
-                if (value > formValues['maxValue']) {
-                    return {
-                        type : 'Invalid number',
-                        message : "La valeur par défault est supérieur à la valeur maximale"
+                console.log("********", value);
+                if (value != null && value != "")
+                {
+                    if (value > formValues['maxValue']) {
+                        return {
+                            type : 'Invalid number',
+                            message : "La valeur par défault est supérieur à la valeur maximale"
+                        }
+                    } else if (value < formValues['minValue']) {
+                        return {
+                            type : 'Invalid number',
+                            message : "La valeur par défault est inférieure à la valeur minimale"
+                        }
                     }
-                } else if (value < formValues['minValue']) {
-                    return {
-                        type : 'Invalid number',
-                        message : "La valeur par défault est inférieure à la valeur minimale"
-                    }
-                } else {
-                    return undefined;
                 }
 
+                return undefined;
             }];
 
             var toret =  _.extend( {}, schema, {
