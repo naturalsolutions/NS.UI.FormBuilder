@@ -69,16 +69,6 @@ define([
             this.form       = null;
             this.formFilesBinaryList = [];
 
-            /*
-            if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
-                (this.formToEdit.name.toLowerCase() == "new form" && this.formToEdit.id != 0)))
-            {
-                console.log("XXX yo, i'm here !", this.formToEdit, JSON.stringify(this.formToEdit));
-                delete this;
-                return;
-            }
-            */
-
             this.hasFieldsChanged = false;
 
             // I don't know why but i have to specify a model otherwise i've an error on serializeModel callback
@@ -130,16 +120,6 @@ define([
         * View rendering callbak
         */
         onRender : function() {
-
-            /*
-            if (this.formToEdit.length == 0 && (this.formToEdit.name.toLowerCase() != "new form" ||
-                (this.formToEdit.name.toLowerCase() == "new form" && this.formToEdit.id != 0)))
-            {
-                console.log("XXX yo i'm here again !", this.formToEdit, JSON.stringify(this.formToEdit));
-                delete this;
-                return;
-            }
-            */
 
             this.$el.i18n();
             //this.$el.find('.scroll').slimScroll({
@@ -206,6 +186,7 @@ define([
         saveChange : function(callbackSuccess) {
             var that = this;
 
+            console.log("here 02 !");
             if (this.hasbeendestoyed || this.form.data.context == "all"){
                 if (this.form.data.context == "all")
                     console.log("Error ! A form might not be created inside the 'all' context !");
@@ -213,15 +194,15 @@ define([
                 return(false);
             }
 
+            console.log("here 03 !");
             var formValidation = this.form.validate();
 
             if (formValidation === null) {
+                console.log("here 04 !");
                 var filesToSend = [];
                 $.each(this.formFilesBinaryList, function(index, value){
-                    console.log(value.id, value.Pk_ID);
                     if (!value.id && !value.Pk_ID)
                     {
-                        console.log("SENDING FILE !", value, value.id, value.Pk_ID);
                         filesToSend.push(value);
                         that.formFilesBinaryList[index].id = -1;
                     }
@@ -230,10 +211,12 @@ define([
                 this.mainChannel.trigger('editionDone', _.extend({}, this.form.getValue(), {fileList:filesToSend}));
                 $("#collectionName").css('color', "white");
 
+                console.log("here 05 !");
                 if (callbackSuccess)
                 {
                     callbackSuccess();
                     $('.removeFileAssoc').remove();
+                    console.log("here LAST !");
                 }
 
                 //this.removeForm();
@@ -349,15 +332,6 @@ define([
             }
 
             this.generatedAlready = true;
-
-            /*
-            if (this.formToEdit.length == 0)
-            {
-                console.log("XXX yo i'm finally here !", this.formToEdit, JSON.stringify(this.formToEdit));
-                delete this;
-                return;
-            }
-            */
 
             require(['backbone-forms'], _.bind(function() {
                 if (this.form !== null) {

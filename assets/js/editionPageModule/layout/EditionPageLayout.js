@@ -280,7 +280,7 @@ define([
 
             if (form)
             {
-                //console.log(form);
+
             }
             this.closeSettingPanel();
         },
@@ -288,18 +288,6 @@ define([
         closeSettingPanelAndSuccess : function(form) {
 
             this.closeSettingPanelDefault(form);
-            //TODO DEPRECATED
-            /*
-            swal({
-                title: translater.getValueFromKey('modal.save.success') || "Sauvé !",
-                text: translater.getValueFromKey('modal.save.successMsgTmp') || "Sauvegardé !",
-                type:"success",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
-            */
         },
 
         closeSettingPanelAndCommit : function(form) {

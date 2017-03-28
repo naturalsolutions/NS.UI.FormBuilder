@@ -54,8 +54,6 @@
                     i18n     = section[n][i]['i18n'];
                     %>
                     <div data-type="<%= type %>" data-i18n="[title]tooltip.<%= i18n %>" >
-                        <!-- Exception for childform, understood as a subform TODO OBJECTPICKER PICTO -->
-                        <!-- <span class="picto-<%= i18n %>" data-type="<%= (type=='childform'?'subform':type) %>"></span> -->
                         <span class="picto-<%= i18n %>" data-type="<%= (type=='childform'?'subform':type) %>"></span>
                     </div>
                 <% } %>

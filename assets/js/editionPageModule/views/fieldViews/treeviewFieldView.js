@@ -5,7 +5,8 @@ define([
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/treeviewFieldView.html',
     'text!editionPageModule/templates/fields/readonly/treeviewFieldView.html',
-    'jquery-ui', 'fancytree'
+    'jquery-ui',
+    'fancytree'
 ], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var TreeViewFieldView = BaseView.extend({
@@ -24,7 +25,7 @@ define([
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
-            $('#treeview' + this.model.get('id')).fancytree({
+            $('#treeview' + this.model.get('id')).autocompTree({
                 source: [
                     {title: "Node 1", key: "1"},
                     {title: "Folder 2", key: "2", folder: true, children: [

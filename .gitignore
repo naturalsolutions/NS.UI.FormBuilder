@@ -1,6 +1,7 @@
 node_modules/
 web.config
-libs/
+libs/*
+!libs/autocompleteTreeview
 bower_components
 compressed/
 build/formbuilder.min.js

@@ -52,33 +52,53 @@ define([
             }
 
             var callbackWSCallHttp = function(data){
-                $('#position' + that.model.get('id')).fancytree({
+                $('#position' + that.model.get('id')).autocompTree({
                     source: data['children'],
-                    checkbox: false,
-                    selectMode: 2,
-                    activeNode: startID,
-                    click: function (event, data){/*console.log("-01**************", event, data);*/}
+                    startId: startID,
+                    inputValue: item.val(),
+                    onItemClick: function (event, data){console.log("test 02", event, data);},
+                    display: {
+                        isDisplayDifferent: true
+                    },
+                    WsParams: {
+                        ProfMin: item.attr('profmin') ? item.attr('profmin') : null,
+                        ProfMax: item.attr('profmax') ? item.attr('profmax') : null,
+                        ForLeafs: item.attr('forleafs') ? item.attr('forleafs') : null,
+                        NotDisplayOutOfMax: item.attr('notdisplayoutofmax') ? item.attr('notdisplayoutofmax') : null
+                    }
                 });
             };
 
             var callbackWSCallOther = function(data){
-                $('#position' + that.model.get('id')).fancytree({
+                $('#position' + that.model.get('id')).autocompTree({
                     source: data['d'],
-                    checkbox: false,
-                    selectMode: 2,
-                    activeNode: startID,
-                    click : _.bind(function(event, data) {
-                        //console.log("03**************", event, data);
-                    }, this)
+                    startId: startID,
+                    inputValue: item.val(),
+                    onItemClick: function (event, data){console.log("test 03", event, data);},
+                    display: {
+                        isDisplayDifferent: true
+                    },
+                    WsParams: {
+                        ProfMin: item.attr('profmin') ? item.attr('profmin') : null,
+                        ProfMax: item.attr('profmax') ? item.attr('profmax') : null,
+                        ForLeafs: item.attr('forleafs') ? item.attr('forleafs') : null,
+                        NotDisplayOutOfMax: item.attr('notdisplayoutofmax') ? item.attr('notdisplayoutofmax') : null
+                    }
                 });
             };
 
-            require(['jquery-ui', 'fancytree'], _.bind(function() {
+            require(['jquery-ui', 'autocompTree'], _.bind(function() {
                 if (that.model.get('webServiceURL').substring(0, 5) == 'http:') {
                     if (window.trees[that.model.get('webServiceURL')]) {
                         callbackWSCallHttp(window.trees[that.model.get('webServiceURL')]);
                     }
                     else {
+                        if (startID == "")
+                        {
+                            startID = AppConfig.config.startID.position[window.context];
+                            if (!startID)
+                                startID = AppConfig.config.startID.position.default;
+                        }
                         $.ajax({
                             data: JSON.stringify({StartNodeID: startID, lng: "fr"}),
                             type: 'POST',
@@ -134,13 +154,13 @@ define([
 
             var reloadFieldInList = function(){
                 if (children !== null) {
-                    $('#position' + that.model.get('id')).fancytree('getTree').reload({
+                    $('#position' + that.model.get('id')).autocompTree('getTree').reload({
                         children : children
                     });
                 } else {
                     var arr = [];
                     arr[0] = data.node;
-                    that.$el.first('.positionField').fancytree('getTree').reload(arr);
+                    that.$el.first('.positionField').autocompTree('getTree').reload(arr);
                 }
             };
 

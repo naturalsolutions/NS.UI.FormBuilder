@@ -617,6 +617,7 @@ define([
                 fullpath: {
                     type        : 'Text',
                     editorClass : 'form-control',
+                    editorAttrs : { disabled: true },
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.fullpath')
                 }
@@ -942,6 +943,7 @@ define([
                 positionPath : {
                     type        : 'Text',
                     editorClass : 'form-control',
+                    editorAttrs : { disabled: true },
                     template    : fieldTemplate,
                     title       : translater.getValueFromKey('schema.positionPath'),
                     validators : ['required']
@@ -1317,7 +1319,6 @@ define([
 
             schema.defaultValue.type = 'Number';
             schema.defaultValue.validators = [function checkValue(value, formValues) {
-                console.log("********", value);
                 if (value != null && value != "")
                 {
                     if (value > formValues['maxValue']) {

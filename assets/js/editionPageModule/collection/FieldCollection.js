@@ -568,8 +568,6 @@ define([
                 json[index] = that[index];
             });
 
-            console.log("json.propagate", json.propagate);
-
             if (PostOrPut == "POST")
             {
                 json.schema = staticInputs.getStaticInputs(this);
@@ -655,8 +653,6 @@ define([
          * @param newElement            if field is a new element
          */
         addField : function(field, ifFieldIsInFieldset, newElement) {
-            console.log("2 - addField - FieldCollection");
-            console.log(field, ifFieldIsInFieldset, newElement);
 
             this.totalAddedElements++;
 
@@ -688,9 +684,6 @@ define([
                     if (lastItemofScrollArea.offset()){
                         var scrollTo = lastItemofScrollArea.offset().top + lastItemofScrollArea.outerHeight(true) + scrollArea.scrollTop();
 
-                        console.log("scrollTo", scrollTo);
-                        console.log(lastItemofScrollArea.offset().top, "+", lastItemofScrollArea.outerHeight(true), "+", scrollArea.scrollTop());
-
                             scrollArea.animate({
                                 scrollTop: scrollTo
                             }, 500);
@@ -712,8 +705,6 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addElement: function (nameType, properties, isUnderFieldset) {
-            console.log("5 - addElement - FieldCollection");
-            console.log(nameType, properties, isUnderFieldset);
 
             var field = properties || {};
             field['order'] = this.getSize();
@@ -732,8 +723,6 @@ define([
          * @param {boolean} isUnderFieldset
          */
         addNewElement: function (nameType, properties, isUnderFieldset) {
-            console.log("1 - addNewElement - FieldCollection");
-            console.log(nameType, properties, isUnderFieldset);
 
             var field = properties || {};
             field['order'] = this.getSize();
@@ -797,9 +786,6 @@ define([
          * @param  {object} JSONUpdate JSON data
          */
         updateWithJSON : function(JSONUpdate) {
-
-            console.log("-2 - updateWithJSON - FieldCollection");
-            console.log(JSONUpdate);
 
             this.JSONUpdate = JSONUpdate;
             //  Update form attribute
@@ -908,9 +894,6 @@ define([
 
         triggeredCreateFieldsets2 : function() {
 
-            console.log("-1 - triggeredCreateFieldsets2 - FieldCollection");
-            console.log("No params");
-
             var i = 0;
             var that = this;
 
@@ -978,8 +961,6 @@ define([
 
         createField3 : function(fieldObj, fieldType)
         {
-            console.log("4 - createField3 - FieldCollection");
-            console.log(fieldObj, fieldType);
 
             if (fieldObj.type == 'Checkboxes') {
                 fieldObj.type = 'CheckBox';
@@ -1124,8 +1105,6 @@ define([
          * Add the next field on the collection
          */
         nextFieldNew : function() {
-            console.log("3 - nextFieldNew - FieldCollection");
-            console.log("No params");
             var that = this;
 
             setTimeout(function() {
@@ -1199,7 +1178,6 @@ define([
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
-
             var that = this;
             var callbackSuccess = function(){
                 // TODO TODO
@@ -1288,7 +1266,6 @@ define([
                                 if (data.form.schema) {
                                     $.each(data.form.schema, function (index, inputVal) {
                                         $.each(that.models, function (modelindex, modelinputVal) {
-                                            console.log(modelinputVal.attributes.name + " == " + inputVal.name);
                                             if (modelinputVal.attributes.name == inputVal.name) {
                                                 that.models[modelindex].set('id', inputVal.id);
                                             }
@@ -1366,7 +1343,6 @@ define([
                         {
                             that.formChannel.trigger('save:formIncomplete');
                             $("#collectionName").css('color', "red");
-                            console.log("Useful information:", formValidation);
                         }
                         else if (!fieldsValidation)
                         {

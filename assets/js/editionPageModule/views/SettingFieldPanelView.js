@@ -28,9 +28,9 @@ define([
 
 
         /**
-        * jQuery event triggered by the view
-        * @type {Object}
-        */
+         * jQuery event triggered by the view
+         * @type {Object}
+         */
         events : {
             'change #getField select'     : 'selectChanged',
             'click #cancel'               : 'cancel',
@@ -48,8 +48,8 @@ define([
 
 
         /**
-        * Setting view template initialization
-        */
+         * Setting view template initialization
+         */
         template : function() {
             if (this.modelToEdit)
             {
@@ -63,8 +63,8 @@ define([
         },
 
         /**
-        * View constructor, init grid channel
-        */
+         * View constructor, init grid channel
+         */
         initialize : function(options, defaultTemplateList) {
             this.fieldsList             = options.fieldsList;
             this.URLOptions             = options.URLOptions;
@@ -96,8 +96,8 @@ define([
 
 
         /**
-        * Init main radio channel for communicate in the editionPageModule
-        */
+         * Init main radio channel for communicate in the editionPageModule
+         */
         initMainChannel : function() {
             //  The edition channel is the main channel ONLY in the editionPageModule
             this.mainChannel = Backbone.Radio.channel('edition');
@@ -126,10 +126,10 @@ define([
 
 
         /**
-        * Create a form to edit field properties
-        *
-        * @param  {Object} field Field with which backbone forms will generate an edition form
-        */
+         * Create a form to edit field properties
+         *
+         * @param  {Object} field Field with which backbone forms will generate an edition form
+         */
         initForm : function() {
             var that = this;
 
@@ -140,15 +140,15 @@ define([
                 that.fieldWithSameType = that.preConfiguredFieldList[that.currentFieldType];
 
                 /*
-                if (that.fieldWithSameType == undefined) {
-                    that.$el.find('*[data-setting="field"]').first().hide();
-                } else {
-                    // Update available pre configurated field
-                    _.each(that.fieldWithSameType, _.bind(function(el, idx) {
-                        that.$el.find('#getField select').append('<option value="' + idx + '">' + idx + '</option>');
-                    }, that));
-                }
-                */
+                 if (that.fieldWithSameType == undefined) {
+                 that.$el.find('*[data-setting="field"]').first().hide();
+                 } else {
+                 // Update available pre configurated field
+                 _.each(that.fieldWithSameType, _.bind(function(el, idx) {
+                 that.$el.find('#getField select').append('<option value="' + idx + '">' + idx + '</option>');
+                 }, that));
+                 }
+                 */
 
                 that.$el.find('select').selectpicker();
 
@@ -349,10 +349,10 @@ define([
         },
 
         /**
-        * Create a form to edit field properties
-        *
-        * @param  {[Object]} field to edit
-        */
+         * Create a form to edit field properties
+         *
+         * @param  {[Object]} field to edit
+         */
         createForm : function() {
             if (this.todelete)
             {
@@ -437,7 +437,7 @@ define([
                                         url         : WebServiceUrl,
                                         contentType : 'application/json',
                                         data        : JSON.stringify({
-                                            StartNodeID:$("#defaultNode").fancytree("getActiveNode") || 0,
+                                            StartNodeID:$("#defaultNode").autocompTree("getActiveNode") || 0,
                                             deprecated:0,
                                             lng:"Fr"}),
                                         success: function (data) {
@@ -450,8 +450,8 @@ define([
                                 }
                             },
                             select: function(event, ui){
-                                $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setActive();
-                                $("#defaultNode").fancytree("getTree").getNodeByKey(ui.item.id).setExpanded(true);
+                                $("#defaultNode").autocompTree("getTree").getNodeByKey(ui.item.id).setActive();
+                                $("#defaultNode").autocompTree("getTree").getNodeByKey(ui.item.id).setExpanded(true);
                                 that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), ui.item.data);
                                 $('input[name="'+pathname+'"]').val(ui.item.label);
                             }
@@ -460,7 +460,7 @@ define([
 
                     if (WebServiceUrl)
                     {
-                        $('input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
+                        $('input[name="defaultNode"]').replaceWith('<input name="defaultNode" id="defaultNode" value="'+that.modelToEdit.get('defaultNode')+'" class="form-control" type="text"/>');
                         if (WebServiceUrl.substring(0,5) == 'http:' ) {
 
                             var startID = AppConfig.config.startID[this.modelToEdit.constructor.type.toLowerCase()][window.context];
@@ -470,18 +470,30 @@ define([
                             var tosend = JSON.stringify({StartNodeID: startID, lng: "fr"});
 
                             var callbackWSCall = function(data){
-                                $('#defaultNode').fancytree({
-                                    source     : data,
-                                    checkbox   : false,
-                                    selectMode : 1,
-                                    activeNode : startID,
-                                    click : _.bind(function(event, data) {
+                                var item = $('#defaultNode');
+
+                                item.autocompTree({
+                                    source: data,
+                                    startId: startID,
+                                    inputValue: item.val(),
+
+                                    callback: function(event,data){
                                         that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), data);
-                                        $('input[name="'+pathname+'"]').val(data.node.data.fullpath);
                                         createFullpathAutocomplete();
-                                    }, this)
+                                    },
+
+                                    display: {
+                                        isDisplayDifferent: true
+                                    },
+                                    WsParams: {
+                                        ProfMin: item.attr('profmin') ? item.attr('profmin') : null,
+                                        ProfMax: item.attr('profmax') ? item.attr('profmax') : null,
+                                        ForLeafs: item.attr('forleafs') ? item.attr('forleafs') : null,
+                                        NotDisplayOutOfMax: item.attr('notdisplayoutofmax') ? item.attr('notdisplayoutofmax') : null
+                                    }
                                 });
-                                $('#defaultNode').fancytree("getTree").activateKey(savednode);
+
+                                item.autocompTree("getTree").activateKey(savednode);
                             };
 
                             if (window.trees[WebServiceUrl]) {
@@ -506,15 +518,28 @@ define([
                         }
                         else {
                             var callBackWSCall = function(data){
-                                $('#defaultNode').fancytree({
+                                var item = $('#defaultNode');
+
+                                item.autocompTree({
                                     source: data['d'],
-                                    checkbox : false,
-                                    selectMode : 1,
-                                    click : _.bind(function(event, data) {
-                                        this.globalChannel.trigger('nodeSelected' + this.modelToEdit.get('id'), data);
-                                    }, this)
+                                    inputValue: item.val(),
+
+                                    callback: function(event,data){
+                                        that.globalChannel.trigger('nodeSelected' + that.modelToEdit.get('id'), data);
+                                        createFullpathAutocomplete();
+                                    },
+
+                                    display: {
+                                        isDisplayDifferent: true
+                                    },
+                                    WsParams: {
+                                        ProfMin: item.attr('profmin') ? item.attr('profmin') : null,
+                                        ProfMax: item.attr('profmax') ? item.attr('profmax') : null,
+                                        ForLeafs: item.attr('forleafs') ? item.attr('forleafs') : null,
+                                        NotDisplayOutOfMax: item.attr('notdisplayoutofmax') ? item.attr('notdisplayoutofmax') : null
+                                    }
                                 });
-                                $('#defaultNode').fancytree("getTree").activateKey(savednode);
+                                item.autocompTree("getTree").activateKey(savednode);
                             };
 
                             if (window.trees[AppConfig.paths.thesaurusWSPath]) {
@@ -532,11 +557,11 @@ define([
                     }
                 } else if (this.modelToEdit.constructor.type === 'TreeView') {
 
-                     this.setTreeViewConfiguration();
+                    this.setTreeViewConfiguration();
 
                 } else if (_.contains(['Select', 'CheckBox', 'Radio'], this.modelToEdit.constructor.type)) {
-                     this.setMultipleFieldConfiguration();
-                 }
+                    this.setMultipleFieldConfiguration();
+                }
 
                 this.initScrollBar();
 
@@ -673,8 +698,8 @@ define([
          * Some field like Treeview need to run specific configuration
          */
         setTreeViewConfiguration : function() {
-            $('.settings form input[name="defaultNode"]').replaceWith('<div id="defaultNode"></div>');
-            $('.settings form #defaultNode').fancytree({
+            $('.settings form input[name="defaultNode"]').replaceWith('<input name="defaultNode" id="defaultNode" class="form-control" type="text"/>');
+            $('.settings form #defaultNode').autocompTree({
                 source: [
                     {title: "Node 1", key: "1"},
                     {title: "Folder 2", key: "2", folder: true, children: [
@@ -716,15 +741,15 @@ define([
 
 
         /**
-        * Reset the select element with pre configuration field name
-        */
+         * Reset the select element with pre configuration field name
+         */
         resetSelect : function() {
             this.$el.find('#getField select').html('<option value="" disabled selected>Select an option</option>');
         },
 
         /**
-        * View rendering callbak
-        */
+         * View rendering callbak
+         */
         onRender : function(options) {
             this.$el.i18n();
             this.initForm();
@@ -745,11 +770,11 @@ define([
         },
 
         /**
-        * Event send when user change select value
-        * Set value to the current vield
-        *
-        * @param  {Object} e jQuery event
-        */
+         * Event send when user change select value
+         * Set value to the current vield
+         *
+         * @param  {Object} e jQuery event
+         */
         selectChanged : function(e) {
             var choice = this.fieldWithSameType[ $(e.target).val() ];
 
@@ -766,8 +791,8 @@ define([
 
 
         /**
-        * Send an event on form channel when user wants to clear current form
-        */
+         * Send an event on form channel when user wants to clear current form
+         */
         cancel : function(event, avoidUserValidation, idCondition){
             var self = this;
 
@@ -795,12 +820,12 @@ define([
                     cancelButtonText: translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
                     closeOnConfirm: true }, function(){
                     //TODO Find out why this timeout fixes the "hiding right panel issue"
-                        setTimeout(function(){
-                            cancelSettingPanel();
-                            window.onkeydown = null;
-                            window.onfocus = null;
-                        }, 50);
-                    });
+                    setTimeout(function(){
+                        cancelSettingPanel();
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    }, 50);
+                });
             }
             else {
                 cancelSettingPanel();
@@ -809,13 +834,14 @@ define([
 
 
         /**
-        * Check generated form values and send events if all is good
-        */
+         * Check generated form values and send events if all is good
+         */
         saveChange : function() {
             var nameCounter = 0;
             var that = this;
             var savedDefaultNode = this.modelToEdit.get("defaultNode");
             var savedFullpath = this.modelToEdit.get("fullpath");
+            console.log("saveChange", savedDefaultNode, savedFullpath);
 
             $.each(this.modelToEdit.collection.models, function(value, index){
                 if (index.attributes.name == $("#form [name='name']").val())
@@ -842,6 +868,7 @@ define([
                     // TODO Need to find why to get a proper testing method ...
                     if (this.modelToEdit.attributes.defaultNode != undefined)
                     {
+                        console.log("flag 01");
                         this.modelToEdit.set("defaultNode", savedDefaultNode);
                         this.modelToEdit.set("fullpath", savedFullpath);
                     }
@@ -889,17 +916,12 @@ define([
         },
 
         /**
-        * Save current field as a configuration field
-        */
-            //TODO
+         * Save current field as a configuration field
+         */
+        //TODO
         saveField : function() {
             var formCommitResult = this.form.commit();
             if (formCommitResult) {
-
-                console.log(this.$el.find('.scroll'));
-                console.log(this.$el.find('.scroll').offset().top);
-                console.log($("#settingFormPanel [name='" + Object.keys(formCommitResult)[0] + "']"));
-                console.log($($("#settingFormPanel [name='" + Object.keys(formCommitResult)[0] + "']")).offset().top);
 
                 this.$el.find('.scroll').scrollTop(0);
                 this.$el.find('.scroll').scrollTop( $($("#settingFieldPanel [name='" + Object.keys(formCommitResult)[0] + "']")).offset().top -
@@ -957,8 +979,8 @@ define([
         },
 
         /**
-        * Change a checkbox state
-        */
+         * Change a checkbox state
+         */
         checkboxChange : function(e) {
             var clickedLabel = $('label[for="' + $(e.target).prop('id') + '"]');
             clickedLabel.toggleClass('selected');

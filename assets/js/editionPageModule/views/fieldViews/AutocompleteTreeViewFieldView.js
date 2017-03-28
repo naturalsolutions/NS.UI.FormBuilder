@@ -30,7 +30,7 @@
                 this.model.set('defaultNode', data.node.key);
                 this.model.set('fullpath', data.node.data.fullpath);
 
-                $(treeID).fancytree("getTree").activateKey(key);
+                $(treeID).autocompTree("getTree").activateKey(key);
             }, this));
         },
 

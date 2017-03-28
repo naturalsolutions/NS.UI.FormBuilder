@@ -5,7 +5,10 @@ require.config({
         backbone                            : "../../libs/backbone/backbone",
         blobjs                              : "../../libs/blobjs/Blob",
         bootstrap                           : "../../libs/bootstrap/dist/js/bootstrap.min",
-        fancytree                           : "../../libs/fancytree/dist/jquery.fancytree-all.min",
+        fancytree                           : "../../libs/autocompleteTreeview/jquery.fancytree",
+        fancytreeAll                        : "../../libs/autocompleteTreeview/jquery.fancytree-all",
+        treeViewAutoComplete                : "../../libs/autocompleteTreeview/treeViewAutoComplete-Formbuilder",
+        autocompTree                        : "../../libs/autocompleteTreeview/jquery.autocompTree",
         filesaver                           : "../../libs/filesaver/FileSaver.min",
         i18n                                : "../../libs/i18n/i18next.min",
         jquery                              : "../../libs/jquery/dist/jquery.min",
@@ -18,7 +21,6 @@ require.config({
         bootstrapTemplate                   : "../../libs/backbone-forms/distribution/templates/bootstrap3",
         bootstrapAdapter                    : "../../libs/bootstrapAdapter/index",
         "backbone.radio"                    : "../../libs/backbone.radio/build/backbone.radio",
-        autocompleteTreeView                : "../../libs/autocompleteTreeview/Scripts/jquery.autocompTree",
         "jquery-simple-slider"              : "../../libs/jquery-simple-slider/js/simple-slider",
         "bootstrap-select"                  : "../../libs/bootstrap-select/dist/js/bootstrap-select",
         sweetalert                          : "../../libs/sweetalert/dist/sweetalert.min",
@@ -98,11 +100,12 @@ require.config({
                 "jquery"
             ]
         },
-        autocompleteTreeView: {
+        autocompTree: {
             deps: [
                 "jquery",
                 "jquery-ui",
-                "fancytree"
+                "fancytree",
+                "fancytreeAll"
             ],
             exports: "$"
         },

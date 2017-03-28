@@ -44,6 +44,8 @@ define([
 
         displayTreeView : function(startID) {
             var that = this;
+            var item = $('#thesaurus' + that.model.get('id'));
+
             if (startID == "")
             {
                 startID = AppConfig.config.startID.thesaurus[window.context];
@@ -52,33 +54,50 @@ define([
             }
 
             var callbackWSCallHttp = function(data){
-                var fancyval = $('#thesaurus' + that.model.get('id')).fancytree({
+
+                if (that.savedDefaultNode == startID)
+                    item.attr("placeholder", that.savedFullpath);
+
+                item.autocompTree({
                     source: data['children'],
-                    checkbox: false,
-                    selectMode: 2,
-                    activeNode: startID,
-                    click: function (event, data){/*console.log("-01**************", event, data);*/}
+                    startId: startID,
+                    inputValue: item.val(),
+                    onItemClick: function (event, data){console.log("test 01", event, data);},
+                    display: {
+                        isDisplayDifferent: true
+                    },
+                    WsParams: {
+                        ProfMin: item.attr('profmin') ? item.attr('profmin') : null,
+                        ProfMax: item.attr('profmax') ? item.attr('profmax') : null,
+                        ForLeafs: item.attr('forleafs') ? item.attr('forleafs') : null,
+                        NotDisplayOutOfMax: item.attr('notdisplayoutofmax') ? item.attr('notdisplayoutofmax') : null
+                    }
                 });
-                if ($('#thesaurus' + that.model.get('id')).fancytree("getTree").getNodeByKey){
-                    $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload({
-                        children : $('#thesaurus' + that.model.get('id')).fancytree("getTree").getNodeByKey(startID).children
-                    });
-                }
             };
 
             var callbackWSCallOther = function(data){
-                $('#thesaurus' + that.model.get('id')).fancytree({
+
+                if (that.savedDefaultNode == startID)
+                    item.attr("placeholder", that.savedFullpath);
+
+                item.autocompTree({
                     source: data['d'],
-                    checkbox: false,
-                    selectMode: 2,
-                    activeNode: startID,
-                    click : _.bind(function(event, data) {
-                        //console.log("03**************", event, data);
-                    }, this)
+                    startId: startID,
+                    inputValue: item.val(),
+                    onItemClick: function (event, data){console.log("test 01", event, data);},
+                    display: {
+                        isDisplayDifferent: true
+                    },
+                    WsParams: {
+                        ProfMin: item.attr('profmin') ? item.attr('profmin') : null,
+                        ProfMax: item.attr('profmax') ? item.attr('profmax') : null,
+                        ForLeafs: item.attr('forleafs') ? item.attr('forleafs') : null,
+                        NotDisplayOutOfMax: item.attr('notdisplayoutofmax') ? item.attr('notdisplayoutofmax') : null
+                    }
                 });
             };
 
-            require(['jquery-ui', 'fancytree'], _.bind(function() {
+            require(['autocompTree'], _.bind(function() {
                 if (that.model.get('webServiceURL').substring(0, 5) == 'http:') {
                     if (window.trees[that.model.get('webServiceURL')]) {
                         callbackWSCallHttp(window.trees[that.model.get('webServiceURL')]);
@@ -107,7 +126,7 @@ define([
                     else {
                         $.getJSON(that.model.get('webServiceURL'), _.bind(function (data) {
                             callbackWSCallOther(data);
-                        }, this)).error(function (a, b, c) {
+                        }, this)).error(function () {
                             alert("can't load ressources !");
                         });
                     }
@@ -116,6 +135,9 @@ define([
         },
 
         updateTreeView : function(data) {
+            var that = this;
+            var item = $('#thesaurus' + that.model.get('id'));
+
             var startID = "";
             var nodeFullpath = "";
             var children = null;
@@ -133,15 +155,12 @@ define([
                 children = data['children'];
             }
 
-            var that = this;
-
             var reloadFieldInList = function(){
                 if (children !== null) {
-                    $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload({
+                    item.autocompTree('getTree').reload({
                         children : children
                     });
-                } else {
-                    // that.$el.first('.thesaurusField').fancytree('getTree').reload(that.savedArr);
+                    item.attr("placeholder", nodeFullpath);
                 }
             };
 
@@ -157,8 +176,11 @@ define([
             reloadFieldInList();
 
             this.model.set('defaultNode', startID);
-            $('input[name="defaultNode"]').val(nodeFullpath);
             this.model.set('fullpath', nodeFullpath);
+
+            $('input[name="defaultNode"]').val(startID);
+            $('input[name="defaultNode"]').attr("value", startID);
+            $('input[name="fullpath"]').val(nodeFullpath);
         },
 
         resetTreeView : function()
@@ -166,15 +188,6 @@ define([
             var that = this;
 
             this.displayTreeView(that.savedDefaultNode);
-            /*
-            if (that.savedDefaultNode)
-            {
-                this.model.set('defaultNode', that.savedDefaultNode);
-                $('input[name="defaultNode"]').val(that.savedFullpath);
-                this.model.set('fullpath', that.savedFullpath);
-                $('#thesaurus' + that.model.get('id')).fancytree('getTree').reload(that.savedArr);
-            }
-            */
         },
 
         render : function() {
@@ -190,6 +203,6 @@ define([
         }
     });
 
-	return TreeViewFieldView;
+    return TreeViewFieldView;
 
 });

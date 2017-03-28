@@ -39,12 +39,6 @@ define([
             BaseView.prototype.render.apply(that, arguments);
 
             var setAutocomplete = function (data) {
-                /*
-                console.log("setAutocomplete", that.model.get('triggerlength'));
-                console.log("setAutocomplete", data);
-                console.log("setAutocomplete", $(that.el));
-                console.log("setAutocomplete", $(that.el).find('.form-control'));
-                */
                 $(that.el).find('.form-control').autocomplete({
                     minLength: that.model.get('triggerlength'),
                     scrollHeight: 220,

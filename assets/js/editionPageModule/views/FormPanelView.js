@@ -406,10 +406,10 @@ define([
          * Trigger an event for the router on the form channel
          */
         save : function() {
-            //TODO DEPRECATED, RULES MANAGER FOR FORM VALIDATION
             //TODO find a better way ... collection save is send inside a callback
             //this.checkRules();
 
+            console.log("here -2 !");
             this.saveCollection();
         },
 
@@ -441,6 +441,7 @@ define([
         },
 
         saveCollection : function() {
+            console.log("here -1 !");
             this.collection.save();
         },
 
@@ -695,9 +696,6 @@ define([
          */
         updateName: function () {
             this.$el.find('#collectionName').text(this.collection.name);
-            console.log("this.collection.originalID", this.collection.originalID);
-            console.log("this.collection", this.collection);
-            console.log("this", this);
             if (this.collection.originalID && this.collection.originalID > 0)
             {
                 this.$el.find('#formOriginalIdArea').show();

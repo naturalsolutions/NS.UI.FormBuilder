@@ -1,0 +1,25 @@
+﻿<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title></title>
+    <script src="Scripts/jquery-1.8.2.js"></script>
+    <script src="Scripts/jquery-ui-1.8.24.js"></script>
+    <link href="Scripts/skin-win7/ui.fancytree.css" rel="stylesheet" />    
+    <script src="Scripts/jquery.fancytree-all.js"></script>
+    <script src="Scripts/jquery.autocompTree.js"></script>    
+</head>
+    <script>
+        $(function () {
+            $("#testInput").autocompTree({
+                language: { hasLanguage: true, lng: 'En' },
+                onItemClick: function () { alert(); },
+                startId: '85263'
+            })
+        });
+    </script>
+<body>
+    <input type="text" id="testInput" />
+    <textarea id="testTextarea"></textarea>
+</body>
+</html>

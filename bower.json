@@ -26,7 +26,6 @@
     "backbone-forms"                   : "https://github.com/powmedia/backbone-forms.git",
     "bootstrapAdapter"                 : "https://github.com/powmedia/backbone.bootstrap-modal.git",
     "jquery-simple-slider"             : null,
-    "autocompleteTreeview"             : "https://github.com/NaturalSolutions/NS.UI.autocompTree.git",
     "bootstrap-select"                 : "https://github.com/silviomoreto/bootstrap-select.git",
     "sweetalert"                       : null,
     "filesaver"                        : "https://github.com/eligrey/FileSaver.js.git",
