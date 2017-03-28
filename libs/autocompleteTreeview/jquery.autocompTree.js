@@ -258,7 +258,7 @@
 					});
 					//Fonction de recherche et de filtration
 					$me.keyup(function (e) {
-						if ($me.val().substr(0,1) != "%")
+						if ($me.val().substr(0,1) != "#")
 						{
 							var treeHtml = $("#treeView" + $me.attr("id"));
 							var fancytree = treeHtml.fancytree("getTree");

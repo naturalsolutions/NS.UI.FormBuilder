@@ -117,6 +117,7 @@
 					//console.log($('#treeView' + $me.attr("id")));
 					//console.log(parametres.webservices);
 					//console.log(dataToSend);
+					console.log("MY wsUrl IS", parametres.wsUrl);
 					$('#treeView' + $me.attr("id")).fancytree({
 						debugLevel: 0,
 						extensions: ["filter"],
@@ -224,6 +225,11 @@
 							$(this).css('display', 'none');
 						});
 						var treeContainer = $("#treeView" + $me.attr("id"));
+						var fancytree = treeContainer.fancytree("getTree");
+					
+						console.log("fancytree", $me.attr("value"));
+						fancytree.activateKey($me.attr("value"));
+						
 						treeContainer.css('display', 'block').css('width', $me.outerWidth() - 2).css('border', 'solid 1px').css('z-index', '100').css('position','absolute');
 						//treeContainer.css({top: $(this).outerHeight() + 20 });
 						//Fonction qui permet d'effectuer un "blur" sur l'ensemble des éléments (input et arbre)
@@ -252,45 +258,48 @@
 					});
 					//Fonction de recherche et de filtration
 					$me.keyup(function (e) {
-						var treeHtml = $("#treeView" + $me.attr("id"));
-						var fancytree = treeHtml.fancytree("getTree");
-						//Si le nombrte d'élément est < a 100 on oblige l'utilisation d'au moins trois caractère pour des raisons de performances
-						if (fancytree.count() < 100 || $me.val().length >= 3) {
-							treeHtml.find('ul.fancytree-container li').css("padding", "1px 0 0 0");
-							treeHtml.fancytree("getRootNode").visit(function (node) {
-								if (node.span) {
-									var className = node.span.className;
-									if (className.indexOf('fancytree-hide') != -1) {
+						if ($me.val().substr(0,1) != "#")
+						{
+							var treeHtml = $("#treeView" + $me.attr("id"));
+							var fancytree = treeHtml.fancytree("getTree");
+							//Si le nombrte d'élément est < a 100 on oblige l'utilisation d'au moins trois caractère pour des raisons de performances
+							if (fancytree.count() < 100 || $me.val().length >= 3) {
+								treeHtml.find('ul.fancytree-container li').css("padding", "1px 0 0 0");
+								treeHtml.fancytree("getRootNode").visit(function (node) {
+									if (node.span) {
+										var className = node.span.className;
+										if (className.indexOf('fancytree-hide') != -1) {
+											node.setExpanded(false);
+										}
+									} else {
 										node.setExpanded(false);
 									}
-								} else {
-									node.setExpanded(false);
-								}
-							});
-							match = $me.val();
-							var n,
+								});
 								match = $me.val();
+								var n,
+									match = $me.val();
 
-							if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+								if (e && e.which === $.ui.keyCode.ESCAPE || $.trim(match) === "") {
+									fancytree.clearFilter();
+									treeHtml.fancytree("getRootNode").visit(function (node) {
+									node.setExpanded(false);
+									});
+									return;
+								}
+								n = fancytree.filterNodes(match, false);
+								while (treeHtml.find('.fancytree-submatch:not(.fancytree-expanded)').find('.fancytree-expander').length) {
+									treeHtml.find('.fancytree-submatch:not(.fancytree-expanded)').find('.fancytree-expander').click();
+								}
+								if (treeHtml.find('.fancytree-match').length < 3 && treeHtml.find('.fancytree-match').find('.fancytree-match').length)
+									treeHtml.find('.fancytree-match').find('.fancytree-expander').click()
+								treeHtml.find('ul.fancytree-container li').css("padding", "0px 0 0 0");
+							}
+							if ($me.val().length == 0) {
 								fancytree.clearFilter();
 								treeHtml.fancytree("getRootNode").visit(function (node) {
-								node.setExpanded(false);
+									node.setExpanded(false);
 								});
-								return;
 							}
-							n = fancytree.filterNodes(match, false);
-							while (treeHtml.find('.fancytree-submatch:not(.fancytree-expanded)').find('.fancytree-expander').length) {
-								treeHtml.find('.fancytree-submatch:not(.fancytree-expanded)').find('.fancytree-expander').click();
-							}
-							if (treeHtml.find('.fancytree-match').length < 3 && treeHtml.find('.fancytree-match').find('.fancytree-match').length)
-								treeHtml.find('.fancytree-match').find('.fancytree-expander').click()
-							treeHtml.find('ul.fancytree-container li').css("padding", "0px 0 0 0");
-						}
-						if ($me.val().length == 0) {
-							fancytree.clearFilter();
-							treeHtml.fancytree("getRootNode").visit(function (node) {
-								node.setExpanded(false);
-							});
 						}
 					});
 
