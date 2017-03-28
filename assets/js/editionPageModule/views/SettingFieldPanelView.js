@@ -460,6 +460,7 @@ define([
 
                     if (WebServiceUrl)
                     {
+                        console.log("THE WebServiceUrl IS " , WebServiceUrl);
                         $('input[name="defaultNode"]').replaceWith('<input name="defaultNode" id="defaultNode" value="'+that.modelToEdit.get('defaultNode')+'" class="form-control" type="text"/>');
                         if (WebServiceUrl.substring(0,5) == 'http:' ) {
 
@@ -469,10 +470,11 @@ define([
 
                             var tosend = JSON.stringify({StartNodeID: startID, lng: "fr"});
 
-                            var callbackWSCall = function(data){
+                            var callbackWSCall = function(data, urlws){
                                 var item = $('#defaultNode');
 
                                 item.autocompTree({
+                                    wsUrl: urlws,
                                     source: data,
                                     startId: startID,
                                     inputValue: item.val(),
@@ -497,7 +499,7 @@ define([
                             };
 
                             if (window.trees[WebServiceUrl]) {
-                                callbackWSCall(window.trees[WebServiceUrl]);
+                                callbackWSCall(window.trees[WebServiceUrl], WebServiceUrl);
                             }
                             else {
                                 $.ajax({
@@ -511,16 +513,24 @@ define([
 
                                     //  Trigger event with ajax result on the formView
                                     success: _.bind(function (data) {
-                                        callbackWSCall(data);
+                                        callbackWSCall(data, WebServiceUrl);
                                     }, this)
                                 });
                             }
                         }
                         else {
-                            var callBackWSCall = function(data){
+                            var urlws = "";
+                            if (this.modelToEdit.constructor.type == "Position")
+                                urlws = AppConfig.paths.positionWSPath;
+                            if (this.modelToEdit.constructor.type == "Thesaurus")
+                                urlws = AppConfig.thesaurusWSPath;
+
+                            console.log("THE URLWS IS " , urlws);
+                            var callBackWSCall = function(data, urlws){
                                 var item = $('#defaultNode');
 
                                 item.autocompTree({
+                                    wsUrl: urlws,
                                     source: data['d'],
                                     inputValue: item.val(),
 
@@ -542,12 +552,12 @@ define([
                                 item.autocompTree("getTree").activateKey(savednode);
                             };
 
-                            if (window.trees[AppConfig.paths.thesaurusWSPath]) {
-                                callBackWSCall(window.trees[AppConfig.paths.thesaurusWSPath]);
+                            if (window.trees[urlws]) {
+                                callBackWSCall(window.trees[urlws], urlws);
                             }
                             else {
-                                $.getJSON(AppConfig.paths.thesaurusWSPath, _.bind(function(data) {
-                                    callBackWSCall(data);
+                                $.getJSON(urlws, _.bind(function(data) {
+                                    callBackWSCall(data, urlws);
                                 }, this)).error(function(a,b,c) {
                                     alert ("can't load ressources !");
                                 });
@@ -751,6 +761,11 @@ define([
          * View rendering callbak
          */
         onRender : function(options) {
+            if (this.modelToEdit.attributes.defaultNode != undefined)
+            {
+                this.globalChannel.trigger('resetSavedValues');
+            }
+
             this.$el.i18n();
             this.initForm();
         },
@@ -841,7 +856,7 @@ define([
             var that = this;
             var savedDefaultNode = this.modelToEdit.get("defaultNode");
             var savedFullpath = this.modelToEdit.get("fullpath");
-            console.log("saveChange", savedDefaultNode, savedFullpath);
+            var savedPositionPath = this.modelToEdit.get("positionPath");
 
             $.each(this.modelToEdit.collection.models, function(value, index){
                 if (index.attributes.name == $("#form [name='name']").val())
@@ -870,7 +885,11 @@ define([
                     {
                         console.log("flag 01");
                         this.modelToEdit.set("defaultNode", savedDefaultNode);
-                        this.modelToEdit.set("fullpath", savedFullpath);
+                        if(this.modelToEdit.attributes.fullpath != undefined)
+                            this.modelToEdit.set("fullpath", savedFullpath);
+                        if(this.modelToEdit.attributes.positionPath != undefined)
+                            this.modelToEdit.set("positionPath", savedPositionPath);
+
                     }
 
                     if (!this.modelToEdit.get('isLinkedField')) {

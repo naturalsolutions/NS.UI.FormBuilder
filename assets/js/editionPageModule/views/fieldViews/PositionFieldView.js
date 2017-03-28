@@ -28,12 +28,16 @@ define([
             this.initConfigChannel();
 
             this.rendered = false;
+            this.savedDefaultNode = undefined;
+            this.savedFullpath = undefined;
         },
 
         initGlobalChannel : function() {
             this.globalChannel = Backbone.Radio.channel('global');
 
             this.globalChannel.on('nodeSelected' + this.model.get('id'), this.updateTreeView, this);
+            this.globalChannel.on('nodeReset' + this.model.get('id'), this.resetTreeView, this);
+            this.globalChannel.on('resetSavedValues', this.resetSavedValues, this);
         },
 
         initConfigChannel : function() {
@@ -44,6 +48,7 @@ define([
 
         displayTreeView : function(startID) {
             var that = this;
+            var item = $('#position' + that.model.get('id'));
             if (startID == "")
             {
                 startID = AppConfig.config.startID.position[window.context];
@@ -51,12 +56,19 @@ define([
                     startID = AppConfig.config.startID.position.default;
             }
 
-            var callbackWSCallHttp = function(data){
-                $('#position' + that.model.get('id')).autocompTree({
+            var callbackWSCallHttp = function(data, urlws){
+                if (that.savedDefaultNode == startID)
+                {
+                    item.attr("placeholder", that.savedFullpath);
+                    that.model.set('defaultNode', that.savedDefaultNode);
+                    that.model.set('positionPath', that.savedFullpath);
+                }
+
+                item.autocompTree({
+                    wsUrl: urlws,
                     source: data['children'],
                     startId: startID,
                     inputValue: item.val(),
-                    onItemClick: function (event, data){console.log("test 02", event, data);},
                     display: {
                         isDisplayDifferent: true
                     },
@@ -69,12 +81,19 @@ define([
                 });
             };
 
-            var callbackWSCallOther = function(data){
-                $('#position' + that.model.get('id')).autocompTree({
+            var callbackWSCallOther = function(data, urlws){
+                if (that.savedDefaultNode == startID)
+                {
+                    item.attr("placeholder", that.savedFullpath);
+                    that.model.set('defaultNode', that.savedDefaultNode);
+                    that.model.set('positionPath', that.savedFullpath);
+                }
+
+                item.autocompTree({
+                    wsUrl: urlws,
                     source: data['d'],
                     startId: startID,
                     inputValue: item.val(),
-                    onItemClick: function (event, data){console.log("test 03", event, data);},
                     display: {
                         isDisplayDifferent: true
                     },
@@ -88,9 +107,12 @@ define([
             };
 
             require(['jquery-ui', 'autocompTree'], _.bind(function() {
-                if (that.model.get('webServiceURL').substring(0, 5) == 'http:') {
-                    if (window.trees[that.model.get('webServiceURL')]) {
-                        callbackWSCallHttp(window.trees[that.model.get('webServiceURL')]);
+
+                var urlws = that.model.get('webServiceURL');
+
+                if (urlws.substring(0, 5) == 'http:') {
+                    if (window.trees[urlws]) {
+                        callbackWSCallHttp(window.trees[urlws], urlws);
                     }
                     else {
                         if (startID == "")
@@ -102,26 +124,22 @@ define([
                         $.ajax({
                             data: JSON.stringify({StartNodeID: startID, lng: "fr"}),
                             type: 'POST',
-                            url: that.model.get('webServiceURL'),
+                            url: urlws,
                             contentType: 'application/json',
-                            //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                            //  The server is already configured to used it
                             crossDomain: true,
-
-                            //  Trigger event with ajax result on the formView
                             success: _.bind(function (data) {
-                                callbackWSCallHttp(data);
+                                callbackWSCallHttp(data, urlws);
                             }, this)
                         });
                     }
                 }
                 else {
-                    if (window.trees[that.model.get('webServiceURL')]) {
-                        callbackWSCallOther(window.trees[that.model.get('webServiceURL')]);
+                    if (window.trees[urlws]) {
+                        callbackWSCallOther(window.trees[urlws], urlws);
                     }
                     else {
                         $.getJSON(that.model.get('webServiceURL'), _.bind(function (data) {
-                            callbackWSCallOther(data);
+                            callbackWSCallOther(data, urlws);
                         }, this)).error(function (a, b, c) {
                             alert("can't load ressources !");
                         });
@@ -131,6 +149,9 @@ define([
         },
 
         updateTreeView : function(data) {
+            var that = this;
+            var item = $('#position' + that.model.get('id'));
+
             var startID = "";
             var nodeFullpath = "";
             var children = null;
@@ -148,27 +169,40 @@ define([
                 children = data['children'];
             }
 
-            var that = this;
-
-
-
             var reloadFieldInList = function(){
                 if (children !== null) {
-                    $('#position' + that.model.get('id')).autocompTree('getTree').reload({
+                    item.autocompTree('getTree').reload({
                         children : children
                     });
-                } else {
-                    var arr = [];
-                    arr[0] = data.node;
-                    that.$el.first('.positionField').autocompTree('getTree').reload(arr);
+                    item.attr("placeholder", nodeFullpath);
                 }
             };
 
-            reloadFieldInList();
+            if (!that.savedDefaultNode)
+            {
+                that.resetSavedValues();
+            }
 
             this.model.set('defaultNode', startID);
-            $('input[name="defaultNode"]').val(nodeFullpath);
-            this.model.set('fullpath', nodeFullpath);
+            this.model.set('positionPath', nodeFullpath);
+
+            reloadFieldInList();
+
+            $('input[name="defaultNode"]').val(startID);
+            $('input[name="defaultNode"]').attr("value", startID);
+            $('input[name="positionPath"]').val(nodeFullpath);
+        },
+
+        resetTreeView : function()
+        {
+            var that = this;
+            this.displayTreeView(that.savedDefaultNode);
+        },
+
+        resetSavedValues : function()
+        {
+            this.savedDefaultNode = this.model.get('defaultNode');
+            this.savedFullpath = this.model.get('positionPath');
         },
 
         render : function() {

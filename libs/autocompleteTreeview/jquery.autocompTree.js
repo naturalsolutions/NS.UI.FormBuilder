@@ -117,6 +117,7 @@
 					//console.log($('#treeView' + $me.attr("id")));
 					//console.log(parametres.webservices);
 					//console.log(dataToSend);
+					console.log("MY wsUrl IS", parametres.wsUrl);
 					$('#treeView' + $me.attr("id")).fancytree({
 						debugLevel: 0,
 						extensions: ["filter"],

@@ -27,6 +27,8 @@ define([
             this.initConfigChannel();
 
             this.rendered = false;
+            this.savedDefaultNode = undefined;
+            this.savedFullpath = undefined;
         },
 
         initGlobalChannel : function() {
@@ -34,6 +36,7 @@ define([
 
             this.globalChannel.on('nodeSelected' + this.model.get('id'), this.updateTreeView, this);
             this.globalChannel.on('nodeReset' + this.model.get('id'), this.resetTreeView, this);
+            this.globalChannel.on('resetSavedValues', this.resetSavedValues, this);
         },
 
         initConfigChannel : function() {
@@ -56,13 +59,16 @@ define([
             var callbackWSCallHttp = function(data){
 
                 if (that.savedDefaultNode == startID)
+                {
                     item.attr("placeholder", that.savedFullpath);
+                    that.model.set('defaultNode', that.savedDefaultNode);
+                    that.model.set('fullpath', that.savedFullpath);
+                }
 
                 item.autocompTree({
                     source: data['children'],
                     startId: startID,
                     inputValue: item.val(),
-                    onItemClick: function (event, data){console.log("test 01", event, data);},
                     display: {
                         isDisplayDifferent: true
                     },
@@ -78,13 +84,16 @@ define([
             var callbackWSCallOther = function(data){
 
                 if (that.savedDefaultNode == startID)
+                {
                     item.attr("placeholder", that.savedFullpath);
+                    that.model.set('defaultNode', that.savedDefaultNode);
+                    that.model.set('fullpath', that.savedFullpath);
+                }
 
                 item.autocompTree({
                     source: data['d'],
                     startId: startID,
                     inputValue: item.val(),
-                    onItemClick: function (event, data){console.log("test 01", event, data);},
                     display: {
                         isDisplayDifferent: true
                     },
@@ -166,17 +175,13 @@ define([
 
             if (!that.savedDefaultNode)
             {
-                that.savedDefaultNode = this.model.get('defaultNode');
-                that.savedFullpath = this.model.get('fullpath');
-                var arr = [];
-                arr[0] = data.node;
-                that.savedArr = arr;
+                that.resetSavedValues();
             }
-
-            reloadFieldInList();
 
             this.model.set('defaultNode', startID);
             this.model.set('fullpath', nodeFullpath);
+
+            reloadFieldInList();
 
             $('input[name="defaultNode"]').val(startID);
             $('input[name="defaultNode"]').attr("value", startID);
@@ -186,8 +191,13 @@ define([
         resetTreeView : function()
         {
             var that = this;
-
             this.displayTreeView(that.savedDefaultNode);
+        },
+
+        resetSavedValues : function()
+        {
+            this.savedDefaultNode = this.model.get('defaultNode');
+            this.savedFullpath = this.model.get('fullpath');
         },
 
         render : function() {
