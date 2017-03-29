@@ -1258,15 +1258,26 @@ define([
             },
             defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
             minValue: {
-                type        : 'Number',
+                type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 title       : translater.getValueFromKey('schema.min'),
                 validators : [function checkValue(value, formValues) {
-                    if (value > formValues['maxValue']) {
-                        return {
-                            type : 'Invalid number',
-                            message : "La valeur maximale est inférieure à la valeur minimale"
+                    if (value != "")
+                    {
+                        if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
+                            return {
+                                type: 'Invalid number',
+                                message: "La valeur saisie est d'un format incorrect"
+                            }
+                        }
+                        value = parseFloat(value);
+
+                        if (value.toString().substr(0, 1) != '#' && formValues['maxValue'] != "" && value > formValues['maxValue']) {
+                            return {
+                                type: 'Invalid number',
+                                message: "La valeur maximale est inférieure à la valeur minimale"
+                            }
                         }
                     }
                 }],
@@ -1275,15 +1286,27 @@ define([
                 }
             },
             maxValue: {
-                type        : 'Number',
+                type        : 'Text',
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 title       : translater.getValueFromKey('schema.max'),
                 validators : [function checkValue(value, formValues) {
-                    if (value < formValues['minValue']) {
-                        return {
-                            type : 'Invalid number',
-                            message : "La valeur maximale est inférieure à la valeur minimale"
+                    if (value != "")
+                    {
+                        if (!$.isNumeric(value) && value.toString().substr(0,1) != '#')
+                        {
+                            return {
+                                type : 'Invalid number',
+                                message : "La valeur saisie est d'un format incorrect"
+                            }
+                        }
+                        value = parseFloat(value);
+
+                        if (value.toString().substr(0,1) != '#' && formValues['minValue'] != "" && value < formValues['minValue']) {
+                            return {
+                                type : 'Invalid number',
+                                message : "La valeur maximale est inférieure à la valeur minimale"
+                            }
                         }
                     }
                 }],
@@ -1321,12 +1344,12 @@ define([
             schema.defaultValue.validators = [function checkValue(value, formValues) {
                 if (value != null && value != "")
                 {
-                    if (value > formValues['maxValue']) {
+                    if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0,1) != '#' && value > formValues['maxValue']) {
                         return {
                             type : 'Invalid number',
                             message : "La valeur par défault est supérieur à la valeur maximale"
                         }
-                    } else if (value < formValues['minValue']) {
+                    } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0,1) != '#' && value < formValues['minValue']) {
                         return {
                             type : 'Invalid number',
                             message : "La valeur par défault est inférieure à la valeur minimale"
