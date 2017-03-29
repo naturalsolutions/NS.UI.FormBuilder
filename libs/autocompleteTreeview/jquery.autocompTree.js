@@ -63,6 +63,7 @@
 			onInputInitialize: '',
 			//Enregistrement de l'item en elle même
 			thisItem: $(this),
+			source: '',
 			WsParams:{
 				//Param only feuilles
 				ForLeafs: null,
@@ -118,6 +119,13 @@
 					//console.log(parametres.webservices);
 					//console.log(dataToSend);
 					console.log("MY wsUrl IS", parametres.wsUrl);
+					var defaultSource = {
+							type: "POST",
+							url: parametres.wsUrl + "/" + parametres.webservices,
+							datatype: 'jsonp',
+							contentType: "application/json; charset=utf-8",
+							data: '{' + dataToSend + '}'
+						};
 					$('#treeView' + $me.attr("id")).fancytree({
 						debugLevel: 0,
 						extensions: ["filter"],
@@ -131,13 +139,7 @@
 							nbExpand: 0
 						},
 						//defini la source pour les elts parents
-						source: {
-							type: "POST",
-							url: parametres.wsUrl + "/" + parametres.webservices,
-							datatype: 'jsonp',
-							contentType: "application/json; charset=utf-8",
-							data: '{' + dataToSend + '}'
-						},
+						source: (parametres.source != '' ? parametres.source : defaultSource),
 						//Permet si l'arbre et en mode filter d'afficher les enfants des termes filtrés -> submatch
 						renderNode: function (event, data) {						    
 							if(data.node.data.usable){
