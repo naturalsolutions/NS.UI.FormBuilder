@@ -34,7 +34,8 @@ define([
             'click #clearAll'     : 'clear',
             'click #save'         : 'save',
             'click #exit'         : 'exit',
-            'click .sizepreview'  : 'sizepreview'
+            'click .sizepreview'  : 'sizepreview',
+            'click #datasImg'     : 'popDatasImg'
         },
 
 
@@ -754,6 +755,14 @@ define([
                 });
                 $(".actions").hide();
             }
+        },
+
+        popDatasImg: function(){
+            swal({
+                title: "Datas linked to the protocol '"+this.collection.name+"'",
+                text: "Coming soon !<br/><br/><img style='height: 20px;' src='assets/images/loader.gif' />",
+                html: true
+            });
         }
     });
 
