@@ -696,11 +696,17 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+
             this.$el.find('#collectionName').text(this.collection.name);
             if (this.collection.originalID && this.collection.originalID > 0)
             {
                 this.$el.find('#formOriginalIdArea').show();
                 this.$el.find('#formOriginalID').text(this.collection.originalID);
+                if (context != "track")
+                {
+                    $("#datasImg").delete();
+                }
             }
         },
 
@@ -758,11 +764,34 @@ define([
         },
 
         popDatasImg: function(){
-            swal({
-                title: "Datas linked to the protocol '"+this.collection.name+"'",
-                text: "Coming soon !<br/><br/><img style='height: 20px;' src='assets/images/loader.gif' />",
-                html: true
-            });
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+
+            if (context == "track")
+            {
+                swal({
+                    title: "Datas linked to the form<br />'"+this.collection.name+"'<br />",
+                    text: "<span id='formDatasArea'><span id='formDatasLoading'>Loading datas ...<br/><br/>"+
+                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>",
+                    html: true
+                });
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url:  this.URLOptions.trackFormWeight + "/" + $("#formOriginalID").html(),
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        $("#formDatasLoading").remove();
+                        $.each(data.FormWeight, function(index, value){
+                            $("#formDatasArea").append("<span>"+index+" : "+value+" saisies</span><br/>");
+                        });
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                    }, this)
+                });
+            }
         }
     });
 

@@ -43,7 +43,8 @@ define([
             'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
                 $(this).tab('show');
-            }
+            },
+            'click #inputDatasImg'        : 'popInputDatasImg'
         },
 
 
@@ -1029,6 +1030,37 @@ define([
                     if (window.context == "ecoreleve")
                         $("input[name='linkedFieldIdentifyingColumn']").val("FK_" + $(e.currentTarget).val());
                     break;
+            }
+        },
+
+        popInputDatasImg: function(){
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+
+            if (context == "track")
+            {
+                swal({
+                    title: "Datas linked to the input<br />'"+$("#settingFieldPanel [name='name']").val()+"'<br />",
+                    text: "<span id='inputDatasArea'><span id='inputDatasLoading'>Loading datas ...<br/><br/>"+
+                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>",
+                    html: true
+                });
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url:  this.URLOptions.trackInputWeight + "/" + $("#fieldOriginalID").html(),
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        $("#inputDatasLoading").remove();
+                        $.each(data.InputWeight, function(index, value){
+                            $("#inputDatasArea").append("<span>"+index+" : "+value+" observations</span><br/>");
+                        });
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                    }, this)
+                });
             }
         },
 
