@@ -79,6 +79,7 @@ define([
 
             this.URLOptions = options.URLOptions;
 
+            console.log("Deleting selected row 1");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
@@ -203,6 +204,7 @@ define([
                 if (isConfirm){
                     // Send event to FormCollection if user chosen to remove a form
                     //self.homePageChannel.trigger('deleteForm', formToRemove)
+                    console.log("gonna remove brah !");
                     self.formCollection.deleteModel(formToRemove);
                 }
 
@@ -274,11 +276,13 @@ define([
          * @param {object} elementAndModel contains jQuery row element and the model
          */
         displayFormInformation : function(elementAndModel) {
+            console.log("displayFormInformation");
 
             var newSelctedRow = elementAndModel['model'].get('id');
 
             if (this.currentSelectedForm == newSelctedRow) {
 
+                console.log("this.clearSelectedRow();");
                 this.clearSelectedRow();
 
             } else {
@@ -309,6 +313,7 @@ define([
                 }
 
                 this.beforeFormSelection = this.currentSelectedForm;
+                console.log("Deleting selected row a");
                 this.currentSelectedForm = newSelctedRow;
             }
 
@@ -326,6 +331,7 @@ define([
             }, this));
 
             this.beforeFormSelection = this.currentSelectedForm;
+            console.log("Deleting selected row 2");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
         },
@@ -390,7 +396,6 @@ define([
          * Initialize backgrid instance
          */
         initGrid : function() {
-
             this.grid = new Backgrid.Grid({
 
                 row: this.initClickableRow(),
@@ -427,6 +432,7 @@ define([
          */
         onRender: function(options) {
 
+            console.log("onRender");
             //  Create the form collection with an URL
             this.formCollection = new FormCollection({
                 url : this.URLOptions.forms,
@@ -954,6 +960,7 @@ define([
             this.template = GridPanelView;
             if (context.toLowerCase() == "all")
                 this.template = GridPanelViewAllContext;
+            console.log("Deleting selected row 3");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 

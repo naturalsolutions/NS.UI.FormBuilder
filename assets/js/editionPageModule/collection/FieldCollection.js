@@ -556,7 +556,6 @@ define([
                 isTemplate    : this.isTemplate || false,
                 context       : this.context,
                 fileList      : this.fileList || [],
-                originalID    : this.originalID || 0,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []

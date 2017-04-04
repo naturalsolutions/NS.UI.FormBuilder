@@ -64,6 +64,9 @@ define([
             var modelToRemove = this.get(modelID);
             modelToRemove.urlRoot = this.url;
 
+            console.log("deleteModel", modelToRemove);
+
+            /*
             modelToRemove.destroy({
                 success : _.bind(function() {
                     this.homePageChannel.trigger('destroy:success');
@@ -72,6 +75,7 @@ define([
                     this.homePageChannel.trigger('destroy:error');
                 }, this)
             });
+            */
         }
 
     });
