@@ -326,8 +326,11 @@
     "filename" : "File name",
     "clear" : {
       "title"            : "Are you sure ?",
-      "text"             : "Unsaved modifications will be lost !",
-      "textinput"        : "The input will be forever lost !",
+      "title2"           : "Are you REALLY sure ?",
+      "text"             : "The form will be deleted !",
+      "text2"            : "The form and all it's linked fields will be lost !",
+      "textinput"        : "The input will be deleted !",
+      "textinput2"       : "After saving, the input will be forever lost !",
       "yes"              : "Yes, delete it",
       "no"               : "No, cancel",
       "deleted"          : "Fields deleted",
@@ -413,6 +416,10 @@
       "fieldEditAlert" : "Field edition warning",
       "defaultValueEdit" : "Beware, by editing the 'default value' property, you may want to update the data(s) stored in your database(s) linked to this value",
       "propagationactivated" : "Make sure your rules have been properly setted up before saving with propagation activated !"
+    },
+    "makeObs" : {
+      "success" : "Success !",
+      "successMsg" : "The form have been turned into obsolete"
     }
   },
 

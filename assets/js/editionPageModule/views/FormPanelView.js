@@ -703,9 +703,9 @@ define([
             {
                 this.$el.find('#formOriginalIdArea').show();
                 this.$el.find('#formOriginalID').text(this.collection.originalID);
-                if (context != "track")
+                if (context != "track" && $("#datasImg").length > 0)
                 {
-                    $("#datasImg").delete();
+                    $("#datasImg").remove();
                 }
             }
         },

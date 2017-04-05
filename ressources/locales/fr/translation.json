@@ -334,8 +334,11 @@
         "filename" : "Nom du fichier",
         "clear" : {
             "title"            : "Etes vous sûr ?",
-            "text"             : "Les modifications non sauvegardées seront perdues !",
-            "textinput"        : "Le champ sera définitivement perdu !",
+            "title2"           : "Etes vous VRAIMENT sûr ?",
+            "text"             : "Le formulaire sera supprimé !",
+            "text2"            : "Le formulaire et ses champs associés seront définitivement perdus !",
+            "textinput"        : "Le champ sera supprimé !",
+            "textinput2"       : "Après sauvegarde, le champ sera définitivement perdu !",
             "yes"              : "Oui, supprimer",
             "no"               : "Non, annuler",
             "deleted"          : "Champs supprimés !",
@@ -420,6 +423,10 @@
             "fieldEditAlert" : "Alerte d'édition de champ",
             "defaultValueEdit" : "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
             "propagationactivated" : "Assurez vous que vos règles ont bien été configurées avant de sauvegarder avec la propagation activée !"
+        },
+        "makeObs" : {
+            "success" : "Succès !",
+            "successMsg" : "Le formulaire a été passé en obsolète"
         }
     },
 

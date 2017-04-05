@@ -73,6 +73,7 @@ define([
 
 					formAutocomplete 		: '/FormbuilderWS/autocomplete/forms',
 					forms 					: '/FormbuilderWS/forms',
+					makeObsolete 			: '/FormbuilderWS/makeObsolete',
                     allforms 				: '/FormbuilderWS/forms/allforms',
 					formSaveURL  			: '/FormbuilderWS/forms',							//  Get all form name for autocomplete, does not work if you are in client side mode only
                     preConfiguredField    	: '/FormbuilderWS/configurations', 					//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms
