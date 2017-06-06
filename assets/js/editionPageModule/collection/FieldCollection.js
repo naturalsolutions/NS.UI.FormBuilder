@@ -496,6 +496,9 @@ define([
          */
 
         getJSONFromModel: function (model) {
+            var valuesToKeep = ["converted"];
+            var valuesToKeepIfExists = {converted:["originalID"]};
+
             var subModel = model.getJSON();
 
             switch (model.constructor.type) {
@@ -507,6 +510,19 @@ define([
                     subModel['type'] = model.constructor.type;
                     break;
             }
+
+            $.each(valuesToKeep, function(index, value){
+               subModel[value] = model.attributes[value];
+            });
+
+            $.each(valuesToKeepIfExists, function(index, value){
+               if (subModel[index])
+               {
+                   $.each(valuesToKeepIfExists[index], function(subindex, subvalue){
+                       subModel[subvalue] = model.attributes[subvalue];
+                   });
+               }
+            });
 
             return subModel;
         },
@@ -596,7 +612,7 @@ define([
             }, this));
 
             $.each(json.schema, function(index, inputVal){
-
+                console.log("******** TOJSON ====", index, inputVal);
                 $.each(json.fieldsets, function(index, fieldsetVal){
                     if (inputVal.linkedFieldset != fieldsetVal.legend + " " + fieldsetVal.cid &&
                         $.inArray(inputVal.name, fieldsetVal.fields) != -1){
@@ -632,7 +648,7 @@ define([
                 });
             });
 
-            json.actif = "nique ta mere!";
+            json.actif = "hello !";
             if (json.actif)
             {
                 json.actif = true;

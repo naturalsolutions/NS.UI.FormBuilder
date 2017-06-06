@@ -286,6 +286,8 @@ define([
             var hideTemplateApply = true;
 
             $.each(this.preConfiguredFieldList.options, function(key, value){
+                //TODO REDO ERROR WITH QUOTES
+                /*
                 if ( $("#templateList option[value='"+key+"']").length == 0) {
                     $('#templateList').append($('<option>', {
                         value: key,
@@ -293,6 +295,7 @@ define([
                     }));
                 }
                 hideTemplateApply = false;
+                */
             });
 
             if (hideTemplateApply)
@@ -1086,6 +1089,7 @@ define([
                 if (isConfirm) {
                     that.formChannel.trigger('remove', that.modelToEdit.attributes.id, true);
                     var fieldType = $("#inputTypeList option:selected").text() + 'Field';
+                    that.modelToEdit.attributes.converted = that.modelToEdit.attributes.id;
                     that.modelToEdit.attributes.id = 0;
                     that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes);
                     that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
