@@ -81,11 +81,9 @@
 		var methods = {
 			init: function (parametres) {
 				//Fusion des paramètres envoyer avec les params par defaut
-			    console.log("parametres", JSON.parse(JSON.stringify(parametres)));
 				if (parametres) {
 					var parametres = $.extend(defauts, parametres);
 				};
-				console.log("parametres", parametres);
 			    //Information à envoyer
 				var dataToSend = '';
 				if (parametres.language.hasLanguage) {
@@ -118,7 +116,6 @@
 					//console.log($('#treeView' + $me.attr("id")));
 					//console.log(parametres.webservices);
 					//console.log(dataToSend);
-					console.log("MY wsUrl IS", parametres.wsUrl);
 					var defaultSource = {
 							type: "POST",
 							url: parametres.wsUrl + "/" + parametres.webservices,
@@ -229,7 +226,6 @@
 						var treeContainer = $("#treeView" + $me.attr("id"));
 						var fancytree = treeContainer.fancytree("getTree");
 					
-						console.log("fancytree", $me.attr("value"));
 						fancytree.activateKey($me.attr("value"));
 						
 						treeContainer.css('display', 'block').css('width', $me.outerWidth() - 2).css('border', 'solid 1px').css('z-index', '100').css('position','absolute');
