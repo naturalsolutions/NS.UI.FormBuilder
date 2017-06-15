@@ -215,73 +215,59 @@ define([
             }
         });
 
-        if (Object.keys(AppConfig.appMode).length == 2)
-        {
-            $("#contextSwitcher .selectedContext").remove();
-            $("#contextSwitcher .headerWhiteArrow").remove();
-            $("#contextSwitcher span").attr("class", "selectedContext");
-            $("#contextSwitcher .selectedContext").attr("style", "width:auto;cursor:initial;padding-left:0px;");
+        $(".headerWhiteArrow").click(function(){
+            $("#contextSwitcher .selectedContext").trigger("click");
+        });
 
-            setTimeout(function(){
-                var context = $("#contextSwitcher .selectedContext").text();
-                window.context = context;
-                /*
-                    Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-                    Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-                */
-            }, 100);
-        }
-        else
-        {
-            $(".headerWhiteArrow").click(function(){
-                $("#contextSwitcher .selectedContext").trigger("click");
-            });
-
-            $("#contextSwitcher span").click(function(){
-                if (window.location.hash.indexOf('#edition') == -1)
+        $("#contextSwitcher span").click(function(){
+            if (window.location.hash.indexOf('#edition') == -1)
+            {
+                if (!$(this).hasClass("selectedContext"))
                 {
-                    if (!$(this).hasClass("selectedContext"))
-                    {
-                        $("#contextSwitcher .selectedContext").removeClass("selectedContext");
-                        $(this).addClass("selectedContext");
-                        $(this).trigger("click");
+                    $("#contextSwitcher .selectedContext").removeClass("selectedContext");
+                    $(this).addClass("selectedContext");
+                    $(this).trigger("click");
 
-                        $('#leftPanel input').val('');
+                    $('#leftPanel input').val('');
+
+                    $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
+                    $("header span.pipe:eq(1)").attr("style", "");
+                    $("#contextSwitcher").attr("style", "position:initial;");
+
+                    setTimeout(function(){
+                        var context = $("#contextSwitcher .selectedContext").text();
+                        window.context = context;
+                        Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+                        Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+                    }, 100);
+                }
+                else
+                {
+                    if ($("#contextSwitcher .hidden").length > 0)
+                    {
+                        $("#contextSwitcher .hidden").removeClass("hidden");
+
+                        $("#contextSwitcher .selectedContext").attr("style", "");
+                        $("header span.pipe:eq(1)").attr("style", "margin-left:180px;");
+                        $("#contextSwitcher").attr("style", "");
+                    }
+                    else
+                    {
+                        $("#contextSwitcher span").addClass("hidden");
+                        $(this).removeClass("hidden");
 
                         $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
                         $("header span.pipe:eq(1)").attr("style", "");
                         $("#contextSwitcher").attr("style", "position:initial;");
-
-                        setTimeout(function(){
-                            var context = $("#contextSwitcher .selectedContext").text();
-                            window.context = context;
-                            console.log("click context ", context);
-                            Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-                            Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-                        }, 100);
-                    }
-                    else
-                    {
-                        if ($("#contextSwitcher .hidden").length > 0)
-                        {
-                            $("#contextSwitcher .hidden").removeClass("hidden");
-
-                            $("#contextSwitcher .selectedContext").attr("style", "");
-                            $("header span.pipe:eq(1)").attr("style", "margin-left:180px;");
-                            $("#contextSwitcher").attr("style", "");
-                        }
-                        else
-                        {
-                            $("#contextSwitcher span").addClass("hidden");
-                            $(this).removeClass("hidden");
-
-                            $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
-                            $("header span.pipe:eq(1)").attr("style", "");
-                            $("#contextSwitcher").attr("style", "position:initial;");
-                        }
                     }
                 }
-            });
+            }
+        });
+
+        if ($("#contextSwitcher span").length == 2)
+        {
+            $("#contextSwitcher .selectedContext").remove();
+            $("#contextSwitcher span").trigger("click");
         }
 
         window.onhashchange = function(e)
@@ -301,31 +287,21 @@ define([
 
         window.trees = [];
         $.each(AppConfig.paths, function(index, value){
-            var treesRestrictions = {
-                thesaurusWSPath : "reneco",
-                positionWSPath : "reneco"
-            };
+            $.ajax({
+                type        : 'POST',
+                url         : value,
+                contentType : 'application/json',
+                data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
+                timeout     : 10000,
+                success: function (data) {
+                    window.trees[value] = data;
+                },
+                error: function () {
 
-            if (!treesRestrictions[index] || treesRestrictions[index] == AppConfig.appMode.topcontext)
-            {
-                $.ajax({
-                    type        : 'POST',
-                    url         : value,
-                    contentType : 'application/json',
-                    data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
-                    timeout     : 10000,
-                    success: function (data) {
-                        window.trees[value] = data;
-                    },
-                    error: function () {
-
-                    }
-                });
-            }
+                }
+            });
         });
     });
-
-    window.formbuilder = {};
 
     return FormbuilderApp;
 

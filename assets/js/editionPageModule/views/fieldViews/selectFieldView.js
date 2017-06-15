@@ -29,8 +29,7 @@ define([
 
                 try
                 {
-                    if (this.model.get('defaultValue').constructor != Array)
-                        sqlParsed = sqliteParser(this.model.get('defaultValue'));
+                    sqlParsed = sqliteParser(this.model.get('defaultValue'));
                 }
                 catch (err)
                 {

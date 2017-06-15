@@ -334,25 +334,20 @@
         "filename" : "Nom du fichier",
         "clear" : {
             "title"            : "Etes vous sûr ?",
-            "title2"           : "Etes vous VRAIMENT sûr ?",
-            "text"             : "Le formulaire sera supprimé !",
-            "text2"            : "Le formulaire et ses champs associés seront définitivement perdus !",
-            "textinput"        : "Le champ sera supprimé !",
-            "textinput2"       : "Après sauvegarde, le champ sera définitivement perdu !",
+            "text"             : "Les modifications non sauvegardées seront perdues !",
+            "textinput"        : "Le champ sera définitivement perdu !",
             "yes"              : "Oui, supprimer",
             "no"               : "Non, annuler",
             "deleted"          : "Champs supprimés !",
             "formDeleted"      : "Votre formulaire a été vidé !",
             "deleteError"      : "Champs non supprimé !",
-            "formDeletedError" : "Votre formulaire n'a pas pu être vidé !",
-            "fieldsdeleted"    : "Les champs du formulaire seront supprimés !",
-            "loosingModifications" : "En quittant, vous perdrez vos modifications !"
+            "formDeletedError" : "Votre formulaire n'a pas pu être vidé !"
         },
         "exit" : {
           "yes" : "Oui quitter"
         },
         "import" : {
-            "error"    : "Une erreur est survenue !",
+            "error"    : "Une erreur est survenu !",
             "errorMsg" : "Votre formulaire n'a pas pu être importé",
             "title"    : "Importer un formulaire",
             "label"    : "Selectionnez le fichier JSON a importé",
@@ -425,10 +420,6 @@
             "fieldEditAlert" : "Alerte d'édition de champ",
             "defaultValueEdit" : "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
             "propagationactivated" : "Assurez vous que vos règles ont bien été configurées avant de sauvegarder avec la propagation activée !"
-        },
-        "makeObs" : {
-            "success" : "Succès !",
-            "successMsg" : "Le formulaire a été passé en obsolète"
         }
     },
 
