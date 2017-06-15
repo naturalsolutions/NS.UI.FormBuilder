@@ -34,7 +34,8 @@ define([
             'click #clearAll'     : 'clear',
             'click #save'         : 'save',
             'click #exit'         : 'exit',
-            'click .sizepreview'  : 'sizepreview'
+            'click .sizepreview'  : 'sizepreview',
+            'click #datasImg'     : 'popDatasImg'
         },
 
 
@@ -67,6 +68,8 @@ define([
          * @param  {object} options configuration options like web service URL for back end connection
          */
         initialize : function(options, readonly) {
+            window.formbuilder.formedited = false;
+
             var topcontext = "";
             var context = window.context || $("#contextSwitcher .selectedContext").text();
             var that = this;
@@ -461,7 +464,7 @@ define([
             var self = this;
             swal({
                 title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
+                text               : translater.getValueFromKey('modal.clear.fieldsdeleted') || "Les champs du formulaire seront supprimés !",
                 type               : "warning",
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
@@ -488,6 +491,8 @@ define([
                     self.collection.clearAll();
                     self._viewCount = 0;
                     self.updateFieldCount();
+
+                    window.formbuilder.formedited = true;
                 }
 
                 window.onkeydown = null;
@@ -657,24 +662,31 @@ define([
         exit : function() {
             if (!Backbone.Radio.channel('global').readonly){
                 var self = this;
-                swal({
-                    title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                    text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
-                    type               : "warning",
-                    showCancelButton   : true,
-                    confirmButtonColor : "#DD6B55",
-                    confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
-                    cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                    closeOnConfirm     : true,
-                    closeOnCancel      : true
-                }, function(isConfirm) {
-                    if (isConfirm) {
-                        self.clearFormAndExit();
-                    }
+                if (window.formbuilder.formedited)
+                {
+                    swal({
+                        title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                        text               : translater.getValueFromKey('modal.clear.loosingModifications') || "Vous allez perdre vos modifications !",
+                        type               : "warning",
+                        showCancelButton   : true,
+                        confirmButtonColor : "#DD6B55",
+                        confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
+                        cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
+                        closeOnConfirm     : true,
+                        closeOnCancel      : true
+                    }, function(isConfirm) {
+                        if (isConfirm) {
+                            self.clearFormAndExit();
+                        }
 
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
+                }
+                else
+                {
+                    self.clearFormAndExit();
+                }
             }
             else
                 this.clearFormAndExit();
@@ -695,11 +707,17 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+
             this.$el.find('#collectionName').text(this.collection.name);
             if (this.collection.originalID && this.collection.originalID > 0)
             {
                 this.$el.find('#formOriginalIdArea').show();
                 this.$el.find('#formOriginalID').text(this.collection.originalID);
+                if (context != "track" && $("#datasImg").length > 0)
+                {
+                    $("#datasImg").remove();
+                }
             }
         },
 
@@ -753,6 +771,37 @@ define([
                     currentInput.addClass("col-xs-" + value.attributes.fieldSize);
                 });
                 $(".actions").hide();
+            }
+        },
+
+        popDatasImg: function(){
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+
+            if (context == "track")
+            {
+                swal({
+                    title: "Datas linked to the form<br />'"+this.collection.name+"'<br />",
+                    text: "<span id='formDatasArea'><span id='formDatasLoading'>Loading datas ...<br/><br/>"+
+                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>",
+                    html: true
+                });
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url:  this.URLOptions.trackFormWeight + "/" + $("#formOriginalID").html(),
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        $("#formDatasLoading").remove();
+                        $.each(data.FormWeight, function(index, value){
+                            $("#formDatasArea").append("<span>"+index+" : "+value+" saisies</span><br/>");
+                        });
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                    }, this)
+                });
             }
         }
     });

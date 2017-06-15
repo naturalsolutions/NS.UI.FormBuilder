@@ -43,7 +43,8 @@ define([
             'change .form-control'        : 'formControlChange',
             'click #myTabs a' : function(e) {
                 $(this).tab('show');
-            }
+            },
+            'click #inputDatasImg'        : 'popInputDatasImg'
         },
 
 
@@ -167,7 +168,8 @@ define([
                 }, that));
             }
 
-            that.currentFieldType  = that.modelToEdit.constructor.type;
+            if (this.modelToEdit)
+                that.currentFieldType = that.modelToEdit.constructor.type;
 
             that.createForm();
 
@@ -285,6 +287,8 @@ define([
             var hideTemplateApply = true;
 
             $.each(this.preConfiguredFieldList.options, function(key, value){
+                //TODO REDO ERROR WITH QUOTES
+                /*
                 if ( $("#templateList option[value='"+key+"']").length == 0) {
                     $('#templateList').append($('<option>', {
                         value: key,
@@ -292,6 +296,7 @@ define([
                     }));
                 }
                 hideTemplateApply = false;
+                */
             });
 
             if (hideTemplateApply)
@@ -761,7 +766,8 @@ define([
          * View rendering callbak
          */
         onRender : function(options) {
-            if (this.modelToEdit.attributes.defaultNode != undefined)
+
+            if (this.modelToEdit && this.modelToEdit.attributes.defaultNode != undefined)
             {
                 this.globalChannel.trigger('resetSavedValues');
             }
@@ -903,6 +909,8 @@ define([
                     this.mainChannel.trigger('formCommit');
 
                     $("#dropField"+this.modelToEdit.get('id')+" .field-label span").css("color", "white");
+
+                    window.formbuilder.formedited = true;
                 }
                 else
                 {
@@ -1032,6 +1040,37 @@ define([
             }
         },
 
+        popInputDatasImg: function(){
+            var context = window.context || $("#contextSwitcher .selectedContext").text();
+
+            if (context == "track")
+            {
+                swal({
+                    title: "Datas linked to the input<br />'"+$("#settingFieldPanel [name='name']").val()+"'<br />",
+                    text: "<span id='inputDatasArea'><span id='inputDatasLoading'>Loading datas ...<br/><br/>"+
+                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>",
+                    html: true
+                });
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url:  this.URLOptions.trackInputWeight + "/" + $("#fieldOriginalID").html(),
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        $("#inputDatasLoading").remove();
+                        $.each(data.InputWeight, function(index, value){
+                            $("#inputDatasArea").append("<span>"+index+" : "+value+" observations</span><br/>");
+                        });
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                    }, this)
+                });
+            }
+        },
+
         showConvertType : function() {
             $(".convertStep1").hide();
             $(".convertStep2").show();
@@ -1054,8 +1093,9 @@ define([
                 if (isConfirm) {
                     that.formChannel.trigger('remove', that.modelToEdit.attributes.id, true);
                     var fieldType = $("#inputTypeList option:selected").text() + 'Field';
+                    that.modelToEdit.attributes.converted = that.modelToEdit.attributes.id;
                     that.modelToEdit.attributes.id = 0;
-                    that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes);
+                    that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes, false, true);
                     that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
                 }
 

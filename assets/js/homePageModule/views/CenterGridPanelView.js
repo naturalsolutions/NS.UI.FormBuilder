@@ -79,6 +79,7 @@ define([
 
             this.URLOptions = options.URLOptions;
 
+            console.log("Deleting selected row 1");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
@@ -186,28 +187,119 @@ define([
             // Usually i user _.bind function but with sweet alert library that do a bug
             // So old school style
             var self = this;
+            var currentForm = self.formCollection.get(self.currentSelectedForm).toJSON();
 
-            var formToRemove = self.currentSelectedForm;
+            var loadedFormWeight;
 
-            swal({
-                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
-                type               : "warning",
-                showCancelButton   : true,
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
-                cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                closeOnCancel      : true,
-                closeOnConfirm: true
-            }, function(isConfirm) {
-                if (isConfirm){
-                    // Send event to FormCollection if user chosen to remove a form
-                    //self.homePageChannel.trigger('deleteForm', formToRemove)
-                    self.formCollection.deleteModel(formToRemove);
+            var getLoadedFormWeight = function () {
+                var toret = "<br/><br/><span id='makeObsoleteArea'>Passer le formulaire en obsolète à la place :<br/>"+
+                            "<span id='doMakeObsolete'>Rendre obsolète</span></span><br/>";
+
+                if (currentForm.context == "track")
+                {
+                    if (loadedFormWeight)
+                        return (toret + loadedFormWeight);
+                    toret += "<br/><span id='contentDeleteForm'><br /><img id='formDatasImg' src='assets/images/loader.gif' /></span>";
                 }
 
-                window.onkeydown = null;
-                window.onfocus = null;
+                return (toret);
+            };
+
+            if (currentForm.context == "track")
+            {
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url: this.URLOptions.trackFormWeight + "WFBID/" + self.currentSelectedForm,
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        loadedFormWeight = "<br /><br />Liste des saisies pour le formulaire selectionné :<br/>";
+                        $.each(data.FormWeight, function (index, value) {
+                            loadedFormWeight += "<span>" + index + " : " + value + " saisies</span><br/>";
+                        });
+                        if ($("#formDatasImg").length > 0) {
+                            $("#contentDeleteForm").empty();
+                            $("#contentDeleteForm").append(loadedFormWeight);
+                        }
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                    }, this)
+                });
+            }
+
+            swal({
+                title: translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                text: translater.getValueFromKey('modal.clear.text') || "Le formulaire sera supprimé !",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: translater.getValueFromKey('modal.clear.yes') || "Oui",
+                cancelButtonText: translater.getValueFromKey('modal.clear.no') || "Annuler",
+                closeOnCancel: true
+            }, function (isConfirm) {
+
+                if (isConfirm) {
+                    setTimeout(function () {
+                        swal({
+                            title: translater.getValueFromKey('modal.clear.title2') || "Etes vous VRAIMENT sûr ?",
+                            text: (translater.getValueFromKey('modal.clear.text2') || "Le formulaire sera définitivement perdu !") +
+                            getLoadedFormWeight(),
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: translater.getValueFromKey('modal.clear.yes') || "Oui",
+                            cancelButtonText: translater.getValueFromKey('modal.clear.no') || "Annuler",
+                            closeOnConfirm: true,
+                            closeOnCancel: true,
+                            html: true
+                        }, function (subisConfirm) {
+
+                            if (subisConfirm) {
+                                // Send event to FormCollection if user chosen to remove a form
+                                self.homePageChannel.trigger('deleteForm', self.beforeFormSelection);
+                                self.formCollection.deleteModel(self.beforeFormSelection);
+                            }
+
+                            window.onkeydown = null;
+                            window.onfocus = null;
+                        });
+                        $("#doMakeObsolete").on("click", function(){self.closeAndObsolete();});
+                    }, 200);
+                }
+            });
+        },
+
+        closeAndObsolete : function() {
+            var that = this;
+
+            swal.close();
+            console.log("make obsolete ! ", that.currentSelectedForm, that.beforeFormSelection);
+
+            console.log(that, that.URLOptions);
+
+            $.ajax({
+                data: {},
+                type: 'PUT',
+                url: that.URLOptions.makeObsolete + "/" + that.beforeFormSelection,
+                contentType: 'application/json',
+                crossDomain: true,
+                success: _.bind(function (data) {
+                    swal({
+                        title:translater.getValueFromKey('modal.makeObs.success') || "Succès",
+                        text:translater.getValueFromKey('modal.makeObs.successMsg') || "Le formulaire a été passé en obsolète",
+                        type:"success",
+                        closeOnConfirm: true
+                    }, function(){
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
+                }, this),
+                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                }, this)
             });
         },
 
@@ -274,11 +366,13 @@ define([
          * @param {object} elementAndModel contains jQuery row element and the model
          */
         displayFormInformation : function(elementAndModel) {
+            console.log("displayFormInformation");
 
             var newSelctedRow = elementAndModel['model'].get('id');
 
             if (this.currentSelectedForm == newSelctedRow) {
 
+                console.log("this.clearSelectedRow();");
                 this.clearSelectedRow();
 
             } else {
@@ -309,6 +403,7 @@ define([
                 }
 
                 this.beforeFormSelection = this.currentSelectedForm;
+                console.log("Deleting selected row a");
                 this.currentSelectedForm = newSelctedRow;
             }
 
@@ -326,6 +421,7 @@ define([
             }, this));
 
             this.beforeFormSelection = this.currentSelectedForm;
+            console.log("Deleting selected row 2");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
         },
@@ -390,7 +486,6 @@ define([
          * Initialize backgrid instance
          */
         initGrid : function() {
-
             this.grid = new Backgrid.Grid({
 
                 row: this.initClickableRow(),
@@ -427,10 +522,10 @@ define([
          */
         onRender: function(options) {
 
-            //  Create the form collection with an URL
+            var condition = Object.keys(AppConfig.appMode).length > 2 && this.URLOptions.forms.indexOf(Object.keys(AppConfig.appMode)[1]) == -1;
             this.formCollection = new FormCollection({
-                url : this.URLOptions.forms,
-                context : window.context
+                url : ( condition ? this.URLOptions.forms : this.URLOptions.forms + "/" + Object.keys(AppConfig.appMode)[1] ),
+                context : ( condition ? window.context : "" )
             });
 
             this.formCollection.reset();
@@ -442,6 +537,9 @@ define([
             $(this.el).find("#grid").html(this.grid.render().el);
 
             // Fetch some countries from the url
+
+            console.log("puuuuuuuuuuuute", this.formCollection.url);
+
             this.formCollection.fetch({
                 reset: true,
                 timeout:5000,
@@ -957,12 +1055,13 @@ define([
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
+            console.log("setCenterGridPanel", this.template);
             this.render(this.template);
         },
 
         hideContextList : function()
         {
-            if ($("#contextSwitcher .hidden").length == 0)
+            if ($("#contextSwitcher .hidden").length == 0 && Object.keys(AppConfig.appMode).length > 2)
             {
                 $("#contextSwitcher span").addClass("hidden");
                 $("#contextSwitcher .selectedContext").removeClass("hidden");

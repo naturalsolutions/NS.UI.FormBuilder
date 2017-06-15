@@ -82,6 +82,47 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
          */
         removeView: function() {
             var self = this;
+
+            var loadedFieldWeight;
+
+            var getLoadedFieldWeight = function () {
+                var toret = "";
+
+                if (self.collection.context == "track")
+                {
+                    if (loadedFieldWeight)
+                        return (toret + loadedFieldWeight);
+                    toret += "<br/><span id='contentDeleteField'><br /><img id='fieldDatasImg' src='assets/images/loader.gif' /></span>";
+                }
+
+                return (toret);
+            };
+
+            if (self.collection.context == "track")
+            {
+                $.ajax({
+                    data: {},
+                    type: 'GET',
+                    url: self.collection.options.URLOptions.trackInputWeight + "WFBID/" + self.model.id,
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        data = JSON.parse(data);
+                        loadedFieldWeight = "<br /><br />Liste des saisies pour le champ a supprimer :<br/>";
+                        $.each(data.InputWeight, function (index, value) {
+                            loadedFieldWeight += "<span>" + index + " : " + value + " saisies</span><br/>";
+                        });
+                        if ($("#fieldDatasImg").length > 0) {
+                            $("#contentDeleteField").empty();
+                            $("#contentDeleteField").append(loadedFieldWeight);
+                        }
+                    }, this),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
+                    }, this)
+                });
+            }
+
             swal({
                 title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
                 text               : translater.getValueFromKey('modal.clear.textinput') || "Le champ sera définitivement perdu !",
@@ -90,15 +131,34 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
                 confirmButtonColor : "#DD6B55",
                 confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
                 cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                closeOnConfirm     : true,
                 closeOnCancel      : true
             }, function(isConfirm) {
-                if (isConfirm) {
-                    self.formChannel.trigger('remove', self.model.get('id'));
-                }
 
-                window.onkeydown = null;
-                window.onfocus = null;
+                if (isConfirm) {
+                    setTimeout(function () {
+                        swal({
+                            title: translater.getValueFromKey('modal.clear.title2') || "Etes vous VRAIMENT sûr ?",
+                            text: (translater.getValueFromKey('modal.clear.textinput2') || "Le champ sera définitivement perdu !") +
+                            getLoadedFieldWeight(),
+                            type: "warning",
+                            showCancelButton: true,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: translater.getValueFromKey('modal.clear.yes') || "Oui",
+                            cancelButtonText: translater.getValueFromKey('modal.clear.no') || "Annuler",
+                            closeOnConfirm: true,
+                            closeOnCancel: true,
+                            html: true
+                        }, function (subisConfirm) {
+
+                            if (subisConfirm) {
+                                self.formChannel.trigger('remove', self.model.get('id'));
+                            }
+
+                            window.onkeydown = null;
+                            window.onfocus = null;
+                        });
+                    }, 200);
+                }
             });
         },
 
