@@ -32,7 +32,6 @@ define([
                 URLOptions : this.URLOptions
             }, Backbone.Radio.channel('global').readonly));
 
-            console.log(this.URLOptions);
             this.centerPanel.show( new CenterGridPanelView({
                 URLOptions : this.URLOptions
             }, Backbone.Radio.channel('global').readonly));

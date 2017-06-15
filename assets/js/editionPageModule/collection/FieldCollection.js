@@ -496,9 +496,6 @@ define([
          */
 
         getJSONFromModel: function (model) {
-            var valuesToKeep = ["converted"];
-            var valuesToKeepIfExists = {converted:["originalID"]};
-
             var subModel = model.getJSON();
 
             switch (model.constructor.type) {
@@ -510,19 +507,6 @@ define([
                     subModel['type'] = model.constructor.type;
                     break;
             }
-
-            $.each(valuesToKeep, function(index, value){
-               subModel[value] = model.attributes[value];
-            });
-
-            $.each(valuesToKeepIfExists, function(index, value){
-               if (subModel[index])
-               {
-                   $.each(valuesToKeepIfExists[index], function(subindex, subvalue){
-                       subModel[subvalue] = model.attributes[subvalue];
-                   });
-               }
-            });
 
             return subModel;
         },
@@ -572,6 +556,7 @@ define([
                 isTemplate    : this.isTemplate || false,
                 context       : this.context,
                 fileList      : this.fileList || [],
+                originalID    : this.originalID || 0,
                 //  form inputs
                 schema        : {},
                 fieldsets     : []
@@ -612,7 +597,7 @@ define([
             }, this));
 
             $.each(json.schema, function(index, inputVal){
-                console.log("******** TOJSON ====", index, inputVal);
+
                 $.each(json.fieldsets, function(index, fieldsetVal){
                     if (inputVal.linkedFieldset != fieldsetVal.legend + " " + fieldsetVal.cid &&
                         $.inArray(inputVal.name, fieldsetVal.fields) != -1){
@@ -648,7 +633,7 @@ define([
                 });
             });
 
-            json.actif = "hello !";
+            json.actif = "nique ta mere!";
             if (json.actif)
             {
                 json.actif = true;
@@ -668,7 +653,6 @@ define([
          * @param newElement            if field is a new element
          */
         addField : function(field, ifFieldIsInFieldset, newElement) {
-            var that = this;
 
             this.totalAddedElements++;
 
@@ -690,6 +674,7 @@ define([
                 if (ifFieldIsInFieldset) {
                     var fieldset = this.get(field.get('subFormParent'));
                     fieldset.addField(field);
+
                 }
 
                 if (newElement){
@@ -706,16 +691,8 @@ define([
                     this.fieldsexcludedfromdelete.push(field.get('id'));
                 }
 
-                setTimeout(function(){
-                    var previousInput = $(".dropField[data-order='"+(field.get('order')-1)+"']");
-                    var thisInput = $(".dropField[data-order='"+(field.get('order'))+"']");
-
-                    if ($(previousInput).length > 0 && $(thisInput).length > 0)
-                    {
-                        thisInput.after(previousInput);
-                    }
-                }, 25);
-
+                var that = this;
+                //setTimeout(function(){that.nextFieldNew();}, 1000);
                 return field.get('id');
             }
         },
@@ -727,17 +704,14 @@ define([
          * @param {object} properties
          * @param {boolean} isUnderFieldset
          */
-        addElement: function (nameType, properties, isUnderFieldset, fromConversion) {
+        addElement: function (nameType, properties, isUnderFieldset) {
 
             var field = properties || {};
-            if (fromConversion)
-                field['order'] = properties.order;
-            if (!field['order'])
-                field['order'] = this.getSize();
+            field['order'] = this.getSize();
 
             var toret = this.addField(new Fields[nameType](field), isUnderFieldset);
             var that = this;
-            setTimeout(function(){that.nextFieldNew();}, 15);
+            setTimeout(function(){that.nextFieldNew();}, 10);
             return toret;
         },
 
@@ -748,17 +722,14 @@ define([
          * @param {object} properties
          * @param {boolean} isUnderFieldset
          */
-        addNewElement: function (nameType, properties, isUnderFieldset, fromConversion) {
+        addNewElement: function (nameType, properties, isUnderFieldset) {
 
             var field = properties || {};
-            if (fromConversion)
-                field['order'] = properties.order;
-            if (!field['order'])
-                field['order'] = this.getSize();
+            field['order'] = this.getSize();
 
             var toret = this.addField(new Fields[nameType](field), isUnderFieldset, true);
             var that = this;
-            setTimeout(function(){that.nextFieldNew();}, 15);
+            setTimeout(function(){that.nextFieldNew();}, 10);
             return toret;
         },
 
@@ -1302,21 +1273,18 @@ define([
                                     });
                                 }
 
-                                if (that.fieldstodelete && that.fieldstodelete.length > 0)
-                                {
-                                    $.ajax({
-                                        data: JSON.stringify({fieldstodelete:that.fieldstodelete}),
-                                        type: 'DELETE',
-                                        url: that.url + "/" + savedid + "/deletefields",
-                                        contentType: 'application/json',
-                                        crossDomain: true,
-                                        success: _.bind(function (data) {
-                                        }, that),
-                                        error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                            that.formChannel.trigger('save:fail');
-                                        }, that)
-                                    });
-                                }
+                                $.ajax({
+                                    data: JSON.stringify({fieldstodelete:that.fieldstodelete}),
+                                    type: 'DELETE',
+                                    url: that.url + "/" + savedid + "/deletefields",
+                                    contentType: 'application/json',
+                                    crossDomain: true,
+                                    success: _.bind(function (data) {
+                                    }, that),
+                                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                                        that.formChannel.trigger('save:fail');
+                                    }, that)
+                                });
 
                                 that.fieldstodelete = [];
                                 that.fieldsexcludedfromdelete = [];
@@ -1330,8 +1298,6 @@ define([
                                         else
                                             displaySaveSuccess();
                                     }, 200);
-
-                                    window.formbuilder.formedited = false;
                                 };
 
                                 displaySaveSuccess();

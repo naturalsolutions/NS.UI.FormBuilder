@@ -73,7 +73,6 @@ define([
 
 					formAutocomplete 		: '/FormbuilderWS/autocomplete/forms',
 					forms 					: '/FormbuilderWS/forms',
-					makeObsolete 			: '/FormbuilderWS/makeObsolete',
                     allforms 				: '/FormbuilderWS/forms/allforms',
 					formSaveURL  			: '/FormbuilderWS/forms',							//  Get all form name for autocomplete, does not work if you are in client side mode only
                     preConfiguredField    	: '/FormbuilderWS/configurations', 					//  Returns all pre-configurated fields, they are fields saved by use for a future use, ex: an user create a firstName field because it will be present in many forms
@@ -89,8 +88,6 @@ define([
 					security				: '/FormbuilderWS/Security',						// Used for security chekings purpose (jwt among others ?)
                     track					: '/FormbuilderWS/Track',							// Used for track data linking
                     trackTypes				: '/FormbuilderWS/TrackTypes',						// Used to get track types (THIS PATH SHOULD BE TEMPORARY)
-                    trackFormWeight			: '/FormbuilderWS/Track/FormWeight',				// Used to get forms weight from track records
-                    trackInputWeight		: '/FormbuilderWS/Track/InputWeight',				// Used to get input weight from track records
 
                     // ************************************************
 					// Still don't know what those nodes are used for :

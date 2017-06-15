@@ -35,7 +35,7 @@ define([
             'click .addFileBtn'           : 'triggerFileClick',
             'change .formAddFileRealAdd'  : 'associationFileSelected',
             'click .removeFileAssoc'      : 'deleteFileAssociation',
-            'click .downloadFileAssoc'    : 'downloadFileAssoc',
+            'click .downloadFileAssoc'    : 'downloadFileAssoc'
         },
 
 
@@ -259,8 +259,6 @@ define([
             var clickedLabel = $('label[for="' + $(e.target).prop('id') + '"]');
             clickedLabel.toggleClass('selected');
             this.formControlChange(e, clickedLabel.hasClass('selected'));
-
-            window.formbuilder.formedited = true;
         },
 
         /**
@@ -285,8 +283,6 @@ define([
                     }
                     break;
             }
-
-            window.formbuilder.formedited = true;
         },
 
         initChildForms : function() {
