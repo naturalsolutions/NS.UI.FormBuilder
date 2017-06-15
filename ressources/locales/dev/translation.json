@@ -336,7 +336,9 @@
       "deleted"          : "Fields deleted",
       "formDeleted"      : "Your form has been emptied !",
       "deleteError"      : "Fields not deleted !",
-      "formDeletedError" : "Your form could not be emptied !"
+      "formDeletedError" : "Your form could not be emptied !",
+      "fieldsdeleted"    : "Your form fields will be removed !",
+      "loosingModifications" : "If you leave, you will loose your modifications !"
     },
     "exit" : {
       "yes" : "Yes exit"

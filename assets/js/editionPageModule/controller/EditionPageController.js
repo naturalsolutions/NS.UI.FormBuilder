@@ -260,19 +260,23 @@ define([
 
         setFieldCollection : function(context, urloptions, formName)
         {
-            var formSaveUrl = null
+            var formSaveUrl = null;
             if (urloptions)
                 formSaveUrl = urloptions['formSaveURL'];
 
             if (this.fieldCollection)
                 this.fieldCollection.reset();
 
+            if (this.URLOptions['formSaveURL'])
+
             this.fieldCollection = new FieldCollection({}, {
                 name         : formName || 'New form',
-                url          : this.URLOptions['formSaveURL'] || formSaveUrl,
+                url          : this.URLOptions['formSaveURL'] + (context != "all" ? "/" + context : "") || formSaveUrl,
                 context      : context || "all",
                 URLOptions   : this.URLOptions || ""
             });
+
+            console.log("zoooooooooooooooob", this.fieldCollection, this.URLOptions['formSaveURL']);
 
             this.fieldCollection.reset();
         }

@@ -168,7 +168,8 @@ define([
                 }, that));
             }
 
-            that.currentFieldType  = that.modelToEdit.constructor.type;
+            if (this.modelToEdit)
+                that.currentFieldType = that.modelToEdit.constructor.type;
 
             that.createForm();
 
@@ -765,7 +766,8 @@ define([
          * View rendering callbak
          */
         onRender : function(options) {
-            if (this.modelToEdit.attributes.defaultNode != undefined)
+
+            if (this.modelToEdit && this.modelToEdit.attributes.defaultNode != undefined)
             {
                 this.globalChannel.trigger('resetSavedValues');
             }
@@ -907,6 +909,8 @@ define([
                     this.mainChannel.trigger('formCommit');
 
                     $("#dropField"+this.modelToEdit.get('id')+" .field-label span").css("color", "white");
+
+                    window.formbuilder.formedited = true;
                 }
                 else
                 {
@@ -1091,7 +1095,7 @@ define([
                     var fieldType = $("#inputTypeList option:selected").text() + 'Field';
                     that.modelToEdit.attributes.converted = that.modelToEdit.attributes.id;
                     that.modelToEdit.attributes.id = 0;
-                    that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes);
+                    that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes, false, true);
                     that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
                 }
 

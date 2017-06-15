@@ -68,6 +68,8 @@ define([
          * @param  {object} options configuration options like web service URL for back end connection
          */
         initialize : function(options, readonly) {
+            window.formbuilder.formedited = false;
+
             var topcontext = "";
             var context = window.context || $("#contextSwitcher .selectedContext").text();
             var that = this;
@@ -462,7 +464,7 @@ define([
             var self = this;
             swal({
                 title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
+                text               : translater.getValueFromKey('modal.clear.fieldsdeleted') || "Les champs du formulaire seront supprimés !",
                 type               : "warning",
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
@@ -489,6 +491,8 @@ define([
                     self.collection.clearAll();
                     self._viewCount = 0;
                     self.updateFieldCount();
+
+                    window.formbuilder.formedited = true;
                 }
 
                 window.onkeydown = null;
@@ -658,24 +662,31 @@ define([
         exit : function() {
             if (!Backbone.Radio.channel('global').readonly){
                 var self = this;
-                swal({
-                    title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                    text               : translater.getValueFromKey('modal.clear.text') || "Le formulaire sera définitivement perdu !",
-                    type               : "warning",
-                    showCancelButton   : true,
-                    confirmButtonColor : "#DD6B55",
-                    confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
-                    cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                    closeOnConfirm     : true,
-                    closeOnCancel      : true
-                }, function(isConfirm) {
-                    if (isConfirm) {
-                        self.clearFormAndExit();
-                    }
+                if (window.formbuilder.formedited)
+                {
+                    swal({
+                        title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
+                        text               : translater.getValueFromKey('modal.clear.loosingModifications') || "Vous allez perdre vos modifications !",
+                        type               : "warning",
+                        showCancelButton   : true,
+                        confirmButtonColor : "#DD6B55",
+                        confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
+                        cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
+                        closeOnConfirm     : true,
+                        closeOnCancel      : true
+                    }, function(isConfirm) {
+                        if (isConfirm) {
+                            self.clearFormAndExit();
+                        }
 
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
+                }
+                else
+                {
+                    self.clearFormAndExit();
+                }
             }
             else
                 this.clearFormAndExit();

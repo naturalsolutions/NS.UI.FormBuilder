@@ -54,41 +54,39 @@ define([
             }
             catch (err)
             {
-                console.log(err);
+                console.log("Debug information on sql parsing, might be useful:", err);
             }
 
-            if (sqlParsed)
+            if (sqlParsed && that.model.get('url') != "")
             {
                 that.model.set('isSQL', true);
+
+                $.ajax({
+                    data: JSON.stringify({'sqlQuery': that.model.get('url'), 'context': window.context}),
+                    type: 'POST',
+                    url: that.URLOptions.sqlAutocomplete,
+                    contentType: 'application/json',
+                    crossDomain: true,
+                    success: _.bind(function (data) {
+                        if (!that.autocompleteLoaded) {
+                            setAutocomplete(data);
+                            that.autocompleteLoaded = true;
+                        }
+                    }, that),
+                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                        console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
+                    }, that)
+                });
             }
             else
             {
                 that.model.set('isSQL', false);
                 if (!that.autocompleteLoaded)
                 {
-                    that.autocompleteLoaded = true;
-                    try {
-                        $.ajax({
-                            data: JSON.stringify({'sqlQuery': that.model.get('url'), 'context': window.context}),
-                            type: 'POST',
-                            url: that.URLOptions.sqlAutocomplete,
-                            contentType: 'application/json',
-                            crossDomain: true,
-                            success: _.bind(function (data) {
-                                setAutocomplete(data);
-                            }, that),
-                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                console.log(xhr + " & " + ajaxOptions + " & " + thrownError + " <-------- AJAX ERROR !");
-                            }, that)
-                        });
-                    }
-                    catch (err)
-                    {
-                        console.log(err);
-                        $.getJSON(that.model.get('url'), _.bind(function (data) {
-                            setAutocomplete(data.options);
-                        }, that));
-                    }
+                    $.getJSON(that.model.get('url'), _.bind(function (data) {
+                        setAutocomplete(data.options);
+                        that.autocompleteLoaded = true;
+                    }, that));
                 }
             }
        }

@@ -522,11 +522,10 @@ define([
          */
         onRender: function(options) {
 
-            console.log("onRender");
-            //  Create the form collection with an URL
+            var condition = Object.keys(AppConfig.appMode).length > 2 && this.URLOptions.forms.indexOf(Object.keys(AppConfig.appMode)[1]) == -1;
             this.formCollection = new FormCollection({
-                url : this.URLOptions.forms,
-                context : window.context
+                url : ( condition ? this.URLOptions.forms : this.URLOptions.forms + "/" + Object.keys(AppConfig.appMode)[1] ),
+                context : ( condition ? window.context : "" )
             });
 
             this.formCollection.reset();
@@ -538,6 +537,9 @@ define([
             $(this.el).find("#grid").html(this.grid.render().el);
 
             // Fetch some countries from the url
+
+            console.log("puuuuuuuuuuuute", this.formCollection.url);
+
             this.formCollection.fetch({
                 reset: true,
                 timeout:5000,
@@ -1050,16 +1052,16 @@ define([
             this.template = GridPanelView;
             if (context.toLowerCase() == "all")
                 this.template = GridPanelViewAllContext;
-            console.log("Deleting selected row 3");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
+            console.log("setCenterGridPanel", this.template);
             this.render(this.template);
         },
 
         hideContextList : function()
         {
-            if ($("#contextSwitcher .hidden").length == 0)
+            if ($("#contextSwitcher .hidden").length == 0 && Object.keys(AppConfig.appMode).length > 2)
             {
                 $("#contextSwitcher span").addClass("hidden");
                 $("#contextSwitcher .selectedContext").removeClass("hidden");
