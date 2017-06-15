@@ -465,7 +465,6 @@ define([
 
                     if (WebServiceUrl)
                     {
-                        console.log("THE WebServiceUrl IS " , WebServiceUrl);
                         $('input[name="defaultNode"]').replaceWith('<input name="defaultNode" id="defaultNode" value="'+that.modelToEdit.get('defaultNode')+'" class="form-control" type="text"/>');
                         if (WebServiceUrl.substring(0,5) == 'http:' ) {
 
@@ -530,7 +529,6 @@ define([
                             if (this.modelToEdit.constructor.type == "Thesaurus")
                                 urlws = AppConfig.thesaurusWSPath;
 
-                            console.log("THE URLWS IS " , urlws);
                             var callBackWSCall = function(data, urlws){
                                 var item = $('#defaultNode');
 
@@ -673,8 +671,6 @@ define([
                 $.each(that.form.fields, function(index, value){
                     if (value.schema.validators && value.schema.validators[0] == "required")
                     {
-                        console.log("compulsory field ! ", index, value);
-
                         $(value.$el).find("label").append(" <span style='color: red;'>*</span>");
                         //$("#settingFieldPanel #form label[for="+that.modelToEdit.cid+"_"+index+"]").append(" <span style='color: red;'>*</span>");
                     }
@@ -889,7 +885,6 @@ define([
                     // TODO Need to find why to get a proper testing method ...
                     if (this.modelToEdit.attributes.defaultNode != undefined)
                     {
-                        console.log("flag 01");
                         this.modelToEdit.set("defaultNode", savedDefaultNode);
                         if(this.modelToEdit.attributes.fullpath != undefined)
                             this.modelToEdit.set("fullpath", savedFullpath);

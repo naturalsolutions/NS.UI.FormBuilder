@@ -147,9 +147,6 @@ define([
          * @param {string} newElementClassName new field class like TextField
          */
         addNewElementToCollection : function(newElementClassName, attributes) {
-            console.log("0 - addNewElement - EditionPageController");
-            console.log(newElementClassName, attributes);
-
             this.lastNewElementAdded = this.fieldCollection.addNewElement(newElementClassName, attributes, false);
         },
 
@@ -275,8 +272,6 @@ define([
                 context      : context || "all",
                 URLOptions   : this.URLOptions || ""
             });
-
-            console.log("zoooooooooooooooob", this.fieldCollection, this.URLOptions['formSaveURL']);
 
             this.fieldCollection.reset();
         }

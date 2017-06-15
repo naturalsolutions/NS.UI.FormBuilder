@@ -412,7 +412,6 @@ define([
             //TODO find a better way ... collection save is send inside a callback
             //this.checkRules();
 
-            console.log("here -2 !");
             this.saveCollection();
         },
 
@@ -444,7 +443,6 @@ define([
         },
 
         saveCollection : function() {
-            console.log("here -1 !");
             this.collection.save();
         },
 

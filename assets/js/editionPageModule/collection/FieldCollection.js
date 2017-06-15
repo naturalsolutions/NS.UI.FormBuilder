@@ -612,7 +612,6 @@ define([
             }, this));
 
             $.each(json.schema, function(index, inputVal){
-                console.log("******** TOJSON ====", index, inputVal);
                 $.each(json.fieldsets, function(index, fieldsetVal){
                     if (inputVal.linkedFieldset != fieldsetVal.legend + " " + fieldsetVal.cid &&
                         $.inArray(inputVal.name, fieldsetVal.fields) != -1){
@@ -1209,9 +1208,6 @@ define([
         save : function() {
             var that = this;
             var callbackSuccess = function(){
-                // TODO TODO
-                // console.log(that.saveChange());
-
                 that.showSpinner();
 
                 var hasDuplicates = function(array) {

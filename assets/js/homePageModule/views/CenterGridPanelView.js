@@ -79,7 +79,6 @@ define([
 
             this.URLOptions = options.URLOptions;
 
-            console.log("Deleting selected row 1");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
@@ -276,9 +275,6 @@ define([
             var that = this;
 
             swal.close();
-            console.log("make obsolete ! ", that.currentSelectedForm, that.beforeFormSelection);
-
-            console.log(that, that.URLOptions);
 
             $.ajax({
                 data: {},
@@ -366,13 +362,9 @@ define([
          * @param {object} elementAndModel contains jQuery row element and the model
          */
         displayFormInformation : function(elementAndModel) {
-            console.log("displayFormInformation");
-
             var newSelctedRow = elementAndModel['model'].get('id');
 
             if (this.currentSelectedForm == newSelctedRow) {
-
-                console.log("this.clearSelectedRow();");
                 this.clearSelectedRow();
 
             } else {
@@ -403,7 +395,6 @@ define([
                 }
 
                 this.beforeFormSelection = this.currentSelectedForm;
-                console.log("Deleting selected row a");
                 this.currentSelectedForm = newSelctedRow;
             }
 
@@ -421,7 +412,6 @@ define([
             }, this));
 
             this.beforeFormSelection = this.currentSelectedForm;
-            console.log("Deleting selected row 2");
             this.currentSelectedForm = -1;
             this.clearFooterAction();
         },
@@ -537,9 +527,6 @@ define([
             $(this.el).find("#grid").html(this.grid.render().el);
 
             // Fetch some countries from the url
-
-            console.log("puuuuuuuuuuuute", this.formCollection.url);
-
             this.formCollection.fetch({
                 reset: true,
                 timeout:5000,
@@ -1055,7 +1042,6 @@ define([
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
-            console.log("setCenterGridPanel", this.template);
             this.render(this.template);
         },
 

@@ -185,8 +185,6 @@ define([
         */
         saveChange : function(callbackSuccess) {
             var that = this;
-
-            console.log("here 02 !");
             if (this.hasbeendestoyed || this.form.data.context == "all"){
                 if (this.form.data.context == "all")
                     console.log("Error ! A form might not be created inside the 'all' context !");
@@ -194,11 +192,9 @@ define([
                 return(false);
             }
 
-            console.log("here 03 !");
             var formValidation = this.form.validate();
 
             if (formValidation === null) {
-                console.log("here 04 !");
                 var filesToSend = [];
                 $.each(this.formFilesBinaryList, function(index, value){
                     if (!value.id && !value.Pk_ID)
@@ -211,12 +207,10 @@ define([
                 this.mainChannel.trigger('editionDone', _.extend({}, this.form.getValue(), {fileList:filesToSend}));
                 $("#collectionName").css('color', "white");
 
-                console.log("here 05 !");
                 if (callbackSuccess)
                 {
                     callbackSuccess();
                     $('.removeFileAssoc').remove();
-                    console.log("here LAST !");
                 }
 
                 //this.removeForm();

@@ -23,7 +23,6 @@ define([
             this.url = options.url || 'ressources/forms/formsExample.json'; //  get a default URL for client-side mode
             if (options.url && options.context)
                 this.url = options.url + "/" + options.context;
-            console.log ("biiiiiiiiiiitch", this.url);
             this.initHomePageChannel();
         },
 
@@ -64,8 +63,6 @@ define([
         deleteModel : function(modelID) {
 
             var modelToRemove = this.get(modelID);
-
-            console.log("deleteModel", this, modelID, modelToRemove);
 
             modelToRemove.urlRoot = this.url;
 
