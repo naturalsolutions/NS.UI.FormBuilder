@@ -191,7 +191,10 @@ define([
             var loadedFormWeight;
 
             var getLoadedFormWeight = function () {
-                var toret = "<br/><br/><span id='makeObsoleteArea'>Passer le formulaire en obsolète à la place :<br/>"+
+                var toret = "";
+
+                if (AppConfig.appMode.topcontext == "reneco")
+                    toret += "<br/><br/><span id='makeObsoleteArea'>Passer le formulaire en obsolète à la place :<br/>"+
                             "<span id='doMakeObsolete'>Rendre obsolète</span></span><br/>";
 
                 if (currentForm.context == "track")
@@ -516,8 +519,6 @@ define([
 
             if (!condition)
             {
-                console.log("here !!");
-
                 window.context = Object.keys(AppConfig.appMode)[1];
                 if (this.template != GridPanelView)
                 {
@@ -526,7 +527,6 @@ define([
                 }
 
                 Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
-                console.log("here ??????????");
             }
 
             this.formCollection = new FormCollection({

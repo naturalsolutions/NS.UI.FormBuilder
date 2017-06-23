@@ -1197,7 +1197,8 @@ define([
                 }
             };
 
-            if (AppConfig.appMode.topcontext == "reneco")
+            // TODO - UGLY : Abstract special input cases ?
+            if (AppConfig.appMode.topcontext == "reneco" || window.context == "aygalades")
             {
                 formatFieldProps.type = 'Select';
                 delete formatFieldProps.editorAttrs;
