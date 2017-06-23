@@ -513,6 +513,22 @@ define([
         onRender: function(options) {
 
             var condition = Object.keys(AppConfig.appMode).length > 2 && this.URLOptions.forms.indexOf(Object.keys(AppConfig.appMode)[1]) == -1;
+
+            if (!condition)
+            {
+                console.log("here !!");
+
+                window.context = Object.keys(AppConfig.appMode)[1];
+                if (this.template != GridPanelView)
+                {
+                    this.template = GridPanelView;
+                    return(this.render(GridPanelView));
+                }
+
+                Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
+                console.log("here ??????????");
+            }
+
             this.formCollection = new FormCollection({
                 url : ( condition ? this.URLOptions.forms : this.URLOptions.forms + "/" + Object.keys(AppConfig.appMode)[1] ),
                 context : ( condition ? window.context : "" )
@@ -1034,7 +1050,7 @@ define([
             });
         },
 
-        setCenterGridPanel : function(context)
+        setCenterGridPanel : function(context, avoidRendering)
         {
             this.template = GridPanelView;
             if (context.toLowerCase() == "all")
@@ -1042,7 +1058,8 @@ define([
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
-            this.render(this.template);
+            if (!avoidRendering)
+                this.render(this.template);
         },
 
         hideContextList : function()

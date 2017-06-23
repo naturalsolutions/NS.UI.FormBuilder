@@ -225,10 +225,6 @@ define([
             setTimeout(function(){
                 var context = $("#contextSwitcher .selectedContext").text();
                 window.context = context;
-                /*
-                    Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-                    Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-                */
             }, 100);
         }
         else

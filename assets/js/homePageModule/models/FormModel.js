@@ -30,6 +30,7 @@ define([
             propagate        : false,
             isTemplate       : false,
             context          : window.context || "",
+            schtroudel: "salamanca !",
 
             // display attributes
             creationDateDisplay : "",
@@ -53,6 +54,9 @@ define([
                 modificationDate = modificationDate.toString();
                 this.set('modificationDateDisplay', modificationDate.substring(0, modificationDate.length - 3));
             }
+
+            if (this.defaults.context = "" && window.context)
+                this.defaults.context = window.context;
 
             this.updateKeywords();
         },

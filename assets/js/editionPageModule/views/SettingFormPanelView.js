@@ -186,6 +186,7 @@ define([
         saveChange : function(callbackSuccess) {
             var that = this;
             if (this.hasbeendestoyed || this.form.data.context == "all"){
+                console.log(this.form);
                 if (this.form.data.context == "all")
                     console.log("Error ! A form might not be created inside the 'all' context !");
                 this.destroy();
