@@ -123,6 +123,11 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
                 });
             }
 
+            var customSwalRemoval = function(){
+                $(".sweet-overlay").remove();
+                $(".sweet-alert").remove();
+            };
+
             swal({
                 title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
                 text               : translater.getValueFromKey('modal.clear.textinput') || "Le champ sera définitivement perdu !",
@@ -131,8 +136,11 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
                 confirmButtonColor : "#DD6B55",
                 confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
                 cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                closeOnCancel      : true
+                closeOnCancel      : false,
+                closeOnConfirm     : false
             }, function(isConfirm) {
+
+                customSwalRemoval();
 
                 if (isConfirm) {
                     setTimeout(function () {
@@ -145,10 +153,11 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
                             confirmButtonColor: "#DD6B55",
                             confirmButtonText: translater.getValueFromKey('modal.clear.yes') || "Oui",
                             cancelButtonText: translater.getValueFromKey('modal.clear.no') || "Annuler",
-                            closeOnConfirm: true,
-                            closeOnCancel: true,
+                            closeOnConfirm: false,
+                            closeOnCancel: false,
                             html: true
                         }, function (subisConfirm) {
+                            swal.close();
 
                             if (subisConfirm) {
                                 self.formChannel.trigger('remove', self.model.get('id'));
@@ -159,6 +168,7 @@ define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../
                         });
                     }, 200);
                 }
+
             });
         },
 
