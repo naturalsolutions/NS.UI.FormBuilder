@@ -71,7 +71,7 @@ define([
             window.formbuilder.formedited = false;
 
             var topcontext = "";
-            var context = window.context || $("#contextSwitcher .selectedContext").text();
+            var context = window.context || $("#contextSwitcher .selected").text();
             var that = this;
 
             if (AppConfig.appMode.topcontext != "classic")
@@ -705,7 +705,7 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
-            var context = window.context || $("#contextSwitcher .selectedContext").text();
+            var context = window.context || $("#contextSwitcher .selected").text();
 
             this.$el.find('#collectionName').text(this.collection.name);
             if (this.collection.originalID && this.collection.originalID > 0)
@@ -773,7 +773,7 @@ define([
         },
 
         popDatasImg: function(){
-            var context = window.context || $("#contextSwitcher .selectedContext").text();
+            var context = window.context || $("#contextSwitcher .selected").text();
 
             if (context == "track")
             {
@@ -805,7 +805,7 @@ define([
     });
 
     var setStatics = function(staticsToSet){
-        var context = staticsToSet ||  window.context || $("#contextSwitcher .selectedContext").text();
+        var context = staticsToSet ||  window.context || $("#contextSwitcher .selected").text();
         if (context.toLowerCase() != "all")
             staticInputs = ContextStaticInputs.getStaticMode(context);
     };

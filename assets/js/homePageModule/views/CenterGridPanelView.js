@@ -54,7 +54,7 @@ define([
          * @param  {object} options some options not used here
          */
         initialize : function(options, readonly) {
-            var context = $("#contextSwitcher .selectedContext").text();
+            var context = $("#contextSwitcher .selected").text();
 
             var topcontext = "";
             if (AppConfig.appMode.topcontext != "classic")
@@ -309,7 +309,7 @@ define([
          * @param {object} model Model information to display in the grid
          */
         addFormSection : function(el, model) {
-            var context = $("#contextSwitcher .selectedContext").text();
+            var context = $("#contextSwitcher .selected").text();
             // TODO To Move
             if (context.toLowerCase() == "all" || context.toLowerCase() == model.get('context'))
             {
@@ -739,7 +739,7 @@ define([
          * User wants to edit a form of the list
          */
         editForm : function() {
-            var context = $('.backgrid .selected td:last-child').text() || $("#contextSwitcher .selectedContext").text().toLowerCase();
+            var context = $('.backgrid .selected td:last-child').text() || $("#contextSwitcher .selected").text().toLowerCase();
 
             window.context = context;
 
@@ -1067,8 +1067,8 @@ define([
             if ($("#contextSwitcher .hidden").length == 0 && Object.keys(AppConfig.appMode).length > 2)
             {
                 $("#contextSwitcher span").addClass("hidden");
-                $("#contextSwitcher .selectedContext").removeClass("hidden");
-                $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
+                $("#contextSwitcher .selected").removeClass("hidden");
+                $("#contextSwitcher .selected").attr("style", "width:auto;");
                 $("header span.pipe:eq(1)").attr("style", "");
                 $("#contextSwitcher").attr("style", "position:initial;");
             }

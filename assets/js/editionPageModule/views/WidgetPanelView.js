@@ -93,7 +93,7 @@ define([
             var sections = {text: {}, numeric: {}, list: {}, presentation: {}, autocomplete: {}, tree: {}, file: {},
                 other: {}, reneco: {}};
 
-            var context = window.context || $("#contextSwitcher .selectedContext").text().toLowerCase();
+            var context = window.context || $("#contextSwitcher .selected").text().toLowerCase();
 
             var checkDisplayMode = function(fieldType){
                 if (context == "all" || (AppConfig.appMode.hasOwnProperty(context) &&

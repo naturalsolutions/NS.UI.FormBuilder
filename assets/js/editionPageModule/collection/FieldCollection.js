@@ -1441,13 +1441,13 @@ define([
     });
 
     var setExtention = function(extentionToSet){
-        var context = extentionToSet || window.context || $("#contextSwitcher .selectedContext").text();
+        var context = extentionToSet || window.context || $("#contextSwitcher .selected").text();
         if (context.toLowerCase() != "all")
             extention = CollectionExtention.getModeExtention(context);
     };
 
     var setStatics = function(staticsToSet){
-        var context = staticsToSet ||  window.context || $("#contextSwitcher .selectedContext").text();
+        var context = staticsToSet ||  window.context || $("#contextSwitcher .selected").text();
         if (context.toLowerCase() != "all")
             staticInputs = ContextStaticInputs.getStaticMode(context);
     };

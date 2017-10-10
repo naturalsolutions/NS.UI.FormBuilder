@@ -82,7 +82,7 @@ define([
             else if (urlArgs[0] == "context" || urlArgs[0].indexOf("context") > -1)
             {
                 loadHomepage();
-                $("#contextSwitcher .selectedContext").trigger("click");
+                $("#contextSwitcher .selected").trigger("click");
                 if (urlArgs[0] == "context")
                     $("#contextSwitcher span:contains('" + urlArgs[1] + "')").trigger("click");
                 else

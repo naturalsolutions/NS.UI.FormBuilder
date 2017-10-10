@@ -1036,7 +1036,7 @@ define([
         },
 
         popInputDatasImg: function(){
-            var context = window.context || $("#contextSwitcher .selectedContext").text();
+            var context = window.context || $("#contextSwitcher .selected").text();
 
             if (context == "track")
             {
