@@ -194,7 +194,7 @@ define([
                 }, this),
                 error: _.bind(function (xhr, ajaxOptions, thrownError) {
                     swal({
-                        title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
+                        title: translater.getValueFromKey('error.cookieCheck') || "Votre identitÃ© ne peut Ãªtre vÃ©rifiÃ©e",
                         text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
                         type: "error",
                         closeOnConfirm: true
