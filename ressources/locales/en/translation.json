@@ -367,7 +367,7 @@
             "successMsg" : "Your form was successfully saved on the server !",
             "successMsgTmp" : "New values for the form parameters saved !",
             "error"      : "An error occured !",
-            "errorMsg"   :" Your form wasn't saved. Consider making a export",,
+            "errorMsg"   :" Your form wasn't saved. Consider making a export",
             "errorMsgNoExport"   :" Your form wasn't saved. For some reason ...",
             "title"      : "Protocol save",
             "button"     : "Save",
