@@ -191,6 +191,7 @@ define([
                     window.user = data.username;
                     $("header .user").text(data.username);
                     $("header .icons.last").removeClass("hidden");
+                    $("header .lang").text(data.userlanguage.toUpperCase());
                 }, this),
                 error: _.bind(function (xhr, ajaxOptions, thrownError) {
                     swal({
@@ -207,77 +208,51 @@ define([
             });
         }
 
-        // Adding contexts
+        // Spawn contexts
         $.each(AppConfig.appMode, function(index, value){
             if (index.indexOf("demo") == -1 && index != "topcontext" && index != "minimalist")
             {
-                $("#contextSwitcher").append("<span class='hidden'>"+index+"</span>");
+                // enable multi-context
+                $("#contextSwitcher").removeClass("single");
+
+                // insert context
+                $("#contextSwitcher").append("<div class='context'>"+index+"</div>");
             }
         });
 
-        if (Object.keys(AppConfig.appMode).length == 2)
-        {
-            $("#contextSwitcher .selectedContext").remove();
-            $("#contextSwitcher .headerWhiteArrow").remove();
-            $("#contextSwitcher span").attr("class", "selectedContext");
-            $("#contextSwitcher .selectedContext").attr("style", "width:auto;cursor:initial;padding-left:0px;");
+        // Expand context switcher
+        $("#contextSwitcher").click(function() {
+            // not sure what's this
+            if (window.location.hash.indexOf('#edition') != -1) {
+                return;
+            }
+            $(this).toggleClass("expand");
+        });
 
-            setTimeout(function(){
-                var context = $("#contextSwitcher .selectedContext").text();
-                window.context = context;
-            }, 100);
-        }
-        else
-        {
-            $(".headerWhiteArrow").click(function(){
-                $("#contextSwitcher .selectedContext").trigger("click");
-            });
+        // Swap contexts
+        $("#contextSwitcher .context").click(function() {
+            // no context change
+            if ($(this).hasClass("selected")) {
+                return;
+            }
 
-            $("#contextSwitcher span").click(function(){
-                if (window.location.hash.indexOf('#edition') == -1)
-                {
-                    if (!$(this).hasClass("selectedContext"))
-                    {
-                        $("#contextSwitcher .selectedContext").removeClass("selectedContext");
-                        $(this).addClass("selectedContext");
-                        $(this).trigger("click");
+            // put new context on top
+            // ideally we would keep a consistant order for remaining contexts, but it seems tedious
+            var $selected = $("#contextSwitcher .selected");
+            $(this).insertBefore($selected);
+            $selected.removeClass("selected");
+            $(this).addClass("selected");
+            $selected = $(this);
 
-                        $('#leftPanel input').val('');
+            // clear left-panel search form ?
+            // $('#leftPanel input').val('');
 
-                        $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
-                        $("header span.pipe:eq(1)").attr("style", "");
-                        $("#contextSwitcher").attr("style", "position:initial;");
-
-                        setTimeout(function(){
-                            var context = $("#contextSwitcher .selectedContext").text();
-                            window.context = context;
-                            Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-                            Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-                        }, 100);
-                    }
-                    else
-                    {
-                        if ($("#contextSwitcher .hidden").length > 0)
-                        {
-                            $("#contextSwitcher .hidden").removeClass("hidden");
-
-                            $("#contextSwitcher .selectedContext").attr("style", "");
-                            $("header span.pipe:eq(1)").attr("style", "margin-left:180px;");
-                            $("#contextSwitcher").attr("style", "");
-                        }
-                        else
-                        {
-                            $("#contextSwitcher span").addClass("hidden");
-                            $(this).removeClass("hidden");
-
-                            $("#contextSwitcher .selectedContext").attr("style", "width:auto;");
-                            $("header span.pipe:eq(1)").attr("style", "");
-                            $("#contextSwitcher").attr("style", "position:initial;");
-                        }
-                    }
-                }
-            });
-        }
+            // notify world
+            var context = $selected.text();
+            window.context = context;
+            Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+            Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+        });
 
         window.onhashchange = function(e)
         {
