@@ -161,8 +161,11 @@ define([
 ], function($, _, Backbone, Translater, AppConfig) {
 
 	require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbuilder) {
-
 		formbuilder.start(AppConfig.config.options);
 	});
 
+	require(['tools'], function(tools) {
+	    // replace all <img src="*svg"> with inline <svg> tags
+	    tools.inlineSvg('img.svg');
+    });
 });
