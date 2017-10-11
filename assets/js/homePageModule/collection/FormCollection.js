@@ -20,10 +20,18 @@ define([
          * @param  {object} options contains some options for collection init, here we-ve an url where fetch collection
          */
         initialize : function(options) {
+            this.update(options);
+            this.initHomePageChannel();
+        },
+
+        /**
+         * update resets url and stuff for fetching
+         * @param options
+         */
+        update: function(options) {
             this.url = options.url || 'ressources/forms/formsExample.json'; //  get a default URL for client-side mode
             if (options.url && options.context)
                 this.url = options.url + "/" + options.context;
-            this.initHomePageChannel();
         },
 
         initHomePageChannel : function() {

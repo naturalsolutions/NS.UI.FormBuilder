@@ -479,6 +479,11 @@ define([
          * Initialize backgrid instance
          */
         initGrid : function() {
+            // only once
+            if (this.grid) {
+                return;
+            }
+
             this.grid = new Backgrid.Grid({
 
                 row: this.initClickableRow(),
@@ -529,18 +534,21 @@ define([
                 Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
             }
 
-            this.formCollection = new FormCollection({
+            var formCollOptions = {
                 url : ( condition ? this.URLOptions.forms : this.URLOptions.forms + "/" + Object.keys(AppConfig.appMode)[1] ),
                 context : ( condition ? window.context : "" )
-            });
+            };
+
+            if (!this.formCollection) {
+                this.formCollection = new FormCollection(formCollOptions);
+            } else {
+                this.formCollection.update(formCollOptions);
+            }
 
             this.formCollection.reset();
 
             //  Create grid
             this.initGrid();
-
-            // Render the grid and attach the root to your HTML document
-            $(this.el).find("#grid").html(this.grid.render().el);
 
             // Fetch some countries from the url
             this.formCollection.fetch({
@@ -548,6 +556,9 @@ define([
                 timeout:5000,
                 success : _.bind(function() {
                     this.hideSpinner();
+
+                    // Insert rendered grid
+                    $(this.el).find("#grid").html(this.grid.render().el);
 
                     //  Wait fetch end before display forms count and scrollbar got backgrid table
                     this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
@@ -559,15 +570,7 @@ define([
                         alwaysVisible: true
                     });
 
-                    //  Clone table
-                    $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
-                    //  Keep only one table row to lighten table
-                    $(this.el).find("#grid2 tbody tr").slice(1).remove();
-
-                    var that = this;
-                    $(this.el).find("#grid2 th a").on("click", function(){
-                        $(that.el).find("#grid th."+$(this).parent().attr('class').replace(/ /g, ".")+" a").click();
-                    });
+                    this.updateGridHeader();
                 }, this),
                 error : _.bind(function() {
                     this.displayFetchError();
@@ -575,6 +578,22 @@ define([
             });
 
             this.$el.i18n();
+        },
+
+        /**
+         * updateGridHeader clones main grid to extract and display a fixed table header
+         */
+        updateGridHeader: function() {
+            //  clone table for header
+            $(this.el).find("#grid2").html( $(this.el).find("#grid").html() );
+            // remove stuff in it
+            $(this.el).find("#grid2 tbody tr").slice(1).remove();
+
+            // bind newly created header links to real-grid's header (sorters)
+            var that = this;
+            $(this.el).find("#grid2 th a").on("click", function(){
+                $(that.el).find("#grid th."+$(this).parent().attr('class').replace(/ /g, ".")+" a").click();
+            });
         },
 
         /**
@@ -1048,16 +1067,52 @@ define([
             });
         },
 
+        /**
+         * addGridColumn inserts a column in this.grid
+         * @param name
+         * @param i18nKey
+         * @param type
+         */
+        addGridColumn: function(name, i18nKey, type) {
+            if (this.grid.columns.findWhere({name: name})) {
+                return;
+            }
+
+            type = type === undefined ? "string" : type;
+            this.grid.columns.add({
+               name: name,
+               label: translater.getValueFromKey(i18nKey) || i18nKey,
+               cell: type,
+               editable: false
+            });
+            this.updateGridHeader();
+        },
+
+        /**
+         * removeGridColumn removes column by name in this.grid
+         * @param name
+         */
+        removeGridColumn: function(name) {
+            this.grid.columns.remove(this.grid.columns.where({name: name}));
+            this.updateGridHeader();
+        },
+
         setCenterGridPanel : function(context, avoidRendering)
         {
             this.template = GridPanelView;
-            if (context.toLowerCase() == "all")
+            if (context.toLowerCase() == "all") {
                 this.template = GridPanelViewAllContext;
+                this.addGridColumn('context', 'grid.formContext');
+            } else {
+                this.removeGridColumn('context');
+            }
+
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
-            if (!avoidRendering)
+            if (!avoidRendering) {
                 this.render(this.template);
+            }
         },
 
         hideContextList : function() {
