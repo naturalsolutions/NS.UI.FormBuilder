@@ -470,7 +470,7 @@ define([
                 onDblClick: function() {
                     if (that.currentSelectedForm == -1)
                         this.onClick();
-                    that.editForm();
+                    that.editForm(this.model.get('context'));
                 }
             });
         },
@@ -738,9 +738,7 @@ define([
         /**
          * User wants to edit a form of the list
          */
-        editForm : function() {
-            var context = $('.backgrid .selected td:last-child').text() || $("#contextSwitcher .selected").text().toLowerCase();
-
+        editForm : function(context) {
             window.context = context;
 
             Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
