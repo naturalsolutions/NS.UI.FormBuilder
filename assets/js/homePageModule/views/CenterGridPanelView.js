@@ -1060,17 +1060,9 @@ define([
                 this.render(this.template);
         },
 
-        hideContextList : function()
-        {
-            if ($("#contextSwitcher .hidden").length == 0 && Object.keys(AppConfig.appMode).length > 2)
-            {
-                $("#contextSwitcher span").addClass("hidden");
-                $("#contextSwitcher .selected").removeClass("hidden");
-                $("#contextSwitcher .selected").attr("style", "width:auto;");
-                $("header span.pipe:eq(1)").attr("style", "");
-                $("#contextSwitcher").attr("style", "position:initial;");
-            }
-        }
+        hideContextList : function() {
+            $("#contextSwitcher").removeClass("expand");
+        },
     });
 
     return CenterGridPanelView;
