@@ -88,11 +88,6 @@ define([
                 else
                     $("#contextSwitcher span:contains('" + urlArgs[0].split('=')[1] + "')").trigger("click");
             }
-            else if (urlArgs[0] == "edition" && $("#formsCount").length == 0){
-                window.setTimeout(function() {
-                    loadHomepage();
-                }, 500);
-            }
         }, 200);
 
     };
