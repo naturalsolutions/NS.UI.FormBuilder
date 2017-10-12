@@ -218,6 +218,12 @@ define([
             // replace "All" context with actual context
             $("#contextSwitcher .selected").remove();
             $("#contextSwitcher .context").addClass("selected");
+
+            // notify world what context we're working on
+            var context = $("#contextSwitcher .selected").text().toLowerCase();
+            window.context = context;
+            Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+            Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
         } else if (nbContexts > 1) {
             // enable multi-context
             $("#contextSwitcher").removeClass("single");
@@ -250,7 +256,7 @@ define([
                 // $('#leftPanel input').val('');
 
                 // notify world
-                var context = $selected.text();
+                var context = $selected.text().toLowerCase();
                 window.context = context;
                 Backbone.Radio.channel('form').trigger('setFieldCollection', context);
                 Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
