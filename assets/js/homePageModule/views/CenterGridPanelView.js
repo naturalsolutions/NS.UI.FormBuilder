@@ -780,9 +780,9 @@ define([
         },
 
         /**
-         *
+         * Add new form and edit it
          */
-        askNewFormName : function() {
+        addForm: function() {
 
             $.getJSON(this.URLOptions.templateUrl, _.bind(function(data) {
 
@@ -820,13 +820,6 @@ define([
 
 
 
-        },
-
-        /**
-         * Add new form and edit it
-         */
-        addForm : function() {
-            this.askNewFormName();
         },
 
         /**
