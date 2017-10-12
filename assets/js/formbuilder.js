@@ -204,50 +204,58 @@ define([
         }
 
         // Spawn contexts
+        var nbContexts = 0;
         $.each(AppConfig.appMode, function(index, value){
             if (index.indexOf("demo") == -1 && index != "topcontext" && index != "minimalist")
             {
-                // enable multi-context
-                $("#contextSwitcher").removeClass("single");
-
                 // insert context
                 $("#contextSwitcher").append("<div class='context'>"+index+"</div>");
+                nbContexts++;
             }
         });
 
-        // Expand context switcher
-        $("#contextSwitcher").click(function() {
-            // not sure what's this
-            if (window.location.hash.indexOf('#edition') != -1) {
-                return;
-            }
-            $(this).toggleClass("expand");
-        });
+        if (nbContexts == 1) {
+            // replace "All" context with actual context
+            $("#contextSwitcher .selected").remove();
+            $("#contextSwitcher .context").addClass("selected");
+        } else if (nbContexts > 1) {
+            // enable multi-context
+            $("#contextSwitcher").removeClass("single");
 
-        // Swap contexts
-        $("#contextSwitcher .context").click(function() {
-            // no context change
-            if ($(this).hasClass("selected")) {
-                return;
-            }
+            // Expand context switcher
+            $("#contextSwitcher").click(function() {
+                // disable context-switching in edition page
+                if (window.location.hash.indexOf('#edition') != -1) {
+                    return;
+                }
+                $(this).toggleClass("expand");
+            });
 
-            // put new context on top
-            // ideally we would keep a consistant order for remaining contexts, but it seems tedious
-            var $selected = $("#contextSwitcher .selected");
-            $(this).insertBefore($selected);
-            $selected.removeClass("selected");
-            $(this).addClass("selected");
-            $selected = $(this);
+            // Swap contexts
+            $("#contextSwitcher .context").click(function() {
+                // no context change
+                if ($(this).hasClass("selected")) {
+                    return;
+                }
 
-            // clear left-panel search form ?
-            // $('#leftPanel input').val('');
+                // put new context on top
+                // ideally we would keep a consistant order for remaining contexts, but it seems tedious
+                var $selected = $("#contextSwitcher .selected");
+                $(this).insertBefore($selected);
+                $selected.removeClass("selected");
+                $(this).addClass("selected");
+                $selected = $(this);
 
-            // notify world
-            var context = $selected.text();
-            window.context = context;
-            Backbone.Radio.channel('form').trigger('setFieldCollection', context);
-            Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
-        });
+                // clear left-panel search form ?
+                // $('#leftPanel input').val('');
+
+                // notify world
+                var context = $selected.text();
+                window.context = context;
+                Backbone.Radio.channel('form').trigger('setFieldCollection', context);
+                Backbone.Radio.channel('homepage').trigger('setCenterGridPanel', context);
+            });
+        }
 
         window.onhashchange = function(e)
         {
