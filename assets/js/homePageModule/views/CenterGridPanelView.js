@@ -2,11 +2,7 @@ define([
     'jquery',
     'underscore',
     'marionette',
-    'text!../templates/CenterGridPanel/View.html',
-    'text!../templates/CenterGridPanel/ViewRO.html',
-    'text!../templates/CenterGridPanel/ViewAllContext.html',
-    'text!../templates/CenterGridPanel/Reneco/ViewRO.html',
-    'text!../templates/CenterGridPanel/Reneco/ViewAllContext.html',
+    'text!../templates/GridView.html',
     'backgrid',
     '../../Translater',
     '../collection/FormCollection',
@@ -15,9 +11,8 @@ define([
     'sweetalert',
     '../../app-config',
     'slimScroll'
-    ], function($, _, Marionette, GridPanelView, GridPanelViewRO, GridPanelViewAllContext, GridPanelViewROReneco,
-                GridPanelViewAllContextReneco, Backgrid, Translater, FormCollection, FormModel, Radio, swal,
-                AppConfig) {
+    ], function($, _, Marionette, GridView, Backgrid, Translater,
+                FormCollection, FormModel, Radio, swal, AppConfig) {
 
     var translater = Translater.getTranslater();
 
@@ -26,10 +21,6 @@ define([
      * This view contains backgrid element displaying collection element
      */
     var CenterGridPanelView = Backbone.Marionette.ItemView.extend({
-
-        /**
-         * View events
-         */
         events : {
             'click #delete'        : 'deleteForm',
             'click #copy'          : 'duplicateForm',
@@ -42,10 +33,57 @@ define([
         },
 
         /**
-         * Custom template from HTML file
-         * We prefer use HTML file for each view instead script tag in one file for example
+         * initTemplate initialize this.template with provided html template and parameters,
+         * it also stores parameters into this.tplParams for further use with this.updateTemplate
+         *
+         * @param template - html template (underscore)
+         * @param context - "all" / "track" / ...
+         * @param topContext - "reneco" / "*"
+         * @param readonly - enable read-only mode (no edition of forms)
+         * @param extraParams - any parameters to be injected
          */
-        template: GridPanelView,
+        initTemplate: function(template, context, topContext, readonly, extraParams) {
+            if (!context) context = "all";
+            if (!topContext) topContext = "default";
+            if (!extraParams) extraParams = {};
+            if (!template) template = CenterGridPanelView;
+
+            var params = extraParams;
+            params.context = context.toLowerCase();
+            params.topContext = topContext.toLowerCase();
+            params.readonly = readonly;
+
+            this.currentTemplate = {
+                html: template,
+                params: params
+            };
+            this.updateTemplate();
+        },
+
+        /**
+         * currentTemplate stores template values to facilitate changing context & stuff,
+         * cause it's really doable given how underscore handles template rendering.
+         */
+        currentTemplate: {
+           html: {},
+           params: {}
+        },
+
+        /**
+         * updateTemplate updates this.template with currentTemplate data
+         * after doing various stuff depending on context & other options.
+         */
+        updateTemplate: function() {
+          var tpl = this.currentTemplate;
+          // force lowercase on params
+          for (var param in tpl.params) {
+              if (typeof tpl.params[param] === 'string')
+                tpl.params[param] = tpl.params[param].toLowerCase();
+          }
+          this.template = function(model) {
+              return _.template(tpl.html)(tpl.params);
+          };
+        },
 
         /**
          * View construcotr
@@ -54,28 +92,7 @@ define([
          * @param  {object} options some options not used here
          */
         initialize : function(options, readonly) {
-            var context = $("#contextSwitcher .selected").text();
-
-            var topcontext = "";
-            if (AppConfig.appMode.topcontext != "classic")
-            {
-                topcontext = AppConfig.appMode.topcontext
-            }
-
-            if (context.toLowerCase() == "all")
-            {
-                this.template = GridPanelViewAllContext;
-                if (topcontext == "reneco")
-                    this.template = GridPanelViewAllContextReneco;
-            }
-
-            if (readonly)
-            {
-                this.template = GridPanelViewRO;
-                if (topcontext == "reneco")
-                    this.template = GridPanelViewROReneco;
-            }
-            _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm')
+            _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm');
 
             this.URLOptions = options.URLOptions;
 
@@ -88,6 +105,23 @@ define([
 
             this.scrollSize = options.scrollSize || '100%';
             this.importProtocolModalView = null;
+
+            var context = $("#contextSwitcher .selected").text().toLowerCase();
+            window.context = context;
+
+            // init formCollection
+            this.formCollection = new FormCollection({
+                url : this.URLOptions.forms,
+                context : context
+            });
+
+            // init grid & template
+            this.initGrid();
+            this.initTemplate(
+                GridView,
+                context,
+                AppConfig.appMode.topcontext,
+                readonly);
         },
 
         /**
@@ -519,36 +553,7 @@ define([
          * @param {[type]} options options give to the view like URL for collection fetching
          */
         onRender: function(options) {
-
-            var condition = Object.keys(AppConfig.appMode).length > 2 && this.URLOptions.forms.indexOf(Object.keys(AppConfig.appMode)[1]) == -1;
-
-            if (!condition)
-            {
-                window.context = Object.keys(AppConfig.appMode)[1];
-                if (this.template != GridPanelView)
-                {
-                    this.template = GridPanelView;
-                    return(this.render(GridPanelView));
-                }
-
-                Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
-            }
-
-            var formCollOptions = {
-                url : ( condition ? this.URLOptions.forms : this.URLOptions.forms + "/" + Object.keys(AppConfig.appMode)[1] ),
-                context : ( condition ? window.context : "" )
-            };
-
-            if (!this.formCollection) {
-                this.formCollection = new FormCollection(formCollOptions);
-            } else {
-                this.formCollection.update(formCollOptions);
-            }
-
             this.formCollection.reset();
-
-            //  Create grid
-            this.initGrid();
 
             // Fetch some countries from the url
             this.formCollection.fetch({
@@ -1090,24 +1095,50 @@ define([
             this.updateGridHeader();
         },
 
+        /**
+         * setContext updates relevant parts depending on context value.
+         * @param context
+         */
+        setContext: function(context) {
+            context = context.toLowerCase();
+            window.context = context;
+            this.currentTemplate.params.context = context;
+            this.updateTemplate();
+
+            this.formCollection.update({
+                url: this.URLOptions.forms,
+                context: context
+            });
+
+            switch(context) {
+                case "all":
+                    this.addGridColumn('context', 'grid.formContext');
+                    break;
+                default:
+                    this.removeGridColumn('context');
+                    break;
+            }
+        },
+
+        /**
+         * setCenterGridPanel
+         * @param context
+         * @param avoidRendering
+         */
         setCenterGridPanel : function(context, avoidRendering)
         {
-            this.template = GridPanelView;
-            if (context.toLowerCase() == "all") {
-                this.template = GridPanelViewAllContext;
-                this.addGridColumn('context', 'grid.formContext');
-            } else {
-                this.removeGridColumn('context');
-            }
-
+            this.setContext(context);
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
             if (!avoidRendering) {
-                this.render(this.template);
+                this.render();
             }
         },
 
+        /**
+         * hideContextList hides context list (!)
+         */
         hideContextList : function() {
             $("#contextSwitcher").removeClass("expand");
         },

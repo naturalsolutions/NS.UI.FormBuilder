@@ -20,8 +20,8 @@ define([
          * @param  {object} options contains some options for collection init, here we-ve an url where fetch collection
          */
         initialize : function(options) {
+            this.homePageChannel = Backbone.Radio.channel('homepage');
             this.update(options);
-            this.initHomePageChannel();
         },
 
         /**
@@ -30,12 +30,8 @@ define([
          */
         update: function(options) {
             this.url = options.url || 'ressources/forms/formsExample.json'; //  get a default URL for client-side mode
-            if (options.url && options.context)
+            if (options.url && options.context && options.context != 'all')
                 this.url = options.url + "/" + options.context;
-        },
-
-        initHomePageChannel : function() {
-            this.homePageChannel = Backbone.Radio.channel('homepage');
         },
 
         /**
