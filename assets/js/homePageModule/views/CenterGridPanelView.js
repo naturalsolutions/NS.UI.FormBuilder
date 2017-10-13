@@ -400,29 +400,29 @@ define([
          */
         displayFormInformation : function(elementAndModel) {
             var newSelctedRow = elementAndModel['model'].get('id');
+            var el      = elementAndModel['el'],
+                model   = elementAndModel['model'];
+
+            // remove rowControls from grid, to avoid duplicate cloning
+            $("#grid").find('#rowControls').remove();
 
             if (this.currentSelectedForm == newSelctedRow) {
                 this.clearSelectedRow();
-
             } else {
-
                 //  User clicked on another row
                 this.updateFooterAction();
 
-                var el      = elementAndModel['el'],
-                    model   = elementAndModel['model'];
+                // clone controls to selected row
+                $('#rowControls').clone().appendTo($(el).find("td:last-of-type"));
 
-                if (AppConfig.appMode.topcontext == "reneco")
-                {
+                if (AppConfig.appMode.topcontext == "reneco") {
                     $('tr.selected').removeClass('selected');
                     el.addClass('selected');
-                }
-                else
-                {
+                } else {
                     if ($('.formInformation').length > 0) {
                         $('.formInformation').fadeOut(100, _.bind(function() {
                             $('.padding').slideUp(500);
-                            $('.formInformation').remove()
+                            $('.formInformation').remove();
                             $('tr.selected').removeClass('selected');
                             this.addFormSection(el, model);
                         }, this));
@@ -541,6 +541,12 @@ define([
                     label    : translater.getValueFromKey('grid.formContext') || 'Form Context',
                     cell     : 'string',
                     editable : false
+                }, {
+                    name     : 'controls',
+                    label    : '',
+                    cell     : 'string',
+                    editable : false,
+                    sortable : false
                 }],
 
                 collection : this.formCollection
@@ -1082,7 +1088,7 @@ define([
                label: translater.getValueFromKey(i18nKey) || i18nKey,
                cell: type,
                editable: false
-            });
+            }, {at: -2}); // insert column at position -2, which is before the .controls row
             this.updateGridHeader();
         },
 
