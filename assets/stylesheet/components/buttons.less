@@ -6,6 +6,24 @@
 
 input[type="submit"].reneco { color : white; }
 
+[data-context="all"] {
+    .actions {
+        display: none !important;
+    }
+}
+
+[data-topcontext="reneco"] {
+    #import, #export {
+        display: none !important;
+    }
+}
+
+[data-readonly="true"] {
+    .actions, #rowControls {
+        display: none !important;
+    }
+}
+
 #rowControls {
     display: none;
 }
