@@ -434,14 +434,13 @@ define([
                 this.beforeFormSelection = this.currentSelectedForm;
                 this.currentSelectedForm = newSelctedRow;
             }
-
         },
 
         /**
          * Unselected current selected row
          */
         clearSelectedRow : function() {
-            //  User clicked on the same row
+            //  context !== reneco
             $('.formInformation').fadeOut(100, _.bind(function() {
                 $('.padding').slideUp(500);
                 $('.formInformation').remove()
@@ -494,16 +493,21 @@ define([
                  * Row click callback
                  * When user clicked on a row we send current element and model information with backbone radio grid channel
                  */
-                onClick: function () {
+                onClick: function (e) {
+                    // dismiss click event if srcElement is a .control (delete / edit)
+                    if ($(e.originalEvent.srcElement).hasClass("control")) {
+                        return;
+                    }
+
                     this.gridChannel = Backbone.Radio.channel('grid');
                     this.gridChannel.trigger('rowClicked', {
                         model   : this.model,
                         el      : this.$el
                     });
                 },
-                onDblClick: function() {
+                onDblClick: function(e) {
                     if (that.currentSelectedForm == -1)
-                        this.onClick();
+                        this.onClick(e);
                     that.editForm(this.model.get('context'));
                 }
             });
