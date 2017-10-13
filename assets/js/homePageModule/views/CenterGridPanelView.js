@@ -772,10 +772,14 @@ define([
         /**
          * User wants to edit a form of the list
          */
-        editForm : function(context) {
-            window.context = context;
+        editForm : function(ctx) {
+            if (!ctx || typeof(ctx) !== 'string') {
+                // get currentSelectedForm's context
+                ctx = this.grid.collection.findWhere({id: this.currentSelectedForm}).get("context");
+            }
+            window.context = ctx;
 
-            Backbone.Radio.channel('form').trigger('setFieldCollection', window.context);
+            Backbone.Radio.channel('form').trigger('setFieldCollection', ctx);
 
             var formToEdit = this.formCollection.get(this.currentSelectedForm);
             //  Send an event to the formbuilder
