@@ -1,9 +1,54 @@
-
 //
 //  Button style
 //
 
+@import url('./common.less');
+
 input[type="submit"].reneco { color : white; }
+
+#rowControls {
+    display: none;
+}
+
+.selected #rowControls {
+    display: block;
+
+    div {
+        display: inline-block;
+        width: 20px;
+        border-radius: 6px;
+        color: white;
+        text-align: center;
+        margin: auto;
+        font-size: 14px;
+        padding: 3px;
+
+        &.btnTrash {
+            background : #3d3b3c;
+        }
+
+        &.btnEdit {
+            background: #702029;
+        }
+    }
+}
+
+.action {
+    .exo;
+    box-sizing: content-box;
+    display: inline-block;
+    padding: 7px 30px;
+    border-radius: 20px;
+    .gradiant;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+
+    &:hover {
+        cursor: pointer;
+    }
+}
 
 button.reneco2 {
     line-height : initial !important;

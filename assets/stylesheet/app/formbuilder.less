@@ -68,7 +68,8 @@ body {
     &>.container-fluid {
         padding: 0 !important;
         margin: 0 !important;
-        height: 100%;
+        height: calc(~"100% - 55px"); // remove header's height
+        position: relative;
 
         &>.row {
             margin-left: 0;
