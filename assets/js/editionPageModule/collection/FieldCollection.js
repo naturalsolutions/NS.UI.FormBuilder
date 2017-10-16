@@ -10,6 +10,7 @@
 
 define([
     'jquery',
+    'lodash',
     'backbone',
     '../models/fields',
     'backbone.radio',
@@ -19,7 +20,7 @@ define([
     'app-config',
     './CollectionExtention',
     './staticInputs/ContextStaticInputs'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention, ContextStaticInputs) {
+], function ($, lodash, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention, ContextStaticInputs) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -48,7 +49,7 @@ define([
          * Collection schema for backbone forms generation
          * @type {Object}
          */
-        schemaDefinition : {
+        defaultSchema : {
             name : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.name'),
@@ -59,10 +60,10 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 },
                 function test(value) {
-                    if (value.length > 50) {
+                    if (value.length > 55) {
                         return {
                             type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength50')
+                            message: translater.getValueFromKey('schema.maxlength55')
                         };
                     }
                 }],
@@ -80,10 +81,10 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 },
                 function test(value) {
-                    if (value.length > 50) {
+                    if (value.length > 55) {
                         return {
                             type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength50')
+                            message: translater.getValueFromKey('schema.maxlength55')
                         };
                     }
                 }],
@@ -101,10 +102,10 @@ define([
                     message : translater.getValueFromKey('form.validation')
                 },
                 function test(value) {
-                    if (value.length > 50) {
+                    if (value.length > 55) {
                         return {
                             type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength50')
+                            message: translater.getValueFromKey('schema.maxlength55')
                         };
                     }
                 }],
@@ -156,10 +157,7 @@ define([
             },
             keywordsFr : {
                 type        : PillboxEditor,
-                title       : translater.getValueFromKey('form.keywords.fr'),
-                editorAttrs : {
-                    placeholder : "testage"
-                }
+                title       : translater.getValueFromKey('form.keywords.fr')
             },
             keywordsEn : {
                 type        : PillboxEditor,
@@ -183,136 +181,7 @@ define([
         },
 
         getDefaultSchema : function (){
-            var toret = {
-                name : {
-                    type        : "Text",
-                    title       : translater.getValueFromKey('form.name'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    },
-                        function test(value) {
-                            if (value.length > 55) {
-                                return {
-                                    type: 'String too wide',
-                                    message: translater.getValueFromKey('schema.maxlength55')
-                                };
-                            }
-                        }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.form.name')
-                    }
-                },
-                labelFr   : {
-                    type        : "Text",
-                    title       : translater.getValueFromKey('form.label.fr'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    },
-                        function test(value) {
-                            if (value.length > 55) {
-                                return {
-                                    type: 'String too wide',
-                                    message: translater.getValueFromKey('schema.maxlength55')
-                                };
-                            }
-                        }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.form.label.fr')
-                    }
-                },
-                labelEn   : {
-                    type        : "Text",
-                    title       : translater.getValueFromKey('form.label.en'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    },
-                        function test(value) {
-                            if (value.length > 55) {
-                                return {
-                                    type: 'String too wide',
-                                    message: translater.getValueFromKey('schema.maxlength55')
-                                };
-                            }
-                        }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.form.label.en')
-                    }
-                },
-                descriptionFr : {
-                    type        : "TextArea",
-                    title       : translater.getValueFromKey('form.description.fr'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    },
-                        function test(value) {
-                            if (value.length > 255) {
-                                return {
-                                    type: 'String too wide',
-                                    message: translater.getValueFromKey('schema.maxlength255')
-                                };
-                            }
-                        }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.form.description.fr')
-                    }
-                },
-                descriptionEn : {
-                    type        : "TextArea",
-                    title       : translater.getValueFromKey('form.description.en'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    },
-                        function test(value) {
-                            if (value.length > 255) {
-                                return {
-                                    type: 'String too wide',
-                                    message: translater.getValueFromKey('schema.maxlength255')
-                                };
-                            }
-                        }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.form.description.en')
-                    }
-                },
-                keywordsFr : {
-                    type        : PillboxEditor,
-                    title       : translater.getValueFromKey('form.keywords.fr')
-                },
-                keywordsEn : {
-                    type        : PillboxEditor,
-                    title       : translater.getValueFromKey('form.keywords.en')
-                },
-                obsolete : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.obsolete')
-                },
-                propagate : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.propagate')
-                },
-                context : {
-                    type        : "Hidden",
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                }
-            };
+            var toret = lodash.cloneDeep(this.defaultSchema);
 
             $.extend(toret, extention.getSchemaExtention(this.options));
             return (toret);

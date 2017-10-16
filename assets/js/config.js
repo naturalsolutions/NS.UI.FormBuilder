@@ -32,7 +32,8 @@ require.config({
         async                               : '../../libs/requirejs-plugins/src/async',
         'pillbox-editor' 					: "../../libs/pillbox-editor/dist/pillbox-editor.amd",
         'pillbox' 							: '../../libs/jquery.pillbox.js/js/jquery.pillbox',
-        'jcanvas' 							: '../../libs/jcanvas/jcanvas.min'
+        'jcanvas' 							: '../../libs/jcanvas/jcanvas.min',
+        'lodash'                            : '../../libs/lodash/dist/lodash.min'
     },
 
     shim: {
@@ -160,7 +161,7 @@ define([
     'jquery', 'underscore', 'backbone', 'Translater', 'app-config'
 ], function($, _, Backbone, Translater, AppConfig) {
 
-	require(['jquery', 'Translater', 'formbuilder', 'moment'], function($, Translater, formbuilder) {
+	require(['jquery', 'Translater', 'formbuilder', 'moment', 'lodash'], function($, Translater, formbuilder) {
 		formbuilder.start(AppConfig.config.options);
 	});
 

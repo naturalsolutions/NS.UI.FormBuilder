@@ -48,14 +48,7 @@ define([
         },
 
         getSchemaExtention: function(options){
-            return({
-                author : {
-                    type        : 'Hidden',
-                    title       : translater.getValueFromKey('form.author'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                }
-            });
+            return this.schemaExtention;
         },
 
         initializeExtention: function () {

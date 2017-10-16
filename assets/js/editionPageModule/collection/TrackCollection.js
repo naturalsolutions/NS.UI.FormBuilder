@@ -48,7 +48,16 @@ define([
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required'
-                }]
+                },
+                    function test(value) {
+                        if (value < 0 || value > 5) {
+                            return {
+                                type: 'Invalid value',
+                                message: translater.getValueFromKey('schema.errorbetween0and5')
+                            };
+                        }
+                    }
+                ]
             },
             typeIndividus : {
                 type        : 'Select',
@@ -75,11 +84,15 @@ define([
                 title       : translater.getValueFromKey('form.groupe'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : []
+                options : [],
+                validators  : [{
+                    type : 'required'
+                }]
             },
             actif : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.actif.title'),
+                fieldClass  : "hidden",
                 editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [
@@ -91,10 +104,7 @@ define([
                         label : translater.getValueFromKey('form.actif.pasactif'),
                         val : 0
                     }
-                ],
-                validators  : [{
-                    type : 'required'
-                }]
+                ]
             },
             importapressortie : {
                 type        : 'Select',
@@ -159,103 +169,7 @@ define([
         },
 
         getSchemaExtention: function(options){
-            var toret = {
-                activite : {
-                    type        : "Select",
-                    title       : translater.getValueFromKey('form.activite'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    }]
-                },
-                importance : {
-                    type        : 'Number',
-                    title       : translater.getValueFromKey('form.importance'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                            type : 'required'
-                        },
-                        function test(value) {
-                            if (value < 0 || value > 5) {
-                                return {
-                                    type: 'Invalid value',
-                                    message: translater.getValueFromKey('schema.errorbetween0and5')
-                                };
-                            }
-                        }
-                    ]
-                },
-                typeIndividus : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.typeIndividus'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                },
-                frequence : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.frequence'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                },
-                groupe : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.groupe'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                },
-                actif : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.actif.title'),
-                    fieldClass  : "hidden",
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [
-                        {
-                            label : translater.getValueFromKey('form.actif.actif'),
-                            val : 1
-                        },
-                        {
-                            label : translater.getValueFromKey('form.actif.pasactif'),
-                            val : 0
-                        }
-                    ]
-                },
-                importapressortie : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.importapressortie.title'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [
-                        {
-                            label : translater.getValueFromKey('form.importapressortie.only'),
-                            val : 1
-                        },
-                        {
-                            label : translater.getValueFromKey('form.importapressortie.not'),
-                            val : 0
-                        }
-                    ],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                }
-            };
+            var toret = this.schemaExtention;
 
             if (options)
             {
