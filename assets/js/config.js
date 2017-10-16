@@ -160,7 +160,7 @@ define([
     'jquery', 'underscore', 'backbone', 'Translater', 'app-config'
 ], function($, _, Backbone, Translater, AppConfig) {
 
-	require(['jquery', 'Translater', 'formbuilder'], function($, Translater, formbuilder) {
+	require(['jquery', 'Translater', 'formbuilder', 'moment'], function($, Translater, formbuilder) {
 		formbuilder.start(AppConfig.config.options);
 	});
 

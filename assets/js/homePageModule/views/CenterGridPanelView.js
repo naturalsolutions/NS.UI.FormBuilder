@@ -2,6 +2,7 @@ define([
     'jquery',
     'underscore',
     'marionette',
+    'moment',
     'text!../templates/GridView.html',
     'backgrid',
     '../../Translater',
@@ -11,7 +12,7 @@ define([
     'sweetalert',
     '../../app-config',
     'slimScroll'
-    ], function($, _, Marionette, GridView, Backgrid, Translater,
+    ], function($, _, Marionette, moment, GridView, Backgrid, Translater,
                 FormCollection, FormModel, Radio, swal, AppConfig) {
 
     var translater = Translater.getTranslater();
@@ -522,6 +523,15 @@ define([
                 return;
             }
 
+            // sort by modification date
+            var parseModificationDate = function(model) {
+                return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss");
+            };
+
+            var dateSorter = function(model) {
+                return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss").unix();
+            };
+
             this.grid = new Backgrid.Grid({
 
                 row: this.initClickableRow(),
@@ -534,12 +544,14 @@ define([
                     name     : 'creationDateDisplay',
                     label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
                     cell     : "string",
-                    editable : false
+                    editable : false,
+                    sortValue: dateSorter
                 }, {
                     name     : 'modificationDateDisplay',
                     label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
                     cell     : 'string',
-                    editable : false
+                    editable : false,
+                    sortValue: dateSorter
                 }, {
                     name     : 'context',
                     label    : translater.getValueFromKey('grid.formContext') || 'Form Context',
