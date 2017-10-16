@@ -19,6 +19,7 @@ define([
             creationDate     : new Date(),
             modificationDate : null,
             curStatus        : 1,
+            editStatus       : '',
             descriptionFr    : '',
             descriptionEn    : '',
             keywordsFr       : [],
@@ -54,6 +55,7 @@ define([
                 modificationDate = modificationDate.toString();
                 this.set('modificationDateDisplay', modificationDate.substring(0, modificationDate.length - 11));
             }
+            this.set('editStatus', creationDate == modificationDate ? 'created': 'modified');
 
             if (this.defaults.context = "" && window.context)
                 this.defaults.context = window.context;

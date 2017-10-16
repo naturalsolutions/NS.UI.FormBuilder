@@ -524,10 +524,6 @@ define([
             }
 
             // sort by modification date
-            var parseModificationDate = function(model) {
-                return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss");
-            };
-
             var dateSorter = function(model) {
                 return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss").unix();
             };
@@ -570,6 +566,48 @@ define([
         },
 
         /**
+         * updateRecentlyEdited inserts the recently edited forms from this.formCollection,
+         * sorted by modification date.
+         */
+        updateRecentlyEdited: function() {
+            // retreive grid rows for sorting
+            var sorter = [];
+            for (var id in this.formCollection.models) {
+                sorter.push([id, this.formCollection.models[id]]);
+            }
+
+            // sort by modification date
+            var parseModificationDate = function(model) {
+                return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss");
+            };
+            sorter.sort(function(a, b) {
+                a = parseModificationDate(a[1]);
+                b = parseModificationDate(b[1]);
+                return b.unix() - a.unix();
+            });
+
+            // empty recentlyEdited container
+            var $cont = $(".recentlyEdited");
+            $cont.empty();
+
+            // insert 12 first elements in $cont (todo config 12 ?)
+            $(sorter).slice(0, 12).each(_.bind(function(idx, row) {
+                var model = row[1];
+                var id = model.get("id");
+
+                var $el = $("<div>");
+                $el.addClass(model.get("editStatus"));
+                $el.attr("data-id", id);
+                $el.text(model.get("name"));
+
+                $el.on("click", _.bind(function() {
+                    this.editForm(model.get('context'), id);
+                }, this));
+                $cont.append($el);
+            }, this));
+        },
+
+        /**
          * Do some stuff after rendering view
          *
          * @param {[type]} options options give to the view like URL for collection fetching
@@ -586,6 +624,9 @@ define([
 
                     // Insert rendered grid
                     $(this.el).find("#grid").html(this.grid.render().el);
+
+                    // Update recently edited forms
+                    this.updateRecentlyEdited();
 
                     //  Wait fetch end before display forms count and scrollbar got backgrid table
                     this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
@@ -669,6 +710,7 @@ define([
                 reset : true,
                 success : _.bind(function() {
                     this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
+                    this.updateRecentlyEdited();
                 }, this)
             });
         },
@@ -784,7 +826,7 @@ define([
         /**
          * User wants to edit a form of the list
          */
-        editForm : function(ctx) {
+        editForm : function(ctx, id) {
             if (!ctx || typeof(ctx) !== 'string') {
                 // get currentSelectedForm's context
                 ctx = this.grid.collection.findWhere({id: this.currentSelectedForm}).get("context");
@@ -793,7 +835,12 @@ define([
 
             Backbone.Radio.channel('form').trigger('setFieldCollection', ctx);
 
-            var formToEdit = this.formCollection.get(this.currentSelectedForm);
+            // if not provided use this.currentSelectedForm
+            if (!id) {
+                id = this.currentSelectedForm;
+            }
+
+            var formToEdit = this.formCollection.get(id);
             //  Send an event to the formbuilder
             //  Two modules never speak directly, all communication pass htrough formbuilder App
             // TODO TODO
