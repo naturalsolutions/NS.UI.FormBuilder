@@ -36,13 +36,15 @@
   },
 
   "search" : {
+    "search"   : "\ue65f Search",
     "name"     : "Name",
     "keywords" : "Keywords",
     "user"     : "User",
     "date" : {
       "from" : "From",
       "to"   : "To"
-    }
+    },
+    "edited" : "Recently edited forms"
   },
 
   "form" : {
@@ -100,6 +102,7 @@
       "clear"  : "CLEAR ALL",
       "find"   : "FIND",
       "add"    : "ADD",
+      "search" : "SEARCH",
       "viewdetails" : "VIEW DETAILS",
       "edit"   : "EDIT",
       "sizepreview" : "Input sizes preview"
