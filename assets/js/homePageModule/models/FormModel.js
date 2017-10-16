@@ -48,11 +48,11 @@ define([
 
             if (creationDate != null) {
                 creationDate = creationDate.toString();
-                this.set('creationDateDisplay', creationDate.substring(0, creationDate.length - 3));
+                this.set('creationDateDisplay', creationDate.substring(0, creationDate.length - 11));
             }
             if (modificationDate != null) {
                 modificationDate = modificationDate.toString();
-                this.set('modificationDateDisplay', modificationDate.substring(0, modificationDate.length - 3));
+                this.set('modificationDateDisplay', modificationDate.substring(0, modificationDate.length - 11));
             }
 
             if (this.defaults.context = "" && window.context)
