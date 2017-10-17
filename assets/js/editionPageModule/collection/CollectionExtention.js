@@ -36,6 +36,7 @@ define([
     var translater = Translater.getTranslater();
 
     var CollectionExtention = {
+        started: false,
 
         schemaExtention: {
 
@@ -59,6 +60,18 @@ define([
 
         initializeExtention: function () {
             return(true);
+        },
+
+        initAllExtensions: function(options) {
+            if (this.started) {
+                return;
+            }
+
+            this.started = true;
+            for (var i in Extentions) {
+                var ext = Extentions[i];
+                ext.initializeExtention(options);
+            }
         },
 
         jsonExtention: function (originalForm) {

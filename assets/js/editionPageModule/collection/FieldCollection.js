@@ -194,6 +194,8 @@ define([
         * @param {type} options
         */
         initialize: function (models, options) {
+            // init all extentions, allows some pre-fetching at app startup (done only once)
+            CollectionExtention.initAllExtensions(options);
 
             var that = this;
             setExtention(options.context);
