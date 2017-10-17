@@ -27,7 +27,7 @@ define([
 
     var TrackExtention = {
 
-        extentionDatas: {},
+        extensionData: {},
 
         schemaExtention: {
             activite : {
@@ -231,7 +231,7 @@ define([
 
         getTrackDatas: function (options, datas, callback, schema) {
             var that = this;
-            if ($.isEmptyObject(that.extentionDatas))
+            if ($.isEmptyObject(that.extensionData))
             {
                 $.ajax({
                     data: JSON.stringify({'datas' : datas}),
@@ -242,7 +242,7 @@ define([
                     async: false,
                     success: _.bind(function (data) {
                         var schemaToRet = callback(data, schema);
-                        that.extentionDatas = data;
+                        that.extensionData = data;
                         return(schemaToRet);
                     }, this),
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
@@ -252,7 +252,7 @@ define([
             }
             else
             {
-                var schemaToRet = callback(that.extentionDatas, schema);
+                var schemaToRet = callback(that.extensionData, schema);
                 return (schemaToRet);
             }
         }
