@@ -196,12 +196,8 @@ define([
         initialize: function (models, options) {
 
             var that = this;
-
-            if (options.context && options.context != "all")
-            {
-                setExtention(options.context);
-                setStatics(options.context);
-            }
+            setExtention(options.context);
+            setStatics(options.context);
 
             that.options = options;
 
@@ -1311,14 +1307,12 @@ define([
 
     var setExtention = function(extentionToSet){
         var context = extentionToSet || window.context || $("#contextSwitcher .selected").text();
-        if (context.toLowerCase() != "all")
-            extention = CollectionExtention.getModeExtention(context);
+        extention = CollectionExtention.getModeExtention(context.toLowerCase());
     };
 
     var setStatics = function(staticsToSet){
         var context = staticsToSet ||  window.context || $("#contextSwitcher .selected").text();
-        if (context.toLowerCase() != "all")
-            staticInputs = ContextStaticInputs.getStaticMode(context);
+        staticInputs = ContextStaticInputs.getStaticMode(context.toLowerCase());
     };
 
     return Form;
