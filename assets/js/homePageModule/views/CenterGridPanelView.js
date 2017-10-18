@@ -523,46 +523,11 @@ define([
                 return;
             }
 
-            // sort by modification date
-            var dateSorter = function(model) {
-                return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss").unix();
-            };
-
             this.grid = new Backgrid.Grid({
-
                 row: this.initClickableRow(),
-                columns    : [{
-                    name  : 'name',
-                    label    : translater.getValueFromKey('grid.name') || 'Name',
-                    cell  : 'string',
-                    editable : false
-                }, {
-                    name     : 'creationDateDisplay',
-                    label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
-                    cell     : "string",
-                    editable : false,
-                    sortValue: dateSorter
-                }, {
-                    name     : 'modificationDateDisplay',
-                    label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
-                    cell     : 'string',
-                    editable : false,
-                    sortValue: dateSorter
-                }, {
-                    name     : 'context',
-                    label    : translater.getValueFromKey('grid.formContext') || 'Form Context',
-                    cell     : 'string',
-                    editable : false
-                }, {
-                    name     : 'controls',
-                    label    : '',
-                    cell     : 'string',
-                    editable : false,
-                    sortable : false
-                }],
-
                 collection : this.formCollection
             });
+            this.resetGridColumns();
         },
 
         /**
@@ -1169,6 +1134,48 @@ define([
         },
 
         /**
+         * resetGridColumns resets grid default columns.
+         */
+        resetGridColumns: function() {
+            // sort by modification date
+            var dateSorter = function(model) {
+                return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss").unix();
+            };
+            var defaults = [{
+                name  : 'name',
+                label    : translater.getValueFromKey('grid.name') || 'Name',
+                cell  : 'string',
+                editable : false
+            }, {
+                name     : 'creationDateDisplay',
+                label    : translater.getValueFromKey('grid.creationDate') || 'Creation Date',
+                cell     : "string",
+                editable : false,
+                sortValue: dateSorter
+            }, {
+                name     : 'modificationDateDisplay',
+                label    : translater.getValueFromKey('grid.modificationDate') || 'Modification date',
+                cell     : 'string',
+                editable : false,
+                sortValue: dateSorter
+            }, {
+                name     : 'context',
+                label    : translater.getValueFromKey('grid.formContext') || 'Form Context',
+                cell     : 'string',
+                editable : false
+            }, {
+                name     : 'controls',
+                label    : '',
+                cell     : 'string',
+                editable : false,
+                sortable : false
+            }];
+
+            this.grid.columns.set(defaults);
+            this.updateGridHeader();
+        },
+
+        /**
          * setContext updates relevant parts depending on context value.
          * @param context
          */
@@ -1183,12 +1190,14 @@ define([
                 context: context
             });
 
+            // update custom columns
+            this.resetGridColumns();
+            if (context !== "all") {
+                this.removeGridColumn('context');
+            }
             switch(context) {
-                case "all":
-                    this.addGridColumn('context', 'grid.formContext');
-                    break;
-                default:
-                    this.removeGridColumn('context');
+                case "track":
+                    this.addGridColumn('activite', 'form.activite');
                     break;
             }
         },
