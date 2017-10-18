@@ -27,7 +27,7 @@ define([
 
     var TrackExtention = {
 
-        extensionData: {},
+        extensionData: null,
 
         schemaExtention: {
             activite : {
@@ -169,21 +169,17 @@ define([
         },
 
         getSchemaExtention: function(options){
-            var toret = this.schemaExtention;
-
-            if (options)
-            {
-                this.getTrackDatas(options, this.getExtractedDatas(), this.setSelectValues, toret);
-                return (toret);
+            if (this.extensionData) {
+                return this.extensionData;
             }
-            return (toret);
+            if (options) {
+                this.getTrackDatas(options);
+            }
+            return this.schemaExtention;
         },
 
         initializeExtention: function (options) {
-
-            this.getTrackDatas(options, this.getExtractedDatas(), this.setSelectValues, this.schemaExtention);
-
-            return(true);
+            this.getTrackDatas(options);
         },
 
         jsonExtention: function (originalForm) {
@@ -229,32 +225,26 @@ define([
             return (schema);
         },
 
-        getTrackDatas: function (options, datas, callback, schema) {
+        getTrackDatas: function (options) {
             var that = this;
-            if ($.isEmptyObject(that.extensionData))
-            {
+            if (!this.extensionData) {
                 $.ajax({
-                    data: JSON.stringify({'datas' : datas}),
+                    data: JSON.stringify({'datas' : that.getExtractedDatas()}),
                     type: 'POST',
                     url: options.URLOptions.track + "/getData",
                     contentType: 'application/json',
                     crossDomain: true,
                     async: false,
                     success: _.bind(function (data) {
-                        var schemaToRet = callback(data, schema);
-                        that.extensionData = data;
-                        return(schemaToRet);
+                        that.extensionData = that.setSelectValues(data, that.schemaExtention);
                     }, this),
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
                         console.log("error ! " + xhr);
                     }, this)
                 });
             }
-            else
-            {
-                var schemaToRet = callback(that.extensionData, schema);
-                return (schemaToRet);
-            }
+
+            return this.extensionData;
         }
     };
 
