@@ -18,11 +18,31 @@
             margin: 15px 0 0;
         }
 
+        .form-group {
+            margin: 12px 0;
+
+            label {
+                color: #bbb;
+                margin: 5px 0;
+            }
+
+            input, select {
+                border: none;
+                border-bottom: 1px solid #bbb;
+                background: none;
+
+                &:focus, &:hover {
+                    border-bottom-color: #888;
+                }
+            }
+        }
+
         .search-box {
             width: 100%;
             position: relative;
 
             span.close {
+                opacity: .45;
                 position: absolute;
                 right: 10px;
                 top: 5px;
@@ -45,7 +65,6 @@
                     font-style: italic;
                 }
                 &:focus {
-                    color: @orange;
                     border-color: @orange !important;
                     &::placeholder {
                         color: @orange;
