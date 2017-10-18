@@ -19,9 +19,9 @@ define([
          * Event catch by the view
          */
         events : {
-            'click #find' : 'runSearch',    //  when user submit form
-            'click #clearForm' : 'clearForm',
-            'keyup .form input' : 'removeEmptyClass'
+            'click #searchBtn' : 'runSearch',
+            'click .search-box .close' : 'clearForm',
+            'keypress form input' : 'keypress'
         },
 
         /**
@@ -36,11 +36,19 @@ define([
         },
 
         /**
-         * #find click callback, send form values to the center view to update grid
-         *
-         * @param {[Object]} evt jQuery event
+         * keypress listener, triggers a new search if enter is pressed
+         * @param e keypress event
          */
-        runSearch : function(evt) {
+        keypress: function(e) {
+            if (e.keyCode === 13) {
+                this.runSearch();
+            }
+        },
+
+        /**
+         * #find click callback, send form values to the center view to update grid
+         */
+        runSearch : function() {
             var values = {};
             $.each(this.$el.find('form').serializeArray(), function(i, field) {
                 if (field.value !== "") {
