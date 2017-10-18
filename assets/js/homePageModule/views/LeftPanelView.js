@@ -1,6 +1,9 @@
 define([
-    'jquery', 'marionette', 'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewNoUserNoTags.html', 'app-config', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
-], function($, Marionette, LeftPanelViewTemplate, LeftPanelViewTemplateNoUser, AppConfig) {
+    'jquery', 'marionette', '../../editionPageModule/collection/CollectionExtention',
+    'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewNoUserNoTags.html',
+    'app-config', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
+], function($, Marionette, CollectionExtention, LeftPanelViewTemplate,
+            LeftPanelViewTemplateNoUser, AppConfig) {
 
     /**
      * Left panel view in the homepage layout, contains form to filter grid on the center view
@@ -27,16 +30,9 @@ define([
         initialize : function(options, readonly) {
             if (!AppConfig.displayUserFilter)
                 this.template = LeftPanelViewTemplateNoUser;
-            this.initGridChannel();
-            this.URLOptions = options.URLOptions;
-        },
-
-        /**
-         * Init grid channel
-         * grid channel allows to communicate ONLY in the homepage layout
-         */
-        initGridChannel : function() {
             this.gridChannel = Backbone.Radio.channel('grid');
+            this.gridChannel.on('contextChanged', this.setCustomSearchInputs, this);
+            this.URLOptions = options.URLOptions;
         },
 
         /**
@@ -59,8 +55,70 @@ define([
             }
         },
 
-        removeEmptyClass : function() {
-            this.$el.find('form').removeClass('empty')
+        /**
+         * addCustomSearchInput inserts a custom search input in search section.
+         * @param type - select / number / string
+         * @param id - html id
+         * @param title - label of input
+         * @param options - for select input, list of options {0: {val, label},...}
+         */
+        addCustomSearchInput: function(type, id, title, options) {
+            var $label = $("<label>");
+            var $input;
+            type = type.toLowerCase();
+
+            switch (type) {
+                case 'select':
+                    $input = $("<select>");
+                    // insert empty option
+                    $input.append($("<option>"));
+                    for (var i in options) {
+                        var $opt = $("<option>");
+                        var option = options[i];
+                        $opt.attr("value", option.val).text(option.label);
+                        $input.append($opt);
+                    }
+                    break;
+                default:
+                    $input = $("input");
+                    $input.attr("type", type);
+            }
+
+            $input.addClass("form-control").attr("name", id);
+            $label.attr("for", id).text(title);
+            var $div = $("<div>");
+            $div.addClass("form-group").addClass(id + "-group").addClass("custom");
+            $div.append($label);
+            $div.append($input);
+
+            $(".search .customFilters").append($div);
+        },
+
+        /**
+         * setSchemaExtension goes through provided schemaExtension and adds custom search
+         * inputs for items that have "searchable" set to true.
+         * @param schemaExtension
+         */
+        setCustomSearchInputs: function(context) {
+            // clear custom filters
+            var $form = $(".search form");
+            $form.find(".customFilters").html('');
+
+            if (!context) {
+                return;
+            }
+            var ext = CollectionExtention.getModeExtention(context);
+            if (!(ext && ext.extensionData)) {
+                return;
+            }
+            var data = ext.extensionData;
+            for (var i in data) {
+                var ext = data[i];
+                if (!ext["searchable"]) {
+                    continue;
+                }
+                this.addCustomSearchInput(ext.type.toLowerCase(), i, ext.title, ext.options);
+            }
         },
 
         /**

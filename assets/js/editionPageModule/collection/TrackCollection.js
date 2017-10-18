@@ -35,6 +35,7 @@ define([
                 title       : translater.getValueFromKey('form.activite'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
+                searchable  : true,
                 options : [],
                 validators  : [{
                     type : 'required',
@@ -64,6 +65,7 @@ define([
                 title       : translater.getValueFromKey('form.typeIndividus'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
+                searchable  : true,
                 options : [],
                 validators  : [{
                     type : 'required'
@@ -84,6 +86,7 @@ define([
                 title       : translater.getValueFromKey('form.groupe'),
                 editorClass : 'form-control',
                 template    : fieldTemplate,
+                searchable  : true,
                 options : [],
                 validators  : [{
                     type : 'required'

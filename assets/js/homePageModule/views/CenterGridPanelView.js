@@ -1207,6 +1207,9 @@ define([
                     this.addGridColumn('activite', 'form.activite');
                     break;
             }
+
+            // retreive and populate custom search inputs
+            this.gridChannel.trigger('contextChanged', context);
         },
 
         /**
