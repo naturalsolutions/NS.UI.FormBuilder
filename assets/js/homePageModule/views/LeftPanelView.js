@@ -135,13 +135,6 @@ define([
         onRender : function(options) {
             this.$el.i18n(); // run i18nnext translation in the view context
             this.enableAutocomplete();
-
-            this.$el.find('#dateFrom').datetimepicker({
-                format : 'DD/MM/YYYY'
-            });
-            this.$el.find('#dateTo').datetimepicker({
-                format : 'DD/MM/YYYY'
-            });
         },
 
         /**

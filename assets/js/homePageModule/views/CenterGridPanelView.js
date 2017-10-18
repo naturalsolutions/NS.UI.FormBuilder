@@ -653,10 +653,8 @@ define([
         /**
          * Hide spinner when loading is finished
          */
-        hideSpinner : function(duration) {
-            setTimeout(_.bind(function() {
-                this.$el.find('.spinner').addClass('end', 250);
-            }, this), duration || 400);
+        hideSpinner : function() {
+            this.$el.find('.spinner').addClass('end', 250);
         },
 
         /**
@@ -723,52 +721,46 @@ define([
          * @param {Object} searchData user typed data
          */
         updateCollectionAfterSearch: function(searchData) {
+            var filteredModels = this.formCollection.filter(_.bind(function(model) {
+                for (var name in searchData) {
+                    if (name !== 'keywords' && model.get(name) === undefined) {
+                        console.warn("ignoring undefined search term \"" + name +"\" for model.");
+                        continue;
+                    }
 
-            var foundedModels = this.formCollection.filter(_.bind(function(model) {
-                var correspondingCondition = true;
+                    var searchVal = searchData[name].toLowerCase();
+                    //  Special case for keywords
+                    // todo better - this searches keywords.join() which is wonky
+                    if (name === 'keywords') {
+                        if (model.get('keywordsFr').join().toLowerCase().indexOf(searchVal) < 0 &&
+                            model.get('keywordsEn').join().toLowerCase().indexOf(searchVal) < 0) {
+                            return false;
+                        }
+                        continue;
+                    }
 
-                //  Check if models name contains typed name
-                if (searchData.name != undefined)
-                    correspondingCondition = correspondingCondition &&((model.get('name').toLowerCase()).indexOf(searchData.name.toLowerCase()) >=0 );
+                    var modelVal = model.get(name).toLowerCase();
+                    // Special case for name search: do not require strict match
+                    if (name === 'name') {
+                        if (modelVal.indexOf(searchVal) < 0) {
+                            return false;
+                        }
+                        continue;
+                    }
 
-                //  Check if typed keywords is present in french keywords list or english keywords list
-                if (searchData.keywords != undefined) {
-                    correspondingCondition = correspondingCondition && (
-                        model.get('keywordsFr').join().indexOf(searchData.keywords.toLowerCase()) > 0
-                        ||
-                        model.get('keywordsEn').join().indexOf(searchData.keywords.toLowerCase()) > 0
-                    )
+                    // Default case: require strict match
+                    if (modelVal != searchVal) {
+                        return false;
+                    }
                 }
 
-
-                if (searchData.dateFrom != undefined) {
-
-                    var creationDate = this.getDateFromString(model.get('creationDate'), true),
-                        dateFrom     = this.getDateFromString(searchData.dateFrom);
-
-                    dateFrom.setHours(0);
-                    dateFrom.setDate(dateFrom.getDate()-1);
-
-                    correspondingCondition = correspondingCondition && (dateFrom - creationDate < 0);
-                }
-
-                if (searchData.dateTo != undefined) {
-
-                    var creationDate = this.getDateFromString(model.get('creationDate'), true),
-                        dateTo     = this.getDateFromString(searchData.dateTo);
-
-                    dateTo.setHours(0);
-
-                    correspondingCondition = correspondingCondition && (dateTo - creationDate > 0);
-                }
-
-                return correspondingCondition;
+                return true;
             }, this));
 
-            this.formCollection.reset(foundedModels);
-
-            this.$el.find('#formsCount').text(  $.t("formCount.form", { count: foundedModels.length }) );
-            this.hideSpinner(500);
+            this.formCollection.reset(filteredModels);
+            this.$el.find('#formsCount').text(
+                $.t("formCount.form", { count: filteredModels.length }));
+            this.hideSpinner();
         },
 
         /**
