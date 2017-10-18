@@ -4,13 +4,12 @@ define([
 
     var Translater = Marionette.Object.extend({
 
-        initialize: function(options) {
+        initialize: function() {
             this.url = 'ressources/locales/__lng__/__ns__.json';
-            this.initi18n();
-        },
-
-        initi18n : function() {
-            i18n.init({ resGetPath: this.url, getAsync : false, lng : navigator.language || navigator.userLanguagenavigator.language || navigator.userLanguage});
+            var lang = auth.userlanguage ||navigator.language ||
+                navigator.userLanguagenavigator.language ||
+                navigator.userLanguage || 'en';
+            i18n.init({ resGetPath: this.url, getAsync : false, lng : lang});
         },
 
         getValueFromKey : function(key) {

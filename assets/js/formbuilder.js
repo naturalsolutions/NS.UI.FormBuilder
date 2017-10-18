@@ -15,9 +15,10 @@ define([
     'backbone.radio',
     'app-config',
     'sweetalert',
-    'Translater'
+    'Translater',
+    'auth'
 ], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController,
-            FormCollection, Radio, AppConfig, swal, Translater) {
+            FormCollection, Radio, AppConfig, swal, Translater, auth) {
 
     var translater = Translater.getTranslater();
 
@@ -171,37 +172,29 @@ define([
 
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
-        Backbone.history.start();
-
         if (AppConfig.authmode == 'portal')
         {
-            $.ajax({
-                data: JSON.stringify({'securityKey' : AppConfig.securityKey}),
-                type: 'POST',
-                url: options.URLOptions.security + "/isCookieValid",
-                contentType: 'application/json',
-                crossDomain: true,
-                async: false,
-                success: _.bind(function (data) {
-                    window.user = data.username;
-                    $("header .user").text(data.username);
-                    $("header .icons.last").removeClass("hidden");
-                    $("header .lang").text(data.userlanguage.toUpperCase());
-                }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                    swal({
-                        title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
-                        text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
-                        type: "error",
-                        closeOnConfirm: true
-                    }, function(){
-                        window.location.href = AppConfig.portalURL;
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    });
-                }, this)
-            });
+            if (auth.error) {
+                swal({
+                    title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
+                    text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
+                    type: "error",
+                    closeOnConfirm: true
+                }, function(){
+                    window.location.href = AppConfig.portalURL;
+                    window.onkeydown = null;
+                    window.onfocus = null;
+                });
+                return;
+            }
+
+            window.user = auth.username;
+            $("header .user").text(auth.username);
+            $("header .icons.last").removeClass("hidden");
+            $("header .lang").text(auth.userlanguage.toUpperCase());
         }
+
+        Backbone.history.start();
 
         // Spawn contexts
         var nbContexts = 0;
