@@ -670,12 +670,17 @@ define([
          * Backbone radio event callback
          * Reset collection and update forms count
          */
-        resetCollection : function() {
+        resetCollection : function(callback) {
+            this.showSpinner();
             this.formCollection.fetch({
                 reset : true,
                 success : _.bind(function() {
                     this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
                     this.updateRecentlyEdited();
+                    if (callback) {
+                        callback();
+                    }
+                    this.hideSpinner();
                 }, this)
             });
         },
@@ -688,7 +693,9 @@ define([
          */
         updateGridWithSearch : function(searchData) {
             this.showSpinner();
-            this.updateCollectionAfterSearch(searchData);
+            this.resetCollection(_.bind(function() {
+                this.updateCollectionAfterSearch(searchData);
+            }, this));
         },
 
         getDateFromString : function(stringDate, resetTime) {
