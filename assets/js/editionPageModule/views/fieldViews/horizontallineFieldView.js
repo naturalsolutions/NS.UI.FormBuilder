@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'underscore',
+    'lodash',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/horizontallineFieldView.html',

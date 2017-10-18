@@ -1,5 +1,5 @@
 
-define(['jquery', 'underscore', 'backbone', 'backbone.radio', 'sweetalert', '../../../Translater', 'i18n'],
+define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../../Translater', 'i18n'],
     function($, _, Backbone, Radio, swal, Translater) {
 
     var translater = Translater.getTranslater();

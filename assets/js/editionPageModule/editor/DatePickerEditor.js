@@ -1,4 +1,4 @@
-define(['jquery', 'underscore', 'backbone', 'backbone-forms', 'eonasdan-bootstrap-datetimepicker'], function($, _, Backbone, Form) {
+define(['jquery', 'lodash', 'backbone', 'backbone-forms', 'eonasdan-bootstrap-datetimepicker'], function($, _, Backbone, Form) {
 
     var DatePickerEditor = Backbone.Form.editors.Base.extend({
         tagName: 'input',

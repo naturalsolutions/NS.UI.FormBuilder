@@ -1,5 +1,5 @@
 define([
-    'underscore',
+    'lodash',
     'backbone',
     'text!homePageModule/templates/modals/NewFormModalView.html',
     'app-config',

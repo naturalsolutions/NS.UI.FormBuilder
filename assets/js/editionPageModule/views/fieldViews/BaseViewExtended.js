@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'underscore',
+    'lodash',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     '../../../../../node_modules/sqlite-parser/dist/sqlite-parser'

@@ -1,6 +1,6 @@
 define([
-    'jquery', 'underscore', 'marionette', 'i18n'
-], function($, _, Marionette, Radio) {
+    'jquery', 'lodash', 'marionette', 'auth', 'i18n'
+], function($, _, Marionette, auth) {
 
     var Translater = Marionette.Object.extend({
 

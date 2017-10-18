@@ -4,7 +4,7 @@
  */
 
 define([
-    'underscore',
+    'lodash',
     'marionette',
     'homePageModule/router/HomePageRouter',
     'homePageModule/controller/HomePageController',

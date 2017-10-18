@@ -1,5 +1,5 @@
 define([
-    'underscore',
+    'lodash',
     'backbone',
     'text!editionPageModule/templates/modals/EnumerationModalView.html',
     'backgrid',

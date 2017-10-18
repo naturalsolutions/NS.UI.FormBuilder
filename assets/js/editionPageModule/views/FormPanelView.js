@@ -42,7 +42,7 @@ define([
         /**
          * FormView template configuration
          *
-         * @return {string} Compiled underscore template
+         * @return {string} Compiled lodash template
          */
         template : function() {
             var topcontext = "";

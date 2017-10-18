@@ -1,5 +1,5 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config',
+    'jquery', 'lodash', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config',
     '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
 ], function($, _, Backbone, Translater, CheckboxEditor, AppConfig, FormCollection, ExtraProperties) {
 

@@ -37,7 +37,7 @@
     "requirejs-plugins": "~1.0.3",
     "reneco-fonts": "*",
     "pillbox-editor": "*",
-    "lodash": "~4.17.4"
+    "lodash": "3.10.1"
   },
   "dependenciesIgnore": {
     "backbone": [

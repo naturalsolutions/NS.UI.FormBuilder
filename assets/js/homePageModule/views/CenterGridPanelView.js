@@ -1,6 +1,6 @@
 define([
     'jquery',
-    'underscore',
+    'lodash',
     'marionette',
     'moment',
     'text!../templates/GridView.html',
@@ -37,7 +37,7 @@ define([
          * initTemplate initialize this.template with provided html template and parameters,
          * it also stores parameters into this.tplParams for further use with this.updateTemplate
          *
-         * @param template - html template (underscore)
+         * @param template - html template (lodash)
          * @param context - "all" / "track" / ...
          * @param topContext - "reneco" / "*"
          * @param readonly - enable read-only mode (no edition of forms)
@@ -63,7 +63,7 @@ define([
 
         /**
          * currentTemplate stores template values to facilitate changing context & stuff,
-         * cause it's really doable given how underscore handles template rendering.
+         * cause it's really doable given how lodash handles template rendering.
          */
         currentTemplate: {
            html: {},

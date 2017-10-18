@@ -1,5 +1,5 @@
 define([
-    'underscore',
+    'lodash',
     'backbone',
     'text!homePageModule/templates/modals/ImportModalView.html',
     'bootstrap',

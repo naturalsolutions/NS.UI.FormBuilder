@@ -13,7 +13,6 @@ require.config({
         i18n                                : "../../libs/i18n/i18next.min",
         jquery                              : "../../libs/jquery/dist/jquery.min",
         "jquery-ui"                         : "../../libs/jquery-ui/jquery-ui",
-        underscore                          : "../../libs/underscore/underscore-min",
         requirejs                           : "../../libs/requirejs/require",
         "backbone-forms"                    : "../../libs/backbone-forms/distribution.amd/backbone-forms",
         modalAdapter                        : "../../libs/bootstrapAdapter/src/backbone.bootstrap-modal",
@@ -33,7 +32,7 @@ require.config({
         'pillbox-editor' 					: "../../libs/pillbox-editor/dist/pillbox-editor.amd",
         'pillbox' 							: '../../libs/jquery.pillbox.js/js/jquery.pillbox',
         'jcanvas' 							: '../../libs/jcanvas/jcanvas.min',
-        'lodash'                            : '../../libs/lodash/dist/lodash.min'
+        'lodash'                            : '../../libs/lodash/lodash.min'
     },
 
     shim: {
@@ -55,13 +54,13 @@ require.config({
         jquery: {
             exports: "$"
         },
-        underscore: {
+        lodash: {
             exports: "_"
         },
         backbone: {
             exports: "Backbone",
             deps: [
-                "underscore",
+                "lodash",
                 "jquery"
             ]
         },
@@ -139,7 +138,7 @@ require.config({
             exports: "Marionette"
         },
         'backgrid': {
-            deps: ['jquery', 'underscore', 'backbone'],
+            deps: ['jquery', 'lodash', 'backbone'],
             exports: 'Backgrid'
         },
         'pillbox' : {
@@ -154,11 +153,17 @@ require.config({
                 "jquery"
             ]
         }
+    },
+
+    map: {
+        "*": {
+            "underscore": "lodash"
+        }
     }
 });
 
 define([
-    'jquery', 'underscore', 'backbone', 'Translater', 'app-config'
+    'jquery', 'lodash', 'backbone', 'Translater', 'app-config'
 ], function($, _, Backbone, Translater, AppConfig) {
 
 	require(['jquery', 'Translater', 'formbuilder', 'moment', 'lodash'], function($, Translater, formbuilder) {

@@ -7,7 +7,7 @@
 * @version         1.0
 */
 
-define(['jquery', 'underscore'], function($, _) {
+define(['jquery', 'lodash'], function($, _) {
 
     var utilities = {};
 

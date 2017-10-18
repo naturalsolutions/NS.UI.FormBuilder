@@ -9,7 +9,7 @@
 
 
 define([
-    'jquery', 'underscore', 'backbone', 'Translater'
+    'jquery', 'lodash', 'backbone', 'Translater'
 ], function($, _, Backbone, Translater) {
 
     var AppConfiguration = {

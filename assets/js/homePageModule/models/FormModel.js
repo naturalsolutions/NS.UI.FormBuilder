@@ -1,5 +1,5 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater', 'app-config'
+    'jquery', 'lodash', 'backbone', '../../Translater', 'app-config'
 ], function($, _, Backbone,Translater, AppConfig) {
 
     var translater = Translater.getTranslater();
