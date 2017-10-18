@@ -1,9 +1,9 @@
 {
   "grid" : {
     "name"             : "Name",
-    "creationDate"     : "Creation date",
-    "modificationDate" : "Modfication date",
-    "formContext"      : "Form Context"
+    "creationDate"     : "Creation",
+    "modificationDate" : "Modfication",
+    "formContext"      : "Context"
   },
 
   "fields" : {
