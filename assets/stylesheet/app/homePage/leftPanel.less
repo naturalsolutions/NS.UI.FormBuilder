@@ -4,6 +4,10 @@
     overflow: hidden;
     padding: 0;
 
+    & > div {
+        height: 100%;
+    }
+
     .row {
         width: 100%;
         margin: 0;
@@ -92,9 +96,12 @@
     .row.edited {
         background: white;
         font-family: 'ProximaNovaLight', sans-serif !important;
+        position: relative;
+        height: ~"calc(100% - 231px)";
 
         h3 {
-            margin: 0 0 22px;
+            padding: 0 0 22px;
+            margin: 0;
         }
 
         .recentlyEdited {

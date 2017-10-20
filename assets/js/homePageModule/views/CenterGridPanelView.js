@@ -570,6 +570,12 @@ define([
                 }, this));
                 $cont.append($el);
             }, this));
+
+            // adapt height (suggest to changes depending on .customFilters section)
+            var searchH = $("#leftPanel").find(".search").outerHeight();
+            var margin = $(".edited h3").outerHeight() - $(".edited h3").height();
+            $cont.closest(".edited").attr("style",
+                "height: calc(100% - " + (searchH + margin) + "px);");
         },
 
         /**
@@ -596,7 +602,7 @@ define([
                     //  Wait fetch end before display forms count and scrollbar got backgrid table
                     this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
 
-                    $("#scrollSection").slimScroll({
+                    $(".scroller").slimScroll({
                         height       : this.scrollSize,
                         color        : '#111',
                         railVisible  : true,
