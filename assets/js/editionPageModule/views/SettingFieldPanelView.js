@@ -135,33 +135,16 @@ define([
             var that = this;
 
             var callBackTemplateRequest = function(fieldList){
-
                 that.preConfiguredFieldList = fieldList;
-
                 that.fieldWithSameType = that.preConfiguredFieldList[that.currentFieldType];
-
-                /*
-                 if (that.fieldWithSameType == undefined) {
-                 that.$el.find('*[data-setting="field"]').first().hide();
-                 } else {
-                 // Update available pre configurated field
-                 _.each(that.fieldWithSameType, _.bind(function(el, idx) {
-                 that.$el.find('#getField select').append('<option value="' + idx + '">' + idx + '</option>');
-                 }, that));
-                 }
-                 */
-
                 that.$el.find('select').selectpicker();
-
                 that.initInputTemplateList();
             };
 
-            if (that.savedTemplateFieldList)
-            {
+            if (that.savedTemplateFieldList) {
                 callBackTemplateRequest(that.savedTemplateFieldList);
             }
-            else
-            {
+            else {
                 $.getJSON(that.URLOptions.preConfiguredField, _.bind(function(fieldList) {
                     that.mainChannel.trigger('setTemplateList', fieldList);
                     callBackTemplateRequest(fieldList);
@@ -228,15 +211,11 @@ define([
                     that.form.fields.linkedFieldTable.$el.addClass('hide')});
             }
 
-            if (disable)
-            {
-                if (state)
-                    this.disableOrEnableLinkedFields(false, disable);
-                else
-                {
-                    this.form.fields.isLinkedField.$el.animate({opacity: 0}, 300, function(){
-                        that.form.fields.isLinkedField.$el.addClass('hide')});
-                }
+            if (disable && state) {
+                this.disableOrEnableLinkedFields(false, disable);
+            } else if (disable) {
+                this.form.fields.isLinkedField.$el.animate({opacity: 0}, 300, function(){
+                    that.form.fields.isLinkedField.$el.addClass('hide')});
             }
         },
 
@@ -244,8 +223,7 @@ define([
          * Enable or disable linked field select if the checkbox is checked or not
          */
         bindCssEditorsSelect : function() {
-            if (this.form.fields.showCssProperties)
-            {
+            if (this.form.fields.showCssProperties) {
                 this.form.fields.showCssProperties.editor.$el.find('input').change(_.bind(function(e) {
                     this.disableOrEnableCssEditionFields($(e.target).is(':checked'));
                 }, this));
@@ -258,19 +236,15 @@ define([
          * @param state if the select will be checked or not
          */
         disableOrEnableCssEditionFields : function(state) {
-            if (this.form.fields.showCssProperties)
-            {
-                if (state)
-                {
+            if (this.form.fields.showCssProperties) {
+                if (state) {
                     this.form.fields.editorClass.$el.removeClass('hide');
                     this.form.fields.editorClass.$el.animate({opacity: 1}, 300);
                     this.form.fields.fieldClassEdit.$el.removeClass('hide');
                     this.form.fields.fieldClassEdit.$el.animate({opacity: 1}, 300);
                     this.form.fields.fieldClassDisplay.$el.removeClass('hide');
                     this.form.fields.fieldClassDisplay.$el.animate({opacity: 1}, 300);
-                }
-                else
-                {
+                } else {
                     var that = this;
                     this.form.fields.editorClass.$el.animate({opacity: 0}, 300, function(){
                         that.form.fields.editorClass.$el.addClass('hide')});
@@ -283,31 +257,7 @@ define([
         },
 
         initInputTemplateList: function() {
-
-            var hideTemplateApply = true;
-
-            $.each(this.preConfiguredFieldList.options, function(key, value){
-                //TODO REDO ERROR WITH QUOTES
-                /*
-                if ( $("#templateList option[value='"+key+"']").length == 0) {
-                    $('#templateList').append($('<option>', {
-                        value: key,
-                        text: key
-                    }));
-                }
-                hideTemplateApply = false;
-                */
-            });
-
-            if (hideTemplateApply)
-            {
-                $(".loadTemplateArea").hide();
-            }
-            else
-            {
-                $("#templateList").selectpicker("refresh");
-                $(".loadTemplateArea").show();
-            }
+            $(".loadTemplateArea").hide();
         },
 
         /**
@@ -318,8 +268,7 @@ define([
 
             var disable = true;
 
-            if (this.linkedFieldsList)
-            {
+            if (this.linkedFieldsList) {
                 var linkedFieldsKeyList = [];
                 _.each(this.linkedFieldsList.linkedFieldsList, function(el, idx) {
                     linkedFieldsKeyList.push(el.key)
@@ -346,9 +295,7 @@ define([
         },
 
         initExtraPropertiesValues : function(){
-
-            if (this.modelToEdit.collection.tracktypes)
-            {
+            if (this.modelToEdit.collection.tracktypes) {
                 this.form.fields.trackType.editor.setOptions(this.modelToEdit.collection.tracktypes);
             }
         },
@@ -359,20 +306,16 @@ define([
          * @param  {[Object]} field to edit
          */
         createForm : function() {
-            if (this.todelete)
-            {
+            if (this.todelete) {
                 delete this;
                 return;
             }
             this.todelete = true;
             require(['backbone-forms'], _.bind(function() {
-
                 var that = this;
-
                 Backbone.Form.validators.errMessages.required = translater.getValueFromKey('form.validation');
 
-                var getJSONFromBinaryWeight = function(binWeight)
-                {
+                var getJSONFromBinaryWeight = function(binWeight) {
                     var toret = {};
                     toret.nullmean = (binWeight >= 8);
                     binWeight %= 8;
@@ -385,8 +328,7 @@ define([
                 };
 
                 if (this.modelToEdit && this.modelToEdit.attributes.editMode &&
-                    this.modelToEdit.attributes.editMode.visible == undefined)
-                {
+                    this.modelToEdit.attributes.editMode.visible == undefined) {
                     this.modelToEdit.set("editMode", getJSONFromBinaryWeight(this.modelToEdit.attributes.editMode));
                 }
 
@@ -396,7 +338,7 @@ define([
 
                 this.initContextDatas();
 
-                this.$el.find('#form').append(this.form.el)
+                this.$el.find('#form').append(this.form.el);
 
                 // Send an event to editionPageLayout to notify that form is created
                 this.mainChannel.trigger('formCreated');
@@ -561,7 +503,7 @@ define([
                             else {
                                 $.getJSON(urlws, _.bind(function(data) {
                                     callBackWSCall(data, urlws);
-                                }, this)).error(function(a,b,c) {
+                                }, this)).error(function() {
                                     alert ("can't load ressources !");
                                 });
                             }
@@ -591,23 +533,9 @@ define([
                     return (toret);
                 };
 
-                var getAllInputNames = function()
-                {
-                    var toret = [];
-
-                    $.each(that.modelToEdit.collection.models, function(index, value){
-                        var linkedFieldset = value.attributes.linkedFieldset;
-                        if (linkedFieldset && linkedFieldset.length > 0)
-                            toret.push(linkedFieldset);
-                    });
-
-                    return (toret);
-                };
-
                 var elLinkedFieldset = $("#settingFieldPanel [name='linkedFieldset']");
 
-                if (elLinkedFieldset.length > 0)
-                {
+                if (elLinkedFieldset.length > 0) {
                     elLinkedFieldset.autocomplete({
                         minLength: 0,
                         source : getAllFieldsetsNames()
@@ -618,16 +546,14 @@ define([
 
                 var elFieldName = $("#settingFieldPanel [name='name']");
 
-                if (elFieldName.length > 0)
-                {
+                if (elFieldName.length > 0) {
                     elFieldName.autocomplete({
                         minLength: 1,
                         source : this.modelToEdit.collection.contextInputNames
                     });
                 }
 
-                var getCompatibleInputs = function()
-                {
+                var getCompatibleInputs = function() {
                     var toret = [];
                     var compatibilityToUse = AppConfig.allowedConvert.default;
 
@@ -659,25 +585,19 @@ define([
                     hideTypeConverter = false;
                 });
 
-                if (hideTypeConverter)
-                {
+                if (hideTypeConverter) {
                     $(".convertArea").hide();
-                }
-                else
-                {
+                } else {
                     $("#inputTypeList").selectpicker("refresh");
                 }
 
                 $.each(that.form.fields, function(index, value){
-                    if (value.schema.validators && value.schema.validators[0] == "required")
-                    {
+                    if (value.schema.validators && value.schema.validators[0] == "required") {
                         $(value.$el).find("label").append(" <span style='color: red;'>*</span>");
-                        //$("#settingFieldPanel #form label[for="+that.modelToEdit.cid+"_"+index+"]").append(" <span style='color: red;'>*</span>");
                     }
                 });
 
-                if(that.modelToEdit.attributes.originalID && that.modelToEdit.attributes.originalID > 0)
-                {
+                if(that.modelToEdit.attributes.originalID && that.modelToEdit.attributes.originalID > 0) {
                     $("#originalIDArea").show();
                     $("#fieldOriginalID").text(that.modelToEdit.attributes.originalID);
                 }
@@ -693,15 +613,11 @@ define([
          */
         setMultipleFieldConfiguration : function() {
             require(['editionPageModule/views/SettingViews/EnumerationView'], _.bind(function(EnumarationView) {
-
                 this.$el.find('.setting-tabs').show();
-
                 this.subSettingView = new EnumarationView({
                     el : '#field-values>div',
                     model : this.modelToEdit
                 }).render();
-
-
             }, this));
         },
 
@@ -750,13 +666,6 @@ define([
             }, this), 500);
         },
 
-
-        /**
-         * Reset the select element with pre configuration field name
-         */
-        resetSelect : function() {
-            this.$el.find('#getField select').html('<option value="" disabled selected>Select an option</option>');
-        },
 
         /**
          * View rendering callbak
@@ -1012,7 +921,7 @@ define([
         /**
          * Remember field value has changed
          */
-        formControlChange : function(e, checkboxIsSelected) {
+        formControlChange : function(e) {
             this.hasFieldsChanged = true;
 
             switch(e.currentTarget.name)

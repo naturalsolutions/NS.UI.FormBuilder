@@ -2,17 +2,8 @@
  * Created by David on 22/12/2015.
  */
 
-define([
-    'jquery',
-    'backbone',
-    '../../../Translater',
-    'app-config'
-], function ($, Backbone, Translater, AppConfig) {
-
-    var translater = Translater.getTranslater();
-
+define(['jquery'], function ($) {
     var TrackStatics = {
-
         staticInputs: {
             "Individual": {
                 "validators": [],
@@ -132,21 +123,20 @@ define([
             "TSai_PK_ID"
         ],
 
-        getStaticInputs: function(){
+        getStaticInputs: function() {
             var toret = TrackStatics.staticInputs;
             $.each(toret, function(index, value){
                 if (!value.id)
                     value.id = 0;
             });
-            return(toret);
+            return toret;
         },
 
-        getCompulsoryInputs: function(){
-            return(TrackStatics.compulsoryInputs);
+        getCompulsoryInputs: function() {
+            return TrackStatics.compulsoryInputs;
         },
 
-        applyRules: function(form, json)
-        {
+        applyRules: function(form, json) {
             var savedSchema = json.schema;
             var toret = json;
             var toadd = [];
@@ -174,7 +164,7 @@ define([
         },
 
         initializeStatics: function () {
-            return(true);
+            return true;
         }
     };
 

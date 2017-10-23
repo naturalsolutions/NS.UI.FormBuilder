@@ -1,6 +1,5 @@
-define(['jquery', 'lodash', 'backbone', 'backbone-forms'], function($, _, Backbone, Form) {
-
-    var CheckboxEditor = Backbone.Form.editors.Base.extend({
+define(['jquery', 'lodash', 'backbone', 'backbone-forms'], function($, _, Backbone) {
+    return Backbone.Form.editors.Base.extend({
         tagName: 'input',
 
         initialize: function(options) {
@@ -44,6 +43,4 @@ define(['jquery', 'lodash', 'backbone', 'backbone-forms'], function($, _, Backbo
                     '&nbsp;<%= title %></label>' +
             '</div>')
     });
-
-    return CheckboxEditor;
 });

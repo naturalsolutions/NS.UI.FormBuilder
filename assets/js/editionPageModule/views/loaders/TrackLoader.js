@@ -1,22 +1,4 @@
-
-define([
-    'jquery',
-    'backbone',
-    '../../models/fields',
-    'backbone.radio',
-    '../../../Translater',
-    '../../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config',
-    './ContextLoader'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, ContextLoader) {
-
-    var translater = Translater.getTranslater();
-    var loader = ContextLoader;
-
-    /**
-    * Implement form object as a fields collection
-    */
+define(['jquery'], function ($) {
     var TrackLoader = {
 
         initializeLoader: function (form, URLoptions) {
@@ -26,15 +8,14 @@ define([
             return(true);
         },
 
-        loadFormDatas: function(){
-            if (this.form.fields.unity)
-            {
+        loadFormDatas: function() {
+            if (this.form.fields.unity) {
                 this.loadUnities();
             }
             return(true);
         },
 
-        loadUnities: function(){
+        loadUnities: function() {
             $.ajax({
                 data        : "",
                 type        : 'GET',
@@ -49,7 +30,7 @@ define([
                     });
                     this.form.fields.unity.editor.setOptions(unityoptions);
                 }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                error: _.bind(function (xhr) {
                     console.log(xhr);
                 }, this)
             });

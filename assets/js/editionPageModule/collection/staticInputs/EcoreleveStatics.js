@@ -2,44 +2,25 @@
  * Created by David on 22/12/2015.
  */
 
-define([
-    'jquery',
-    'backbone',
-    '../../../Translater',
-    'app-config'
-], function ($, Backbone, Translater, AppConfig) {
-
-    var translater = Translater.getTranslater();
-
+define([], function () {
     var EcoreleveStatics = {
+        staticInputs: {},
+        compulsoryInputs: [],
 
-        staticInputs: {
-
+        getStaticInputs: function() {
+            return EcoreleveStatics.staticInputs;
         },
 
-        compulsoryInputs: [
-
-        ],
-
-        getStaticInputs: function(form){
-            return({
-
-            });
+        getCompulsoryInputs: function() {
+            return EcoreleveStatics.compulsoryInputs;
         },
 
-        getCompulsoryInputs: function(){
-            return(EcoreleveStatics.compulsoryInputs);
-        },
-
-        applyRules: function(form, json)
-        {
-            var toret = json;
-
-            return toret;
+        applyRules: function(form, json) {
+            return json;
         },
 
         initializeStatics: function () {
-            return(true);
+            return true;
         }
     };
 

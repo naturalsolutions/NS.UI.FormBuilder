@@ -1,22 +1,15 @@
 define([
     'jquery',
     'marionette',
+    'backbone',
     '../layout/EditionPageLayout',
-    '../collection/FieldCollection',
-    'backbone.radio'
-], function($, Marionette, EditionPageLayout, FieldCollection, Radio) {
+    '../collection/FieldCollection'
+], function($, Marionette, Backbone, EditionPageLayout, FieldCollection) {
 
     /**
      * EditionPageModule controller
      */
-    var EditionPageController = Marionette.Controller.extend({
-
-
-        /**
-         * Controller constructor
-         *
-         * @param  {object} options Configuration variable
-         */
+    return Marionette.Controller.extend({
         initialize: function(options) {
             // Kepp homepage region
             this.editionPageRegion = options.editionPageRegion;
@@ -26,30 +19,7 @@ define([
 
             this.initFormChannel();
             this.getLinkedFieldsList();
-            this.getPreConfiguratedFields();
-            this.initMainChannel();
-        },
-
-        /**
-         * Init main radio channel for communicate in the editionPageModule
-         */
-        initMainChannel : function() {
-            //  The edition channel is the main channel ONLY in the editionPageModule
-            this.mainChannel = Backbone.Radio.channel('edition');
-
-            this.mainChannel.on('saveTemplate', this.saveTemplate, this);
-        },
-
-        /**
-         * Get all pre configurated field
-         */
-        getPreConfiguratedFields : function () {
-
-            /*
-            $.getJSON(this.URLOptions.preConfiguredField, _.bind(function(fieldList) {
-                this.preConfiguredFieldList = fieldList;
-            }, this))
-            */
+            Backbone.Radio.channel('edition').on('saveTemplate', this.saveTemplate, this);
         },
 
         /**
@@ -77,8 +47,6 @@ define([
             //  Event send from router when user import a form or edit a form from the grid
             //this.formChannel.on('formEdition', this.editForm, this);
 
-            this.formChannel.on('import', this.import, this);
-
             //  Event receive from a field field (see BaseView.js) when user wants to edit field properties
             this.formChannel.on('editModel', this.modelSetting, this);
 
@@ -96,13 +64,11 @@ define([
         exportFormAsFile : function(filename) {
             require(['blobjs', 'filesaver'], _.bind(function(Blob, Filesaver) {
                 try {
-
-                    var isFileSaverSupported = !!new Blob();
                     var blob = new Blob([JSON.stringify(this.fieldCollection.getJSON(), null, 2)], {
                         type: "application/json;charset=utf-8"
                     });
 
-                    var fs = new Filesaver(blob, filename + '.json');
+                    new Filesaver(blob, filename + '.json');
 
                     //  All is good
                     this.formChannel.trigger('exportFinished', true);
@@ -116,7 +82,7 @@ define([
         /**
          * Main controller action, display edition page layout
          */
-        editionAction: function(options) {
+        editionAction: function() {
             delete this.currentEditionPageLayout;
 
             // TODO Display Context
@@ -128,7 +94,6 @@ define([
             });
 
             this.editionPageRegion.show( editionPageLayout );
-
             this.currentEditionPageLayout = editionPageLayout;
         },
 
@@ -208,7 +173,7 @@ define([
                         if(editModeVal[index])
                             toret += loop;
                         loop *= 2;
-                    };
+                    }
                 }
                 return(toret);
             };
@@ -276,7 +241,4 @@ define([
             this.fieldCollection.reset();
         }
     });
-
-    return EditionPageController;
-
 });

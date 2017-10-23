@@ -5,9 +5,8 @@
 define([
     'jquery',
     'backbone',
-    '../../../Translater',
-    'app-config'
-], function ($, Backbone, Translater, AppConfig) {
+    '../../../Translater'
+], function ($, Backbone, Translater) {
 
     var translater = Translater.getTranslater();
 
@@ -21,7 +20,7 @@ define([
         </div>\
     ');
 
-    var TrackProperties = {
+    return {
 
         extraProperties: {
             all:{
@@ -49,14 +48,13 @@ define([
             }
         },
 
-        getExtraPropertiesDefaults: function(inputType, avoid){
+        getExtraPropertiesDefaults: function(inputType, avoid) {
             var toret = {};
             if (!avoid)
                 toret = this.getExtraPropertiesDefaults("all", true);
 
-            $.each(this.extraProperties, function(index, value){
-                if (index == inputType)
-                {
+            $.each(this.extraProperties, function(index, value) {
+                if (index == inputType) {
                     toret = _.extend(toret, value.defaults);
                     return(toret);
                 }
@@ -65,14 +63,13 @@ define([
             return(toret);
         },
 
-        getExtraPropertiesSchema: function(inputType, avoid){
+        getExtraPropertiesSchema: function(inputType, avoid) {
             var toret = {};
             if (!avoid)
                 toret = this.getExtraPropertiesSchema("all", true);
 
-            $.each(this.extraProperties, function(index, value){
-                if (index == inputType)
-                {
+            $.each(this.extraProperties, function(index, value) {
+                if (index == inputType) {
                     toret = _.extend(toret, value.schema);
                     return(toret);
                 }
@@ -81,8 +78,7 @@ define([
             return(toret);
         },
 
-        getHideExceptionForProperty: function(input, property)
-        {
+        getHideExceptionForProperty: function(input, property) {
             return(this.exceptions.hide[input] && this.exceptions.hide[input][property]);
         },
 
@@ -90,6 +86,4 @@ define([
             return(true);
         }
     };
-
-    return TrackProperties;
 });

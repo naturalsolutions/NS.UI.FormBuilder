@@ -8,10 +8,8 @@ define([
     '../models/fields',
     'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor) {
+    '../editor/CheckboxEditor'
+], function ($, Backbone, Fields, Radio, Translater) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\

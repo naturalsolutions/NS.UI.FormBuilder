@@ -3,30 +3,20 @@
  */
 
 define([
-    'jquery',
-    'backbone',
-    '../../models/fields',
-    'backbone.radio',
-    '../../../Translater',
-    '../../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config',
     './TrackLoader',
     './EcoreleveLoader',
     './EcollectionLoader',
     './PositionLoader'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig,
-             TrackLoader, EcoreleveLoader, EcollectionLoader, PositionLoader) {
+], function (TrackLoader, EcoreleveLoader, EcollectionLoader, PositionLoader) {
 
-    var Loaders = {"track" : TrackLoader,
-                        "ecoreleve" : EcoreleveLoader,
-                        "ecollection" : EcollectionLoader,
-                        "position" : PositionLoader};
+    var Loaders = {
+        "track" : TrackLoader,
+        "ecoreleve" : EcoreleveLoader,
+        "ecollection" : EcollectionLoader,
+        "position" : PositionLoader
+    };
 
-    var translater = Translater.getTranslater();
-
-    var ContextLoader = {
-
+    return {
         initializeLoader: function (form, URLoptions, withDataLoading) {
             this.form = form;
             this.options = URLoptions;
@@ -55,6 +45,4 @@ define([
             return loaderMode;
         }
     };
-
-    return ContextLoader;
 });

@@ -20,7 +20,7 @@ define([
     'app-config',
     './CollectionExtention',
     './staticInputs/ContextStaticInputs'
-], function ($, lodash, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention, ContextStaticInputs) {
+], function ($, _, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, CollectionExtention, ContextStaticInputs) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -181,8 +181,7 @@ define([
         },
 
         getDefaultSchema : function (){
-            var toret = lodash.cloneDeep(this.defaultSchema);
-
+            var toret = _.cloneDeep(this.defaultSchema);
             $.extend(toret, extention.getSchemaExtention(this.options));
             return (toret);
         },
@@ -278,7 +277,7 @@ define([
             this.formChannel.on('nextField', this.nextField, this);
 
             //  Next fieldset event send by subFormView
-            this.formChannel.on('nextFieldSet', this.triggeredCreateFieldsets2, this);
+            this.formChannel.on('nextFieldSet', this.triggeredCreateFieldsets, this);
 
             //  Event send by SettingFieldPanelView when a field has changed
             this.formChannel.on('field:change', this.fieldChange, this);
@@ -292,7 +291,7 @@ define([
             this.mainChannel = Backbone.Radio.channel('edition');
         },
 
-        fieldChange : function(id) {
+        fieldChange : function() {
             this.hookChannel.trigger('field:change', this, this.get('id'));
         },
 
@@ -303,7 +302,7 @@ define([
          */
         copyModel : function(modelToCloneID) {
             var originModel = this.at(modelToCloneID),
-                nameType    = originModel.constructor.type + 'Field'
+                nameType    = originModel.constructor.type + 'Field';
 
             this.addElement(nameType, _.omit(originModel.attributes, 'id'), false);
         },
@@ -489,8 +488,6 @@ define([
                 });
 
                 inputVal.editMode = getBinaryWeight(inputVal.editMode);
-                //inputVal.name = inputVal.name.replace(/\s+/g, '');
-
                 setUnexistingStuff(inputVal);
             });
 
@@ -514,14 +511,7 @@ define([
                 });
             });
 
-            json.actif = "hello !";
-            if (json.actif)
-            {
-                json.actif = true;
-                if (json.obsolete)
-                    json.actif = false;
-            }
-
+            json.actif = !json.obsolete;
             console.log("json to return", json);
             return json;
         },
@@ -534,8 +524,6 @@ define([
          * @param newElement            if field is a new element
          */
         addField : function(field, ifFieldIsInFieldset, newElement) {
-            var that = this;
-
             this.totalAddedElements++;
 
             if (this.isAValidFieldType(field.constructor.type)) {
@@ -686,7 +674,7 @@ define([
             //  Update form attribute
             this.updateCollectionAttributes(JSONUpdate);
 
-            this.triggeredCreateFieldsets2();
+            this.triggeredCreateFieldsets();
         },
 
         /**
@@ -748,47 +736,6 @@ define([
         },
 
         triggeredCreateFieldsets : function() {
-            var that = this;
-            if (that.maxfields == 0)
-                that.maxfields = that.JSONUpdate['fieldsets'].length + Object.keys(this.JSONUpdate["schema"]).length;
-            if (that.checkedfields != that.maxfields && !this.working)
-            {
-                this.working = true;
-                var ordervalue = 0;
-                var checked = false;
-
-                while (that.maxfields != that.checkedfields && ordervalue < 666){
-                    checked = false;
-                    $.each(that.JSONUpdate['fieldsets'], function(index, value){
-                        if (value['order'] == ordervalue)
-                        {
-                            that.createFieldset(value, index);
-                            that.checkedfields++;
-                            checked = true;
-                            return(false);
-                        }
-                    });
-
-                    if (!checked){
-                        $.each(that.JSONUpdate['schema'], function(index, value){
-                            if (value.order == ordervalue)
-                            {
-                                that.createField2(value, index);
-                                that.checkedfields++;
-                                checked = true;
-                                return(false);
-                            }
-                        });
-                    }
-                    ordervalue++;
-                }
-                this.formChannel.trigger('collectionUpdateFinished');
-                this.working = false;
-            }
-        },
-
-        triggeredCreateFieldsets2 : function() {
-
             var i = 0;
             var that = this;
 
@@ -854,7 +801,7 @@ define([
             }
         },
 
-        createField3 : function(fieldObj, fieldType)
+        createField : function(fieldObj, fieldType)
         {
 
             if (fieldObj.type == 'Checkboxes') {
@@ -868,135 +815,6 @@ define([
         },
 
         /**
-         * Create fieldset and sub field from JSON data
-         *
-         * @param  {Object} JSONUpdate JSON data
-         */
-        createFieldset2 : function(fieldsetObj) {
-
-            var fieldset = {
-                legend   : fieldsetObj['legend'],
-                fields   : fieldsetObj['fields'],
-                multiple : fieldsetObj['multiple'],
-                order    : fieldsetObj['order']
-            };
-
-            var subFormID = this.addElement('SubformField', fieldset, false);
-
-            $.each(this.schema, _.bind(function(index, value) {
-                if (this.schema && value && value.linkedFieldset == fieldsetObj["refid"]){
-                    value['subFormParent'] = subFormID;
-                    value['isUnderFieldset'] = true;
-                    this.createField3(value);
-                    delete this.schema[index];
-                }
-            }, this));
-        },
-
-        /**
-         * Create fieldset and sub field from JSON data
-         *
-         * @param  {Object} JSONUpdate JSON data
-         */
-        createFieldset : function(fieldsetObj, fieldsetPosition) {
-
-            var fieldset = {
-                legend   : fieldsetObj['legend'],
-                fields   : fieldsetObj['fields'],
-                multiple : fieldsetObj['multiple'],
-                order    : fieldsetObj['order']
-            };
-
-            var subFormID = this.addElement('SubformField', fieldset, false);
-
-            $.each(fieldset['fields'], _.bind(function(index, value) {
-                var fieldObj = this.JSONUpdate['schema'][index];
-                fieldObj['subFormParent'] = subFormID;
-                fieldObj['isUnderFieldset'] = true;
-                this.createField(value, index);
-            }, this));
-
-            this.JSONUpdate['fieldsets'].splice(fieldsetPosition, 1);
-        },
-
-
-        createField2 : function(fieldObj, fieldPosition)
-        {
-            this.schema = [];
-
-            if (fieldObj.type == 'Checkboxes') {
-                fieldObj.type = 'CheckBox';
-            }
-
-            this.schema.push(fieldObj);
-
-            var fieldToAdd = this.schema[0];
-
-            if (this.isAValidFieldType(fieldToAdd.type)) {
-                this.addField(this.createFieldWithJSON(fieldToAdd), fieldToAdd['isUnderFieldset']);
-                var that = this;
-                setTimeout(function(){that.nextFieldNew();}, 10);
-            }
-
-            this.schema.shift();
-
-            delete this.JSONUpdate["schema"][fieldPosition];
-        },
-
-
-        createField : function(fieldObj, fieldPosition)
-        {
-            if (fieldObj.type == 'Checkboxes') {
-                fieldObj.type = 'CheckBox';
-            }
-
-            if (this.isAValidFieldType(fieldObj.type)) {
-                this.addField(this.createFieldWithJSON(fieldObj), fieldObj['isUnderFieldset']);
-                var that = this;
-                setTimeout(function(){that.nextFieldNew();}, 10);
-            }
-
-            delete this.JSONUpdate["schema"][fieldPosition];
-        },
-
-
-        /**
-         * Create all field from JSON schema
-         *
-         * @param  {Object} JSONUpdate JSON data
-         */
-        createFieldFromSchema : function(JSONUpdate) {
-
-            this.schema = [];
-
-            //  Convert current schema object in array
-            //  We need to convert it in array for sort it by field order
-            _.each(JSONUpdate["schema"], _.bind(function(element, index) {
-                if (element.type == 'Checkboxes') {
-                    element.type = 'CheckBox';
-                }
-                this.schema.push(element);
-            }, this));
-
-            this.schema = _.sortBy(this.schema, function(el) {
-                return el.order;
-            });
-
-            //  When we add the field on the collection, the form panel listen the event and get the adapted view with requireJS
-            //  According to the view weight, the views can be created in a wrong order
-            //
-            //  E.G : we have a text field and a long text, the text in first and the long at the end
-            //  If the requireJS request is too long the Long text could be created before the text
-            //
-            //  So i create a minimal queue with backbone event
-            //  When the view is rendered the formPanelView send an event to the collection "Ok next field" and we add the next field in the collection
-
-            this.nextField();
-
-            //  Now we wait the formPanelview next event
-        },
-
-        /**
          * Add the next field on the collection
          */
         nextFieldNew : function() {
@@ -1006,13 +824,9 @@ define([
                 if (globalloop > 100)
                     return;
                 if (that.schema != undefined && that.schema.length > 0) {
-
                     var firstFieldToAdd = that.schema[0];
-
                     that.schema.shift();
-
-                    that.createField3(firstFieldToAdd);
-
+                    that.createField(firstFieldToAdd);
                 }
                 else {
                     that.formChannel.trigger('collectionUpdateFinished');
@@ -1029,7 +843,6 @@ define([
 
                 var firstFieldToAdd = this.schema[0];
 
-                var copyof = this.schema;
                 if (this.isAValidFieldType(firstFieldToAdd.type)) {
                     this.addField( this.createFieldWithJSON(firstFieldToAdd), firstFieldToAdd['isUnderFieldset']);
                     var that = this;
@@ -1044,12 +857,9 @@ define([
 
         /**
          * Return collection attributes values
-         * @return [Object} attributes values
          */
         getAttributesValues : function() {
-            var result = _.pick(this, _.keys(this.schemaDefinition));
-
-            return result;
+            return _.pick(this, _.keys(this.schemaDefinition));
         },
 
         /**
@@ -1060,7 +870,7 @@ define([
         getFieldList : function(modelID) {
             var fieldsList = [];
 
-            _.each(this.models, function(el, idx) {
+            _.each(this.models, function(el) {
                 if (el.constructor.type != undefined && el.get('id') != modelID) {
                     fieldsList.push(el.get('name'))
                 }
@@ -1199,7 +1009,7 @@ define([
 
                                 displaySaveSuccess();
                             }, that),
-                            error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                            error: _.bind(function (xhr) {
                                 if (xhr.status == 418)
                                 {
                                     if (xhr.responseText.indexOf("ERR:NAME") !== -1)

@@ -18,33 +18,19 @@ define([
 ], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig,
              EcollectionCollection, EcoreleveCollection, TrackCollection, PositionCollection) {
 
-    var Extentions = {"track" : TrackCollection,
-                        "ecoreleve" : EcoreleveCollection,
-                        "ecollection" : EcollectionCollection,
-                        "position" : PositionCollection};
-
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
-    var translater = Translater.getTranslater();
+    var Extentions = {
+        "track" : TrackCollection,
+        "ecoreleve" : EcoreleveCollection,
+        "ecollection" : EcollectionCollection,
+        "position" : PositionCollection
+    };
 
     var CollectionExtention = {
         started: false,
 
-        schemaExtention: {
+        schemaExtention: {},
 
-        },
-
-        propertiesDefaultValues : {
-
-        },
+        propertiesDefaultValues : {},
 
         rulesList : function() {
             return({});
@@ -54,7 +40,7 @@ define([
             return({});
         },
 
-        getSchemaExtention: function(options){
+        getSchemaExtention: function(){
             return({});
         },
 
@@ -74,20 +60,12 @@ define([
             }
         },
 
-        jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
-
-            }
+        jsonExtention: function () {
             return(this.propertiesDefaultValues);
         },
 
         updateAttributesExtention: function () {
             return(true);
-        },
-
-        setRulesExtention: function(){
-
         },
 
         getModeExtention : function (currentContext) {

@@ -129,8 +129,8 @@ define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../.
             };
 
             swal({
-                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                text               : translater.getValueFromKey('modal.clear.textinput') || "Le champ sera définitivement perdu !",
+                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sÃ»r ?",
+                text               : translater.getValueFromKey('modal.clear.textinput') || "Le champ sera dÃ©finitivement perdu !",
                 type               : "warning",
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
@@ -145,8 +145,8 @@ define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../.
                 if (isConfirm) {
                     setTimeout(function () {
                         swal({
-                            title: translater.getValueFromKey('modal.clear.title2') || "Etes vous VRAIMENT sûr ?",
-                            text: (translater.getValueFromKey('modal.clear.textinput2') || "Le champ sera définitivement perdu !") +
+                            title: translater.getValueFromKey('modal.clear.title2') || "Etes vous VRAIMENT sÃ»r ?",
+                            text: (translater.getValueFromKey('modal.clear.textinput2') || "Le champ sera dÃ©finitivement perdu !") +
                             getLoadedFieldWeight(),
                             type: "warning",
                             showCancelButton: true,
@@ -210,13 +210,6 @@ define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../.
         enableActions : function() {
             // REMOVED FOR NOW this.$el.find('.actions').removeClass('locked');
             this.$el.find('.element').removeClass('selected');
-        },
-
-        /**
-         * Disable action when edition panel is displayed (form or field)
-         */
-        disableActions : function() {
-            // REMOVED FOR NOW this.$el.find('.actions').addClass('locked');
         },
 
         /**

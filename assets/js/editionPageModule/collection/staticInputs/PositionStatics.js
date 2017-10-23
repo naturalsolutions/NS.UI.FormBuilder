@@ -2,42 +2,25 @@
  * Created by David on 22/12/2015.
  */
 
-define([
-    'jquery',
-    'backbone',
-    '../../../Translater',
-    'app-config'
-], function ($, Backbone, Translater, AppConfig) {
-
-    var translater = Translater.getTranslater();
-
+define([], function () {
     var PositionStatics = {
+        staticInputs: {},
+        compulsoryInputs: [],
 
-        staticInputs: {
-
+        getStaticInputs: function() {
+            return PositionStatics.staticInputs;
         },
 
-        compulsoryInputs: [
-
-        ],
-
-        getStaticInputs: function(form){
-            return(PositionStatics.staticInputs);
+        getCompulsoryInputs: function() {
+            return PositionStatics.compulsoryInputs;
         },
 
-        getCompulsoryInputs: function(){
-            return(PositionStatics.compulsoryInputs);
-        },
-
-        applyRules: function(form, json)
-        {
-            var toret = json;
-
-            return toret;
+        applyRules: function(form, json) {
+            return json;
         },
 
         initializeStatics: function () {
-            return(true);
+            return true;
         }
     };
 

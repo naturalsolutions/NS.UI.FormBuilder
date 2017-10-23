@@ -160,7 +160,7 @@ define([
             if (this.hasFieldsChanged){
                 swal({
                     title: this.translater.getValueFromKey('configuration.cancel.yousure') || "Vraiment ?",
-                    text: this.translater.getValueFromKey('configuration.cancel.unsavedchanges') || "Vous avez effectué de changements !",
+                    text: this.translater.getValueFromKey('configuration.cancel.unsavedchanges') || "Vous avez effectuÃ© des changements !",
                     type: "warning",
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
@@ -213,9 +213,6 @@ define([
                     callbackSuccess();
                     $('.removeFileAssoc').remove();
                 }
-
-                //this.removeForm();
-                //return (true);
             } else {
 
                 this.$el.find('.scroll').scrollTop(0);
@@ -234,15 +231,13 @@ define([
                 }
                 swal({
                     title:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Erreur",
-                    text:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Champ obligatoire non renseigné",
+                    text:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Champ obligatoire non renseignÃ©",
                     type:"error",
                     closeOnConfirm: true
                 }, function(){
                     window.onkeydown = null;
                     window.onfocus = null;
                 });
-
-                //return (false);
             }
         },
 
@@ -269,8 +264,8 @@ define([
                 case "propagate":
                     if (checkboxIsSelected){
                         swal({
-                            title: this.translater.getValueFromKey('modal.editionField.fieldEditAlert') || "Alerte d'édition de champ",
-                            text: this.translater.getValueFromKey('modal.editionField.propagationactivated') || "Attention, vérifie ta conf de propagation !",
+                            title: this.translater.getValueFromKey('modal.editionField.fieldEditAlert') || "Alerte d'Ã©dition de champ",
+                            text: this.translater.getValueFromKey('modal.editionField.propagationactivated') || "Attention, vÃ©rifie ta conf de propagation !",
                             type: "info",
                             closeOnConfirm: true
                         }, function(){

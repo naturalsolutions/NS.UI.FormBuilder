@@ -4,14 +4,8 @@
 
 define([
     'jquery',
-    'backbone',
-    '../models/fields',
-    'backbone.radio',
-    '../../Translater',
-    '../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor) {
+    '../../Translater'
+], function ($, Translater) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -25,10 +19,8 @@ define([
 
     var translater = Translater.getTranslater();
 
-    var TrackExtention = {
-
+    return {
         extensionData: null,
-
         schemaExtention: {
             activite : {
                 type        : "Select",
@@ -140,24 +132,6 @@ define([
             importapressortie : ""
         },
 
-        txtUnder255: function(value){
-            if (value.length > 255) {
-                return {
-                    type : 'String too wide',
-                    message : translater.getValueFromKey('schema.maxlength255')
-                }
-            }
-        },
-
-        txtUnder55: function(value){
-            if (value.length > 50) {
-                return {
-                    type : 'String too wide',
-                    message : translater.getValueFromKey('schema.maxlength55')
-                }
-            }
-        },
-
         rulesList : function() {
             return({});
         },
@@ -185,11 +159,7 @@ define([
             this.getTrackDatas(options);
         },
 
-        jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
-
-            }
+        jsonExtention: function () {
             return(this.propertiesDefaultValues);
         },
 
@@ -204,12 +174,6 @@ define([
                 $.each(valuesArray, function(index, value){
                     valuesArray[index] = {label: value, val: value};
                 });
-
-                /* IGNORES NULL VALUES
-                if (valuesArray[valuesArray.length - 1].val == "null")
-                    valuesArray.pop();
-                    */
-
                 return(valuesArray);
             };
 
@@ -241,7 +205,7 @@ define([
                     success: _.bind(function (data) {
                         that.extensionData = that.setSelectValues(data, that.schemaExtention);
                     }, this),
-                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    error: _.bind(function (xhr) {
                         console.log("error ! " + xhr);
                     }, this)
                 });
@@ -250,6 +214,4 @@ define([
             return this.extensionData;
         }
     };
-
-    return TrackExtention;
 });

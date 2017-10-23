@@ -15,27 +15,6 @@ define([
 
     var models = {}, translater = Translater.getTranslater();
 
-    var Node = Backbone.Model.extend({
-        schema: {
-            title: {
-                type  : "Text",
-                title : translater.getValueFromKey('schema.title')
-            },
-            key: {
-                type  : 'Number',
-                title : translater.getValueFromKey('schema.key')
-            },
-            folder: {
-                type        : CheckboxEditor,
-                fieldClass : "checkBoxEditor",
-                title : translater.getValueFromKey('schema.readonly')
-            }
-        },
-
-        initialize: function(options) {
-        }
-    });
-
     var getFormsList = function(context){
         //TODO CHANGE THIS CRAP, LOAD FORMSLIST ON FORM LOADING AND NOT ON FIELD SETTINGS PANEL OPENING
         if (this.getFormsListResult && context.collection.name == this.savedCollectionName)
@@ -1624,7 +1603,6 @@ define([
         i18n   : 'radio',
         section : 'list'
     });
-
 
     //  ----------------------------------------------------
     //  Other Fields (might be deprecated)

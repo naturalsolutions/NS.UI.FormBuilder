@@ -5,19 +5,14 @@ define([
     '../views/WidgetPanelView',
     '../views/SettingFieldPanelView',
     '../views/SettingFormPanelView',
-    'backbone.radio',
-    '../../Translater',
-    'sweetalert'
-], function(Marionette, EditionPageLayoutTemplate, FormPanelView, WidgetPanelView, SettingFieldPanelView,
-            SettingFormPanelView, Radio, Translater, swal ) {
-
-    var translater = Translater.getTranslater();
+], function(Marionette, EditionPageLayoutTemplate,
+            FormPanelView, WidgetPanelView, SettingFieldPanelView, SettingFormPanelView) {
 
     /**
      * Main layout manages views in editionPageModule
      * contains widgetPanelView, FormPanelView and settingPanelView
      */
-    var EditionPageLayout =  Backbone.Marionette.LayoutView.extend({
+    return Backbone.Marionette.LayoutView.extend({
 
 
         /**
@@ -182,19 +177,6 @@ define([
             this.settingFormPanel = this.getRegion('settingFormPanel');
         },
 
-
-        /**
-         * Show the setting view
-         */
-        displaySettingPanel : function() {
-            if ($('#widgetPanel').hasClass('col-md-1')) {
-                //$('#formPanel').switchClass('col-md-8 col-md-offset-3', 'col-md-6 col-md-offset-6', 500);
-            } else {
-                //$('#formPanel').switchClass('col-md-6 col-md-offset-6', 'col-md-6 col-md-offset-6', 500);
-            }
-        },
-
-
         /**
          * Render callbacks
          * Display ItemView like settingPanel
@@ -223,42 +205,12 @@ define([
         },
 
         /**
-         * Animate widget panel to put it in small size
-         */
-        minimizeWidgetPanel : function() {
-            /*
-            $('#formPanel').switchClass('col-md-8', 'col-md-11', 300);
-            $('#widgetPanel').switchClass('col-md-4', 'col-md-1', 300);
-            $('#widgetPanel #features').fadeOut(200);
-            $('#widgetPanel #smallFeatures').fadeIn(200);
-            $('#toggle').switchClass('open', 'closed');
-            */
-        },
-
-
-        /**
-        * Animate widget panel to put it in large size
-         */
-        maximizeWidgetPanel : function() {
-            /*
-            $('#formPanel').switchClass('col-md-11', 'col-md-8', 300);
-            $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 300, function() {
-                $('#widgetPanel #features').fadeIn(200);
-                $('#widgetPanel #smallFeatures').fadeOut(200);
-                $('#toggle').switchClass('closed', 'open');
-            });
-            */
-        },
-
-
-        /**
         * Close setting panel
         */
         closeSettingPanel : function() {
             if ($('#widgetPanel').hasClass('col-md-1')) {
                 $('#formPanel').switchClass('col-md-6', 'col-md-8', 500);
             } else {
-                //$('#formPanel').switchClass('col-md-6 col-md-offset-6', 'col-md-6 col-md-offset-6', 500);
                 $('#widgetPanel').animate({
                     marginRight : 0
                 }, 500, _.bind(function() {
@@ -276,22 +228,15 @@ define([
         /**
          * Callback launch when setting panel needs to be closed
          */
-        closeSettingPanelDefault : function(form) {
-
-            if (form)
-            {
-
-            }
+        closeSettingPanelDefault : function() {
             this.closeSettingPanel();
         },
 
         closeSettingPanelAndSuccess : function(form) {
-
             this.closeSettingPanelDefault(form);
         },
 
         closeSettingPanelAndCommit : function(form) {
-
             this.closeSettingPanelDefault(form);
         },
 
@@ -303,7 +248,4 @@ define([
             this.savedTemplateList = undefined;
         }
     });
-
-    return EditionPageLayout;
-
 });

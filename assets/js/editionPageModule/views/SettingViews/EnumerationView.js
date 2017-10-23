@@ -2,7 +2,7 @@ define([
     'jquery',
     'marionette',
     'text!../../templates/settingViews/EnumerationViewTemplate.html',
-    'backgrid',
+    'backgrid'
 ], function ($, Marionette, EnumerationViewTemplate, Backgrid) {
 
     /**
@@ -21,10 +21,6 @@ define([
             en: 'English label',
             value: 'val'
         },
-
-        /*initialize : function(options) {
-         this.set(options)
-         },*/
 
         /**
          * Return a choice as a JSON object
@@ -47,24 +43,10 @@ define([
      * Simple to collection for backgrid that stocks all choices of a list
      */
     var Choices = Backbone.Collection.extend({
-
         /**
          * Model of the collection
          */
-        model: Choice,
-
-        /**
-         * Check in the collection if almost one member is a default value
-         *
-         * @returns {boolean} if one attribute has a default value
-         */
-        hasADefaultValue: function () {
-            var modelWithDefaultValue = this.filter(function (model) {
-                return model.get("isDefaultValue");
-            });
-
-            return modelWithDefaultValue.length > 0;
-        }
+        model: Choice
     });
 
     /**

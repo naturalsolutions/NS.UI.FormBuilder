@@ -3,53 +3,37 @@
  */
 
 define([
-    'jquery',
-    'backbone',
-    '../../../Translater',
-    'app-config',
     './TrackStatics',
     './EcoreleveStatics',
     './EcollectionStatics',
     './PositionStatics'
-], function ($, Backbone, Translater, AppConfig,
-             TrackStatics, EcoreleveStatics, EcollectionStatics, PositionStatics) {
+], function (TrackStatics, EcoreleveStatics, EcollectionStatics, PositionStatics) {
 
-    var staticInputs = {"track" : TrackStatics,
-                        "ecoreleve" : EcoreleveStatics,
-                        "ecollection" : EcollectionStatics,
-                        "postiion" : PositionStatics};
-
-    var translater = Translater.getTranslater();
+    var staticInputs = {
+        "track" : TrackStatics,
+        "ecoreleve" : EcoreleveStatics,
+        "ecollection" : EcollectionStatics,
+        "postiion" : PositionStatics
+    };
 
     var ContextStaticInputs = {
+        staticInputs: {},
+        compulsoryInputs: [],
 
-        staticInputs: {
-
+        getStaticInputs: function(){
+            return {};
         },
 
-        compulsoryInputs: [
-
-        ],
-
-        getStaticInputs: function(form){
-            return({
-            });
+        getCompulsoryInputs: function() {
+            return {};
         },
 
-        getCompulsoryInputs: function(){
-            return({
-            });
-        },
-
-        applyRules: function(form, json)
-        {
-            var toret = json;
-
-            return toret;
+        applyRules: function(form, json) {
+            return json;
         },
 
         initializeStatics: function () {
-            return(true);
+            return true;
         },
 
         getStaticMode : function (currentContext) {

@@ -6,12 +6,10 @@ define([
     'jquery',
     'backbone',
     '../../../Translater',
-    '../../editor/CheckboxEditor',
-    'app-config'
-], function ($, Backbone, Translater, CheckboxEditor, AppConfig) {
+    '../../editor/CheckboxEditor'
+], function ($, Backbone, Translater, CheckboxEditor) {
 
     var translater = Translater.getTranslater();
-
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
             <label class="control-label" for="<%= editorId %>"><%= title %></label>\
@@ -22,8 +20,7 @@ define([
         </div>\
     ');
 
-    var EcoreleveProperties = {
-
+    return {
         extraProperties: {
             ChildForm:{
                 defaults: {
@@ -39,7 +36,7 @@ define([
                             if (value < 0) {
                                 return {
                                     type : 'Invalid number',
-                                    message : translater.getValueFromKey('schema.minValueError') || "La valeur ne peut pas être inférieure à 0"
+                                    message : translater.getValueFromKey('schema.minValueError') || "La valeur ne peut pas Ãªtre infÃ©rieure Ã  0"
                                 }
                             }
                         }],
@@ -100,9 +97,7 @@ define([
         },
 
         exceptions: {
-            hide: {
-
-            }
+            hide: {}
         },
 
         getExtraPropertiesDefaults: function(inputType, avoid){
@@ -114,11 +109,11 @@ define([
                 if (index == inputType)
                 {
                     toret = _.extend(toret, value.defaults);
-                    return(toret);
+                    return toret;
                 }
             });
 
-            return(toret);
+            return toret;
         },
 
         getExtraPropertiesSchema: function(inputType, avoid){
@@ -130,22 +125,19 @@ define([
                 if (index == inputType)
                 {
                     toret = _.extend(toret, value.schema);
-                    return(toret);
+                    return toret;
                 }
             });
 
-            return(toret);
+            return toret;
         },
 
-        getHideExceptionForProperty: function(input, property)
-        {
-            return(this.exceptions.hide[input] && this.exceptions.hide[input][property]);
+        getHideExceptionForProperty: function(input, property) {
+            return this.exceptions.hide[input] && this.exceptions.hide[input][property];
         },
 
         initializeStatics: function () {
-            return(true);
+            return true;
         }
     };
-
-    return EcoreleveProperties;
 });

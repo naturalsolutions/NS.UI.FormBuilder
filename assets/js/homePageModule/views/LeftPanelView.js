@@ -169,20 +169,6 @@ define([
                     }, this)
                 });
             }, this));
-
-            if (AppConfig.displayUserFilter) {
-                $.getJSON(this.URLOptions.usersAutocomplete, _.bind(function(data) {
-                    this.$el.find('#user').autocomplete({
-                        minLength: 2,
-                        source : data.options,
-                        appendTo : '#leftPanel form #user-group',
-                        open : _.bind(function(event, ui) {
-                            var inputWidth = this.$el.find('#name-group input').css('width');
-                            $('.form-group ul, .form-group li').css('width', inputWidth);
-                        }, this)
-                    });
-                }, this));
-            }
         },
 
         /**

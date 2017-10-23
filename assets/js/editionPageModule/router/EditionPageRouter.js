@@ -1,9 +1,5 @@
-define([
-    'marionette',
-    'backbone.radio'
-], function(Marionette, Radio) {
-
-    var EditionePageRouter = Backbone.Marionette.AppRouter.extend({
+define(["jquery", "backbone"], function($, Backbone) {
+    return Backbone.Marionette.AppRouter.extend({
 
         appRoutes: {
             "edition" : "editionAction"
@@ -73,9 +69,5 @@ define([
                 Backbone.Radio.channel('grid').trigger('refresh');
             }
         }
-
     });
-
-    return EditionePageRouter;
-
 });

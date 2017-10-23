@@ -109,7 +109,7 @@ define([
                         data = JSON.parse(data);
                         that.collection.tracktypes = data.types;
                     }, this),
-                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    error: _.bind(function (xhr) {
                         console.log("Ajax Error: " + xhr);
                     }, this)
                 });
@@ -125,14 +125,14 @@ define([
                     data = JSON.parse(data);
                     that.collection.contextInputNames = data;
                 }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                error: _.bind(function (xhr) {
                     console.log("Ajax Error: " + xhr);
                 }, this)
             });
 
             //  Bind collection events
-            this.collection.bind('add', this.addElement, this);         //  new element added on the collection
-            this.collection.bind('remove', this.removeElement, this);   //  element removed from the collection
+            this.collection.bind('add', this.addElement, this);
+            this.collection.bind('remove', this.removeElement, this);
 
             _.bindAll(this, 'template', 'save');
 
@@ -184,20 +184,20 @@ define([
 
             //  This event is send from the router with the ajax request result
             //  And we display message with sweet alert
-            this.formChannel.on('save:success',      this.displaySucessMessage);
-            this.formChannel.on('save:fail',      this.displayFailMessage);
-            this.formChannel.on('save:formIncomplete',      this.displayIncompleteFormMessage);
-            this.formChannel.on('save:fieldIncomplete',      this.displayIncompleteFieldMessage);
-            this.formChannel.on('save:hasDuplicateFieldNames',      this.displayHasDuplicateFieldNames);
+            this.formChannel.on('save:success', this.displaySucessMessage, this);
+            this.formChannel.on('save:fail', this.displayFailMessage);
+            this.formChannel.on('save:formIncomplete', this.displayIncompleteFormMessage);
+            this.formChannel.on('save:fieldIncomplete', this.displayIncompleteFieldMessage);
+            this.formChannel.on('save:hasDuplicateFieldNames', this.displayHasDuplicateFieldNames);
 
-            this.formChannel.on('template:success',      this.displaytemplateMessage);
-            this.formChannel.on('template:fail',      this.displayFailtemplatee);
+            this.formChannel.on('template:success', this.displaytemplateMessage);
+            this.formChannel.on('template:fail', this.displayFailtemplatee);
 
             //  Event send from Formbuilder.js when export is finished (success or not)
-            this.formChannel.on('exportFinished',   this.displayExportMessage, this);
+            this.formChannel.on('exportFinished', this.displayExportMessage, this);
 
             //  Disable footer actions when user wants to edit a field
-            this.formChannel.on('editModel',   this.disableFooterAndClearField, this);
+            this.formChannel.on('editModel', this.disableFooterAndClearField, this);
 
             //  Event send by fieldCollection when the update is done
             this.formChannel.on('collectionUpdateFinished', this.collectionUpdateFinished, this);
@@ -240,8 +240,6 @@ define([
          * Update form fields count when an element was removed
          */
         removeElement : function() {
-            //this._viewCount--;
-
             this.updateFieldCount();
         },
 
@@ -304,7 +302,6 @@ define([
 
             }
 
-            this._viewCount++;
             this.updateFieldCount();
         },
 
@@ -329,7 +326,7 @@ define([
         /**
          * Rendering callback
          */
-        onRender : function(options) {
+        onRender : function() {
 
             this.updateName();
             //  By default marionette wrap template with a div
@@ -346,7 +343,7 @@ define([
                 handle : '.paddingBottom5',
                 cursor: "move",
 
-                update : _.bind(function( event, ui ) {
+                update : _.bind(function() {
                     for (var v in this._view) {
                         this._view[v].updateIndex( $('#' + v).index());
                     }
@@ -409,49 +406,7 @@ define([
          * Trigger an event for the router on the form channel
          */
         save : function() {
-            //TODO find a better way ... collection save is send inside a callback
-            //this.checkRules();
-
-            this.saveCollection();
-        },
-
-        checkRules : function(callbackAfterRulesCheck) {
-
-            require(['app-config'], _.bind(function(appConfig) {
-
-                var ruleResult  = true;
-
-                _.each(appConfig.rules, _.bind(function(rule) {
-
-                    ruleResult = rule.execute(this.collection.toJSON());
-
-                    if (!ruleResult) {
-                        this.displayRuleMessage(rule.error);
-                        ruleResult = false;
-                    }
-
-                }, this));
-
-                if (!ruleResult){
-                    return false;
-                }
-
-                this.saveCollection();
-
-            }, this));
-
-        },
-
-        saveCollection : function() {
             this.collection.save();
-        },
-
-        displayRuleMessage : function(error) {
-            swal({title:error.title, text:error.content, type:"error",
-                closeOnConfirm: true}, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
         },
 
         /**
@@ -487,7 +442,6 @@ define([
                     });
 
                     self.collection.clearAll();
-                    self._viewCount = 0;
                     self.updateFieldCount();
 
                     window.formbuilder.formedited = true;
@@ -622,37 +576,18 @@ define([
         },
 
         /**
-         * Hide footer actions
-         */
-        disableFooterActions : function() {
-            //this.$el.find('footer button:not(#exit)').hide();
-        },
-
-        /**
          * Disable current selected field
          */
         clearSelectedFied : function(modelToKeepSelect) {
             var modelToKeepSelectedID = '#dropField' + modelToKeepSelect;
-
-            //this.$el.find('.dropField').not(modelToKeepSelectedID).css('background', 'red');
-
             this.$el.find('.dropField').not(modelToKeepSelectedID).find('.element').removeClass('selected');
-            // REMOVED FOR NOW this.$el.find('.dropField').not(modelToKeepSelectedID).find('.actions').removeClass('locked');
         },
 
         /**
          *
          */
         disableFooterAndClearField : function(modelToEditID) {
-            this.disableFooterActionsAndExit();
             this.clearSelectedFied(modelToEditID);
-        },
-
-        /**
-         * Hide all footer action
-         */
-        disableFooterActionsAndExit : function() {
-            //this.$el.find('footer button').hide();
         },
 
         /**
@@ -699,7 +634,6 @@ define([
             Fields.getFormsListResult = undefined;
             this.collection.reset();
             this.formChannel.trigger('exit', this.dataUpdated);
-            this._viewCount = 0;
         },
 
         /**
@@ -724,8 +658,6 @@ define([
             this.updateName();
             this.formSettings();
         },
-
-
 
         displaytemplateMessage : function() {
             swal({
