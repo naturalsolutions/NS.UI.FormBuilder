@@ -64,11 +64,14 @@ define([
             this.options.controller.import(this.formAsJSON);
         },
 
-        exit : function() {
+        exit : function(dataUpdated) {
             this.formChannel.trigger('exitingFormEditing');
             this.navigate('#');
             this.globalChannel.trigger('displayHomePage');
-            Backbone.Radio.channel('grid').trigger('resetCollection');
+
+            if (dataUpdated) {
+                Backbone.Radio.channel('grid').trigger('refresh');
+            }
         }
 
     });

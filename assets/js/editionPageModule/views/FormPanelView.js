@@ -532,6 +532,7 @@ define([
          * Display a message when the form has been saved
          */
         displaySucessMessage : function() {
+            this.dataUpdated = true;
             swal({
                 title: translater.getValueFromKey('modal.save.success') || "Sauvé !",
                 text: translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
@@ -697,7 +698,7 @@ define([
         clearFormAndExit : function() {
             Fields.getFormsListResult = undefined;
             this.collection.reset();
-            this.formChannel.trigger('exit');
+            this.formChannel.trigger('exit', this.dataUpdated);
             this._viewCount = 0;
         },
 

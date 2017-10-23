@@ -28,6 +28,7 @@ define([
         initialize : function(options, readonly) {
             this.gridChannel = Backbone.Radio.channel('grid');
             this.gridChannel.on('contextChanged', this.setCustomSearchInputs, this);
+            this.gridChannel.on('refresh', this.runSearch, this);
             this.URLOptions = options.URLOptions;
         },
 
