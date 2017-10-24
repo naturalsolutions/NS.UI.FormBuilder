@@ -137,10 +137,16 @@ define([
          * Enable autocomplete with jquery ui on search form field
          */
         enableAutocomplete : function() {
+            // todo auto-complete should take into consideration current context, which is not the case and is misleading
+            // ideally it would use data already available in grid, instead of querying the back-end.
+            // keywords auto-completion also needs proper implementation (right now it points to a static json) -
+            // same idea it can use data available from unfiltered query.
 
-            //  Enable autocomplete for form name search
+            // disabled for now
+            return;
+
             $.getJSON(this.URLOptions.formAutocomplete, _.bind(function(data) {
-                this.$el.find('#name').autocomplete({
+                this.$el.find('#search').autocomplete({
                     minLength: 2,
                     source : data.options,
                     appendTo : '#leftPanel form #name-group',
