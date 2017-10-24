@@ -14,7 +14,7 @@ define([
 
     var AppConfiguration = {
         readonlyMode : false,								// Defines whether the app has to be displayed in Read Only mode or not
-        displayUserFilter : false,        					// Defines whether you display the User filter on the main page or not
+        displayUserFilter : false,        					// (not implemented) Defines whether you display the User filter on the main page or not
 		authmode : 'classic',								// Authentication mode (portal or anything)
 		portalURL : 'http://localhost/nsportal/front/',		// Portal local URL
 		securityKey : '',									// JWT security secret word key

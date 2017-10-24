@@ -1,9 +1,7 @@
 define([
     'jquery', 'marionette', '../../editionPageModule/collection/CollectionExtention',
-    'text!../templates/LeftPanelView.html', 'text!../templates/LeftPanelViewNoUserNoTags.html',
-    'app-config', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
-], function($, Marionette, CollectionExtention, LeftPanelViewTemplate,
-            LeftPanelViewTemplateNoUser, AppConfig) {
+    'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
+], function($, Marionette, CollectionExtention, LeftPanelViewTemplate) {
 
     /**
      * Left panel view in the homepage layout, contains form to filter grid on the center view
@@ -28,8 +26,6 @@ define([
          * View constructor, init grid channel
          */
         initialize : function(options, readonly) {
-            if (!AppConfig.displayUserFilter)
-                this.template = LeftPanelViewTemplateNoUser;
             this.gridChannel = Backbone.Radio.channel('grid');
             this.gridChannel.on('contextChanged', this.setCustomSearchInputs, this);
             this.URLOptions = options.URLOptions;
