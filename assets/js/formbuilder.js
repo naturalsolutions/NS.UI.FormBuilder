@@ -177,25 +177,26 @@ define([
 
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
-        if (AppConfig.authmode == 'portal')
-        {
-            if (auth.error) {
-                swal({
-                    title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
-                    text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
-                    type: "error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.location.href = AppConfig.portalURL;
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
-                return;
-            }
+        if (auth.error) {
+            swal({
+                title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
+                text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
+                type: "error",
+                closeOnConfirm: true
+            }, function(){
+                window.location.href = AppConfig.portalURL;
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
+            return;
+        }
 
+        if (auth.username) {
             window.user = auth.username;
             $("header .user").text(auth.username);
             $("header .icons.last").removeClass("hidden");
+        }
+        if (auth.userlanguage) {
             $("header .lang").text(auth.userlanguage.toUpperCase());
         }
 
