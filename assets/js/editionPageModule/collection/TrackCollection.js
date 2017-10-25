@@ -237,7 +237,7 @@ define([
                     url: options.URLOptions.track + "/getData",
                     contentType: 'application/json',
                     crossDomain: true,
-                    async: false,
+                    async: true,
                     success: _.bind(function (data) {
                         that.extensionData = that.setSelectValues(data, that.schemaExtention);
                     }, this),
