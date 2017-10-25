@@ -2,44 +2,9 @@
  * Created by David on 22/12/2015.
  */
 
-define([
-    'jquery',
-    'backbone',
-    '../../../Translater'
-], function ($, Backbone, Translater) {
-
-    var translater = Translater.getTranslater();
-
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
+define(['jquery'], function ($) {
     return {
-
-        extraProperties: {
-            all:{
-                defaults: {
-                    trackType: ""
-                },
-                schema: {
-                    trackType: {
-                        type        : 'Select',
-                        editorClass : 'form-control',
-                        template    : fieldTemplate,
-                        title       : translater.getValueFromKey('schema.trackType'),
-                        options     : [],
-                        after       : "name"
-                    }
-                }
-            }
-        },
-
+        extraProperties: {},
         exceptions: {
             hide: {
                 AutocompleteField : {

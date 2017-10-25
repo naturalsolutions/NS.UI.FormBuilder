@@ -66,24 +66,6 @@ define([
             this.URLOptions = options.URLOptions;
 
             var that = this;
-            if (this.context == "track")
-            {
-                $.ajax({
-                    data: {},
-                    type: 'GET',
-                    url:  this.URLOptions.trackTypes + "/" + "fr",
-                    contentType: 'application/json',
-                    crossDomain: true,
-                    success: _.bind(function (data) {
-                        data = JSON.parse(data);
-                        that.collection.tracktypes = data.types;
-                    }, this),
-                    error: _.bind(function (xhr) {
-                        console.log("Ajax Error: " + xhr);
-                    }, this)
-                });
-            }
-
             $.ajax({
                 data: {},
                 type: 'GET',

@@ -88,7 +88,6 @@ define([
 					
 					security				: '/FormbuilderWS/Security',						// Used for security chekings purpose (jwt among others ?)
                     track					: '/FormbuilderWS/Track',							// Used for track data linking
-                    trackTypes				: '/FormbuilderWS/TrackTypes',						// Used to get track types (THIS PATH SHOULD BE TEMPORARY)
                     trackFormWeight			: '/FormbuilderWS/Track/FormWeight',				// Used to get forms weight from track records
                     trackInputWeight		: '/FormbuilderWS/Track/InputWeight',				// Used to get input weight from track records
 

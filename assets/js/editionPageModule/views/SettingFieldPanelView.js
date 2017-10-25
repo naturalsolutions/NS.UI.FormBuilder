@@ -174,8 +174,6 @@ define([
             //  Init linked field
 
             this.initFormLinkedFields();
-            this.initExtraPropertiesValues();
-
             ContextLoader.initializeLoader(this.form, this.URLOptions, true);
         },
 
@@ -292,12 +290,6 @@ define([
             this.disableOrEnableLinkedFields(attr.linkedField && attr.linkedFieldTable, disable);
             this.bindLinkedFieldSelect();
             this.bindCssEditorsSelect();
-        },
-
-        initExtraPropertiesValues : function(){
-            if (this.modelToEdit.collection.tracktypes) {
-                this.form.fields.trackType.editor.setOptions(this.modelToEdit.collection.tracktypes);
-            }
         },
 
         /**
