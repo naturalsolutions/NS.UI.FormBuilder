@@ -1,10 +1,7 @@
 define([
     'jquery',
     'marionette',
-    'text!editionPageModule/templates/FormPanel/View.html',
-    'text!editionPageModule/templates/FormPanel/ViewRO.html',
-    'text!editionPageModule/templates/FormPanel/Reneco/View.html',
-    'text!editionPageModule/templates/FormPanel/Reneco/ViewRO.html',
+    'text!editionPageModule/templates/FormPanelView.html',
     'sweetalert',
     '../../Translater',
     '../../app-config',
@@ -12,7 +9,7 @@ define([
     '../models/fields',
     'i18n',
     'slimScroll'    
-], function($, Marionette, FormPanelViewTpl, FormPanelViewRO, FormPanelViewReneco, FormPanelViewROReneco, swal,
+], function($, Marionette, FormPanelViewTpl, swal,
             Translater, AppConfig, ContextStaticInputs, Fields) {
 
     var translater = Translater.getTranslater();
@@ -45,20 +42,11 @@ define([
          * @return {string} Compiled lodash template
          */
         template : function() {
-            var topcontext = "";
-            if (AppConfig.appMode.topcontext != "classic")
-            {
-                topcontext = AppConfig.appMode.topcontext
-            }
-
-            if (topcontext == "reneco")
-            {
-                return _.template(FormPanelViewReneco)({
-                    collection : this.collection.getAttributesValues()
-                });
-            }
-            return _.template(FormPanelViewTpl)({
-                collection : this.collection.getAttributesValues()
+            return _.template(FormPanelViewTpl) ({
+                collection : this.collection.getAttributesValues(),
+                context: this.context,
+                topContext: this.topContext,
+                readonly: this.readonly
             });
         },
 
@@ -70,34 +58,15 @@ define([
         initialize : function(options, readonly) {
             window.formbuilder.formedited = false;
 
-            var topcontext = "";
-            var context = window.context || $("#contextSwitcher .selected").text();
+            this.topContext = AppConfig.appMode.topcontext;
+            this.context = window.context || $("#contextSwitcher .selected").text();
+            this.readonly = readonly;
+            this.collection = options.fieldCollection;
+            this._view = {};
+            this.URLOptions = options.URLOptions;
+
             var that = this;
-
-            if (AppConfig.appMode.topcontext != "classic")
-            {
-                topcontext = AppConfig.appMode.topcontext
-            }
-
-            if (readonly)
-            {
-                this.template = function(){
-                    return _.template(FormPanelViewRO)({
-                        collection : this.collection.getAttributesValues()
-                    })};
-                if (topcontext == "reneco")
-                    this.template = function(){
-                        return _.template(FormPanelViewROReneco)({
-                            collection : this.collection.getAttributesValues()
-                        })};
-            }
-
-            this.collection     = options.fieldCollection;
-            this._view          = {};
-            this.URLOptions     = options.URLOptions;
-            this._viewCount     = 0;
-
-            if (context == "track")
+            if (this.context == "track")
             {
                 $.ajax({
                     data: {},
@@ -118,7 +87,7 @@ define([
             $.ajax({
                 data: {},
                 type: 'GET',
-                url:  this.URLOptions.forms + "/getAllInputNames/" + context,
+                url:  this.URLOptions.forms + "/getAllInputNames/" + that.context,
                 contentType: 'application/json',
                 crossDomain: true,
                 success: _.bind(function (data) {
@@ -140,7 +109,7 @@ define([
             this.initMainChannel();
             this.initCollectionChannel();
 
-            setStatics(context);
+            setStatics(this.context);
         },
 
         /**

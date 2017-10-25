@@ -6,6 +6,17 @@
                     <%= collection.name %>
                 </label>
                 <span id="count"></span>
+                <% if (topContext === "reneco") { %>
+                <span id="formOriginalIdArea">
+                    Original ID :
+                    <span id="formOriginalID" >
+                        <%= collection.originalID %>
+                    </span>
+                    <span>
+                        &nbsp;<img id="datasImg" src="assets/images/datas.png" />
+                    </span>
+                </span>
+                <% } %>
             </h1>
         </div>
     </div>
@@ -33,7 +44,19 @@
                     <label class="empty"></label>
                 </button>
 
+                <% if (!readonly) { %>
+                <button class="reneco grey" id="clearAll">
+                    <label>
+                        <span data-i18n="form.actions.clear">
+                        TOUT EFFACER
+                        </span>
+                    </label>
+                    <label class="empty"></label>
+                </button>
+                <% } %>
+
                 <div class="pull-right">
+                    <% if (topContext !== "reneco") { %>
                     <button class="reneco red" id="export">
                         <label>
                             <span data-i18n="form.actions.export">
@@ -44,6 +67,21 @@
                             <span class="reneco reneco-export2"></span>
                         </label>
                     </button>
+                    <% } %>
+
+                    <% if (!readonly) { %>
+                    <img src="assets/images/loader.gif" class="saveSpinner"/>
+                    <button class="reneco red" id="save">
+                        <label>
+                            <span data-i18n="form.actions.save">
+                                SAUVER
+                            </span>
+                        </label>
+                        <label>
+                            <span class="reneco reneco-write"></span>
+                        </label>
+                    </button>
+                    <% } %>
                 </div>
             </div>
         </div>
