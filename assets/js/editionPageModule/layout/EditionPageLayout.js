@@ -5,20 +5,26 @@ define([
     '../views/WidgetPanelView',
     '../views/SettingFieldPanelView',
     '../views/SettingFormPanelView',
+    'app-config'
 ], function(Marionette, EditionPageLayoutTemplate,
-            FormPanelView, WidgetPanelView, SettingFieldPanelView, SettingFormPanelView) {
+            FormPanelView, WidgetPanelView, SettingFieldPanelView, SettingFormPanelView,
+            AppConfig) {
 
     /**
      * Main layout manages views in editionPageModule
      * contains widgetPanelView, FormPanelView and settingPanelView
      */
     return Backbone.Marionette.LayoutView.extend({
-
-
         /**
          * edition page layout HTML template initialization
          */
         template: EditionPageLayoutTemplate,
+        attributes: function() {
+            return {
+                "data-context": this.options.fieldCollection.context,
+                "data-topcontext": AppConfig.appMode.topcontext
+            };
+        },
 
 
         /**
@@ -40,7 +46,6 @@ define([
             settingFormPanel    : '#settingFormPanel',
             settingFieldPanel    : '#settingFieldPanel'
         },
-
 
         /**
          * Layout constructor
