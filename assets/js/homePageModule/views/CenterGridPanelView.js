@@ -296,8 +296,8 @@ define([
 
                             if (subisConfirm) {
                                 // Send event to FormCollection if user chosen to remove a form
-                                self.homePageChannel.trigger('deleteForm', self.beforeFormSelection);
-                                self.formCollection.deleteModel(self.beforeFormSelection);
+                                self.homePageChannel.trigger('deleteForm', currentForm.id);
+                                self.formCollection.deleteModel(currentForm.id);
                             }
 
                             window.onkeydown = null;
