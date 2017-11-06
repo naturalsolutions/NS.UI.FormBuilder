@@ -6,6 +6,7 @@ define(['jquery'], function ($) {
     var TrackStatics = {
         staticInputs: {
             "Individual": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Individu",
                 "labelEn": "Individual",
@@ -28,6 +29,7 @@ define(['jquery'], function ($) {
                 "type": "Autocomplete"
             },
             "Egg": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Oeuf",
                 "labelEn": "Egg",
@@ -50,6 +52,7 @@ define(['jquery'], function ($) {
                 "type": "Autocomplete"
             },
             "UserReadonly": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Utilisateur",
                 "labelEn": "User",
@@ -71,6 +74,7 @@ define(['jquery'], function ($) {
                 "type": "Text"
             },
             "eventDate": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Date de saisie",
                 "labelEn": "Event date",
@@ -93,6 +97,7 @@ define(['jquery'], function ($) {
                 "type": "Date"
             },
             "TSai_PK_ID": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "TSai_PK_ID",
                 "labelEn": "TSai_PK_ID",

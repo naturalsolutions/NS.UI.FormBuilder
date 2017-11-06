@@ -2,16 +2,14 @@
     <div id="smallFeatures">
         <div class="scroll">
             <% for (var n in section) {
-                for (var i in section[n]) { count++;
-                    type     = i.replace(' Field ', ' ');
-                    i18n     = section[n][i]['i18n'];
-                    %>
+                for (var i in section[n]) {
+                  type     = i.replace(' Field ', ' ');
+                  i18n     = section[n][i]['i18n']; %>
                     <div data-type="<%= type %>" data-i18n="[title]tooltip.<%= i18n %>" >
                         <span class="picto-<%= i18n %>" data-type="<%= (type=='childform'?'subform':type) %>"></span>
                     </div>
-                <% } %>
-            <% } %>
+               <% }
+            } %>
         </div>
     </div>
-
 </div>

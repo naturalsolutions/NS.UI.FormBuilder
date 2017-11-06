@@ -7,7 +7,7 @@ define([
     'sweetalert',
     'app-config',
     './loaders/ContextLoader',
-    '../models/fields',
+    '../models/Fields',
     'jquery-ui',
     'i18n',
     'bootstrap-select',

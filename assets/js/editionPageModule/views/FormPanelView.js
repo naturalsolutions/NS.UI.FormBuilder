@@ -1,64 +1,44 @@
 define([
     'jquery',
     'marionette',
-    'text!editionPageModule/templates/FormPanelView.html',
+    'text!../templates/FormPanelView.html',
     'sweetalert',
     '../../Translater',
     '../../app-config',
     '../collection/staticInputs/ContextStaticInputs',
-    '../models/fields',
+    '../models/Fields',
+    './fieldViews/All',
     'i18n',
     'slimScroll'    
 ], function($, Marionette, FormPanelViewTpl, swal,
-            Translater, AppConfig, ContextStaticInputs, Fields) {
+            Translater, AppConfig, ContextStaticInputs, Fields, AllFieldViews) {
 
     var translater = Translater.getTranslater();
     var staticInputs = ContextStaticInputs;
-    
+
     /**
      * The form view represents the current form. It's a the edition module main view.
      */
     var FormPanelView = Backbone.Marionette.ItemView.extend({
-
-        /**
-         * jQuery events triggered by the form view
-         *
-         * @type {Object}
-         */
         events : {
-            'click #editForm'     : 'formSettings',
             'click #export'       : 'export',
             'click #clearAll'     : 'clear',
-            'click #save'         : 'save',
-            'click #exit'         : 'exit',
             'click .sizepreview'  : 'sizepreview',
             'click #datasImg'     : 'popDatasImg'
         },
-
-
-        /**
-         * FormView template configuration
-         *
-         * @return {string} Compiled lodash template
-         */
         template : function() {
             return _.template(FormPanelViewTpl) ({
                 collection : this.collection.getAttributesValues(),
                 context: this.context,
-                topContext: this.topContext,
+                topcontext: this.topcontext,
                 readonly: this.readonly
             });
         },
 
-        /**
-         * Form view constructor
-         *
-         * @param  {object} options configuration options like web service URL for back end connection
-         */
         initialize : function(options, readonly) {
             window.formbuilder.formedited = false;
 
-            this.topContext = AppConfig.appMode.topcontext;
+            this.topcontext = AppConfig.appMode.topcontext;
             this.context = window.context || $("#contextSwitcher .selected").text();
             this.readonly = readonly;
             this.collection = options.fieldCollection;
@@ -89,22 +69,10 @@ define([
 
             this.initFormChannel();
             this.initMainChannel();
-            this.initCollectionChannel();
+            this.collectionChannel = Backbone.Radio.channel('collectionView');
+            this.collectionChannel.on('viewDrop', this.viewDrop, this);
 
             setStatics(this.context);
-        },
-
-        /**
-         * Initialize collectionView channel, the collectionView channel is a private channel between the formView and the subForm views
-         * It is used when view are added or removed from a subForm view
-         */
-        initCollectionChannel : function() {
-            //  This channel is used between the form view and all subForm view
-            //  The goal is to pass information when a view is dragged and dropped inside or outside of a subForm view
-            this.collectionChannel = Backbone.Radio.channel('collectionView');
-
-            //  Event send by a subForm view when a BaseView is dropped in
-            this.collectionChannel.on('viewDrop', this.viewDrop, this);
         },
 
         /**
@@ -113,6 +81,7 @@ define([
          * @param subFormView subForm View where a BaseView was dropped in
          */
         viewDrop : function(subFormView) {
+            console.log("viewDrop", subFormView);
 
             var droppedView = this._view[subFormView.viewDroppedId],
                 droppedViewModel = droppedView.model;
@@ -160,11 +129,6 @@ define([
         initMainChannel : function() {
             this.mainChannel = Backbone.Radio.channel('edition');
             this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
-
-            //  These events is receive when a user close the setting panel
-            //  When the setting panel is closed we can show footer action
-            this.mainChannel.on('formCancel', this.enableFooterActions, this);
-            this.mainChannel.on('formCommit', this.enableFooterActions, this);
         },
 
         /**
@@ -176,15 +140,6 @@ define([
             this.collection.updateCollectionAttributes(newCollectionAttributes);
             this.updateName();
             this.enableFooterActions();
-        },
-
-        /**
-        * Send an event to the setting view (settingView.js) to display properties form
-        * Channel send on the form channel
-        */
-        formSettings : function() {
-
-            this.formChannel.trigger('editForm', this.collection);
         },
 
         /**
@@ -211,67 +166,54 @@ define([
                         e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
                     })
                 }
-                require(['editionPageModule/views/fieldViews/' + viewClassName], _.bind(function (fieldView) {
 
-                    //  View file successfully loaded
-                    var id = "dropField" + newModel['id'];
-
-                    $('.drop').append('<div class="dropField" id="' + id + '" data-order="' + newModel.get('order') + '" ></div>');
-
-                    var vue = new fieldView({
-                        el: '#' + id,
-                        model: newModel,
-                        collection: this.collection,
-                        urlOptions: this.URLOptions
-                    }, Backbone.Radio.channel('global').readonly ||
-                        $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
-                    if (vue !== null) {
-                        vue.render();
-                        this._view[id] = vue;
-                        this.updateScrollBar();
-
-                        //
-                        //  Field queue
-                        //
-                        //  Now the view is rendered so we can send an event to the FieldCollection
-                        //  See FieldCollection createFieldFromSchema method
-                    }
-
-                    $(".actions").i18n();
-
-                }, this), function (err) {
+                // FieldView exists?
+                if (!AllFieldViews[viewClassName]) {
                     swal({
-                        title: translater.getValueFromKey('modal.field.error' + err) || "Echec de l'ajout!",
-                        text: translater.getValueFromKey('modal.field.errorMsg' + err) || "Une erreur est survenue lors de l'ajout du champ !",
+                        title: translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
+                        text: translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
                         type: "error",
                         closeOnConfirm: true
                     }, function(){
                         window.onkeydown = null;
                         window.onfocus = null;
                     });
-                });
+                    return;
+                }
 
+                // prepare target element for field rendering
+                var id = "dropField" + newModel['id'];
+                var $field = $("<div>").addClass("dropField").attr("id", id);
+                this.$el.find('.drop').append($field);
+
+                // populate field / readonly if compulsory input
+                var vue = new AllFieldViews[viewClassName]({
+                    el: '#' + id,
+                    model: newModel,
+                    collection: this.collection,
+                    urlOptions: this.URLOptions,
+                    $container: this.$el
+                }, Backbone.Radio.channel('global').readonly ||
+                    $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
+                if (vue !== null) {
+                    vue.render();
+                    this._view[id] = vue;
+                    if (newModel.get('new')) {
+                        // scroll to bottom if element was just inserted
+                        this.$el.find('#scrollSection').slimScroll({ scrollTo: "99999px" });
+                    }
+                }
+
+                $(".actions").i18n();
             }
 
             this.updateFieldCount();
         },
 
-        /**
-         * Update field count
-         */
         updateFieldCount : function() {
-            this.$el.find('#count').text(  $.t("fieldCount.field", { count: this.collection.length }) );
-
-            // Hides bottom buttons when collection length is 0
-            // this[this.collection.length > 0 ? 'enableFooterActions' : 'disableFooterActions']();
-        },
-
-        /**
-         * Update perfect scrollbar size and position (for example when user add field in the form)
-         */
-        updateScrollBar : function(height) {
-            var scrollToHeight = height || this.$el.find('#scrollSection').height();
-            this.$el.find('#scrollSection').slimScroll({ scrollTo: scrollToHeight });
+            this.$el.find('#count').text($.t("fieldCount.field", {
+                count: this.collection.length
+            }));
         },
 
         /**
@@ -289,14 +231,23 @@ define([
             // run i18next translation in the view context
             this.$el.i18n();
 
+            // init sortable section
             this.$el.find('.drop').sortable({
                 axis: "y",
-                handle : '.paddingBottom5',
+                handle : '.handle',
                 cursor: "move",
-
+                items: "tr:not(.static)",
+                start: function(e) {
+                    // place the element being dragged at the end
+                    // of the table: its absolute position breakse the
+                    // table display in case it is the first row
+                    $(e.originalEvent.target).parent()
+                        .insertAfter(".drop tr:last-of-type");
+                },
                 update : _.bind(function() {
+                    // update fields indexes
                     for (var v in this._view) {
-                        this._view[v].updateIndex( $('#' + v).index());
+                        this._view[v].updateIndex( $('#' + v).index() - 1);
                     }
                 }, this)
             });
@@ -311,6 +262,7 @@ define([
             });
 
             this.updateFieldCount();
+            this.collection.creadeFields();
 
             //  Send an event to notify the render is done
             this.formChannel.trigger('renderFinished');
@@ -516,17 +468,6 @@ define([
         },
 
         /**
-         * Display footer actions like export and save
-         */
-        enableFooterActions : function() {
-            this.$el.find('#edit').fadeIn('500').prop('disabled', false).animate({opacity : 1});
-            this.$el.find('#exit').show();
-            if (this.collection.length > 0) {
-                this.$el.find('footer button:not(#exit)').show();
-            }
-        },
-
-        /**
          * Disable current selected field
          */
         clearSelectedFied : function(modelToKeepSelect) {
@@ -606,8 +547,10 @@ define([
         },
 
         collectionUpdateFinished : function() {
+            alert("FormPanelView: collectionUpdateFinished");
             this.updateName();
-            this.formSettings();
+            // propagate to field BaseView & EditionPageLayout
+            this.formChannel.trigger('editForm', this.collection);
         },
 
         displaytemplateMessage : function() {

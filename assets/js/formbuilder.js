@@ -121,7 +121,7 @@ define([
 
     FormbuilderApp.addInitializer(function(options){
         //  Create controller for homepage
-        var editionPageRouter = new EditionPageRouter({
+        this.router = new EditionPageRouter({
                 controller : new EditionPageController({
                 editionPageRegion : this.rightRegion,
                 URLOptions : options.URLOptions
@@ -139,13 +139,9 @@ define([
 
         //  Event send by CenterGridView when user wants to edit a form present in the grid
         this.globalChannel.on('displayEditionPage', _.bind(function(formToEdit) {
+            this.router.navigate('#edition');
             //  Send event to editionPageRouter
-            this.editionPageChannel.trigger('display', formToEdit);
-            setTimeout(function() {
-                $('#mainRegion').animate({
-                    marginLeft : '-100%'
-                }, 750);
-            }, 500);
+            this.editionPageChannel.trigger('edit', formToEdit);
         }, this));
 
 

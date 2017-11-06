@@ -612,7 +612,16 @@ define([
                     this.updateGridHeader();
                 }, this),
                 error : _.bind(function() {
-                    this.displayFetchError();
+                    swal({
+                        title:translater.getValueFromKey('fetch.error') || "Erreur de récupération des formulaires !",
+                        text:translater.getValueFromKey('fetch.errorMsg') || "Impossible de récupérer la liste des formulaires depuis le serveur",
+                        type:"error",
+                        closeOnConfirm: true
+                    }, function(){
+                        window.onkeydown = null;
+                        window.onfocus = null;
+                    });
+                    this.hideSpinner();
                 }, this)
             });
 
@@ -633,27 +642,6 @@ define([
             $(this.el).find("#grid2 th a").on("click", function(){
                 $(that.el).find("#grid th."+$(this).parent().attr('class').replace(/ /g, ".")+" a").click();
             });
-        },
-
-        /**
-         * Display error when the front is unable to fetch form list from the server
-         */
-        displayFetchError : function() {
-            /* DISABLED FOR NOW
-            setTimeout(function(){
-                swal({
-                    title:translater.getValueFromKey('fetch.error') || "Erreur de récupération des formulaires !",
-                    text:translater.getValueFromKey('fetch.errorMsg') || "Impossible de récupérer la liste des formulaires depuis le serveur",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
-            }, 50);
-            */
-
-            this.hideSpinner();
         },
 
         /**
@@ -843,6 +831,7 @@ define([
 
                 if (AppConfig.appMode.topcontext != "reneco")
                 {
+                    // todo test this - or remove probably
                     require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {
                         var tmpOptions = {
                             el : '#newFormModal',
@@ -859,7 +848,6 @@ define([
                 }
                 else
                 {
-                    //this.globalChannel.trigger('displayEditionPage', {});
                     this.createFormModel("", 0);
                 }
                 this.hideContextList();

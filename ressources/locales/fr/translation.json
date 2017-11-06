@@ -1,9 +1,21 @@
 {
+    "reloadPage": "Recharger la page",
     "grid" : {
         "name"             : "Nom",
         "creationDate"     : "Création",
         "modificationDate" : "Modification",
         "formContext"      : "Contexte"
+    },
+
+    "editGrid": {
+        "type": "Type",
+        "name": "Nom",
+        "default": "Valeur par défaut",
+        "linkedField": "Champs lié",
+        "parentFieldset": "Fieldset parent",
+        "appearance": "Apparence",
+        "editMode": "Mode d'édition",
+        "options": "Options"
     },
 
     "fields" : {
@@ -58,7 +70,7 @@
         "validation"  : "Ce champs est requis",
         "importance"  : "Importance",
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
-        "setting"     : "Caractéristiques <br /> du formulaire",
+        "setting"     : "Caractéristiques du formulaire",
         "new"         : "Nouveau formulaire",
         "context"     : "Contexte",
         "activite"    : "Activité",
@@ -97,14 +109,15 @@
         "actions" : {
             "import" : "IMPORTER",
             "export" : "EXPORTER",
-            "save"   : "SAUVER FORMULAIRE",
+            "save"   : "TOUT ENREGISTRER",
             "clear"  : "TOUT EFFACER",
             "find"   : "TROUVER",
             "add"    : "AJOUTER",
             "search" : "CHERCHER",
             "viewdetails" : "VOIR DETAILS",
             "edit"   : "EDITER",
-            "sizepreview" : "Input sizes preview"
+            "sizepreview" : "Input sizes preview",
+            "back"   : "RETOUR"
         }
     },
 
@@ -137,7 +150,8 @@
     "actions" : {
         "edit"      : "Modifier",
         "delete"    : "Supprimer",
-        "clone"     : " Dupliquer"
+        "clone"     : " Dupliquer",
+        "download"  : "Télécharger"
     },
 
     "schema" : {
@@ -311,7 +325,9 @@
     },
 
     "settings" : {
+        "attachedFiles": "Fichiers joints",
         "actions" : {
+            "addFile": "Ajouter un fichier",
             "saveAsType" : "Enregistrez comme nouveau template",
             "applyTemplate" : "Appliquer",
             "chooseNewTemplate" : "Appliquer un template :",

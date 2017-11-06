@@ -1,13 +1,46 @@
-<div>
+<div class="header">
+    <div data-i18n="form.actions.back" class="action gray actionBack" id="exit">Retour</div>
+    <div class="formTitle"><%= collection.name %></div>
+    <img class="saveSpinner" src="assets/images/loader.gif" />
+    <div data-i18n="form.actions.save" class="action actionSave" id="save">Tout sauvegarder</div>
+</div>
+<div class="content row">
     <div id="settingFormPanel" class="col-md-3">
+        <div class="row scroll">
+            <div class="row title">
+                <h2 class="col-md-10 col-md-offset-1" data-i18n="form.setting">
+                    Caractéristiques du formulaire
+                </h2>
+            </div>
+            <div class="row properties">
+                <div class="general-error col-md-10 col-md-offset-1"></div>
+                <div id="form" class="col-md-10 col-md-offset-1">
+                    <!-- generated backbone form -->
+                </div>
+                <div class="col-md-10 col-md-offset-1 childFormsList" data-setting="field" style="display:none;">
+                    <span class="outerform" data-i18n="settings.actions.listOfParentForms">
+                        Liste des formulaires parents :
+                    </span>
+                    <div class="childList"></div>
+                </div>
+                <% if (topcontext !== 'reneco') { %>
+                <div class="col-md-10 col-md-offset-1" data-setting="field">
+                    <button id="saveTemplate" class="transparent reneco" data-i18n="settings.actions.saveAsType">
+                        Enregistrer comme nouveau template
+                    </button>
+                </div>
+                <% } else if (context === 'track') { %>
+                <div class="col-md-10 col-md-offset-1 attachedFiles form-group">
+                    <input type="file" class="hide" accept="">
+                    <label data-i18n="settings.attachedFiles">attached files</label>
+                    <div data-i18n="settings.actions.addFile" class="action addBtn">add file</div>
+                    <div class="filesList"></div>
+                </div>
+                <% } %>
+            </div>
+        </div>
     </div>
-
-    <div id="formPanel" class="col-md-8 col-md-offset-3">
-    </div>
-
-    <div id="widgetPanel" class="col-md-1">
-    </div>
-
-    <div id="settingFieldPanel" class="col-md-0">
-    </div>
+    <div id="formPanel" class="col-md-8"></div>
+    <div id="widgetPanel" class="col-md-1"></div>
+    <div id="settingFieldPanel" class="col-md-0"></div>
 </div>

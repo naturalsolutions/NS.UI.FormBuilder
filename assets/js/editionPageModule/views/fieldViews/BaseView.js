@@ -1,6 +1,7 @@
-
-define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../../Translater', 'i18n'],
-    function($, _, Backbone, Radio, swal, Translater) {
+define([
+    'jquery', 'lodash', 'text!../../templates/GridRow.html',
+    'backbone', 'backbone.radio', 'sweetalert', '../../../Translater', 'i18n'
+], function($, _, DefaultTemplate, Backbone, Radio, swal, Translater) {
 
     var translater = Translater.getTranslater();
 
@@ -8,10 +9,6 @@ define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../.
      *  Base view
      */
     var BaseView = Backbone.View.extend({
-
-        /**
-         * Events for the intercepted by the view
-         */
         events: {
             'click #trash'       : 'removeView',
             'click #duplicate'   : 'copyModel',
@@ -23,15 +20,15 @@ define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../.
          * Constructor
          */
         initialize: function(options) {
-            this.template   = _.template(options.template);
+            // override template for now
+            this.template   = _.template(DefaultTemplate);
             _.bindAll(this, 'render', 'removeView', 'editModel', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
 
             this.model.bind('destroy', this.destroy_view);
 
             this.el   = options.el;
-            this.next = 'nextFieldSet2';
-
+            this.$container = options.$container;
             this.initFormChannel();
             this.initMainChannel();
         },
@@ -172,18 +169,16 @@ define(['jquery', 'lodash', 'backbone', 'backbone.radio', 'sweetalert', '../../.
             });
         },
 
-        /**
-         * Render view
-         */
         render: function() {
-            var renderedContent = this.template(this.model.toJSON());
-            $(this.el).html(renderedContent);
-            $(this.el).disableSelection();
+            this.$el = $(this.template(this.model.toJSON()));
+            var $placeholder = $(this.$container).find(this.el);
+            this.$el.attr("id", $placeholder.attr("id"));
+            this.$el.i18n();
+            $placeholder.replaceWith(this.$el);
 
-            $(this.el).i18n();
-
-            this.formChannel.trigger(this.next);
-            return this;
+            // $el was replaced, we need to rebind the view's events
+            this.delegateEvents();
+            return this.$el;
         },
 
         /**

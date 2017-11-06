@@ -96,6 +96,7 @@ define([
 
             this.set('schema', schema);
 
+            // todo send this.attributes.toJSON()?
             return {
                 id                         : this.get('id'),
                 name                       : this.get('name'),

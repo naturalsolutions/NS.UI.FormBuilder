@@ -36,6 +36,50 @@ define(['jquery'], function($) {
                     $img.replaceWith($svg);
                 }, 'xml');
             });
+        },
+
+        /**
+         * dedupeFilename appends now timestamp to filename before extension
+         */
+        dedupeFilename: function(name) {
+            return this.appendFilenameSuffix(name, "_" + Date.now());
+        },
+
+        /**
+         * appendFilenameSuffix inserts suffix before extension, if available, or just
+         * at the end of name if no extension detected.
+         */
+        appendFilenameSuffix: function(name, suffix) {
+            if (name.indexOf(".") == -1) {
+                return name + suffix;
+            }
+            return name.replace(/(\.[\w\d_-]+)$/i, '' + suffix + '$1');
+        },
+
+        /**
+         * binWeight exposes two functions for transposing a 4bits binary weight into
+         * custom dict {visible, editable, nullable, nullmean}. And vice-versa!
+         */
+        binWeight: {
+            toValue: function(dict) {
+                var i = 0;
+                i += dict.visible ? 1: 0;
+                i += dict.editable ? 2: 0;
+                i += dict.nullable ? 4: 0;
+                i += dict.nullmean ? 8: 0;
+                return i;
+            },
+            toDict: function(value) {
+                var dict = {};
+                dict.nullmean = (value >= 8);
+                value %= 8;
+                dict.nullable = (value >= 4);
+                value %= 4;
+                dict.editable = (value >= 2);
+                value %= 2;
+                dict.visible = (value >= 1);
+                return dict;
+            }
         }
     };
 });

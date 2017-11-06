@@ -1,0 +1,58 @@
+.grid {
+  height: 100%;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+
+    &.header {
+      background: #342623;
+      height: 31px;
+      color: #7B6C69;
+      font-weight: bold;
+    }
+
+    tr {
+      &.static td.handle {
+        cursor: default;
+        background: inherit;
+      }
+
+      td {
+        border: 1px solid black;
+        overflow: hidden;
+        height: 50px;
+
+        &.handle {
+          background: url("../assets/images/handle.png") no-repeat 2px center;
+          cursor: move;
+        }
+
+        width: 10%;
+        max-width: 10%;
+        min-width: 10%;
+
+        &:nth-of-type(1) {
+          width: 40px;
+          max-width: 40px;
+          min-width: 40px;
+        }
+
+        &:nth-last-of-type(2) {
+          width: 20%;
+          max-width: 20%;
+          min-width: 20%;
+        }
+
+        &:nth-last-of-type(1) {
+          width: 30%;
+          max-width: 30%;
+          min-width: 30%;
+        }
+      }
+    }
+
+  }
+}

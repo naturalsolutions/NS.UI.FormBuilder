@@ -37,7 +37,7 @@ define(['jquery', 'lodash', 'backbone', 'backbone-forms'], function($, _, Backbo
 
     }, {
         template: _.template(
-            '<div class="checkboxField">' +
+            '<div class="checkboxField col-md-6">' +
                 '<input type="checkbox" id="<%= id %>" name="<%= id %>" class="<%= editorClass %>" <% if(value){%>checked<%}%> />' +
                 '<label for="<%= id %>" class="<%= iconClass %>">' +
                     '&nbsp;<%= title %></label>' +

@@ -57,12 +57,15 @@ input[type="submit"].reneco { color : white; }
     display: inline-block;
     padding: 7px 30px;
     border-radius: 20px;
-    .gradiant;
+    .invertGradiant;
     font-size: 13px;
     font-weight: bold;
     text-transform: uppercase;
     color: white;
 
+    &.gray {
+        background: @gray;
+    }
     &:hover {
         cursor: pointer;
     }

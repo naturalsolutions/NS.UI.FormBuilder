@@ -1,90 +1,23 @@
-<div class="dropArea">
-    <div class="row">
-        <div class="col-md-10 col-md-offset-1">
-            <h1>
-                <label id="collectionName">
-                    <%= collection.name %>
-                </label>
-                <span id="count"></span>
-                <% if (topContext === "reneco") { %>
-                <span id="formOriginalIdArea">
-                    Original ID :
-                    <span id="formOriginalID" >
-                        <%= collection.originalID %>
-                    </span>
-                    <span>
-                        &nbsp;<img id="datasImg" src="assets/images/datas.png" />
-                    </span>
-                </span>
-                <% } %>
-            </h1>
-        </div>
+<div class="grid" data-context="<%= context %>" data-topcontext="<%= topcontext %>">
+    <table class="header">
+        <tbody>
+            <tr>
+                <td class="type" data-i18n="editGrid.type">type</td>
+                <td class="name" data-i18n="editGrid.name">name</td>
+                <td class="default" data-i18n="editGrid.default">default</td>
+                <td class="linkedField" data-i18n="editGrid.linkedField">linkedfield</td>
+                <td class="linkedFieldset" data-i18n="editGrid.parentFieldset">parentfieldset</td>
+                <td class="appearance" data-i18n="editGrid.appearance">appearance</td>
+                <td class="editMode" data-i18n="editGrid.editMode">editmode</td>
+                <td class="options" data-i18n="editGrid.options">options</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="scrollSection">
+        <table>
+            <tbody class="drop rows">
+
+            </tbody>
+        </table>
     </div>
-    <div class="sizepreview-container"><span class="sizepreview" data-i18n="form.actions.sizepreview"></span></div>
-    <div class="row scrollSection paddingTop20">
-        <div class="col-md-12">
-            <div id="scrollSection">
-                <div class="row">
-                    <div class="col-md-10 col-md-offset-1" id="dropContainer">
-                        <div class="col-md-12 drop"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <footer>
-        <div class="row">
-            <div class="col-md-10 col-md-offset-1">
-                <button class="reneco grey" id="exit">
-                    <label>
-                        <span data-i18n="form.actions.exit">
-                            QUITTER
-                        </span>
-                    </label>
-                    <label class="empty"></label>
-                </button>
-
-                <% if (!readonly) { %>
-                <button class="reneco grey" id="clearAll">
-                    <label>
-                        <span data-i18n="form.actions.clear">
-                        TOUT EFFACER
-                        </span>
-                    </label>
-                    <label class="empty"></label>
-                </button>
-                <% } %>
-
-                <div class="pull-right">
-                    <% if (topContext !== "reneco") { %>
-                    <button class="reneco red" id="export">
-                        <label>
-                            <span data-i18n="form.actions.export">
-                                EXPORTER
-                            </span>
-                        </label>
-                        <label>
-                            <span class="reneco reneco-export2"></span>
-                        </label>
-                    </button>
-                    <% } %>
-
-                    <% if (!readonly) { %>
-                    <img src="assets/images/loader.gif" class="saveSpinner"/>
-                    <button class="reneco red" id="save">
-                        <label>
-                            <span data-i18n="form.actions.save">
-                                SAUVER
-                            </span>
-                        </label>
-                        <label>
-                            <span class="reneco reneco-write"></span>
-                        </label>
-                    </button>
-                    <% } %>
-                </div>
-            </div>
-        </div>
-    </footer>
-
 </div>

@@ -21,11 +21,11 @@ define([
         compulsoryInputs: [],
 
         getStaticInputs: function(){
-            return {};
+            return ContextStaticInputs.staticInputs;
         },
 
         getCompulsoryInputs: function() {
-            return {};
+            return ContextStaticInputs.compulsoryInputs;
         },
 
         applyRules: function(form, json) {

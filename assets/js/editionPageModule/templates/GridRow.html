@@ -1,0 +1,21 @@
+<tr class="editRow <% if (compulsory) { %>static<% } %>" data-id="<%= id %>" data-order="<%= order %>">
+    <td class="handle type"><%= type %></td>
+    <td class="name"><%= name %></td>
+    <td class="default"><%= defaultValue %></td>
+    <td class="linkedField"><%= arguments[0].linkedField %></td>
+    <td class="linkedFieldset"><%= arguments[0].linkedFieldset %></td>
+    <td class="appearance">
+        <div class="fieldSize"><%= fieldSize %></div>
+        <div class="atBeginingOfLine"><%= atBeginingOfLine %></div>
+    </td>
+    <td class="editMode">
+        <%= editMode %>
+    </td>
+    <td class="options">
+        <% if (compulsory) { %>
+        nope
+        <% } else { %>
+        <button id="edit">Edit</button>
+        <% } %>
+    </td>
+</tr>

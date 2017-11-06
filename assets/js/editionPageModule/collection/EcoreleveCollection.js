@@ -5,7 +5,7 @@
 define([
     'jquery',
     'backbone',
-    '../models/fields',
+    '../models/Fields',
     'backbone.radio',
     '../../Translater',
     '../editor/CheckboxEditor'

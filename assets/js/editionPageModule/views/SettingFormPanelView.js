@@ -26,16 +26,14 @@ define([
         * @type {Object}
         */
         events : {
-            'click #cancel'               : 'cancel',
-            'click #saveChange'           : 'saveChange',
             'change .checkboxField input' : 'checkboxChange',
             'change .form-control'        : 'formControlChange',
             'click #saveTemplate'         : 'saveTemplate',
             'click .addFileText'          : 'triggerFileClick',
             'click .addFileBtn'           : 'triggerFileClick',
             'change .formAddFileRealAdd'  : 'associationFileSelected',
-            'click .removeFileAssoc'      : 'deleteFileAssociation',
-            'click .downloadFileAssoc'    : 'downloadFileAssoc',
+            'click ..remove'      : 'deleteFileAssociation',
+            'click .download'    : 'downloadFileAssoc',
         },
 
 
@@ -92,7 +90,7 @@ define([
             this.mainChannel = Backbone.Radio.channel('edition');
 
             //  Event send by BaseView or BaseView inherited view for duplicate model
-            this.mainChannel.on('triggerFormSettingsRender', this.triggerRender, this);
+            this.mainChannel.on('triggerFormSettingsRender', this.render, this);
             this.mainChannel.on('manualSaveChange', this.saveChange, this);
         },
 
@@ -120,16 +118,7 @@ define([
         * View rendering callbak
         */
         onRender : function() {
-
             this.$el.i18n();
-            //this.$el.find('.scroll').slimScroll({
-            //    height : '100%'
-            //});
-        },
-
-        triggerRender : function()
-        {
-            this.render();
         },
 
         initScrollBar : function() {
@@ -154,7 +143,7 @@ define([
             var self = this;
             var cancelSettingPanel = function(){
                 self.removeForm();
-                self.mainChannel.trigger('formCancel');
+                self.mainChannel.trigger('editionDone');
             };
 
             if (this.hasFieldsChanged){
@@ -295,7 +284,7 @@ define([
                             $(".childList").append("<div id='childform"+this.id+"'><a target=_blank href='#form/"+this.id+"'>"+this.name+"</a></div>");
                     });
                 }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                error: _.bind(function (xhr) {
                     console.log("Ajax Error: " + xhr);
                 }, this)
             });
@@ -318,19 +307,12 @@ define([
         */
         generateForm : function(formToEdit) {
             var that = this;
-
-            if (this.generatedAlready)
-            {
-                delete this;
-                return;
-            }
-
+            if (this.generatedAlready) return;
             this.generatedAlready = true;
 
             require(['backbone-forms'], _.bind(function() {
                 if (this.form !== null) {
-                    //  Remove last form and create new with new model
-                    this.removeForm()
+                    this.removeForm();
                 }
 
                 //

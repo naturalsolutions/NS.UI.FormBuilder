@@ -1,5 +1,7 @@
 @orange: #DE7710;
 @darkorange: #E0411A;
+@gray: #59514F;
+@gray2: #40322F;
 @grid_bg: #342623;
 @search_bg: #EDEDED;
 @row_header: #8C8A8D;
@@ -14,4 +16,12 @@
   background: -o-linear-gradient(-90deg, @darkorange, @orange);
   background: -moz-linear-gradient(-90deg, @darkorange, @orange);
   background: linear-gradient(-90deg, @darkorange, @orange);
+}
+
+.invertGradiant {
+  background: @orange;
+  background: -webkit-linear-gradient(-90deg, @orange, @darkorange);
+  background: -o-linear-gradient(-90deg, @orange, @darkorange);
+  background: -moz-linear-gradient(-90deg, @orange, @darkorange);
+  background: linear-gradient(-90deg, @orange, @darkorange);
 }

@@ -54,6 +54,10 @@ define([
             this.formChannel.on('saveConfiguration', this.saveConfiguration, this);
 
             this.formChannel.on('setFieldCollection', this.setFieldCollection, this);
+
+            // working shit
+            this.editionPageChannel = Backbone.Radio.channel('editionPage');
+            this.editionPageChannel.on('edit', this.loadForm, this);
         },
 
         /**
@@ -79,15 +83,27 @@ define([
             }, this))
         },
 
-        /**
-         * Main controller action, display edition page layout
-         */
-        editionAction: function() {
-            delete this.currentEditionPageLayout;
+        loadForm: function(form) {
+            if (form && form.id) {
+                $.ajax({
+                    url: this.URLOptions.forms + '/' + form.id,
+                    dataType: 'json',
+                    success: _.bind(function (data) {
+                        this.display(data['form']);
+                    }, this),
+                    error: _.bind(function (error) {
+                        // todo swal
+                        console.error("couldn't retreive form", error);
+                    }, this)
+                });
+                return;
+            }
+            this.display(form);
+        },
 
-            // TODO Display Context
-            $('#navbarContext').text($.t('navbar.context.edition') + (window.context?' - '+window.context:''));
-
+        display: function(jsonForm) {
+            this.fieldCollection.updateWithJSON(jsonForm);
+            // todo - do not create a new editionPage (memleak)
             var editionPageLayout = new EditionPageLayout({
                 fieldCollection : this.fieldCollection,
                 URLOptions      : this.URLOptions
@@ -95,6 +111,10 @@ define([
 
             this.editionPageRegion.show( editionPageLayout );
             this.currentEditionPageLayout = editionPageLayout;
+
+            $('#mainRegion').animate({
+                marginLeft : '-100%'
+            }, 750);
         },
 
         /**
@@ -112,11 +132,10 @@ define([
          * @param {string} newElementClassName new field class like TextField
          */
         addNewElementToCollection : function(newElementClassName, attributes) {
-            this.lastNewElementAdded = this.fieldCollection.addNewElement(newElementClassName, attributes, false);
+            this.lastNewElementAdded = this.fieldCollection.addElement(newElementClassName, attributes);
         },
 
         modelSetting: function(modelID) {
-
             if (modelID == false)
                 modelID = this.lastNewElementAdded;
 
@@ -129,83 +148,6 @@ define([
                 preConfiguredFieldList : this.preConfiguredFieldList,
                 modelToEdit            : this.fieldCollection.get(modelID),
                 fieldsList             : this.fieldCollection.getFieldList(modelID)
-
-            });
-        },
-
-        /**
-         * Send an event to FieldCollection
-         *
-         * @param  {Object} formImportedJSON imported form JSON data
-         */
-        import : function(formImportedJSON) {
-
-            //
-            //  If there isn't .json in the URL, the form list come from server
-            //  And the server returns only form attributes, not schema to lighten AJAX weight
-            //  So we get the schema now
-            //
-
-            if (this.URLOptions.forms.indexOf('.json') < 0 && formImportedJSON && formImportedJSON.id > 0) {
-
-                $.getJSON(this.URLOptions.forms + '/' + formImportedJSON['id'], _.bind(function(data){
-                    this.fieldCollection.updateWithJSON(data['form'])
-                }, this));
-
-            } else {
-                this.fieldCollection.updateWithJSON(formImportedJSON)
-            }
-        },
-
-        /**
-         * Save field as pre configurated field
-         *
-         * @param fieldToSave field to save
-         */
-        saveConfiguration : function(fieldToSave) {
-            var getBinaryWeight = function(editModeVal) {
-                var toret = editModeVal;
-                if (!$.isNumeric(editModeVal))
-                {
-                    var loop = 1;
-                    toret = 0;
-                    for (var index in editModeVal) {
-                        if(editModeVal[index])
-                            toret += loop;
-                        loop *= 2;
-                    }
-                }
-                return(toret);
-            };
-
-            var setUnexistingStuff = function(mymodel){
-                var compulsoryProps = ['editorClass', 'fieldClassEdit', 'fieldClassDisplay'];
-
-                $.each(compulsoryProps, function(index, value){
-                    if (!mymodel[value])
-                        mymodel[value] =  '';
-                });
-            };
-
-            fieldToSave.field.editMode = getBinaryWeight(fieldToSave.field.editMode);
-
-            setUnexistingStuff(fieldToSave.field);
-
-            $.ajax({
-                type: "POST",
-                url: this.URLOptions.fieldConfigurationURL,
-                contentType : 'application/json',
-                data: JSON.stringify(fieldToSave),
-                success: _.bind(function() {
-                    this.formChannel.trigger('configurationSaved:success');
-                }, this),
-                dataType: 'json',
-                error : _.bind(function() {
-                    this.formChannel.trigger('configurationSaved:fail');
-                }, this),
-                fail : _.bind(function() {
-                    this.formChannel.trigger('configurationSaved:fail');
-                }, this)
             });
         },
 
@@ -226,17 +168,14 @@ define([
             if (urloptions)
                 formSaveUrl = urloptions['formSaveURL'];
 
-            if (this.fieldCollection)
-                this.fieldCollection.reset();
-
-            if (this.URLOptions['formSaveURL'])
-
-            this.fieldCollection = new FieldCollection({}, {
-                name         : formName || 'New form',
-                url          : this.URLOptions['formSaveURL'] + (context != "all" ? "/" + context : "") || formSaveUrl,
-                context      : context || "all",
-                URLOptions   : this.URLOptions || ""
-            });
+            if (this.URLOptions['formSaveURL']) {
+                this.fieldCollection = new FieldCollection({}, {
+                    name         : formName || 'New form',
+                    url          : this.URLOptions['formSaveURL'] + (context != "all" ? "/" + context : "") || formSaveUrl,
+                    context      : context || "all",
+                    URLOptions   : this.URLOptions || ""
+                });
+            }
 
             this.fieldCollection.reset();
         }

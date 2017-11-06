@@ -1,0 +1,211 @@
+.edition {
+  .header {
+    width: 100%;
+    height: 62px;
+    padding: 15px 30px;
+    text-align: center;
+    background: @gray2;
+
+    & > div {
+      display: inline-block;
+
+      &.formTitle {
+        .exo;
+        font-size: 23px;
+        color: white;
+      }
+
+      &.action {
+        position: absolute;
+        &.actionBack {
+          left: 25px;
+        }
+        &.actionSave {
+          right: 25px;
+        }
+      }
+    }
+
+    .saveSpinner {
+      position: absolute;
+      right: 25px;
+      width: 30px;
+      visibility: hidden;
+    }
+  }
+
+  .content {
+    #settingFieldPanel {
+      & > div {
+        height: 100%;
+      }
+
+      #originalIDArea {
+        display: none;
+      }
+    }
+
+    #settingFormPanel, #settingFieldPanel {
+      overflow: hidden;
+      height: 100%;
+      padding-right: 0;
+      font-family: 'ProximaNovaLight', sans-serif;
+
+      .title {
+        padding: 20px;
+        h2 {
+          margin: 0 0 0 15px;
+          text-align: left;
+          font-weight: bold;
+          font-size: 20px;
+          color: @gray;
+        }
+      }
+
+      .properties {
+        margin-bottom: 10px;
+
+        .form-group {
+          label {
+            color: #bbb;
+            margin: 5px 0 0;
+          }
+
+          textarea {
+            color: black;
+          }
+
+          input, select {
+            border: none;
+            border-bottom: 1px solid #bbb;
+            background: none;
+            padding: 2px 0 0;
+            margin-bottom: 10px;
+            height: 22px;
+            color: black;
+
+            &:focus, &:hover {
+              border-bottom-color: #888;
+            }
+          }
+
+          input {
+            padding-left: 4px;
+          }
+
+          textarea {
+            resize: vertical;
+            height: 80px;
+            min-height: 30px;
+            margin-bottom: 10px;
+          }
+
+          &.checkBoxEditor {
+            .checkboxField {
+              padding-left: 0;
+              padding-right: 0;
+              margin: 10px 0;
+            }
+
+            &>label:first-child {
+              display: none;
+            }
+          }
+        }
+
+        .attachedFiles {
+          label {
+            margin: 15px 0;
+          }
+
+          .disabled {
+            &, &:hover {
+              cursor: not-allowed !important;
+            }
+            opacity: .5 !important;
+          }
+
+          .filesList, .addBtn {
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          .addBtn {
+            text-align: center;
+            background: none;
+            color: #555;
+            border: 2px solid @orange;
+
+            &:hover {
+              font-weight: bold;
+            }
+          }
+
+          .filesList {
+            margin-top: 10px;
+            padding: 0 5px;
+            .file {
+              margin-bottom: 5px;
+              .type, .download, .remove {
+                font-family: 'reneco', sans-serif;
+                font-size: 20px;
+              }
+
+              .name {
+                margin-top: 5px;
+                color: black;
+                cursor: default;
+              }
+
+              .download, .remove {
+                cursor: pointer;
+                padding: 0;
+                margin: 0 5px;
+                text-align: center;
+              }
+
+              .download::before {
+                content: '\e64b';
+              }
+              .remove::before {
+                content: '\e681';
+              }
+              .type {
+                &.default::before {
+                  content: '\e643';
+                }
+              }
+            }
+          }
+        }
+
+        #form {
+          padding-left : 15px;
+          padding-right: 20px;
+
+          p[data-error] {
+            .exo;
+            font-size: 18px;
+            color: red;
+          }
+        }
+      }
+
+      .slimScrollDiv {
+        width: 100% !important;
+        .scroll {
+          position      : relative;
+          overflow      : hidden;
+          width: auto !important;
+          height: ~"calc(100%) !important";
+        }
+      }
+
+      .slimScrollBar {
+        background: black !important;
+      }
+    }
+
+    @import url('grid.less');
+  }
+}

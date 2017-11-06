@@ -1,9 +1,21 @@
 {
+    "reloadPage": "Reload page",
     "grid" : {
       "name"             : "Name",
       "creationDate"     : "Creation",
       "modificationDate" : "Modfication",
       "formContext"      : "Context"
+    },
+
+    "editGrid": {
+        "type": "Type",
+        "name": "Name",
+        "default": "Default value",
+        "linkedField": "Linked field",
+        "parentFieldset": "Parent fieldset",
+        "appearance": "Appearance",
+        "editMode": "Edit mode",
+        "options": "Options"
     },
 
     "fields" : {
@@ -59,7 +71,7 @@
         "validation" : "This field is required",
         "importance" : "Importance",
         "minimal"    : "Minimum size must be less than the maximum size",
-        "setting"    : "Form <br />properties",
+        "setting"    : "Form properties",
         "new"        : "New form",
         "context"    : "Context",
         "activite"   : "Activity",
@@ -98,14 +110,15 @@
         "actions" : {
             "import" : "IMPORT",
             "export" : "EXPORT",
-            "save"   : "SAVE FORM",
+            "save"   : "SAVE ALL",
             "clear"  : "CLEAR ALL",
             "find"   : "FIND",
             "add"    : "ADD",
             "search" : "SEARCH",
             "viewdetails" : "VIEW DETAILS",
             "edit"   : "EDIT",
-            "sizepreview" : "Input sizes preview"
+            "sizepreview" : "Input sizes preview",
+            "back"   : "BACK"
         }
     },
 
@@ -138,7 +151,8 @@
     "actions" : {
         "edit"      : "Edit",
         "delete"    : "Delete",
-        "clone"     : " Clone"
+        "clone"     : " Clone",
+        "download"  : "Download"
     },
 
     "schema" : {
@@ -303,7 +317,9 @@
     },
 
     "settings" : {
+        "attachedFiles": "Attached files",
         "actions" : {
+            "addFile": "Add file",
             "saveAsType" : "Save as template",
             "applyTemplate" : "Apply",
             "chooseNewTemplate" : "Apply a template:",
