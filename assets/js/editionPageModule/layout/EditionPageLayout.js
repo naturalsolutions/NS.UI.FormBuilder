@@ -5,13 +5,12 @@ define([
     '../views/FormPanelView',
     '../views/WidgetPanelView',
     '../views/SettingFieldPanelView',
-    '../views/SettingFormPanelView',
     '../models/Fields',
     '../../Translater',
     'tools',
     'app-config'
 ], function($, Marionette, EditionPageLayoutTemplate,
-            FormPanelView, WidgetPanelView, SettingFieldPanelView, SettingFormPanelView,
+            FormPanelView, WidgetPanelView, SettingFieldPanelView,
             Fields, Translater, tools, AppConfig) {
     var t = Translater.getTranslater();
 
