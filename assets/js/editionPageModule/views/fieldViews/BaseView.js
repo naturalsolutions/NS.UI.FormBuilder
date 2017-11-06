@@ -29,6 +29,7 @@ define([
 
             this.el   = options.el;
             this.$container = options.$container;
+            this.model.view = this;
             this.initFormChannel();
             this.initMainChannel();
         },

@@ -266,7 +266,7 @@ define([
         },
 
         lastIndex: function () {
-            if (this.length === 0) return 0;
+            if (this.models.length === 0) return 0;
             // return highest order + 1
             return Math.max.apply(Math,
                 Object.values(this.models).map(
@@ -279,22 +279,23 @@ define([
          * reorderItems cleans order of all this.models with compulsory fields first
          */
         reorderItems: function() {
+            if (this.models.length == 0) return;
             var compulsoryFields = _.sortBy(_.filter(this.models, function(el) {
                 return el.get('compulsory');
-            }), ['order']);
+            }), function(el) {return el.get('order');});
             var normalFields = _.sortBy(_.filter(this.models, function(el) {
                 return !el.get('compulsory');
-            }), ['order']);
+            }), function(el) {return el.get('order');});
+            var $cont = this.models[0].view.$container;
+            $cont.empty();
 
             var order = 0;
-            _.each(Object.values(compulsoryFields), function(field) {
-                field.set('order', order);
-                order++;
-            });
-            _.each(Object.values(normalFields), function(field) {
-                field.set('order', order);
-                order++;
-            });
+            _.each($.merge(Object.values(compulsoryFields), Object.values(normalFields)),
+                function(field) {
+                    $cont.append(field.view.$el);
+                    field.view.updateIndex(order);
+                    order++;
+                });
         },
 
         /**
@@ -425,12 +426,21 @@ define([
             {
                 json.schema = staticInputs.getStaticInputs(this);
                 json = staticInputs.applyRules(this, json);
+                if (Object.keys(json.schema).length > 0) {
+                    $.each(json.schema, function(k, v) {
+                        var f = that.createField(v, v.type);
+                        f.set('skip', true);
+                    });
+                    this.reorderItems();
+                }
             }
 
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
                     json.fieldsets.push(this.getFieldsetFromModel(model));
                 } else if (model.constructor.type != undefined) {
+                    // skip newly created static inputs
+                    if (model.get('skip')) return;
 
                     subModel = this.getJSONFromModel(model);
 
@@ -509,7 +519,7 @@ define([
                 this.fieldsexcludedfromdelete.push(field.get('id'));
             }
             this.add(field);
-            return field.get('id');
+            return field;
         },
 
         addElement: function (nameType, properties) {
@@ -635,7 +645,11 @@ define([
             }
 
             if (this.isAValidFieldType(fieldObj.type) || this.isAValidFieldType(fieldType)) {
-                this.addElement((fieldObj.type || fieldType) + "Field", fieldObj, false);
+                return this.addElement((fieldObj.type || fieldType) + "Field", fieldObj, false);
+            } else {
+                // todo some kind of swal
+                console.error("provided field type is not valid");
+                return null;
             }
         },
 
