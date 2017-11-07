@@ -1,4 +1,5 @@
-define(['jquery'], function($) {
+define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetalert) {
+    var translater = translater.getTranslater();
     return {
         /**
          * inlineSvg replaces svg image tags matching selector with inline svg (for css edition)
@@ -80,6 +81,18 @@ define(['jquery'], function($) {
                 dict.visible = (value >= 1);
                 return dict;
             }
+        },
+
+        swal: function(t, title, text) {
+            sweetalert({
+                type: t,
+                title: translater.getValueFromKey(title) || title,
+                text: translater.getValueFromKey(text) || text,
+                closeOnConfirm: true
+            }, function() {
+                window.onkeydown = null;
+                window.onfocus = null;
+            });
         }
     };
 });
