@@ -29,9 +29,9 @@ require.config({
         slimScroll                          : '../../libs/slimScroll/jquery.slimscroll.min',
         "eonasdan-bootstrap-datetimepicker" : "../../libs/eonasdan-bootstrap-datetimepicker/build/js/bootstrap-datetimepicker.min",
         async                               : '../../libs/requirejs-plugins/src/async',
-        'pillbox-editor' 					: "../../libs/pillbox-editor/dist/pillbox-editor.amd",
-        'pillbox' 							: '../../libs/jquery.pillbox.js/js/jquery.pillbox',
-        'jcanvas' 							: '../../libs/jcanvas/jcanvas.min',
+        'pillbox-editor'                    : "../../libs/pillbox-editor/dist/pillbox-editor.amd",
+        'pillbox'                           : '../../libs/jquery.pillbox.js/js/jquery.pillbox',
+        'jcanvas'                           : '../../libs/jcanvas/jcanvas.min',
         'lodash'                            : '../../libs/lodash/lodash.min'
     },
 
@@ -166,12 +166,12 @@ define([
     'jquery', 'lodash', 'backbone', 'Translater', 'app-config'
 ], function($, _, Backbone, Translater, AppConfig) {
 
-	require(['jquery', 'Translater', 'formbuilder', 'moment', 'lodash'], function($, Translater, formbuilder) {
-		formbuilder.start(AppConfig.config.options);
-	});
+    require(['jquery', 'Translater', 'formbuilder', 'moment', 'lodash'], function($, Translater, formbuilder) {
+        formbuilder.start(AppConfig.config.options);
+    });
 
-	require(['tools'], function(tools) {
-	    // replace all <img src="*svg"> with inline <svg> tags
-	    tools.inlineSvg('img.svg');
+    require(['tools'], function(tools) {
+        // replace all <img src="*svg"> with inline <svg> tags
+        tools.inlineSvg('img.svg');
     });
 });
