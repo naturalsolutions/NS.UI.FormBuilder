@@ -30,33 +30,7 @@ define([
             this.el   = options.el;
             this.$container = options.$container;
             this.model.view = this;
-            this.initFormChannel();
-            this.initMainChannel();
-        },
-
-        /**
-         * Initialize backbone radio form channel and listen events
-         */
-        initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
-
-            //  Disable actions
-            //  Send by FormPanelView when user want to edit a field
-            //  The goal is to hide action button like edit, duplicate and remove when the user is in edition mode
-            this.formChannel.on('editForm', this.disableActions, this);
-        },
-
-        /**
-         * Initialize edition channel, it's the global channel for edition section
-         */
-        initMainChannel : function() {
-            //  The edition channel is the main channel ONLY in the editionPageModule
-            this.mainChannel = Backbone.Radio.channel('edition');
-
-            //  Re-enable action when field edition is done
-            this.mainChannel.on('formCancel', this.enableActions, this);
-            this.mainChannel.on('formCommit', this.enableActions, this);
-            this.mainChannel.on('editionDone', this.enableActions, this);
         },
 
         /**

@@ -65,7 +65,6 @@ define([
 
             this.formChannel = Backbone.Radio.channel('form');
             this.formChannel.on('initFieldSetting', this.initFieldSetting, this);
-            this.formChannel.on('editForm', this.formSetting, this);
 
             _.bindAll(this, 'template');
         },

@@ -145,7 +145,6 @@ define([
             this.formChannel.trigger('initFieldSetting', {
                 URLOptions             : this.URLOptions,
                 linkedFieldsList       : this.linkedFieldsList,
-                preConfiguredFieldList : this.preConfiguredFieldList,
                 modelToEdit            : this.fieldCollection.get(modelID),
                 fieldsList             : this.fieldCollection.getFieldList(modelID)
             });

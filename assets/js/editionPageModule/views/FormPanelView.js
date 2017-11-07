@@ -118,9 +118,6 @@ define([
 
             //  Disable footer actions when user wants to edit a field
             this.formChannel.on('editModel', this.disableFooterAndClearField, this);
-
-            //  Event send by fieldCollection when the update is done
-            this.formChannel.on('collectionUpdateFinished', this.collectionUpdateFinished, this);
         },
 
         /**
@@ -544,13 +541,6 @@ define([
                     $("#datasImg").remove();
                 }
             }
-        },
-
-        collectionUpdateFinished : function() {
-            alert("FormPanelView: collectionUpdateFinished");
-            this.updateName();
-            // propagate to field BaseView & EditionPageLayout
-            this.formChannel.trigger('editForm', this.collection);
         },
 
         displaytemplateMessage : function() {

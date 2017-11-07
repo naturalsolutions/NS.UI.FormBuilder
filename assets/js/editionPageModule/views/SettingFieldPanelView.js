@@ -32,7 +32,6 @@ define([
          * @type {Object}
          */
         events : {
-            'change #getField select'     : 'selectChanged',
             'click #cancel'               : 'cancel',
             'click #saveChange'           : 'saveChange',
             'click #saveButton'           : 'saveField',
@@ -71,12 +70,10 @@ define([
             this.URLOptions             = options.URLOptions;
             this.modelToEdit            = options.modelToEdit;
             this.linkedFieldsList       = options.linkedFieldsList[window.context];
-            this.preConfiguredFieldList = options.preConfiguredFieldList;
 
             this.savedTemplateFieldList = defaultTemplateList;
 
             this.form               = null;
-            this.fieldWithSameType  = null;
 
             this.subSettingView = null;
 
@@ -135,8 +132,6 @@ define([
             var that = this;
 
             var callBackTemplateRequest = function(fieldList){
-                that.preConfiguredFieldList = fieldList;
-                that.fieldWithSameType = that.preConfiguredFieldList[that.currentFieldType];
                 that.$el.find('select').selectpicker();
                 that.initInputTemplateList();
             };
@@ -686,27 +681,6 @@ define([
                 this.$el.find('.scroll').scrollTop(0);
             }, this), 200);
         },
-
-        /**
-         * Event send when user change select value
-         * Set value to the current vield
-         *
-         * @param  {Object} e jQuery event
-         */
-        selectChanged : function(e) {
-            var choice = this.fieldWithSameType[ $(e.target).val() ];
-
-            this.form.setValue(choice)
-
-            if(_.contains(choice['validators'], "required")) {
-                this.form.setValue({'required': true});
-                this.$el.find('input[name="required"]').prop('checked', true)
-            } else {
-                this.form.setValue({'required': false});
-                this.$el.find('input[name="required"]').prop('checked', false)
-            }
-        },
-
 
         /**
          * Send an event on form channel when user wants to clear current form
