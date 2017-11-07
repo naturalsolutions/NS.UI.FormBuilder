@@ -589,7 +589,7 @@ define([
             // Fetch some countries from the url
             this.formCollection.fetch({
                 reset: true,
-                timeout:5000,
+                timeout: 15000,
                 success : _.bind(function() {
                     this.hideSpinner();
 
