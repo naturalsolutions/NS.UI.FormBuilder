@@ -32,7 +32,8 @@ require.config({
         'pillbox-editor'                    : "../../libs/pillbox-editor/dist/pillbox-editor.amd",
         'pillbox'                           : '../../libs/jquery.pillbox.js/js/jquery.pillbox',
         'jcanvas'                           : '../../libs/jcanvas/jcanvas.min',
-        'lodash'                            : '../../libs/lodash/lodash.min'
+        'lodash'                            : '../../libs/lodash/lodash.min',
+        'tools'                             : './tools'
     },
 
     shim: {
