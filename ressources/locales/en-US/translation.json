@@ -255,33 +255,6 @@
     "trackType"                      : "Track type"
   },
 
-  "tooltip" : {
-    "text"                 : "Text",
-    "number"               : "Numeric",
-    "date"                 : "Date",
-    "select"               : "Dropdown list",
-    "radio"                : "Radio button",
-    "checkbox"             : "Checkbox",
-    "hidden"               : "Hidden ",
-    "file"                 : "File",
-    "treeview"             : "Tree View",
-    "textarea"             : "Long text",
-    "pattern"              : " with regular expression",
-    "line"                 : "Horizontal line",
-    "autocomplete"         : "Auto complete",
-    "subform"              : "set",
-    "horizontalline"       : "Horizontal line",
-    "boolean"              : "Boolean",
-    "autocompletetreeview" : "A TreeView with searching functionality",
-    "numericrange"         : "Numeric field with range",
-    "thesaurus"            : "Hierarchical Selector",
-    "childform"            : "Child Form",
-    "objectpicker"         : "Object Picker",
-    "imageFile"            : "Image File",
-    "decimal"              : "Decimal Numeric",
-    "position"             : "Position"
-  },
-
   "clearProtocol" : "You're going to clear this form.<br />Unsaved modifications will be lost.<br />Do you continue ?",
 
   "accordion" : {

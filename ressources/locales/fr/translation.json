@@ -264,34 +264,6 @@
         "trackType"                    : "Type Track"
     },
 
-    "tooltip" : {
-        "text"                 : "Texte",
-        "number"               : "Numérique",
-        "date"                 : "Date",
-        "select"               : "Liste déroulante",
-        "radio"                : "Bouton radio",
-        "checkbox"             : "Case à cocher",
-        "hidden"               : "Masqué",
-        "file"                 : "Fichier",
-        "textarea"             : "Texte long",
-        "pattern"              : "Expression régulière",
-        "line"                 : "Ligne horizontale",
-        "autocomplete"         : "Auto complétion",
-        "table"                : "Présentation",
-        "subform"              : "Regroupement",
-        "horizontalline"       : "Séparation",
-        "treeview"             : "Arborescence",
-        "boolean"              : "Booléen",
-        "autocompletetreeview" : "arborescence avec un champs de recherche",
-        "numericrange"         : "Curseur numérique",
-        "thesaurus"            : "Sélecteur Hiérarchisé",
-        "childform"            : "Formulaire Fils",
-        "objectpicker"         : "Selecteur d'objet",
-        "imageFile"            : "Fichier Image",
-        "decimal"              : "Numérique Décimal",
-        "position"             : "Position"
-    },
-
     "clearProtocol" : "Vous êtes sur le point de purger le formulaire.<br />Les modifications non sauvegardées seront perdues.<br />Voulez vous continuer ?",
 
     "accordion" : {
