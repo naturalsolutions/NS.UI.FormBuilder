@@ -1,5 +1,5 @@
 <tr class="editRow <% if (compulsory) { %>static<% } %>" data-id="<%= id %>" data-order="<%= order %>">
-    <td class="handle type"><%= type %></td>
+    <td class="handle type" data-i18n="[title]fields.<%= meta.i18n %>"><%= meta.type %></td>
     <td class="name"><%= name %></td>
     <td class="default"><%= defaultValue %></td>
     <td class="linkedField"><%= arguments[0].linkedField %></td>

@@ -209,6 +209,13 @@ define([
         },
 
         initialize : function(options) {
+            // set meta object for use in templates etc. will be ignored
+            var meta = {
+                i18n: this.constructor.i18n,
+                type: this.constructor.type
+            };
+            this.set("meta", meta);
+
             if (AppConfig.appMode.topcontext != "reneco")
             {
                 $.extend(this.schema, this.schema, {
@@ -394,8 +401,6 @@ define([
 
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.autocomplete");
-            this.set("type", "Autocomplete");
         }
 
     }, {
@@ -464,8 +469,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.file");
-            this.set("type", "File");
         }
     }, {
         type   : "File",
@@ -544,8 +547,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.treeview");
-            this.set("type", "TreeView");
         }
     }, {
         type: 'TreeView',
@@ -614,8 +615,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.thesaurus");
-            this.set("type", "Thesaurus");
         }
     }, {
         type: 'Thesaurus',
@@ -681,8 +680,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.autocompletetreeview");
-            this.set("type", "AutocompleteTreeView");
         }
     }, {
         type: 'AutocompleteTreeView',
@@ -735,8 +732,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.objectpicker");
-            this.set("type", "ObjectPicker");
         }
     }, {
         type   : 'ChildForm',
@@ -809,8 +804,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.objectpicker");
-            this.set("type", "ObjectPicker");
         }
     }, {
         type   : 'ObjectPicker',
@@ -883,8 +876,6 @@ define([
         },
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.subformgrid");
-            this.set("type", "SubFormGrid");
         }
     }, {
         type   : 'SubFormGrid',
@@ -951,8 +942,6 @@ define([
 
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.position");
-            this.set("type", "Position");
         }
     }, {
         type   : 'Position',
@@ -1041,8 +1030,6 @@ define([
 
         initialize: function(options) {
             models.BaseField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.text");
-            this.set("type", "Text");
         }
     }, {
         type   : "Text",
@@ -1118,8 +1105,6 @@ define([
 
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.textarea");
-            this.set("type", "TextArea");
         }
 
     }, {
@@ -1158,8 +1143,6 @@ define([
 
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.pattern");
-            this.set("type", "Pattern");
         }
 
     }, {
@@ -1219,8 +1202,6 @@ define([
 
         initialize: function() {
             models.BaseFieldExtended.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.date");
-            this.set("type", "Date");
         }
     }, {
         type   : "Date",
@@ -1383,8 +1364,6 @@ define([
 
         initialize: function() {
             models.TextField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.number");
-            this.set("type", "Number");
         }
     }, {
         type   : 'Number',
@@ -1413,8 +1392,6 @@ define([
 
         initialize: function() {
             models.NumberField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.decimal");
-            this.set("type", "Decimal");
         }
 
     }, {
@@ -1563,8 +1540,6 @@ define([
 
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.select");
-            this.set("type", "Select");
         }
     }, {
         type   : 'Select',
@@ -1604,8 +1579,6 @@ define([
 
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.checkbox");
-            this.set("type", "CheckBox");
         }
 
     }, {
@@ -1636,8 +1609,6 @@ define([
 
         initialize: function() {
             models.EnumerationField.prototype.initialize.apply(this, arguments);
-            this.set("i18n", "fields.radio");
-            this.set("type", "Radio");
         }
     }, {
         type   : 'Radio',

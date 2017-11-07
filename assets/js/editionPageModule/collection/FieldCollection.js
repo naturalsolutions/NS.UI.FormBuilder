@@ -339,6 +339,8 @@ define([
             var valuesToKeepIfExists = {converted:["originalID"]};
 
             var subModel = model.getJSON();
+            // delete meta field for backend usage
+            delete subModel.meta;
 
             switch (model.constructor.type) {
                 case 'CheckBox':
