@@ -5,19 +5,12 @@ define([
     '../models/Fields',
     '../../Translater',
     'backbone.radio',
-    'sweetalert',
     'app-config',
+    'tools',
     'i18n',
     'jquery-ui'
 
-], function($, Marionette, WidgetPanelViewTemplate, Fields,Translater, Radio, swal, AppConfig) {
-
-    //  Get singleton Translater object
-    var translater = Translater.getTranslater();
-
-    /**
-     * Widget Panel contains contains avlaible field of the application
-     */
+], function($, Marionette, WidgetPanelViewTemplate, Fields, Translater, Radio, AppConfig, tools) {
     var WidgetPanelView = Backbone.Marionette.ItemView.extend({
         events: {
             'click div.col-md-3'                 : 'appendToDrop',
@@ -27,19 +20,14 @@ define([
 
         template : function() {
             return _.template(WidgetPanelViewTemplate)({
-                section : this.section
+                fieldTypes : this.fieldTypes
             });
         },
 
         initialize : function() {
             _.bindAll(this, 'template');
 
-            this.initSection();
-            this.initFormChannel();
-        },
-
-        initFormChannel : function() {
-            //  The widget panel view used this channel to send event when an user wants to add a field
+            this.initFieldTypes();
             this.formChannel = Backbone.Radio.channel('form');
         },
 
@@ -51,70 +39,42 @@ define([
          */
         appendToDrop : function(e) {
             var elementClassName = $(e.target).data("type");
-
-            //  Check if the field type is a valid type
-            if (Fields[elementClassName] !== undefined) {
-                this.formChannel.trigger('addNewElement', elementClassName);
-            } else {
-                swal({
-                    title:translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
-                    text:translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+            if (!Fields[elementClassName]) {
+                tools.swal('error', 'modal.field.error', 'modal.field.errorMsg');
+                return;
             }
+
+            this.formChannel.trigger('addNewElement', elementClassName);
         },
 
-        initSection : function() {
-            var sections = {text: {}, numeric: {}, list: {}, presentation: {}, autocomplete: {}, tree: {}, file: {},
-                other: {}, reneco: {}};
-
+        initFieldTypes : function() {
             var context = window.context || $("#contextSwitcher .selected").text().toLowerCase();
 
-            var checkDisplayMode = function(fieldType){
-                if (context == "all" || (AppConfig.appMode.hasOwnProperty(context) &&
-                    $.inArray(fieldType, AppConfig.appMode[context]) == -1))
-                    return (false);
-                return (true);
-            };
+            // no soup for you
+            if (!AppConfig.appMode[context] || context == "all") {
+                return;
+            }
 
-            for (var i in Fields) {
-                if (Fields[i].type !== undefined && checkDisplayMode(Fields[i].type)) {
-                    if (Fields[i].section === undefined)
-                    {
-                        sections['other'][i] = {
-                            i18n             : i.replace('Field', '').toLowerCase(),
-                            doubleColumn     : Fields[i].doubleColumn !== undefined,
-                            fontAwesomeClass : Fields[i].fontAwesomeClass
-                        }
-                    }
-                    else
-                    {
-                        if (sections[Fields[i].section] === undefined)
-                        {
-                            //  create new sections
-                            sections[ Fields[i].section ] = {};
-                        }
-
-                        sections[ Fields[i].section ][i] = {
-                            i18n             : i.replace('Field', '').toLowerCase(),
-                            doubleColumn     : Fields[i].doubleColumn !== undefined,
-                            fontAwesomeClass : Fields[i].fontAwesomeClass
-                        }
+            // insert each field found from specific context in config
+            var fieldTypes = {};
+            $.each(AppConfig.appMode[context], function (i, fieldType) {
+                var field = Fields[fieldType];
+                if (!field) {
+                    // try appending "Field" suffix
+                    fieldType += "Field";
+                    field = Fields[fieldType];
+                    if (!field) {
+                        console.warn('field type "' + fieldType + '" from config is not implemented');
+                        return;
                     }
                 }
-            }
-
-            for (var section in sections)
-            {
-                if (Object.keys(sections[section]).length == 0)
-                    delete(sections[section]);
-            }
-
-            this.section = sections;
+                fieldTypes[fieldType] = {
+                    i18n             : fieldType.replace('Field', '').toLowerCase(),
+                    doubleColumn     : field.doubleColumn !== undefined,
+                    fontAwesomeClass : field.fontAwesomeClass
+                };
+            });
+            this.fieldTypes = fieldTypes;
         },
 
         onRender : function() {
