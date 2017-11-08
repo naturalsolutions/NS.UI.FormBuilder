@@ -18,7 +18,7 @@ define([
             this.setFieldCollection(null, options['URLOptions']);
 
             this.initFormChannel();
-            this.getLinkedFieldsList();
+            this.linkedFieldsList = this.getLinkedFieldsList();
             Backbone.Radio.channel('edition').on('saveTemplate', this.saveTemplate, this);
         },
 
@@ -26,9 +26,22 @@ define([
          * Get all avalaible linked field
          */
         getLinkedFieldsList : function() {
-            $.getJSON(this.URLOptions.linkedFields, _.bind(function(linkedFieldsList) {
-                this.linkedFieldsList = linkedFieldsList;
-            }, this));
+            var linkedFields = {};
+            $.ajax({
+                type: 'GET',
+                url: this.URLOptions.linkedFields,
+                contentType: 'application/json',
+                crossDomain: true,
+                async: false,
+                success: _.bind(function(data) {
+                    linkedFields = data;
+                }, this),
+                error: _.bind(function(xhr) {
+                    console.error("error fetching linked fields at '",
+                        this.URLOptions.linkedFields + "': " + xhr.status + " " + xhr.statusCode);
+                }, this)
+            });
+            return linkedFields;
         },
 
         /**
@@ -37,22 +50,8 @@ define([
         initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
 
-            //  Event receive from widgetPanel when user want to add a field on its form
-            this.formChannel.on('addElement', this.addElementToCollection, this);
-            this.formChannel.on('addNewElement', this.addNewElementToCollection, this);
-
             //  Event receive when user wants to export its form in JSON file
             this.formChannel.on('export', this.exportFormAsFile, this);
-
-            //  Event send from router when user import a form or edit a form from the grid
-            //this.formChannel.on('formEdition', this.editForm, this);
-
-            //  Event receive from a field field (see BaseView.js) when user wants to edit field properties
-            this.formChannel.on('editModel', this.modelSetting, this);
-
-            //  Event send from settingFieldPanel when user wants to save a field as a preconfigurated field
-            this.formChannel.on('saveConfiguration', this.saveConfiguration, this);
-
             this.formChannel.on('setFieldCollection', this.setFieldCollection, this);
 
             // working shit
@@ -105,8 +104,9 @@ define([
             this.fieldCollection.updateWithJSON(jsonForm);
             // todo - do not create a new editionPage (memleak)
             var editionPageLayout = new EditionPageLayout({
-                fieldCollection : this.fieldCollection,
-                URLOptions      : this.URLOptions
+                fieldCollection  : this.fieldCollection,
+                URLOptions       : this.URLOptions,
+                linkedFieldsList : this.linkedFieldsList
             });
 
             this.editionPageRegion.show( editionPageLayout );
@@ -115,39 +115,6 @@ define([
             $('#mainRegion').animate({
                 marginLeft : '-100%'
             }, 750);
-        },
-
-        /**
-         * User wants to add a field into the collection
-         *
-         * @param {string} elementClassName field class like TextField
-         */
-        addElementToCollection : function(elementClassName) {
-            this.fieldCollection.addElement(elementClassName);
-        },
-
-        /**
-         * User wants to add a new field into the collection
-         *
-         * @param {string} newElementClassName new field class like TextField
-         */
-        addNewElementToCollection : function(newElementClassName, attributes) {
-            this.lastNewElementAdded = this.fieldCollection.addElement(newElementClassName, attributes);
-        },
-
-        modelSetting: function(modelID) {
-            if (modelID == false)
-                modelID = this.lastNewElementAdded;
-
-            //  Get many information with Ajax and send it to the layout
-            //  And the layout display the setting panel
-
-            this.formChannel.trigger('initFieldSetting', {
-                URLOptions             : this.URLOptions,
-                linkedFieldsList       : this.linkedFieldsList,
-                modelToEdit            : this.fieldCollection.get(modelID),
-                fieldsList             : this.fieldCollection.getFieldList(modelID)
-            });
         },
 
         /**

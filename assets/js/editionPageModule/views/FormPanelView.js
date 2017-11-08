@@ -68,7 +68,6 @@ define([
             _.bindAll(this, 'template', 'save');
 
             this.initFormChannel();
-            this.initMainChannel();
             this.collectionChannel = Backbone.Radio.channel('collectionView');
             this.collectionChannel.on('viewDrop', this.viewDrop, this);
 
@@ -115,28 +114,6 @@ define([
 
             //  Event send from Formbuilder.js when export is finished (success or not)
             this.formChannel.on('exportFinished', this.displayExportMessage, this);
-
-            //  Disable footer actions when user wants to edit a field
-            this.formChannel.on('editModel', this.disableFooterAndClearField, this);
-        },
-
-        /**
-         * Init main channel ONLY for this module and listen some events
-         */
-        initMainChannel : function() {
-            this.mainChannel = Backbone.Radio.channel('edition');
-            this.mainChannel.on('editionDone', this.updateCollectionAttributes, this);
-        },
-
-        /**
-         * Update collection attributes and display its new name when edition is done
-         *
-         * @param  {Object} collection updated attributes
-         */
-        updateCollectionAttributes : function(newCollectionAttributes) {
-            this.collection.updateCollectionAttributes(newCollectionAttributes);
-            this.updateName();
-            this.enableFooterActions();
         },
 
         /**
@@ -462,21 +439,6 @@ define([
                 window.onkeydown = null;
                 window.onfocus = null;
             });
-        },
-
-        /**
-         * Disable current selected field
-         */
-        clearSelectedFied : function(modelToKeepSelect) {
-            var modelToKeepSelectedID = '#dropField' + modelToKeepSelect;
-            this.$el.find('.dropField').not(modelToKeepSelectedID).find('.element').removeClass('selected');
-        },
-
-        /**
-         *
-         */
-        disableFooterAndClearField : function(modelToEditID) {
-            this.clearSelectedFied(modelToEditID);
         },
 
         /**

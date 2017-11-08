@@ -12,7 +12,7 @@ define([
         events: {
             'click #trash'       : 'removeView',
             'click #duplicate'   : 'copyModel',
-            'click #edit'        : 'editModel',
+            'click #edit'        : 'editField',
             'focus input'        : 'updateSetting'
         },
 
@@ -22,7 +22,7 @@ define([
         initialize: function(options) {
             // override template for now
             this.template   = _.template(DefaultTemplate);
-            _.bindAll(this, 'render', 'removeView', 'editModel', 'copyModel', 'destroy_view');
+            _.bindAll(this, 'render', 'removeView', 'editField', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
 
             this.model.bind('destroy', this.destroy_view);
@@ -166,11 +166,11 @@ define([
         /**
          * Send an event on form channel when user wants to edit field properties
          */
-        editModel : function() {
+        editField: function() {
             $(".actions").hide();
 
             //  The event is send to EditionPageController
-            this.formChannel.trigger('editModel', this.model.get('id'));
+            this.formChannel.trigger('editField', this.model.get('id'));
             this.$el.find('.element').addClass('selected');
         },
 

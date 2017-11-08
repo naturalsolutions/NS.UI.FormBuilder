@@ -150,17 +150,7 @@ define([
                 that.currentFieldType = that.modelToEdit.constructor.type;
 
             that.createForm();
-
-            if ($('#widgetPanel').hasClass('col-md-1')) {
-                $('#formPanel').switchClass('col-md-8', 'col-md-6', 500);
-            }
-
-            if ($('#settingFieldPanel').hasClass('col-md-0')) {
-                $('#settingFieldPanel').switchClass('col-md-0', 'col-md-3', 500);
-                $('#widgetPanel').hide();
-            }
-
-            $(".actions").show();
+            that.displayPanel();
         },
 
         initContextDatas : function() {
@@ -628,6 +618,14 @@ define([
             });
         },
 
+        closePanel: function() {
+            $("#settingFieldPanel").removeClass("display");
+        },
+
+        displayPanel: function() {
+            $("#settingFieldPanel").addClass("display");
+            $("#settingFieldPanel").css({width: $("td.options").outerWidth()});
+        },
 
         /**
          * Remove last form and clean html content
@@ -698,7 +696,7 @@ define([
 
             var cancelSettingPanel = function(){
                 self.removeForm();
-                self.mainChannel.trigger('formCancel');
+                self.closePanel();
             };
 
             if (this.hasFieldsChanged && !avoidUserValidation){
@@ -776,7 +774,7 @@ define([
                     this.formChannel.trigger('field:change', this.modelToEdit.get('id'));
 
                     this.removeForm();
-                    this.mainChannel.trigger('formCommit');
+                    this.closePanel();
 
                     $("#dropField"+this.modelToEdit.get('id')+" .field-label span").css("color", "white");
 
@@ -857,7 +855,7 @@ define([
                         modattr.isLinkedField = modattr.linkedField && modattr.linkedField.length > 0 &&
                             modattr.linkedFieldTable && modattr.linkedFieldTable.length > 0;
 
-                        that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
+                        that.formChannel.trigger('editField', that.modelToEdit.get('id'));
                         swal({
                             title:translater.getValueFromKey('configuration.save.loadsuccess') || "Chargement réussit !",
                             text:translater.getValueFromKey('configuration.save.loadsuccessMsg') || "Le template a bien été chargé",
@@ -966,7 +964,7 @@ define([
                     that.modelToEdit.attributes.converted = that.modelToEdit.attributes.id;
                     that.modelToEdit.attributes.id = 0;
                     that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes, false, true);
-                    that.formChannel.trigger('editModel', that.modelToEdit.get('id'));
+                    that.formChannel.trigger('editField', that.modelToEdit.get('id'));
                 }
 
                 window.onkeydown = null;

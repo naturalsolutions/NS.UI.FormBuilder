@@ -709,10 +709,9 @@ define([
 
             $.each(that.models, function (index, value) {
                 var fieldModel = that.get(value.id);
-
                 if (!fieldModel.attributes.validated) {
                     var fieldForm = new Backbone.Form({
-                        model: that.get(value.id)
+                        model: fieldModel
                     }).render();
 
                     if (!fieldForm.staticfield)

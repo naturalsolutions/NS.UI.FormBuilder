@@ -4,8 +4,8 @@
     <img class="saveSpinner" src="assets/images/loader.gif" />
     <div data-i18n="form.actions.save" class="action actionSave" id="save">Tout sauvegarder</div>
 </div>
-<div class="content row">
-    <div id="settingFormPanel" class="col-md-3">
+<div class="content">
+    <div id="settingFormPanel">
         <div class="row scroll">
             <div class="row title">
                 <h2 class="col-md-10 col-md-offset-1" data-i18n="form.setting">
@@ -40,7 +40,20 @@
             </div>
         </div>
     </div>
-    <div id="formPanel" class="col-md-8"></div>
-    <div id="widgetPanel" class="col-md-1"></div>
-    <div id="settingFieldPanel" class="col-md-0"></div>
+    <div id="formPanel">
+        <% if (!readonly) { %>
+        <div id="widgetPanel">
+            <div class="fieldTypes">
+                <% for (var i in fieldTypes) {
+                field = fieldTypes[i]; %>
+                <div class="picto-<%= field.i18n %>"
+                     data-type="<%= field.type %>"
+                     data-i18n="[title]fields.<%= field.i18n %>"></div>
+                <% } %>
+            </div>
+        </div>
+        <% } %>
+        <div id="gridView"></div>
+        <div id="settingFieldPanel"></div>
+    </div>
 </div>

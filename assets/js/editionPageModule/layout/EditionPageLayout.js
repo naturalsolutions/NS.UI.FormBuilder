@@ -3,14 +3,13 @@ define([
     'marionette',
     'text!../templates/EditionPageLayout.html',
     '../views/FormPanelView',
-    '../views/WidgetPanelView',
     '../views/SettingFieldPanelView',
     '../models/Fields',
     '../../Translater',
     'tools',
     'app-config'
 ], function($, Marionette, EditionPageLayoutTemplate,
-            FormPanelView, WidgetPanelView, SettingFieldPanelView,
+            FormPanelView, SettingFieldPanelView,
             Fields, Translater, tools, AppConfig) {
     var t = Translater.getTranslater();
 
@@ -19,6 +18,7 @@ define([
             return _.template(EditionPageLayoutTemplate) ({
                 collection : this.fieldCollection.getAttributesValues(),
                 context: this.context,
+                fieldTypes: this.fieldTypes,
                 topcontext: AppConfig.appMode.topcontext,
                 readonly: AppConfig.readonlyMode
             });
@@ -39,43 +39,49 @@ define([
             'click  .attachedFiles .addBtn'           : 'triggerFileClick',
             'change .attachedFiles input[type="file"]': 'fileInputChanged',
             'click  .attachedFiles .remove'           : 'removeAttachedFile',
-            'click  .attachedFiles .download'         : 'downloadAttachedFile'
+            'click  .attachedFiles .download'         : 'downloadAttachedFile',
+
+            'click .fieldTypes > div'                 : 'appendToDrop'
         },
 
         regions : {
-            leftPanel : '#widgetPanel',
-            centerPanel : '#formPanel',
+            centerPanel : '#gridView',
             settingFormPanel : '#settingFormPanel',
             settingFieldPanel : '#settingFieldPanel'
         },
 
         initialize : function(options) {
+            this.options = options;
+            this.linkedFieldsList = options.linkedFieldsList;
             this.fieldCollection = options.fieldCollection;
             this.URLOptions = options.URLOptions;
             this.context = this.fieldCollection.context;
             this.formFilesBinaryList = {};
+            this.initFieldTypes();
 
             this.mainChannel = Backbone.Radio.channel('edition');
-            this.mainChannel.on('formCommit', this.closeSettingPanel, this);
-            this.mainChannel.on('editionDone', this.closeSettingPanel, this);
-            this.mainChannel.on('formCancel', this.closeSettingPanel, this);
             this.mainChannel.on('setTemplateList', this.setTemplateList, this);
             this.mainChannel.on('unsetTemplateList', this.unsetTemplateList, this);
 
 
             this.formChannel = Backbone.Radio.channel('form');
-            this.formChannel.on('initFieldSetting', this.initFieldSetting, this);
+            this.formChannel.on('editField', this.editField, this);
 
             _.bindAll(this, 'template');
         },
 
-        initFieldSetting : function(options) {
+        editField: function(id) {
             if (this.settingFieldPanel == undefined) {
                 this.addRegion('settingFieldPanel', '#settingFieldPanel');
                 this.settingFieldPanel =  this.getRegion('settingFieldPanel');
             }
 
-            this.settingFieldPanel.show(new SettingFieldPanelView(options, this.savedTemplateList));
+            this.settingFieldPanel.show(new SettingFieldPanelView({
+                URLOptions             : this.URLOptions,
+                linkedFieldsList       : this.linkedFieldsList,
+                modelToEdit            : this.fieldCollection.get(id),
+                fieldsList             : this.fieldCollection.getFieldList(id)
+            }, this.savedTemplateList));
         },
 
         onRender : function() {
@@ -85,10 +91,6 @@ define([
                 URLOptions : this.URLOptions
             }, AppConfig.readonlyMode);
             this.centerPanel.show(this.formPanel);
-
-            if (!AppConfig.readonlyMode) {
-                this.leftPanel.show( new WidgetPanelView({}));
-            }
             this.$el.i18n();
         },
 
@@ -154,15 +156,6 @@ define([
                     window.onfocus = null;
                 });
             }
-        },
-
-        closeSettingPanel : function() {
-            $('#formPanel').switchClass("col-md-6", "col-md-8", 500);
-            $('#settingFieldPanel').switchClass("col-md-3", "col-md-0", 500);
-            $('#widgetPanel').show();
-            $('#widgetPanel').animate({
-                marginRight : 0
-            }, 500);
         },
 
         /* ----------------------- */
@@ -353,5 +346,48 @@ define([
             delete this.formFilesBinaryList[name];
             $file.remove();
         },
+
+        /* -------------- */
+        /* Fieldtypes bar */
+        /* -------------- */
+        initFieldTypes : function() {
+            var context = this.context;
+
+            // no soup for you
+            if (!AppConfig.appMode[context] || context == "all") {
+                return;
+            }
+
+            // insert each field found from specific context in config
+            var fieldTypes = [];
+            $.each(AppConfig.appMode[context], function (i, fieldType) {
+                var field = Fields[fieldType];
+                if (!field) {
+                    // try appending "Field" suffix
+                    fieldType += "Field";
+                    field = Fields[fieldType];
+                    if (!field) {
+                        console.warn('initFieldTypes: field "' + fieldType + '" from config does not exist');
+                        return;
+                    }
+                }
+                fieldTypes.push({
+                    type: fieldType,
+                    i18n             : fieldType.replace('Field', '').toLowerCase(),
+                    doubleColumn     : field.doubleColumn !== undefined,
+                    fontAwesomeClass : field.fontAwesomeClass
+                });
+            });
+            this.fieldTypes = fieldTypes;
+        },
+
+        appendToDrop : function(e) {
+            var fieldType = $(e.target).data("type");
+            if (!Fields[fieldType]) {
+                tools.swal('error', 'modal.field.error', 'modal.field.errorMsg');
+                return;
+            }
+            this.fieldCollection.addElement(fieldType);
+        }
     });
 });
