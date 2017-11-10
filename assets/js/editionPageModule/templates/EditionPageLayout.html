@@ -42,16 +42,16 @@
     </div>
     <div id="formPanel">
         <% if (!readonly) { %>
-        <div id="widgetPanel">
-            <div class="fieldTypes">
+        <table id="widgetPanel">
+            <tr class="fieldTypes">
                 <% for (var i in fieldTypes) {
                 field = fieldTypes[i]; %>
-                <div class="picto-<%= field.i18n %>"
+                <td class="picto-<%= field.i18n %>"
                      data-type="<%= field.type %>"
-                     data-i18n="[title]fields.<%= field.i18n %>"></div>
+                     data-i18n="[title]fields.<%= field.i18n %>"></td>
                 <% } %>
-            </div>
-        </div>
+            </tr>
+        </table>
         <% } %>
         <div id="gridView"></div>
         <div id="settingFieldPanel"></div>

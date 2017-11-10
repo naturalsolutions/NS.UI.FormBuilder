@@ -41,7 +41,7 @@ define([
             'click  .attachedFiles .remove'           : 'removeAttachedFile',
             'click  .attachedFiles .download'         : 'downloadAttachedFile',
 
-            'click .fieldTypes > div'                 : 'appendToDrop'
+            'click .fieldTypes td'                    : 'appendToDrop'
         },
 
         regions : {
