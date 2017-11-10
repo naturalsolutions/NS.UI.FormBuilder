@@ -14,14 +14,10 @@ define([
     'homePageModule/collection/FormCollection',
     'backbone.radio',
     'app-config',
-    'sweetalert',
-    'Translater',
-    'auth'
+    'auth',
+    'tools'
 ], function(_, Marionette, HomePageRouter, HomePageController, HomePageLayout, EditionPageRouter, EditionPageController,
-            FormCollection, Radio, AppConfig, swal, Translater, auth) {
-
-    var translater = Translater.getTranslater();
-
+            FormCollection, Radio, AppConfig, auth, tools) {
     //  Create a marionette application
     var FormbuilderApp = new Backbone.Marionette.Application();
 
@@ -174,16 +170,10 @@ define([
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
         if (auth.error) {
-            swal({
-                title: translater.getValueFromKey('error.cookieCheck') || "Votre identité ne peut être vérifiée",
-                text: translater.getValueFromKey('error.serverAvailable') || "Le serveur est-il hors ligne ?",
-                type: "error",
-                closeOnConfirm: true
-            }, function(){
-                window.location.href = AppConfig.portalURL;
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("error", "error.cookieCheck", "error.serverAvailable",
+                function() {
+                    window.location.href = AppConfig.portalURL;
+                });
             return;
         }
 

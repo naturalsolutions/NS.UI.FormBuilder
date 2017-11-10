@@ -83,15 +83,24 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
             }
         },
 
-        swal: function(t, title, text) {
-            sweetalert({
+        swal: function(t, title, text, options, callback, confirmCallback) {
+            var opts = $.extend({
                 type: t,
-                title: translater.getValueFromKey(title) || title,
-                text: translater.getValueFromKey(text) || text,
-                closeOnConfirm: true
-            }, function() {
+                title: translater.getValueFromKey(title),
+                text: translater.getValueFromKey(text),
+                closeOnConfirm: true,
+                closeOnCancel: true
+            }, options);
+
+            sweetalert(opts, function(confirm) {
                 window.onkeydown = null;
                 window.onfocus = null;
+                if (callback && typeof(callback) === 'function') {
+                    callback();
+                }
+                if (confirm && confirmCallback && typeof(confirmCallback) === 'function') {
+                    confirmCallback();
+                }
             });
         }
     };

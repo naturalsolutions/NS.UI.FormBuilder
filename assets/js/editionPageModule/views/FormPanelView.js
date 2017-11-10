@@ -2,15 +2,15 @@ define([
     'jquery',
     'marionette',
     'text!../templates/FormPanelView.html',
-    'sweetalert',
+    'tools',
     '../../Translater',
     '../../app-config',
     '../collection/staticInputs/ContextStaticInputs',
     '../models/Fields',
     './fieldViews/All',
     'i18n',
-    'slimScroll'    
-], function($, Marionette, FormPanelViewTpl, swal,
+    'slimScroll'
+], function($, Marionette, FormPanelViewTpl, tools,
             Translater, AppConfig, ContextStaticInputs, Fields, AllFieldViews) {
 
     var translater = Translater.getTranslater();
@@ -143,15 +143,7 @@ define([
 
                 // FieldView exists?
                 if (!AllFieldViews[viewClassName]) {
-                    swal({
-                        title: translater.getValueFromKey('modal.field.error') || "Echec de l'ajout!",
-                        text: translater.getValueFromKey('modal.field.errorMsg') || "Une erreur est survenue lors de l'ajout du champ !",
-                        type: "error",
-                        closeOnConfirm: true
-                    }, function(){
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    });
+                    tools.swal("error", "modal.field.error", "modal.field.errorMsg");
                     return;
                 }
 
@@ -292,42 +284,22 @@ define([
         */
         clear : function() {
             var self = this;
-            swal({
-                title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                text               : translater.getValueFromKey('modal.clear.fieldsdeleted') || "Les champs du formulaire seront supprimés !",
-                type               : "warning",
+            tools.swal("warning", "modal.clear.title", "modal.clear.fieldsdeleted", {
                 showCancelButton   : true,
                 confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('modal.clear.yes') || "Oui, supprimer",
-                cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                closeOnConfirm     : true,
-                closeOnCancel      : true
-            }, function(isConfirm) {
+                confirmButtonText  : translater.getValueFromKey('modal.clear.yes'),
+                cancelButtonText   : translater.getValueFromKey('modal.clear.no')
+            }, null, function() {
+                // confirm callback
+                _.map(self._view, function(el) {
+                    el.removeView();
+                });
+                self.collection.clearAll();
+                self.updateFieldCount();
 
-                if (isConfirm) {
-                    _.map(self._view, function(el) {
-                        el.removeView();
-                    });
-                    swal({
-                        title:translater.getValueFromKey('modal.clear.deleted') || "Supprimé !",
-                        text:translater.getValueFromKey('modal.clear.formDeleted') || "Votre formulaire a été supprimé !",
-                        type:"success",
-                        closeOnConfirm: true
-                    }, function(){
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    });
-
-                    self.collection.clearAll();
-                    self.updateFieldCount();
-
-                    window.formbuilder.formedited = true;
-                }
-
-                window.onkeydown = null;
-                window.onfocus = null;
+                window.formbuilder.formedited = true;
+                tools.swal("success", "modal.clear.deleted", "modal.clear.formDeleted");
             });
-
         },
 
         /**
@@ -337,25 +309,9 @@ define([
          */
         displayExportMessage : function(result) {
             if (result) {
-                swal({
-                    title:translater.getValueFromKey('modal.export.success') || "Export réussi !",
-                    text:"",
-                    type:"success",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+                tools.swal("success", "modal.export.success", "");
             } else {
-                swal({
-                    title:translater.getValueFromKey('modal.export.error') || "Echec de l'export !",
-                    text:translater.getValueFromKey('modal.export.errorMsg') || "Une erreur est survenue lors de l'export",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+                tools.swal("error", "modal.export.error", "modal.export.errorMsg");
             }
         },
 
@@ -364,117 +320,54 @@ define([
          */
         displaySucessMessage : function() {
             this.dataUpdated = true;
-            swal({
-                title: translater.getValueFromKey('modal.save.success') || "Sauvé !",
-                text: translater.getValueFromKey('modal.save.successMsg') || "Votre formulaire a été enregistré sur le serveur !",
-                type: "success",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("success", "modal.save.success", "modal.save.successMsg");
         },
 
         /**
          * Display a message if the form couldn't be saved
          */
         displayFailMessage : function(textKey, textValue) {
-            if (textKey)
-            {
-                swal({
-                    title:translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
-                    text:translater.getValueFromKey(textKey) + (textValue ? textValue : "") || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+            if (textKey) {
+                tools.swal("error", "modal.save.error",
+                    translater.getValueFromKey(textKey) + (textValue ? textValue : ""));
             }
-            else
-            {
-                swal({
-                    title:translater.getValueFromKey('modal.save.error') || "Une erreur est survenue !",
-                    text:translater.getValueFromKey('modal.save.errorMsg') || "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+            else {
+                tools.swal("error", "modal.save.error", "modal.save.errorMsg");
             }
         },
 
         displayIncompleteFormMessage: function() {
-            swal({
-                title:translater.getValueFromKey('modal.save.uncompleteFormerror') || "Une erreur est survenue !",
-                text:translater.getValueFromKey('modal.save.uncompleteForm') || "Votre formulaire n'a pas été totallement renseigné",
-                type:"error",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("error", "modal.save.uncompleteFormerror", "modal.save.uncompleteForm");
         },
 
         displayIncompleteFieldMessage: function() {
-            swal({
-                title:translater.getValueFromKey('modal.save.uncompleteFielderror') || "Une erreur est survenue !",
-                text:translater.getValueFromKey('modal.save.uncompleteField') || "Un de vos champs n'a pas été totallement renseigné",
-                type:"error",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("error", "modal.save.uncompleteFielderror", "modal.save.uncompleteField");
         },
 
         displayHasDuplicateFieldNames: function() {
-            swal({
-                title:translater.getValueFromKey('modal.save.hasDuplicateFieldNamesError') || "Une erreur est survenue !",
-                text:translater.getValueFromKey('modal.save.hasDuplicateFieldNames') || "Certains de vos champs ont des noms identiques",
-                type:"error",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("error", "modal.save.hasDuplicateFieldNamesError", "modal.save.hasDuplicateFieldNames");
         },
 
         /**
          * Display a confirm dialog when user wants to exit
          */
         exit : function() {
-            if (!Backbone.Radio.channel('global').readonly){
-                var self = this;
-                if (window.formbuilder.formedited)
-                {
-                    swal({
-                        title              : translater.getValueFromKey('modal.clear.title') || "Etes vous sûr ?",
-                        text               : translater.getValueFromKey('modal.clear.loosingModifications') || "Vous allez perdre vos modifications !",
-                        type               : "warning",
-                        showCancelButton   : true,
-                        confirmButtonColor : "#DD6B55",
-                        confirmButtonText  : translater.getValueFromKey('modal.exit.yes') || "Oui, quitter",
-                        cancelButtonText   : translater.getValueFromKey('modal.clear.no') || "Annuler",
-                        closeOnConfirm     : true,
-                        closeOnCancel      : true
-                    }, function(isConfirm) {
-                        if (isConfirm) {
-                            self.clearFormAndExit();
-                        }
-
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    });
-                }
-                else
-                {
-                    self.clearFormAndExit();
-                }
-            }
-            else
+            if (!window.formbuilder.formedited || this.readonly) {
                 this.clearFormAndExit();
+                return;
+            }
+
+            // form was edited, display confirmation popup
+            var self = this;
+            tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications", {
+                showCancelButton   : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText  : translater.getValueFromKey('modal.exit.yes'),
+                cancelButtonText   : translater.getValueFromKey('modal.clear.no')
+            }, null, function() {
+                // confirm callback
+                self.clearFormAndExit();
+            });
         },
 
         /**
@@ -491,14 +384,12 @@ define([
          * Set H1 text when the update is done
          */
         updateName: function () {
-            var context = window.context || $("#contextSwitcher .selected").text();
-
             this.$el.find('#collectionName').text(this.collection.name);
             if (this.collection.originalID && this.collection.originalID > 0)
             {
                 this.$el.find('#formOriginalIdArea').show();
                 this.$el.find('#formOriginalID').text(this.collection.originalID);
-                if (context != "track" && $("#datasImg").length > 0)
+                if (this.context != "track" && $("#datasImg").length > 0)
                 {
                     $("#datasImg").remove();
                 }
@@ -506,27 +397,11 @@ define([
         },
 
         displaytemplateMessage : function() {
-            swal({
-                title:translater.getValueFromKey('modal.template.success') || "Sauvé !",
-                text:translater.getValueFromKey('modal.template.successMsg') || "Votre formulaire a été enregistré comme template !",
-                type:"success",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("success", "modal.template.success", "modal.template.successMsg");
         },
 
         displayFailtemplatee : function() {
-            swal({
-                title:translater.getValueFromKey('modal.template.error') || "Une erreur est survenu !",
-                text:translater.getValueFromKey('modal.template.errorMsg') || "Votre formulaire n'a pas été enregistré comme template.",
-                type:"error",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("error", "modal.template.error", "modal.template.errorMsg");
         },
 
         sizepreview : function() {
@@ -552,16 +427,14 @@ define([
         },
 
         popDatasImg: function(){
-            var context = window.context || $("#contextSwitcher .selected").text();
-
-            if (context == "track")
+            if (this.context == "track")
             {
-                swal({
-                    title: "Datas linked to the form<br />'"+this.collection.name+"'<br />",
-                    text: "<span id='formDatasArea'><span id='formDatasLoading'>Loading datas ...<br/><br/>"+
-                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>",
-                    html: true
-                });
+                tools.swal("info",
+                    "Datas linked to the form<br />'"+this.collection.name+"'<br />",
+                    "<span id='formDatasArea'><span id='formDatasLoading'>Loading datas ...<br/><br/>"+
+                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>", {
+                        html: true
+                    });
                 $.ajax({
                     data: {},
                     type: 'GET',

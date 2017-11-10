@@ -4,7 +4,7 @@ define([
     'text!../templates/SettingFieldPanelView.html',
     'backbone.radio',
     '../../Translater',
-    'sweetalert',
+    'tools',
     'app-config',
     './loaders/ContextLoader',
     '../models/Fields',
@@ -13,7 +13,7 @@ define([
     'bootstrap-select',
     'slimScroll',
     'bootstrap'
-], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, swal, AppConfig, ContextLoader, Fields) {
+], function($, Marionette, SettingPanelViewTemplate, Radio, Translater, tools, AppConfig, ContextLoader, Fields) {
 
     var translater = Translater.getTranslater();
 
@@ -700,24 +700,19 @@ define([
             };
 
             if (this.hasFieldsChanged && !avoidUserValidation){
-                swal({
-                    title: translater.getValueFromKey('configuration.cancel.yousure') || "Vraiment ?",
-                    text: translater.getValueFromKey('configuration.cancel.unsavedchanges') || "Vous avez effectué de changements !",
-                    type: "warning",
+                // todo test
+                tools.swal("warning", "configuration.cancel.yousure", "configuration.cancel.unsavedchanges", {
                     showCancelButton: true,
                     confirmButtonColor: "#DD6B55",
-                    confirmButtonText: translater.getValueFromKey('configuration.cancel.yescancel') || "Oui, quitter !",
-                    cancelButtonText: translater.getValueFromKey('configuration.cancel.stay') || "Non, continuer.",
-                    closeOnConfirm: true }, function(){
+                    confirmButtonText: translater.getValueFromKey('configuration.cancel.yescancel'),
+                    cancelButtonText: translater.getValueFromKey('configuration.cancel.stay')
+                }, null, function() {
                     //TODO Find out why this timeout fixes the "hiding right panel issue"
                     setTimeout(function(){
                         cancelSettingPanel();
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    }, 50);
+                    }, 50)
                 });
-            }
-            else {
+            } else {
                 cancelSettingPanel();
             }
         },
@@ -786,27 +781,11 @@ define([
                     this.$el.find('.scroll').scrollTop( $($("#settingFieldPanel [name='" + Object.keys(commitResult)[0] + "']")).offset().top -
                         this.$el.find('.scroll').offset().top - 60);
 
-                    swal({
-                        title:translater.getValueFromKey('modal.save.uncompleteFielderror') || "Erreur",
-                        text:translater.getValueFromKey('modal.save.uncompleteFieldProp') || "Champ obligatoire non renseigné",
-                        type:"error",
-                        closeOnConfirm: true
-                    }, function(){
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    });
+                    tools.swal("error", "modal.save.uncompleteFielderror", "modal.save.uncompleteFieldProp");
                 }
             }
             else {
-                swal({
-                    title:translater.getValueFromKey('configuration.save.fail') || "Echec !",
-                    text:translater.getValueFromKey('configuration.save.samename') || "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+                tools.swal("error", "configuration.save.fail", "configuration.save.samename");
             }
         },
 
@@ -856,15 +835,8 @@ define([
                             modattr.linkedFieldTable && modattr.linkedFieldTable.length > 0;
 
                         that.formChannel.trigger('editField', that.modelToEdit.get('id'));
-                        swal({
-                            title:translater.getValueFromKey('configuration.save.loadsuccess') || "Chargement réussit !",
-                            text:translater.getValueFromKey('configuration.save.loadsuccessMsg') || "Le template a bien été chargé",
-                            type:"success",
-                            closeOnConfirm: true
-                        }, function(){
-                            window.onkeydown = null;
-                            window.onfocus = null;
-                        });
+
+                        tools.swal("success", "configuration.save.loadsuccess", "configuration.save.loadsuccessMsg");
                     },
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
                         console.log("Ajax Error: " + xhr);
@@ -891,15 +863,7 @@ define([
             switch(e.currentTarget.name)
             {
                 case "defaultValue":
-                    swal({
-                        title: translater.getValueFromKey('modal.editionField.fieldEditAlert') || "Alerte d'édition de champ",
-                        text: translater.getValueFromKey('modal.editionField.defaultValueEdit') || "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
-                        type: "info",
-                        closeOnConfirm: true
-                    }, function(){
-                        window.onkeydown = null;
-                        window.onfocus = null;
-                    });
+                    tools.swal("info", "modal.editionField.fieldEditAlert", "modal.editionField.defaultValueEdit");
                     break;
                 case "linkedFieldTable":
                     if (window.context == "ecoreleve")
@@ -913,12 +877,12 @@ define([
 
             if (context == "track")
             {
-                swal({
-                    title: "Datas linked to the input<br />'"+$("#settingFieldPanel [name='name']").val()+"'<br />",
-                    text: "<span id='inputDatasArea'><span id='inputDatasLoading'>Loading datas ...<br/><br/>"+
-                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>",
-                    html: true
-                });
+                tools.swal("info",
+                    "Datas linked to the input<br />'"+$("#settingFieldPanel [name='name']").val()+"'<br />",
+                    "<span id='inputDatasArea'><span id='inputDatasLoading'>Loading datas ...<br/><br/>"+
+                    "<img style='height: 20px;' src='assets/images/loader.gif' /></span></span>", {
+                        html: true
+                    });
                 $.ajax({
                     data: {},
                     type: 'GET',
@@ -948,27 +912,17 @@ define([
 
         convertAction : function() {
             var that = this;
-            swal({
-                title              : translater.getValueFromKey('settings.actions.convertTitle') || "Confirmation de convertion",
-                text               : translater.getValueFromKey('settings.actions.convertValidate') || "L'input sera convertit sans retour possible !",
-                type               : "warning",
-                showCancelButton   : true,
+            tools.swal("warning", "settings.actions.convertTitle", "settings.actions.convertValidate", {
                 confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('settings.actions.convertYes') || "Oui, convertir",
-                cancelButtonText   : translater.getValueFromKey('settings.actions.convertNo') || "Annuler",
-                closeOnConfirm: true
-            }, function(isConfirm) {
-                if (isConfirm) {
-                    that.formChannel.trigger('remove', that.modelToEdit.attributes.id, true);
-                    var fieldType = $("#inputTypeList option:selected").text() + 'Field';
-                    that.modelToEdit.attributes.converted = that.modelToEdit.attributes.id;
-                    that.modelToEdit.attributes.id = 0;
-                    that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes, false, true);
-                    that.formChannel.trigger('editField', that.modelToEdit.get('id'));
-                }
-
-                window.onkeydown = null;
-                window.onfocus = null;
+                confirmButtonText  : translater.getValueFromKey('settings.actions.convertYes'),
+                cancelButtonText   : translater.getValueFromKey('settings.actions.convertNo')
+            }, null, function() {
+                that.formChannel.trigger('remove', that.modelToEdit.attributes.id, true);
+                var fieldType = $("#inputTypeList option:selected").text() + 'Field';
+                that.modelToEdit.attributes.converted = that.modelToEdit.attributes.id;
+                that.modelToEdit.attributes.id = 0;
+                that.formChannel.trigger('addNewElement', fieldType, that.modelToEdit.attributes, false, true);
+                that.formChannel.trigger('editField', that.modelToEdit.get('id'));
             });
         },
 
@@ -977,32 +931,15 @@ define([
          */
         displayConfigurationSaveSuccess : function() {
             this.mainChannel.trigger('unsetTemplateList');
-            swal({
-                title:translater.getValueFromKey('configuration.save.success') || "Sauvé !",
-                text:translater.getValueFromKey('configuration.save.successMsg') || "Votre champs a bien été sauvgeardé",
-                type:"success",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("success", "configuration.save.success", "configuration.save.successMsg");
         },
 
         /**
          * Display en error message when field couldn't be saved
          */
         displayConfigurationSaveFail : function() {
-            swal({
-                title:translater.getValueFromKey('configuration.save.fail') || "Echec !",
-                text:translater.getValueFromKey('configuration.save.failMsg') || "Votre champs n'a pas pu être sauvegardé",
-                type:"error",
-                closeOnConfirm: true
-            }, function(){
-                window.onkeydown = null;
-                window.onfocus = null;
-            });
+            tools.swal("error", "configuration.save.fail", "configuration.save.failMsg");
         }
-
     });
 
     return SettingFieldPanelView;

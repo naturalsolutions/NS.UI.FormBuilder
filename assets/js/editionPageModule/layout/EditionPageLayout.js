@@ -146,15 +146,7 @@ define([
                     $(this.form.el).find('p[data-error]').show();
                     this.$el.find('.general-error').html('').hide();
                 }
-                swal({
-                    title:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Erreur",
-                    text:this.translater.getValueFromKey('modal.save.uncompleteFormerror') || "Champ obligatoire non renseigné",
-                    type:"error",
-                    closeOnConfirm: true
-                }, function(){
-                    window.onkeydown = null;
-                    window.onfocus = null;
-                });
+                tools.swal("error", 'modal.save.uncompleteFormerror', 'modal.save.uncompleteFormerror');
             }
         },
 
