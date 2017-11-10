@@ -1621,7 +1621,7 @@ define([
     //  ----------------------------------------------------
 
 
-    models.HiddenField = Backbone.Model.extend({
+    models.HiddenField = models.BaseField.extend({
         defaults: {
             id          : 0,
             order       : 1,
@@ -1677,13 +1677,13 @@ define([
         section : 'presentation'
     });
 
-    models.HorizontalLineField = Backbone.Model.extend({}, {
+    models.HorizontalLineField = models.BaseField.extend({}, {
         type   : 'HorizontalLine',
         section : 'presentation',
         i18n   : 'presentation'
     });
 
-    models.SubformField = Backbone.Model.extend({
+    models.SubformField = models.BaseField.extend({
 
         defaults: {
             id                : 0,
