@@ -1441,9 +1441,6 @@ define([
                         value          : "1"
                     }
                 ],
-                //  the default value refers to the default choice id
-                //  We used an array because we can have multiple default value
-                defaultValue: [1],
                 expanded: false
             });
 

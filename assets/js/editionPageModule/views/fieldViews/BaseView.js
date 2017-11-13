@@ -187,19 +187,9 @@ define([
          * Send an event on form channel when user wants to edit field properties
          */
         editField: function() {
-            $(".actions").hide();
-
             //  The event is send to EditionPageController
             this.formChannel.trigger('editField', this.model.get('id'));
             this.$el.find('.element').addClass('selected');
-        },
-
-        /**
-         * Re-enable actions when the edition is done or cancelled
-         */
-        enableActions : function() {
-            // REMOVED FOR NOW this.$el.find('.actions').removeClass('locked');
-            this.$el.find('.element').removeClass('selected');
         },
 
         /**

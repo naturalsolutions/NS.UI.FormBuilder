@@ -412,7 +412,6 @@ define([
                     var currentInput = $(".dropField#dropField" + value.id);
                     currentInput.removeClass("col-xs-" + value.attributes.fieldSize);
                 });
-                $(".actions").show();
             }
             else
             {
@@ -421,7 +420,6 @@ define([
                     var currentInput = $(".dropField#dropField" + value.id);
                     currentInput.addClass("col-xs-" + value.attributes.fieldSize);
                 });
-                $(".actions").hide();
             }
         },
 

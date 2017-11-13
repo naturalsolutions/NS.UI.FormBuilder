@@ -23,16 +23,6 @@ define([
 
        render : function() {
            BaseView.prototype.render.apply(this, arguments);
-
-           var editor = new DatePickerEditor({
-               format : 'DD/MM/YYYY',
-               iconClass : 'fa fa-calendar',
-               fieldClass: 'datepicker-editor'
-           }).render();
-
-           this.$el.find('.datepickerlocation').html(editor.el);
-
-           this.$el.find('input').prop('placeholder', this.model.get('help'));
        }
     });
 
