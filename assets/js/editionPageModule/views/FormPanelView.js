@@ -221,10 +221,9 @@ define([
             this.$el.find('.drop').disableSelection();
 
             this.$el.find('#scrollSection').slimScroll({
-                height        : 'calc(100% - 20px)',
+                height        : 'calc(100% - 50px)',
                 railVisible   : true,
-                alwaysVisible : true,
-                railColor     : "#111"
+                alwaysVisible : true
             });
 
             this.updateFieldCount();
