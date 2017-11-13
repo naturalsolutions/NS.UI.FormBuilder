@@ -12,8 +12,8 @@ define([
         events: {
             'click #trash'       : 'removeView',
             'click #duplicate'   : 'copyModel',
-            'click #edit'        : 'editField',
-            'focus input'        : 'updateSetting'
+            'click .settings'    : 'editField',
+            'click .languages'   : 'editField'
         },
 
         /**

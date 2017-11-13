@@ -619,6 +619,7 @@ define([
         },
 
         closePanel: function() {
+            $(".rows tr.selected").removeClass("selected");
             $("#settingFieldPanel").removeClass("display");
         },
 

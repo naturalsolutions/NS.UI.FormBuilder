@@ -76,10 +76,14 @@ define([
                 this.settingFieldPanel =  this.getRegion('settingFieldPanel');
             }
 
+            $(".rows tr.selected").removeClass("selected");
+            var model = this.fieldCollection.get(id);
+            $(model.view.$el).addClass("selected");
+
             this.settingFieldPanel.show(new SettingFieldPanelView({
                 URLOptions             : this.URLOptions,
                 linkedFieldsList       : this.linkedFieldsList,
-                modelToEdit            : this.fieldCollection.get(id),
+                modelToEdit            : model,
                 fieldsList             : this.fieldCollection.getFieldList(id)
             }, this.savedTemplateList));
         },
