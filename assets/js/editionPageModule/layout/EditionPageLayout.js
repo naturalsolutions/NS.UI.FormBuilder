@@ -7,7 +7,8 @@ define([
     '../models/Fields',
     '../../Translater',
     'tools',
-    'app-config'
+    'app-config',
+    'backbone-forms'
 ], function($, Marionette, EditionPageLayoutTemplate,
             FormPanelView, SettingFieldPanelView,
             Fields, Translater, tools, AppConfig) {
@@ -163,86 +164,78 @@ define([
                 form = this.fieldCollection;
             }
             var that = this;
-            if (this.generatedAlready) {
-                alert('u');
-                return;
-            }
-            this.generatedAlready = true;
+            var datas = form.getAttributesValues(),
+                schemaDefinition = form.schemaDefinition,
+                keywordFr = [],
+                keywordEn = [];
 
-            require(['backbone-forms'], _.bind(function() {
-                var datas = form.getAttributesValues(),
-                    schemaDefinition = form.schemaDefinition,
-                    keywordFr = [],
-                    keywordEn = [];
+            schemaDefinition.keywordsFr.value = keywordFr;
+            schemaDefinition.keywordsEn.value = keywordEn;
 
-                schemaDefinition.keywordsFr.value = keywordFr;
-                schemaDefinition.keywordsEn.value = keywordEn;
+            this.form = new Backbone.Form({
+                schema: schemaDefinition,
+                data  : datas
+            }).render();
 
-                this.form = new Backbone.Form({
-                    schema: schemaDefinition,
-                    data  : datas
-                }).render();
-
-                // Init linked field (childForm?)
-                $.ajax({
-                    data: {},
-                    type: 'GET',
-                    url: this.URLOptions.childforms + "/" + form.id,
-                    contentType: 'application/json',
-                    crossDomain: true,
-                    success: function (data) {
-                        data = JSON.parse(data);
-                        $(data).each(function () {
-                            $(".childFormsList").show();
-                            if ($("#childform" + this.id).length == 0)
-                                $(".childList").append("<div id='childform" + this.id + "'><a target=_blank href='#form/" + this.id + "'>" + this.name + "</a></div>");
-                        });
-                    },
-                    error: function (err) {
-                        console.log("error retreiving childforms: " + err);
-                    }
-                });
-
-                this.$el.find('#form').append(this.form.el);
-                this.$el.find('.scroll').slimScroll({
-                    height        : '100%',
-                    railVisible   : true,
-                    alwaysVisible : true,
-                    railColor     : "#111",
-                    disableFadeOut: true
-                });
-
-                // append * to required
-                $.each(form.schemaDefinition, function(index, value){
-                    if (value.validators && value.validators[0].type == "required") {
-                        $("#settingFormPanel #form label[for="+index+"]").append("<span>*</span>");
-                    }
-                });
-
-                if (form.fileList) {
-                    $.each(form.fileList, function(index, value){
-                        that.addAttachedFile(value.Pk_ID, value.name, value.filedata);
+            // Init linked field (childForm?)
+            $.ajax({
+                data: {},
+                type: 'GET',
+                url: this.URLOptions.childforms + "/" + form.id,
+                contentType: 'application/json',
+                crossDomain: true,
+                success: function (data) {
+                    data = JSON.parse(data);
+                    $(data).each(function () {
+                        $(".childFormsList").show();
+                        if ($("#childform" + this.id).length == 0)
+                            $(".childList").append("<div id='childform" + this.id + "'><a target=_blank href='#form/" + this.id + "'>" + this.name + "</a></div>");
                     });
+                },
+                error: function (err) {
+                    console.log("error retreiving childforms: " + err);
                 }
+            });
 
-                $('select#typeIndividus').on('change', function(){
-                    var groupselect = $('select#groupe');
+            this.$el.find('#form').append(this.form.el);
+            this.$el.find('.scroll').slimScroll({
+                height        : '100%',
+                railVisible   : true,
+                alwaysVisible : true,
+                railColor     : "#111",
+                disableFadeOut: true
+            });
 
-                    if($(this).val().toLowerCase().indexOf("nouvel") !== -1){
-                        $(groupselect).find('option[value="null"]').show();
-                        $(groupselect).val('null');
-                        $(groupselect).attr("disabled", true);
-                    }
-                    else
-                    {
-                        if ($(groupselect).find('option[value="null"]').is(':selected')){
-                            $(groupselect).val([]);
-                        }
-                        $(groupselect).find('option[value="null"]').hide();
-                        $(groupselect).attr("disabled", false);
-                    }
+            // append * to required
+            $.each(form.schemaDefinition, function(index, value){
+                if (value.validators && value.validators[0].type == "required") {
+                    $("#settingFormPanel #form label[for="+index+"]").append("<span>*</span>");
+                }
+            });
+
+            if (form.fileList) {
+                $.each(form.fileList, function(index, value){
+                    that.addAttachedFile(value.Pk_ID, value.name, value.filedata);
                 });
-            }, this));
+            }
+
+            $('select#typeIndividus').on('change', function(){
+                var groupselect = $('select#groupe');
+
+                if($(this).val().toLowerCase().indexOf("nouvel") !== -1){
+                    $(groupselect).find('option[value="null"]').show();
+                    $(groupselect).val('null');
+                    $(groupselect).attr("disabled", true);
+                }
+                else
+                {
+                    if ($(groupselect).find('option[value="null"]').is(':selected')){
+                        $(groupselect).val([]);
+                    }
+                    $(groupselect).find('option[value="null"]').hide();
+                    $(groupselect).attr("disabled", false);
+                }
+            });
         },
 
         triggerFileClick: function(){
