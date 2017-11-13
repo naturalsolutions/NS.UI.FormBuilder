@@ -30,6 +30,7 @@ define([
             this.el   = options.el;
             this.$container = options.$container;
             this.model.view = this;
+            this.static = this.model.get('compulsory');
             this.formChannel = Backbone.Radio.channel('form');
         },
 
@@ -130,6 +131,9 @@ define([
             var $placeholder = $(this.$container).find(this.el);
             this.$el.attr("id", $placeholder.attr("id"));
             this.$el.i18n();
+            if (this.static) {
+                this.$el.find("input, select").attr("disabled", true);
+            }
             $placeholder.replaceWith(this.$el);
 
             // $el was replaced, we need to rebind the view's events
