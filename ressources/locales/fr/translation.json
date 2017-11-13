@@ -248,7 +248,7 @@
         "propagate"                    : "Propagé",
         "isBinaryWeight"               : "Est un poid binaire",
         "preview"                      : "Montrer une prévisualisation",
-        "atBeginingOfLine"             : "Est en début de ligne",
+        "atBeginingOfLine"             : "début de ligne",
         "sizeError"                    : "La taille doit être comprise entre 1 et 12",
         "positionPath"                 : "Chemin vers la position",
         "defaultPath"                  : "Valeur par défaut",

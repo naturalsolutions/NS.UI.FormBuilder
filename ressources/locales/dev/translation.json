@@ -240,7 +240,7 @@
     "propagate"                      : "Propagated",
     "isBinaryWeight"                 : "Is Binary Weight",
     "preview"                        : "Show preview",
-    "atBeginingOfLine"               : "Is at the begining of the line",
+    "atBeginingOfLine"               : "begining of line",
     "sizeError"                      : "Field size must be from 1 to 12",
     "positionPath"                   : "Path of the position",
     "defaultPath"                    : "Default value",
