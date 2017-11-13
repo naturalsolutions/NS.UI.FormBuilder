@@ -102,15 +102,18 @@ define([
 
         display: function(jsonForm) {
             this.fieldCollection.updateWithJSON(jsonForm);
-            // todo - do not create a new editionPage (memleak)
-            var editionPageLayout = new EditionPageLayout({
-                fieldCollection  : this.fieldCollection,
-                URLOptions       : this.URLOptions,
-                linkedFieldsList : this.linkedFieldsList
-            });
 
-            this.editionPageRegion.show( editionPageLayout );
-            this.currentEditionPageLayout = editionPageLayout;
+            if (!this.currentEditionPageLayout) {
+                this.currentEditionPageLayout = new EditionPageLayout({
+                    fieldCollection: this.fieldCollection,
+                    URLOptions: this.URLOptions,
+                    linkedFieldsList: this.linkedFieldsList
+                });
+            } else {
+                this.currentEditionPageLayout.update(this.fieldCollection);
+                this.currentEditionPageLayout.render();
+            }
+            this.editionPageRegion.show(this.currentEditionPageLayout);
 
             $('#mainRegion').animate({
                 marginLeft : '-100%'
@@ -141,6 +144,7 @@ define([
                     context      : context || "all",
                     URLOptions   : this.URLOptions || ""
                 });
+                this.fieldCollection.linkedFieldsList = this.linkedFieldsList;
             }
 
             this.fieldCollection.reset();

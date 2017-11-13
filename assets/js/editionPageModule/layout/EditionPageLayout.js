@@ -59,7 +59,6 @@ define([
             this.URLOptions = options.URLOptions;
             this.context = this.fieldCollection.context;
             this.formFilesBinaryList = {};
-            this.initFieldTypes();
 
             this.mainChannel = Backbone.Radio.channel('edition');
             this.mainChannel.on('setTemplateList', this.setTemplateList, this);
@@ -70,6 +69,13 @@ define([
             this.formChannel.on('editField', this.editField, this);
 
             _.bindAll(this, 'template');
+
+            this.update(this.fieldCollection);
+        },
+
+        update: function(fieldCollection) {
+            this.fieldCollection = fieldCollection;
+            this.initFieldTypes();
         },
 
         editField: function(id) {
