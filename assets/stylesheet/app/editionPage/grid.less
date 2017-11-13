@@ -19,13 +19,13 @@
       border: none;
       border-right: 1px solid @grid_fg;
       color: @grid_gray;
-      font-weight: bold;
       padding: 5px;
+      font-weight: bold;
     }
 
     .rows td.type {
       .reneco;
-      color: @grid_gray;
+      color: #bbb;
       font-size: 20px;
     }
 
@@ -35,6 +35,7 @@
         td {
           background: @grid_fg;
           border: 1px solid @grid_bg;
+          color: #aaa !important;
 
           &.handle {
             cursor: default;
@@ -49,6 +50,8 @@
 
         overflow: hidden;
         height: 60px;
+        padding: 5px 5px;
+        text-align: center;
 
         &.handle {
           background: url("../assets/images/handle.png") @grid_bg no-repeat 2px center;
@@ -59,22 +62,99 @@
         max-width: 10%;
         min-width: 10%;
 
-        &:nth-of-type(1) {
+        &.type {
           width: 50px;
           max-width: 50px;
           min-width: 50px;
         }
 
-        &:nth-last-of-type(2) {
+        &.editMode {
           width: 18%;
           max-width: 18%;
           min-width: 18%;
         }
 
-        &:nth-last-of-type(1) {
+        &.options {
           width: 28%;
           max-width: 28%;
           min-width: 28%;
+
+          &:hover {
+            cursor: default;
+          }
+
+          div {
+            display: inline-block;
+            width: 48%;
+            padding: 8px 0;
+            text-align: center;
+            font-weight: bold;
+
+            &::before {
+              .reneco;
+              font-size: 25px;
+              margin-right: 8px;
+            }
+
+            &.settings::before {
+              content: '\e657';
+              vertical-align: -6px;
+            }
+
+            &.languages::before {
+              content: '\e62e';
+              vertical-align: -6px;
+            }
+
+            &:hover {
+              cursor: pointer;
+              color: @orange;
+            }
+          }
+        }
+
+        label.apCheckbox {
+          margin: 3px 0 0 0;
+          font-weight: normal;
+          white-space: nowrap;
+          input {
+            vertical-align: middle;
+            margin: 0;
+          }
+        }
+
+        input, select, option, div, span {
+          text-align: left;
+        }
+
+        option {
+          color: black;
+        }
+
+        input[type="text"], select {
+          height: 22px;
+        }
+
+        input, select {
+          &[disabled]:hover {
+            cursor: default !important;
+          }
+        }
+
+        input:not([type="checkbox"]), select {
+          border: none;
+          border-bottom: 1px solid #bbb;
+          background: none;
+          width: 100%;
+          color: #ddd;
+          padding: 0;
+
+          &:not([disabled]):focus, &:not([disabled]):hover {
+            border-bottom-color: white;
+            color: white;
+            outline: none;
+            box-shadow: none;
+          }
         }
       }
     }
