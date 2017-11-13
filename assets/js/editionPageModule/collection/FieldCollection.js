@@ -722,6 +722,7 @@ define([
                             $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
                         {
                             fieldsValidation = false;
+                            value.view.$el.addClass("validationError");
                             $("#dropField"+value.id+" .field-label span").css("color", "red");
                         }
                     }

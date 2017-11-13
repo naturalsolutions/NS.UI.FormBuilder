@@ -19,7 +19,7 @@ define([
         },
 
         selectChanged: function(e) {
-            this.model.set(e.target.name, e.target.selectedOptions[0].value);
+            this.setValue(e.target.name, e.target.selectedOptions[0].value);
         },
 
         inputChanged: function(e) {
@@ -32,7 +32,12 @@ define([
                     value = e.target.value;
                     break;
             }
-            this.model.set(e.target.name, value);
+            this.setValue(e.target.name, value);
+        },
+
+        setValue: function(field, value) {
+            this.$el.removeClass("validationError");
+            this.model.set(field, value);
         },
 
         /**
@@ -149,6 +154,7 @@ define([
             this.$el = $(this.template(this.model.toJSON()));
             var $placeholder = $(this.$container).find(this.el);
             this.$el.attr("id", $placeholder.attr("id"));
+            this.$el.addClass($placeholder.attr("class"));
             this.$el.i18n();
             if (this.static) {
                 this.$el.find("input, select").attr("disabled", true);
