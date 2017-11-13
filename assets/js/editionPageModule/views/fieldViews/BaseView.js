@@ -13,7 +13,26 @@ define([
             'click #trash'       : 'removeView',
             'click #duplicate'   : 'copyModel',
             'click .settings'    : 'editField',
-            'click .languages'   : 'editField'
+            'click .languages'   : 'editField',
+            'change input'       : 'inputChanged',
+            'change select'      : 'selectChanged'
+        },
+
+        selectChanged: function(e) {
+            this.model.set(e.target.name, e.target.selectedOptions[0].value);
+        },
+
+        inputChanged: function(e) {
+            var value;
+            switch(e.target.type.toLowerCase()) {
+                case "checkbox":
+                    value = e.target.checked;
+                    break;
+                default:
+                    value = e.target.value;
+                    break;
+            }
+            this.model.set(e.target.name, value);
         },
 
         /**
@@ -133,6 +152,16 @@ define([
             this.$el.i18n();
             if (this.static) {
                 this.$el.find("input, select").attr("disabled", true);
+            }
+            var linkedField = this.model.get('linkedField');
+            if (linkedField) {
+                this.$el.find('.linkedField option').each(function() {
+                    if (this.value === linkedField) {
+                        $(this).attr("selected", true);
+                    } else {
+                        $(this).attr("selected", false);
+                    }
+                });
             }
             $placeholder.replaceWith(this.$el);
 

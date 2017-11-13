@@ -8,12 +8,16 @@
     </td>
     <td class="linkedField">
         <select name="linkedField">
-            <option selected><%= arguments[0].linkedField %></option>
+            <option selected></option>
+            <% for (i in arguments[0].linkedFieldsList) {
+                var val = arguments[0].linkedFieldsList[i].key; %>
+            <option><%= val %></option>
+            <% } %>
         </select>
     </td>
     <td class="linkedFieldset">
         <!-- todo autocompletion on existing -->
-        <input spellcheck="off" type="text" name="defaultValue" value="<%= arguments[0].linkedFieldset %>">
+        <input spellcheck="off" type="text" name="linkedFieldset" value="<%= arguments[0].linkedFieldset %>">
     </td>
     <td class="appearance">
         <!-- todo custom checkbox & number input -->

@@ -54,6 +54,7 @@ define([
             this.options = options;
             this.linkedFieldsList = options.linkedFieldsList;
             this.fieldCollection = options.fieldCollection;
+            this.fieldCollection.linkedFieldsList = options.linkedFieldsList;
             this.URLOptions = options.URLOptions;
             this.context = this.fieldCollection.context;
             this.formFilesBinaryList = {};

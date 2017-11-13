@@ -529,6 +529,7 @@ define([
             var field = properties || {};
             if (field['order'] === undefined)
                 field['order'] = this.lastIndex();
+            field['linkedFieldsList'] = this.linkedFieldsList[this.context].linkedFieldsList;
             return this.addField(new Fields[nameType](field));
         },
 
