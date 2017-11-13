@@ -15,7 +15,10 @@
         "parentFieldset": "Parent fieldset",
         "appearance": "Appearance",
         "editMode": "Edit mode",
-        "options": "Options"
+        "options": "Options",
+        "optionsUnavailable": "Options unavailable for this field",
+        "languages": "Languages",
+        "settings": "Settings"
     },
 
     "fields" : {
