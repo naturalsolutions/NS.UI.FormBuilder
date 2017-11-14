@@ -67,6 +67,8 @@ define([
 
             this.formChannel = Backbone.Radio.channel('form');
             this.formChannel.on('editField', this.editField, this);
+            this.formChannel.on('setSelected', this.setSelected, this);
+            this.formChannel.on('closeEdit', this.closeEdit, this);
 
             _.bindAll(this, 'template');
 
@@ -84,12 +86,14 @@ define([
                 this.settingFieldPanel =  this.getRegion('settingFieldPanel');
             }
 
-            $(".rows tr.selected").removeClass("selected");
             var model = this.fieldCollection.get(id);
-            $(model.view.$el).addClass("selected");
+            this.setSelected(model);
+
+            model.view.$el.addClass("editing");
 
             // disable formPanel while editing field
             $("#formPanel").addClass("disabled");
+
 
             this.settingFieldPanel.show(new SettingFieldPanelView({
                 URLOptions             : this.URLOptions,
@@ -97,6 +101,34 @@ define([
                 modelToEdit            : model,
                 fieldsList             : this.fieldCollection.getFieldList(id)
             }, this.savedTemplateList));
+        },
+
+        setSelected: function(model) {
+            if (this.selected === model) {
+                return;
+            }
+            this.clearSelected();
+
+            this.selected = model;
+            this.selected.view.$el.addClass("selected");
+        },
+
+        clearSelected: function() {
+            if (!this.selected) {
+                return
+            }
+            this.selected.view.$el.removeClass("selected");
+            this.selected = null;
+        },
+
+        closeEdit: function() {
+            if (!this.selected) return;
+
+            this.selected.view.$el.find("input[name='name']").focus();
+            this.selected.view.$el.removeClass("editing");
+
+            // re-enable panel
+            $("#formPanel").removeClass("disabled");
         },
 
         onRender : function() {

@@ -14,20 +14,10 @@ define([
             'change input'          : 'inputChanged',
             'change select'         : 'selectChanged',
             'focus input, select'   : 'focusField',
-            'focusout input, select': 'focusOutField'
         },
 
-        focusOutField: function(e) {
-            // actually focusOut only if relatedTarget differs from currentTarget
-            if (e.delegateTarget == $(e.relatedTarget).closest("tr")[0]) {
-                return;
-            }
-            this.$el.removeClass("selected");
-        },
-
-        focusField: function(e) {
-            this.focusedField = e.target;
-            this.$el.addClass("selected");
+        focusField: function() {
+            this.formChannel.trigger("setSelected", this.model);
         },
 
         selectChanged: function(e) {
@@ -211,9 +201,7 @@ define([
          * Send an event on form channel when user wants to edit field properties
          */
         editField: function() {
-            //  The event is send to EditionPageController
             this.formChannel.trigger('editField', this.model.get('id'));
-            this.$el.find('.element').addClass('selected');
         },
 
         /**

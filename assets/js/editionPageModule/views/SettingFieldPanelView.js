@@ -619,9 +619,8 @@ define([
         },
 
         closePanel: function() {
-            $(".rows tr.selected").removeClass("selected");
             $("#settingFieldPanel").removeClass("display");
-            $("#formPanel").removeClass("disabled");
+            this.formChannel.trigger("closeEdit");
         },
 
         displayPanel: function() {
