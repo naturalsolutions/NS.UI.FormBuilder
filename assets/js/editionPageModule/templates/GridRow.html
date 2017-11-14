@@ -1,10 +1,10 @@
 <tr class="editRow <% if (compulsory) { %>static<% } %>" data-id="<%= id %>" data-order="<%= order %>">
     <td class="handle type picto-<%= meta.type.toLowerCase() %>"></td>
     <td class="name">
-        <input spellcheck="off" type="text" name="name" value="<%= name %>">
+        <input spellcheck="false" type="text" name="name" value="<%= name %>">
     </td>
     <td class="default">
-        <input spellcheck="off" type="text" name="defaultValue" value="<%= arguments[0].defaultValue %>">
+        <input spellcheck="false" type="text" name="defaultValue" value="<%= arguments[0].defaultValue %>">
     </td>
     <td class="linkedField">
         <select name="linkedField">
@@ -17,11 +17,11 @@
     </td>
     <td class="linkedFieldset">
         <!-- todo autocompletion on existing -->
-        <input spellcheck="off" type="text" name="linkedFieldset" value="<%= arguments[0].linkedFieldset %>">
+        <input spellcheck="false" type="text" name="linkedFieldset" value="<%= arguments[0].linkedFieldset %>">
     </td>
     <td class="appearance">
         <!-- todo custom checkbox & number input -->
-        <input spellcheck="off" type="number" name="fieldSize" min="1" max="12" value="<%= fieldSize %>">
+        <input spellcheck="false" type="number" name="fieldSize" min="1" max="12" value="<%= fieldSize %>">
         <label class="apCheckbox" for="cbBegining<%= id %>">
             <input type="checkbox" id="cbBegining<%= id %>" name="atBeginingOfLine" <% if (atBeginingOfLine) { %>checked<% } %>>
             début de ligne
