@@ -5,9 +5,6 @@ define([
 
     var translater = Translater.getTranslater();
 
-    /**
-     *  Base view
-     */
     var BaseView = Backbone.View.extend({
         events: {
             'click #trash'          : 'removeView',
@@ -76,11 +73,8 @@ define([
             }, this));
         },
 
-        /**
-         * Constructor
-         */
         initialize: function(options) {
-            // override template for now
+            // todo fix all other views instead of savagely overriding template like that
             this.template   = _.template(DefaultTemplate);
             _.bindAll(this, 'render', 'removeView', 'editField', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
@@ -94,9 +88,6 @@ define([
             this.formChannel = Backbone.Radio.channel('form');
         },
 
-        /**
-         * Remove the view when the model is destroyed
-         */
         destroy_view: function() {
             this.$el.slideUp(_.bind(function() {
                 // TODO undelegate ?
@@ -107,12 +98,8 @@ define([
                 this.remove();
                 Backbone.View.prototype.remove.call(this);
             }, this))
-
         },
 
-        /**
-         * Send event for remove the view
-         */
         removeView: function() {
             var self = this;
 
