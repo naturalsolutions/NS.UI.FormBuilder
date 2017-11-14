@@ -10,12 +10,27 @@ define([
      */
     var BaseView = Backbone.View.extend({
         events: {
-            'click #trash'       : 'removeView',
-            'click #duplicate'   : 'copyModel',
-            'click .settings'    : 'editField',
-            'click .languages'   : 'editField',
-            'change input'       : 'inputChanged',
-            'change select'      : 'selectChanged'
+            'click #trash'          : 'removeView',
+            'click #duplicate'      : 'copyModel',
+            'click .settings'       : 'editField',
+            'click .languages'      : 'editField',
+            'change input'          : 'inputChanged',
+            'change select'         : 'selectChanged',
+            'focus input, select'   : 'focusField',
+            'focusout input, select': 'focusOutField'
+        },
+
+        focusOutField: function(e) {
+            // actually focusOut only if relatedTarget differs from currentTarget
+            if (e.delegateTarget == $(e.relatedTarget).closest("tr")[0]) {
+                return;
+            }
+            this.$el.removeClass("selected");
+        },
+
+        focusField: function(e) {
+            this.focusedField = e.target;
+            this.$el.addClass("selected");
         },
 
         selectChanged: function(e) {
