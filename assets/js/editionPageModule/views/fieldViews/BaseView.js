@@ -61,7 +61,9 @@ define([
                 }
             }
 
-            this.model.set(field, value);
+            // tricks for you : update value without re-rendering
+            // since our render is wonky and breaks dom and we don't like it
+            this.model.set(field, value, { silent: true });
         },
 
         setValidationErrors: function(errors) {
@@ -185,6 +187,7 @@ define([
         },
 
         render: function() {
+            // todo stop breaking DOM with this $.replaceWith, itsux
             this.$el = $(this.template(this.model.toJSON()));
             var $placeholder = $(this.$container).find(this.el);
             this.$el.attr("id", $placeholder.attr("id"));
@@ -204,11 +207,6 @@ define([
                 });
             }
             $placeholder.replaceWith(this.$el);
-
-            // after re-rendering element, reset validationErrors
-            if (this.validationErrors) {
-                this.setValidationErrors(this.validationErrors);
-            }
 
             // $el was replaced, we need to rebind the view's events
             this.delegateEvents();
