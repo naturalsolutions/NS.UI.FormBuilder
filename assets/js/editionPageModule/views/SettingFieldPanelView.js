@@ -621,6 +621,7 @@ define([
         closePanel: function() {
             $(".rows tr.selected").removeClass("selected");
             $("#settingFieldPanel").removeClass("display");
+            $("#formPanel").removeClass("disabled");
         },
 
         displayPanel: function() {

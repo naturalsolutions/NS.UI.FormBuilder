@@ -88,6 +88,9 @@ define([
             var model = this.fieldCollection.get(id);
             $(model.view.$el).addClass("selected");
 
+            // disable formPanel while editing field
+            $("#formPanel").addClass("disabled");
+
             this.settingFieldPanel.show(new SettingFieldPanelView({
                 URLOptions             : this.URLOptions,
                 linkedFieldsList       : this.linkedFieldsList,
