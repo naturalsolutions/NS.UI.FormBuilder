@@ -51,8 +51,27 @@ define([
         },
 
         setValue: function(field, value) {
-            this.$el.removeClass("validationError");
+            // remove validation error for modified field
+            if (this.validationErrors) {
+                delete(this.validationErrors[field]);
+                this.$el.find("[name='" + field + "']").removeClass("error");
+                if (Object.keys(this.validationErrors).length === 0) {
+                    this.validationErrors = null;
+                    this.$el.removeClass("validationError");
+                }
+            }
+
             this.model.set(field, value);
+        },
+
+        setValidationErrors: function(errors) {
+            if (!errors) return;
+
+            this.validationErrors = errors;
+            this.$el.addClass("validationError");
+            _.each(this.validationErrors, _.bind(function(err, name) {
+                this.$el.find("[name='" + name + "']").addClass("error");
+            }, this));
         },
 
         /**
@@ -185,6 +204,11 @@ define([
                 });
             }
             $placeholder.replaceWith(this.$el);
+
+            // after re-rendering element, reset validationErrors
+            if (this.validationErrors) {
+                this.setValidationErrors(this.validationErrors);
+            }
 
             // $el was replaced, we need to rebind the view's events
             this.delegateEvents();
