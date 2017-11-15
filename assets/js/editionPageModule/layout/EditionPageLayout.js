@@ -48,7 +48,8 @@ define([
             'focus #settingFormPanel input'           : 'clearSelected',
             'focus #settingFormPanel textarea'        : 'clearSelected',
             'focus #settingFormPanel select'          : 'clearSelected',
-            'click .btnDelete'                        : 'deleteField'
+            'click .btnDelete'                        : 'deleteField',
+            'click .btnConvert'                       : 'convertField'
         },
 
         regions : {
@@ -485,6 +486,10 @@ define([
                 // todo but not now
                 model.view.removeView(goDelete);
             }
+        },
+
+        convertField: function() {
+            alert("todo");
         },
     });
 });
