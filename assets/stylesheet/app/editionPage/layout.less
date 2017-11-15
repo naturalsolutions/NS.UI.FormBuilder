@@ -272,14 +272,18 @@
       position: absolute;
       z-index: 1000;
       width: 30%;
-      right: -30%;
       height: 100%;
       background: white;
-
       top: 0;
-      transition: all 500ms ease-in;
+
+      right: -30%;
+      opacity: 0;
+      transition: right 500ms ease-in, opacity 0ms 500ms;
+
       &.display {
         right: 0;
+        opacity: 1;
+        transition: right 500ms ease-in;
       }
     }
 
