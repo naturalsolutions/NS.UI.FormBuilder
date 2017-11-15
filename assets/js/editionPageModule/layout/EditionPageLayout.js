@@ -292,9 +292,10 @@ define([
             });
 
             // append * to required
+            var $formEl = this.form.$el;
             $.each(form.schemaDefinition, function(index, value){
                 if (value.validators && value.validators[0].type == "required") {
-                    $("#settingFormPanel #form label[for="+index+"]").append("<span>*</span>");
+                    $formEl.find("label[for="+index+"]").append("<span>*</span>");
                 }
             });
 

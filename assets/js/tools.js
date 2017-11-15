@@ -92,6 +92,8 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
                 closeOnCancel: true
             }, options);
 
+            if (opts.cancelButtonText) opts.showCancelButton = true;
+
             sweetalert(opts, function(confirm) {
                 window.onkeydown = null;
                 window.onfocus = null;
