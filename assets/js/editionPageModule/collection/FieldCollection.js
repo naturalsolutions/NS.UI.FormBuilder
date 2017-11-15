@@ -774,10 +774,12 @@ define([
                                 var curField = that.findWhere({
                                     name: field.name
                                 });
+
                                 if (!curField) {
                                     that.createField(field, field.type);
                                 } else {
                                     curField.set('id', field.id);
+                                    curField.set('new', false);
                                 }
                             });
                         }
