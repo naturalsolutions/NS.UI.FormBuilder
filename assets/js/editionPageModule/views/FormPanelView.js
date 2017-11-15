@@ -38,9 +38,9 @@ define([
             window.formbuilder.formedited = false;
 
             this.topcontext = AppConfig.appMode.topcontext;
-            this.context = window.context || $("#contextSwitcher .selected").text();
             this.readonly = readonly;
             this.collection = options.fieldCollection;
+            this.context = this.collection.context;
             this._view = {};
             this.URLOptions = options.URLOptions;
 
