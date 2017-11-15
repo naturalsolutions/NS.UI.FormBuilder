@@ -90,7 +90,7 @@ define([
             }, this))
         },
 
-        removeView: function() {
+        removeView: function(confirmCallback) {
             var self = this;
 
             var loadedFieldWeight;
@@ -155,9 +155,7 @@ define([
                             translater.getValueFromKey('modal.clear.textinput2') + getLoadedFieldWeight(),
                             $.extend(extraSwalOpts, {html: true}),
                             null,
-                            function () {
-                                self.formChannel.trigger('remove', self.model.get('id'));
-                            });
+                            confirmCallback);
                     }, 200);
                 }
             );

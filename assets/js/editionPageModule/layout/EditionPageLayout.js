@@ -47,7 +47,8 @@ define([
             'keyup .rows'                             : 'gridKeypress',
             'focus #settingFormPanel input'           : 'clearSelected',
             'focus #settingFormPanel textarea'        : 'clearSelected',
-            'focus #settingFormPanel select'          : 'clearSelected'
+            'focus #settingFormPanel select'          : 'clearSelected',
+            'click .btnDelete'                        : 'deleteField'
         },
 
         regions : {
@@ -463,6 +464,27 @@ define([
             var model = this.fieldCollection.addElement(fieldType);
             this.setSelected(model);
             model.view.$el.find("input[name='name']").focus();
-        }
+        },
+
+        deleteField: function() {
+            if (!this.selected) {
+                return;
+            }
+
+            var goDelete = _.bind(function() {
+                this.fieldCollection.removeElement(model);
+                this.clearSelected();
+            }, this);
+
+            var model = this.selected;
+            if (model.get('new')) {
+                // no confirmation if element is new
+                goDelete();
+            } else {
+                // pass to BaseView.removeView, which needs to be rewritten
+                // todo but not now
+                model.view.removeView(goDelete);
+            }
+        },
     });
 });

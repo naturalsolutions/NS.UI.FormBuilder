@@ -231,7 +231,6 @@ define([
             this.originalID      = opt.originalID     || 0;
 
             this.fieldstodelete  = [];
-            this.fieldsexcludedfromdelete = [];
             this.totalAddedElements = 0;
             this.checkedfields = 0;
             this.maxfields = 0;
@@ -252,8 +251,6 @@ define([
 
             this.mainChannel = Backbone.Radio.channel('edition');
             this.formChannel = Backbone.Radio.channel('form');
-            //  Event send from BaseView or inherited view when user wants to remove a field
-            this.formChannel.on('remove', this.removeElement);
             //  Event send by BaseView or BaseView inherited view for duplicate model
             this.formChannel.on('copyModel', this.copyModel, this);
             //  Event send by SettingFieldPanelView when a field has changed
@@ -523,7 +520,6 @@ define([
             if (!field.get('id')) {
                 field.set('id', this.totalAddedElements);
                 field.set('new', true);
-                this.fieldsexcludedfromdelete.push(field.get('id'));
             }
             this.add(field);
             return field;
@@ -551,35 +547,26 @@ define([
             })
         },
 
-        /**
-         * Remove element from collection
-         *
-         * @param  {integer} id model to remove id
-         */
-        removeElement : function(id, avoidSettingsClosure) {
-            var item = this.get(id);
+        removeElement : function(model) {
+            if (!model) return;
 
-            if (item !== undefined) {
-                //  If the field is a subForm field we remove all subFormField
-                if (item.constructor.type == 'Subform') {
-                    this.destroySubElement(item.get('id'));
-                }
+            var id = model.get("id");
 
-                if (item.get('subFormParent') !== undefined) {
-                    var fieldSet = this.get(item.get('subFormParent'));
-                    fieldSet.removeField(item.get('name'));
-                }
+            //  If the field is a subForm field we remove all subFormField
+            if (model.constructor.type == 'Subform') {
+                this.destroySubElement(id);
+            }
 
-                //  We used trigger instead destroy method, the DELETE ajax request is not send
-                item.trigger('destroy', item);
+            if (model.get('subFormParent') !== undefined) {
+                var fieldSet = this.get(model.get('subFormParent'));
+                fieldSet.removeField(model.get('name'));
+            }
 
-                if ($.inArray(item.get('id'), this.fieldsexcludedfromdelete) == '-1')
-                {
-                    this.fieldstodelete.push(item.get('id'));
-                }
-
-                if (!avoidSettingsClosure)
-                    this.formChannel.trigger('cancelFieldEdition', null, true, item.get('id'));
+            // remove dom element by hand cause it's faster than re-rendering
+            model.view.$el.remove();
+            model.trigger('destroy', model);
+            if (!model.get('new')) {
+                this.fieldstodelete.push(id);
             }
         },
 
@@ -771,6 +758,10 @@ define([
                         if (data.form.schema) {
                             // update field ids (new fields)
                             $.each(data.form.schema, function (i, field) {
+                                for (var i in that.fieldstodelete) {
+                                    if (that.fieldstodelete[i] === field.id) return;
+                                }
+
                                 var curField = that.findWhere({
                                     name: field.name
                                 });
@@ -801,7 +792,6 @@ define([
                         }
 
                         that.fieldstodelete = [];
-                        that.fieldsexcludedfromdelete = [];
 
                         var displaySaveSuccess = function(){
                             setTimeout(function () {
