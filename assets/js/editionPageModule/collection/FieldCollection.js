@@ -429,6 +429,12 @@ define([
                 json = staticInputs.applyRules(this, json);
                 if (Object.keys(json.schema).length > 0) {
                     $.each(json.schema, function(k, v) {
+                        // in case field was already added and
+                        // there was an ajax error on save,
+                        // do not re-add
+                        if (that.findWhere({name: v.name})) {
+                            return;
+                        }
                         var f = that.createField(v, v.type);
                         f.set('skip', true);
                     });
@@ -762,7 +768,6 @@ define([
                     success: _.bind(function (data) {
                         // update form id (new form)
                         that.id = data.form.id;
-                        // todo insert fuckers staticinputz ------ into current shit
                         if (data.form.schema) {
                             // update field ids (new fields)
                             $.each(data.form.schema, function (i, field) {
