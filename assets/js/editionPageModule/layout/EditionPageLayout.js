@@ -2,6 +2,7 @@ define([
     'jquery',
     'marionette',
     'text!../templates/EditionPageLayout.html',
+    'text!../templates/GridRowActions.html',
     '../views/FormPanelView',
     '../views/SettingFieldPanelView',
     '../models/Fields',
@@ -9,7 +10,7 @@ define([
     'tools',
     'app-config',
     'backbone-forms'
-], function($, Marionette, EditionPageLayoutTemplate,
+], function($, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
             FormPanelView, SettingFieldPanelView,
             Fields, Translater, tools, AppConfig) {
     var t = Translater.getTranslater();
@@ -42,7 +43,11 @@ define([
             'click  .attachedFiles .remove'           : 'removeAttachedFile',
             'click  .attachedFiles .download'         : 'downloadAttachedFile',
 
-            'click .fieldTypes td'                    : 'appendToDrop'
+            'click .fieldTypes td'                    : 'appendToDrop',
+            'keyup .rows'                             : 'gridKeypress',
+            'focus #settingFormPanel input'           : 'clearSelected',
+            'focus #settingFormPanel textarea'        : 'clearSelected',
+            'focus #settingFormPanel select'          : 'clearSelected'
         },
 
         regions : {
@@ -70,7 +75,7 @@ define([
             this.formChannel.on('setSelected', this.setSelected, this);
             this.formChannel.on('closeEdit', this.closeEdit, this);
 
-            _.bindAll(this, 'template');
+            _.bindAll(this, 'template', 'clearSelected');
 
             this.update(this.fieldCollection);
         },
@@ -88,12 +93,10 @@ define([
 
             var model = this.fieldCollection.get(id);
             this.setSelected(model);
-
             model.view.$el.addClass("editing");
 
             // disable formPanel while editing field
             $("#formPanel").addClass("disabled");
-
 
             this.settingFieldPanel.show(new SettingFieldPanelView({
                 URLOptions             : this.URLOptions,
@@ -111,14 +114,16 @@ define([
 
             this.selected = model;
             this.selected.view.$el.addClass("selected");
+            this.renderActions(this.selected);
         },
 
         clearSelected: function() {
             if (!this.selected) {
-                return
+                return;
             }
             this.selected.view.$el.removeClass("selected");
             this.selected = null;
+            this.renderActions(null);
         },
 
         closeEdit: function() {
@@ -141,8 +146,29 @@ define([
             this.$el.i18n();
         },
 
+        renderActions: function(model) {
+            if (!model) {
+                // clear gridRowActions section
+                this.$el.find("#gridRowActions").empty().removeClass("enabled");
+                return;
+            }
+
+            var $el = $(_.template(GridRowActionsTemplate)({
+                model: model
+            }));
+            $el.i18n();
+            this.$el.find("#gridRowActions").html($el).addClass("enabled");
+        },
+
         exit: function() {
             this.formChannel.trigger('exit', false);
+        },
+
+        gridKeypress: function(e) {
+            if (e.keyCode === 27) {
+                this.clearSelected();
+                this.form.$el.find("#name").focus();
+            }
         },
 
         setTemplateList : function(templateList) {
@@ -418,7 +444,9 @@ define([
                 tools.swal('error', 'modal.field.error', 'modal.field.errorMsg');
                 return;
             }
-            this.fieldCollection.addElement(fieldType);
+            var model = this.fieldCollection.addElement(fieldType);
+            this.setSelected(model);
+            model.view.$el.find("input[name='name']").focus();
         }
     });
 });

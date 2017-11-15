@@ -71,6 +71,58 @@
           opacity: 0.42;
         }
       }
+
+      #gridRowActions {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #2B2B2B;
+        height: 50px;
+
+        display: none;
+        &.enabled {
+          display: block;
+        }
+
+        & > div {
+          margin-top: 15px;
+        }
+
+        .fieldType {
+          float: left;
+          margin-left: 20px;
+          font-size: inherit;
+          color: white;
+          padding: 0;
+
+          .type {
+            color: @orange;
+            font-weight: bold;
+
+            &::before, &::after {
+              color: white;
+              margin: 0 3px;
+            }
+            &::before {
+              content: "\0000AB";
+            }
+            &::after {
+              content: "\0000BB";
+            }
+          }
+        }
+
+        .actions {
+          float: right;
+          color: white;
+          margin-top: 8px;
+
+          div {
+            display: inline-block;
+            margin-right: 25px;
+          }
+        }
+      }
     }
 
     #settingFormPanel {

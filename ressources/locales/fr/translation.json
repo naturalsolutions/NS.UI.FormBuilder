@@ -18,7 +18,8 @@
         "options": "Options",
         "optionsUnavailable": "Options indisponibles pour ce champ",
         "languages": "Langues",
-        "settings": "Paramètres"
+        "settings": "Paramètres",
+        "selectedField": "Champ sélectionné de type"
     },
 
     "fields" : {
@@ -154,7 +155,8 @@
         "edit"      : "Modifier",
         "delete"    : "Supprimer",
         "clone"     : " Dupliquer",
-        "download"  : "Télécharger"
+        "download"  : "Télécharger",
+        "convert"   : "Convertir"
     },
 
     "schema" : {
