@@ -22,7 +22,6 @@ define([
     var FormPanelView = Backbone.Marionette.ItemView.extend({
         events : {
             'click #export'       : 'export',
-            'click #clearAll'     : 'clear',
             'click .sizepreview'  : 'sizepreview',
             'click #datasImg'     : 'popDatasImg'
         },
@@ -275,30 +274,6 @@ define([
          */
         save : function() {
             this.collection.save();
-        },
-
-        /**
-        * Display a sweet alert and ask the classic "Are you sur ?"
-        * And clear the current form if the user agrees
-        */
-        clear : function() {
-            var self = this;
-            tools.swal("warning", "modal.clear.title", "modal.clear.fieldsdeleted", {
-                showCancelButton   : true,
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('modal.clear.yes'),
-                cancelButtonText   : translater.getValueFromKey('modal.clear.no')
-            }, null, function() {
-                // confirm callback
-                _.map(self._view, function(el) {
-                    el.removeView();
-                });
-                self.collection.clearAll();
-                self.updateFieldCount();
-
-                window.formbuilder.formedited = true;
-                tools.swal("success", "modal.clear.deleted", "modal.clear.formDeleted");
-            });
         },
 
         /**
