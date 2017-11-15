@@ -82,16 +82,10 @@ define([
             //  Init backbone radio channel
             this.initFormChannel();
             this.initMainChannel();
-            this.initHookChannel();
             this.initGlobalChannel();
 
             _.bindAll(this, 'template', 'initForm');
         },
-
-        initHookChannel : function() {
-            this.hookChannel = Backbone.Radio.channel('hook');
-        },
-
 
         /**
          * Init main radio channel for communicate in the editionPageModule

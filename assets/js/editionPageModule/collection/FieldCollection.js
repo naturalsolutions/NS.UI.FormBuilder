@@ -250,7 +250,6 @@ define([
             //  Bind
             _.bindAll(this, 'clearAll', 'lastIndex', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 
-            this.hookChannel = Backbone.Radio.channel('hook');
             this.mainChannel = Backbone.Radio.channel('edition');
             this.formChannel = Backbone.Radio.channel('form');
             //  Event send from BaseView or inherited view when user wants to remove a field
@@ -564,8 +563,6 @@ define([
                     var fieldSet = this.get(item.get('subFormParent'));
                     fieldSet.removeField(item.get('name'));
                 }
-
-                this.hookChannel.trigger('field:remove', this, item);
 
                 //  We used trigger instead destroy method, the DELETE ajax request is not send
                 item.trigger('destroy', item);
