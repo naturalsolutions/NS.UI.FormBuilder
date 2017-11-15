@@ -210,7 +210,7 @@ define([
          * @param {interger} idx new order of the view
          */
         updateIndex: function(idx) {
-            this.model.set('order', parseInt(idx) + 1);
+            this.model.set('order', parseInt(idx) + 1, { silent: true });
             this.$el.data('order', parseInt(idx) + 1);
         }
     });
