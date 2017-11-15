@@ -93,6 +93,7 @@ define([
 
             var model = this.fieldCollection.get(id);
             this.setSelected(model);
+            this.editing = model;
             model.view.$el.addClass("editing");
 
             // disable formPanel while editing field
@@ -119,7 +120,7 @@ define([
         },
 
         clearSelected: function() {
-            if (!this.selected) {
+            if (!this.selected || this.editing) {
                 return;
             }
             this.selected.view.$el.removeClass("selected");
@@ -128,10 +129,11 @@ define([
         },
 
         closeEdit: function() {
-            if (!this.selected) return;
+            if (!this.editing) return;
 
-            this.selected.view.$el.find("input[name='name']").focus();
-            this.selected.view.$el.removeClass("editing");
+            this.editing.view.$el.find("input[name='name']").focus();
+            this.editing.view.$el.removeClass("editing");
+            this.editing = null;
 
             // re-enable panel
             $("#formPanel").removeClass("disabled");
