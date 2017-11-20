@@ -293,8 +293,13 @@ define([
 
             var splitter = /^(\S+)\s*(.*)$/;
             form.undelegateEvents();
-            for (var key in this.events) {
-                var method = this.events[key];
+
+            var events = this.events;
+            if (typeof events === "function") {
+                events = events();
+            }
+            for (var key in events) {
+                var method = events[key];
                 if (!_.isFunction(method)) method = this[method];
                 if (!method) continue;
                 var match = key.match(splitter);
