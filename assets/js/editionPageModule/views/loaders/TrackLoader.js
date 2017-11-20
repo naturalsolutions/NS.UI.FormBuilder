@@ -1,45 +1,29 @@
 define(['jquery'], function ($) {
-    var TrackLoader = {
-
-        initializeLoader: function (form, URLoptions) {
-            this.form = form;
-            this.options = URLoptions;
-
-            return(true);
-        },
-
-        loadFormDatas: function() {
-            if (this.form.fields.unity) {
-                this.loadUnities();
+    return {
+        loadFormData: function(form, urls, lang) {
+            if (form.fields.unity) {
+                this.loadUnits(form.fields.unity, urls.unities + "/track/" + lang);
             }
-            return(true);
         },
 
-        loadUnities: function() {
+        loadUnits: function(field, url) {
             $.ajax({
-                data        : "",
                 type        : 'GET',
-                url         : this.options.unities + "/" + window.context + "/fr",
+                url         : url,
                 contentType : 'application/json',
                 crossDomain : true,
-                success: _.bind(function(data) {
+                success: function(data) {
                     var jsondata = JSON.parse(data);
-                    var unityoptions = [];
-                    $.each(jsondata.unities, function(index, value){
-                        unityoptions.push(value);
+                    var units = [];
+                    $.each(jsondata.unities, function (index, value) {
+                        units.push(value);
                     });
-                    this.form.fields.unity.editor.setOptions(unityoptions);
-                }, this),
-                error: _.bind(function (xhr) {
+                    field.editor.setOptions(units);
+                },
+                error: function (xhr) {
                     console.log(xhr);
-                }, this)
+                }
             });
-        },
-
-        getThisLoader : function(){
-            return (this);
         }
     };
-
-    return TrackLoader.getThisLoader();
 });

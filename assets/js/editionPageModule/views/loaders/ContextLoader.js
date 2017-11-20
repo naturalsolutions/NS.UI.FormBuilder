@@ -6,8 +6,9 @@ define([
     './TrackLoader',
     './EcoreleveLoader',
     './EcollectionLoader',
-    './PositionLoader'
-], function (TrackLoader, EcoreleveLoader, EcollectionLoader, PositionLoader) {
+    './PositionLoader',
+    'auth'
+], function (TrackLoader, EcoreleveLoader, EcollectionLoader, PositionLoader, auth) {
 
     var Loaders = {
         "track" : TrackLoader,
@@ -17,32 +18,11 @@ define([
     };
 
     return {
-        initializeLoader: function (form, URLoptions, withDataLoading) {
-            this.form = form;
-            this.options = URLoptions;
-            this.currentloader = this.getModeLoader();
+        loadFormData: function(context, form, URLoptions) {
+            var ctxLoader = Loaders[context];
+            if (!ctxLoader) return;
 
-            if (withDataLoading)
-                return(this.loadFormDatas());
-            return(true);
-        },
-
-        loadFormDatas: function(){
-
-            if (this.currentloader != this)
-                return(this.currentloader.loadFormDatas());
-
-            return(true);
-        },
-
-        getModeLoader : function (currentContext) {
-            var loaderMode = Loaders[window.context];
-            if (currentContext)
-                loaderMode = Loaders[currentContext];
-            if (!loaderMode)
-                return this;
-            loaderMode.initializeLoader(this.form, this.options);
-            return loaderMode;
+            ctxLoader.loadFormData(form, URLoptions, auth.userlanguage);
         }
     };
 });

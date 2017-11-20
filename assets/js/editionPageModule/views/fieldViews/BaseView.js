@@ -1,7 +1,8 @@
 define([
     'jquery', 'lodash', 'text!../../templates/GridRow.html',
-    'backbone', 'backbone.radio', 'tools', '../../../Translater', 'i18n'
-], function($, _, DefaultTemplate, Backbone, Radio, tools, Translater) {
+    'backbone', 'backbone.radio', 'tools', '../../../Translater',
+    '../loaders/ContextLoader', 'i18n'
+], function($, _, DefaultTemplate, Backbone, Radio, tools, Translater, ContextLoader) {
 
     var translater = Translater.getTranslater();
 
@@ -94,6 +95,8 @@ define([
 
             this.el   = options.el;
             this.$container = options.$container;
+            this.context = options.context;
+            this.options = options;
             this.model.view = this;
             this.static = this.model.get('compulsory');
             this.formChannel = Backbone.Radio.channel('form');
@@ -268,6 +271,8 @@ define([
             var form = this.makeForm(schema);
             this.actionners[name] = actionner;
             this.$elements[name] = form.$el;
+            form.context = this.context;
+            ContextLoader.loadFormData(this.context, form, this.options.urlOptions);
             return form;
         },
 

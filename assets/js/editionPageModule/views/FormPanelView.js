@@ -157,7 +157,8 @@ define([
                     model: newModel,
                     collection: this.collection,
                     urlOptions: this.URLOptions,
-                    $container: this.$el.find(".drop")
+                    $container: this.$el.find(".drop"),
+                    context: this.context
                 }, Backbone.Radio.channel('global').readonly ||
                     $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
                 if (vue !== null) {
