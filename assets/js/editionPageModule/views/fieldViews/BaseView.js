@@ -42,7 +42,9 @@ define([
             // remove validation error for modified field
             if (this.validationErrors && this.validationErrors[field]) {
                 var err = this.validationErrors[field];
-                err.$target.find("[name='" + field + "']").removeClass("error");
+                var $erronousField = err.$target.find("[name='" + field + "']");
+                $erronousField.removeClass("error");
+                this.setErrorMessage($erronousField, null);
                 if (err.$target.find(".error").length === 0) {
                     this.$el.find(this.actionners[err.actionner]).removeClass("error");
                 }
@@ -56,6 +58,19 @@ define([
             // tricks for you : update value without re-rendering
             // since our render is wonky and breaks dom and we don't like it
             this.model.set(field, value, { silent: true });
+        },
+
+        setErrorMessage: function($el, message) {
+            if (!message)
+                message = ""; // force empty message
+
+            var $helpBlock = $el.parent().find(".help-block[data-error]");
+            if ($helpBlock.length > 0) {
+                $helpBlock.html(message);
+            } else {
+                // no .help-block, add error info on element's title attribute
+                $el.attr("title", message);
+            }
         },
 
         setValidationErrors: function(errors) {
@@ -73,6 +88,9 @@ define([
                         // display error on parent element's button and $erronousInput
                         this.$el.find(this.actionners[viewKey]).addClass("error");
                         $erronousInput.addClass("error");
+
+                        // set error message
+                        this.setErrorMessage($erronousInput, err.message);
 
                         // keep track of which parent element contain this error
                         err.$target = $viewEl;
