@@ -151,11 +151,6 @@ define([
             if (!model) {
                 // clear gridRowActions section
                 this.$el.find("#gridRowActions").empty().removeClass("enabled");
-                // enlarge slimScroll section
-                this.$el.find('#scrollSection').slimScroll({
-                    height: 'calc(100% - 50px)'
-                });
-                this.actionsDisplayed = false;
                 return;
             }
 
@@ -164,14 +159,6 @@ define([
             }));
             $el.i18n();
             this.$el.find("#gridRowActions").html($el).addClass("enabled");
-
-            if (!this.actionsDisplayed) {
-                // reduce slimScroll section
-                this.$el.find('#scrollSection').slimScroll({
-                    height: 'calc(100% - 75px)'
-                });
-                this.actionsDisplayed = true;
-            }
         },
 
         exit: function() {
