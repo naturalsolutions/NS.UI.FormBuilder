@@ -19,7 +19,9 @@
     "optionsUnavailable": "Options unavailable for this field",
     "languages": "Languages",
     "settings": "Settings",
-    "selectedField": "Selected field type"
+    "selectedField": "Selected field type",
+    "manageLanguages": "Language settings",
+    "manageSettings": "Settings"
   },
 
   "fields" : {

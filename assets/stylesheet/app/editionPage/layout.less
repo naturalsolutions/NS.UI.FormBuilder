@@ -38,16 +38,6 @@
   }
 
   .content {
-    #settingFieldPanel {
-      & > div {
-        height: 100%;
-      }
-
-      #originalIDArea {
-        display: none;
-      }
-    }
-
     #formPanel {
       width: 75%;
       float: left;
@@ -134,7 +124,7 @@
       }
     }
 
-    #settingFormPanel, #settingFieldPanel {
+    #settingFormPanel, #fieldPropertiesPanel {
       overflow: hidden;
       height: 100%;
       padding-right: 0;
@@ -187,6 +177,12 @@
             height: 80px;
             min-height: 30px;
             margin-bottom: 10px;
+          }
+
+          input, select, option, div, span {
+            &.error {
+              border-bottom: 3px dashed red !important;
+            }
           }
 
           &.checkBoxEditor {
@@ -320,22 +316,77 @@
       }
     }
 
-    #settingFieldPanel {
+    #fieldPropertiesPanel {
       position: absolute;
       z-index: 1000;
       width: 30%;
       height: 100%;
-      background: white;
+      background: #271D1B;
+      color: white;
+      box-shadow: 1px 7px 12px 2px black;
+      padding: 0 20px;
       top: 0;
 
       right: -30%;
       opacity: 0;
       transition: right 500ms ease-in, opacity 0ms 500ms;
+      text-align: center;
+
+      .properties form .form-group {
+        label {
+          color: #94827E;
+        }
+
+        option {
+          color: black;
+        }
+
+        input, select {
+          color: white;
+
+          &::placeholder {
+            color: #94827E;
+          }
+          border-bottom-color: #94827E
+        }
+      }
+
+      .content {
+        background: none;
+        margin-top: 20px;
+        height: ~"calc(100% - 65px)";
+        text-align: left;
+        padding-bottom: 25px;
+      }
+
+      h2 {
+        color: #806C6B;
+        margin: 20px 0;
+        font-size: 26px;
+        text-transform: uppercase;
+
+        &::before {
+          content: "<";
+          margin-right: 20px;
+        }
+      }
 
       &.display {
         right: 0;
         opacity: 1;
         transition: right 500ms ease-in;
+      }
+
+      .btnOk {
+        bottom: 5px;
+        border: 1px solid @orange;
+        background: transparent;
+        padding-left: 60px;
+        padding-right: 60px;
+
+        &:hover {
+          background: rgba(222, 119, 16, .2);
+        }
       }
     }
 

@@ -19,7 +19,9 @@
         "optionsUnavailable": "Options indisponibles pour ce champ",
         "languages": "Langues",
         "settings": "Paramètres",
-        "selectedField": "Champ sélectionné de type"
+        "selectedField": "Champ sélectionné de type",
+        "manageLanguages": "Gestion des langues",
+        "manageSettings": "Paramètres"
     },
 
     "fields" : {

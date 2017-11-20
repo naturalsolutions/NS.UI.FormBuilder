@@ -84,7 +84,8 @@ define([
             labelEn     : "",
             required    : false,
 
-            // Linked fields values GONE
+            linkedFieldTable: '',
+            linkedField: '',
 
             editMode: 7,
             editModeElem: tools.binWeight.toDict(7),
@@ -206,6 +207,35 @@ define([
                 editorClass : 'form-control',
                 template    : fieldTemplate
             }
+        },
+
+        i18nFields: ["labelFr", "labelEn", "help"],
+
+        /**
+         * languageSchema returns i18n related fields from this.schema()
+        **/
+        languagesSchema: function() {
+            var languageProperties = _.pick(this.schema(), _.bind(function(v, k) {
+                return _.includes(this.i18nFields, k);
+            }, this));
+            return languageProperties;
+        },
+
+        /**
+         * extraSchema returns any extra field not present in this.schema() or
+         * this.languages schema
+         */
+        extraSchema: function() {
+            var defaultSchema = models.BaseField.prototype.schema;
+            var keys = Object.keys(defaultSchema).concat(this.i18nFields);
+
+            // also exclude defaultValue
+            keys.push("defaultValue");
+
+            var extraProperties = _.pick(this.schema(), function(v, k) {
+                return !_.includes(keys, k);
+            });
+            return extraProperties;
         },
 
         initialize : function(options) {

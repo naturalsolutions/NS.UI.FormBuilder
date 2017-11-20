@@ -4,15 +4,13 @@ define([
     'text!../templates/EditionPageLayout.html',
     'text!../templates/GridRowActions.html',
     '../views/FormPanelView',
-    '../views/SettingFieldPanelView',
     '../models/Fields',
     '../../Translater',
     'tools',
     'app-config',
     'backbone-forms'
 ], function($, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
-            FormPanelView, SettingFieldPanelView,
-            Fields, Translater, tools, AppConfig) {
+            FormPanelView, Fields, Translater, tools, AppConfig) {
     var t = Translater.getTranslater();
 
     return Backbone.Marionette.LayoutView.extend({
@@ -49,13 +47,13 @@ define([
             'focus #settingFormPanel textarea'        : 'clearSelected',
             'focus #settingFormPanel select'          : 'clearSelected',
             'click .btnDelete'                        : 'deleteField',
-            'click .btnConvert'                       : 'convertField'
+            'click .btnConvert'                       : 'convertField',
+            'click .btnOk'                            : 'closeEdit'
         },
 
         regions : {
             centerPanel : '#gridView',
-            settingFormPanel : '#settingFormPanel',
-            settingFieldPanel : '#settingFieldPanel'
+            settingFormPanel : '#settingFormPanel'
         },
 
         initialize : function(options) {
@@ -87,13 +85,7 @@ define([
             this.initFieldTypes();
         },
 
-        editField: function(id) {
-            if (this.settingFieldPanel == undefined) {
-                this.addRegion('settingFieldPanel', '#settingFieldPanel');
-                this.settingFieldPanel =  this.getRegion('settingFieldPanel');
-            }
-
-            var model = this.fieldCollection.get(id);
+        editField: function(model, panelTitle, form) {
             this.setSelected(model);
             this.editing = model;
             model.view.$el.addClass("editing");
@@ -101,12 +93,15 @@ define([
             // disable formPanel while editing field
             $("#formPanel").addClass("disabled");
 
-            this.settingFieldPanel.show(new SettingFieldPanelView({
-                URLOptions             : this.URLOptions,
-                linkedFieldsList       : this.linkedFieldsList,
-                modelToEdit            : model,
-                fieldsList             : this.fieldCollection.getFieldList(id)
-            }, this.savedTemplateList));
+            // update panel title
+            $("#fieldPropertiesPanel").find("h2").attr("data-i18n", panelTitle).i18n();
+
+            // insert form
+            $("#fieldPropertiesPanel").find(".properties").html(form.$el);
+
+            // display panel
+            $("#fieldPropertiesPanel").addClass("display")
+                .css({width: $("td.options").outerWidth()});
         },
 
         setSelected: function(model) {
@@ -139,6 +134,7 @@ define([
 
             // re-enable panel
             $("#formPanel").removeClass("disabled");
+            $("#fieldPropertiesPanel").removeClass("display");
         },
 
         onRender : function() {

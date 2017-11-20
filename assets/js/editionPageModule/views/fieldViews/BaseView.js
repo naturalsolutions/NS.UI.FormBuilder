@@ -9,8 +9,8 @@ define([
         events: {
             'click #trash'          : 'removeView',
             'click #duplicate'      : 'copyModel',
-            'click .settings'       : 'editField',
-            'click .languages'      : 'editField',
+            'click .settings'       : 'editSettings',
+            'click .languages'      : 'editLanguages',
             'change input'          : 'inputChanged',
             'change select'         : 'selectChanged',
             'focus input, select'   : 'focusField',
@@ -39,9 +39,13 @@ define([
 
         setValue: function(field, value) {
             // remove validation error for modified field
-            if (this.validationErrors) {
+            if (this.validationErrors && this.validationErrors[field]) {
+                var err = this.validationErrors[field];
+                err.$target.find("[name='" + field + "']").removeClass("error");
+                if (err.$target.find(".error").length === 0) {
+                    this.$el.find(this.actionners[err.actionner]).removeClass("error");
+                }
                 delete(this.validationErrors[field]);
-                this.$el.find("[name='" + field + "']").removeClass("error");
                 if (Object.keys(this.validationErrors).length === 0) {
                     this.validationErrors = null;
                     this.$el.removeClass("validationError");
@@ -56,17 +60,34 @@ define([
         setValidationErrors: function(errors) {
             if (!errors) return;
 
-            this.validationErrors = errors;
+            this.validationErrors = {};
             this.$el.addClass("validationError");
-            _.each(this.validationErrors, _.bind(function(err, name) {
-                this.$el.find("[name='" + name + "']").addClass("error");
+
+            // loop over errors found in model
+            _.each(errors, _.bind(function(err, name) {
+                // find for which of our this.$elements the error targets
+                _.each(this.$elements, _.bind(function($viewEl, viewKey) {
+                    var $erronousInput = $viewEl.find("[name='" + name + "']");
+                    if ($erronousInput.length > 0) {
+                        // display error on parent element's button and $erronousInput
+                        this.$el.find(this.actionners[viewKey]).addClass("error");
+                        $erronousInput.addClass("error");
+
+                        // keep track of which parent element contain this error
+                        err.$target = $viewEl;
+                        err.actionner = viewKey;
+
+                        // save error
+                        this.validationErrors[name] = err;
+                    }
+                }, this));
             }, this));
         },
 
         initialize: function(options) {
             // todo fix all other views instead of savagely overriding template like that
             this.template   = _.template(DefaultTemplate);
-            _.bindAll(this, 'render', 'removeView', 'editField', 'copyModel', 'destroy_view');
+            _.bindAll(this, 'render', 'removeView', 'editLanguages', 'editSettings', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
 
             this.model.bind('destroy', this.destroy_view);
@@ -76,6 +97,20 @@ define([
             this.model.view = this;
             this.static = this.model.get('compulsory');
             this.formChannel = Backbone.Radio.channel('form');
+
+            // BaseView is splitted into several subviews
+            // We'll keep track of them in this object for displaying validation errors
+            this.$elements = {};
+            this.actionners = {};
+
+            // pre-generate subforms only if field is new and not static
+            // this allows for validation errors to be properly displayed on new elements.
+            // If element is not new, extra forms will be generated on-demand (no risk
+            // of validation error if values are not modified on existing input properties)
+            if (this.model.get("new") && !this.static) {
+                this.initExtraForm();
+                this.initLanguageForm();
+            }
         },
 
         destroy_view: function() {
@@ -162,7 +197,7 @@ define([
         },
 
         render: function() {
-            // todo stop breaking DOM with this $.replaceWith, itsux
+            // todo stop breaking DOM with this $.replaceWith, it (really) sux
             this.$el = $(this.template(this.model.toJSON()));
             var $placeholder = $(this.$container).find(this.el);
             this.$el.attr("id", $placeholder.attr("id"));
@@ -182,6 +217,8 @@ define([
                 });
             }
             $placeholder.replaceWith(this.$el);
+            this.$elements.main = this.$el;
+            this.actionners.main = "";
 
             // $el was replaced, we need to rebind the view's events
             this.delegateEvents();
@@ -195,11 +232,75 @@ define([
             this.formChannel.trigger('copyModel', this.model.get('id'));
         },
 
+        editLanguages: function() {
+            if (!this.languageForm) {
+                this.languageForm = this.initLanguageForm();
+            }
+            this.formChannel.trigger('editField',
+                this.model, "editGrid.manageLanguages", this.languageForm);
+
+            // redelegate events for this form, dom was fucked by editionPage
+            this.delegateFormEvents(this.languageForm);
+        },
+
+        editSettings: function() {
+            if (!this.extraForm) {
+                this.extraForm = this.initExtraForm();
+            }
+            this.formChannel.trigger('editField',
+                this.model, "editGrid.manageSettings", this.extraForm);
+
+            // redelegate events for this form, dom was fucked by editionPage
+            this.delegateFormEvents(this.extraForm);
+        },
+
+        initExtraForm: function() {
+            this.extraForm = this.initForm("extra", this.model.extraSchema(), ".settings");
+            return this.extraForm;
+        },
+
+        initLanguageForm: function() {
+            this.languageForm = this.initForm("language", this.model.languagesSchema(), ".languages");
+            return this.languageForm;
+        },
+
+        initForm: function(name, schema, actionner) {
+            var form = this.makeForm(schema);
+            this.actionners[name] = actionner;
+            this.$elements[name] = form.$el;
+            return form;
+        },
+
+        makeForm: function(schema) {
+            var form = new Backbone.Form({
+                model: this.model,
+                schema: schema
+            });
+            form.render();
+            form.$el.i18n();
+            // listen to this.events from created backbone form
+            this.delegateFormEvents(form);
+            return form;
+        },
+
         /**
-         * Send an event on form channel when user wants to edit field properties
+         * delegateFormEvents applies events from this to provided form,
+         * allowing this to catch events observed in form. The code is taken from
+         * backbone's delegateEvents
          */
-        editField: function() {
-            this.formChannel.trigger('editField', this.model.get('id'));
+        delegateFormEvents: function(form) {
+            if (!form) return;
+
+            var splitter = /^(\S+)\s*(.*)$/;
+            form.undelegateEvents();
+            for (var key in this.events) {
+                var method = this.events[key];
+                if (!_.isFunction(method)) method = this[method];
+                if (!method) continue;
+                var match = key.match(splitter);
+                form.delegate(match[1], match[2], _.bind(method, this));
+            }
+            return this;
         },
 
         /**
