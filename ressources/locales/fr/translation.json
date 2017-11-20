@@ -81,6 +81,10 @@
 
     "form" : {
         "author"      : "Auteur",
+        "isgrid"      : "Est en grille",
+        "ishiddenprotocol" : "Protocole caché",
+        "hideprotocolname" : "Cacher le nom du Protocole",
+        "defaultforfieldactivity" : "Par défaut pour la fieldactivity",
         "name"        : "Nom du protocole",
         "tag"         : "Tag de destination",
         "cancel"      : "Annuler",

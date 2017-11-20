@@ -15,6 +15,22 @@ define([
 
     return {
         extraProperties: {
+            CheckBox:{
+                defaults: {
+                    defaultValue: ""
+                },
+                schema: {
+                    defaultValue : {
+                        type        : 'Text',
+                        title       : translater.getValueFromKey('schema.default'),
+                        editorClass : 'form-control',
+                        template    : fieldTemplate,
+                        editorAttrs : {
+
+                        }
+                    }
+                }
+            },
             ChildForm:{
                 defaults: {
                     minimumAppearance : 0

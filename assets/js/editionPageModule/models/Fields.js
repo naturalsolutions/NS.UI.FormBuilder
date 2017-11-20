@@ -1227,13 +1227,12 @@ define([
                 models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults)
             );
 
-            var toret = _.extend({}, baseSchema, {
-                minValue: '',
-                maxValue: '',
-                precision: 1,
-                decimal: true,
-                defaultValue: '',
-                unity: []
+            var toret = _.extend( {}, baseSchema, {
+                minValue     : '',
+                maxValue     : '',
+                precision    : 1,
+                defaultValue : '',
+                unity        : []
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -1241,14 +1240,8 @@ define([
             return toret;
         },
 
-        baseSchema: {
-            decimal: {
-                type: CheckboxEditor,
-                template: fieldTemplate,
-                fieldClass: "checkBoxEditor",
-                title: translater.getValueFromKey('schema.decimal')
-            },
-            defaultValue: _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
+        baseSchema : {
+            defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
             minValue: {
                 type: 'Text',
                 template: fieldTemplate,

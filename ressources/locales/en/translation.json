@@ -82,6 +82,10 @@
 
     "form" : {
         "author"     : "Author",
+        "isgrid"     : "Is a grid",
+        "ishiddenprotocol" : "Hidden Protocol",
+        "hideprotocolname" : "Hide Protocol name",
+        "defaultforfieldactivity" : "Default for fieldactivity",
         "name"       : "Protocol name",
         "tag"        : "Destination tag",
         "cancel"     : "Cancel",
