@@ -498,7 +498,6 @@ define([
             });
 
             json.actif = !json.obsolete;
-            console.log("json to return", json);
             return json;
         },
 
@@ -526,7 +525,6 @@ define([
         },
 
         addElement: function (nameType, properties) {
-            console.log("addNewElement-", nameType);
             var field = properties || {};
             if (field['order'] === undefined)
                 field['order'] = this.lastIndex();
@@ -632,7 +630,6 @@ define([
         },
 
         createField: function(fieldObj, fieldType) {
-            console.log("createField", fieldObj.name, fieldObj.order);
             if (fieldObj.type == 'Checkboxes') {
                 fieldObj.type = 'CheckBox';
             }
