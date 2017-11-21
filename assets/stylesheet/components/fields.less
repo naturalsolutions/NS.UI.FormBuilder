@@ -14,8 +14,10 @@
 //  checkbox custom field
 //  We hide the input and replace with before icon, we use reneco fonts https://github.com/NaturalSolutions/RenecoFonts
 .checkboxField {
+    position: relative;
     input {
-        display : none;
+        position: absolute;
+        opacity: 0;
 
         &+label {
             color : #aaa;
@@ -23,7 +25,12 @@
             &:before {
                 .reneco;
                 content: "\e640";
+                vertical-align: -1px;
             }
+        }
+
+        &:focus + label {
+            border-bottom: 1px dashed #aaa;
         }
 
         &:checked+label:before {
