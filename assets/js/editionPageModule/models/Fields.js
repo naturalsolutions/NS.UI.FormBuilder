@@ -315,10 +315,7 @@ define([
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    template    : fieldTemplate
                 },
                 isDefaultSQL: {
                     type        : CheckboxEditor,
@@ -369,10 +366,7 @@ define([
                     title       : translater.getValueFromKey('schema.default'),
                     fieldClass  : 'advanced',
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    template    : fieldTemplate
                 },
                 help: {
                     type        : 'Text',
@@ -590,10 +584,7 @@ define([
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    template    : fieldTemplate
                 },
                 webServiceURL : {
                     type        : 'Text',
@@ -991,10 +982,7 @@ define([
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    template    : fieldTemplate
                 },
                 isDefaultSQL: {
                     type        : CheckboxEditor,
@@ -1074,10 +1062,7 @@ define([
                     type        : 'Text',
                     title       : translater.getValueFromKey('schema.default'),
                     editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    template    : fieldTemplate
                 },
                 isDefaultSQL: {
                     type        : CheckboxEditor,
