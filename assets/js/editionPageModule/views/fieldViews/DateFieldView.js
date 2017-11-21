@@ -4,9 +4,8 @@ define([
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
     'text!editionPageModule/templates/fields/datefieldView.html',
-    'text!editionPageModule/templates/fields/readonly/datefieldView.html',
-    'editionPageModule/editor/DatePickerEditor'
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, DatePickerEditor) {
+    'text!editionPageModule/templates/fields/readonly/datefieldView.html'
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var DateFieldView = BaseView.extend({
         events: function() {
