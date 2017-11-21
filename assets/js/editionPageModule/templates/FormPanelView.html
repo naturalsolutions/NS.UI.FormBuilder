@@ -2,22 +2,20 @@
     <table class="header">
         <tbody>
             <tr>
+                <!-- first last column are always displayed -->
                 <td class="type" data-i18n="editGrid.type">type</td>
-                <td class="name" data-i18n="editGrid.name">name</td>
-                <td class="default" data-i18n="editGrid.default">default</td>
-                <td class="linkedField" data-i18n="editGrid.linkedField">linkedfield</td>
-                <td class="linkedFieldset" data-i18n="editGrid.parentFieldset">parentfieldset</td>
-                <td class="appearance" data-i18n="editGrid.appearance">appearance</td>
-                <td class="editMode" data-i18n="editGrid.editMode">editmode</td>
+                <% for (var i in columns) {
+                    var col = columns[i];
+                %>
+                <td class="<%= col %>" data-i18n="editGrid.<%= col %>"><%= col %></td>
+                <% } %>
                 <td class="options" data-i18n="editGrid.options">options</td>
             </tr>
         </tbody>
     </table>
     <div id="scrollSection">
         <table>
-            <tbody class="drop rows">
-
-            </tbody>
+            <tbody class="drop rows"></tbody>
         </table>
     </div>
 </div>

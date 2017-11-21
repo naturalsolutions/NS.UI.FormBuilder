@@ -1,37 +1,15 @@
-<tr class="editRow <% if (compulsory) { %>static<% } %>" data-id="<%= id %>" data-order="<%= order %>">
-    <td class="handle type picto-<%= meta.type.toLowerCase() %>"></td>
-    <td class="name">
-        <input spellcheck="false" type="text" name="name" value="<%= name %>">
-    </td>
-    <td class="default">
-        <input spellcheck="false" type="text" name="defaultValue" value="<%= arguments[0].defaultValue %>">
-    </td>
-    <td class="linkedField">
-        <select name="linkedField">
-            <option selected></option>
-            <% for (i in arguments[0].linkedFieldsList) {
-                var val = arguments[0].linkedFieldsList[i].key; %>
-            <option><%= val %></option>
-            <% } %>
-        </select>
-    </td>
-    <td class="linkedFieldset">
-        <!-- todo autocompletion on existing -->
-        <input spellcheck="false" type="text" name="linkedFieldset" value="<%= arguments[0].linkedFieldset %>">
-    </td>
-    <td class="appearance">
-        <!-- todo custom checkbox & number input -->
-        <input spellcheck="false" type="number" name="fieldSize" min="1" max="12" value="<%= fieldSize %>">
-        <label class="apCheckbox" for="cbBegining<%= id %>">
-            <input type="checkbox" id="cbBegining<%= id %>" name="atBeginingOfLine" <% if (atBeginingOfLine) { %>checked<% } %>>
-            début de ligne
-        </label>
-    </td>
-    <td class="editMode">
-        <%= editMode %>
-    </td>
+<tr class="editRow <% if (model.get('compulsory')) { %>static<% } %>" data-id="<%= model.get('id') %>" data-order="<%= model.get('order') %>">
+    <td class="handle type picto-<%= model.get('meta').type.toLowerCase() %>"></td>
+    <% for (var i in columns) {
+    var col = columns[i];
+    if (!schema[col]) { %>
+    <td class="<%= col %> unavailable"></td>
+    <% } else { %>
+    <td class="<%= col %>" data-editors="<%= col %>"></td>
+    <% }
+    } %>
     <td class="options">
-        <% if (compulsory) { %>
+        <% if (model.get('compulsory')) { %>
         <span data-i18n="editGrid.optionsUnavailable"></span>
         <% } else { %>
         <div class="languages" data-i18n="editGrid.languages"></div>

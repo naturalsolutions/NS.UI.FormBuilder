@@ -25,12 +25,14 @@ define([
             'click .sizepreview'  : 'sizepreview',
             'click #datasImg'     : 'popDatasImg'
         },
+
         template : function() {
             return _.template(FormPanelViewTpl) ({
                 collection : this.collection.getAttributesValues(),
                 context: this.context,
                 topcontext: this.topcontext,
-                readonly: this.readonly
+                readonly: this.readonly,
+                columns: this.columns
             });
         },
 
@@ -43,6 +45,11 @@ define([
             this.context = this.collection.context;
             this._view = {};
             this.URLOptions = options.URLOptions;
+
+            this.columns = AppConfig.editColumns[this.context];
+            if (!this.columns) {
+                this.columns = AppConfig.editColumns.default;
+            }
 
             var that = this;
             $.ajax({
@@ -136,7 +143,8 @@ define([
                     collection: this.collection,
                     urlOptions: this.URLOptions,
                     $container: this.$el.find(".drop"),
-                    context: this.context
+                    context: this.context,
+                    columns: this.columns
                 }, Backbone.Radio.channel('global').readonly ||
                     $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
                 if (vue !== null) {

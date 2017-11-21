@@ -10,9 +10,9 @@
     "editGrid": {
         "type": "Type",
         "name": "Name",
-        "default": "Default value",
+        "defaultValue": "Default value",
         "linkedField": "Linked field",
-        "parentFieldset": "Parent fieldset",
+        "linkedFieldset": "Parent fieldset",
         "appearance": "Appearance",
         "editMode": "Edit mode",
         "options": "Options",

@@ -114,6 +114,8 @@ define([
             this.el   = options.el;
             this.$container = options.$container;
             this.context = options.context;
+            this.columns = options.columns;
+            this.schema = typeof(this.model.schema) === "function" ? this.model.schema(): this.model.schema;
             this.options = options;
             this.model.view = this;
             this.static = this.model.get('compulsory');
@@ -218,24 +220,28 @@ define([
         },
 
         render: function() {
+            // first generate a template with provided columns
+            var formTemplate = this.template({
+                schema: this.schema,
+                columns: this.columns,
+                model: this.model
+            });
+            // feed this template to BackboneForm
+            var mainForm = new Backbone.Form({
+                model: this.model,
+                schema: this.schema,
+                template: _.template(formTemplate)
+            });
+
+            // do the voodoo for replacing element with currently rendered element
             // todo stop breaking DOM with this $.replaceWith, it (really) sux
-            this.$el = $(this.template(this.model.toJSON()));
+            this.$el = $(mainForm.render().$el);
             var $placeholder = $(this.$container).find(this.el);
             this.$el.attr("id", $placeholder.attr("id"));
             this.$el.addClass($placeholder.attr("class"));
             this.$el.i18n();
             if (this.static) {
                 this.$el.find("input, select").attr("disabled", true);
-            }
-            var linkedField = this.model.get('linkedField');
-            if (linkedField) {
-                this.$el.find('.linkedField option').each(function() {
-                    if (this.value === linkedField) {
-                        $(this).attr("selected", true);
-                    } else {
-                        $(this).attr("selected", false);
-                    }
-                });
             }
             $placeholder.replaceWith(this.$el);
             this.$elements.main = this.$el;
@@ -276,7 +282,7 @@ define([
         },
 
         initExtraForm: function() {
-            this.extraForm = this.initForm("extra", this.model.extraSchema(), ".settings");
+            this.extraForm = this.initForm("extra", this.model.extraSchema(this.columns), ".settings");
             return this.extraForm;
         },
 

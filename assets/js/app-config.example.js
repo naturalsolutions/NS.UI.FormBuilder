@@ -151,6 +151,18 @@ define([
         },
 		*/
 
+		// Defines fast-edition columns to be displayed in edition's page main grid
+		editColumns: {
+			default: [
+				"name",
+				"defaultValue",
+				"linkedField",
+				"linkedFieldset",
+				"appearance",
+				"editMode"
+			]
+		},
+
         // Defines a list of allowed kind of fields that will be displayed when adding / editing Forms
         appMode : {
             // List of all existing generic types :

@@ -10,9 +10,9 @@
     "editGrid": {
         "type": "Type",
         "name": "Nom",
-        "default": "Valeur par défaut",
+        "defaultValue": "Valeur par défaut",
         "linkedField": "Champs lié",
-        "parentFieldset": "Fieldset parent",
+        "linkedFieldset": "Fieldset parent",
         "appearance": "Apparence",
         "editMode": "Mode d'édition",
         "options": "Options",
