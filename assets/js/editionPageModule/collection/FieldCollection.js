@@ -39,7 +39,6 @@ define([
     * Implement form object as a fields collection
     */
     var Form = Backbone.Collection.extend({
-        model: Fields.BaseField,
         options: {},
 
         /**
