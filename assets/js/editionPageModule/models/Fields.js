@@ -150,7 +150,16 @@ define([
                 title       : translater.getValueFromKey('schema.linkedField'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
-                options : []
+                options : function(apply, control) {
+                    // all the passing around of "linkedFieldsList" ends up here
+                    // todo it could probably be avoided
+                    var linkedFieldsList = control.model.get("linkedFieldsList");
+                    if (!linkedFieldsList) return;
+                    var options = _.map(linkedFieldsList, function(obj) {
+                        return obj.key;
+                    });
+                    apply(options);
+                },
             },
 
             editMode : {
