@@ -143,7 +143,13 @@ define([
                 title       : translater.getValueFromKey('schema.linkedFieldTable'),
                 template    : fieldTemplate,
                 editorClass : 'form-control',
-                options : []
+                options : function(apply, control) {
+                    // all the passing around of "linkedTablesList" ends up here
+                    // todo it could probably be avoided (bis)
+                    var linkedTablesList = control.model.get("linkedTablesList");
+                    if (!linkedTablesList) return;
+                    apply(linkedTablesList);
+                },
             },
             linkedField : {
                 type : 'Select',

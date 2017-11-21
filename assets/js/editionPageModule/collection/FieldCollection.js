@@ -528,6 +528,7 @@ define([
             if (field['order'] === undefined)
                 field['order'] = this.lastIndex();
             field['linkedFieldsList'] = this.linkedFieldsList[this.context].linkedFieldsList;
+            field['linkedTablesList'] = this.linkedFieldsList[this.context].tablesList;
             return this.addField(new Fields[nameType](field));
         },
 
