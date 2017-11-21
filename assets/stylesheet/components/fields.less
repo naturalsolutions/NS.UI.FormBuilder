@@ -22,6 +22,7 @@
         &+label {
             color : #aaa;
             font-size : 16px;
+            border-bottom: dashed 1px transparent;
             &:before {
                 .reneco;
                 content: "\e640";
@@ -29,8 +30,19 @@
             }
         }
 
-        &:focus + label {
-            border-bottom: 1px dashed #aaa;
+        &:not(:disabled) {
+            &:focus + label, &:active + label {
+                border-bottom-color: #aaa;
+            }
+        }
+
+        &:not(:checked) {
+            & + label {
+                opacity: 0.6;
+            }
+            &:not(:disabled) + label:hover {
+                opacity: 1;
+            }
         }
 
         &:checked+label:before {
