@@ -159,7 +159,7 @@
           color: black;
         }
 
-        input[type="text"], select {
+        input, select {
           height: 22px;
         }
 
@@ -176,6 +176,10 @@
           width: 100%;
           color: #ddd;
           padding: 0;
+
+          &[disabled] {
+            cursor: default !important;
+          }
 
           &:not([disabled]):focus, &:not([disabled]):hover {
             border-bottom-color: white;
