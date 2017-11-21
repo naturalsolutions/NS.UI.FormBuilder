@@ -222,16 +222,12 @@ define([
         },
 
         /**
-         * extraSchema returns any extra field not present in this.schema() or
+         * extraSchema returns any field not present in excluded this.schema() or
          * this.languages schema
          */
-        extraSchema: function() {
-            var defaultSchema = models.BaseField.prototype.schema;
-            var keys = Object.keys(defaultSchema).concat(this.i18nFields);
-
-            // also exclude defaultValue
-            keys.push("defaultValue");
-
+        extraSchema: function(excluded) {
+            if (!excluded) excluded = [];
+            var keys = excluded.concat(this.i18nFields);
             var extraProperties = _.pick(this.schema(), function(v, k) {
                 return !_.includes(keys, k);
             });
