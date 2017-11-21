@@ -270,10 +270,6 @@ define([
             _.bindAll(this, 'getJSON');
         },
 
-        isAdvanced : function(index) {
-            return this.getSchemaProperty(index, 'advanced') === "advanced";
-        },
-
         /**
          * Return the model in JSON object
          *

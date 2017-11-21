@@ -651,23 +651,6 @@ define([
         },
 
         /**
-         * Return fields list
-         * @param  {[type]} modelID id of field to excluse of the list
-         * @return {[Array} list of field
-         */
-        getFieldList : function(modelID) {
-            var fieldsList = [];
-
-            _.each(this.models, function(el) {
-                if (el.constructor.type != undefined && el.get('id') != modelID) {
-                    fieldsList.push(el.get('name'))
-                }
-            });
-
-            return fieldsList;
-        },
-
-        /**
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
