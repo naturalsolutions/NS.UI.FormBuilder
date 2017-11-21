@@ -67,30 +67,8 @@ define([
             _.bindAll(this, 'template', 'save');
 
             this.initFormChannel();
-            this.collectionChannel = Backbone.Radio.channel('collectionView');
-            this.collectionChannel.on('viewDrop', this.viewDrop, this);
 
             setStatics(this.context);
-        },
-
-        /**
-         * Callback executed when a BaseView is dropped in a subForm View
-         *
-         * @param subFormView subForm View where a BaseView was dropped in
-         */
-        viewDrop : function(subFormView) {
-            console.log("viewDrop", subFormView);
-
-            var droppedView = this._view[subFormView.viewDroppedId],
-                droppedViewModel = droppedView.model;
-
-            droppedView.destroy_view();
-            delete droppedView;
-
-            //subFormView.destroy_view()
-            //  We send to the subFormView the BaseView object
-            //  The subForm view has to move the BaseView from the main form view to its HTML container
-            this.collectionChannel.trigger('viewDropped:' + subFormView.id, droppedViewModel);
         },
 
         /**
