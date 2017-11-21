@@ -62,6 +62,9 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
          * custom dict {visible, editable, nullable, nullmean}. And vice-versa!
          */
         binWeight: {
+            items: [
+                "visible", "editable", "nullable", "nullmean"
+            ],
             toValue: function(dict) {
                 var i = 0;
                 i += dict.visible ? 1: 0;

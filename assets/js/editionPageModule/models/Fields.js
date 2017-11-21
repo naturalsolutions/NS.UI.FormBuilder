@@ -1,7 +1,8 @@
 define([
-    'jquery', 'lodash', 'tools', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config',
-    '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
-], function($, _, tools, Backbone, Translater, CheckboxEditor, AppConfig, FormCollection, ExtraProperties) {
+    'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
+    '../editor/CheckboxEditor', '../editor/EditModeEditor',
+    'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
+], function($, _, tools, Backbone, Translater, CheckboxEditor, EditModeEditor, AppConfig, FormCollection, ExtraProperties) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -63,7 +64,6 @@ define([
             linkedField: '',
 
             editMode: 7,
-            editModeElem: tools.binWeight.toDict(7),
             isDragged   : false,
             showCssProperties   : false,
             editorClass : '',
@@ -144,30 +144,9 @@ define([
             },
 
             editMode : {
-                type        : 'Object',
-                subSchema   : {
-                    visible : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.visible'),
-                        fieldClass: "checkBoxEditor"
-                    },
-                    editable : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.editable'),
-                        fieldClass: "checkBoxEditor"
-                    },
-                    nullable : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.nullable'),
-                        fieldClass: "checkBoxEditor"
-                    },
-                    nullmean : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.nullmean'),
-                        fieldClass: "checkBoxEditor"
-                    }
-                },
-                title       : translater.getValueFromKey('schema.editMode.editMode')
+                type        : EditModeEditor,
+                title       : translater.getValueFromKey('schema.editMode.editMode'),
+                template    : fieldTemplate
             },
 
             //  Css field section GONE

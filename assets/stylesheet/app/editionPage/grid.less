@@ -90,6 +90,8 @@
         }
 
         &.editMode {
+          padding-top: 2px;
+          padding-bottom: 1px;
           width: 18%;
           max-width: 18%;
           min-width: 18%;
@@ -141,6 +143,35 @@
           input {
             vertical-align: middle;
             margin: 0;
+          }
+        }
+
+        .editModeEditor {
+          position: relative;
+          padding: 4px 0 0 3px;
+
+          .checkboxField {
+            display: inline-block;
+            width: 48%;
+            height: 21px;
+            white-space: nowrap;
+            overflow: hidden;
+
+            input {
+              height: 1px;
+              &:focus + label {
+                border-bottom-color: inherit;
+              }
+              & + label {
+                color: inherit;
+                font-size: inherit;
+                font-weight: normal;
+                margin-bottom: 0;
+                &::before {
+                  margin-right: 8px;
+                }
+              }
+            }
           }
         }
 
