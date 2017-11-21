@@ -50,31 +50,6 @@ define([
     //  ----------------------------------------------------
     //  Field herited by BaseField
     //  ----------------------------------------------------
-
-    var reorderProperties = function(jsonobject){
-        var toOrder = {};
-        $.each(jsonobject, function(index, value){
-            if (value.after)
-            {
-                toOrder[index] = value;
-                delete jsonobject[index];
-            }
-        });
-
-        var toret = {};
-        $.each(jsonobject, function(index, value){
-            toret[index] = value;
-            $.each(toOrder, function(subindex, subvalue){
-               if(subvalue.after == index){
-                   toret[subindex] = subvalue;
-                   delete toOrder[subindex];
-               }
-            });
-        });
-
-        return toret;
-    };
-
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
@@ -437,7 +412,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function(options) {
@@ -505,7 +480,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -583,7 +558,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -651,7 +626,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -716,7 +691,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -768,7 +743,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -840,7 +815,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -913,7 +888,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
         initialize: function() {
             models.BaseField.prototype.initialize.apply(this, arguments);
@@ -978,7 +953,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -1066,7 +1041,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function(options) {
@@ -1141,7 +1116,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -1179,7 +1154,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -1238,7 +1213,7 @@ define([
                 format: formatFieldProps
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function() {
@@ -1398,7 +1373,7 @@ define([
                 }
             });
 
-            toret = reorderProperties(_.extend(toret, toret, extraschema));
+            toret = _.extend(toret, toret, extraschema);
 
             return toret;
         },
@@ -1421,9 +1396,9 @@ define([
         },
 
         schema : function() {
-            return reorderProperties(_.extend({},
+            return _.extend({},
                 models.NumberField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal")));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
 
             /* TODO KEEP AS EXAMPLE OF THE OLD WAY
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal");
@@ -1450,9 +1425,9 @@ define([
         },
 
         schema : function() {
-            return reorderProperties(_.extend({},
+            return _.extend({},
                 models.NumberField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange")));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange"));
         }
 
     }, {
@@ -1498,8 +1473,8 @@ define([
         },
 
         schema: function() {
-            return reorderProperties(_.extend( {}, models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration")));
+            return _.extend( {}, models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"));
         },
 
         /**
@@ -1569,9 +1544,9 @@ define([
         },
 
         schema : function() {
-            return reorderProperties(_.extend({},
+            return _.extend({},
                 models.EnumerationField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select")));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
@@ -1610,7 +1585,7 @@ define([
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
@@ -1639,8 +1614,8 @@ define([
         },
 
         schema : function() {
-            return reorderProperties(_.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio")));
+            return _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio"));
         },
 
         subSchema : models.EnumerationField.prototype.subSchema,
