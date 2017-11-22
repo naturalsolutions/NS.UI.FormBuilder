@@ -97,7 +97,13 @@ define([
             $("#fieldPropertiesPanel").find("h2").attr("data-i18n", panelTitle).i18n();
 
             // insert form
-            $("#fieldPropertiesPanel").find(".properties").html(form.$el);
+            $("#fieldPropertiesPanel").find(".properties")
+                .html(form.$el)
+                .slimScroll({
+                    height: "calc(100% - 22px)",
+                    railVisible: true,
+                    alwaysVisible : true
+                });
 
             // display panel
             $("#fieldPropertiesPanel").show().css({width: $("td.options").outerWidth()});
