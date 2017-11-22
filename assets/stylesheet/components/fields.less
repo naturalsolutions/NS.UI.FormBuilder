@@ -14,42 +14,50 @@
 //  checkbox custom field
 //  We hide the input and replace with before icon, we use reneco fonts https://github.com/NaturalSolutions/RenecoFonts
 .checkboxField {
-    position: relative;
-    input {
-        position: absolute;
-        opacity: 0;
+  position: relative;
+  height: 21px;
 
-        &+label {
-            color : #aaa;
-            font-size : 16px;
-            border-bottom: dashed 1px transparent;
-            &:before {
-                .reneco;
-                content: "\e640";
-                vertical-align: -1px;
-            }
-        }
-
-        &:not(:disabled) {
-            &:focus + label, &:active + label {
-                border-bottom-color: #aaa;
-            }
-        }
-
-        &:not(:checked) {
-            & + label {
-                opacity: 0.6;
-            }
-            &:not(:disabled) + label:hover {
-                opacity: 1;
-            }
-        }
-
-        &:checked+label:before {
-            .reneco;
-            content: "\e63f"
-        }
+  input {
+    position: absolute;
+    opacity: 0;
+    height: 1px;
+    &:focus + label {
+      border-bottom-color: inherit;
     }
+    & + label {
+      color: inherit;
+      font-size: inherit;
+      font-weight: normal;
+      border-bottom: dashed 1px transparent;
+      margin-bottom: 0;
+      &:before {
+        .reneco;
+        content: "\e640";
+        vertical-align: -1px;
+        margin-right: 8px;
+      }
+    }
+
+    &:not(:disabled) {
+      &:focus + label, &:active + label {
+        border-bottom-color: #aaa;
+      }
+    }
+
+    &:not(:checked) {
+      & + label {
+        opacity: 0.6;
+      }
+      &:not(:disabled) + label:hover {
+        opacity: 1;
+      }
+    }
+
+    &:checked+label:before {
+      .reneco;
+      content: "\e63f"
+    }
+  }
 }
 
 //  checkbox custom field

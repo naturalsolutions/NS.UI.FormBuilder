@@ -132,13 +132,10 @@
           }
         }
 
-        label.apCheckbox {
-          margin: 3px 0 0 0;
-          font-weight: normal;
+        .checkboxField {
           white-space: nowrap;
-          input {
-            vertical-align: middle;
-            margin: 0;
+          label {
+            overflow: hidden;
           }
         }
 
@@ -147,6 +144,7 @@
           padding: 4px 0 0 3px;
 
           .checkboxField {
+            display: inline-block;
             width: 48%;
           }
         }
@@ -154,30 +152,6 @@
         .appearanceEditor {
           .checkboxField {
             margin-top: 5px;
-          }
-        }
-
-        .checkboxField {
-          display: inline-block;
-          height: 21px;
-          white-space: nowrap;
-          overflow: hidden;
-          width: 100%;
-
-          input {
-            height: 1px;
-            &:focus + label {
-              border-bottom-color: inherit;
-            }
-            & + label {
-              color: inherit;
-              font-size: inherit;
-              font-weight: normal;
-              margin-bottom: 0;
-              &::before {
-                margin-right: 8px;
-              }
-            }
           }
         }
 

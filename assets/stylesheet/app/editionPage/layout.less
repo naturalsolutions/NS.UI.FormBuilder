@@ -148,6 +148,13 @@
             margin: 5px 0 0;
           }
 
+          .checkboxField {
+            display: block;
+            label {
+              color: black;
+            }
+          }
+
           textarea {
             color: black;
           }
@@ -191,7 +198,7 @@
             .checkboxField {
               padding-left: 0;
               padding-right: 0;
-              margin: 10px 0;
+              margin: 10px 0 20px;
             }
 
             &>label:first-child {
@@ -339,7 +346,7 @@
       }
 
       .properties form .form-group {
-        label {
+        :not(.checkboxField) label {
           color: #94827E;
         }
 
