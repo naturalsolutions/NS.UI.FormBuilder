@@ -184,6 +184,7 @@ define([
          * save blob
          */
         save: function() {
+            this.clearSelected();
             var formValidation = this.form.validate();
             if (formValidation === null) {
                 // filter new files only (deletion not implemented in back, todo)
