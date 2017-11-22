@@ -100,8 +100,8 @@ define([
             $("#fieldPropertiesPanel").find(".properties").html(form.$el);
 
             // display panel
-            $("#fieldPropertiesPanel").addClass("display")
-                .css({width: $("td.options").outerWidth()});
+            $("#fieldPropertiesPanel").show().css({width: $("td.options").outerWidth()});
+            $("#fieldPropertiesPanel").addClass("display");
         },
 
         setSelected: function(model) {
@@ -134,7 +134,7 @@ define([
 
             // re-enable panel
             $("#formPanel").removeClass("disabled");
-            $("#fieldPropertiesPanel").removeClass("display");
+            $("#fieldPropertiesPanel").removeClass("display").delay(500).hide(0);
         },
 
         onRender : function() {
