@@ -8,18 +8,11 @@ define([
     '../models/Fields',
     'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor'
-], function ($, Backbone, Fields, Radio, Translater) {
+    '../editor/CheckboxEditor',
+    'text!../templates/FieldTemplate.html'
+], function ($, Backbone, Fields, Radio, Translater, FieldTemplate) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var fieldTemplate = _.template(FieldTemplate);
 
     var translater = Translater.getTranslater();
 

@@ -4,8 +4,14 @@
 //
 
 //  remove shadow
+.formField, .form-control {
+  input, textarea, select {
+    outline: none;
+    box-shadow: none;
+  }
+}
+
 .form-control {
-    box-shadow: none!important;
     height: 32px;
     padding: 5px 10px;
     font-size: 13px;
@@ -21,6 +27,7 @@
     position: absolute;
     opacity: 0;
     height: 1px;
+    width: 0 !important;
     &:focus + label {
       border-bottom-color: inherit;
     }

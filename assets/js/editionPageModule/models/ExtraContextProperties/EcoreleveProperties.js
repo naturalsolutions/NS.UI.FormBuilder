@@ -6,19 +6,12 @@ define([
     'jquery',
     'backbone',
     '../../../Translater',
-    '../../editor/CheckboxEditor'
-], function ($, Backbone, Translater, CheckboxEditor) {
+    '../../editor/CheckboxEditor',
+    'text!../../templates/FieldTemplate.html'
+], function ($, Backbone, Translater, CheckboxEditor, FieldTemplate) {
 
     var translater = Translater.getTranslater();
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var fieldTemplate = _.template(FieldTemplate);
 
     return {
         extraProperties: {

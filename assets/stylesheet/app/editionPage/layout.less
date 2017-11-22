@@ -142,16 +142,37 @@
       .properties {
         margin-bottom: 10px;
 
-        .form-group {
+        .formField {
+          margin: 10px 0 20px;
+          &.hide {
+            display: none;
+          }
+
+          .editor {
+            margin-top: 2px;
+          }
+
           label {
             color: #bbb;
-            margin: 5px 0 0;
+            margin: 0;
           }
 
           .checkboxField {
             display: block;
             label {
               color: black;
+            }
+          }
+
+          input, select, textarea {
+            display: block;
+            width: 100%;
+            border-color: #bbb;
+
+            &:focus, &:hover {
+              &:not(:disabled) {
+                border-color: #888;
+              }
             }
           }
 
@@ -164,13 +185,8 @@
             border-bottom: 1px solid #bbb;
             background: none;
             padding: 2px 0 0;
-            margin-bottom: 10px;
             height: 22px;
             color: black;
-
-            &:focus, &:hover {
-              border-bottom-color: #888;
-            }
           }
 
           input {
@@ -210,6 +226,7 @@
         .attachedFiles {
           label {
             margin: 15px 0;
+            color: #bbb;
           }
 
           .disabled {
@@ -345,7 +362,7 @@
         padding-right: 25px;
       }
 
-      .properties form .form-group {
+      .properties form .formField {
         :not(.checkboxField) label {
           color: #94827E;
         }

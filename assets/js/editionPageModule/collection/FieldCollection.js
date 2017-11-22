@@ -18,18 +18,11 @@ define([
     '../editor/CheckboxEditor',
     'app-config',
     './CollectionExtention',
-    './staticInputs/ContextStaticInputs'
-], function ($, _, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig, CollectionExtention, ContextStaticInputs) {
+    './staticInputs/ContextStaticInputs',
+    'text!../templates/FieldTemplate.html',
+], function ($, _, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig, CollectionExtention, ContextStaticInputs, FieldTemplate) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var fieldTemplate = _.template(FieldTemplate);
 
     var translater = Translater.getTranslater();
     var extention = CollectionExtention;

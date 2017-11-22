@@ -1,21 +1,15 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
-    'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
+    'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties',
+    'text!../templates/FieldTemplate.html'
 ], function(
     $, _, tools, Backbone, Translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
-    AppConfig, FormCollection, ExtraProperties) {
+    AppConfig, FormCollection, ExtraProperties,
+    FieldTemplate) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var fieldTemplate = _.template(FieldTemplate);
 
     var models = {}, translater = Translater.getTranslater();
 
