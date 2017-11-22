@@ -29,7 +29,6 @@ define([
                 schema: {
                     minimumAppearance : {
                         type        : 'Number',
-                        editorClass : 'form-control',
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.minAppearance'),
                         validators : [function checkValue(value, formValues) {
@@ -67,7 +66,6 @@ define([
                     defaultValue: {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
-                        editorClass : 'form-control',
                         template    : fieldTemplate,
                         editorAttrs : {
                             placeholder : translater.getValueFromKey('placeholder.valueSQL')
@@ -87,7 +85,6 @@ define([
                 schema: {
                     linkedFieldIdentifyingColumn: {
                         type        : 'Text',
-                        editorClass : 'form-control',
                         fieldClass  : "hidden",
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn')

@@ -49,7 +49,6 @@ define([
             name : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.name'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
@@ -70,7 +69,6 @@ define([
             labelFr   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.label.fr'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
@@ -91,7 +89,6 @@ define([
             labelEn   : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.label.en'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
@@ -112,7 +109,6 @@ define([
             descriptionFr : {
                 type        : "TextArea",
                 title       : translater.getValueFromKey('form.description.fr'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
@@ -133,7 +129,6 @@ define([
             descriptionEn : {
                 type        : "TextArea",
                 title       : translater.getValueFromKey('form.description.en'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required',
@@ -154,13 +149,11 @@ define([
             keywordsFr : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.keywords.fr'),
-                editorClass : 'form-control',
                 template    : fieldTemplate
             },
             keywordsEn : {
                 type        : "Text",
                 title       : translater.getValueFromKey('form.keywords.en'),
-                editorClass : 'form-control',
                 template    : fieldTemplate
             },
             obsolete : {
@@ -175,7 +168,6 @@ define([
             },
             context : {
                 type        : "Hidden",
-                editorClass : 'form-control',
                 template    : fieldTemplate
             }
         },

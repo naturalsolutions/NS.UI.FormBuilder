@@ -25,7 +25,6 @@ define([
             activite : {
                 type        : "Select",
                 title       : translater.getValueFromKey('form.activite'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 searchable  : true,
                 options : [],
@@ -37,7 +36,6 @@ define([
             importance : {
                 type        : 'Number',
                 title       : translater.getValueFromKey('form.importance'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required'
@@ -55,7 +53,6 @@ define([
             typeIndividus : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.typeIndividus'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 searchable  : true,
                 options : [],
@@ -66,7 +63,6 @@ define([
             frequence : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.frequence'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [],
                 validators  : [{
@@ -76,7 +72,6 @@ define([
             groupe : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.groupe'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 searchable  : true,
                 options : [],
@@ -88,7 +83,6 @@ define([
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.actif.title'),
                 fieldClass  : "hidden",
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [
                     {
@@ -104,7 +98,6 @@ define([
             importapressortie : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.importapressortie.title'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [
                     {

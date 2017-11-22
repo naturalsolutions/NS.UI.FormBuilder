@@ -80,7 +80,6 @@ define([
             labelFr: {
                 type: "Text",
                 title: translater.getValueFromKey('schema.label.fr'),
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 validators: ['required'],
                 editorAttrs: {
@@ -90,7 +89,6 @@ define([
             labelEn: {
                 type: "Text",
                 title: translater.getValueFromKey('schema.label.en'),
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 validators: ['required'],
                 editorAttrs: {
@@ -100,7 +98,6 @@ define([
             name: {
                 type: "Text",
                 title: translater.getValueFromKey('schema.name'),
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 fieldClass: 'marginBottom10',
                 validators: ['required'],
@@ -119,7 +116,6 @@ define([
                 type: 'Select',
                 title: translater.getValueFromKey('schema.linkedFieldTable'),
                 template: fieldTemplate,
-                editorClass: 'form-control',
                 options: function(apply, control) {
                     // all the passing around of "linkedTablesList" ends up here
                     // todo it could probably be avoided (bis)
@@ -132,7 +128,6 @@ define([
                 type: 'Select',
                 title: translater.getValueFromKey('schema.linkedField'),
                 template: fieldTemplate,
-                editorClass: 'form-control',
                 options: function(apply, control) {
                     // all the passing around of "linkedFieldsList" ends up here
                     // todo it could probably be avoided
@@ -178,7 +173,6 @@ define([
 
             linkedFieldset: {
                 title: translater.getValueFromKey('schema.linkedFieldset'),
-                editorClass: 'form-control',
                 template: fieldTemplate
             }
         },
@@ -226,20 +220,17 @@ define([
                     editorClass: {
                         type: "Text",
                         title: translater.getValueFromKey('schema.editorClass'),
-                        editorClass: 'form-control',
                         fieldClass: 'marginTop20',
                         template: fieldTemplate
                     },
                     fieldClassEdit: {
                         type: "Text",
                         title: translater.getValueFromKey('schema.fieldClassEdit'),
-                        editorClass: 'form-control',
                         template: fieldTemplate
                     },
                     fieldClassDisplay: {
                         type: "Text",
                         title: translater.getValueFromKey('schema.fieldClassDisplay'),
-                        editorClass: 'form-control',
                         template: fieldTemplate
                     }
                 });
@@ -297,7 +288,6 @@ define([
                 defaultValue: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.default'),
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 isDefaultSQL: {
@@ -307,7 +297,6 @@ define([
                 },
                 help: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.help'),
                     editorAttrs: {
@@ -348,12 +337,10 @@ define([
                     type: 'Text',
                     title: translater.getValueFromKey('schema.default'),
                     fieldClass: 'advanced',
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 help: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.help'),
                     editorAttrs: {
@@ -362,7 +349,6 @@ define([
                 },
                 triggerlength: {
                     type: (ExtraProperties.getPropertiesContext().getHideExceptionForProperty('AutocompleteField', 'triggerlength') ? 'Hidden' : 'Number'),
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.triggerlength'),
                     editorAttrs: {
@@ -371,7 +357,6 @@ define([
                 },
                 url: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.url'),
                     editorAttrs: {
@@ -421,7 +406,6 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 mimeType: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.mime'),
                     editorAttrs: {
@@ -430,7 +414,6 @@ define([
                 },
                 help: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.help'),
                     editorAttrs: {
@@ -439,7 +422,6 @@ define([
                 },
                 filesize: {
                     type: 'Number',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.size'),
                     editorAttrs: {
@@ -504,7 +486,6 @@ define([
                 defaultNode: {
                     type: 'Number',
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     editorAttrs: {
                         placeholder: translater.getValueFromKey('placeholder.tree.default')
@@ -522,7 +503,6 @@ define([
                 },
                 webServiceURL: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.webServiceURL'),
                     editorAttrs: {
@@ -566,12 +546,10 @@ define([
                 defaultValue: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.default'),
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 webServiceURL: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.webServiceURL'),
                     editorAttrs: {
@@ -581,7 +559,6 @@ define([
                 defaultNode: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     editorAttrs: {
                         placeholder: translater.getValueFromKey('placeholder.tree.default')
@@ -589,7 +566,6 @@ define([
                 },
                 fullpath: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     editorAttrs: {disabled: true},
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.fullpath')
@@ -630,32 +606,27 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 wsUrl: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.wsUrl')
                 },
                 defaultNode: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 webservices: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.ws')
                 },
                 language: {
                     type: 'Select',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.wslng'),
                     options: ["fr", "en"]
                 },
                 fullpath: {
                     type: 'Hidden',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: ""
                 }
@@ -693,7 +664,6 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 childForm: {
                     type: 'Select',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.childForm'),
                     validators: ['required'],
@@ -701,13 +671,11 @@ define([
                 },
                 childFormName: {
                     type: 'Hidden',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: ""
                 },
                 help: {
                     type: 'Hidden',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: ""
                 }
@@ -747,7 +715,6 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 objectType: {
                     type: 'Select',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.objectType'),
                     options: ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
@@ -755,14 +722,12 @@ define([
                 },
                 wsUrl: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.wsUrl'),
                     validators: ['required']
                 },
                 triggerAutocomplete: {
                     type: 'Number',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.ACTrigger'),
                     validators: [function checkValue(value) {
@@ -779,7 +744,6 @@ define([
                 },
                 linkedLabel: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.linkedLabel')
                 }
@@ -820,7 +784,6 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 childForm: {
                     type: 'Select',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.childForm'),
                     validators: ['required'],
@@ -828,13 +791,11 @@ define([
                 },
                 childFormName: {
                     type: 'Hidden',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: ""
                 },
                 nbFixedCol: {
                     type: 'Number',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.nbFixedCol'),
                     validators: [function checkValue(value) {
@@ -892,7 +853,6 @@ define([
                 defaultPath: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultPath'),
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     editorAttrs: {
                         placeholder: translater.getValueFromKey('placeholder.value')
@@ -900,7 +860,6 @@ define([
                 },
                 webServiceURL: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.webServiceURL'),
                     editorAttrs: {
@@ -910,12 +869,10 @@ define([
                 defaultNode: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 positionPath: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     editorAttrs: {disabled: true},
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.positionPath'),
@@ -964,7 +921,6 @@ define([
                 defaultValue: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.default'),
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 isDefaultSQL: {
@@ -974,7 +930,6 @@ define([
                 },
                 help: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.help'),
                     editorAttrs: {
@@ -983,13 +938,11 @@ define([
                 },
                 minLength: {
                     type: 'Hidden',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.min')
                 },
                 maxLength: {
                     type: 'Number',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.maxTextLength'),
                     validators: ['required',
@@ -1040,7 +993,6 @@ define([
                 defaultValue: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.default'),
-                    editorClass: 'form-control',
                     template: fieldTemplate
                 },
                 isDefaultSQL: {
@@ -1050,7 +1002,6 @@ define([
                 },
                 help: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.help'),
                     editorAttrs: {
@@ -1059,7 +1010,6 @@ define([
                 },
                 maxLength: {
                     type: 'Number',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.maxTextLength'),
                     validators: [function checkValue(value, formValues) {
@@ -1108,7 +1058,6 @@ define([
             var toret = _.extend({}, models.TextField.prototype.schema(), {
                 pattern: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.pattern')
                 }
@@ -1151,7 +1100,6 @@ define([
 
             var formatFieldProps = {
                 type: 'Text',
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.format'),
                 editorAttrs: {
@@ -1221,7 +1169,6 @@ define([
             defaultValue: _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
             minValue: {
                 type: 'Text',
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.min'),
                 validators: [function checkValue(value, formValues) {
@@ -1248,7 +1195,6 @@ define([
             },
             maxValue: {
                 type: 'Text',
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.max'),
                 validators: [function checkValue(value, formValues) {
@@ -1275,7 +1221,6 @@ define([
             },
             precision: {
                 type: 'Number',
-                editorClass: 'form-control',
                 fieldClass: 'advanced',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.precision'),
@@ -1287,7 +1232,6 @@ define([
                 type: 'Select',
                 title: translater.getValueFromKey('schema.unity'),
                 template: fieldTemplate,
-                editorClass: 'form-control',
                 editorAttrs: {
                     placeholder: translater.getValueFromKey('placeholder.num.unity')
                 },
@@ -1321,7 +1265,6 @@ define([
             var toret = _.extend({}, schema, {
                 pattern: {
                     type: 'Text',
-                    editorClass: 'form-control',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.pattern')
                 }
@@ -1600,7 +1543,6 @@ define([
             name: {
                 type: "Text",
                 title: 'Name',
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 editorAttrs: {
                     placeholder: translater.getValueFromKey('placeholder.name')
@@ -1608,7 +1550,6 @@ define([
             },
             value: {
                 type: 'Text',
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.value'),
                 editorAttrs: {
@@ -1626,14 +1567,12 @@ define([
                 type: 'Select',
                 title: translater.getValueFromKey('schema.linkedFieldTable'),
                 template: fieldTemplate,
-                editorClass: 'form-control',
                 options: []
             },
             linkedField: {
                 type: 'Select',
                 title: translater.getValueFromKey('schema.linkedField'),
                 template: fieldTemplate,
-                editorClass: 'form-control',
                 options: []
             }
         }
@@ -1662,7 +1601,6 @@ define([
         schema: {
             legend: {
                 type: 'Text',
-                editorClass: 'form-control',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.legend'),
                 editorAttrs: {
