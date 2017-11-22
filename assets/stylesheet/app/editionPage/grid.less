@@ -151,25 +151,35 @@
           padding: 4px 0 0 3px;
 
           .checkboxField {
-            display: inline-block;
             width: 48%;
-            height: 21px;
-            white-space: nowrap;
-            overflow: hidden;
+          }
+        }
 
-            input {
-              height: 1px;
-              &:focus + label {
-                border-bottom-color: inherit;
-              }
-              & + label {
-                color: inherit;
-                font-size: inherit;
-                font-weight: normal;
-                margin-bottom: 0;
-                &::before {
-                  margin-right: 8px;
-                }
+        .appearanceEditor {
+          .checkboxField {
+            margin-top: 5px;
+          }
+        }
+
+        .checkboxField {
+          display: inline-block;
+          height: 21px;
+          white-space: nowrap;
+          overflow: hidden;
+          width: 100%;
+
+          input {
+            height: 1px;
+            &:focus + label {
+              border-bottom-color: inherit;
+            }
+            & + label {
+              color: inherit;
+              font-size: inherit;
+              font-weight: normal;
+              margin-bottom: 0;
+              &::before {
+                margin-right: 8px;
               }
             }
           }
@@ -191,7 +201,7 @@
         }
 
         input, select {
-          height: 22px;
+          height: 20px;
         }
 
         input, select {

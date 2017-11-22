@@ -1,0 +1,8 @@
+<div class="appearanceEditor" id="<%= id %>">
+    <input spellcheck="false" type="number" name="fieldSize" min="1" max="12" value="<%= model.get('fieldSize') %>">
+    <% var checked = model.get('atBeginingOfLine')? "checked": ""; %>
+    <div class="checkboxField">
+        <input id="cb<%= id %>" type="checkbox" name="atBeginingOfLine" <%= checked %> />
+        <label class="<%= checked %>" for="cb<%= id %>" data-i18n="schema.atBeginingOfLine"></label>
+    </div>
+</div>

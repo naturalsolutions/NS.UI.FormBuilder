@@ -1,8 +1,11 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
-    '../editor/CheckboxEditor', '../editor/EditModeEditor',
+    '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
     'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
-], function($, _, tools, Backbone, Translater, CheckboxEditor, EditModeEditor, AppConfig, FormCollection, ExtraProperties) {
+], function(
+    $, _, tools, Backbone, Translater,
+    CheckboxEditor, EditModeEditor, AppearanceEditor,
+    AppConfig, FormCollection, ExtraProperties) {
 
     var fieldTemplate = _.template('\
         <div class="form-group field-<%= key %>">\
@@ -148,20 +151,22 @@ define([
                 template: fieldTemplate
             },
 
-            //  Css field section GONE
+            // appearance englobes values for atBeginingOfLine & fieldSize
+            // this is not completely ideal but works well with BaseView's
+            // mechanism that setValue's based on input name.
+            appearance: {
+                type: AppearanceEditor,
+                title: translater.getValueFromKey('editGrid.appearance'),
+                template: fieldTemplate
+            },
 
             atBeginingOfLine: {
-                type: CheckboxEditor,
-                fieldClass: "checkBoxEditor",
-                title: translater.getValueFromKey('schema.atBeginingOfLine') || "atBeginingOfLine"
+                type: "Hidden"
             },
             fieldSize: {
-                type: 'Number',
-                editorClass: 'form-control',
-                template: fieldTemplate,
-                title: translater.getValueFromKey('schema.fieldSize'),
+                type: "Hidden",
                 validators: ['required',
-                    function checkValue(value, formValues) {
+                    function checkValue(value) {
                         if (value < 1 || value > 12) {
                             return {
                                 type: 'Invalid number',
@@ -170,6 +175,7 @@ define([
                         }
                     }]
             },
+
             linkedFieldset: {
                 title: translater.getValueFromKey('schema.linkedFieldset'),
                 editorClass: 'form-control',
