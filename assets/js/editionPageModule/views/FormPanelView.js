@@ -207,7 +207,7 @@ define([
             this.$el.find('.drop').disableSelection();
 
             this.$el.find('#scrollSection').slimScroll({
-                height        : 'calc(100% - 75px)',
+                height        : 'calc(100% - 76px)',
                 railVisible   : true,
                 alwaysVisible : true
             });

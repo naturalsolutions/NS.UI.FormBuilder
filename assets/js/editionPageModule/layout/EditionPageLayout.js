@@ -100,7 +100,7 @@ define([
             $("#fieldPropertiesPanel").find(".properties")
                 .html(form.$el)
                 .slimScroll({
-                    height: "calc(100% - 22px)",
+                    height: "calc(100% - 35px)",
                     railVisible: true,
                     alwaysVisible : true
                 });

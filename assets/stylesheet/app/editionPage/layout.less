@@ -1,8 +1,4 @@
 .edition {
-  .slimScrollBar {
-    background: black !important;
-  }
-
   .header {
     width: 100%;
     padding: 15px 30px;
@@ -62,6 +58,10 @@
         }
       }
 
+      #gridView {
+        height: ~"calc(100% - 76px)";
+      }
+
       #gridRowActions {
         position: absolute;
         bottom: 0;
@@ -116,6 +116,9 @@
 
       .slimScrollRail, .slimScrollBar {
         right: 0 !important;
+      }
+      .slimScrollBar {
+        background: black !important;
       }
     }
 
