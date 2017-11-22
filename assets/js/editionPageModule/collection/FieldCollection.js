@@ -688,12 +688,14 @@ define([
                     if (!fieldForm.staticfield)
                     {
                         var fieldformresult = fieldForm.validate();
-                        if (fieldformresult != null &&
-                            $.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) == -1)
-                        {
+                        if ($.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) !== -1) {
+                            fieldformresult = null;
+                        }
+                        if (fieldformresult !== null) {
                             fieldsValidation = false;
                             value.view.setValidationErrors(fieldformresult);
-                            $("#dropField"+value.id+" .field-label span").css("color", "red");
+                        } else {
+                            value.view.clearAllErrors();
                         }
                     }
 

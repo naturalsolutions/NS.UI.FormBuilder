@@ -42,17 +42,7 @@ define([
             // remove validation error for modified field
             if (this.validationErrors && this.validationErrors[field]) {
                 var err = this.validationErrors[field];
-                var $erronousField = err.$target.find("[name='" + field + "']");
-                $erronousField.removeClass("error");
-                this.setErrorMessage($erronousField, null);
-                if (err.$target.find(".error").length === 0) {
-                    this.$el.find(this.actionners[err.actionner]).removeClass("error");
-                }
-                delete(this.validationErrors[field]);
-                if (Object.keys(this.validationErrors).length === 0) {
-                    this.validationErrors = null;
-                    this.$el.removeClass("validationError");
-                }
+                this.clearValidationError(err, field);
             }
 
             // tricks for you : update value without re-rendering
@@ -73,9 +63,27 @@ define([
             }
         },
 
-        setValidationErrors: function(errors) {
-            if (!errors) return;
+        clearValidationError: function(err, name) {
+            var $erronousField = err.$target.find("[name='" + name + "']");
+            $erronousField.removeClass("error");
+            this.setErrorMessage($erronousField, null);
+            if (err.$target.find(".error").length === 0) {
+                this.$el.find(this.actionners[err.actionner]).removeClass("error");
+            }
+            delete(this.validationErrors[name]);
+            if (Object.keys(this.validationErrors).length === 0) {
+                this.validationErrors = null;
+                this.$el.removeClass("validationError");
+            }
+        },
 
+        clearAllErrors: function() {
+            _.each(this.validationErrors, _.bind(function(err, name) {
+                this.clearValidationError(err, name);
+            }, this));
+        },
+
+        setValidationErrors: function(errors) {
             this.validationErrors = {};
             this.$el.addClass("validationError");
 
@@ -120,6 +128,7 @@ define([
             this.model.view = this;
             this.static = this.model.get('compulsory');
             this.formChannel = Backbone.Radio.channel('form');
+            this.validationErrors = null;
 
             // BaseView is splitted into several subviews
             // We'll keep track of them in this object for displaying validation errors
