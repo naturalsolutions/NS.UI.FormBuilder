@@ -514,8 +514,11 @@ define([
             var field = properties || {};
             if (field['order'] === undefined)
                 field['order'] = this.lastIndex();
-            field['linkedFieldsList'] = this.linkedFieldsList[this.context].linkedFieldsList;
-            field['linkedTablesList'] = this.linkedFieldsList[this.context].tablesList;
+            var ctxLinkedFields = this.linkedFieldsList[this.context];
+            if (ctxLinkedFields) {
+                field['linkedFieldsList'] = ctxLinkedFields.linkedFieldsList;
+                field['linkedTablesList'] = ctxLinkedFields.tablesList;
+            }
             return this.addField(new Fields[nameType](field));
         },
 
