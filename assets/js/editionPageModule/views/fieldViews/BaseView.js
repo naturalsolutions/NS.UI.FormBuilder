@@ -315,6 +315,7 @@ define([
                 schema: schema
             });
             form.render();
+            tools.appendRequired(form.$el, schema);
             form.$el.i18n();
             // listen to this.events from created backbone form
             this.delegateFormEvents(form);

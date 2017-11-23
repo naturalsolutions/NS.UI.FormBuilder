@@ -66,8 +66,8 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
                 if (!value.validators) return;
                 for (var i in value.validators) {
                     var validator = value.validators[i];
-                    if (validator.type === "required") {
-                        $el.find("label[for="+index+"]").append("<span>*</span>");
+                    if (validator == "required" || validator.type === "required") {
+                        $el.find(".field-" + index + " label[for]").append("<span>*</span>");
                     }
                 }
             });
