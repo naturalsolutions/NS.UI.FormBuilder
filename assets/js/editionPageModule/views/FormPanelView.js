@@ -280,7 +280,7 @@ define([
          * Display a message when the form has been saved
          */
         displaySucessMessage : function() {
-            this.dataUpdated = true;
+            this.collection.dataUpdated = true;
             tools.swal("success", "modal.save.success", "modal.save.successMsg");
         },
 

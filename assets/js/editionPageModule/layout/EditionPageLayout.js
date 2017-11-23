@@ -82,6 +82,7 @@ define([
 
         update: function(fieldCollection) {
             this.fieldCollection = fieldCollection;
+            this.fieldCollection.dataUpdated = false;
             this.context = fieldCollection.context;
             this.initFieldTypes();
         },
@@ -170,7 +171,7 @@ define([
         },
 
         exit: function() {
-            this.formChannel.trigger('exit', false);
+            this.formChannel.trigger('exit', this.fieldCollection.dataUpdated);
         },
 
         gridKeypress: function(e) {
