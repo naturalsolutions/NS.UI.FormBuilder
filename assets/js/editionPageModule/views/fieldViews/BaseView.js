@@ -39,6 +39,8 @@ define([
         },
 
         setValue: function(field, value) {
+            this.options.collection.pendingChanges = true;
+
             // remove validation error for modified field
             if (this.validationErrors && this.validationErrors[field]) {
                 var err = this.validationErrors[field];
@@ -355,6 +357,7 @@ define([
          * @param {interger} idx new order of the view
          */
         updateIndex: function(idx) {
+            this.options.collection.pendingChanges = true;
             this.model.set('order', parseInt(idx) + 1, { silent: true });
             this.$el.data('order', parseInt(idx) + 1);
         }

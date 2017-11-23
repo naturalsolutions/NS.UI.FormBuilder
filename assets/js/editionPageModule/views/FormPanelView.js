@@ -37,8 +37,6 @@ define([
         },
 
         initialize : function(options, readonly) {
-            window.formbuilder.formedited = false;
-
             this.topcontext = AppConfig.appMode.topcontext;
             this.readonly = readonly;
             this.collection = options.fieldCollection;
@@ -281,6 +279,7 @@ define([
          */
         displaySucessMessage : function() {
             this.collection.dataUpdated = true;
+            this.collection.pendingChanges = false;
             tools.swal("success", "modal.save.success", "modal.save.successMsg");
         },
 
@@ -307,38 +306,6 @@ define([
 
         displayHasDuplicateFieldNames: function() {
             tools.swal("error", "modal.save.hasDuplicateFieldNamesError", "modal.save.hasDuplicateFieldNames");
-        },
-
-        /**
-         * Display a confirm dialog when user wants to exit
-         */
-        exit : function() {
-            if (!window.formbuilder.formedited || this.readonly) {
-                this.clearFormAndExit();
-                return;
-            }
-
-            // form was edited, display confirmation popup
-            var self = this;
-            tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications", {
-                showCancelButton   : true,
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('modal.exit.yes'),
-                cancelButtonText   : translater.getValueFromKey('modal.clear.no')
-            }, null, function() {
-                // confirm callback
-                self.clearFormAndExit();
-            });
-        },
-
-        /**
-         * Clear form and return to the homepage
-         * The controller does the redirection, the view send just an event
-         */
-        clearFormAndExit : function() {
-            Fields.getFormsListResult = undefined;
-            this.collection.reset();
-            this.formChannel.trigger('exit', this.dataUpdated);
         },
 
         /**

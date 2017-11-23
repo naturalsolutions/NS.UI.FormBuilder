@@ -774,8 +774,6 @@ define([
                                 else
                                     displaySaveSuccess();
                             }, 200);
-
-                            window.formbuilder.formedited = false;
                         };
 
                         displaySaveSuccess();

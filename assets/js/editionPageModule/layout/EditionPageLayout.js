@@ -83,6 +83,7 @@ define([
         update: function(fieldCollection) {
             this.fieldCollection = fieldCollection;
             this.fieldCollection.dataUpdated = false;
+            this.fieldCollection.pendingChanges = false;
             this.context = fieldCollection.context;
             this.initFieldTypes();
         },
@@ -171,7 +172,22 @@ define([
         },
 
         exit: function() {
-            this.formChannel.trigger('exit', this.fieldCollection.dataUpdated);
+            var exit = _.bind(function() {
+                this.formChannel.trigger('exit', this.fieldCollection.dataUpdated);
+            }, this);
+
+            if (!this.fieldCollection.pendingChanges || this.readonly) {
+                exit();
+                return;
+            }
+
+            // form was edited, display confirmation popup
+            tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications", {
+                showCancelButton   : true,
+                confirmButtonColor : "#DD6B55",
+                confirmButtonText  : t.getValueFromKey('modal.exit.yes'),
+                cancelButtonText   : t.getValueFromKey('modal.clear.no')
+            }, null, exit);
         },
 
         gridKeypress: function(e) {
@@ -260,6 +276,7 @@ define([
                 var $errField = $(e.target).closest(".error");
                 $errField.removeClass("error");
                 $errField.find(".error-block").html(null);
+                that.fieldCollection.pendingChanges = true;
             });
 
             // Init linked field (childForm?)
@@ -469,6 +486,7 @@ define([
         },
 
         appendToDrop : function(e) {
+            this.fieldCollection.pendingChanges = true;
             var fieldType = $(e.target).data("type");
             if (!Fields[fieldType]) {
                 tools.swal('error', 'modal.field.error', 'modal.field.errorMsg');
@@ -485,6 +503,7 @@ define([
             }
 
             var goDelete = _.bind(function() {
+                this.fieldCollection.pendingChanges = true;
                 this.fieldCollection.removeElement(model);
                 this.clearSelected();
             }, this);
@@ -501,6 +520,7 @@ define([
         },
 
         convertField: function() {
+            this.fieldCollection.pendingChanges = true;
             alert("todo");
         },
     });
