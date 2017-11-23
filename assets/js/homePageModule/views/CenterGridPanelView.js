@@ -154,6 +154,7 @@ define([
          */
         initGlobalChannel : function() {
             this.globalChannel = Backbone.Radio.channel('global');
+            this.globalChannel.on('formLoaded', this.hideSpinner, this);
         },
 
         /**
@@ -757,10 +758,9 @@ define([
             }
 
             var formToEdit = this.formCollection.get(id);
-            //  Send an event to the formbuilder
-            //  Two modules never speak directly, all communication pass htrough formbuilder App
-            // TODO TODO
+
             this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
+            this.showSpinner();
             this.hideContextList();
         },
 

@@ -87,6 +87,7 @@ define([
             if (this.loadingForm) return;
             this.loadingForm = true;
             var loadError = _.bind(function(err) {
+                Backbone.Radio.channel('global').trigger('formLoaded');
                 tools.swal("error", "fetchOne.error", "fetchOne.errorMsg");
                 console.error("fetch error", err);
                 this.loadingForm = false;
@@ -130,6 +131,8 @@ define([
             }
             this.editionPageRegion.show(this.currentEditionPageLayout);
 
+            // notify loading is happening
+            Backbone.Radio.channel('global').trigger('formLoaded');
             $('#mainRegion').animate({
                 marginLeft : '-100%'
             }, 750);
@@ -138,6 +141,8 @@ define([
             // while animation is playing. Double form loading is not cool.
             setTimeout(_.bind(function() {
                 this.loadingForm = false;
+                // twice is better than one :)
+                Backbone.Radio.channel('global').trigger('formLoaded');
             }, this), 1000);
         },
 
