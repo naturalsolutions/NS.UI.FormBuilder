@@ -483,7 +483,12 @@
 
   "fetch" : {
     "error"    : "Error retrieving forms !",
-    "errorMsg" : "Unable to retrieve the list of forms from the server. Is the server down ?"
+    "errorMsg" : "Unable to retrieve the list of forms from the server. Is it down ?"
+  },
+
+  "fetchOne" : {
+    "error"    : "Error retrieving form !",
+    "errorMsg" : "Unable to retrieve selected form from server. Is it down ?"
   },
 
   "configuration" : {

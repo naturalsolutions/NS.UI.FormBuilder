@@ -3,8 +3,9 @@ define([
     'marionette',
     'backbone',
     '../layout/EditionPageLayout',
-    '../collection/FieldCollection'
-], function($, Marionette, Backbone, EditionPageLayout, FieldCollection) {
+    '../collection/FieldCollection',
+    'tools'
+], function($, Marionette, Backbone, EditionPageLayout, FieldCollection, tools) {
 
     /**
      * EditionPageModule controller
@@ -93,8 +94,9 @@ define([
                         this.display(data['form']);
                     }, this),
                     error: _.bind(function (error) {
-                        // todo swal
-                        console.error("couldn't retreive form", error);
+                        tools.swal("error", "fetchOne.error", "fetchOne.message");
+                        console.error("fetch error", error);
+                        this.loadingForm = false;
                     }, this)
                 });
             } else {
