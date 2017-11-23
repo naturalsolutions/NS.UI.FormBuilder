@@ -82,6 +82,7 @@ define([
 
         update: function(fieldCollection) {
             this.fieldCollection = fieldCollection;
+            this.context = fieldCollection.context;
             this.initFieldTypes();
         },
 
