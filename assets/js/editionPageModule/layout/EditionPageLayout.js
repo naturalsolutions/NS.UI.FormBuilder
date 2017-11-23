@@ -295,23 +295,38 @@ define([
                 });
             }
 
-            $('select#typeIndividus').on('change', function(){
-                var groupselect = $('select#groupe');
-
-                if($(this).val().toLowerCase().indexOf("nouvel") !== -1){
-                    $(groupselect).find('option[value="null"]').show();
-                    $(groupselect).val('null');
-                    $(groupselect).attr("disabled", true);
-                }
-                else
-                {
-                    if ($(groupselect).find('option[value="null"]').is(':selected')){
-                        $(groupselect).val([]);
+            // set custom double binding between #group and #typeIndividus
+            // this is track specific - todo NotLikeThat
+            var $groupe = $(this.form.el).find('select#groupe');
+            var $typeIndividus = $(this.form.el).find('select#typeIndividus');
+            var updateGroupe = function() {
+                if($typeIndividus.val().toLowerCase().indexOf("nouvel") !== -1) {
+                    if ($groupe.val() == 'null') {
+                        // skip if value is already null to avoid
+                        // losing $groupe.data('previous')
+                        return;
                     }
-                    $(groupselect).find('option[value="null"]').hide();
-                    $(groupselect).attr("disabled", false);
+
+                    $groupe.find('option[value="null"]').show();
+                    $groupe.data('previous', $groupe.val());
+                    $groupe.val('null');
+                    $groupe.attr("disabled", true);
+                } else {
+                    if ($groupe.find('option[value="null"]').is(':selected')) {
+                        var prev = $groupe.data('previous');
+                        var val = prev ? prev : [];
+                        $groupe.val(val);
+                    }
+                    $groupe.find('option[value="null"]').hide();
+                    $groupe.attr("disabled", false);
                 }
-            });
+            };
+
+            // trigger updateGroupe on typeIndividus change
+            $typeIndividus.on('change', updateGroupe);
+
+            // manually disable #group if set to null
+            if ($groupe.val() == 'null') $groupe.attr("disabled", true);
         },
 
         triggerFileClick: function(){
