@@ -83,6 +83,8 @@ define([
         },
 
         loadForm: function(form) {
+            if (this.loadingForm) return;
+            this.loadingForm = true;
             if (form && form.id) {
                 $.ajax({
                     url: this.URLOptions.forms + '/' + form.id,
@@ -95,9 +97,9 @@ define([
                         console.error("couldn't retreive form", error);
                     }, this)
                 });
-                return;
+            } else {
+                this.display(form);
             }
-            this.display(form);
         },
 
         display: function(jsonForm) {
@@ -118,6 +120,12 @@ define([
             $('#mainRegion').animate({
                 marginLeft : '-100%'
             }, 750);
+
+            // wait before animation is done (& some), or the user can fuck us
+            // while animation is playing. Double form loading is not cool.
+            setTimeout(_.bind(function() {
+                this.loadingForm = false;
+            }, this), 1000);
         },
 
         /**
