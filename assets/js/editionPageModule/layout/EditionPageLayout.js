@@ -281,13 +281,9 @@ define([
                 disableFadeOut: true
             });
 
+
             // append * to required
-            var $formEl = this.form.$el;
-            $.each(form.schemaDefinition, function(index, value){
-                if (value.validators && value.validators[0].type == "required") {
-                    $formEl.find("label[for="+index+"]").append("<span>*</span>");
-                }
-            });
+            tools.appendRequired(this.form.$el, form.schemaDefinition);
 
             if (form.fileList) {
                 $.each(form.fileList, function(index, value){

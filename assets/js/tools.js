@@ -58,6 +58,22 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
         },
 
         /**
+         * appendRequired appends <span>*</span> for each schema entry if
+         * it has "required" validator.
+         */
+        appendRequired: function($el, schema) {
+            $.each(schema, function(index, value){
+                if (!value.validators) return;
+                for (var i in value.validators) {
+                    var validator = value.validators[i];
+                    if (validator.type === "required") {
+                        $el.find("label[for="+index+"]").append("<span>*</span>");
+                    }
+                }
+            });
+        },
+
+        /**
          * binWeight exposes two functions for transposing a 4bits binary weight into
          * custom dict {visible, editable, nullable, nullmean}. And vice-versa!
          */
