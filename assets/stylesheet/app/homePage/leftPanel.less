@@ -34,6 +34,8 @@
                 border: none;
                 border-bottom: 1px solid #bbb;
                 background: none;
+                outline: none;
+                box-shadow: none;
 
                 &:focus, &:hover {
                     border-bottom-color: #888;
@@ -62,9 +64,15 @@
             }
 
             input#search {
+                outline: none;
+                box-shadow: none;
                 font-family: 'reneco', sans-serif !important;
                 border-radius: 19px !important;
                 background: #ededed;
+
+                &:focus, &:hover {
+                    border-color: @orange;
+                }
                 &::placeholder {
                     font-style: italic;
                 }

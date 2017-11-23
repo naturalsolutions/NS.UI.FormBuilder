@@ -8,7 +8,6 @@ define([
     '../models/Fields',
     'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor',
     'text!../templates/FieldTemplate.html'
 ], function ($, Backbone, Fields, Radio, Translater, FieldTemplate) {
 
