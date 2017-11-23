@@ -124,6 +124,14 @@
       input:disabled, select:disabled {
         cursor: not-allowed;
       }
+
+      .checkBoxEditor {
+        width: 49%;
+        display: inline-block;
+        label {
+          color: black !important;
+        }
+      }
     }
 
     #settingFormPanel, #fieldPropertiesPanel {
@@ -163,9 +171,6 @@
 
           .checkboxField {
             display: block;
-            label {
-              color: black;
-            }
           }
 
           input, select, textarea {
@@ -366,8 +371,12 @@
         padding-right: 25px;
       }
 
+      .checkboxField label {
+        color: white !important;
+      }
+
       .properties form .formField {
-        :not(.checkboxField) label {
+        label {
           color: #94827E;
         }
 
