@@ -97,17 +97,18 @@ define([
             // update panel title
             $("#fieldPropertiesPanel").find("h2").attr("data-i18n", panelTitle).i18n();
 
-            // insert form
-            $("#fieldPropertiesPanel").find(".properties")
+            // display panel
+            $("#fieldPropertiesPanel").show().css({width: $("td.options").outerWidth()});
+
+            // insert form with padding & slimscrollIt
+            var padding = 11 + $("#fieldPropertiesPanel h2").outerHeight();
+            this.$el.find("#fieldPropertiesPanel").find(".properties")
                 .html(form.$el)
                 .slimScroll({
-                    height: "calc(100% - 35px)",
+                    height: 'calc(100% - ' + padding + 'px)',
                     railVisible: true,
                     alwaysVisible : true
                 });
-
-            // display panel
-            $("#fieldPropertiesPanel").show().css({width: $("td.options").outerWidth()});
             $("#fieldPropertiesPanel").addClass("display");
         },
 
