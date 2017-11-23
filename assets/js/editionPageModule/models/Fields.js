@@ -103,6 +103,7 @@ define([
             //  Linked field section
             isLinkedField: {
                 type: CheckboxEditor,
+                template: fieldTemplate,
                 fieldClass: "checkBoxEditor",
                 title: translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
             },
@@ -208,6 +209,7 @@ define([
                 $.extend(this.schema, this.schema, {
                     showCssProperties: {
                         type: CheckboxEditor,
+                        template: fieldTemplate,
                         fieldClass: "checkBoxEditor",
                         title: translater.getValueFromKey('schema.showCssProperties') || "showCssProperties"
                     },
@@ -286,6 +288,7 @@ define([
                 },
                 isDefaultSQL: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
                 },
@@ -359,6 +362,7 @@ define([
                 },
                 isSQL: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
                 }
@@ -424,6 +428,7 @@ define([
                 },
                 preview: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "checkBoxEditor",
                     title: translater.getValueFromKey('schema.preview') || "preview"
                 }
@@ -487,12 +492,14 @@ define([
                 },
                 multipleSelection: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "checkBoxEditor",
                     title: translater.getValueFromKey('schema.multipleSelection'),
                 },
                 hierarchicSelection: {
                     title: translater.getValueFromKey('schema.hierarchic'),
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "checkBoxEditor"
                 },
                 webServiceURL: {
@@ -803,11 +810,13 @@ define([
                 },
                 delFirst: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "checkBoxEditor",
                     title: translater.getValueFromKey('schema.delFirst')
                 },
                 showLines: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "checkBoxEditor",
                     title: translater.getValueFromKey('schema.showLines')
                 }
@@ -919,6 +928,7 @@ define([
                 },
                 isDefaultSQL: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
                 },
@@ -991,6 +1001,7 @@ define([
                 },
                 isDefaultSQL: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
                 },
@@ -1157,6 +1168,7 @@ define([
         baseSchema: {
             decimal: {
                 type: CheckboxEditor,
+                template: fieldTemplate,
                 fieldClass: "checkBoxEditor",
                 title: translater.getValueFromKey('schema.decimal')
             },
@@ -1471,6 +1483,7 @@ define([
             var toret = _.extend({}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema, {
                 isBinaryWeight: {
                     type: CheckboxEditor,
+                    template: fieldTemplate,
                     fieldClass: "checkBoxEditor",
                     title: translater.getValueFromKey('schema.isBinaryWeight') || "isBinaryWeight"
                 }
@@ -1554,6 +1567,7 @@ define([
             //  Linked field section
             isLinkedField: {
                 type: CheckboxEditor,
+                template: fieldTemplate,
                 fieldClass: "checkBoxEditor",
                 title: translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
             },

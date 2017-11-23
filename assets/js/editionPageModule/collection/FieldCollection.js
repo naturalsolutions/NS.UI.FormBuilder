@@ -151,11 +151,13 @@ define([
             },
             obsolete : {
                 type        : CheckboxEditor,
+                template    : fieldTemplate,
                 fieldClass  : "form-group checkBoxEditor",
                 title       : translater.getValueFromKey('schema.obsolete')
             },
             propagate : {
                 type        : CheckboxEditor,
+                template    : fieldTemplate,
                 fieldClass  : "form-group checkBoxEditor",
                 title       : translater.getValueFromKey('schema.propagate')
             },

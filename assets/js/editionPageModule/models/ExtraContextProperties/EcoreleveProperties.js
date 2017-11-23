@@ -45,6 +45,7 @@ define([
                 schema: {
                     iscollapsed : {
                         type        : CheckboxEditor,
+                        template    : fieldTemplate,
                         fieldClass  : "checkBoxEditor",
                         title       : translater.getValueFromKey('schema.iscollapsed')
                     }
@@ -66,6 +67,7 @@ define([
                     },
                     isDefaultSQL: {
                         type        : CheckboxEditor,
+                        template    : fieldTemplate,
                         fieldClass  : "hidden",
                         title       : "isSQL"
                     }
