@@ -86,17 +86,28 @@ define([
         loadForm: function(form) {
             if (this.loadingForm) return;
             this.loadingForm = true;
+            var loadError = _.bind(function(err) {
+                tools.swal("error", "fetchOne.error", "fetchOne.errorMsg");
+                console.error("fetch error", err);
+                this.loadingForm = false;
+            }, this);
             if (form && form.id) {
                 $.ajax({
                     url: this.URLOptions.forms + '/' + form.id,
                     dataType: 'json',
                     success: _.bind(function (data) {
+                        // it so happens that backend is happy with non-existing id
+                        // and sends us an empty data stuff, so this workaround says fuck
+                        // to user anyway. todo fix backend
+                        if (!data || !data['form']) {
+                            loadError("backend shoulda tell me there's a problem :/ it did not");
+                            return;
+                        }
+
                         this.display(data['form']);
                     }, this),
                     error: _.bind(function (error) {
-                        tools.swal("error", "fetchOne.error", "fetchOne.message");
-                        console.error("fetch error", error);
-                        this.loadingForm = false;
+                        loadError(error);
                     }, this)
                 });
             } else {
