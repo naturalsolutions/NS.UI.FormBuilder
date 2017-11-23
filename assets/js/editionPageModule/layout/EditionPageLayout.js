@@ -252,6 +252,13 @@ define([
                 data  : datas
             }).render();
 
+            // manually remove error on input change, to match behaviour of fields view
+            this.form.$el.find("input, select, textarea").on("change", function(e) {
+                var $errField = $(e.target).closest(".error");
+                $errField.removeClass("error");
+                $errField.find(".error-block").html(null);
+            });
+
             // Init linked field (childForm?)
             $.ajax({
                 data: {},
@@ -281,10 +288,10 @@ define([
                 disableFadeOut: true
             });
 
-
             // append * to required
             tools.appendRequired(this.form.$el, form.schemaDefinition);
 
+            // append files if any
             if (form.fileList) {
                 $.each(form.fileList, function(index, value){
                     that.addAttachedFile(value.Pk_ID, value.name, value.filedata);
