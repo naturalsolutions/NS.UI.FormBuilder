@@ -209,8 +209,13 @@
             margin-bottom: 10px;
           }
 
-          input, select, option, div, span {
-            &.error {
+          .error-block {
+            color: red;
+            text-indent: 10px;
+          }
+
+          &.error {
+            input, select, textarea {
               border-bottom: 3px dashed red !important;
             }
           }
@@ -391,6 +396,16 @@
             color: #94827E;
           }
           border-bottom-color: #94827E
+        }
+
+        .error-block {
+          color: @orange;
+        }
+
+        &.error {
+          input, select, textarea {
+            border-bottom-color: @orange !important;
+          }
         }
       }
 

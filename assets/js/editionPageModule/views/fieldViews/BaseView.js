@@ -54,7 +54,7 @@ define([
             if (!message)
                 message = ""; // force empty message
 
-            var $helpBlock = $el.parent().find(".help-block[data-error]");
+            var $helpBlock = $el.closest(".formField").find(".error-block");
             if ($helpBlock.length > 0) {
                 $helpBlock.html(message);
             } else {
@@ -66,6 +66,7 @@ define([
         clearValidationError: function(err, name) {
             var $erronousField = err.$target.find("[name='" + name + "']");
             $erronousField.removeClass("error");
+            $erronousField.closest(".error").removeClass("error");
             this.setErrorMessage($erronousField, null);
             if (err.$target.find(".error").length === 0) {
                 this.$el.find(this.actionners[err.actionner]).removeClass("error");
@@ -96,6 +97,7 @@ define([
                         // display error on parent element's button and $erronousInput
                         this.$el.find(this.actionners[viewKey]).addClass("error");
                         $erronousInput.addClass("error");
+                        $erronousInput.closest(".formField").addClass("error");
 
                         // set error message
                         this.setErrorMessage($erronousInput, err.message);
