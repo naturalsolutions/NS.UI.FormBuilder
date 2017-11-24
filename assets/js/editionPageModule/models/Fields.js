@@ -304,7 +304,7 @@ define([
         },
 
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
         }
     });
 
@@ -372,7 +372,7 @@ define([
         },
 
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
         }
 
     }, {
@@ -437,8 +437,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: "File",
@@ -515,8 +515,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'TreeView',
@@ -576,8 +576,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Thesaurus',
@@ -636,8 +636,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'AutocompleteTreeView',
@@ -685,8 +685,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'ChildForm',
@@ -753,8 +753,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'ObjectPicker',
@@ -824,8 +824,8 @@ define([
 
             return _.extend(toret, toret, extraschema);
         },
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'SubFormGrid',
@@ -886,8 +886,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Position',
@@ -969,7 +969,7 @@ define([
         },
 
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: "Text",
@@ -1034,8 +1034,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.TextField.prototype.initialize.call(this, options);
         }
 
     }, {
@@ -1071,8 +1071,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.TextField.prototype.initialize.call(this, options);
         }
 
     }, {
@@ -1127,8 +1127,8 @@ define([
             return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseFieldExtended.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseFieldExtended.prototype.initialize.call(this, options);
         }
     }, {
         type: "Date",
@@ -1281,8 +1281,8 @@ define([
             return toret;
         },
 
-        initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.TextField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Number',
@@ -1309,8 +1309,8 @@ define([
             */
         },
 
-        initialize: function() {
-            models.NumberField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.NumberField.prototype.initialize.call(this, options);
         }
 
     }, {
@@ -1368,8 +1368,8 @@ define([
             return toret;
         },
 
-        getJSON: function() {
-            var json = models.BaseField.prototype.getJSON.apply(this, arguments);
+        getJSON: function(options) {
+            var json = models.BaseField.prototype.getJSON.call(this, options);
             json.choices = JSON.stringify(this.get('choices'));
 
             return json;
@@ -1431,7 +1431,7 @@ define([
          * Get models.BaseField schema and add it on EnumerationField schema
          */
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
             if (typeof this.get('choices') === 'string') {
                 this.set('choices', JSON.parse(this.get('choices')));
             }
@@ -1454,8 +1454,8 @@ define([
 
         subSchema: models.EnumerationField.prototype.subSchema,
 
-        initialize: function() {
-            models.EnumerationField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.EnumerationField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Select',
@@ -1494,8 +1494,8 @@ define([
 
         subSchema: models.EnumerationField.prototype.subSchema,
 
-        initialize: function() {
-            models.EnumerationField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.EnumerationField.prototype.initialize.call(this, options);
         }
 
     }, {
@@ -1523,8 +1523,8 @@ define([
 
         subSchema: models.EnumerationField.prototype.subSchema,
 
-        initialize: function() {
-            models.EnumerationField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.EnumerationField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Radio',
