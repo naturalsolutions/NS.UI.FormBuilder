@@ -12,6 +12,7 @@
         "name": "Name",
         "defaultValue": "Default value",
         "linkedField": "Linked field",
+        "linkedFieldTable": "Linked field table",
         "linkedFieldset": "Parent fieldset",
         "appearance": "Appearance",
         "editMode": "Edit mode",

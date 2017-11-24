@@ -12,6 +12,7 @@
         "name": "Nom",
         "defaultValue": "Valeur par défaut",
         "linkedField": "Champs lié",
+        "linkedFieldTable": "Table du champ lié",
         "linkedFieldset": "Fieldset parent",
         "appearance": "Apparence",
         "editMode": "Mode d'édition",
