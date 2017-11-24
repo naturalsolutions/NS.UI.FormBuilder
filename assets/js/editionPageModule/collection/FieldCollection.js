@@ -519,6 +519,10 @@ define([
                 field['linkedFieldsList'] = ctxLinkedFields.linkedFieldsList;
                 field['linkedTablesList'] = ctxLinkedFields.tablesList;
             }
+            field['context'] = this.context;
+            if (nameType.indexOf("Field") === -1) {
+                nameType += "Field";
+            }
             return this.addField(new Fields[nameType](field));
         },
 
