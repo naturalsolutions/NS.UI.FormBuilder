@@ -132,7 +132,14 @@ define([
                 // prepare target element for field rendering
                 var id = "dropField" + newModel['id'];
                 var $field = $("<div>").addClass("dropField").attr("id", id);
-                this.$el.find('.drop').append($field);
+
+                // check that order is not set to last (converted field)
+                var order = newModel.get('order');
+                if (order >= this.$el.find(".drop").children().length) {
+                    this.$el.find('.drop').append($field);
+                } else {
+                    this.$el.find(".drop > tr:nth-child(" + order + ")").after($field);
+                }
 
                 // populate field / readonly if compulsory input
                 var vue = new AllFieldViews[viewClassName]({

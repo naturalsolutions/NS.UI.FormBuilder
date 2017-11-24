@@ -197,13 +197,79 @@ define([
             return extraProperties;
         },
 
+        cacheCompatibleFields: function(context, src, dest) {
+            if (!this.prototype.compatibleFields) {
+                this.prototype.compatibleFields = {};
+            }
+
+            if (!this.prototype.compatibleFields[context]) {
+                this.prototype.compatibleFields[context] = {};
+            }
+
+            this.prototype.compatibleFields[context][src] = dest;
+        },
+
+        getCompatibleFields: function(ctx) {
+            var srcType = this.constructor.type;
+
+            // do we have allowed converts for context in config ?
+            var compatibleFieldPacks = AppConfig.allowedConvert[ctx];
+            if (!compatibleFieldPacks) {
+                // fallback to default allowed converts ?
+                ctx = "default";
+                compatibleFieldPacks = AppConfig.allowedConvert[ctx];
+            }
+            if (!compatibleFieldPacks) {
+                // abort
+                return;
+            }
+
+            // do we have it in cache ?
+            if (this.prototype.compatibleFields &&
+                this.prototype.compatibleFields[ctx] &&
+                this.prototype.compatibleFields[ctx][srcType]) {
+
+                return this.prototype.compatibleFields[ctx][srcType];
+            }
+
+            // do the work
+            var pack;
+            for (var i in compatibleFieldPacks) {
+                pack = compatibleFieldPacks[i];
+
+                // search srcType in field pack
+                var idx = pack.indexOf(srcType);
+                if (idx > -1) {
+                    // found, copy array
+                    pack = pack.slice();
+                    // splice it (remove src type)
+                    pack.splice(idx, 1);
+                    break;
+                }
+
+                pack = null;
+            }
+
+            // cache value in prototype
+            this.cacheCompatibleFields(ctx, srcType, pack);
+
+            // assign value to model
+            return pack;
+        },
+
         initialize: function(options) {
+            // set prototype
+            this.prototype = models.BaseField.prototype;
+
             // set meta object for use in templates etc. will be ignored
             var meta = {
                 i18n: this.constructor.i18n,
                 type: this.constructor.type
             };
             this.set("meta", meta);
+
+            // set compatible convert fields
+            this.set("compatibleFields", this.getCompatibleFields(options.context));
 
             if (AppConfig.appMode.topcontext != "reneco") {
                 $.extend(this.schema, this.schema, {

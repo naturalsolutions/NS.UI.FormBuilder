@@ -102,6 +102,28 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
             }
         },
 
+        swalSelect: function(t, title, text, selectLabel, selectOptions, options, confirmCallback) {
+            var $el = $("<div class='swalSelect'>");
+            $el.append("<p class='important'>" + translater.getValueFromKey(text) + "</p>");
+            $el.append("<label for='swalSelect'>" + translater.getValueFromKey(selectLabel) + "</label>");
+
+            // populate select options
+            var $select = $("<select id='swalSelect'>");
+            for (var i in selectOptions) {
+                $select.append(
+                    "<option value='" + selectOptions[i] + "'>" +
+                    translater.getValueFromKey("fields." + selectOptions[i].toLowerCase()) +
+                    "</option>");
+            }
+            $el.append($select);
+            options.html = true;
+            this.swal(t, title, $el[0].outerHTML, options, null,
+                function() {
+                    confirmCallback($("#swalSelect").val());
+                }
+            );
+        },
+
         swal: function(t, title, text, options, callback, confirmCallback) {
             var opts = $.extend({
                 type: t,

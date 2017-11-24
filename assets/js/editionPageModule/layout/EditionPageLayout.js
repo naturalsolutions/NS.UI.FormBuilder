@@ -497,7 +497,7 @@ define([
             model.view.$el.find("input[name='name']").focus();
         },
 
-        deleteField: function() {
+        deleteField: function(noSwal) {
             if (!this.selected) {
                 return;
             }
@@ -509,8 +509,8 @@ define([
             }, this);
 
             var model = this.selected;
-            if (model.get('new')) {
-                // no confirmation if element is new
+            if (model.get('new') || noSwal) {
+                // no confirmation if element is new, or asked with noSwal arg
                 goDelete();
             } else {
                 // pass to BaseView.removeView, which needs to be rewritten
@@ -520,8 +520,42 @@ define([
         },
 
         convertField: function() {
-            this.fieldCollection.pendingChanges = true;
-            alert("todo");
-        },
+            var toConvert = this.selected;
+
+            var selectOptions = toConvert.get("compatibleFields")
+            if (!selectOptions || selectOptions.length === 0) {
+                console.error("no compatible fields set for model", this.get("type"), this.get("id"));
+                return;
+            }
+
+            tools.swalSelect("warning",
+                "settings.actions.convertTitle",
+                "settings.actions.convertValidate",
+                "settings.actions.convertLabel",
+                toConvert.get("compatibleFields"),
+                {
+                    confirmButtonColor : "#DD6B55",
+                    confirmButtonText  : t.getValueFromKey('settings.actions.convertYes'),
+                    cancelButtonText   : t.getValueFromKey('settings.actions.convertNo')
+                }, _.bind(function(targetFieldType) {
+                    this.fieldCollection.pendingChanges = true;
+
+                    if (!toConvert.get('new')) {
+                        // notify field convertion only if field already exists
+                        toConvert.set("converted", toConvert.get("id"));
+                    }
+                    this.deleteField(true);
+
+                    // model.id needs to be deleted.
+                    // Otherwise backbone somehow retreives existing
+                    // item on new Field(props) instead of actually creating a new object.
+                    delete(toConvert.attributes.id);
+
+                    // insert and select new element
+                    var model = this.fieldCollection.addElement(targetFieldType, toConvert.attributes);
+                    this.setSelected(model);
+                    model.view.$el.find("input[name='name']").focus();
+                }, this));
+        }
     });
 });

@@ -310,6 +310,7 @@
       "convertAction" : "Convert",
       "convertTitle" : "Conversion validation",
       "convertValidate" : "The input will be converted without possible return !",
+      "convertLabel" : "Select new input type: ",
       "convertYes" : "Yes, convert",
       "convertNo" : "Don't",
       "choosefile" : "Associate a file",
