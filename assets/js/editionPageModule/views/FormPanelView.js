@@ -195,11 +195,24 @@ define([
                 cursor: "move",
                 items: "tr:not(.static)",
                 start: function(e) {
+                    var $el = $(e.originalEvent.target).parent();
+                    var $container = $el.parent();
+                    var $placeholder = $container.find(".ui-sortable-placeholder");
+
                     // place the element being dragged at the end
                     // of the table: its absolute position breakse the
                     // table display in case it is the first row
-                    $(e.originalEvent.target).parent()
-                        .insertAfter(".drop tr:last-of-type");
+                    $el.insertAfter(".drop tr:last-of-type");
+
+                    // for each placeholder's td, apply css class of any non-placeholder
+                    // <tr>.. this is because we cannot target css columns with :nth-of-type,
+                    // because each column type has a specific sizing and can be placed
+                    // anywhere in the grid with config
+                    $.each($container.find("tr:not('.ui-sortable-placeholder') td"),
+                        function(i, elem) {
+                            $($placeholder.find("td")[i]).attr("class", $(elem).attr("class"));
+                        }
+                    );
                 },
                 update : _.bind(function() {
                     // update fields indexes
