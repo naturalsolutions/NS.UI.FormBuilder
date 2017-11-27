@@ -17,10 +17,13 @@ define([
     '../../Translater',
     '../editor/CheckboxEditor',
     'app-config',
+    'tools',
     './CollectionExtention',
     './staticInputs/ContextStaticInputs',
-    'text!../templates/FieldTemplate.html',
-], function ($, _, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig, CollectionExtention, ContextStaticInputs, FieldTemplate) {
+    'text!../templates/FieldTemplate.html'
+], function ($, _, Backbone,
+             Fields, Radio, Translater, CheckboxEditor, AppConfig, tools,
+             CollectionExtention, ContextStaticInputs, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -159,7 +162,17 @@ define([
                 type        : CheckboxEditor,
                 template    : fieldTemplate,
                 fieldClass  : "form-group checkBoxEditor",
-                title       : translater.getValueFromKey('schema.propagate')
+                title       : translater.getValueFromKey('schema.propagate'),
+                handlers    : [
+                    // notify user this is serious matter
+                    function(checked) {
+                        if (checked) {
+                            tools.swal('info',
+                                'modal.editionField.fieldEditAlert',
+                                'modal.editionField.propagationactivated');
+                        }
+                    }
+                ]
             },
             context : {
                 type        : "Hidden",
