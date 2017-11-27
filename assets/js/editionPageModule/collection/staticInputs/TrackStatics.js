@@ -162,7 +162,7 @@ define(['jquery'], function ($) {
             $.each(toadd, function(index, value){
                 if (index + 1 != savedSchema[value].order)
                     savedSchema[value].order -= 1;
-                toret.schema[Object.keys(toret.schema).length + 1] = (savedSchema[value]);
+                toret.schema[value] = savedSchema[value];
             });
 
             return toret;

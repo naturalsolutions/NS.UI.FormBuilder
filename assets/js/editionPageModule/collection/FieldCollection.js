@@ -418,8 +418,7 @@ define([
                         if (that.findWhere({name: v.name})) {
                             return;
                         }
-                        var f = that.createField(v, v.type);
-                        f.set('skip', true);
+                        that.createField(v, v.type);
                     });
                     this.reorderItems();
                 }
@@ -429,12 +428,9 @@ define([
                 if (model.constructor.type === 'Subform') {
                     json.fieldsets.push(this.getFieldsetFromModel(model));
                 } else if (model.constructor.type != undefined) {
-                    // skip newly created static inputs
-                    if (model.get('skip')) return;
-
                     subModel = this.getJSONFromModel(model);
 
-                    if (json.schema[model.get('name')] !== undefined) {
+                    if (!model.get("compulsory") && json.schema[model.get('name')] !== undefined) {
                         model.set('name', model.get('name') + model.get('id'));
                     }
 
