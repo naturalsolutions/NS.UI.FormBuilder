@@ -6,7 +6,7 @@ define([
     'text!editionPageModule/templates/fields/treeviewFieldView.html',
     'text!editionPageModule/templates/fields/readonly/treeviewFieldView.html',
     'jquery-ui',
-    'fancytree'
+    'autocompTree'
 ], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO) {
 
     var TreeViewFieldView = BaseView.extend({

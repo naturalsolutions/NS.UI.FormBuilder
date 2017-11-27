@@ -5,7 +5,9 @@
     'editionPageModule/views/fieldViews/BaseView',
        'text!editionPageModule/templates/fields/AutocompleteTreeViewFieldView.html',
        'text!editionPageModule/templates/fields/readonly/AutocompleteTreeViewFieldView.html',
-    'backbone.radio'
+    'backbone.radio',
+    'jquery-ui',
+    'autocompTree'
 ], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio) {
 
     var AutocompleteTreeViewFieldView = BaseView.extend({
@@ -36,14 +38,12 @@
 
         render : function() {
             BaseView.prototype.render.apply(this, arguments);
-            require(['jquery-ui', 'autocompleteTreeView'], _.bind(function() {
-                this.$el.find('#tree' + this.model.get('id')).autocompTree({
-                    language    : { hasLanguage: true, lng : this.model.get('language') },
-                    wsUrl       : 'ressources/thesaurus',
-                    webservices : 'autocompleteTreeView.json',
-                    startId     : '0'
-	            });
-            }, this));
+            this.$el.find('#tree' + this.model.get('id')).autocompTree({
+                language    : { hasLanguage: true, lng : this.model.get('language') },
+                wsUrl       : 'ressources/thesaurus',
+                webservices : 'autocompleteTreeView.json',
+                startId     : '0'
+            });
         }
     });
 
