@@ -509,7 +509,7 @@ define([
             }, this);
 
             var model = this.selected;
-            if (model.get('new') || noSwal) {
+            if (model.get('new') || (noSwal === true)) {
                 // no confirmation if element is new, or asked with noSwal arg
                 goDelete();
             } else {
