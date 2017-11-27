@@ -377,9 +377,6 @@ define([
             if (this.currentSelectedForm == newSelctedRow) {
                 this.clearSelectedRow();
             } else {
-                //  User clicked on another row
-                this.updateFooterAction();
-
                 // clone controls to selected row
                 $('#rowControls').clone().appendTo($(el).find("td:last-of-type"));
 
@@ -425,20 +422,6 @@ define([
          */
         clearFooterAction : function() {
             $('tr.selected').removeClass('selected');
-            this.$el.find('footer').animate({
-                bottom : '-80px'
-            }, 500);
-            $('#add, #import').switchClass('grey', 'red', 1);
-        },
-
-        /**
-         * Display common action form the current selected form like delete, clone, etc ...
-         */
-        updateFooterAction : function() {
-            this.$el.find('footer').animate({
-                bottom : '-25px'
-            }, 500);
-            $('#add, #import').switchClass('red', 'grey', 1);
         },
 
         /**
