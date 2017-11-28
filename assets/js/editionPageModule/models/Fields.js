@@ -100,13 +100,6 @@ define([
                 }
             },
 
-            //  Linked field section
-            isLinkedField: {
-                type: CheckboxEditor,
-                template: fieldTemplate,
-                fieldClass: "checkBoxEditor",
-                title: translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
-            },
             linkedFieldTable: {
                 type: 'Select',
                 title: translater.getValueFromKey('schema.linkedFieldTable'),
@@ -300,7 +293,6 @@ define([
                 });
 
                 $.extend(this.defaults, this.defaults, {
-                    isLinkedField: false,
                     linkedFieldTable: '',
                     linkedField: ''
                 });
@@ -333,7 +325,7 @@ define([
             if (this.get('editMode') & 2 != 2) {
                 jsonObject['validators'].push('readonly');
             }
-            return _.omit(jsonObject, ['isLinkedField', 'showCssProperties']);
+            return _.omit(jsonObject, ['showCssProperties']);
         }
 
     });
@@ -1632,13 +1624,6 @@ define([
                 }
             },
 
-            //  Linked field section
-            isLinkedField: {
-                type: CheckboxEditor,
-                template: fieldTemplate,
-                fieldClass: "checkBoxEditor",
-                title: translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
-            },
             linkedFieldTable: {
                 type: 'Select',
                 title: translater.getValueFromKey('schema.linkedFieldTable'),
