@@ -10,7 +10,7 @@ define([
     '../models/FormModel',
     'backbone.radio',
     'sweetalert',
-    '../../app-config',
+    'app-config',
     'tools',
     'slimScroll'
     ], function($, _, Marionette, moment, GridView, Backgrid, Translater,
@@ -122,7 +122,7 @@ define([
             this.initTemplate(
                 GridView,
                 context,
-                AppConfig.appMode.topcontext,
+                AppConfig.topcontext,
                 readonly);
         },
 
@@ -214,7 +214,7 @@ define([
             var getLoadedFormWeight = function () {
                 var toret = "";
 
-                if (AppConfig.appMode.topcontext == "reneco")
+                if (AppConfig.topcontext == "reneco")
                     toret += "<br/><br/><span id='makeObsoleteArea'>Passer le formulaire en obsolète à la place :<br/>"+
                             "<span id='doMakeObsolete'>Rendre obsolète</span></span><br/>";
 
@@ -380,7 +380,7 @@ define([
                 // clone controls to selected row
                 $('#rowControls').clone().appendTo($(el).find("td:last-of-type"));
 
-                if (AppConfig.appMode.topcontext == "reneco") {
+                if (AppConfig.topcontext == "reneco") {
                     $('tr.selected').removeClass('selected');
                     el.addClass('selected');
                 } else {
@@ -770,7 +770,7 @@ define([
 
                 $('body').append('<div class="modal fade" id="newFormModal"></div>');
 
-                if (AppConfig.appMode.topcontext != "reneco")
+                if (AppConfig.topcontext != "reneco")
                 {
                     // todo test this - or remove probably
                     require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {

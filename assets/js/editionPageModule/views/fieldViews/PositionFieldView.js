@@ -6,8 +6,8 @@ define([
     'text!editionPageModule/templates/fields/PositionFieldView.html',
     'text!editionPageModule/templates/fields/readonly/PositionFieldView.html',
     'backbone.radio',
-    'app-config'
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, AppConfig) {
+    'tools'
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, tools) {
 
     var PositionFieldView = BaseView.extend({
 
@@ -50,11 +50,7 @@ define([
             var that = this;
             var item = $('#position' + that.model.get('id'));
             if (startID == "")
-            {
-                startID = AppConfig.config.startID.position[window.context];
-                if (!startID)
-                    startID = AppConfig.config.startID.position.default;
-            }
+                startID = tools.getContextConfig(window.context, "positionStartId");
 
             var callbackWSCallHttp = function(data, urlws){
                 if (that.savedDefaultNode == startID)
@@ -115,12 +111,6 @@ define([
                         callbackWSCallHttp(window.trees[urlws], urlws);
                     }
                     else {
-                        if (startID == "")
-                        {
-                            startID = AppConfig.config.startID.position[window.context];
-                            if (!startID)
-                                startID = AppConfig.config.startID.position.default;
-                        }
                         $.ajax({
                             data: JSON.stringify({StartNodeID: startID, lng: "fr"}),
                             type: 'POST',

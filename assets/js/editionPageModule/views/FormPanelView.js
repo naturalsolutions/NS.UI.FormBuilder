@@ -4,7 +4,7 @@ define([
     'text!../templates/FormPanelView.html',
     'tools',
     '../../Translater',
-    '../../app-config',
+    'app-config',
     '../collection/staticInputs/ContextStaticInputs',
     '../models/Fields',
     './fieldViews/All',
@@ -37,17 +37,14 @@ define([
         },
 
         initialize : function(options, readonly) {
-            this.topcontext = AppConfig.appMode.topcontext;
+            this.topcontext = AppConfig.topcontext;
             this.readonly = readonly;
             this.collection = options.fieldCollection;
             this.context = this.collection.context;
             this._view = {};
             this.URLOptions = options.URLOptions;
 
-            this.columns = AppConfig.editColumns[this.context];
-            if (!this.columns) {
-                this.columns = AppConfig.editColumns.default;
-            }
+            this.columns = tools.getContextConfig(this.context, "editColumns");
 
             var that = this;
             $.ajax({

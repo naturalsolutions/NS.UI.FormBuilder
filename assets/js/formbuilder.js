@@ -189,7 +189,7 @@ define([
 
         // Spawn contexts
         var nbContexts = 0;
-        $.each(AppConfig.appMode, function(index, value){
+        $.each(AppConfig.contexts, function(index, value){
             if (index.indexOf("demo") == -1 && index != "topcontext" && index != "minimalist")
             {
                 // insert context
@@ -269,7 +269,7 @@ define([
                 positionWSPath : "reneco"
             };
 
-            if (!treesRestrictions[index] || treesRestrictions[index] == AppConfig.appMode.topcontext)
+            if (!treesRestrictions[index] || treesRestrictions[index] == AppConfig.topcontext)
             {
                 $.ajax({
                     type        : 'POST',

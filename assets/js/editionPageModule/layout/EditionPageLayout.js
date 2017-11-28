@@ -19,7 +19,7 @@ define([
                 collection : this.fieldCollection.getAttributesValues(),
                 context: this.context,
                 fieldTypes: this.fieldTypes,
-                topcontext: AppConfig.appMode.topcontext,
+                topcontext: AppConfig.topcontext,
                 readonly: AppConfig.readonlyMode
             });
         },
@@ -27,7 +27,7 @@ define([
         attributes: function() {
             return {
                 "data-context": this.context,
-                "data-topcontext": AppConfig.appMode.topcontext,
+                "data-topcontext": AppConfig.topcontext,
                 "data-readonly": AppConfig.readonlyMode,
                 "class": "edition"
             };
@@ -458,13 +458,13 @@ define([
             var context = this.context;
 
             // no soup for you
-            if (!AppConfig.appMode[context] || context == "all") {
+            if (!AppConfig.contexts[context] || context == "all") {
                 return;
             }
 
             // insert each field found from specific context in config
             var fieldTypes = [];
-            $.each(AppConfig.appMode[context], function (i, fieldType) {
+            $.each(tools.getContextConfig(context, "inputTypes"), function (i, fieldType) {
                 var field = Fields[fieldType];
                 if (!field) {
                     // try appending "Field" suffix

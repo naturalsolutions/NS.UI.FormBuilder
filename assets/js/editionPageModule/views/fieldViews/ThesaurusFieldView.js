@@ -6,8 +6,8 @@ define([
     'text!editionPageModule/templates/fields/thesaurusFieldView.html',
     'text!editionPageModule/templates/fields/readonly/thesaurusFieldView.html',
     'backbone.radio',
-    'app-config'
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, AppConfig) {
+    'tools'
+], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, tools) {
 
     var TreeViewFieldView = BaseView.extend({
 
@@ -50,11 +50,7 @@ define([
             var item = $('#thesaurus' + that.model.get('id'));
 
             if (startID == "")
-            {
-                startID = AppConfig.config.startID.thesaurus[window.context];
-                if (!startID)
-                    startID = AppConfig.config.startID.thesaurus.default;
-            }
+                startID = tools.getContextConfig(window.context, "thesaurusStartId");
 
             var callbackWSCallHttp = function(data){
 

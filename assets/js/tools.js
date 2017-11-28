@@ -1,4 +1,6 @@
-define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetalert) {
+define([
+    'jquery', './Translater', 'sweetalert', 'app-config'
+], function($, translater, sweetalert, AppConfig) {
     var translater = translater.getTranslater();
     return {
         /**
@@ -145,6 +147,15 @@ define(['jquery', './Translater', 'sweetalert'], function($, translater, sweetal
                     confirmCallback();
                 }
             });
+        },
+
+        getContextConfig: function(context, key) {
+            if (!AppConfig.contexts[context]) return null;
+
+            var item = AppConfig.contexts[context][key];
+            if (item) return item;
+
+            return AppConfig.defaults[key];
         }
     };
 });

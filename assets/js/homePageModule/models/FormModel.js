@@ -1,6 +1,6 @@
 define([
-    'jquery', 'lodash', 'backbone', '../../Translater', 'app-config'
-], function($, _, Backbone,Translater, AppConfig) {
+    'jquery', 'lodash', 'backbone', '../../Translater'
+], function($, _, Backbone,Translater) {
 
     var translater = Translater.getTranslater();
     /**

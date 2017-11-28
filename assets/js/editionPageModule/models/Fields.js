@@ -224,18 +224,7 @@ define([
 
         getCompatibleFields: function(ctx) {
             var srcType = this.constructor.type;
-
-            // do we have allowed converts for context in config ?
-            var compatibleFieldPacks = AppConfig.allowedConvert[ctx];
-            if (!compatibleFieldPacks) {
-                // fallback to default allowed converts ?
-                ctx = "default";
-                compatibleFieldPacks = AppConfig.allowedConvert[ctx];
-            }
-            if (!compatibleFieldPacks) {
-                // abort
-                return;
-            }
+            var compatibleFieldPacks = tools.getContextConfig(ctx, "allowedConvert");
 
             // do we have it in cache ?
             if (this.prototype.compatibleFields &&
@@ -284,7 +273,7 @@ define([
             // set compatible convert fields
             this.set("compatibleFields", this.getCompatibleFields(options.context));
 
-            if (AppConfig.appMode.topcontext != "reneco") {
+            if (AppConfig.topcontext != "reneco") {
                 $.extend(this.schema, this.schema, {
                     showCssProperties: {
                         type: CheckboxEditor,
@@ -1166,11 +1155,11 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Date");
 
             var toret = _.extend({}, models.BaseFieldExtended.prototype.defaults(), {
-                format: (AppConfig.appMode.topcontext == "reneco" ? "DD/MM/YYYY" : ""),
+                format: (AppConfig.topcontext == "reneco" ? "DD/MM/YYYY" : ""),
                 help: translater.getValueFromKey('placeholder.date')
             });
 
-            if (AppConfig.appMode.topcontext == "reneco") {
+            if (AppConfig.topcontext == "reneco") {
                 toret.fieldSize = 2;
             }
 
@@ -1192,7 +1181,7 @@ define([
             };
 
             // TODO - UGLY : Abstract special input cases ?
-            if (AppConfig.appMode.topcontext == "reneco" || window.context == "aygalades") {
+            if (AppConfig.topcontext == "reneco" || window.context == "aygalades") {
                 formatFieldProps.type = 'Select';
                 delete formatFieldProps.editorAttrs;
                 formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
