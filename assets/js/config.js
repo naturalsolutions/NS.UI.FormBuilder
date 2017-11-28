@@ -79,9 +79,14 @@ require.config({
         },
         fancytree: {
             deps: [
+                "jquery",
                 "jquery-ui"
-            ],
-            exports: "$"
+            ]
+        },
+        fancytreeAll: {
+            deps: [
+                "fancytree"
+            ]
         },
         slimScroll: {
             exports: "$",
@@ -103,12 +108,8 @@ require.config({
         },
         autocompTree: {
             deps: [
-                "jquery",
-                "jquery-ui",
-                "fancytree",
                 "fancytreeAll"
-            ],
-            exports: "$"
+            ]
         },
         "jquery-simple-slider": {
             exports: "$",
