@@ -1,4 +1,17 @@
 module.exports = function(grunt) {
+    var cssLibs = [
+        "node_modules/autocompTree/Scripts/skin-win7/ui.fancytree.min.css",
+        "node_modules/bootstrap/dist/css/bootstrap-theme.css",
+        "node_modules/bootstrap/dist/css/bootstrap.css",
+        "node_modules/backbone-forms/distribution/templates/bootstrap3.css",
+        "node_modules/@naturalsolutions/renecofonts/style.css",
+        "assets/stylesheet/sweetalert.css"
+    ];
+
+    var cssMain = [
+        "assets/stylesheet/all.less"
+    ];
+
 
     grunt.initConfig({
         //  LESS file compilation
@@ -15,7 +28,8 @@ module.exports = function(grunt) {
                     sourceMapRootpath: ''
                 },
                 files: {
-                    "compressed/formbuilder.min.css": "assets/stylesheet/all.less"
+                    "compressed/libs.min.css": cssLibs,
+                    "compressed/formbuilder.min.css": cssMain
                 }
             },
             dist: {
@@ -28,7 +42,8 @@ module.exports = function(grunt) {
                     sourceMapRootpath: ''
                 },
                 files: {
-                    "compressed/formbuilder.min.css": "assets/stylesheet/all.less"
+                    "compressed/libs.min.css": cssLibs,
+                    "compressed/formbuilder.min.css": cssMain
                 }
             }
         },
