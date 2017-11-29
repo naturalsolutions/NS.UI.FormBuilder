@@ -3,10 +3,8 @@ define([
     'lodash',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-    'text!editionPageModule/templates/fields/TextFieldView.html',
-    'text!editionPageModule/templates/fields/readonly/TextFieldView.html',
     '../../../../../node_modules/sqlite-parser/dist/sqlite-parser' /* <-- TODO */
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, sqliteParser) {
+], function($, _, Backbone, BaseView, sqliteParser) {
 
     var TextFieldView = BaseView.extend({
         initialize : function(options, readonly) {

@@ -3,36 +3,11 @@ define([
     'lodash',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-    'text!editionPageModule/templates/fields/autocompleteView.html',
-    'text!editionPageModule/templates/fields/readonly/autocompleteView.html',
     '../../../../../node_modules/sqlite-parser/dist/sqlite-parser',
     'jquery-ui'
-], function($, _, Backbone, BaseView, autocompleteTemplate, autocompleteTemplateRO, sqliteParser) {
+], function($, _, Backbone, BaseView, sqliteParser) {
 
     var AutocompleteFieldView = BaseView.extend({
-
-        /**
-         * Get BaseView events and add sepecific TextFieldView event
-         */
-        events: function() {
-            return _.extend(BaseView.prototype.events, {
-                
-            });
-        },
-
-        initialize : function(options, readonly) {
-            var opt = options;
-            opt.template = autocompleteTemplate;
-            if (readonly)
-                opt.template = autocompleteTemplateRO;
-
-            this.URLOptions = options.urlOptions;
-            BaseView.prototype.initialize.apply(this, [opt]);
-        },
-
-        /**
-         * Render view
-         */
         render : function() {
             var that = this;
 

@@ -3,25 +3,13 @@
     'lodash',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-       'text!editionPageModule/templates/fields/AutocompleteTreeViewFieldView.html',
-       'text!editionPageModule/templates/fields/readonly/AutocompleteTreeViewFieldView.html',
-    'backbone.radio',
     'jquery-ui',
     'autocompTree'
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio) {
+], function($, _, Backbone, BaseView) {
 
     var AutocompleteTreeViewFieldView = BaseView.extend({
-        events: function() {
-            return _.extend({}, BaseView.prototype.events, {
-            });
-        },
-
-        initialize : function(options, readonly) {
+        initialize : function(options) {
             var opt = options;
-            opt.template = viewTemplate;
-            if (readonly)
-                opt.template = viewTemplateRO;
-
             BaseView.prototype.initialize.apply(this, [opt]);
             this.mainChannel = Backbone.Radio.channel('global');
 

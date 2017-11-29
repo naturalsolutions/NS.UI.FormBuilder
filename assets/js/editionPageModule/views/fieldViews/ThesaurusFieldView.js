@@ -3,11 +3,9 @@ define([
     'lodash',
     'backbone',
     'editionPageModule/views/fieldViews/BaseView',
-    'text!editionPageModule/templates/fields/thesaurusFieldView.html',
-    'text!editionPageModule/templates/fields/readonly/thesaurusFieldView.html',
     'backbone.radio',
     'tools'
-], function($, _, Backbone, BaseView, viewTemplate, viewTemplateRO, Radio, tools) {
+], function($, _, Backbone, BaseView, Radio, tools) {
 
     var TreeViewFieldView = BaseView.extend({
 
@@ -16,12 +14,8 @@ define([
             });
         },
 
-        initialize : function(options, readonly) {
-            var opt = options;
-            opt.template = viewTemplate;
-            if (readonly)
-                opt.template = viewTemplateRO;
-            BaseView.prototype.initialize.apply(this, [opt]);
+        initialize : function(options) {
+            BaseView.prototype.initialize.apply(this, [options]);
 
             this.initGlobalChannel();
             this.initConfigChannel();

@@ -1,6 +1,6 @@
 define([
     'jquery', 'marionette', '../../editionPageModule/collection/CollectionExtention',
-    'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui', "eonasdan-bootstrap-datetimepicker"
+    'text!../templates/LeftPanelView.html', 'i18n', 'jquery-ui'
 ], function($, Marionette, CollectionExtention, LeftPanelViewTemplate) {
 
     /**
