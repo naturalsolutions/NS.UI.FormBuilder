@@ -22,7 +22,6 @@
   },
   "dependencies": {
     "@naturalsolutions/renecofonts": "^1.3.0",
-    "autocompTree": "https://github.com/NaturalSolutions/NS.UI.autocompTree",
     "backbone": "^1.3.3",
     "backbone-forms": "^0.14.1",
     "backbone.marionette": "2.3.2",
@@ -39,6 +38,7 @@
     "jquery-ui-dist": "1.12.1",
     "lodash": "3.10.1",
     "moment": "2.18.1",
+    "ns.ui.autocomptree": "git+https://github.com/NaturalSolutions/NS.UI.autocompTree.git",
     "requirejs": "2.3.5",
     "sweetalert": "1.1.0"
   }
