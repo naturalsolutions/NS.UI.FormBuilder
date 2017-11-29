@@ -9,13 +9,12 @@ define([
     'backbone.radio',
     '../../Translater',
     '../editor/CheckboxEditor',
-    'pillbox-editor',
     'app-config',
     './EcollectionCollection',
     './EcoreleveCollection',
     './TrackCollection',
     './PositionCollection'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig,
+], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig,
              EcollectionCollection, EcoreleveCollection, TrackCollection, PositionCollection) {
 
     var Extentions = {
