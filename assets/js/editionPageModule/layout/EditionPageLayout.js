@@ -379,7 +379,7 @@ define([
                 name = tools.dedupeFilename(name);
             }
 
-            // prepare element
+            // prepare element todo table layout would be way simpler than bootstrap
             var $file = $("<div class='file row'>");
             var $name = $("<span class='name col-md-8'>").html(name);
             var $ctrlDownload = $("<span class='download col-md-1'>");
@@ -387,10 +387,34 @@ define([
             var $ctrlRemove = $("<span class='remove col-md-1'>");
             $ctrlRemove.attr('title', t.getValueFromKey("actions.delete"));
             var $type = $("<span class='type col-md-1'>");
-            switch (name.split(".").pop()) {
+            var typeClass = "default";
+            switch (name.split(".").pop().toLowerCase()) {
+                case "doc":
+                case "docx":
+                case "odt":
+                    typeClass = "doc";
+                    break;
+                case "xls":
+                case "xlsx":
+                case "ods":
+                    typeClass = "xls";
+                    break;
+                case "jpg":
+                case "svg":
+                case "bmp":
+                case "gif":
+                    typeClass = "jpg";
+                    break;
+                case "png":
+                    typeClass = "png";
+                    break;
+                case "pdf":
+                    typeClass = "pdf";
+                    break;
                 default:
-                    $type.addClass("default");
+                    typeClass = "default";
             }
+            $type.addClass(typeClass);
 
             // trim extra chars in name
             if (name.length > 25) {
