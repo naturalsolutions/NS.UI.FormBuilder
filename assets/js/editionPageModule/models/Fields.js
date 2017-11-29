@@ -1524,7 +1524,6 @@ define([
             id: 0,
             order: 1,
             title: translater.getValueFromKey('tooltip.hidden'),
-            name: "Field",
             value: ""
         },
 
