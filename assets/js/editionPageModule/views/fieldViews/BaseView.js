@@ -17,6 +17,8 @@ define([
             'focus input, select'   : 'focusField',
         },
 
+        template: _.template(DefaultTemplate),
+
         focusField: function() {
             this.formChannel.trigger("setSelected", this.model);
         },
@@ -116,8 +118,6 @@ define([
         },
 
         initialize: function(options) {
-            // todo fix all other views instead of savagely overriding template like that
-            this.template   = _.template(DefaultTemplate);
             _.bindAll(this, 'render', 'removeView', 'editLanguages', 'editSettings', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
 
