@@ -123,6 +123,7 @@ define([
 
             this.selected = model;
             this.selected.view.$el.addClass("selected");
+            this.selected.view.$el.find("input[name='name']").focus();
             this.renderActions(this.selected);
         },
 
@@ -518,7 +519,6 @@ define([
             }
             var model = this.fieldCollection.addElement(fieldType);
             this.setSelected(model);
-            model.view.$el.find("input[name='name']").focus();
         },
 
         deleteField: function(noSwal) {
@@ -527,9 +527,20 @@ define([
             }
 
             var goDelete = _.bind(function() {
+                var sibling = model.view.$el.next();
+                if (sibling.length == 0) {
+                    sibling = model.view.$el.prev();
+                }
+                var siblingId = sibling.data("id");
+
                 this.fieldCollection.pendingChanges = true;
                 this.fieldCollection.removeElement(model);
                 this.clearSelected();
+
+                // select sibling if available
+                if (siblingId) {
+                    this.setSelected(this.fieldCollection.findWhere({id: siblingId}));
+                }
             }, this);
 
             var model = this.selected;
@@ -578,7 +589,6 @@ define([
                     // insert and select new element
                     var model = this.fieldCollection.addElement(targetFieldType, toConvert.attributes);
                     this.setSelected(model);
-                    model.view.$el.find("input[name='name']").focus();
                 }, this));
         }
     });
