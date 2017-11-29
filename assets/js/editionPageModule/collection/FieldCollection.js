@@ -57,10 +57,7 @@ define([
                             message: translater.getValueFromKey('schema.maxlength55')
                         };
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.form.name')
-                }
+                }]
             },
             labelFr   : {
                 type        : "Text",
@@ -77,10 +74,7 @@ define([
                             message: translater.getValueFromKey('schema.maxlength55')
                         };
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.form.label.fr')
-                }
+                }]
             },
             labelEn   : {
                 type        : "Text",
@@ -97,10 +91,7 @@ define([
                             message: translater.getValueFromKey('schema.maxlength55')
                         };
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.form.label.en')
-                }
+                }]
             },
             descriptionFr : {
                 type        : "TextArea",
@@ -117,10 +108,7 @@ define([
                             message: translater.getValueFromKey('schema.maxlength255')
                         };
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.form.description.fr')
-                }
+                }]
             },
             descriptionEn : {
                 type        : "TextArea",
@@ -137,10 +125,7 @@ define([
                             message: translater.getValueFromKey('schema.maxlength255')
                         };
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.form.description.en')
-                }
+                }]
             },
             keywordsFr : {
                 type        : "Text",

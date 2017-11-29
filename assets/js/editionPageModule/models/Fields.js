@@ -75,29 +75,20 @@ define([
                 type: "Text",
                 title: translater.getValueFromKey('schema.label.fr'),
                 template: fieldTemplate,
-                validators: ['required'],
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.label.fr')
-                }
+                validators: ['required']
             },
             labelEn: {
                 type: "Text",
                 title: translater.getValueFromKey('schema.label.en'),
                 template: fieldTemplate,
-                validators: ['required'],
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.label.en')
-                }
+                validators: ['required']
             },
             name: {
                 type: "Text",
                 title: translater.getValueFromKey('schema.name'),
                 template: fieldTemplate,
                 fieldClass: 'marginBottom10',
-                validators: ['required'],
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.name')
-                }
+                validators: ['required']
             },
 
             linkedFieldTable: {
@@ -355,10 +346,7 @@ define([
                 help: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.help')
-                    }
+                    title: translater.getValueFromKey('schema.help')
                 }
             })
         },
@@ -399,26 +387,17 @@ define([
                 help: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.help')
-                    }
+                    title: translater.getValueFromKey('schema.help')
                 },
                 triggerlength: {
                     type: (ExtraProperties.getPropertiesContext().getHideExceptionForProperty('AutocompleteField', 'triggerlength') ? 'Hidden' : 'Number'),
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.triggerlength'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.triggerlength')
-                    }
+                    title: translater.getValueFromKey('schema.triggerlength')
                 },
                 url: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.url'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.url')
-                    }
+                    title: translater.getValueFromKey('schema.url')
                 },
                 isSQL: {
                     type: CheckboxEditor,
@@ -465,26 +444,17 @@ define([
                 mimeType: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.mime'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.mime')
-                    }
+                    title: translater.getValueFromKey('schema.mime')
                 },
                 help: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.help')
-                    }
+                    title: translater.getValueFromKey('schema.help')
                 },
                 filesize: {
                     type: 'Number',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.size'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.fileSize')
-                    }
+                    title: translater.getValueFromKey('schema.size')
                 },
                 preview: {
                     type: CheckboxEditor,
@@ -545,10 +515,7 @@ define([
                 defaultNode: {
                     type: 'Number',
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    template: fieldTemplate,
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.tree.default')
-                    }
+                    template: fieldTemplate
                 },
                 multipleSelection: {
                     type: CheckboxEditor,
@@ -565,10 +532,7 @@ define([
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.tree.url')
-                    }
+                    title: translater.getValueFromKey('schema.webServiceURL')
                 }
             });
 
@@ -612,18 +576,12 @@ define([
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.node.url')
-                    }
+                    title: translater.getValueFromKey('schema.webServiceURL')
                 },
                 defaultNode: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    template: fieldTemplate,
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.tree.default')
-                    }
+                    template: fieldTemplate
                 },
                 fullpath: {
                     type: 'Text',
@@ -798,10 +756,7 @@ define([
                                 message: translater.getValueFromKey('schema.ACTriggerMinValue')
                             }
                         }
-                    }],
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.num.ACTrigger')
-                    }
+                    }]
                 },
                 linkedLabel: {
                     type: 'Text',
@@ -916,18 +871,12 @@ define([
                 defaultPath: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultPath'),
-                    template: fieldTemplate,
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.value')
-                    }
+                    template: fieldTemplate
                 },
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.node.url')
-                    }
+                    title: translater.getValueFromKey('schema.webServiceURL')
                 },
                 defaultNode: {
                     type: 'Text',
@@ -995,10 +944,7 @@ define([
                 help: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.help')
-                    }
+                    title: translater.getValueFromKey('schema.help')
                 },
                 minLength: {
                     type: 'Hidden',
@@ -1018,10 +964,7 @@ define([
                                 }
                             }
                         }
-                    ],
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('schema.maxlength255')
-                    }
+                    ]
                 }
             });
 
@@ -1068,10 +1011,7 @@ define([
                 help: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help'),
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('placeholder.help')
-                    }
+                    title: translater.getValueFromKey('schema.help')
                 },
                 maxLength: {
                     type: 'Number',
@@ -1084,10 +1024,7 @@ define([
                                 message: translater.getValueFromKey('schema.maxTextLengthMin')
                             }
                         }
-                    }],
-                    editorAttrs: {
-                        placeholder: translater.getValueFromKey('schema.maxlength255')
-                    }
+                    }]
                 }
             });
 
@@ -1166,10 +1103,7 @@ define([
             var formatFieldProps = {
                 type: 'Text',
                 template: fieldTemplate,
-                title: translater.getValueFromKey('schema.format'),
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.format')
-                }
+                title: translater.getValueFromKey('schema.format')
             };
 
             // TODO - UGLY : Abstract special input cases ?
@@ -1254,10 +1188,7 @@ define([
                             }
                         }
                     }
-                }],
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.num.min')
-                }
+                }]
             },
             maxValue: {
                 type: 'Text',
@@ -1280,27 +1211,18 @@ define([
                             }
                         }
                     }
-                }],
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.num.max')
-                }
+                }]
             },
             precision: {
                 type: 'Number',
                 fieldClass: 'advanced',
                 template: fieldTemplate,
-                title: translater.getValueFromKey('schema.precision'),
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.num.precision')
-                }
+                title: translater.getValueFromKey('schema.precision')
             },
             unity: {
                 type: 'Select',
                 title: translater.getValueFromKey('schema.unity'),
                 template: fieldTemplate,
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.num.unity')
-                },
                 options: []
             }
         },
@@ -1610,18 +1532,12 @@ define([
             name: {
                 type: "Text",
                 title: 'Name',
-                template: fieldTemplate,
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.name')
-                }
+                template: fieldTemplate
             },
             value: {
                 type: 'Text',
                 template: fieldTemplate,
-                title: translater.getValueFromKey('schema.value'),
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.value')
-                }
+                title: translater.getValueFromKey('schema.value')
             },
 
             linkedFieldTable: {
@@ -1663,10 +1579,7 @@ define([
             legend: {
                 type: 'Text',
                 template: fieldTemplate,
-                title: translater.getValueFromKey('schema.legend'),
-                editorAttrs: {
-                    placeholder: translater.getValueFromKey('placeholder.legend')
-                }
+                title: translater.getValueFromKey('schema.legend')
             }
         },
 
