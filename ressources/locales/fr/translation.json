@@ -522,12 +522,12 @@
     },
 
     "formCount" : {
-      "form": "__count__ Formulaire",
-      "form_plural": "__count__ Formulaires"
+      "form": "{{count}} Formulaire",
+      "form_plural": "{{count}} Formulaires"
     },
 
     "fieldCount" : {
-      "field": "__count__ Champ",
-      "field_plural": "__count__ Champs"
+      "field": "{{count}} Champ",
+      "field_plural": "{{count}} Champs"
     }
 }

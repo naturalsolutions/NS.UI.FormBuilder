@@ -514,12 +514,12 @@
   },
 
   "formCount" : {
-      "form": "__count__ Form",
-      "form_plural": "__count__ Forms"
+      "form": "{{count}} Form",
+      "form_plural": "{{count}} Forms"
   },
 
   "fieldCount" : {
-      "field": "__count__ Field",
-      "field_plural": "__count__ Fields"
+      "field": "{{count}} Field",
+      "field_plural": "{{count}} Fields"
   }
 }
