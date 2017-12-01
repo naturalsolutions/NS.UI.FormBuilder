@@ -114,7 +114,7 @@ define([
             $("#fieldPropertiesPanel").addClass("display");
         },
 
-        setSelected: function(model) {
+        setSelected: function(model, focus) {
             if (this.selected === model) {
                 return;
             } else if (this.selected) {
@@ -123,7 +123,9 @@ define([
 
             this.selected = model;
             this.selected.view.$el.addClass("selected");
-            this.selected.view.$el.find("input[name='name']").focus();
+            if (focus === true) {
+                this.selected.view.$el.find("input[name='name']").focus();
+            }
             this.renderActions(this.selected);
         },
 
@@ -518,7 +520,7 @@ define([
                 return;
             }
             var model = this.fieldCollection.addElement(fieldType);
-            this.setSelected(model);
+            this.setSelected(model, true);
         },
 
         deleteField: function(noSwal) {
@@ -539,7 +541,7 @@ define([
 
                 // select sibling if available
                 if (siblingId) {
-                    this.setSelected(this.fieldCollection.findWhere({id: siblingId}));
+                    this.setSelected(this.fieldCollection.findWhere({id: siblingId}), true);
                 }
             }, this);
 
@@ -588,7 +590,7 @@ define([
 
                     // insert and select new element
                     var model = this.fieldCollection.addElement(targetFieldType, toConvert.attributes);
-                    this.setSelected(model);
+                    this.setSelected(model, true);
                 }, this));
         }
     });
