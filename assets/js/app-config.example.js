@@ -124,6 +124,7 @@ define([], function() {
             editColumns: [
                 "name",
                 "defaultValue",
+                "linkedFieldTable",
                 "linkedField",
                 "linkedFieldset",
                 "appearance",
