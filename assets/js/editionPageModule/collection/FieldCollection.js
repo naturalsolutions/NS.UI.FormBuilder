@@ -226,10 +226,6 @@ define([
                 that[index] = opt[index] || value || "";
             });
 
-            $.each(extention.rulesList(), function(index, value){
-                that.schemaDefinition[index].validators.push(value);
-            });
-
             //  Bind
             _.bindAll(this, 'clearAll', 'lastIndex', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 

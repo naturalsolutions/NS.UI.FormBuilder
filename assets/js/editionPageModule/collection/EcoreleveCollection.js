@@ -12,10 +12,8 @@ define([
 ], function ($, Backbone, Fields, Radio, Translater, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
-
     var translater = Translater.getTranslater();
-
-    var EcoreleveExtention = {
+    return {
         schemaExtention: {
             author : {
                 type        : 'Hidden',
@@ -24,38 +22,19 @@ define([
             }
         },
 
-        propertiesDefaultValues : {
-            author : window.user
-        },
-
-        rulesList : function() {
-            return({});
-        },
-
-        getExtractedDatas: function(){
-            return({});
-        },
-
-        getSchemaExtention: function(options){
+        getExtractedDatas: function() {return {};},
+        getSchemaExtention: function(){
             return this.schemaExtention;
         },
-
-        initializeExtention: function () {
-            return(true);
-        },
-
+        initializeExtention: function () {return true;},
         jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
+            if (originalForm) {
                 originalForm.author = window.user;
             }
-            return(this.propertiesDefaultValues);
+            return {
+                author : window.user
+            };
         },
-
-        updateAttributesExtention: function () {
-            return(true);
-        }
+        updateAttributesExtention: function () {return true;}
     };
-
-    return EcoreleveExtention;
 });

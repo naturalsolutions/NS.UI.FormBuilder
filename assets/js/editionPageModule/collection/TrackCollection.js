@@ -118,10 +118,6 @@ define([
             importapressortie : ""
         },
 
-        rulesList : function() {
-            return({});
-        },
-
         getExtractedDatas: function(){
             return({
                 "Activite":"Activite",

@@ -10,42 +10,33 @@ define([
     '../../Translater',
     '../editor/CheckboxEditor',
     'app-config',
-    './EcollectionCollection',
     './EcoreleveCollection',
     './TrackCollection',
-    './PositionCollection'
 ], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig,
-             EcollectionCollection, EcoreleveCollection, TrackCollection, PositionCollection) {
+             EcoreleveCollection, TrackCollection) {
 
-    var Extentions = {
-        "track" : TrackCollection,
-        "ecoreleve" : EcoreleveCollection,
-        "ecollection" : EcollectionCollection,
-        "position" : PositionCollection
+    /**
+     * EmptyStatics is a dummy CollectionExtension object that does nothing.
+     * If need extension for a specific context, add "context" key to
+     * Extentions object, and make it implement this skeleton
+     */
+    var EmptyExtension = {
+        schemaExtention: function() {return {};},
+        propertiesDefaultValues: function() {return {};},
+        getSchemaExtention: function() {return {};},
+        initializeExtention: function() {return {};},
+        jsonExtention: function() {return {};}
     };
 
-    var CollectionExtention = {
+    var collectionExtensions = {
+        "track" : TrackCollection,
+        "ecoreleve" : EcoreleveCollection
+    };
+
+    return {
         started: false,
-
         schemaExtention: {},
-
         propertiesDefaultValues : {},
-
-        rulesList : function() {
-            return({});
-        },
-
-        getExtractedDatas: function(){
-            return({});
-        },
-
-        getSchemaExtention: function(){
-            return({});
-        },
-
-        initializeExtention: function () {
-            return(true);
-        },
 
         initAllExtensions: function(options) {
             if (this.started) {
@@ -53,29 +44,19 @@ define([
             }
 
             this.started = true;
-            for (var i in Extentions) {
-                var ext = Extentions[i];
+            for (var i in collectionExtensions) {
+                var ext = collectionExtensions[i];
                 ext.initializeExtention(options);
             }
         },
 
-        jsonExtention: function () {
-            return(this.propertiesDefaultValues);
-        },
-
-        updateAttributesExtention: function () {
-            return(true);
-        },
-
         getModeExtention : function (currentContext) {
-            var extentionMode = Extentions[window.context];
+            var extentionMode = collectionExtensions[window.context];
             if (currentContext)
-                extentionMode = Extentions[currentContext];
+                extentionMode = collectionExtensions[currentContext];
             if (!extentionMode)
-                return this;
+                return EmptyExtension;
             return extentionMode;
         }
     };
-
-    return CollectionExtention.getModeExtention();
 });
