@@ -11,7 +11,6 @@ define([], function() {
 
     var AppConfiguration = {
         readonlyMode: false,                           // Defines whether the app has to be displayed in Read Only mode or not
-        displayUserFilter: false,                      // (not implemented) Defines whether you display the User filter on the main page or not
         authmode: 'classic',                           // Authentication mode (portal or anything)
         portalURL: 'http://localhost/nsportal/front/', // Portal local URL
         securityKey: '',                               // JWT security secret word key
@@ -22,23 +21,6 @@ define([], function() {
             // POST(@lng, @StartNodeId)
             positionWSPath: 'http://localhost/positionCore/api/PositionAction/GetTree'
         },
-
-        // Defines the list of rules that will apply to the forms
-        rules: [
-            {
-                error: {
-                    'title': 'Form size exceeded',
-                    'content': 'Form can\'t have more than 666 fields'
-                },
-
-                /**
-                 * @param form
-                 **/
-                execute: function(form) {
-                    return form.length < 667;
-                }
-            }
-        ],
 
         config: {
             options: {
