@@ -562,8 +562,8 @@ define([
          * @param  {object} JSONUpdate JSON data
          */
         updateWithJSON : function(JSONUpdate) {
+            this.reset();
             this.JSONUpdate = JSONUpdate;
-            this.models = [];
             //  Update form attribute
             this.updateCollectionAttributes(JSONUpdate);
         },
