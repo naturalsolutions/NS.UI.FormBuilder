@@ -28,7 +28,16 @@ define([
             }, this));
         },
 
+        isKeyValid: function(key) {
+            return typeof key === "string" &&
+                key.indexOf(" ") === -1;
+        },
+
+
         getValueFromKey : function(key) {
+            if (!this.isKeyValid(key))
+                return key;
+
             return $.t(key);
         }
     });
