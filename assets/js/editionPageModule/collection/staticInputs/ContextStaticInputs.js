@@ -3,48 +3,39 @@
  */
 
 define([
-    './TrackStatics',
-    './EcoreleveStatics',
-    './EcollectionStatics',
-    './PositionStatics'
-], function (TrackStatics, EcoreleveStatics, EcollectionStatics, PositionStatics) {
+    './TrackStatics'
+], function (TrackStatics) {
+
+    /**
+     * EmptyStatics is a dummy StaticInput object that does nothing.
+     * If need static inputs for a specific context, add "context" key to
+     * staticInputs object, and make it implement this skeleton
+     */
+    var EmptyStatics = {
+        getStaticInputs: function() {return {};},
+        getCompulsoryInputs: function() {return [];},
+        applyRules: function(form, json) {return json;},
+        initializeStatics: function() {return true;}
+    };
 
     var staticInputs = {
-        "track" : TrackStatics,
-        "ecoreleve" : EcoreleveStatics,
-        "ecollection" : EcollectionStatics,
-        "postiion" : PositionStatics
+        "track" : TrackStatics
     };
 
     var ContextStaticInputs = {
-        staticInputs: {},
-        compulsoryInputs: [],
-
-        getStaticInputs: function(){
-            return ContextStaticInputs.staticInputs;
-        },
-
-        getCompulsoryInputs: function() {
-            return ContextStaticInputs.compulsoryInputs;
-        },
-
-        applyRules: function(form, json) {
-            return json;
-        },
-
-        initializeStatics: function () {
-            return true;
-        },
-
         getStaticMode : function (currentContext) {
+            if (!currentContext) {
+                console.warn("getStaticMode without context", window.context);
+            }
+
             var staticMode = staticInputs[window.context];
             if (currentContext)
                 staticMode = staticInputs[currentContext];
             if (!staticMode)
-                return this;
+                staticMode = EmptyStatics;
             return staticMode;
         }
     };
 
-    return ContextStaticInputs.getStaticMode();
+    return ContextStaticInputs;
 });
