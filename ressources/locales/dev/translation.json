@@ -376,7 +376,7 @@
       "uncompleteFielderror" : "Wrong Fields !",
       "uncompleteForm" : "At least one information is either missing or incorrect in your field properties !",
       "uncompleteFieldProp" : "At least one required field of your input is empty or invalid !",
-      "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : ",
+      "inputnamehasothertype" : "One of this form input already exists in another form with another type for this context as following : ",
       "hasDuplicateFieldNamesError" : "Invalid form !",
       "hasDuplicateFieldNames" : "Some of your fields have the same names",
       "formSimilarName" : "A form with a similar name already exists !",
