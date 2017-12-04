@@ -316,7 +316,9 @@
       "convertYes" : "Yes, convert",
       "convertNo" : "Don't",
       "choosefile" : "Associate a file",
-      "browse" : "Browse"
+      "browse" : "Browse",
+      "noCompatibleFieldsTitle": "No conversion available",
+      "noCompatibleFields": "There is no compatible input type for \"{{type}}\" input in configuration."
     },
     "preField" : "Pre-configurated field"
   },

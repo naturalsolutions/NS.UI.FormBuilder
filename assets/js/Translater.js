@@ -33,12 +33,11 @@ define([
                 key.indexOf(" ") === -1;
         },
 
-
-        getValueFromKey : function(key) {
+        getValueFromKey : function(key, opts) {
             if (!this.isKeyValid(key))
                 return key;
 
-            return $.t(key);
+            return $.t(key, opts);
         }
     });
 

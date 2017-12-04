@@ -324,7 +324,9 @@
             "convertYes" : "Oui, convertir",
             "convertNo" : "Annuler",
             "choosefile" : "Associer un fichier",
-            "browse" : "Parcourir"
+            "browse" : "Parcourir",
+            "noCompatibleFieldsTitle": "Pas de conversion possible",
+            "noCompatibleFields": "Il n'y a pas de type d'input compatible pour les inputs de type \"{{type}}\" dans la configuration."
         },
         "preField" : "Champs pré configurés",
         "linkedFilesList" : "Liste des fichiers associés :"

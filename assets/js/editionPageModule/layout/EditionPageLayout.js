@@ -559,9 +559,17 @@ define([
         convertField: function() {
             var toConvert = this.selected;
 
-            var selectOptions = toConvert.get("compatibleFields")
+            var selectOptions = toConvert.get("compatibleFields");
             if (!selectOptions || selectOptions.length === 0) {
-                console.error("no compatible fields set for model", this.get("type"), this.get("id"));
+                tools.swal("warning",
+                    "settings.actions.noCompatibleFieldsTitle",
+                    t.getValueFromKey(
+                        "settings.actions.noCompatibleFields",
+                        {
+                            type: t.getValueFromKey("fields." + toConvert.get("meta").i18n.toLowerCase())
+                        }
+                    )
+                );
                 return;
             }
 
