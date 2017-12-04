@@ -8,8 +8,9 @@ define([
     '../models/Fields',
     'backbone.radio',
     '../../Translater',
+    'auth',
     'text!../templates/FieldTemplate.html'
-], function ($, Backbone, Fields, Radio, Translater, FieldTemplate) {
+], function ($, Backbone, Fields, Radio, Translater, auth, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
     var translater = Translater.getTranslater();
@@ -29,10 +30,10 @@ define([
         initializeExtention: function () {return true;},
         jsonExtention: function (originalForm) {
             if (originalForm) {
-                originalForm.author = window.user;
+                originalForm.author = auth.username;
             }
             return {
-                author : window.user
+                author : auth.username
             };
         },
         updateAttributesExtention: function () {return true;}

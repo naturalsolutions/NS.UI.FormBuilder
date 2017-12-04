@@ -177,7 +177,6 @@ define([
         }
 
         if (auth.username) {
-            window.user = auth.username;
             $("header .user").text(auth.username);
             $("header .icons.last").removeClass("hidden");
         }
