@@ -169,7 +169,7 @@ define([
     //  Application start callback
     FormbuilderApp.on('start', function(options) {
         if (auth.error) {
-            tools.swal("error", "error.cookieCheck", "error.serverAvailable",
+            tools.swal("error", "error.cookieCheck", "error.serverAvailable", null,
                 function() {
                     window.location.href = AppConfig.portalURL;
                 });
