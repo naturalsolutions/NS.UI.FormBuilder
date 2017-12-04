@@ -2,6 +2,15 @@ define([
     'jquery', './Translater', 'sweetalert', 'app-config'
 ], function($, translater, sweetalert, AppConfig) {
     var translater = translater.getTranslater();
+
+    // fix swal lib breaking tab key
+    // https://github.com/t4t5/sweetalert/issues/127
+    var close = window.swal.close;
+    window.swal.close = function() {
+        close();
+        window.onkeydown = null;
+    };
+
     return {
         /**
          * inlineSvg replaces svg image tags matching selector with inline svg (for css edition)
@@ -138,8 +147,6 @@ define([
             if (opts.cancelButtonText) opts.showCancelButton = true;
 
             sweetalert(opts, function(confirm) {
-                window.onkeydown = null;
-                window.onfocus = null;
                 if (callback && typeof(callback) === 'function') {
                     callback();
                 }
