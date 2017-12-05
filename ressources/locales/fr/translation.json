@@ -11,7 +11,7 @@
         "type": "Type",
         "name": "Nom",
         "defaultValue": "Valeur par défaut",
-        "linkedField": "Champs lié",
+        "linkedField": "Champ lié",
         "linkedFieldTable": "Table du champ lié",
         "linkedFieldset": "Fieldset parent",
         "appearance": "Apparence",
@@ -74,7 +74,7 @@
         "title"       : "Création d'un nouveau formulaire",
         "count"       : "Champ(s)",
         "find"        : "Rechercher",
-        "validation"  : "Ce champs est requis",
+        "validation"  : "Ce champ est requis",
         "importance"  : "Importance",
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
         "setting"     : "Caractéristiques du formulaire",
@@ -145,13 +145,13 @@
     },
 
     "label" : {
-        "field"     : "Champs",
+        "field"     : "Champ",
         "settings"  : "Paramètre",
         "options"   : {
             "simple"    : "Options simples",
             "advanced"  : "Options avancées"
         },
-        "help" : "Cliquer sur champs pour l'ajouter au protocole"
+        "help" : "Cliquer sur champ pour l'ajouter au protocole"
     },
 
     "actions" : {
@@ -214,8 +214,8 @@
         "multiple"          : "Multiple",
         "legend"            : "Légende",
         "editorClass"       : "Classe CSS de l'éditeur",
-        "fieldClassEdit"        : "Classe CSS du champs en mode Edition",
-        "fieldClassDisplay"        : "Classe CSS du champs en mode Affichage",
+        "fieldClassEdit"        : "Classe CSS du champ en mode Edition",
+        "fieldClassDisplay"        : "Classe CSS du champ en mode Affichage",
         "checked"           : "Sélectionné",
         "checkboxlabel"     : "Label checkbox",
         "decimal"           : "Valeur décimale autorisée",
@@ -244,7 +244,7 @@
         "linkedField"                  : "Champ lié",
         "formIdentifyingColumn"        : "Champ du formulaire identifiant",
         "linkedFieldset"               : "Fieldset parent",
-        "isLinkedField"                : "Est un champs lié",
+        "isLinkedField"                : "Est un champ lié",
         "showCssProperties"            : "Voir Propriétés Css",
         "childForm"                    : "Nom du formulaire fils",
         "applyTemplate"                : "Template à appliquer (valider en bas de page)",
@@ -275,11 +275,11 @@
     "clearProtocol" : "Vous êtes sur le point de purger le formulaire.<br />Les modifications non sauvegardées seront perdues.<br />Voulez vous continuer ?",
 
     "accordion" : {
-        "text"         : "Champs texte",
-        "numeric"      : "Champs numérique",
+        "text"         : "Champ texte",
+        "numeric"      : "Champ numérique",
         "list"         : "Listes",
-        "presentation" : "Champs de présentation",
-        "autocomplete" : "Champs avec autocomplétion",
+        "presentation" : "Champ de présentation",
+        "autocomplete" : "Champ avec autocomplétion",
         "tree"         : "Arbres de selection",
         "file"         : "Selecteurs de fichier",
         "other"        : "Autres types de champs",
@@ -328,7 +328,7 @@
             "noCompatibleFieldsTitle": "Pas de conversion possible",
             "noCompatibleFields": "Il n'y a pas de type d'input compatible pour les inputs de type \"{{type}}\" dans la configuration."
         },
-        "preField" : "Champs pré configurés",
+        "preField" : "Champ pré configurés",
         "linkedFilesList" : "Liste des fichiers associés :"
     },
     "modal" : {
@@ -345,7 +345,7 @@
             "no"               : "Non, annuler",
             "deleted"          : "Champs supprimés !",
             "formDeleted"      : "Votre formulaire a été vidé !",
-            "deleteError"      : "Champs non supprimé !",
+            "deleteError"      : "Champ non supprimé !",
             "formDeletedError" : "Votre formulaire n'a pas pu être vidé !",
             "fieldsdeleted"    : "Les champs du formulaire seront supprimés !",
             "loosingModifications" : "En quittant, vous perdrez vos modifications !"
@@ -399,10 +399,10 @@
             "errorMsg" : "Une erreur est survenue lors de l'ajout du champ !"
         },
         "configuration" : {
-            "success"    : "Champs sauvegardé !",
-            "successMsg" : "Votre champs a été enregistré comme champs pré-configuré.",
-            "error"      : "Champs non sauvegardé !",
-            "errorMsg"   : "Votre champs n'a pas pu être sauvegardé."
+            "success"    : "Champ sauvegardé !",
+            "successMsg" : "Votre champ a été enregistré comme champ pré-configuré.",
+            "error"      : "Champ non sauvegardé !",
+            "errorMsg"   : "Votre champ n'a pas pu être sauvegardé."
         },
         "duplicate" : {
           "success"    : "Dupliqué !",
@@ -456,8 +456,8 @@
         "help"        : "Text d'aide de votre champ",
         "triggerlength": "Taille de la chaine pour le déclenchement de l'autocomplétion",
         "url"         : "URL permettant de récupérer la liste des valeurs",
-        "size"        : "Taille maximum de la valeur du champs",
-        "minimalSize" : "Taille minimum de la valeur du champs",
+        "size"        : "Taille maximum de la valeur du champ",
+        "minimalSize" : "Taille minimum de la valeur du champ",
         "mime"        : "Type de fichiers autorisés",
         "fileSize"    : "Taille maximum autorisée pour les fichiers choisis",
         "tree" : {
@@ -469,7 +469,7 @@
           "min"       : "Valeur numérique minimale",
           "max"       : "Valeur numérique maximale",
           "precision" : "Précision d'incrémentation",
-          "unity"     : "Unité du champs",
+          "unity"     : "Unité du champ",
           "ACTrigger" : "L'autocompletion se lancera à",
           "minAppearance"   : "Au moins 0"
         },
@@ -508,10 +508,10 @@
     "configuration" : {
       "save" : {
         "success"    : "Sauvé !",
-        "successMsg" : "Votre champs a bien été sauvgeardé",
+        "successMsg" : "Votre champ a bien été sauvgeardé",
         "fail"       : "Echec !",
-        "failMsg"    : "Votre champs n'a pas pu être sauvegardé",
-        "samename"   : "Votre champs ne peut avoir le même nom qu'un autre champ du formulaire",
+        "failMsg"    : "Votre champ n'a pas pu être sauvegardé",
+        "samename"   : "Votre champ ne peut avoir le même nom qu'un autre champ du formulaire",
         "loadsuccess": "Chargement réussi !",
         "loadsuccessMsg": "Le template a bien été chargé"
       },
