@@ -120,10 +120,6 @@ define([
 
         getHideExceptionForProperty: function(input, property) {
             return this.exceptions.hide[input] && this.exceptions.hide[input][property];
-        },
-
-        initializeStatics: function () {
-            return true;
         }
     };
 });

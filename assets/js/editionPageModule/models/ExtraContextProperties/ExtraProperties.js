@@ -17,7 +17,7 @@ define([
         "position" : PositionProperties
     };
 
-    var ExtraProperties = {
+    return {
         extraProperties: {},
         exceptions: {
             hide: {}
@@ -57,10 +57,6 @@ define([
             return(this.exceptions.hide[input] && this.exceptions.hide[input][property]);
         },
 
-        initializeStatics: function () {
-            return(true);
-        },
-
         getPropertiesContext : function (currentContext) {
             var propertiesContext = contextExtraProperties[window.context];
             if (currentContext)
@@ -70,6 +66,4 @@ define([
             return propertiesContext;
         }
     };
-
-    return ExtraProperties.getPropertiesContext();
 });
