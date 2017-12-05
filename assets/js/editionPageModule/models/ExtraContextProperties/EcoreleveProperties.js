@@ -31,10 +31,7 @@ define([
                                     message : translater.getValueFromKey('schema.minValueError') || "La valeur ne peut pas être inférieure à 0"
                                 }
                             }
-                        }],
-                        editorAttrs : {
-                            placeholder : translater.getValueFromKey('placeholder.num.minAppearance')
-                        }
+                        }]
                     }
                 }
             },
@@ -60,10 +57,7 @@ define([
                     defaultValue: {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
-                        template    : fieldTemplate,
-                        editorAttrs : {
-                            placeholder : translater.getValueFromKey('placeholder.valueSQL')
-                        }
+                        template    : fieldTemplate
                     },
                     isDefaultSQL: {
                         type        : CheckboxEditor,
