@@ -146,8 +146,8 @@ define([
             // If element is not new, extra forms will be generated on-demand (no risk
             // of validation error if values are not modified on existing input properties)
             if (this.model.get("new") && !this.static) {
-                this.initExtraForm();
-                this.initLanguageForm();
+                this.editSettings(true);
+                this.editLanguages(true);
             }
         },
 
@@ -274,14 +274,18 @@ define([
             this.formChannel.trigger('copyModel', this.model.get('id'));
         },
 
-        editLanguages: function() {
+        editLanguages: function(initOnly) {
             this.languageForm = this.initForm("language", this.model.languagesSchema(), ".languages");
+            if (initOnly === true) return;
+
             this.formChannel.trigger('editField',
                 this.model, "editGrid.manageLanguages", this.languageForm);
         },
 
-        editSettings: function() {
+        editSettings: function(initOnly) {
             this.extraForm = this.initForm("extra", this.model.extraSchema(this.columns), ".settings");
+            if (initOnly === true) return;
+
             this.formChannel.trigger('editField',
                 this.model, "editGrid.manageSettings", this.extraForm);
         },
