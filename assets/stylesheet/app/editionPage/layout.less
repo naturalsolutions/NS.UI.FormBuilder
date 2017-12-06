@@ -132,6 +132,18 @@
           color: black !important;
         }
       }
+
+      .properties .formField {
+        input, select, textarea {
+          border-color: #bbb;
+
+          &:focus, &:hover {
+            &:not(:disabled) {
+              border-color: #888;
+            }
+          }
+        }
+      }
     }
 
     #settingFormPanel, #fieldPropertiesPanel {
@@ -176,13 +188,6 @@
           input, select, textarea {
             display: block;
             width: 100%;
-            border-color: #bbb;
-
-            &:focus, &:hover {
-              &:not(:disabled) {
-                border-color: #888;
-              }
-            }
           }
 
           textarea {
@@ -190,8 +195,11 @@
           }
 
           input, select {
-            border: none;
-            border-bottom: 1px solid #bbb;
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
             background: none;
             padding: 2px 0 0;
             height: 22px;
@@ -500,6 +508,13 @@
 
         &:hover {
           background: rgba(222, 119, 16, .2);
+        }
+      }
+
+      input:not([type="checkbox"]), select {
+        border-color: #bbb;
+        &:not([disabled]):focus, &:not([disabled]):hover {
+          border-bottom-color: white;
         }
       }
     }
