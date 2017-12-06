@@ -12,7 +12,7 @@ define([
             i18n.use(i18nXhr);
             i18n.init({
                 lng : lang,
-                fallbackLng: 'en',
+                fallbackLng: 'fr',
                 async: false,
                 getAsync: false,
                 backend: {
