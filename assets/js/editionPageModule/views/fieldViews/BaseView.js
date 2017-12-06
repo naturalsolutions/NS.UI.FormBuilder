@@ -28,6 +28,8 @@ define([
         },
 
         inputChanged: function(e) {
+            if (!e.target.name) return;
+
             var value;
             switch(e.target.type.toLowerCase()) {
                 case "checkbox":
