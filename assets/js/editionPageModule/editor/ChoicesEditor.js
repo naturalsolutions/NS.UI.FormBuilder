@@ -1,6 +1,6 @@
 define([
     'jquery', 'lodash', 'backbone',
-    'text!./ChoicesEditor.html', 'text!./ChoiceRow.html',
+    'text!./ChoicesEditor.html', 'text!./ChoicesEditorRow.html',
     'backbone-forms'
 ], function($, _, Backbone, ChoicesTemplate, ChoiceRow) {
     return Backbone.Form.editors.Text.extend({
