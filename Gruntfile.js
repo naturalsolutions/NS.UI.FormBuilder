@@ -67,7 +67,7 @@ module.exports = function(grunt) {
         watch: {
             stylesheet: {
                 files: ['assets/stylesheet/**/*.less'],
-                tasks: ['less:dev', 'autoprefixer:single_file']
+                tasks: ['less:dev']
             }
         }
     });
