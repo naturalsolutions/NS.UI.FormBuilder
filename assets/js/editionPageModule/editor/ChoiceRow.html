@@ -1,0 +1,17 @@
+<tr class="choice" data-index="<%= id %>">
+    <td>
+        <input data-name="isDefaultValue" type="checkbox" <% if (isDefaultValue) { %>checked<% } %> />
+    </td>
+    <td>
+        <input data-name="fr" type="text" value="<%= fr %>" />
+    </td>
+    <td>
+        <input data-name="en" type="text" value="<%= en %>" />
+    </td>
+    <td>
+        <input data-name="value" type="text" value="<%= value %>" />
+    </td>
+    <td>
+        <div class="deleteOption" data-i18n="[title]actions.delete"></div>
+    </td>
+</tr>

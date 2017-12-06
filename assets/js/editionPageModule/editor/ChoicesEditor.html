@@ -1,0 +1,19 @@
+<div class="choicesEditor" id="<%= id %>">
+    <table>
+        <tr>
+            <th>&nbsp;</th>
+            <th>FR</th>
+            <th>EN</th>
+            <th data-i18n="editGrid.value"></th>
+            <th>&nbsp;</th>
+        </tr>
+        <% for (var i in choices) {
+        var choice = choices[i];
+        %>
+        <%= renderChoice(choice) %>
+        <% } %>
+    </table>
+    <div class="center">
+        <div class="action addBtn" data-i18n="settings.actions.addOption"></div>
+    </div>
+</div>

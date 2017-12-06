@@ -22,7 +22,9 @@
     "settings": "Settings",
     "selectedField": "Selected field type",
     "manageLanguages": "Language settings",
-    "manageSettings": "Settings"
+    "manageSettings": "Settings",
+    "valuesList": "Values list",
+    "value": "Value"
   },
 
   "fields" : {
@@ -317,7 +319,8 @@
       "choosefile" : "Associate a file",
       "browse" : "Browse",
       "noCompatibleFieldsTitle": "No conversion available",
-      "noCompatibleFields": "There is no compatible input type for \"{{type}}\" input in configuration."
+      "noCompatibleFields": "There is no compatible input type for \"{{type}}\" input in configuration.",
+      "addOption": "Add option"
     },
     "preField" : "Pre-configurated field"
   },

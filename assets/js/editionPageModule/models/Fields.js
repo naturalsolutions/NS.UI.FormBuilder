@@ -1,11 +1,12 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
+    '../editor/ChoicesEditor',
     'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html'
 ], function(
     $, _, tools, Backbone, Translater,
-    CheckboxEditor, EditModeEditor, AppearanceEditor,
+    CheckboxEditor, EditModeEditor, AppearanceEditor, ChoicesEditor,
     AppConfig, FormCollection, ExtraProperties,
     FieldTemplate) {
 
@@ -1333,15 +1334,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Enumeration");
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
-                choices: [
-                    {
-                        id: 1,
-                        isDefaultValue: false,
-                        fr: 'Mon option',
-                        en: "My first Option",
-                        value: "1"
-                    }
-                ],
+                choices: [],
                 expanded: false
             });
 
@@ -1359,7 +1352,14 @@ define([
 
         schema: function() {
             return _.extend({}, models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"),
+                {
+                    choices: {
+                        type: ChoicesEditor,
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('editGrid.valuesList')
+                    }
+                });
         },
 
         /**
@@ -1395,16 +1395,11 @@ define([
             }
         ],
 
-        /**
-         * Default value when we add a new row
-         */
-        columDefaults: {
-
+        columnDefaults: {
             isDefaultValue: false,
-            fr: 'French label',
-            en: 'English value',
-            value: 'Value',
-            action: ''
+            fr: '',
+            en: '',
+            value: ''
         },
 
         /**

@@ -22,7 +22,9 @@
         "settings": "Paramètres",
         "selectedField": "Champ sélectionné de type",
         "manageLanguages": "Gestion des langues",
-        "manageSettings": "Paramètres"
+        "manageSettings": "Paramètres",
+        "valuesList": "Liste de valeurs",
+        "value": "Valeur"
     },
 
     "fields" : {
@@ -326,7 +328,8 @@
             "choosefile" : "Associer un fichier",
             "browse" : "Parcourir",
             "noCompatibleFieldsTitle": "Pas de conversion possible",
-            "noCompatibleFields": "Il n'y a pas de type d'input compatible pour les inputs de type \"{{type}}\" dans la configuration."
+            "noCompatibleFields": "Il n'y a pas de type d'input compatible pour les inputs de type \"{{type}}\" dans la configuration.",
+            "addOption": "Ajouter une option"
         },
         "preField" : "Champ pré configurés",
         "linkedFilesList" : "Liste des fichiers associés :"

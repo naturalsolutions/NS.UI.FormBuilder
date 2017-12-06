@@ -429,6 +429,40 @@
             display: inline-block;
           }
         }
+
+        .choicesEditor {
+          table {
+            table-layout: fixed;
+            width: 100%;
+            border-spacing: 5px;
+            border-collapse: separate;
+
+            th, td {
+              &:first-of-type, &:last-of-type {
+                width: 15px;
+                text-align: center;
+              }
+            }
+          }
+          .deleteOption {
+            font-family: 'reneco', sans-serif;
+            cursor: pointer;
+            color: #aaaaaa;
+
+            &:hover {
+              color: white;
+            }
+
+            &::after {
+              content: "\e681";
+            }
+          }
+
+          .center {
+            text-align: center;
+            margin-top: 12px;
+          }
+        }
       }
 
       .content {
