@@ -275,35 +275,15 @@ define([
         },
 
         editLanguages: function() {
-            if (!this.languageForm) {
-                this.languageForm = this.initLanguageForm();
-            }
+            this.languageForm = this.initForm("language", this.model.languagesSchema(), ".languages");
             this.formChannel.trigger('editField',
                 this.model, "editGrid.manageLanguages", this.languageForm);
-
-            // redelegate events for this form, dom was fucked by editionPage
-            this.delegateFormEvents(this.languageForm);
         },
 
         editSettings: function() {
-            if (!this.extraForm) {
-                this.extraForm = this.initExtraForm();
-            }
+            this.extraForm = this.initForm("extra", this.model.extraSchema(this.columns), ".settings");
             this.formChannel.trigger('editField',
                 this.model, "editGrid.manageSettings", this.extraForm);
-
-            // redelegate events for this form, dom was fucked by editionPage
-            this.delegateFormEvents(this.extraForm);
-        },
-
-        initExtraForm: function() {
-            this.extraForm = this.initForm("extra", this.model.extraSchema(this.columns), ".settings");
-            return this.extraForm;
-        },
-
-        initLanguageForm: function() {
-            this.languageForm = this.initForm("language", this.model.languagesSchema(), ".languages");
-            return this.languageForm;
         },
 
         initForm: function(name, schema, actionner) {
