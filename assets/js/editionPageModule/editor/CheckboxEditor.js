@@ -14,6 +14,7 @@ define([
             this.value = (typeof this.value == 'boolean') ? this.value : false;
             this.$el = $(_.template(CheckboxTemplate)({
                 id          : this.options.id,
+                name        : this.options.key,
                 editorClass : this.options.schema.editorClass || '',
                 fieldClass  : this.options.schema.fieldClass || 'form-group',
                 iconClass   : this.options.iconClass || '',
