@@ -91,6 +91,9 @@ define([
         },
 
         setValidationErrors: function(errors) {
+            if (!errors || Object.keys(errors).length === 0)
+                return;
+
             this.validationErrors = {};
             this.$el.addClass("validationError");
 
@@ -278,6 +281,7 @@ define([
             this.languageForm = this.initForm("language", this.model.languagesSchema(), ".languages");
             if (initOnly === true) return;
 
+            this.setValidationErrors(this.validationErrors);
             this.formChannel.trigger('editField',
                 this.model, "editGrid.manageLanguages", this.languageForm);
         },
@@ -286,6 +290,7 @@ define([
             this.extraForm = this.initForm("extra", this.model.extraSchema(this.columns), ".settings");
             if (initOnly === true) return;
 
+            this.setValidationErrors(this.validationErrors);
             this.formChannel.trigger('editField',
                 this.model, "editGrid.manageSettings", this.extraForm);
         },
