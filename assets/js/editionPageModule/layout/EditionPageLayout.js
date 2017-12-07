@@ -148,7 +148,7 @@ define([
 
             // re-enable panel
             $("#formPanel").removeClass("disabled");
-            $("#fieldPropertiesPanel").removeClass("display").delay(500).hide(0);
+            $("#fieldPropertiesPanel").removeClass("display").hide();
         },
 
         onRender : function() {

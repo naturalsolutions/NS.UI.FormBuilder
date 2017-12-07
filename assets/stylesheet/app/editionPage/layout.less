@@ -389,10 +389,16 @@
       box-shadow: 1px 7px 12px 2px black;
       padding-left: 20px;
       top: 0;
-
-      right: -30%;
-      opacity: 0;
+      right: 0;
       text-align: center;
+
+      opacity: 0;
+      left: 100%;
+      &.display {
+        opacity: 1;
+        right: 0;
+        left: auto;
+      }
 
       .properties {
         padding-right: 25px;
@@ -490,11 +496,6 @@
           content: "<";
           margin-right: 20px;
         }
-      }
-
-      &.display {
-        right: 0;
-        opacity: 1;
       }
 
       .btnOk {
