@@ -12,6 +12,8 @@ define([], function() {
     var AppConfiguration = {
         readonlyMode: false,                           // Defines whether the app has to be displayed in Read Only mode or not
         authmode: 'classic',                           // Authentication mode (portal or anything)
+        username: 'Utilisateur',                       // Username if authmode != portal
+        language: 'fr',                                // language if authmode != portal
         portalURL: 'http://localhost/nsportal/front/', // Portal local URL
         securityKey: '',                               // JWT security secret word key
 
