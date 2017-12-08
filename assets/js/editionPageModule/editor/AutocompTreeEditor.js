@@ -37,7 +37,7 @@ define([
 
                     var path = data.node.data.fullpath;
                     this.view.setValue(this.options.schema.options.path, path);
-                    this.$el.find(".path").val(path).title(path);
+                    this.$el.find(".path").val(path).attr("title", path);
                 }, this)
             });
 

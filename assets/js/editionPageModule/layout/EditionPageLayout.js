@@ -112,7 +112,9 @@ define([
                     alwaysVisible : true
                 });
             $("#fieldPropertiesPanel").addClass("display");
-            form.$el.find("input:not(:hidden)")[0].focus();
+
+            var focusEl = form.$el.find("input:not(:hidden)")[0];
+            if (focusEl) focusEl.focus();
         },
 
         setSelected: function(model, focus) {
