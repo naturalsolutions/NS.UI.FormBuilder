@@ -37,7 +37,7 @@ define([
 
                     var path = data.node.data.fullpath;
                     this.view.setValue(this.options.schema.options.path, path);
-                    this.$el.find(".path").val(path);
+                    this.$el.find(".path").val(path).title(path);
                 }, this)
             });
 
@@ -49,7 +49,7 @@ define([
                 });
                 setTimeout(_.bind(function() {
                     this.$tree.slimScroll({
-                        scrollTo: activeNode.li.offsetTop - 20
+                        scrollTo: activeNode.li.offsetTop - 50
                     });
                 }, this), 100);
             }
