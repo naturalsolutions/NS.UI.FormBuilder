@@ -437,6 +437,42 @@
           }
         }
 
+        .autocompTreeEditor {
+          .tree {
+            background: white;
+            &.loading {
+              height: 100%;
+              color: #222222;
+              text-align: center;
+              padding: 15px;
+              cursor: default;
+            }
+
+            .fancytree-container {
+              border: none;
+              outline: none;
+            }
+          }
+
+          .slimScrollBar {
+            background: black !important;
+            transition: none;
+          }
+
+          .slimScrollRail {
+            opacity: 0.3 !important;
+            transition: none;
+          }
+
+          table {
+            border-spacing: 5px 1px;
+            border-collapse: separate;
+            td {
+              padding: 5px 0;
+            }
+          }
+        }
+
         .editModeEditor, .appearanceEditor {
           .checkboxField, input {
             width: 49%;
