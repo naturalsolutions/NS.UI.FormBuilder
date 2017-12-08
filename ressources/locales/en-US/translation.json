@@ -24,7 +24,9 @@
     "manageLanguages": "Language settings",
     "manageSettings": "Settings",
     "valuesList": "Values list",
-    "value": "Value"
+    "value": "Value",
+    "urlChanged": "Webservice URL change",
+    "urlChangedMessage": "Please reload current form after saving to update nodes tree selector"
   },
 
   "fields" : {
