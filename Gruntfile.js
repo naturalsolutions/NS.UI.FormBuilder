@@ -1,10 +1,14 @@
 module.exports = function(grunt) {
+    var fancytreeSkin = "skin-win8";
+    var fancyTreeSkinsDir = "node_modules/jquery.fancytree/dist";
+
     var cssLibs = [
         "node_modules/autocompTree/Scripts/skin-win7/ui.fancytree.min.css",
         "node_modules/bootstrap/dist/css/bootstrap-theme.css",
         "node_modules/bootstrap/dist/css/bootstrap.css",
         "node_modules/backbone-forms/distribution/templates/bootstrap3.css",
         "node_modules/@naturalsolutions/renecofonts/style.css",
+        "node_modules/jquery.fancytree/dist/" + fancytreeSkin + "/ui.fancytree.min.css",
         "assets/stylesheet/sweetalert.css"
     ];
 
@@ -29,7 +33,7 @@ module.exports = function(grunt) {
                     sourceMapRootpath: ''
                 },
                 files: {
-                    "compressed/libs.min.css": cssLibs,
+                    "compressed/libs/libs.min.css": cssLibs,
                     "compressed/formbuilder.min.css": cssMain
                 }
             },
@@ -43,7 +47,7 @@ module.exports = function(grunt) {
                     sourceMapRootpath: ''
                 },
                 files: {
-                    "compressed/libs.min.css": cssLibs,
+                    "compressed/libs/libs.min.css": cssLibs,
                     "compressed/formbuilder.min.css": cssMain
                 }
             }
@@ -55,9 +59,20 @@ module.exports = function(grunt) {
                     {
                         src: '**',
                         cwd: renecoFontsDir,
-                        dest: 'compressed/fonts/',
+                        dest: 'compressed/libs/fonts/',
                         expand: true,
                         flatten: true
+                    }
+                ]
+            },
+
+            fancyTreeSkin: {
+                files: [
+                    {
+                        src: fancytreeSkin + "/**",
+                        cwd: fancyTreeSkinsDir,
+                        dest: 'compressed/',
+                        expand: true
                     }
                 ]
             }
