@@ -163,6 +163,74 @@ define([
             if (item) return item;
 
             return AppConfig.defaults[key];
+        },
+
+        $findInCollection: function(collection, selector) {
+            var $result = $();
+            _.each(collection, function(e) {
+                var $el = $(e).find(selector);
+                if ($el.length > 0)
+                    $result.push.apply($result, $el);
+            });
+            return $result;
+        },
+
+        // loadTree is a caching thing that would need to embrace callback &
+        // promises & fancy stuff but won't cause time.
+        loadTree: function(url, sync) {
+            if (!this.trees) this.trees = {};
+
+            if (!this.trees[url]) {
+                this.trees[url] = {};
+            }
+
+            var tree = this.trees[url];
+            if (tree.data || tree.loading) {
+                return tree;
+            }
+            tree.loading = true;
+
+            var ajaxOpts = {
+                type        : 'POST',
+                url         : url,
+                contentType : 'application/json',
+                data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
+                timeout     : 20000,
+                success: _.bind(function (data) {
+                    tree.data = data;
+                    tree.loading = false;
+                    tree.error = undefined;
+                }, this),
+                error: function (xhr) {
+                    console.warn("error loading tree \"" + url + "\": ", xhr);
+                    tree.loading = false;
+                    tree.error = xhr;
+                }
+            };
+            if (sync === true) {
+                ajaxOpts.async = false;
+            }
+            $.ajax(ajaxOpts);
+            return tree;
+        },
+
+        getTree: function(url, sync) {
+            var tree = this.trees[url];
+            if (tree && tree.data) {
+                return tree;
+            }
+
+            if (tree && tree.loading) {
+                console.warn("tree is still loading, call back later");
+                return tree;
+            }
+
+            if (tree && !tree.loading) {
+                console.info("loading tree for", url, "this might take a while");
+                return this.loadTree(url);
+            }
+
+            return this.loadTree(url, sync);
         }
     };
 });

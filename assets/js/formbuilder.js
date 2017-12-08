@@ -261,29 +261,9 @@ define([
             setTimeout(function(){window.location.replace(AppConfig.portalURL);},200)
         });
 
-        window.trees = [];
-        $.each(AppConfig.paths, function(index, value){
-            var treesRestrictions = {
-                thesaurusWSPath : "reneco",
-                positionWSPath : "reneco"
-            };
-
-            if (!treesRestrictions[index] || treesRestrictions[index] == AppConfig.topcontext)
-            {
-                $.ajax({
-                    type        : 'POST',
-                    url         : value,
-                    contentType : 'application/json',
-                    data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
-                    timeout     : 10000,
-                    success: function (data) {
-                        window.trees[value] = data;
-                    },
-                    error: function () {
-
-                    }
-                });
-            }
+        // preload trees
+        $.each(AppConfig.paths, function(key, url){
+            tools.loadTree(url);
         });
     });
 
