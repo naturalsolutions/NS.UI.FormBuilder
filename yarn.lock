@@ -1480,11 +1480,17 @@ jquery-ui-dist@1.12.1:
   version "1.12.1"
   resolved "https://registry.yarnpkg.com/jquery-ui-dist/-/jquery-ui-dist-1.12.1.tgz#5c0815d3cc6f90ff5faaf5b268a6e23b4ca904fa"
 
+jquery.fancytree@^2.26.0:
+  version "2.26.0"
+  resolved "https://registry.yarnpkg.com/jquery.fancytree/-/jquery.fancytree-2.26.0.tgz#aee32d484829f06bc612099395acc1c3dc372608"
+  dependencies:
+    jquery ">=1.9"
+
 jquery@2.1.4:
   version "2.1.4"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-2.1.4.tgz#228bde698a0c61431dc2630a6a154f15890d2317"
 
-"jquery@>= 1.7":
+"jquery@>= 1.7", jquery@>=1.9:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/jquery/-/jquery-3.2.1.tgz#5c4d9de652af6cd0a770154a631bba12b015c787"
 
@@ -1875,10 +1881,6 @@ npmlog@^4.0.2:
     console-control-strings "~1.1.0"
     gauge "~2.7.3"
     set-blocking "~2.0.0"
-
-"ns.ui.autocomptree@git+https://github.com/NaturalSolutions/NS.UI.autocompTree.git":
-  version "1.0.0"
-  resolved "git+https://github.com/NaturalSolutions/NS.UI.autocompTree.git#daf60a94d8ddcbf6c4743c802d9dcf238672d6ad"
 
 number-is-nan@^1.0.0:
   version "1.0.1"
