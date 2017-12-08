@@ -216,18 +216,13 @@ define([
 
         getTree: function(url, sync) {
             var tree = this.trees[url];
-            if (tree && tree.data) {
+            if (tree && (tree.data || tree.error)) {
                 return tree;
             }
 
             if (tree && tree.loading) {
                 console.warn("tree is still loading, call back later");
                 return tree;
-            }
-
-            if (tree && !tree.loading) {
-                console.info("loading tree for", url, "this might take a while");
-                return this.loadTree(url);
             }
 
             return this.loadTree(url, sync);

@@ -26,6 +26,8 @@ define([
             }
             if (wsURL) {
                 options.model.defaultNode = wsURL;
+                // pre-load url
+                tools.loadTree(wsURL);
             }
 
             BaseView.prototype.initialize.apply(this, [options]);

@@ -14,8 +14,11 @@ define([
 
         initTree: function(url) {
             this.treeSource = tools.getTree(url);
-            if (this.treeSource.error || !this.treeSource.data) {
-                console.warn("AutocompTreeEditor: no data for AutocompTreeEditor");
+            if (this.treeSource.error) {
+                this.$tree.html("Error fetching provided url: " + this.treeSource.error.status + " (" + this.treeSource.error.statusText + ")")
+                return;
+            }
+            if (!this.treeSource.data) {
                 return;
             }
 
