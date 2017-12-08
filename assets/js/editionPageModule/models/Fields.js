@@ -1,12 +1,13 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
-    '../editor/ChoicesEditor',
+    '../editor/ChoicesEditor', '../editor/AutocompTreeEditor',
     'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html'
 ], function(
     $, _, tools, Backbone, Translater,
-    CheckboxEditor, EditModeEditor, AppearanceEditor, ChoicesEditor,
+    CheckboxEditor, EditModeEditor, AppearanceEditor,
+    ChoicesEditor, AutocompTreeEditor,
     AppConfig, FormCollection, ExtraProperties,
     FieldTemplate) {
 
@@ -580,12 +581,15 @@ define([
                     title: translater.getValueFromKey('schema.webServiceURL')
                 },
                 defaultNode: {
-                    type: 'Text',
+                    type: AutocompTreeEditor,
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    template: fieldTemplate
+                    template: fieldTemplate,
+                    options: {
+                        path: "fullpath"
+                    }
                 },
                 fullpath: {
-                    type: 'Text',
+                    type: 'Hidden',
                     editorAttrs: {disabled: true},
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.fullpath')
@@ -604,6 +608,7 @@ define([
         section: 'tree'
     });
 
+    // todo
     models.AutocompleteTreeViewField = models.BaseField.extend({
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("AutocompleteTreeView");
@@ -869,6 +874,8 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
+                // todo: shouldn't it be defaultValue ??
+                // doesn't match behavior of ThesaurusField which uses defaultValue
                 defaultPath: {
                     type: 'Text',
                     title: translater.getValueFromKey('schema.defaultPath'),
@@ -880,12 +887,15 @@ define([
                     title: translater.getValueFromKey('schema.webServiceURL')
                 },
                 defaultNode: {
-                    type: 'Text',
+                    type: AutocompTreeEditor,
                     title: translater.getValueFromKey('schema.defaultNode'),
-                    template: fieldTemplate
+                    template: fieldTemplate,
+                    options: {
+                        path: "positionPath"
+                    }
                 },
                 positionPath: {
-                    type: 'Text',
+                    type: 'Hidden',
                     editorAttrs: {disabled: true},
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.positionPath'),
