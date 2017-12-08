@@ -142,10 +142,12 @@ define([
 
 
         this.globalChannel.on('displayHomePage', _.bind(function() {
+            $('#leftSection').css('visibility', "visible");
             $('#mainRegion').animate({
                 marginLeft : '0%'
             }, 750, _.bind(function() {
                 $('#navbarContext').text($.t('navbar.context.home'));
+                $('#rightSection').css('visibility', "hidden");
             }, this));
             $(".headerWhiteArrow").css("width", "");
         }, this));

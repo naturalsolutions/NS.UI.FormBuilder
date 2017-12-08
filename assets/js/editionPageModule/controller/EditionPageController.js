@@ -133,9 +133,12 @@ define([
 
             // notify loading is happening
             Backbone.Radio.channel('global').trigger('formLoaded');
+            $('#rightSection').css('visibility', "visible");
             $('#mainRegion').animate({
                 marginLeft : '-100%'
-            }, 750);
+            }, 750, function() {
+                $('#leftSection').css('visibility', "hidden");
+            });
 
             // wait before animation is done (& some), or the user can fuck us
             // while animation is playing. Double form loading is not cool.
