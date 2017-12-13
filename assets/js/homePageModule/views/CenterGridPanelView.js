@@ -94,7 +94,7 @@ define([
          * @param  {object} options some options not used here
          */
         initialize : function(options, readonly) {
-            _.bindAll(this, 'addFormSection', 'displayFormInformation', 'updateGridWithSearch', 'deleteForm');
+            _.bindAll(this, 'displayFormInformation', 'updateGridWithSearch', 'deleteForm');
 
             this.URLOptions = options.URLOptions;
 
@@ -305,62 +305,6 @@ define([
         },
 
         /**
-         * Add additional information after the selected row in the grid
-         *
-         * @param {object} el    jQuery object, clicked row on the grid
-         * @param {object} model Model information to display in the grid
-         */
-        addFormSection : function(el, model) {
-            var context = $("#contextSwitcher .selected").text();
-            // TODO To Move
-            if (context.toLowerCase() == "all" || context.toLowerCase() == model.get('context'))
-            {
-                el.after(
-                    '<div class="formInformation row ">\
-                        <div class="col-md-12">\
-                            <label class="infos">' +
-                    model.get('descriptionFr')
-                    + '</label>\
-                        <label class="infos">'+
-                    model.get('keywordsFr').join(',')
-                    + '</label>\
-                        <div class="pull-right">\
-                            <button class="reneco grey editForm">\
-                                <label>'
-                    +
-                    (this.globalChannel.readonly ?
-                        '<span data-i18n="form.actions.viewdetails">VOIR DETAILS</span>' :
-                        '<span data-i18n="form.actions.edit">EDITER</span>')
-                    +
-                    '</label>\
-                        <label>\
-                        <span class="reneco reneco-edit"></span>\
-                        </label>\
-                        </button>\
-                        </div>\
-                        </div>\
-                        </div>'
-                );
-                //;el.after(
-                //    '<div class="formInformation"><tr >\
-                //        <td colspan="2"><label id="editRow"><span class="reneco reneco-edit"></span></label><p> ' + model.get('descriptionFr') + '</p></td>\
-                //        <td>' + model.get('keywordsFr').join(',') + '</td>\
-                //    </tr></div>'
-                //);
-
-                $('.formInformation').after('<tr class="padding"></tr>');
-
-                var padding = $('.formInformation').height();
-
-                $('.formInformation').fadeIn(500);
-                $('.padding').animate({
-                    height : padding + 30
-                });
-                el.addClass('selected');
-            }
-        },
-
-        /**
          * Callback for grid channel "rowClicked" event
          * Display more information for the model in parameter
          *
@@ -380,21 +324,8 @@ define([
                 // clone controls to selected row
                 $('#rowControls').clone().appendTo($(el).find("td:last-of-type"));
 
-                if (AppConfig.topcontext == "reneco") {
-                    $('tr.selected').removeClass('selected');
-                    el.addClass('selected');
-                } else {
-                    if ($('.formInformation').length > 0) {
-                        $('.formInformation').fadeOut(100, _.bind(function() {
-                            $('.padding').slideUp(500);
-                            $('.formInformation').remove();
-                            $('tr.selected').removeClass('selected');
-                            this.addFormSection(el, model);
-                        }, this));
-                    } else {
-                        this.addFormSection(el, model);
-                    }
-                }
+                $('tr.selected').removeClass('selected');
+                el.addClass('selected');
 
                 this.beforeFormSelection = this.currentSelectedForm;
                 this.currentSelectedForm = newSelctedRow;
