@@ -144,11 +144,8 @@ define([
             this.$elements = {};
             this.actionners = {};
 
-            // pre-generate subforms only if field is new and not static
-            // this allows for validation errors to be properly displayed on new elements.
-            // If element is not new, extra forms will be generated on-demand (no risk
-            // of validation error if values are not modified on existing input properties)
-            if (this.model.get("new") && !this.static) {
+            // pre-generate subforms if field is not static
+            if (!this.static) {
                 this.editSettings(true);
                 this.editLanguages(true);
             }
