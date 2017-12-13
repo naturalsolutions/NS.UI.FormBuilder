@@ -112,10 +112,10 @@ define([
                     alwaysVisible : true
                 });
 
+            $("#fieldPropertiesPanel").addClass("display");
+
             // notify view we're live in DOM
             this.editing.view.trigger("open");
-
-            $("#fieldPropertiesPanel").addClass("display");
 
             var focusEl = form.$el.find("input:not(:hidden)")[0];
             if (focusEl) focusEl.focus();
