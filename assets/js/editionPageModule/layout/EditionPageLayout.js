@@ -541,7 +541,7 @@ define([
 
             var goDelete = _.bind(function() {
                 var sibling = model.view.$el.next();
-                if (sibling.length == 0) {
+                if (sibling.length == 0 || sibling.hasClass("static")) {
                     sibling = model.view.$el.prev();
                 }
                 var siblingId = sibling.data("id");
@@ -551,7 +551,7 @@ define([
                 this.clearSelected();
 
                 // select sibling if available
-                if (siblingId) {
+                if (siblingId && !sibling.hasClass("static")) {
                     this.setSelected(this.fieldCollection.findWhere({id: siblingId}), true);
                 }
             }, this);
