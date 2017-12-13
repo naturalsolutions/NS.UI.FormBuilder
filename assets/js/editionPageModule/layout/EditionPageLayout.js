@@ -184,6 +184,9 @@ define([
 
         exit: function() {
             var exit = _.bind(function() {
+                if (this.editing)
+                    this.editing.view.trigger("close");
+
                 this.formChannel.trigger('exit', this.fieldCollection.dataUpdated);
             }, this);
 

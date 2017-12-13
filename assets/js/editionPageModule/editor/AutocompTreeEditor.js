@@ -12,10 +12,10 @@ define([
 
             // detach tree when view closes, this allows to keep
             // fancytree up in the air for later re-appending
-            this.view.off("close").on("close", function() {
+            this.view.off("close").on("close", _.bind(function() {
                 if (this.$tree)
                     this.$tree.detach();
-            });
+            }, this));
 
             // init some last things on fancytree when element gets inserted
             this.view.off("open").on("open", _.bind(this.treeInserted, this));
