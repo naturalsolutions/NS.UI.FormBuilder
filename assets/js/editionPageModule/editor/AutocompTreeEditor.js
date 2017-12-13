@@ -9,7 +9,54 @@ define([
             this.options = options;
             this.model = this.options.model;
             this.view = this.model.view;
+
+            // detach tree when view closes, this allows to keep
+            // fancytree up in the air for later re-appending
+            this.view.off("close").on("close", function() {
+                if (this.$tree)
+                    this.$tree.detach();
+            });
+
+            // init some last things on fancytree when element gets inserted
+            this.view.off("open").on("open", _.bind(this.treeInserted, this));
+
             Backbone.Form.editors.Text.prototype.initialize.call(this, options);
+        },
+
+        // treeInserted is a callback for when tree is actually inserted in
+        // DOM, operations made here are either no-op if tree is not in DOM,
+        // or dysfunctionnal like the collapse tree feature.
+        treeInserted: function() {
+            if (!this.treeSource.fancytree) {
+                // no tree, nothing to do
+                return;
+            }
+
+            this.$tree.slimScroll({
+                height: "150px",
+                railVisible: true,
+                alwaysVisible: true
+            });
+
+            var activeNode = this.model.get(this.options.key);
+            if (activeNode) {
+                // restore active node
+                activeNode = this.$tree.fancytree("getTree").getNodeByKey(activeNode);
+                activeNode.setActive(true, {
+                    noEvents: true
+                });
+                this.$tree.slimScroll({
+                    scrollTo: activeNode.li.offsetTop - 50
+                });
+            } else {
+                // collapse tree & unselect active node
+                var previousActiveNode = this.$tree.fancytree("getActiveNode");
+                while (previousActiveNode) {
+                    previousActiveNode.setActive(false/*, {noEvents: true}*/);
+                    previousActiveNode.setExpanded(false);
+                    previousActiveNode = previousActiveNode.parent;
+                }
+            }
         },
 
         initTree: function(url) {
@@ -22,18 +69,31 @@ define([
                 return;
             }
 
-            var data = this.treeSource.data.children;
-            if (!data) {
-                data = this.treeSource.data.d;
-            }
-            if (!data) {
-                console.error("AutocompTreeEditor: unexpected tree data", this.treeSource.data);
-                return;
+            if (!this.treeSource.fancytree) {
+                var data = this.treeSource.data.children;
+                if (!data) {
+                    data = this.treeSource.data.d;
+                }
+                if (!data) {
+                    console.error("AutocompTreeEditor: unexpected tree data", this.treeSource.data);
+                    return;
+                }
+
+                this.$tree.empty().removeClass("loading");
+
+                // cache fancytree from tools.getTree for later use
+                this.treeSource.fancytree = $("<div>").fancytree({
+                    source: data
+                });
             }
 
-            this.$tree.empty().removeClass("loading").fancytree({
-                source: data,
-                activate: _.bind(function(event, data){
+            this.$tree.empty().removeClass("loading").append(
+                this.treeSource.fancytree);
+            this.$tree = this.treeSource.fancytree;
+
+            // replace fancytreeactivate event with current
+            this.$tree.off("fancytreeactivate").on("fancytreeactivate",
+                _.bind(function(event, data){
                     var value = data.node.key;
                     this.view.setValue(this.options.key, value);
                     this.$el.find(".value").val(value);
@@ -42,26 +102,7 @@ define([
                     this.view.setValue(this.options.schema.options.path, path);
                     this.$el.find(".path").val(path).attr("title", path);
                 }, this)
-            });
-
-            var activeNode = this.model.get(this.options.key);
-            if (activeNode) {
-                activeNode = this.$tree.fancytree("getTree").getNodeByKey(activeNode);
-                activeNode.setActive(true, {
-                    noEvents: true
-                });
-                setTimeout(_.bind(function() {
-                    this.$tree.slimScroll({
-                        scrollTo: activeNode.li.offsetTop - 50
-                    });
-                }, this), 100);
-            }
-
-            this.$tree.slimScroll({
-                height: "150px",
-                railVisible: true,
-                alwaysVisible: true
-            });
+            );
         },
 
         render: function() {
@@ -84,8 +125,7 @@ define([
                 return this;
             }
 
-            // start autocomp fun
-            // todo autocompletion ;=
+            // init tree
             this.initTree(url);
 
             return this;

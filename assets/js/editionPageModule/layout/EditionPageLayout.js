@@ -111,6 +111,10 @@ define([
                     railVisible: true,
                     alwaysVisible : true
                 });
+
+            // notify view we're live in DOM
+            this.editing.view.trigger("open");
+
             $("#fieldPropertiesPanel").addClass("display");
 
             var focusEl = form.$el.find("input:not(:hidden)")[0];
@@ -146,6 +150,7 @@ define([
 
             this.editing.view.$el.find("input[name='name']").focus();
             this.editing.view.$el.removeClass("editing");
+            this.editing.view.trigger("close");
             this.editing = null;
 
             // re-enable panel
