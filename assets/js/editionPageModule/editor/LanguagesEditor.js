@@ -5,6 +5,10 @@ define([
 ], function($, _, Backbone, tools, AppearanceTemplate) {
     return Backbone.Form.editors.Base.extend({
         initialize: function(options) {
+            // this option saves the day, it disallows parent form to break
+            // our subforms validations. :+1:
+            this.hasNestedForm = true;
+
             Backbone.Form.editors.Base.prototype.initialize.call(this, options);
 
             this.options = options;
@@ -13,8 +17,27 @@ define([
             } else {
                 this.data = options.form.data["translations"];
             }
-
             this.forms = {};
+        },
+
+        validate: function() {
+            Backbone.Form.editors.Base.prototype.validate.call(this);
+            var errors = false;
+            _.each(this.forms, _.bind(function(form, lang) {
+                if (form.validate()) {
+                    errors = true;
+                    form.$actionner.addClass("error");
+                } else {
+                    form.$actionner.removeClass("error");
+                }
+            }, this));
+
+            return errors? {type: "subform", message: null}: null;
+        },
+
+        render: function() {
+            Backbone.Form.editors.Base.prototype.render.call(this);
+
             this.$el = $(_.template(AppearanceTemplate)({
                 id: this.options.id,
                 languages: this.schema.languages
@@ -45,9 +68,19 @@ define([
                 tools.appendRequired(form.$el, schema);
                 this.forms[lang] = form;
                 this.$el.append(form.$el);
+
+                // <td> button for lang
+                form.$actionner = this.$el.find("td.lang[data-lang='" + lang + "']");
+                // remove error class from actionner if no more error in form
+                form.$el.find("input, select, textarea").on("change", _.bind(function(e) {
+                    $(e.delegateTarget).removeClass("error");
+                    if (this.$el.find(".error").length === 1) {
+                        this.$actionner.removeClass("error");
+                    }
+                }, form));
             }, this));
 
-            // add click handlers on language buttons to display form
+            // add click handlers on language buttons to switch form display
             this.$el.find("td.lang").on("click", _.bind(function(e) {
                 var $target = $(e.delegateTarget);
                 if ($target.hasClass("active")) {
