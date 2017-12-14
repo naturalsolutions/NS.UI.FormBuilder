@@ -79,6 +79,7 @@ define([
                     var validator = value.validators[i];
                     if (validator == "required" || validator.type === "required") {
                         $el.find(".field-" + index + " label[for]").append("<span>*</span>");
+                        return;
                     }
                 }
             });
