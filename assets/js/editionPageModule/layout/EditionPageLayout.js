@@ -243,21 +243,6 @@ define([
                 // disable "delete file" buttons"
                 $(".remove").addClass("disabled");
             } else {
-
-                this.$el.find('.scroll').scrollTop(0);
-                this.$el.find('.scroll').scrollTop( $($("#settingFormPanel [name='" + Object.keys(formValidation)[0] + "']")).offset().top -
-                    this.$el.find('.scroll').offset().top - 60);
-
-                if ((_.size(this.form.fields) - 1) == _.size(formValidation)) {
-                    //  We display a main information
-                    this.$el.find('.general-error').html(
-                        '   <h2>' + this.translater.getValueFromKey('error.general') + '</h2>' +
-                        '   <p>' + this.translater.getValueFromKey('error.message') + '</p>'
-                    ).show();
-                } else {
-                    $(this.form.el).find('p[data-error]').show();
-                    this.$el.find('.general-error').html('').hide();
-                }
                 tools.swal("error", 'modal.save.uncompleteFormerror', 'modal.save.uncompleteFormerror');
             }
         },
