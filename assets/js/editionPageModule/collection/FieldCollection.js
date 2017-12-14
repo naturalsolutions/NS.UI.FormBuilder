@@ -18,12 +18,13 @@ define([
     '../editor/CheckboxEditor',
     'app-config',
     'tools',
+    '../editor/LanguagesEditor',
     './CollectionExtention',
     './staticInputs/ContextStaticInputs',
     'text!../templates/FieldTemplate.html'
 ], function ($, _, Backbone,
              Fields, Radio, Translater, CheckboxEditor, AppConfig, tools,
-             CollectionExtention, ContextStaticInputs, FieldTemplate) {
+             LanguagesEditor, CollectionExtention, ContextStaticInputs, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -59,83 +60,70 @@ define([
                     }
                 }]
             },
-            labelFr   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.label.fr'),
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                },
-                function test(value) {
-                    if (value.length > 55) {
-                        return {
-                            type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength55')
-                        };
+
+            translations: {
+                type: LanguagesEditor,
+                title: translater.getValueFromKey("languages.title"),
+                template: fieldTemplate,
+                languages: {
+                    // todo some kind of conf value ?
+                    fr: {
+                        name: translater.getValueFromKey('languages.fr'),
+                        extraValidators: [{
+                            type : 'required',
+                            message : translater.getValueFromKey('form.validation'),
+                            targets: ["Name", "Description"]
+                        }],
+                        required: true
+                    },
+                    en: {
+                        name: translater.getValueFromKey('languages.en'),
+                        extraValidators: [{
+                            type : 'required',
+                            message : translater.getValueFromKey('form.validation'),
+                            targets: ["Name", "Description"]
+                        }],
+                        required: true
+                    },
+                    ar: {
+                        name: translater.getValueFromKey('languages.ar')
                     }
-                }]
-            },
-            labelEn   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.label.en'),
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
                 },
-                function test(value) {
-                    if (value.length > 55) {
-                        return {
-                            type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength55')
-                        };
+                schema: {
+                    Name: {
+                        type        : "Text",
+                        title       : translater.getValueFromKey("languages.label"),
+                        template    : fieldTemplate,
+                        validators  : [
+                            function test(value) {
+                                if (value.length > 55) {
+                                    return {
+                                        type: 'String too wide',
+                                        message: translater.getValueFromKey('schema.maxlength55')
+                                    };
+                                }
+                            }]
+                    },
+                    Description: {
+                        type        : "TextArea",
+                        title       : translater.getValueFromKey("languages.description"),
+                        template    : fieldTemplate,
+                        validators  : [
+                            function test(value) {
+                                if (value.length > 255) {
+                                    return {
+                                        type: 'String too wide',
+                                        message: translater.getValueFromKey('schema.maxlength255')
+                                    };
+                                }
+                            }]
+                    },
+                    Keywords: {
+                        type        : "Text",
+                        title       : translater.getValueFromKey("languages.keywords"),
+                        template    : fieldTemplate
                     }
-                }]
-            },
-            descriptionFr : {
-                type        : "TextArea",
-                title       : translater.getValueFromKey('form.description.fr'),
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                },
-                function test(value) {
-                    if (value.length > 255) {
-                        return {
-                            type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength255')
-                        };
-                    }
-                }]
-            },
-            descriptionEn : {
-                type        : "TextArea",
-                title       : translater.getValueFromKey('form.description.en'),
-                template    : fieldTemplate,
-                validators  : [{
-                    type : 'required',
-                    message : translater.getValueFromKey('form.validation')
-                },
-                function test(value) {
-                    if (value.length > 255) {
-                        return {
-                            type: 'String too wide',
-                            message: translater.getValueFromKey('schema.maxlength255')
-                        };
-                    }
-                }]
-            },
-            keywordsFr : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.keywords.fr'),
-                template    : fieldTemplate
-            },
-            keywordsEn : {
-                type        : "Text",
-                title       : translater.getValueFromKey('form.keywords.en'),
-                template    : fieldTemplate
+                }
             },
             obsolete : {
                 type        : CheckboxEditor,
@@ -200,13 +188,8 @@ define([
 
             this.id              = opt.id             || 0;
             this.name            = opt.name           || 'My form';
-            this.descriptionFr   = opt.descriptionFr  || "";
-            this.descriptionEn   = opt.descriptionEn  || "";
-            this.keywordsFr      = opt.keywordsFr     || ["formulaire"];
-            this.keywordsEn      = opt.keywordsEn     || ["form"];
-            this.labelFr         = opt.labelFr        || "";
-            this.labelEn         = opt.labelEn        || "";
             this.tag             = opt.tag            || "";
+            this.translations    = opt.translations   || {};
             this.obsolete        = opt.obsolete       || false;
             this.propagate       = opt.propagate      || false;
             this.context         = opt.context        || "";
@@ -377,12 +360,7 @@ define([
             var json         = {
                 //  form properties
                 name          : this.name,
-                descriptionFr : this.descriptionFr,
-                descriptionEn : this.descriptionEn,
-                keywordsEn    : this.keywordsEn,
-                keywordsFr    : this.keywordsFr,
-                labelFr       : this.labelFr,
-                labelEn       : this.labelEn,
+                translations  : this.translations,
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
                 propagate     : this.propagate,
@@ -583,12 +561,7 @@ define([
             if (!JSONUpdate) return;
             this.id            = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
             this.name          = JSONUpdate["name"];
-            this.descriptionFr = JSONUpdate["descriptionFr"];
-            this.descriptionEn = JSONUpdate["descriptionEn"];
-            this.keywordsFr    = JSONUpdate["keywordsFr"];
-            this.keywordsEn    = JSONUpdate["keywordsEn"];
-            this.labelFr       = JSONUpdate["labelFr"];
-            this.labelEn       = JSONUpdate["labelEn"];
+            this.translations  = JSONUpdate["translations"];
             this.tag           = JSONUpdate["tag"];
             this.obsolete      = JSONUpdate["obsolete"];
             this.propagate     = JSONUpdate["propagate"];

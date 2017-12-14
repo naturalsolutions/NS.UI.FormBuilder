@@ -29,6 +29,16 @@
         "urlChangedMessage": "Veuillez recharger le formulaire courant après sauvegarde pour charger le nouveau sélecteur de noeud"
     },
 
+    "languages": {
+        "title": "Langues",
+        "label": "Label",
+        "description": "Description",
+        "keywords": "Mots-clés",
+        "fr": "Français",
+        "en": "Anglais",
+        "ar": "Arabe"
+    },
+
     "fields" : {
         "text"                 : "Texte",
         "number"               : "Numérique",

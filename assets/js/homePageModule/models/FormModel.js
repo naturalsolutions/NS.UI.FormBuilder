@@ -14,16 +14,11 @@ define([
          */
         defaults: {
             name             : translater.getValueFromKey('form.new'),
-            labelFr          : '',
-            labelEn          : '',
             creationDate     : new Date(),
             modificationDate : null,
             curStatus        : 1,
             editStatus       : '',
-            descriptionFr    : '',
-            descriptionEn    : '',
-            keywordsFr       : [],
-            keywordsEn       : [],
+            translations     : {},
             schema           : {},
             fieldsets        : [],
             tag              : '',
@@ -59,23 +54,6 @@ define([
 
             if (this.defaults.context = "" && window.context)
                 this.defaults.context = window.context;
-
-            this.updateKeywords();
-        },
-
-        updateKeywords : function() {
-            var keywordsFr = [], keywordsEn = [];
-
-            _.each(this.get('keywordsFr'), function(el, idx){
-                keywordsFr.push(el.name);
-            });
-
-            _.each(this.get('keywordsEn'), function(el, idx){
-                keywordsEn.push(el.name);
-            });
-
-            this.set('keywordsFr', keywordsFr);
-            this.set('keywordsEn', keywordsEn);
         },
 
         toJSON : function() {
@@ -100,15 +78,10 @@ define([
             return {
                 id                         : this.get('id'),
                 name                       : this.get('name'),
-                labelFr                    : this.get('labelFr'),
-                labelEn                    : this.get('labelEn'),
                 creationDate               : this.get('creationDate'),
                 modificationDate           : this.get('modificationDate'),
                 curStatus                  : this.get('curStatus'),
-                descriptionEn              : this.get('descriptionEn'),
-                descriptionFr              : this.get('descriptionFr'),
-                keywordsFr                 : this.get('keywordsFr'),
-                keywordsEn                 : this.get('keywordsEn'),
+                translations               : this.get('translations'),
                 schema                     : this.get('schema'),
                 fieldsets                  : this.get('fieldsets'),
                 tag                        : this.get('tag'),

@@ -29,6 +29,16 @@
     "urlChangedMessage": "Please reload current form after saving to update nodes tree selector"
   },
 
+  "languages": {
+    "title": "Languages",
+    "label": "Label",
+    "description": "Description",
+    "keywords": "Keywords",
+    "fr": "French",
+    "en": "English",
+    "ar": "Arabic"
+  },
+
   "fields" : {
     "text"                 : "Text",
     "number"               : "Numeric",

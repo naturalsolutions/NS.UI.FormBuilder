@@ -338,6 +338,45 @@
             color: red;
           }
         }
+
+        .languagesEditor {
+          table {
+            width: 100%;
+            text-align: center;
+            border-collapse: separate;
+
+            td {
+              background: #eaeaea;
+              border: 1px solid #bbb;
+              border-bottom: none;
+              border-top-left-radius: 5px;
+              border-top-right-radius: 5px;
+              padding: 5px;
+
+              &, label {
+                cursor: pointer;
+
+                &:hover, &.active {
+                  background: white;
+                }
+              }
+            }
+          }
+
+          form {
+            display: none;
+            padding: 8px;
+            border-left: 1px solid #bbb;
+            border-right: 1px solid #bbb;
+            border-bottom: 1px solid #bbb;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+
+            &.active {
+              display: block;
+            }
+          }
+        }
       }
 
       .slimScrollDiv {

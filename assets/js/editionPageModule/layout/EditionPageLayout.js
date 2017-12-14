@@ -234,8 +234,6 @@ define([
                 newFiles = Object.values(newFiles);
                 var formData = this.form.getValue();
                 formData.fileList = Object.values(newFiles);
-                formData.keywordsEn = formData.keywordsEn.split(",");
-                formData.keywordsFr = formData.keywordsFr.split(",");
                 formData.id = this.fieldCollection.id;
                 this.fieldCollection.updateCollectionAttributes(formData);
                 this.fieldCollection.save();
@@ -273,12 +271,7 @@ define([
             }
             var that = this;
             var datas = form.getAttributesValues(),
-                schemaDefinition = form.schemaDefinition,
-                keywordFr = [],
-                keywordEn = [];
-
-            schemaDefinition.keywordsFr.value = keywordFr;
-            schemaDefinition.keywordsEn.value = keywordEn;
+                schemaDefinition = form.schemaDefinition;
 
             this.form = new Backbone.Form({
                 schema: schemaDefinition,

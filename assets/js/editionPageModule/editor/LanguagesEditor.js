@@ -5,6 +5,8 @@ define([
 ], function($, _, Backbone, tools, AppearanceTemplate) {
     return Backbone.Form.editors.Base.extend({
         initialize: function(options) {
+            Backbone.Form.editors.Base.prototype.initialize.call(this, options);
+
             this.options = options;
             if (options.form && options.form.model) {
                 this.data = options.form.model.get("translations");
@@ -12,11 +14,7 @@ define([
                 this.data = options.form.data["translations"];
             }
 
-            Backbone.Form.editors.Base.prototype.initialize.call(this, options);
-        },
-
-        render: function() {
-            Backbone.Form.editors.Base.prototype.render.call(this);
+            this.forms = {};
             this.$el = $(_.template(AppearanceTemplate)({
                 id: this.options.id,
                 languages: this.schema.languages
@@ -45,7 +43,7 @@ define([
                 }).render();
                 form.$el.attr("data-lang", lang);
                 tools.appendRequired(form.$el, schema);
-
+                this.forms[lang] = form;
                 this.$el.append(form.$el);
             }, this));
 
