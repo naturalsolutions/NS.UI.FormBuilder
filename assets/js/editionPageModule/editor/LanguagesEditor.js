@@ -55,6 +55,10 @@ define([
                         var target = validator.targets[j];
                         if (!schema[target]) continue;
 
+                        // init empty validators
+                        if (!schema[target].validators)
+                            schema[target].validators = [];
+
                         // push at beginning of array
                         schema[target].validators.unshift(validator);
                     }
