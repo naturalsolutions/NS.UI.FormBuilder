@@ -3,15 +3,16 @@ define([
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
     '../editor/ChoicesEditor', '../editor/AutocompTreeEditor', '../editor/LanguagesEditor',
     'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties',
-    'text!../templates/FieldTemplate.html'
+    'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, Translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
     ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
     AppConfig, FormCollection, ExtraProperties,
-    FieldTemplate) {
+    FieldTemplate, FieldTemplateEditorOnly) {
 
     var fieldTemplate = _.template(FieldTemplate);
+    var fieldTemplateEditorOnly = _.template(FieldTemplateEditorOnly);
 
     var models = {}, translater = Translater.getTranslater();
 
@@ -75,7 +76,7 @@ define([
             translations: {
                 type: LanguagesEditor,
                 title: "", // it's already in it's own panel, display empty title
-                template: fieldTemplate,
+                template: fieldTemplateEditorOnly,
                 languages: {
                     // todo some kind of conf value ?
                     fr: {
