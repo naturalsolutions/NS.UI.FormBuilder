@@ -1,13 +1,13 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
-    '../editor/ChoicesEditor', '../editor/AutocompTreeEditor',
+    '../editor/ChoicesEditor', '../editor/AutocompTreeEditor', '../editor/LanguagesEditor',
     'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html'
 ], function(
     $, _, tools, Backbone, Translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
-    ChoicesEditor, AutocompTreeEditor,
+    ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
     AppConfig, FormCollection, ExtraProperties,
     FieldTemplate) {
 
@@ -54,9 +54,8 @@ define([
         defaults: {
             order: 1,
             name: "",
-            labelFr: "",
-            labelEn: "",
             required: false,
+            translations: {},
 
             linkedFieldTable: '',
             linkedField: '',
@@ -73,17 +72,46 @@ define([
         },
 
         schema: {
-            labelFr: {
-                type: "Text",
-                title: translater.getValueFromKey('schema.label.fr'),
+            translations: {
+                type: LanguagesEditor,
+                title: "", // it's already in it's own panel, display empty title
                 template: fieldTemplate,
-                validators: ['required']
-            },
-            labelEn: {
-                type: "Text",
-                title: translater.getValueFromKey('schema.label.en'),
-                template: fieldTemplate,
-                validators: ['required']
+                languages: {
+                    // todo some kind of conf value ?
+                    fr: {
+                        name: translater.getValueFromKey('languages.fr'),
+                        extraValidators: [{
+                            type : 'required',
+                            message : translater.getValueFromKey('form.validation'),
+                            targets: ["Name"]
+                        }],
+                        required: true
+                    },
+                    en: {
+                        name: translater.getValueFromKey('languages.en'),
+                        extraValidators: [{
+                            type : 'required',
+                            message : translater.getValueFromKey('form.validation'),
+                            targets: ["Name"]
+                        }],
+                        required: true
+                    },
+                    ar: {
+                        name: translater.getValueFromKey('languages.ar')
+                    }
+                },
+                schema: {
+                    Name: {
+                        type        : "Text",
+                        title       : translater.getValueFromKey("languages.label"),
+                        template    : fieldTemplate
+                    },
+                    Help: {
+                        type        : "Text",
+                        title       : translater.getValueFromKey("schema.help"),
+                        template    : fieldTemplate
+                    }
+                }
             },
             name: {
                 type: "Text",
@@ -158,7 +186,7 @@ define([
             }
         },
 
-        i18nFields: ["labelFr", "labelEn", "help"],
+        i18nFields: ["translations"],
 
         /**
          * languageSchema returns i18n related fields from this.schema()
@@ -327,8 +355,7 @@ define([
         defaults: function() {
             return _.extend({}, models.BaseField.prototype.defaults, {
                 defaultValue: "",
-                isDefaultSQL: false,
-                help: translater.getValueFromKey('placeholder.text')
+                isDefaultSQL: false
             });
         },
 
@@ -344,11 +371,6 @@ define([
                     template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
-                },
-                help: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help')
                 }
             })
         },
@@ -365,7 +387,6 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 defaultValue: "",
-                help: translater.getValueFromKey('placeholder.autocomplete'),
                 triggerlength: 2,
                 url: "ressources/autocomplete/example.json",
                 isSQL: false
@@ -385,11 +406,6 @@ define([
                     title: translater.getValueFromKey('schema.default'),
                     fieldClass: 'advanced',
                     template: fieldTemplate
-                },
-                help: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help')
                 },
                 triggerlength: {
                     type: (ExtraProperties.getPropertiesContext().getHideExceptionForProperty('AutocompleteField', 'triggerlength') ? 'Hidden' : 'Number'),
@@ -430,7 +446,6 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 mimeType: "*",
                 filesize: 200, //  specify max file size in ko,
-                help: translater.getValueFromKey('placeholder.file'),
                 preview: false
             });
 
@@ -447,11 +462,6 @@ define([
                     type: 'Text',
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.mime')
-                },
-                help: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help')
                 },
                 filesize: {
                     type: 'Number',
@@ -675,8 +685,7 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 childForm: "",
-                childFormName: "",
-                help: translater.getValueFromKey('placeholder.childform')
+                childFormName: ""
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -695,11 +704,6 @@ define([
                     options: getFormsList(this)
                 },
                 childFormName: {
-                    type: 'Hidden',
-                    template: fieldTemplate,
-                    title: ""
-                },
-                help: {
                     type: 'Hidden',
                     template: fieldTemplate,
                     title: ""
@@ -927,7 +931,6 @@ define([
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 defaultValue: "",
                 isDefaultSQL: false,
-                help: translater.getValueFromKey('placeholder.text'),
                 minLength: 1,
                 maxLength: 255
             });
@@ -951,11 +954,6 @@ define([
                     template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
-                },
-                help: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help')
                 },
                 minLength: {
                     type: 'Hidden',
@@ -1018,11 +1016,6 @@ define([
                     template: fieldTemplate,
                     fieldClass: "hidden",
                     title: "isSQL"
-                },
-                help: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.help')
                 },
                 maxLength: {
                     type: 'Number',
@@ -1095,8 +1088,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Date");
 
             var toret = _.extend({}, models.BaseFieldExtended.prototype.defaults(), {
-                format: (AppConfig.topcontext == "reneco" ? "DD/MM/YYYY" : ""),
-                help: translater.getValueFromKey('placeholder.date')
+                format: (AppConfig.topcontext == "reneco" ? "DD/MM/YYYY" : "")
             });
 
             if (AppConfig.topcontext == "reneco") {
@@ -1152,9 +1144,8 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
 
             var baseSchema = _.pick(
-                models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults, 'help')
+                models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults)
             );
-            baseSchema.help = translater.getValueFromKey('placeholder.numeric');
 
             var toret = _.extend({}, baseSchema, {
                 minValue: '',
@@ -1240,7 +1231,7 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend({}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema), 'help'), this.baseSchema);
+            var schema = _.extend({}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
 
             schema.defaultValue.type = 'Number';
             schema.defaultValue.validators = [function checkValue(value, formValues) {

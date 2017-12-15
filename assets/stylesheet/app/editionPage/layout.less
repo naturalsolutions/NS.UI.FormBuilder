@@ -469,7 +469,7 @@
           &::placeholder {
             color: #94827E;
           }
-          border-bottom-color: #94827E
+          border-bottom-color: #94827E;
         }
 
         .error-block {
@@ -556,6 +556,25 @@
           .center {
             text-align: center;
             margin-top: 12px;
+          }
+        }
+
+        .languagesEditor {
+          table {
+            td {
+              background: #4b3935;
+              border-color: #94827E;
+
+              &, label {
+                &:hover, &.active {
+                  background: #271D1B;
+                }
+              }
+            }
+          }
+
+          form {
+            border-color: #94827E;
           }
         }
       }
