@@ -110,7 +110,11 @@ define([
                 this.$el.find("td.lang.active").removeClass("active");
 
                 // display new active
-                this.$el.find("form[data-lang='" + lang + "']").addClass("active");
+                this.$el.find("form[data-lang='" + lang + "']")
+                    .addClass("active")
+                    // focus first input
+                    .find("input, textarea, select").first().focus();
+
                 $target.addClass("active");
             }, this));
 
