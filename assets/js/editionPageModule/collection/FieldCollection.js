@@ -637,31 +637,19 @@ define([
 
             $.each(that.models, function (index, value) {
                 var fieldModel = that.get(value.id);
-                if (!fieldModel.attributes.validated) {
-                    var fieldForm = new Backbone.Form({
-                        model: fieldModel
-                    }).render();
-
-                    if (!fieldForm.staticfield)
-                    {
-                        var fieldformresult = fieldForm.validate();
-                        if ($.inArray(fieldModel.attributes.name, staticInputs.getCompulsoryInputs()) !== -1) {
-                            fieldformresult = null;
-                        }
-                        if (fieldformresult !== null) {
-                            fieldsValidation = false;
-                            value.view.setValidationErrors(fieldformresult);
-                        } else {
-                            value.view.clearAllErrors();
-                        }
+                if (!fieldModel.get("compulsory")) {
+                    var fieldErrors = fieldModel.view.validate();
+                    if (fieldErrors) {
+                        fieldsValidation = false;
+                        fieldModel.view.setValidationErrors(fieldErrors);
                     }
-
-                    formValues.push({
-                        id:fieldForm.model.attributes.id,
-                        name:fieldForm.model.attributes.name
-                    });
-                    formNames.push(fieldForm.model.attributes.name);
                 }
+
+                formValues.push({
+                    id: value.get("id"),
+                    name: value.get("name")
+                });
+                formNames.push(value.get("name"));
             });
 
             var fieldNamesHasDuplicates = hasDuplicates(formNames);

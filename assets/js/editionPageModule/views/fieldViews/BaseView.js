@@ -122,6 +122,22 @@ define([
             }, this));
         },
 
+        validate: function() {
+            var err1, err2, err3;
+            if (this.mainForm) {
+                err1 = this.mainForm.validate();
+            }
+            if (this.extraForm) {
+                err2 = this.extraForm.validate();
+            }
+            if (this.languageForm) {
+                err3 = this.languageForm.validate();
+            }
+
+            var errors = Object.assign({}, err1, err2, err3);
+            return Object.keys(errors).length > 0 ? errors: null;
+        },
+
         initialize: function(options) {
             _.bindAll(this, 'render', 'removeView', 'editLanguages', 'editSettings', 'copyModel', 'destroy_view');
             this.model.bind('change', this.render);
@@ -132,7 +148,7 @@ define([
             this.$container = options.$container;
             this.context = options.context;
             this.columns = options.columns;
-            this.schema = typeof(this.model.schema) === "function" ? this.model.schema(): this.model.schema;
+            this.schema = this.model.mainSchema(this.columns);
             this.options = options;
             this.model.view = this;
             this.static = this.model.get('compulsory');
@@ -242,15 +258,15 @@ define([
                 model: this.model
             });
             // feed this template to BackboneForm
-            var mainForm = new Backbone.Form({
+            this.mainForm = new Backbone.Form({
                 model: this.model,
                 schema: this.schema,
                 template: _.template(formTemplate)
-            });
+            }).render();
 
             // do the voodoo for replacing element with currently rendered element
             // todo stop breaking DOM with this $.replaceWith, it (really) sux
-            this.$el = $(mainForm.render().$el);
+            this.$el = $(this.mainForm.$el);
             var $placeholder = $(this.$container).find(this.el);
             this.$el.attr("id", $placeholder.attr("id"));
             this.$el.addClass($placeholder.attr("class"));
