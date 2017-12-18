@@ -1386,39 +1386,6 @@ define([
                 });
         },
 
-        /**
-         * To manage Enumeration field values we used Backgrid.
-         * So we need to specify which columns use
-         */
-        columns: [
-            {
-                name: 'isDefaultValue',
-                label: '',
-                cell: 'boolean'
-            },
-            {
-                name: 'fr',
-                label: 'fr',
-                cell: 'string'
-            },
-            {
-                name: 'en',
-                label: 'en',
-                cell: 'string'
-            },
-            {
-                name: 'value',
-                label: 'value',
-                cell: 'string'
-            },
-            {
-                name: 'action',
-                label: '',
-                cell: 'string',
-                editable: false
-            }
-        ],
-
         columnDefaults: {
             isDefaultValue: false,
             fr: '',
