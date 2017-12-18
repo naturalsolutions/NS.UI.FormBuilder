@@ -90,6 +90,7 @@ define([
                     schema: schema,
                     data: this.data[lang]
                 }).render();
+                form.parentForm = this;
                 form.$el.attr("data-lang", lang);
                 tools.appendRequired(form.$el, schema);
                 this.forms[lang] = form;
@@ -99,9 +100,20 @@ define([
                 form.$actionner = this.$el.find("td.lang[data-lang='" + lang + "']");
                 // remove error class from actionner if no more error in form
                 form.$el.find("input, select, textarea").on("change", _.bind(function(e) {
-                    $(e.delegateTarget).removeClass("error");
-                    if (this.$el.find(".error").length === 1) {
+                    var $el = $(e.delegateTarget);
+                    var $errField = $el.closest(".error");
+                    $errField.removeClass("error");
+                    $errField.find("[data-error]").empty();
+
+                    $el.removeClass("error");
+                    this.data[$el[0].name] = $el.val();
+                    if (this.$el.find(".error").length === 0) {
                         this.$actionner.removeClass("error");
+
+                        // try & remove error from editor
+                        if (this.parentForm.$el.find(".error").length === 0) {
+                            this.parentForm.$el.removeClass("error");
+                        }
                     }
                 }, form));
             }, this));
