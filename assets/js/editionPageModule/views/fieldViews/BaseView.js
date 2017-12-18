@@ -30,23 +30,34 @@ define([
         inputChanged: function(e) {
             if (!e.target.name) return;
 
+            var field = $(e.target).data("field");
             var value;
-            switch(e.target.type.toLowerCase()) {
-                case "checkbox":
-                    value = e.target.checked;
-                    break;
-                default:
-                    value = e.target.value;
-                    break;
+            var error;
+
+            if (field) {
+                value = field.editor.getValue();
+                error = field.editor.$el.find(".error").length > 0;
+                field = field.key;
+            } else {
+                field = e.target.name;
+                switch(e.target.type.toLowerCase()) {
+                    case "checkbox":
+                        value = e.target.checked;
+                        break;
+                    default:
+                        value = e.target.value;
+                        break;
+                }
             }
-            this.setValue(e.target.name, value);
+
+            this.setValue(field, value, error);
         },
 
-        setValue: function(field, value) {
+        setValue: function(field, value, forcedError) {
             this.options.collection.pendingChanges = true;
 
             // remove validation error for modified field
-            if (this.validationErrors && this.validationErrors[field]) {
+            if (this.validationErrors && this.validationErrors[field] && !forcedError) {
                 var err = this.validationErrors[field];
                 this.clearValidationError(err, field);
             }
@@ -57,6 +68,12 @@ define([
         },
 
         setErrorMessage: function($el, message) {
+            // does $el have its own editor? validate it if so
+            if ($el.data("editor")) {
+                $el.data("editor").validate();
+                return;
+            }
+
             if (!message)
                 message = ""; // force empty message
 
@@ -71,6 +88,10 @@ define([
 
         clearValidationError: function(err, name) {
             var $erronousField = err.$target.find("[name='" + name + "']");
+            if ($erronousField.length === 0) {
+                // try finding field instead
+                $erronousField = err.$target.find(".field-" + name);
+            }
             $erronousField.removeClass("error");
             $erronousField.closest(".error").removeClass("error");
             this.setErrorMessage($erronousField, null);
@@ -101,12 +122,23 @@ define([
             _.each(errors, _.bind(function(err, name) {
                 // find for which of our this.$elements the error targets
                 _.each(this.$elements, _.bind(function($viewEl, viewKey) {
-                    var $erronousInput = $viewEl.find("[name='" + name + "']");
+                    var $erronousInput;
+                    var skipFieldError = false;
+                    if (err.type === "subform") {
+                        // special case for subform error
+                        $erronousInput = $viewEl.find(err.el);
+                        skipFieldError = true;
+                    } else {
+                        $erronousInput = $viewEl.find("[name='" + name + "']");
+                    }
+
                     if ($erronousInput.length > 0) {
                         // display error on parent element's button and $erronousInput
                         this.$el.find(this.actionners[viewKey]).addClass("error");
                         $erronousInput.addClass("error");
-                        $erronousInput.closest(".formField").addClass("error");
+
+                        if (!skipFieldError)
+                            $erronousInput.closest(".formField").addClass("error");
 
                         // set error message
                         this.setErrorMessage($erronousInput, err.message);
