@@ -28,6 +28,10 @@ define([
             this.forms = {};
         },
 
+        getValue: function() {
+            return this.data;
+        },
+
         validate: function() {
             Backbone.Form.editors.Base.prototype.validate.call(this);
             var errors = false;
