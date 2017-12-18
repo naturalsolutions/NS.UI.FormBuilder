@@ -143,6 +143,16 @@ define([
             // display first elem
             this.$el.find("td.lang").first().trigger("click");
 
+            // bind this editor to $el
+            this.$el.data("editor", this);
+
+            // add field key & editor to inputs, for handling onchange validation
+            this.$el.find("input, textarea, select")
+                .data("field", {
+                    "key": this.options.key,
+                    "editor": this
+                });
+
             this.$el.i18n();
             this.setElement(this.$el);
             return this;
