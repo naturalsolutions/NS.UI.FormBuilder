@@ -193,10 +193,14 @@ define([
          * languageSchema returns i18n related fields from this.schema()
          **/
         languagesSchema: function() {
+            if (this.languagesSchema_cache)
+                return this.languagesSchema_cache;
+
             var schema = this.getSchema();
             var languageProperties = _.pick(schema, _.bind(function(v, k) {
                 return _.includes(this.i18nFields, k);
             }, this));
+            this.languagesSchema_cache = languageProperties;
             return languageProperties;
         },
 
@@ -205,13 +209,31 @@ define([
          * this.languages schema
          */
         extraSchema: function(excluded) {
+            if (this.extraSchema_cache)
+                return this.extraSchema_cache;
+
             if (!excluded) excluded = [];
             var keys = excluded.concat(this.i18nFields);
             var schema = this.getSchema();
             var extraProperties = _.pick(schema, function(v, k) {
                 return !_.includes(keys, k);
             });
+            this.extraSchema_cache = extraProperties;
             return extraProperties;
+        },
+
+        mainSchema: function(included) {
+            if (this.mainSchema_cache)
+                return this.mainSchema_cache;
+
+            if (!included) included = [];
+            var schema = this.getSchema();
+            var mainProperties = _.pick(schema, _.bind(function(v, k) {
+                return _.includes(included, k);
+            }, this));
+
+            this.mainSchema_cache = mainProperties;
+            return mainProperties;
         },
 
         /**
