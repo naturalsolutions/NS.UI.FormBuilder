@@ -17,6 +17,14 @@ define([
             } else {
                 this.data = options.form.data["translations"];
             }
+
+            _.each(this.schema.languages, _.bind(function(options, lang) {
+                // init empty lang dictionaries
+                if (!this.data[lang])
+                    this.data[lang] = {
+                        Language: lang
+                    };
+            }, this));
             this.forms = {};
         },
 
