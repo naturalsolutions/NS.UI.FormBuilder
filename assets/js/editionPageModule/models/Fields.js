@@ -1381,7 +1381,10 @@ define([
                     choices: {
                         type: ChoicesEditor,
                         template: fieldTemplate,
-                        title: translater.getValueFromKey('editGrid.valuesList')
+                        title: translater.getValueFromKey('editGrid.valuesList'),
+                        languages: [
+                            "fr", "en", "ar"
+                        ]
                     }
                 });
         },
@@ -1390,6 +1393,7 @@ define([
             isDefaultValue: false,
             fr: '',
             en: '',
+            ar: '',
             value: ''
         },
 

@@ -1,15 +1,17 @@
-<tr class="choice" data-index="<%= id %>">
+<tr class="choice" data-index="<%= choice.id %>">
     <td>
-        <input data-name="isDefaultValue" type="checkbox" <% if (isDefaultValue) { %>checked<% } %> />
+        <input data-name="isDefaultValue" type="checkbox" <% if (choice.isDefaultValue) { %>checked<% } %> />
     </td>
+    <% for (var i in languages) {
+    var lang = languages[i];
+    var value = choice[lang];
+    %>
     <td>
-        <input data-name="fr" type="text" value="<%= fr %>" />
+        <input data-name="<%= lang %>" type="text" value="<%= value %>" />
     </td>
+    <% } %>
     <td>
-        <input data-name="en" type="text" value="<%= en %>" />
-    </td>
-    <td>
-        <input data-name="value" type="text" value="<%= value %>" />
+        <input data-name="value" type="text" value="<%= choice.value %>" />
     </td>
     <td>
         <div class="deleteOption" data-i18n="[title]actions.delete"></div>

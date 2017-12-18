@@ -13,14 +13,19 @@ define([
         // used if this.model.columnDefaults is not there
         defaultFallback: {
             isDefaultValue: false,
-            fr: '',
-            en: '',
             value: ''
         },
+
+        languagesFallback: ['fr', 'en'],
 
         initialize: function(options) {
             this.options = options;
             Backbone.Form.editors.Text.prototype.initialize.call(this, options);
+
+            this.languages = this.schema.languages;
+            if (!this.languages) {
+                this.languages = this.languagesFallback;
+            }
         },
 
         reorderValues: function(updateElem) {
@@ -34,7 +39,10 @@ define([
         },
 
         renderChoice: function(choice) {
-            return _.template(ChoiceRow)(choice);
+            return _.template(ChoiceRow)({
+                choice: choice,
+                languages: this.languages
+            });
         },
 
         render: function() {
@@ -45,6 +53,7 @@ define([
                 fieldClass  : this.options.schema.fieldClass || 'form-group',
                 iconClass   : this.options.iconClass || '',
                 choices     : this.value,
+                languages   : this.languages,
                 renderChoice: this.renderChoice,
                 title       : this.schema.title == undefined ? this.  key : this.schema.title
             }));
@@ -72,6 +81,12 @@ define([
                 newChoice = this.defaultFallback;
             }
             newChoice = _.clone(newChoice);
+
+            _.each(this.languages, function(e) {
+                if (!newChoice[e])
+                    newChoice[e] = '';
+            });
+
             newChoice.id = this.value.length;
             this.value.push(newChoice);
             this.$el.find("table").append(this.renderChoice(newChoice));

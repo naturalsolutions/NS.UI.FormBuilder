@@ -2,8 +2,11 @@
     <table>
         <tr>
             <th>&nbsp;</th>
-            <th>FR</th>
-            <th>EN</th>
+            <% for (var i in languages) {
+            var lang = languages[i];
+            %>
+            <th><%= lang.toUpperCase() %></th>
+            <% } %>
             <th data-i18n="editGrid.value"></th>
             <th>&nbsp;</th>
         </tr>
