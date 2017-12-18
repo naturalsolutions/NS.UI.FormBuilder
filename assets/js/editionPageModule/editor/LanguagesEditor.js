@@ -34,17 +34,27 @@ define([
 
         validate: function() {
             Backbone.Form.editors.Base.prototype.validate.call(this);
-            var errors = false;
+            var errors = {};
             _.each(this.forms, _.bind(function(form, lang) {
-                if (form.validate()) {
-                    errors = true;
+                var subErrors = form.validate();
+                if (subErrors) {
+                    errors[lang] = subErrors;
                     form.$actionner.addClass("error");
                 } else {
                     form.$actionner.removeClass("error");
                 }
             }, this));
 
-            return errors? {type: "subform", message: null}: null;
+            if (Object.keys(errors).length > 0) {
+                return {
+                    type: "subform",
+                    el: "#" + this.options.id,
+                    errors : errors,
+                    message: null
+                }
+            }
+
+            return null;
         },
 
         render: function() {
