@@ -596,23 +596,31 @@ define([
                     }
 
                     var searchVal = searchData[name].toLowerCase();
-                    //  Special case for keywords
-                    // todo better - this searches keywords.join() which is wonky
+
+                    //  Special case for keywords: no strict match on all translations
                     if (name === 'keywords') {
-                        if (model.get('keywordsFr').join().toLowerCase().indexOf(searchVal) < 0 &&
-                            model.get('keywordsEn').join().toLowerCase().indexOf(searchVal) < 0) {
-                            return false;
+                        var translations = model.get('translations');
+                        var found = false;
+                        for (var i in translations) {
+                            var t = translations[i];
+                            if (t.Keywords.toLowerCase().indexOf(searchVal) >= 0) {
+                                found = true;
+                                break;
+                            }
                         }
-                        continue;
+
+                        if (found) {
+                            continue;
+                        }
+                        return false;
                     }
 
                     var modelVal = model.get(name).toLowerCase();
                     // Special case for name search: do not require strict match
                     if (name === 'name') {
-                        if (modelVal.indexOf(searchVal) < 0) {
-                            return false;
+                        if (modelVal.indexOf(searchVal) >= 0) {
+                            continue;
                         }
-                        continue;
                     }
 
                     // Default case: require strict match
