@@ -17,6 +17,8 @@ define([
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
                 collection : this.fieldCollection.getAttributesValues(),
+                formUrl: this.formUrl,
+                originalID: this.fieldCollection.originalID,
                 context: this.context,
                 fieldTypes: this.fieldTypes,
                 topcontext: AppConfig.topcontext,
@@ -85,6 +87,11 @@ define([
             this.fieldCollection.dataUpdated = false;
             this.fieldCollection.pendingChanges = false;
             this.context = fieldCollection.context;
+            this.formUrl = false;
+            if (this.context.toLowerCase() === 'track' && fieldCollection.originalID) {
+                this.formUrl =
+                    AppConfig.trackFormURL.replace("#originalID#", fieldCollection.originalID);
+            }
             this.initFieldTypes();
         },
 

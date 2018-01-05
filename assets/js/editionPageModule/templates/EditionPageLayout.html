@@ -1,6 +1,13 @@
 <div class="header">
     <div data-i18n="form.actions.back" class="action gray actionBack" id="exit">Retour</div>
     <div class="formTitle"><%= collection.name %></div>
+    <% if (formUrl) {%>
+    <div class="formUrl">
+        <a href="<%= formUrl %>" target="_blank">
+            <%= context.toUpperCase() %> - <%= originalID %>
+        </a>
+    </div>
+    <% } %>
     <img class="saveSpinner" src="assets/images/loader.gif" />
     <div data-i18n="form.actions.save" class="action actionSave" id="save">Tout sauvegarder</div>
 </div>

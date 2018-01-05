@@ -17,6 +17,9 @@ define([], function() {
         portalURL: 'http://localhost/nsportal/front/', // Portal local URL
         securityKey: '',                               // JWT security secret word key
 
+        // URL to track protocol, #originalID# will be replaced in code by actual Form.originalID
+        trackFormURL: 'http://track/Intranet/TRACK/App_Pages/ViewForm.aspx?iTPro_PK_Id=#originalID#&IsNew=True',
+
         paths: {
             // Path to the thesaurus Web Services
             thesaurusWSPath: 'http://localhost/ThesaurusCore/api/thesaurus/fastInitForCompleteTree',
