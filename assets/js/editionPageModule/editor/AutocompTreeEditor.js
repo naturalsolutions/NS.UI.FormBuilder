@@ -117,7 +117,7 @@ define([
             this.setElement(this.$el);
             this.$tree = this.$el.find(".tree");
 
-            // get url by key, or from schema
+            // get url by key, it was put there by ThesaurusFieldView todo: NotLikeThis
             var url = this.options.model[this.options.key];
             if (!url) url = this.options.schema.defaultUrl;
             if (!url) {

@@ -25,6 +25,9 @@ define([
                 wsURL = options.model.get("webServiceURL");
             }
             if (wsURL) {
+                // this is hacky behavior, two things would be better:
+                //   * embed wsURL into autocomptree editor in some way, which would make more sense
+                //   * or at least embed wsUrl into defaultNode schema's options, and not directly in model
                 options.model.defaultNode = wsURL;
                 // pre-load url
                 tools.loadTree(wsURL);
