@@ -611,7 +611,12 @@ define([
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.webServiceURL')
+                    title: translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs: {
+                        disabled: function() {
+                            return AppConfig.topcontext.toLowerCase() === 'reneco';
+                        }
+                    }
                 },
                 defaultNode: {
                     type: AutocompTreeEditor,
@@ -911,7 +916,12 @@ define([
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.webServiceURL')
+                    title: translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs: {
+                      disabled: function() {
+                        return AppConfig.topcontext.toLowerCase() === 'reneco';
+                      }
+                    }
                 },
                 defaultNode: {
                     type: AutocompTreeEditor,
