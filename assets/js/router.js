@@ -1,11 +1,14 @@
 define([
     "jquery", "backbone", "marionette",
     "homePageModule/layout/HomePageLayout", "editionPageModule/layout/EditionPageLayout",
-    "editionPageModule/collection/FieldCollection",
-    "tools", "app-config"
+    "editionPageModule/collection/FieldCollection", "homePageModule/models/FormModel",
+    './Translater', "tools", "app-config"
 ], function($, Backbone, Marionette, HomePageLayout, EditionPageLayout,
-            FieldCollection,
-            tools, AppConfig) {
+            FieldCollection, FormModel,
+            Translater, tools, AppConfig) {
+
+    var translater = Translater.getTranslater();
+
     var Controller = Marionette.Controller.extend({
         init: function() {
             this.spawnContexts();
@@ -155,7 +158,13 @@ define([
                 this.loadingForm = false;
             }, this);
 
-            if (id) {
+            if (id === 'new') {
+                var newForm = new FormModel({
+                    id: 0,
+                    name: translater.getValueFromKey('modal.newForm.title')
+                });
+                this.displayForm(newForm.toJSON());
+            } else {
                 $.ajax({
                     url: AppConfig.config.options.URLOptions.forms + '/' + id,
                     dataType: 'json',
@@ -174,10 +183,6 @@ define([
                         loadError(error);
                     }, this)
                 });
-            } else {
-
-                alert("noform" + id);
-                //this.displayForm(form);
             }
         },
 

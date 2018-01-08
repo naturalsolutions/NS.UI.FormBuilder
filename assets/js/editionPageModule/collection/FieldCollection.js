@@ -682,6 +682,10 @@ define([
                     success: _.bind(function (data) {
                         // update form id (new form)
                         that.id = data.form.id;
+                        Backbone.history.navigate(
+                            Backbone.history.location.hash.replace("/new", "/" + that.id),
+                            {trigger: false}
+                        );
                         if (data.form.schema) {
                             // update field ids (new fields)
                             $.each(data.form.schema, function (i, field) {

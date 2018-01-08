@@ -711,7 +711,7 @@ define([
                     }, this));
                 }
                 else {
-                    this.createFormModel("", 0);
+                    Backbone.history.navigate('#form/' + this.context + '/new', {trigger: true});
                 }
                 this.hideContextList();
             }, this));
@@ -951,6 +951,7 @@ define([
         setContext: function(context, avoidRendering) {
             context = context.toLowerCase();
             window.context = context;
+            this.context = context;
             this.currentTemplate.params.context = context;
             this.updateTemplate();
 
