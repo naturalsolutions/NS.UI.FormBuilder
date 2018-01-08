@@ -8,23 +8,14 @@ define([
      */
     var LeftPanelView = Backbone.Marionette.ItemView.extend({
 
-        /**
-         * Left panel view template
-         */
         template : LeftPanelViewTemplate,
 
-        /**
-         * Event catch by the view
-         */
         events : {
             'click #searchBtn' : 'runSearch',
             'click .search-box .close' : 'clearForm',
-            'keypress form input' : 'keypress'
+            'keypress form input' : 'keypressed'
         },
 
-        /**
-         * View constructor, init grid channel
-         */
         initialize : function(options, readonly) {
             this.gridChannel = Backbone.Radio.channel('grid');
             this.gridChannel.on('contextChanged', this.setCustomSearchInputs, this);
@@ -32,19 +23,12 @@ define([
             this.URLOptions = options.URLOptions;
         },
 
-        /**
-         * keypress listener, triggers a new search if enter is pressed
-         * @param e keypress event
-         */
-        keypress: function(e) {
+        keypressed: function(e) {
             if (e.keyCode === 13) {
                 this.runSearch();
             }
         },
 
-        /**
-         * #find click callback, send form values to the center view to update grid
-         */
         runSearch : function() {
             var values = {};
             $.each(this.$el.find('form').serializeArray(), function(i, field) {
@@ -126,17 +110,11 @@ define([
             }
         },
 
-        /**
-         * View rendering callbak
-         */
         onRender : function(options) {
             this.$el.i18n(); // run i18nnext translation in the view context
             this.enableAutocomplete();
         },
 
-        /**
-         * Enable autocomplete with jquery ui on search form field
-         */
         enableAutocomplete : function() {
             // todo auto-complete should take into consideration current context, which is not the case and is misleading
             // ideally it would use data already available in grid, instead of querying the back-end.
@@ -171,17 +149,11 @@ define([
             }, this));
         },
 
-        /**
-         * Reset search form values
-         * @param evt jquery Event
-         */
-        clearForm : function(evt) {
+        clearForm : function() {
             this.$el.find('form').trigger("reset");
             this.gridChannel.trigger('resetCollection');
         }
-
     });
 
     return LeftPanelView;
-
 });

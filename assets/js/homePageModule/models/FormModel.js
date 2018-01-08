@@ -1,12 +1,8 @@
 define([
     'jquery', 'lodash', 'backbone', '../../Translater'
 ], function($, _, Backbone,Translater) {
-
     var translater = Translater.getTranslater();
-    /**
-     * Main model for homepage layout representing a form
-     */
-    var Form = Backbone.Model.extend({
+    return Backbone.Model.extend({
 
         /**
          * Attributes default values
@@ -36,7 +32,7 @@ define([
         /**
          * Model constructor
          */
-        initialize  : function(options) {
+        initialize  : function() {
             _.bindAll(this, 'toJSON');
 
             var creationDate     = this.get('creationDate'),
@@ -57,10 +53,8 @@ define([
         },
 
         toJSON : function() {
-
             var schema = this.get('schema');
-
-            _.map(schema, function(el, idx) {
+            _.map(schema, function(el) {
                 el.validators = [];
                 if (el.readonly) {
                     el.validators.push('readonly')
@@ -71,7 +65,6 @@ define([
 
                 return el;
             });
-
             this.set('schema', schema);
 
             // todo send this.attributes.toJSON()?
@@ -91,9 +84,5 @@ define([
                 context                    : this.get('context')
             }
         }
-
     });
-
-    return Form;
-
 });

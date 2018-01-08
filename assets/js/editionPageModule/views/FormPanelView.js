@@ -6,12 +6,11 @@ define([
     '../../Translater',
     'app-config',
     '../collection/staticInputs/ContextStaticInputs',
-    '../models/Fields',
     './fieldViews/All',
     'i18n',
     'slimScroll'
 ], function($, Marionette, FormPanelViewTpl, tools,
-            Translater, AppConfig, ContextStaticInputs, Fields, AllFieldViews) {
+            Translater, AppConfig, ContextStaticInputs, AllFieldViews) {
 
     var translater = Translater.getTranslater();
     var staticInputs = ContextStaticInputs;
@@ -87,80 +86,63 @@ define([
             this.formChannel.on('save:formIncomplete', this.displayIncompleteFormMessage);
             this.formChannel.on('save:fieldIncomplete', this.displayIncompleteFieldMessage);
             this.formChannel.on('save:hasDuplicateFieldNames', this.displayHasDuplicateFieldNames);
-
-            this.formChannel.on('template:success', this.displaytemplateMessage);
-            this.formChannel.on('template:fail', this.displayFailtemplatee);
-
-            //  Event send from Formbuilder.js when export is finished (success or not)
-            this.formChannel.on('exportFinished', this.displayExportMessage, this);
         },
 
-        /**
-         * Update form fields count when an element was removed
-         */
         removeElement : function() {
             this.updateFieldCount();
         },
 
-        /**
-         * Create the view for the fresh added element
-         *
-         * @param {object} newModel new added field
-         */
         addElement: function (newModel) {
-            if (!newModel.get('isUnderFieldset')) {
-                //  We only create view for model who are not in a fieldset
-                //  If a model if in a fieldset, the fieldset view render the subView
+            //  We only create view for model who are not in a fieldset
+            //  If a model if in a fieldset, the fieldset view render the subView
 
-                var viewClassName = newModel.constructor.type + "FieldView";
+            var viewClassName = newModel.constructor.type + "FieldView";
 
-                if (newModel.constructor.type === "Numeric") {
-                    newModel.on('change:decimal', function (e) {
-                        e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
-                    })
-                }
-
-                // FieldView exists?
-                if (!AllFieldViews[viewClassName]) {
-                    tools.swal("error", "modal.field.error", "modal.field.errorMsg");
-                    return;
-                }
-
-                // prepare target element for field rendering
-                var id = "dropField" + newModel['id'];
-                var $field = $("<div>").addClass("dropField").attr("id", id);
-
-                // check that order is not set to last (converted field)
-                var order = newModel.get('order');
-                if (order >= this.$el.find(".drop").children().length) {
-                    this.$el.find('.drop').append($field);
-                } else {
-                    this.$el.find(".drop > tr:nth-child(" + order + ")").after($field);
-                }
-
-                // populate field / readonly if compulsory input
-                var vue = new AllFieldViews[viewClassName]({
-                    el: '#' + id,
-                    model: newModel,
-                    collection: this.collection,
-                    urlOptions: this.URLOptions,
-                    $container: this.$el.find(".drop"),
-                    context: this.context,
-                    columns: this.columns
-                }, Backbone.Radio.channel('global').readonly ||
-                    $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
-                if (vue !== null) {
-                    vue.render();
-                    this._view[id] = vue;
-                    if (newModel.get('new')) {
-                        // scroll to bottom if element was just inserted
-                        this.$el.find('#scrollSection').slimScroll({ scrollTo: "99999px" });
-                    }
-                }
-
-                $(".actions").i18n();
+            if (newModel.constructor.type === "Numeric") {
+                newModel.on('change:decimal', function (e) {
+                    e.baseSchema['precision']['fieldClass'] = e.get('decimal') ? "advanced" : "";
+                })
             }
 
+            // FieldView exists?
+            if (!AllFieldViews[viewClassName]) {
+                tools.swal("error", "modal.field.error", "modal.field.errorMsg");
+                return;
+            }
+
+            // prepare target element for field rendering
+            var id = "dropField" + newModel['id'];
+            var $field = $("<div>").addClass("dropField").attr("id", id);
+
+            // check that order is not set to last (converted field)
+            var order = newModel.get('order');
+            if (order >= this.$el.find(".drop").children().length) {
+                this.$el.find('.drop').append($field);
+            } else {
+                this.$el.find(".drop > tr:nth-child(" + order + ")").after($field);
+            }
+
+            // populate field / readonly if compulsory input
+            var vue = new AllFieldViews[viewClassName]({
+                el: '#' + id,
+                model: newModel,
+                collection: this.collection,
+                urlOptions: this.URLOptions,
+                $container: this.$el.find(".drop"),
+                context: this.context,
+                columns: this.columns
+            }, Backbone.Radio.channel('global').readonly ||
+                $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
+            if (vue !== null) {
+                vue.render();
+                this._view[id] = vue;
+                if (newModel.get('new')) {
+                    // scroll to bottom if element was just inserted
+                    this.$el.find('#scrollSection').slimScroll({ scrollTo: "99999px" });
+                }
+            }
+
+            $(".actions").i18n();
             this.updateFieldCount();
         },
 
@@ -170,9 +152,6 @@ define([
             }));
         },
 
-        /**
-         * Rendering callback
-         */
         onRender : function() {
 
             this.updateName();
@@ -234,75 +213,16 @@ define([
             this.formChannel.trigger('renderFinished');
         },
 
-        /**
-        * Display modal view when user wants to export him form
-        * When modal view is hidden we send an event on the form channel to send data (filename), see formbuilder.js
-        */
-        export : function() {
-            require(['editionPageModule/modals/ExportModalView'], _.bind(function(ExportModalView) {
-
-                //  Add new element for modal view
-                $('body').append('<div class="modal  fade" id="exportModal"></div>');
-
-                //  Create view and render it
-                var modalView = new ExportModalView({
-                    el: "#exportModal",
-                    URLOptions: this.URLOptions
-                });
-                $('#exportModal').append( modalView.render() );
-                $("#exportModal").i18n();
-
-                //  Listen to view close event
-                //  When modal is closed we get typed data user
-                $('#exportModal').on('hidden.bs.modal', _.bind(function () {
-                    var datas = modalView.getData();
-                    if( datas['response']) {
-
-                        //  Send event to edition page controller for export form in JSON file
-                        //  We send the filename typed by the user
-                        this.formChannel.trigger('export', datas['filename'] );
-
-                        $('#exportModal').modal('hide').removeData();
-                        $('#exportModal').html('').remove();
-                    }
-                }, this));
-
-            }, this));
-        },
-
-        /**
-         * Run when user wants to save current form on the server
-         * Trigger an event for the router on the form channel
-         */
         save : function() {
             this.collection.save();
         },
 
-        /**
-         * Display a message when the export is finished or failed
-         *
-         * @param result if the export is right done or not
-         */
-        displayExportMessage : function(result) {
-            if (result) {
-                tools.swal("success", "modal.export.success", "");
-            } else {
-                tools.swal("error", "modal.export.error", "modal.export.errorMsg");
-            }
-        },
-
-        /**
-         * Display a message when the form has been saved
-         */
         displaySucessMessage : function() {
             this.collection.dataUpdated = true;
             this.collection.pendingChanges = false;
             tools.swal("success", "modal.save.success", "modal.save.successMsg");
         },
 
-        /**
-         * Display a message if the form couldn't be saved
-         */
         displayFailMessage : function(textKey, textValue) {
             if (textKey) {
                 tools.swal("error", "modal.save.error",
@@ -325,9 +245,6 @@ define([
             tools.swal("error", "modal.save.hasDuplicateFieldNamesError", "modal.save.hasDuplicateFieldNames");
         },
 
-        /**
-         * Set H1 text when the update is done
-         */
         updateName: function () {
             this.$el.find('#collectionName').text(this.collection.name);
             if (this.collection.originalID && this.collection.originalID > 0)
@@ -341,37 +258,8 @@ define([
             }
         },
 
-        displaytemplateMessage : function() {
-            tools.swal("success", "modal.template.success", "modal.template.successMsg");
-        },
-
-        displayFailtemplatee : function() {
-            tools.swal("error", "modal.template.error", "modal.template.errorMsg");
-        },
-
-        sizepreview : function() {
-            var previewBtn = $(".sizepreview");
-            if(previewBtn.hasClass("selected"))
-            {
-                previewBtn.removeClass("selected");
-                $.each(this.collection.models, function(index, value){
-                    var currentInput = $(".dropField#dropField" + value.id);
-                    currentInput.removeClass("col-xs-" + value.attributes.fieldSize);
-                });
-            }
-            else
-            {
-                previewBtn.addClass("selected");
-                $.each(this.collection.models, function(index, value){
-                    var currentInput = $(".dropField#dropField" + value.id);
-                    currentInput.addClass("col-xs-" + value.attributes.fieldSize);
-                });
-            }
-        },
-
         popDatasImg: function(){
-            if (this.context == "track")
-            {
+            if (this.context == "track") {
                 tools.swal("info",
                     "Datas linked to the form<br />'"+this.collection.name+"'<br />",
                     "<span id='formDatasArea'><span id='formDatasLoading'>Loading datas ...<br/><br/>"+

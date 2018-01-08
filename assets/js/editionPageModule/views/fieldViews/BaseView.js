@@ -9,7 +9,6 @@ define([
     var BaseView = Backbone.View.extend({
         events: {
             'click #trash'          : 'removeView',
-            'click #duplicate'      : 'copyModel',
             'click .settings'       : 'editSettings',
             'click .languages'      : 'editLanguages',
             'change input'          : 'inputChanged',
@@ -171,7 +170,7 @@ define([
         },
 
         initialize: function(options) {
-            _.bindAll(this, 'render', 'removeView', 'editLanguages', 'editSettings', 'copyModel', 'destroy_view');
+            _.bindAll(this, 'render', 'removeView', 'editLanguages', 'editSettings', 'destroy_view');
             this.model.bind('change', this.render);
 
             this.model.bind('destroy', this.destroy_view);
@@ -212,6 +211,7 @@ define([
         },
 
         removeView: function(confirmCallback) {
+            // todo: not here at all
             var self = this;
 
             var loadedFieldWeight;
@@ -315,13 +315,6 @@ define([
             return this.$el;
         },
 
-        /**
-         * Send event to the collection for duplicate this model
-         */
-        copyModel : function() {
-            this.formChannel.trigger('copyModel', this.model.get('id'));
-        },
-
         editLanguages: function(initOnly) {
             this.languageForm = this.initForm("language", this.model.languagesSchema(), ".languages");
             if (initOnly === true) return;
@@ -400,5 +393,4 @@ define([
     });
 
     return BaseView;
-
 });
