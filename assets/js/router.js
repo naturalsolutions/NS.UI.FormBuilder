@@ -23,7 +23,7 @@ define([
 
         home: function(context) {
             if (!context || !this.contexts[context]) {
-                Backbone.history.navigate('#' + this.defaultContext, {trigger: true});
+                Backbone.history.navigate('#' + this.defaultContext, {trigger: true, replace: true});
                 return;
             }
             this.backHash = Backbone.history.location.hash;
@@ -45,12 +45,13 @@ define([
             var hash;
             if (this.backHash) {
                 hash = this.backHash;
-            } else if (context) {
-                hash = "#" + context;
             } else {
                 hash = "#" + this.defaultContext;
             }
-            Backbone.history.navigate(hash, {trigger: true});
+            Backbone.history.navigate(hash, {
+                trigger: true,
+                replace: true
+            });
 
             if (refresh === 'true') {
                 Backbone.Radio.channel('grid').trigger('refresh');
