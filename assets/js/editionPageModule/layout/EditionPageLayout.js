@@ -333,13 +333,13 @@ define([
 
                     $groupe.find('option[value="null"]').show();
                     $groupe.data('previous', $groupe.val());
-                    $groupe.val('null');
+                    $groupe.val('null').trigger("change");
                     $groupe.attr("disabled", true);
                 } else {
                     if ($groupe.find('option[value="null"]').is(':selected')) {
                         var prev = $groupe.data('previous');
                         var val = prev ? prev : [];
-                        $groupe.val(val);
+                        $groupe.val(val).trigger("change");
                     }
                     $groupe.find('option[value="null"]').hide();
                     $groupe.attr("disabled", false);
