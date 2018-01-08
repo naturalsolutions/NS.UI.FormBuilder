@@ -521,14 +521,20 @@ define([
          * Hide spinner when loading is finished
          */
         hideSpinner : function() {
-            this.$el.find('.spinner').addClass('end', 250);
+            var $spinner = this.$el.find('.spinner');
+            if (!$spinner.hasClass("hijacked")) {
+                this.$el.find('.spinner').addClass('end', 250);
+            }
         },
 
         /**
          * Display spinner
          */
         showSpinner : function() {
-            this.$el.find('.spinner').removeClass('end');
+            var $spinner = this.$el.find('.spinner');
+            if (!$spinner.hasClass("hijacked")) {
+                this.$el.find('.spinner').removeClass('end');
+            }
         },
 
         /**
@@ -670,47 +676,25 @@ define([
                 // get currentSelectedForm's context
                 ctx = this.grid.collection.findWhere({id: this.currentSelectedForm}).get("context");
             }
-            window.context = ctx;
-
-            Backbone.Radio.channel('form').trigger('setFieldCollection', ctx);
 
             // if not provided use this.currentSelectedForm
             if (!id) {
                 id = this.currentSelectedForm;
             }
 
-            var formToEdit = this.formCollection.get(id);
-
-            this.globalChannel.trigger('displayEditionPage', formToEdit.toJSON());
-            this.showSpinner();
             this.hideContextList();
+            Backbone.history.navigate('#form/' + ctx + "/" + id, {trigger: true});
         },
 
-        /**
-         *
-         * @param name
-         * @param template
-         */
-        createFormModel : function(name, template) {
-            this.homePageChannel.trigger('getTemplate', {name : name, template : template});
-        },
-
-        /**
-         * Add new form and edit it
-         */
         addForm: function() {
-
             $.getJSON(this.URLOptions.templateUrl, _.bind(function(data) {
-
                 data.unshift({
                     id : 0,
                     name : 'No template'
                 });
-
                 $('body').append('<div class="modal fade" id="newFormModal"></div>');
 
-                if (AppConfig.topcontext != "reneco")
-                {
+                if (AppConfig.topcontext != "reneco") {
                     // todo test this - or remove probably
                     require(['homePageModule/modals/NewFormModalView'], _.bind(function(NewFormModalView) {
                         var tmpOptions = {
@@ -726,21 +710,13 @@ define([
                         newFormModalView.render();
                     }, this));
                 }
-                else
-                {
+                else {
                     this.createFormModel("", 0);
                 }
                 this.hideContextList();
-
             }, this));
-
-
-
         },
 
-        /**
-         * Import form
-         */
         importForm : function() {
 
             if ($("body").has("#importModal").length == 0) {
@@ -972,7 +948,7 @@ define([
          * setContext updates relevant parts depending on context value.
          * @param context
          */
-        setContext: function(context) {
+        setContext: function(context, avoidRendering) {
             context = context.toLowerCase();
             window.context = context;
             this.currentTemplate.params.context = context;
@@ -996,19 +972,12 @@ define([
 
             // retreive and populate custom search inputs
             this.gridChannel.trigger('contextChanged', context);
-        },
 
-        /**
-         * setCenterGridPanel
-         * @param context
-         * @param avoidRendering
-         */
-        setCenterGridPanel : function(context, avoidRendering)
-        {
-            this.setContext(context);
+            // clear selection
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
+            // render
             if (!avoidRendering) {
                 this.render();
             }

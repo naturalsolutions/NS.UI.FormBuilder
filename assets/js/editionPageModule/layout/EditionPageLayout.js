@@ -194,7 +194,9 @@ define([
                 if (this.editing)
                     this.editing.view.trigger("close");
 
-                this.formChannel.trigger('exit', this.fieldCollection.dataUpdated);
+                Backbone.history.navigate("#back/" +
+                    this.fieldCollection.context + "/" + this.fieldCollection.dataUpdated,
+                    {trigger: true});
             }, this);
 
             if (!this.fieldCollection.pendingChanges || this.readonly) {
