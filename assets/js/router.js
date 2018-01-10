@@ -22,6 +22,8 @@ define([
         },
 
         home: function(context) {
+            this.editMode = false;
+
             if (!context || !this.contexts[context]) {
                 Backbone.history.navigate('#' + this.defaultContext, {trigger: true, replace: true});
                 return;
@@ -36,6 +38,8 @@ define([
         },
 
         edit: function(context, id) {
+            this.editMode = true;
+
             // update window.context, cause it's used somewhere for extraProperties I think
             // todo, remove the window.context mechanics at some point
             window.context = context;
@@ -115,14 +119,14 @@ define([
             } else if (nbContexts > 1) {
                 // enable multi-context
                 this.$contextSwitcher.removeClass("single");
+                var that = this;
 
                 // Expand context switcher
                 this.$contextSwitcher.click(function(e) {
-                    // disable context-switching in edition page
-                    if (window.location.hash.indexOf('#edit') == 0) {
-                        return;
+                    // only allow context-switching on home page
+                    if (!that.editMode) {
+                        $(this).toggleClass("expand");
                     }
-                    $(this).toggleClass("expand");
                 });
 
                 // Swap contexts
