@@ -272,6 +272,12 @@ define([
                 data  : datas
             }).render();
 
+            // disable submit, it throws to an unwanted url redirection
+            this.form.$el.on("submit", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
             // manually remove error on input change, to match behaviour of fields view
             this.form.$el.find("input, select, textarea").on("change", function(e) {
                 var $errField = $(e.target).closest(".error");
