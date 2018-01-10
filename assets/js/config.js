@@ -22,6 +22,7 @@ require.config({
         moment                              : '../../node_modules/moment/moment',
         slimScroll                          : '../../node_modules/jquery-slimScroll/jquery.slimscroll.min',
         'lodash'                            : '../../node_modules/lodash/index',
+        'text'                              : '../../node_modules/text/text',
         'tools'                             : './tools'
     },
 

@@ -41,6 +41,7 @@
     "lodash": "3.10.1",
     "moment": "2.18.1",
     "requirejs": "2.3.5",
-    "sweetalert": "1.1.0"
+    "sweetalert": "1.1.0",
+    "text": "requirejs/text"
   }
 }
