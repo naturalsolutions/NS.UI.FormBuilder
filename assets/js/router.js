@@ -36,6 +36,9 @@ define([
         },
 
         edit: function(context, id) {
+            // update window.context, cause it's used somewhere for extraProperties I think
+            // todo, remove the window.context mechanics at some point
+            window.context = context;
             // update field collection's context
             this.setFieldCollection(context);
             this.loadForm(id);
