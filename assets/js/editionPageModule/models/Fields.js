@@ -47,6 +47,37 @@ define([
         }
     };
 
+    // Although isSQLPropertySetter is not really a validator(!),
+    // it is intended to be plugged in the validators section of a specific "isSQL" property,
+    // it will check, at validation time, if provided property from model is detected as
+    // being a SQL script, and set the current model's property holding this validator accordingly.
+    //
+    // * model is the parent base model
+    // * srcProperty is the attribute from model that needs to be checked
+    // * isSQLproperty is the current property to be set
+    //
+    // property using this will hold a bool value,
+    // it should be hidden because it will be overriden at validate time.
+    //
+    // It is admitedly hacky, but seemed like a good way to avoid code duplication, kind of simply.
+    var isSQLPropertySetter = function(model, srcProperty, isSQLProperty) {
+        return function() {
+            if (!model || !model.attributes ||
+                model.attributes[srcProperty] === undefined ||
+                model.attributes[isSQLProperty] === undefined ||
+                typeof(model.attributes[srcProperty]) !== "string" ||
+                typeof(model.attributes[isSQLProperty]) !== "boolean") {
+
+                console.log("looks like a bad usage of isSQLPropertySetter");
+                return;
+            }
+
+            var sqlStuff = model.attributes[srcProperty].toLowerCase();
+            model.attributes[isSQLProperty] =
+                sqlStuff.indexOf("select") >= 0 && sqlStuff.indexOf("from") > 0;
+        };
+    };
+
     //  ----------------------------------------------------
     //  Field herited by BaseField
     //  ----------------------------------------------------
@@ -393,7 +424,10 @@ define([
                     type: CheckboxEditor,
                     template: fieldTemplate,
                     fieldClass: "hidden",
-                    title: "isSQL"
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "defaultValue", "isDefaultSQL")
+                    ]
                 }
             })
         },
@@ -444,7 +478,10 @@ define([
                     type: CheckboxEditor,
                     template: fieldTemplate,
                     fieldClass: "hidden",
-                    title: "isSQL"
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "url", "isSQL")
+                    ]
                 }
             });
 
@@ -986,7 +1023,10 @@ define([
                     type: CheckboxEditor,
                     template: fieldTemplate,
                     fieldClass: "hidden",
-                    title: "isSQL"
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "defaultValue", "isDefaultSQL")
+                    ]
                 },
                 minLength: {
                     type: 'Hidden',
@@ -1048,7 +1088,10 @@ define([
                     type: CheckboxEditor,
                     template: fieldTemplate,
                     fieldClass: "hidden",
-                    title: "isSQL"
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "defaultValue", "isDefaultSQL")
+                    ]
                 },
                 maxLength: {
                     type: 'Number',
