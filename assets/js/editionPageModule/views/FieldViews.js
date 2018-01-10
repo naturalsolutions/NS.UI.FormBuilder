@@ -3,9 +3,9 @@ define([
     'lodash',
     'backbone',
     'tools',
-    'editionPageModule/views/fieldViews/BaseView'
+    "./FieldViewBase"
 ], function($, _, Backbone, tools, BaseView) {
-    return BaseView.extend({
+    var TreeView = BaseView.extend({
         events: _.extend(BaseView.prototype.events, {
             "change input[name='webServiceURL']": "urlChanged"
         }),
@@ -18,7 +18,7 @@ define([
             tools.swal("info", "editGrid.urlChanged", "editGrid.urlChangedMessage");
         },
 
-        initialize : function(options) {
+        initialize: function(options) {
             // set aside url for autocompTree fields by key, will be used by editor
             var wsURL;
             if (options.model) {
@@ -36,4 +36,31 @@ define([
             BaseView.prototype.initialize.apply(this, [options]);
         }
     });
+
+
+    return {
+        AutocompleteFieldView: BaseView,
+        AutocompleteTreeViewFieldView: BaseView,
+        BaseView: BaseView,
+        CheckBoxFieldView: BaseView,
+        ChildFormFieldView: BaseView,
+        DateFieldView: BaseView,
+        DecimalFieldView: BaseView,
+        FileFieldView: BaseView,
+        HiddenFieldView: BaseView,
+        HorizontalLineFieldView: BaseView,
+        NumberFieldView: BaseView,
+        NumericRangeFieldView: BaseView,
+        ObjectPickerFieldView: BaseView,
+        PatternFieldView: BaseView,
+        RadioFieldView: BaseView,
+        SelectFieldView: BaseView,
+        SubFormGridFieldView: BaseView,
+        TextAreaFieldView: BaseView,
+        TextFieldView: BaseView,
+
+        TreeViewFieldView: TreeView,
+        PositionFieldView: TreeView,
+        ThesaurusFieldView: TreeView
+    };
 });

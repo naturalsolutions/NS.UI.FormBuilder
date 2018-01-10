@@ -6,11 +6,11 @@ define([
     '../../Translater',
     'app-config',
     '../collection/staticInputs/ContextStaticInputs',
-    './fieldViews/All',
+    './FieldViews',
     'i18n',
     'slimScroll'
 ], function($, Marionette, FormPanelViewTpl, tools,
-            Translater, AppConfig, ContextStaticInputs, AllFieldViews) {
+            Translater, AppConfig, ContextStaticInputs, FieldViews) {
 
     var translater = Translater.getTranslater();
     var staticInputs = ContextStaticInputs;
@@ -105,7 +105,7 @@ define([
             }
 
             // FieldView exists?
-            if (!AllFieldViews[viewClassName]) {
+            if (!FieldViews[viewClassName]) {
                 tools.swal("error", "modal.field.error", "modal.field.errorMsg");
                 return;
             }
@@ -123,7 +123,7 @@ define([
             }
 
             // populate field / readonly if compulsory input
-            var vue = new AllFieldViews[viewClassName]({
+            var vue = new FieldViews[viewClassName]({
                 el: '#' + id,
                 model: newModel,
                 collection: this.collection,

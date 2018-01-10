@@ -1,12 +1,12 @@
 define([
-    'jquery', 'lodash', 'text!../../templates/GridRow.html',
-    'backbone', 'backbone.radio', 'tools', '../../../Translater',
-    '../loaders/ContextLoader', 'i18n'
+    'jquery', 'lodash', 'text!../templates/GridRow.html',
+    'backbone', 'backbone.radio', 'tools', '../../Translater',
+    './loaders/ContextLoader', 'i18n'
 ], function($, _, DefaultTemplate, Backbone, Radio, tools, Translater, ContextLoader) {
 
     var translater = Translater.getTranslater();
 
-    var BaseView = Backbone.View.extend({
+    return Backbone.View.extend({
         events: {
             'click #trash'          : 'removeView',
             'click .settings'       : 'editSettings',
@@ -391,6 +391,4 @@ define([
             this.$el.data('order', parseInt(idx) + 1);
         }
     });
-
-    return BaseView;
 });
