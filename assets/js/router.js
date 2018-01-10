@@ -31,7 +31,7 @@ define([
 
             // trick with this.loading, avoid double rendering:
             // on first call because it breaks click events on forms grid for some reason.
-            this.setContext(context, this.firstHome);
+            this.setContext(context, this.firstHome && this.firstEdit);
             this.firstHome = undefined;
         },
 
