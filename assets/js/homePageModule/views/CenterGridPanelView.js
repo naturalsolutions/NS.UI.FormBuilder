@@ -448,7 +448,10 @@ define([
                         callback();
                     }
                     this.hideSpinner();
-                }, this)
+                }, this),
+                error: function() {
+                    tools.swal("error", "fetch.error", "fetch.errorMsg")
+                }
             });
         },
 
