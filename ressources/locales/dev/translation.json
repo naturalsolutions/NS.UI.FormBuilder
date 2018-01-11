@@ -227,7 +227,7 @@
     "decimal"           : "Allow decimal value",
     "fieldSizeEdit"     : "Field display size for Edit mode",
     "fieldSizeDisplay"  : "Field display size for Display mode",
-    "fieldSize"         : "Field display size (X/12)",
+    "fieldSize"         : "Field display size (/12 or pixels)",
     "fullpath"          : "Path",
     "obsolete"          : "Inactive",
     "sizeValue" : {

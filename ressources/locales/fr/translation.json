@@ -235,7 +235,7 @@
         "decimal"           : "Valeur décimale autorisée",
         "fieldSizeEdit"     : "Taille d'affichage en mode Edition",
         "fieldSizeDisplay"  : "Taille d'affichage en mode Affichage",
-        "fieldSize"         : "Taille d'affichage (X/12)",
+        "fieldSize"         : "Taille d'affichage (/12 or pixels)",
         "fullpath"          : "Chemin",
         "obsolete"          : "Inactif",
         "sizeValue" : {

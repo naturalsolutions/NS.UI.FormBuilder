@@ -15,6 +15,10 @@ define([
                 id: this.options.id,
                 model: this.model
             }));
+            // fieldSize value for ecoreleve context can be set in pixels, disable max constraints
+            if (this.model.get("context") == 'ecoreleve') {
+                this.$el.find("[name='fieldSize']").attr("max", null);
+            }
             this.$el.i18n();
             this.setElement(this.$el);
             return this;

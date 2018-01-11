@@ -202,14 +202,18 @@ define([
             fieldSize: {
                 type: "Hidden",
                 validators: ['required',
-                    function checkValue(value) {
+                    _.bind(function checkValue(value) {
+                        // skip check for ecoreleve, fieldSize can be in pixels
+                        if (this.context == "ecoreleve") {
+                            return;
+                        }
                         if (value < 1 || value > 12) {
                             return {
                                 type: 'Invalid number',
                                 message: translater.getValueFromKey('schema.sizeError')
                             }
                         }
-                    }]
+                    }, this)]
             },
 
             linkedFieldset: {
