@@ -504,12 +504,12 @@
 
     "fetch" : {
         "error"    : "Error retrieving forms !",
-        "errorMsg" : "Unable to retrieve the list of forms from the server. Is it down ?"
+        "errorMsg" : "Unable to retrieve the list of forms from the server. Try reloading the page?"
     },
 
     "fetchOne" : {
         "error"    : "Error retrieving form !",
-        "errorMsg" : "Unable to retrieve selected form from server. Is it down ?"
+        "errorMsg" : "Unable to retrieve selected form from server. Try reloading the page?"
     },
 
   "configuration" : {

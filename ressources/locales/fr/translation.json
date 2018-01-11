@@ -512,12 +512,12 @@
 
     "fetch" : {
       "error"    : "Erreur de récupération des formulaires !",
-      "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur. Est-il inactif ?"
+      "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur. Essayez de recharger la page?"
     },
 
     "fetchOne" : {
         "error"    : "Erreur de récupération du formulaire !",
-        "errorMsg" : "Impossible de récupérer le formulaire sélectionné depuis le serveur. Est-il inactif ?"
+        "errorMsg" : "Impossible de récupérer le formulaire sélectionné depuis le serveur. Essayez de recharger la page?"
     },
 
     "configuration" : {
