@@ -76,6 +76,7 @@ define([
                         template    : fieldTemplate
                     },
                     isDefaultSQL: {
+                        // todo: isSQLPropertySetter? (Fields.js:63)
                         type        : CheckboxEditor,
                         template    : fieldTemplate,
                         fieldClass  : "hidden",
