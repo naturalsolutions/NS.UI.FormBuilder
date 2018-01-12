@@ -24,22 +24,26 @@ define([
             },
             isgrid : {
                 type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.isgrid')
             },
             ishiddenprotocol : {
                 type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.ishiddenprotocol')
             },
             hideprotocolname : {
                 type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.hideprotocolname')
             },
             defaultforfieldactivity : {
                 type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.defaultforfieldactivity')
             }
         },
