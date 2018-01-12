@@ -164,6 +164,7 @@ define([
                 tools.swal("error", "fetchOne.error", "fetchOne.errorMsg");
                 console.error("fetch error", err);
                 this.loadingForm = false;
+                this.back();
             }, this);
 
             if (id === 'new') {
