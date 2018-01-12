@@ -450,7 +450,8 @@ define([
                     this.hideSpinner();
                 }, this),
                 error: function() {
-                    tools.swal("error", "fetch.error", "fetch.errorMsg")
+                    tools.swal("error", "fetch.error", "fetch.errorMsg");
+                    this.hideSpinner();
                 }
             });
         },
