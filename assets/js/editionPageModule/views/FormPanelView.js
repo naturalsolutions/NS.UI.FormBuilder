@@ -37,11 +37,17 @@ define([
 
         initialize : function(options, readonly) {
             this.topcontext = AppConfig.topcontext;
+            this.URLOptions = options.URLOptions;
             this.readonly = readonly;
-            this.collection = options.fieldCollection;
+
+            _.bindAll(this, 'template', 'save');
+            this.initFormChannel();
+        },
+
+        updateCollection: function(collection) {
+            this.collection = collection;
             this.context = this.collection.context;
             this._view = {};
-            this.URLOptions = options.URLOptions;
 
             this.columns = tools.getContextConfig(this.context, "editColumns");
 
@@ -65,11 +71,12 @@ define([
             this.collection.bind('add', this.addElement, this);
             this.collection.bind('remove', this.removeElement, this);
 
-            _.bindAll(this, 'template', 'save');
-
-            this.initFormChannel();
-
             setStatics(this.context);
+        },
+
+        destroy: function() {
+            // override & disable destroy mechanism
+            // triggered by a new EditionPageLayout.render()
         },
 
         /**

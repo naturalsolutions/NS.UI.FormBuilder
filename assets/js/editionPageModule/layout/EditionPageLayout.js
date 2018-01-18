@@ -80,6 +80,10 @@ define([
             _.bindAll(this, 'template', 'clearSelected');
 
             this.update(this.fieldCollection);
+            this.formPanel = new FormPanelView({
+                fieldCollection : this.fieldCollection,
+                URLOptions : this.URLOptions
+            }, AppConfig.readonlyMode);
         },
 
         update: function(fieldCollection) {
@@ -167,10 +171,6 @@ define([
 
         onRender : function() {
             this.generateFormProperties();
-            this.formPanel = new FormPanelView({
-                fieldCollection : this.fieldCollection,
-                URLOptions : this.URLOptions
-            }, AppConfig.readonlyMode);
             this.centerPanel.show(this.formPanel);
             this.$el.i18n();
         },
