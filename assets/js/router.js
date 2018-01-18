@@ -90,6 +90,10 @@ define([
                     URLOptions   : AppConfig.config.options.URLOptions
                 });
             this.fieldCollection.linkedFieldsList = this.linkedFieldsList;
+            this.editPageLayout.fieldCollection = this.fieldCollection;
+            if (this.editPageLayout.formPanel) {
+                this.editPageLayout.formPanel.collection = this.fieldCollection;
+            }
         },
 
         spawnContexts: function() {
