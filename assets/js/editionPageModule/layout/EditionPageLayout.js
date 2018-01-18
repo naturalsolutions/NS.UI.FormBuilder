@@ -131,7 +131,7 @@ define([
         setSelected: function(model, focus) {
             if (this.selected === model) {
                 return;
-            } else if (this.selected) {
+            } else if (this.selected && this.selected.view) {
                 this.selected.view.$el.removeClass("selected");
             }
 
