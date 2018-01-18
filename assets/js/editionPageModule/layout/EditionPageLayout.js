@@ -524,6 +524,13 @@ define([
                 return;
             }
             var model = this.fieldCollection.addElement(fieldType);
+
+            // there is an occasional bug where the "add" event triggered by
+            // fieldCollection.add(obj), that should be listened by FormPanel, does
+            // not occur. This hack tries to workaround this faulty behavior
+            if (model.view === undefined) {
+                this.formPanel.addElement(model);
+            }
             this.setSelected(model, true);
         },
 
