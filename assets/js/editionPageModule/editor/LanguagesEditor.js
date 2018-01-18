@@ -18,6 +18,9 @@ define([
                 this.data = options.form.data["translations"];
             }
 
+            // avoid passing references around
+            this.data = _.cloneDeep(this.data);
+
             _.each(this.schema.languages, _.bind(function(options, lang) {
                 // init empty lang dictionaries
                 if (!this.data[lang])
