@@ -199,9 +199,6 @@ define([
 
             this.fieldstodelete  = [];
             this.totalAddedElements = 0;
-            this.checkedfields = 0;
-            this.maxfields = 0;
-            this.working = false;
 
             extention.initializeExtention(options);
 
@@ -212,16 +209,7 @@ define([
             //  Bind
             _.bindAll(this, 'clearAll', 'lastIndex', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 
-            this.mainChannel = Backbone.Radio.channel('edition');
             this.formChannel = Backbone.Radio.channel('form');
-            //  Event send by BaseView or BaseView inherited view for duplicate model
-            this.formChannel.on('copyModel', this.copyModel, this);
-            //  Event send by SettingFieldPanelView when a field has changed
-            this.formChannel.on('field:change', this.fieldChange, this);
-        },
-
-        comparator: function (model) {
-            return model.get(model.id);
         },
 
         lastIndex: function () {
