@@ -475,7 +475,7 @@ define([
         addElement: function (nameType, properties) {
             var field = properties || {};
             if (field['order'] === undefined)
-                field['order'] = this.getNextPropertyValue('order', 1);
+                field['order'] = this.getNextPropertyValue('order', 0);
             var ctxLinkedFields = this.linkedFieldsList[this.context];
             if (ctxLinkedFields) {
                 field['linkedFieldsList'] = ctxLinkedFields.linkedFieldsList;

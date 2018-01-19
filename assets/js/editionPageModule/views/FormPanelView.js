@@ -117,6 +117,8 @@ define([
             var order = newModel.get('order');
             if (order >= this.$el.find(".drop").children().length) {
                 this.$el.find('.drop').append($field);
+            } else if (order === 0) {
+                this.$el.find('.drop').prepend($field);
             } else {
                 this.$el.find(".drop > tr:nth-child(" + order + ")").after($field);
             }
