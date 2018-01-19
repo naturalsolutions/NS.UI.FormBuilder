@@ -1071,7 +1071,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("TextArea");
 
-            var toret = _.extend({}, models.TextField.prototype.defaults(), {});
+            var toret = _.extend({}, models.TextField.prototype.defaults.call(this), {});
 
             toret = _.extend(toret, toret, extraschema);
 
@@ -1080,7 +1080,7 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("TextArea");
-            var schema = _.extend({}, models.TextField.prototype.schema(), {});
+            var schema = _.extend({}, models.TextField.prototype.schema.call(this), {});
 
             var toret = _.extend({}, schema, {
                 defaultValue: {
@@ -1129,7 +1129,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Pattern");
 
-            var toret = _.extend({}, models.TextField.prototype.defaults(), {
+            var toret = _.extend({}, models.TextField.prototype.defaults.call(this), {
                 pattern: ""
             });
 
@@ -1141,7 +1141,7 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Pattern");
 
-            var toret = _.extend({}, models.TextField.prototype.schema(), {
+            var toret = _.extend({}, models.TextField.prototype.schema.call(this), {
                 pattern: {
                     type: 'Text',
                     template: fieldTemplate,
@@ -1167,7 +1167,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Date");
 
-            var toret = _.extend({}, models.BaseFieldExtended.prototype.defaults(), {
+            var toret = _.extend({}, models.BaseFieldExtended.prototype.defaults.call(this), {
                 format: (AppConfig.topcontext == "reneco" ? "DD/MM/YYYY" : "")
             });
 
@@ -1197,7 +1197,7 @@ define([
             }
 
 
-            var toret = _.extend({}, models.BaseFieldExtended.prototype.schema(), {
+            var toret = _.extend({}, models.BaseFieldExtended.prototype.schema.call(this), {
                 format: formatFieldProps
             });
 
@@ -1224,7 +1224,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
 
             var baseSchema = _.pick(
-                models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults)
+                models.TextField.prototype.defaults.call(this), _.keys(models.BaseField.prototype.defaults)
             );
 
             var toret = _.extend( {}, baseSchema, {
@@ -1241,7 +1241,7 @@ define([
         },
 
         baseSchema : {
-            defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
+            defaultValue : _.pick(models.TextField.prototype.schema.call(this), 'defaultValue')['defaultValue'],
             minValue: {
                 type: 'Text',
                 template: fieldTemplate,
@@ -1304,7 +1304,7 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend({}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
+            var schema = _.extend({}, _.pick(models.TextField.prototype.schema.call(this), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
 
             schema.defaultValue.type = 'Number';
             schema.defaultValue.validators = [function checkValue(value, formValues) {
@@ -1351,13 +1351,13 @@ define([
 
         defaults: function() {
             return _.extend({},
-                models.NumberField.prototype.defaults(),
+                models.NumberField.prototype.defaults.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Decimal"));
         },
 
         schema: function() {
             return _.extend({},
-                models.NumberField.prototype.schema(),
+                models.NumberField.prototype.schema.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
 
             /* TODO KEEP AS EXAMPLE OF THE OLD WAY
@@ -1380,13 +1380,13 @@ define([
 
         defaults: function() {
             return _.extend({},
-                models.NumberField.prototype.defaults(),
+                models.NumberField.prototype.defaults.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("NumericRange"));
         },
 
         schema: function() {
             return _.extend({},
-                models.NumberField.prototype.schema(),
+                models.NumberField.prototype.schema.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange"));
         }
 
@@ -1464,7 +1464,7 @@ define([
 
         defaults: function() {
             return _.extend({},
-                models.EnumerationField.prototype.defaults(),
+                models.EnumerationField.prototype.defaults.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
         },
 
@@ -1490,7 +1490,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("CheckBox");
 
-            var toret = _.extend({}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
+            var toret = _.extend({}, models.EnumerationField.prototype.defaults.call(this), models.BaseField.prototype.defaults, {
                 isBinaryWeight: false
             });
 
@@ -1502,7 +1502,7 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("CheckBox");
 
-            var toret = _.extend({}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema, {
+            var toret = _.extend({}, models.EnumerationField.prototype.schema.call(this), models.BaseField.prototype.schema, {
                 isBinaryWeight: {
                     type: CheckboxEditor,
                     template: fieldTemplate,
@@ -1531,7 +1531,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Radio");
 
-            var toret = _.extend({}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {});
+            var toret = _.extend({}, models.EnumerationField.prototype.defaults.call(this), models.BaseField.prototype.defaults, {});
 
             toret = _.extend(toret, toret, extraschema);
 
@@ -1539,7 +1539,7 @@ define([
         },
 
         schema: function() {
-            return _.extend({}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
+            return _.extend({}, models.EnumerationField.prototype.schema.call(this), models.BaseField.prototype.schema,
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio"));
         },
 
