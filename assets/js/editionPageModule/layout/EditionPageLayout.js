@@ -620,6 +620,7 @@ define([
 
                     // insert and select new element
                     var model = this.fieldCollection.addElement(targetFieldType, toConvert.attributes);
+                    model.set('new', toConvert.get('new'));
                     this.setSelected(model, true);
                 }, this));
         }
