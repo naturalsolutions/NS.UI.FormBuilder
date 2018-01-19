@@ -64,22 +64,6 @@ define([
 
             // update statics
             setStatics(this.context);
-
-            var that = this;
-            $.ajax({
-                data: {},
-                type: 'GET',
-                url:  this.URLOptions.forms + "/getAllInputNames/" + that.context,
-                contentType: 'application/json',
-                crossDomain: true,
-                success: _.bind(function (data) {
-                    data = JSON.parse(data);
-                    that.collection.contextInputNames = data;
-                }, this),
-                error: _.bind(function (xhr) {
-                    console.log("Ajax Error: " + xhr);
-                }, this)
-            });
         },
 
         destroy: function() {
