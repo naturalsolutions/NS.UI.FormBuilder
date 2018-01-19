@@ -386,9 +386,11 @@ define([
          * @param {interger} idx new order of the view
          */
         updateIndex: function(idx) {
+            var order = parseInt(idx);
             this.options.collection.pendingChanges = true;
-            this.model.set('order', parseInt(idx) + 1, { silent: true });
-            this.$el.data('order', parseInt(idx) + 1);
+            this.model.set('order', order, { silent: true });
+            this.$el.data('order', order);
+            this.$el.attr('data-order', order);
         }
     });
 });

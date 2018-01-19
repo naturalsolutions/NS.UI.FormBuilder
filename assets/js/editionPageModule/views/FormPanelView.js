@@ -200,7 +200,7 @@ define([
                 update : _.bind(function() {
                     // update fields indexes
                     for (var v in this._view) {
-                        this._view[v].updateIndex( $('#' + v).index() - 1);
+                        this._view[v].updateIndex($('#' + v).index());
                     }
                 }, this)
             });

@@ -198,7 +198,6 @@ define([
             this.originalID      = opt.originalID     || 0;
 
             this.fieldstodelete  = [];
-            this.totalAddedElements = 0;
 
             extention.initializeExtention(options);
 
@@ -207,18 +206,20 @@ define([
             });
 
             //  Bind
-            _.bindAll(this, 'clearAll', 'lastIndex', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
+            _.bindAll(this, 'clearAll', 'getNextPropertyValue', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
 
             this.formChannel = Backbone.Radio.channel('form');
         },
 
-        lastIndex: function () {
-            if (this.models.length === 0) return 0;
-            // return highest order + 1
+        getNextPropertyValue: function(property, dflt) {
+            if (this.models.length === 0) {
+                return dflt ? dflt: 1;
+            }
+            // return highest property + 1
             return Math.max.apply(Math,
                 Object.values(this.models).map(
                     function(o) {
-                        return o.get('order');
+                        return o.get(property);
                     })) + 1;
         },
 
@@ -457,9 +458,8 @@ define([
             // is this a static field? (compulsory)
             field.set('compulsory', staticInputs.getCompulsoryInputs().indexOf(field.get('name')) > -1);
 
-            this.totalAddedElements++;
             if (!field.get('id')) {
-                field.set('id', this.totalAddedElements);
+                field.set('id', this.getNextPropertyValue('id', 1));
                 field.set('new', true);
             }
             this.add(field);
@@ -469,7 +469,7 @@ define([
         addElement: function (nameType, properties) {
             var field = properties || {};
             if (field['order'] === undefined)
-                field['order'] = this.lastIndex();
+                field['order'] = this.getNextPropertyValue('order', 1);
             var ctxLinkedFields = this.linkedFieldsList[this.context];
             if (ctxLinkedFields) {
                 field['linkedFieldsList'] = ctxLinkedFields.linkedFieldsList;
