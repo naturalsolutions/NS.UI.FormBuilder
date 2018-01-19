@@ -381,9 +381,10 @@ define([
                         }
                         that.createField(v, v.type);
                     });
-                    this.reorderItems();
                 }
             }
+
+            this.reorderItems();
 
             this.map(_.bind(function (model) {
                 if (model.constructor.type === 'Subform') {
