@@ -199,15 +199,8 @@ define([
         },
 
         destroy_view: function() {
-            this.$el.slideUp(_.bind(function() {
-                // TODO undelegate ?
-                this.undelegateEvents();
-
-                this.$el.removeData().unbind();
-                this.model.unbind();
-                this.remove();
-                Backbone.View.prototype.remove.call(this);
-            }, this))
+            this.model.unbind();
+            this.remove();
         },
 
         removeView: function(confirmCallback) {
