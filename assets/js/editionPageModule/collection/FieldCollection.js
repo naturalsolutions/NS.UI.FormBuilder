@@ -235,12 +235,17 @@ define([
                 return !el.get('compulsory');
             }), function(el) {return el.get('order');});
             var $cont = this.models[0].view.$container;
-            $cont.empty();
 
             var order = 0;
             _.each($.merge(Object.values(compulsoryFields), Object.values(normalFields)),
                 function(field) {
-                    $cont.append(field.view.$el);
+                    var $el = field.view.$el.detach();
+                    if (order === 0) {
+                        $cont.prepend($el);
+                    } else {
+                        $cont.children().eq(order - 1).after($el);
+                    }
+
                     field.view.updateIndex(order);
                     order++;
                 });
