@@ -46,10 +46,24 @@ define([
 
         updateCollection: function(collection) {
             this.collection = collection;
-            this.context = this.collection.context;
             this._view = {};
 
+            //  Bind collection events
+            this.collection.off('add', this.addElement).on('add', this.addElement, this);
+            this.collection.off('remove', this.addElement).on('remove', this.removeElement, this);
+
+            if (this.context === this.collection.context) {
+                // no context change, we're done
+                return;
+            }
+
+            // update context & refresh template with updated columns
+            this.context = this.collection.context;
             this.columns = tools.getContextConfig(this.context, "editColumns");
+            this.$el = $(this.template());
+
+            // update statics
+            setStatics(this.context);
 
             var that = this;
             $.ajax({
@@ -66,12 +80,6 @@ define([
                     console.log("Ajax Error: " + xhr);
                 }, this)
             });
-
-            //  Bind collection events
-            this.collection.bind('add', this.addElement, this);
-            this.collection.bind('remove', this.removeElement, this);
-
-            setStatics(this.context);
         },
 
         destroy: function() {
