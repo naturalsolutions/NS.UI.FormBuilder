@@ -18,7 +18,7 @@ define([
     /**
      * The form view represents the current form. It's a the edition module main view.
      */
-    var FormPanelView = Backbone.Marionette.ItemView.extend({
+    var FormPanelView = Backbone.Marionette.View.extend({
         events : {
             'click #export'       : 'export',
             'click .sizepreview'  : 'sizepreview',

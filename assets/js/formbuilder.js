@@ -4,23 +4,37 @@
  */
 
 define([
+    'backbone',
     'lodash',
     'marionette',
     './router',
     'app-config',
     'auth',
     'tools'
-], function(_, Marionette, Router, AppConfig, auth, tools) {
+], function(Backbone, _, Marionette, Router, AppConfig, auth, tools) {
 
-    var FormbuilderApp = new Backbone.Marionette.Application();
-
-    FormbuilderApp.addRegions({
-        leftRegion  : '#leftSection',
-        rightRegion : '#rightSection'
+    var FormbuilderApp = new Marionette.Application();
+    var MainView = Marionette.View.extend({
+        el: "#mainRegion",
+        template: _.template(
+            '<div id="leftSection" class="col-md-6"></div>\n' +
+            '<div id="rightSection" class="col-md-6"></div>'),
+        regions: {
+            leftRegion: {
+                el: '#leftSection',
+                replaceElement: false
+            },
+            rightRegion: {
+                el: '#rightSection',
+                replaceElement: false
+            }
+        }
     });
-
     FormbuilderApp.on('start', function() {
-        this.router = new Router(this.leftRegion, this.rightRegion);
+        this.rootView = new MainView();
+        this.router = new Router(
+            this.rootView.getRegion('leftRegion'),
+            this.rootView.getRegion('rightRegion'));
 
         if (auth.error) {
             tools.swal("error", "error.cookieCheck", "error.serverAvailable", null,

@@ -22,7 +22,7 @@ define([
      * Main view in the homepage layout
      * This view contains backgrid element displaying collection element
      */
-    var CenterGridPanelView = Backbone.Marionette.ItemView.extend({
+    var CenterGridPanelView = Backbone.Marionette.View.extend({
         events : {
             'click #delete'        : 'deleteForm',
             'click #copy'          : 'duplicateForm',

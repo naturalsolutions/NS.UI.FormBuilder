@@ -1,11 +1,12 @@
 define([
+    'backbone',
     'marionette',
     'text!../templates/HomePageLayout.html',
     '../views/LeftPanelView',
     '../views/CenterGridPanelView'
-], function(Marionette, HomePageLayoutTemplate, LeftPanelView, CenterGridPanelView) {
+], function(Backbone, Marionette, HomePageLayoutTemplate, LeftPanelView, CenterGridPanelView) {
 
-    return  Backbone.Marionette.LayoutView.extend({
+    return  Marionette.View.extend({
         initialize : function(options) {
             this.URLOptions = options.URLOptions;
         },
@@ -19,11 +20,11 @@ define([
 
         onRender : function() {
             //  Create and render item views
-            this.leftPanel.show( new LeftPanelView({
+            this.getRegion("leftPanel").show( new LeftPanelView({
                 URLOptions : this.URLOptions
             }, Backbone.Radio.channel('global').readonly));
 
-            this.centerPanel.show( new CenterGridPanelView({
+            this.getRegion("centerPanel").show( new CenterGridPanelView({
                 URLOptions : this.URLOptions
             }, Backbone.Radio.channel('global').readonly));
         }

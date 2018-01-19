@@ -13,7 +13,7 @@ define([
             FormPanelView, Fields, Translater, tools, AppConfig) {
     var t = Translater.getTranslater();
 
-    return Backbone.Marionette.LayoutView.extend({
+    return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
                 collection : this.fieldCollection.getAttributesValues(),
@@ -171,7 +171,7 @@ define([
 
         onRender : function() {
             this.generateFormProperties();
-            this.centerPanel.show(this.formPanel);
+            this.getRegion('centerPanel').show(this.formPanel);
             this.$el.i18n();
         },
 

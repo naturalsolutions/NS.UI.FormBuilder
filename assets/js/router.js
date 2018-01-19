@@ -9,7 +9,7 @@ define([
 
     var translater = Translater.getTranslater();
 
-    var Controller = Marionette.Controller.extend({
+    var fbController = {
         init: function() {
             this.spawnContexts();
             this.firstHome = true;
@@ -18,7 +18,7 @@ define([
             this.linkedFieldsList = this.getLinkedFieldsList();
             this.editPageLayout.linkedFieldsList = this.linkedFieldsList;
             this.homeRegion.show(this.homePageLayout);
-            this.centerPanel = this.homePageLayout.centerPanel.currentView;
+            this.centerPanel = this.homePageLayout.getRegion("centerPanel").currentView;
         },
 
         home: function(context) {
@@ -246,7 +246,7 @@ define([
         showSpinner : function() {
             $('.spinner').addClass("hijacked").removeClass('end');
         }
-    });
+    };
 
     return Marionette.AppRouter.extend({
         initialize: function(homeRegion, editRegion) {
@@ -281,6 +281,6 @@ define([
             'form/:context/:id': 'edit'
         },
 
-        controller: new Controller()
+        controller: fbController
     });
 });

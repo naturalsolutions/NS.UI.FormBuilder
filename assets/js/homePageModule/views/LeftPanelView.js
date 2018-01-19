@@ -6,7 +6,7 @@ define([
     /**
      * Left panel view in the homepage layout, contains form to filter grid on the center view
      */
-    var LeftPanelView = Backbone.Marionette.ItemView.extend({
+    var LeftPanelView = Backbone.Marionette.View.extend({
 
         template : LeftPanelViewTemplate,
 
