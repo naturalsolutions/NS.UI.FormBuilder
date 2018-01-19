@@ -151,25 +151,8 @@ define([
             var self = this;
             var currentForm = self.formCollection.get(self.currentSelectedForm).toJSON();
 
-            var loadedFormWeight;
-
-            var getLoadedFormWeight = function () {
-                var toret = "";
-
-                if (AppConfig.topcontext == "reneco")
-                    toret += "<br/><br/><span id='makeObsoleteArea'>Passer le formulaire en obsolète à la place :<br/>"+
-                            "<span id='doMakeObsolete'>Rendre obsolète</span></span><br/>";
-
-                if (currentForm.context == "track")
-                {
-                    if (loadedFormWeight)
-                        return (toret + loadedFormWeight);
-                    toret += "<br/><span id='contentDeleteForm'><br /><img id='formDatasImg' src='assets/images/loader.gif' /></span>";
-                }
-
-                return (toret);
-            };
-
+            // todo restore this feature (form weight)
+            var weight;
             if (currentForm.context == "track")
             {
                 $.ajax({
@@ -179,15 +162,7 @@ define([
                     contentType: 'application/json',
                     crossDomain: true,
                     success: _.bind(function (data) {
-                        data = JSON.parse(data);
-                        loadedFormWeight = "<br /><br />Liste des saisies pour le formulaire selectionné :<br/>";
-                        $.each(data.FormWeight, function (index, value) {
-                            loadedFormWeight += "<span>" + index + " : " + value + " saisies</span><br/>";
-                        });
-                        if ($("#formDatasImg").length > 0) {
-                            $("#contentDeleteForm").empty();
-                            $("#contentDeleteForm").append(loadedFormWeight);
-                        }
+                        weight = JSON.parse(data);
                     }, this),
                     error: _.bind(function (xhr, ajaxOptions, thrownError) {
                         console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
@@ -195,52 +170,67 @@ define([
                 });
             }
 
-            var extraSwalOpts = {
-                confirmButtonColor: "#DD6B55",
-                confirmButtonText: translater.getValueFromKey('modal.clear.yes'),
-                cancelButtonText: translater.getValueFromKey('modal.clear.no'),
-                showCancelButton: true
+            var swalOpts1 = {
+                buttons: {
+                    cancel: translater.getValueFromKey('modal.clear.no'),
+                    confirm: {
+                        text: translater.getValueFromKey('modal.clear.yes'),
+                        value: true,
+                        className: "danger"
+                    }
+                }
+            };
+            var swalOpts2 = {
+                buttons: {
+                    cancel: translater.getValueFromKey('modal.clear.no'),
+                    obsolete: {
+                        text: translater.getValueFromKey('modal.clear.obsolete'),
+                        value: "obsolete"
+                    },
+                    confirm: {
+                        text: translater.getValueFromKey('modal.clear.yes'),
+                        value: true,
+                        className: "danger"
+                    }
+                }
             };
 
             tools.swal("warning",
                 "modal.clear.title",
                 "modal.clear.text",
-                extraSwalOpts,
+                swalOpts1,
                 null,
                 function() {
-                    setTimeout(function () {
-                        tools.swal("warning",
-                            "modal.clear.title2",
-                            translater.getValueFromKey('modal.clear.text2') + getLoadedFormWeight(),
-                            $.extend(extraSwalOpts, {html: true}),
-                            null,
-                            function() {
-                                // Send event to FormCollection if user chosen to remove a form
-                                self.homePageChannel.trigger('deleteForm', currentForm.id);
+                    tools.swal("warning",
+                        "modal.clear.title2",
+                        'modal.clear.text2',
+                        swalOpts2,
+                        null,
+                        function(val) {
+                            if (val === 'obsolete') {
+                                self.makeObsolete(self.currentSelectedForm);
+                                return;
+                            } else {
                                 self.formCollection.deleteModel(currentForm.id);
-                            });
-                        $("#doMakeObsolete").on("click", function() {
-                            self.closeAndObsolete();
+                            }
                         });
-                    }, 200);
                 });
         },
 
-        closeAndObsolete : function() {
-            var that = this;
-
-            sweetalert.close();
-
+        makeObsolete : function(id) {
+            this.showSpinner();
             $.ajax({
                 data: {},
                 type: 'PUT',
-                url: that.URLOptions.makeObsolete + "/" + that.beforeFormSelection,
+                url: this.URLOptions.makeObsolete + "/" + id,
                 contentType: 'application/json',
                 crossDomain: true,
                 success: _.bind(function (data) {
+                    this.hideSpinner();
                     tools.swal("success", "modal.makeObs.success", "modal.makeObs.successMsg");
                 }, this),
                 error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    this.hideSpinner();
                     console.log("Ajax Error: " + xhr, ajaxOptions, thrownError);
                 }, this)
             });

@@ -3,14 +3,6 @@ define([
 ], function($, translater, sweetalert, AppConfig) {
     var translater = translater.getTranslater();
 
-    // fix swal lib breaking tab key
-    // https://github.com/t4t5/sweetalert/issues/127
-    var close = window.swal.close;
-    window.swal.close = function() {
-        close();
-        window.onkeydown = null;
-    };
-
     return {
         /**
          * inlineSvg replaces svg image tags matching selector with inline svg (for css edition)
@@ -128,31 +120,30 @@ define([
                     "</option>");
             }
             $el.append($select);
-            options.html = true;
-            this.swal(t, title, $el[0].outerHTML, options, null,
+            options.content = $el[0];
+            this.swal(t, title, null, options, null,
                 function() {
-                    confirmCallback($("#swalSelect").val());
+                    confirmCallback($select.val());
                 }
             );
         },
 
         swal: function(t, title, text, options, callback, confirmCallback) {
             var opts = $.extend({
-                type: t,
-                title: translater.getValueFromKey(title),
-                text: translater.getValueFromKey(text),
-                closeOnConfirm: true,
-                closeOnCancel: true
+                icon: t,
+                title: translater.getValueFromKey(title)
             }, options);
 
-            if (opts.cancelButtonText) opts.showCancelButton = true;
+            if (text) {
+                opts.text = translater.getValueFromKey(text);
+            }
 
-            sweetalert(opts, function(confirm) {
+            sweetalert(opts).then(function(confirm) {
                 if (callback && typeof(callback) === 'function') {
-                    callback();
+                    callback(confirm);
                 }
                 if (confirm && confirmCallback && typeof(confirmCallback) === 'function') {
-                    confirmCallback();
+                    confirmCallback(confirm);
                 }
             });
         },

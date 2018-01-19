@@ -74,19 +74,41 @@ html, body {
     }
 }
 
-.sweet-alert {
+.swal-modal {
+    width: 525px;
+
+    .swal-text, .swal-footer {
+        text-align: center;
+    }
+    .swal-title {
+        margin-bottom: 25px;
+    }
+
     button {
         height: auto !important;
+    }
+
+    .swal-button {
+        &.danger {
+            background-color: rgb(221, 107, 85);
+            color: white;
+        }
+
+        &.swal-button--obsolete {
+            background-color: #4f73b3;
+            color: white;
+        }
     }
 
     .swalSelect {
         .important {
             font-size: 1.2em;
             font-weight: bold;
-            margin-bottom: 25px;
+            margin-bottom: 10px;
         }
 
         label {
+            font-weight: normal;
             margin-right: 15px;
         }
     }

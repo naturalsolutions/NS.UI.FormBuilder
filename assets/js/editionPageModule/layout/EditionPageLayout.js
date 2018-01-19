@@ -206,12 +206,17 @@ define([
             }
 
             // form was edited, display confirmation popup
-            tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications", {
-                showCancelButton   : true,
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : t.getValueFromKey('modal.exit.yes'),
-                cancelButtonText   : t.getValueFromKey('modal.clear.no')
-            }, null, exit);
+            tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications",
+                {
+                    buttons: {
+                        cancel: t.getValueFromKey('modal.clear.no'),
+                        confirm: {
+                            text: t.getValueFromKey('modal.exit.yes'),
+                            value: true,
+                            className: "danger"
+                        }
+                    }
+                }, null, exit);
         },
 
         gridKeypress: function(e) {
@@ -591,9 +596,14 @@ define([
                 "settings.actions.convertLabel",
                 toConvert.get("compatibleFields"),
                 {
-                    confirmButtonColor : "#DD6B55",
-                    confirmButtonText  : t.getValueFromKey('settings.actions.convertYes'),
-                    cancelButtonText   : t.getValueFromKey('settings.actions.convertNo')
+                    buttons: {
+                        cancel: t.getValueFromKey('settings.actions.convertNo'),
+                        confirm: {
+                            text: t.getValueFromKey('settings.actions.convertYes'),
+                            value: true,
+                            className: "danger"
+                        }
+                    }
                 }, _.bind(function(targetFieldType) {
                     this.fieldCollection.pendingChanges = true;
 

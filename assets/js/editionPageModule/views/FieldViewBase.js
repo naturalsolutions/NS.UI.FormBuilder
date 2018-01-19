@@ -247,27 +247,28 @@ define([
                 });
             }
 
-            var customSwalRemoval = function(){
-                $(".sweet-overlay").remove();
-                $(".sweet-alert").remove();
-            };
             var extraSwalOpts = {
-                confirmButtonColor : "#DD6B55",
-                confirmButtonText  : translater.getValueFromKey('modal.clear.yes'),
-                cancelButtonText   : translater.getValueFromKey('modal.clear.no')
+                buttons: {
+                    cancel: translater.getValueFromKey('modal.clear.no'),
+                    confirm: {
+                        text: translater.getValueFromKey('modal.clear.yes'),
+                        value: true,
+                        className: "danger"
+                    }
+                }
             };
 
             tools.swal("warning",
                 "modal.clear.title",
                 "modal.clear.textinput",
                 extraSwalOpts,
-                customSwalRemoval,
+                null,
                 function() {
                     setTimeout(function () {
                         tools.swal("warning",
                             "modal.clear.title2",
-                            translater.getValueFromKey('modal.clear.textinput2') + getLoadedFieldWeight(),
-                            $.extend(extraSwalOpts, {html: true}),
+                            translater.getValueFromKey('modal.clear.textinput2'),
+                            extraSwalOpts,
                             null,
                             confirmCallback);
                     }, 200);
