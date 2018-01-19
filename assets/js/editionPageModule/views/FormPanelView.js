@@ -159,17 +159,10 @@ define([
             }));
         },
 
-        onRender : function() {
-
+        refresh: function() {
             this.updateName();
-            //  By default marionette wrap template with a div
-            //  We remove it and update view HTML element reference
-            this.$el = this.$el.children();
-            this.$el.unwrap();
-            this.setElement(this.$el);
-
-            // run i18next translation in the view context
-            this.$el.i18n();
+            this.$el.find('.drop').empty();
+            this.collection.creadeFields();
 
             // init sortable section
             this.$el.find('.drop').sortable({
@@ -204,7 +197,6 @@ define([
                     }
                 }, this)
             });
-
             this.$el.find('.drop').disableSelection();
 
             this.$el.find('#scrollSection').slimScroll({
@@ -212,12 +204,21 @@ define([
                 railVisible   : true,
                 alwaysVisible : true
             });
-
             this.updateFieldCount();
-            this.collection.creadeFields();
 
             //  Send an event to notify the render is done
             this.formChannel.trigger('renderFinished');
+        },
+
+        onRender : function() {
+            //  By default marionette wrap template with a div
+            //  We remove it and update view HTML element reference
+            this.$el = this.$el.children();
+            this.$el.unwrap();
+            this.setElement(this.$el);
+
+            // run i18next translation in the view context
+            this.$el.i18n();
         },
 
         save : function() {

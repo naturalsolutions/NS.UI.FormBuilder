@@ -172,6 +172,7 @@ define([
         onRender : function() {
             this.generateFormProperties();
             this.getRegion('centerPanel').show(this.formPanel);
+            this.formPanel.refresh();
             this.$el.i18n();
         },
 
