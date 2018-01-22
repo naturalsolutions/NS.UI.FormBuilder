@@ -79,6 +79,11 @@ define([
         $.each(AppConfig.paths, function(key, url){
             tools.loadTree(url);
         });
+
+        // preload form names
+        $.each(AppConfig.contexts, function(ctx) {
+            tools.loadForms(ctx);
+        });
     });
 
     return FormbuilderApp;

@@ -218,6 +218,58 @@ define([
             }
 
             return this.loadTree(url, sync);
+        },
+
+        // loadForms is another cache thingy
+        // todo: refactored with load/getTrees since it shares most of its behavior
+        loadForms: function(context, sync, refresh) {
+            if (!this.forms) this.forms = {};
+            if (!this.forms[context]) {
+                this.forms[context] = {};
+            }
+
+            var forms = this.forms[context];
+            if ((forms.data || forms.loading) && !refresh) {
+                return forms;
+            }
+            forms.loading = true;
+
+            var url = AppConfig.config.options.URLOptions.allforms + '/' + context;
+            var ajaxOpts = {
+                type        : 'GET',
+                url         : url,
+                contentType : 'application/json',
+                timeout     : 20000,
+                success: _.bind(function (data) {
+                    forms.data = JSON.parse(data);
+                    forms.loading = false;
+                    forms.error = undefined;
+                }, this),
+                error: function (xhr) {
+                    console.warn("error loading forms \"" + url + "\": ", xhr);
+                    forms.loading = false;
+                    forms.error = xhr;
+                }
+            };
+            if (sync === true) {
+                ajaxOpts.async = false;
+            }
+            $.ajax(ajaxOpts);
+            return forms;
+        },
+
+        getForms: function(context, sync, refresh) {
+            var forms = this.forms[context];
+            if (forms && !refresh && (forms.data || forms.error)) {
+                return forms;
+            }
+
+            if (forms && forms.loading && !refresh) {
+                console.warn("forms are still loading, call back later");
+                return forms;
+            }
+
+            return this.loadForms(context, sync, refresh);
         }
     };
 });

@@ -2,13 +2,13 @@ define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
     '../editor/ChoicesEditor', '../editor/AutocompTreeEditor', '../editor/LanguagesEditor',
-    'app-config', '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties',
+    'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, Translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
     ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
-    AppConfig, FormCollection, ExtraProperties,
+    AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
 
     var fieldTemplate = _.template(FieldTemplate);
@@ -16,35 +16,47 @@ define([
 
     var models = {}, translater = Translater.getTranslater();
 
-    var getFormsList = function(context) {
-        //TODO CHANGE THIS CRAP, LOAD FORMSLIST ON FORM LOADING AND NOT ON FIELD SETTINGS PANEL OPENING
-        if (this.getFormsListResult && context.collection.name == this.savedCollectionName)
-            return (this.getFormsListResult);
-        var toret = [];
-        if (AppConfig.config.options.URLOptions) {
-            var formCollection = new FormCollection({
-                url: AppConfig.config.options.URLOptions.allforms + "/" + window.context
-            });
+    // getFormsList tries to retreive cached forms from tools package and filters out current form
+    var getFormsList = function(currentForm) {
+        var ctx = currentForm.collection.context;
+        var id = currentForm.collection.id;
 
-            formCollection.fetch({
-                async: false,
-                reset: true,
-                success: _.bind(function() {
-                    $.each(formCollection.models, function(index, value) {
-                        if ((context.collection.name != value.attributes.name &&
-                                (!value.attributes.context || value.attributes.context == window.context)) &&
-                            !value.attributes.obsolete) {
-                            toret.push({"val": value.attributes.id, "label": value.attributes.name});
-                        }
-                    });
-                }, this)
-            });
+        // retreive cached forms list from tools thingy
+        var forms = tools.getForms(ctx);
 
-            this.getFormsListResult = toret;
-            this.savedCollectionName = context.collection.name;
-
-            return (toret);
+        // no data, attempt something
+        if (!forms.data) {
+            if (forms.error) {
+                // try to reload in background, need form re-opening
+                console.warn(forms.error, "there was an error retreiving forms, retrying in the background");
+                tools.loadForms(ctx, false, true);
+                return [];
+            } else if (forms.loading) {
+                // try fetching synchronously
+                forms = tools.getForms(ctx, true, true);
+                if (!forms.data) {
+                    // no luck
+                    return [];
+                }
+            } else {
+                // some weird state, sorry no understand
+                console.warn("getFormsList: unexpected state");
+                return [];
+            }
         }
+
+        // map id -> val, name -> label for backbone-form Select input
+        var options = _.map(forms.data, function(form) {
+            return {
+                val: form.id,
+                label: form.name
+            }
+        });
+
+        // filter-out current form
+        return _.filter(options, function(opt) {
+            return opt.val != id;
+        });
     };
 
     // Although isSQLPropertySetter is not really a validator(!),

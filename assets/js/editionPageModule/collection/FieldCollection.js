@@ -716,8 +716,13 @@ define([
                             return;
                         }
 
-                        that.formChannel.trigger('save:success');
                         that.showSpinner(true);
+
+                        // refresh forms list to update childForms options
+                        tools.loadForms(that.context, false, true);
+
+                        // display success
+                        that.formChannel.trigger('save:success');
                     }, that),
                     error: _.bind(function (xhr) {
                         if (xhr.status == 418)
