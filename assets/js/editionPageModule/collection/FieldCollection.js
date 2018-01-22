@@ -708,28 +708,16 @@ define([
                                 url: that.url + "/" + that.id + "/deletefields",
                                 contentType: 'application/json',
                                 crossDomain: true,
-                                success: _.bind(function (data) {
-                                }, that),
-                                error: _.bind(function (xhr, ajaxOptions, thrownError) {
-                                    that.formChannel.trigger('save:fail');
-                                }, that)
+                                success: function () {},
+                                error: function (xhr) {
+                                    console.error("error deleting fields", xhr);
+                                }
                             });
+                            return;
                         }
 
-                        that.fieldstodelete = [];
-
-                        var displaySaveSuccess = function(){
-                            setTimeout(function () {
-                                if (that.fieldstodelete.length == 0) {
-                                    that.formChannel.trigger('save:success');
-                                    that.showSpinner(true);
-                                }
-                                else
-                                    displaySaveSuccess();
-                            }, 200);
-                        };
-
-                        displaySaveSuccess();
+                        that.formChannel.trigger('save:success');
+                        that.showSpinner(true);
                     }, that),
                     error: _.bind(function (xhr) {
                         if (xhr.status == 418)
