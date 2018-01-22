@@ -20,7 +20,11 @@ define([
             authData = data;
         },
         error: function(xhr) {
-            authData.error = xhr.status + " " + xhr.statusCode;
+            authData.error = {
+                status: xhr.status,
+                statusText: xhr.statusText,
+                responseText: xhr.responseText
+            }
         }
     });
     return authData;

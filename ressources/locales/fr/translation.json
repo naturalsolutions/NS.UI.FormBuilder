@@ -512,7 +512,8 @@
       "general" : "Erreur générale",
       "message" : "Un ou plusieurs champs ne sont pas renseignés",
       "cookieCheck" : "Votre identité ne peut être vérifiée",
-      "serverAvailable" : "Merci de bien vouloir vous reconnecter"
+      "serverAvailable" : "Merci de bien vouloir vous reconnecter",
+      "serverDown": "Le serveur Formbuilder semble inactif"
     },
 
     "fetch" : {

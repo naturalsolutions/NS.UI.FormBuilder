@@ -6,12 +6,13 @@
 define([
     'backbone',
     'lodash',
+    'jquery',
     'marionette',
     './router',
     'app-config',
     'auth',
     'tools'
-], function(Backbone, _, Marionette, Router, AppConfig, auth, tools) {
+], function(Backbone, _, $, Marionette, Router, AppConfig, auth, tools) {
 
     var FormbuilderApp = new Marionette.Application();
     var MainView = Marionette.View.extend({
@@ -31,18 +32,25 @@ define([
         }
     });
     FormbuilderApp.on('start', function() {
-        this.rootView = new MainView();
-        this.router = new Router(
-            this.rootView.getRegion('leftRegion'),
-            this.rootView.getRegion('rightRegion'));
-
         if (auth.error) {
-            tools.swal("error", "error.cookieCheck", "error.serverAvailable", null,
-                function() {
-                    window.location.href = AppConfig.portalURL;
-                });
+            var redirectHome = function() {
+                window.location.href = AppConfig.portalURL;
+            };
+
+            switch (auth.error.status) {
+                case 400:
+                    tools.swal("error", "error.cookieCheck", "error.serverAvailable", null, redirectHome);
+                    break;
+                case 502:
+                default:
+                    tools.swal("error", "error.cookieCheck", "error.serverDown", null, redirectHome);
+                    break;
+            }
             return;
         }
+
+        // start the bouzin
+        Backbone.history.start();
 
         if (auth.username) {
             $("header .user").text(auth.username);
@@ -52,10 +60,12 @@ define([
             $("header .lang").text(auth.userlanguage.toUpperCase());
         }
 
-        Backbone.history.start();
+        this.rootView = new MainView();
+        this.router = new Router(
+            this.rootView.getRegion('leftRegion'),
+            this.rootView.getRegion('rightRegion'));
 
         $(".logout").click(function(){
-
             var delete_cookie = function(name) {
                 document.cookie = name +'=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
             };

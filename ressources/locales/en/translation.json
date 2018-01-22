@@ -504,7 +504,8 @@
         "general" : "General error",
         "message" : "One or more field are empty",
         "cookieCheck" : "Your identity could not be verified",
-        "serverAvailable" : "Thanks for reloging yourself"
+        "serverAvailable" : "Thanks for reloging yourself",
+        "serverDown": "Formbuilder server seems down"
     },
 
     "fetch" : {
