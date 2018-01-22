@@ -87,8 +87,6 @@ define([], function() {
                 "Date",
                 "Decimal",
                 "File",
-                "Hidden",
-                "HorizontalLine",
                 "Number",
                 "NumericRange",
                 "ObjectPicker",

@@ -48,8 +48,6 @@ define([
         DateFieldView: BaseView,
         DecimalFieldView: BaseView,
         FileFieldView: BaseView,
-        HiddenFieldView: BaseView,
-        HorizontalLineFieldView: BaseView,
         NumberFieldView: BaseView,
         NumericRangeFieldView: BaseView,
         ObjectPickerFieldView: BaseView,
