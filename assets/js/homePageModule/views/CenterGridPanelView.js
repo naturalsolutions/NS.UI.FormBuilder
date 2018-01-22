@@ -1,20 +1,20 @@
 define([
     'jquery',
     'lodash',
+    'backbone',
     'marionette',
     'moment',
     'text!../templates/GridView.html',
     'backgrid',
     '../../Translater',
-    '../collection/FormCollection',
     '../models/FormModel',
     'backbone.radio',
     'sweetalert',
     'app-config',
     'tools',
     'slimScroll'
-    ], function($, _, Marionette, moment, GridView, Backgrid, Translater,
-                FormCollection, FormModel, Radio, sweetalert, AppConfig, tools) {
+    ], function($, _, Backbone, Marionette, moment, GridView, Backgrid, Translater,
+                FormModel, Radio, sweetalert, AppConfig, tools) {
 
     var translater = Translater.getTranslater();
 
@@ -24,7 +24,7 @@ define([
      */
     var CenterGridPanelView = Backbone.Marionette.View.extend({
         events : {
-            'click #delete'        : 'deleteForm',
+            'click #delete'        : 'deleteFormPopup',
             'click #copy'          : 'duplicateForm',
             'click #edit'          : "editForm",
             'click .editForm'      : "editForm",
@@ -88,7 +88,7 @@ define([
         },
 
         initialize : function(options, readonly) {
-            _.bindAll(this, 'displayFormInformation', 'updateGridWithSearch', 'deleteForm');
+            _.bindAll(this, 'displayFormInformation', 'updateGridWithSearch', 'deleteForm', 'deleteFormPopup');
 
             this.URLOptions = options.URLOptions;
 
@@ -103,10 +103,10 @@ define([
             this.context = context;
 
             // init formCollection
-            this.formCollection = new FormCollection({
-                url : this.URLOptions.forms,
-                context : context
+            this.formCollection = new Backbone.Collection(null, {
+                model: FormModel
             });
+            this.formCollection.url = this.URLOptions.forms + '/' + this.context;
 
             // init grid & template
             this.initGrid();
@@ -140,7 +140,7 @@ define([
             this.gridChannel.on('resetCollection', this.resetCollection, this);
         },
 
-        deleteForm : function(evt) {
+        deleteFormPopup : function() {
             var self = this;
             var currentForm = self.formCollection.get(self.currentSelectedForm).toJSON();
 
@@ -199,15 +199,32 @@ define([
                         'modal.clear.text2',
                         swalOpts2,
                         null,
-                        function(val) {
-                            if (val === 'obsolete') {
+                        function(confirm) {
+                            if (confirm === 'obsolete') {
                                 self.makeObsolete(self.currentSelectedForm);
-                                return;
-                            } else {
-                                self.formCollection.deleteModel(currentForm.id);
+                            } else if (confirm) {
+                                self.deleteForm(self.currentSelectedForm);
                             }
                         });
                 });
+        },
+
+        deleteForm: function(id) {
+            this.showSpinner();
+            var form = this.formCollection.get(id);
+            form.urlRoot = this.URLOptions.forms + "/" + form.context;
+            form.destroy({
+                success : _.bind(function() {
+                    tools.swal("success", "modal.clear.deleted", "modal.clear.formDeleted");
+                    this.hideSpinner();
+                    this.resetCollection();
+                }, this),
+                error : _.bind(function() {
+                    tools.swal("error", "modal.clear.deleteError", "modal.clear.formDeletedError");
+                    this.hideSpinner();
+                    this.resetCollection();
+                }, this)
+            });
         },
 
         makeObsolete : function(id) {
@@ -515,15 +532,6 @@ define([
             Backbone.history.navigate('#form/' + this.context + '/new', {trigger: true});
         },
 
-        displayDeleteSuccessMessage : function() {
-            this.resetCollection();
-            tools.swal("success", "modal.clear.deleted", "modal.clear.formDeleted");
-        },
-
-        displayDeleteFailMessage : function() {
-            tools.swal("error", "modal.clear.deleteError", "modal.clear.formDeletedError");
-        },
-
         addGridColumn: function(name, i18nKey, type) {
             if (this.grid.columns.findWhere({name: name})) {
                 return;
@@ -589,11 +597,7 @@ define([
             this.context = context;
             this.currentTemplate.params.context = context;
             this.updateTemplate();
-
-            this.formCollection.update({
-                url: this.URLOptions.forms,
-                context: context
-            });
+            this.formCollection.url = this.URLOptions.forms + '/' + this.context;
 
             // update custom columns
             this.resetGridColumns();
