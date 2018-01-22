@@ -253,7 +253,6 @@ define([
                 $('tr.selected').removeClass('selected');
                 el.addClass('selected');
 
-                this.beforeFormSelection = this.currentSelectedForm;
                 this.currentSelectedForm = newSelctedRow;
             }
         },
@@ -266,7 +265,6 @@ define([
                 $('tr.selected').removeClass('selected');
             }, this));
 
-            this.beforeFormSelection = this.currentSelectedForm;
             this.currentSelectedForm = -1;
             this.clearFooterAction();
         },
