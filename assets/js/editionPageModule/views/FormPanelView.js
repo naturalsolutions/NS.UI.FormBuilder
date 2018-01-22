@@ -92,9 +92,6 @@ define([
         },
 
         addElement: function (newModel) {
-            //  We only create view for model who are not in a fieldset
-            //  If a model if in a fieldset, the fieldset view render the subView
-
             var viewClassName = newModel.constructor.type + "FieldView";
 
             if (newModel.constructor.type === "Numeric") {

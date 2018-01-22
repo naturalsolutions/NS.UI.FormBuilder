@@ -265,22 +265,6 @@ define([
         },
 
         /**
-         * Serialize subform field and sub field
-         *
-         * @param  {object} model subform to serialize
-         * @return {object}       subform data serialized
-         */
-        getFieldsetFromModel: function (model) {
-            return {
-                legend   : model.get('legend'),
-                fields   : model.get('fields'),
-                multiple : model.get('multiple'),
-                cid      : model.cid,
-                order    : model.get('order')
-            };
-        },
-
-        /**
          * Serialize model data to JSON
          *
          * @param  {Object} model model to serialize
@@ -363,7 +347,6 @@ define([
                 fileList      : this.fileList || [],
                 //  form inputs
                 schema        : {},
-                fieldsets     : []
             }, subModel = null;
 
             var that = this;
@@ -392,9 +375,7 @@ define([
             this.reorderItems();
 
             this.map(_.bind(function (model) {
-                if (model.constructor.type === 'Subform') {
-                    json.fieldsets.push(this.getFieldsetFromModel(model));
-                } else if (model.constructor.type != undefined) {
+                if (model.constructor.type != undefined) {
                     subModel = this.getJSONFromModel(model);
 
                     if (!model.get("compulsory") && json.schema[model.get('name')] !== undefined) {
@@ -413,15 +394,6 @@ define([
             }, this));
 
             $.each(json.schema, function(index, inputVal){
-                $.each(json.fieldsets, function(index, fieldsetVal){
-                    if (inputVal.linkedFieldset != fieldsetVal.legend + " " + fieldsetVal.cid &&
-                        $.inArray(inputVal.name, fieldsetVal.fields) != -1){
-                        fieldsetVal.fields = $.grep(fieldsetVal.fields, function(value){
-                            return value != inputVal.name;
-                        });
-                    }
-                });
-
                 inputVal.editMode = getBinaryWeight(inputVal.editMode);
                 setUnexistingStuff(inputVal);
             });
@@ -454,8 +426,6 @@ define([
          * Add field in the form if this is a valid type
          *
          * @param field                 field to add
-         * @param ifFieldIsInFieldset   if field in under a fieldset
-         * @param newElement            if field is a new element
          */
         addField : function(field) {
             if (!this.isAValidFieldType(field.constructor.type)) {
@@ -488,33 +458,10 @@ define([
             return this.addField(new Fields[nameType](field));
         },
 
-        /**
-         * Remove sub field from a subForm
-         *
-         * @param subFormId sub form to remove id
-         */
-        destroySubElement : function(subFormId) {
-            this.map(function(model, idx) {
-                if (model.get('subFormParent') == subFormId) {
-                    model.trigger('destroy', model);
-                }
-            })
-        },
-
         removeElement : function(model) {
             if (!model) return;
 
             var id = model.get("id");
-
-            //  If the field is a subForm field we remove all subFormField
-            if (model.constructor.type == 'Subform') {
-                this.destroySubElement(id);
-            }
-
-            if (model.get('subFormParent') !== undefined) {
-                var fieldSet = this.get(model.get('subFormParent'));
-                fieldSet.removeField(model.get('name'));
-            }
 
             // remove dom element by hand cause it's faster than re-rendering
             model.view.$el.remove();
@@ -525,7 +472,7 @@ define([
         },
 
         /**
-         * Update collection : create field and fieldset from JSON data
+         * Update collection : create field from JSON data
          *
          * @param  {object} JSONUpdate JSON data
          */
