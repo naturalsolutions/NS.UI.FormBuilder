@@ -215,6 +215,9 @@ define([
             form.urlRoot = this.URLOptions.forms + "/" + form.context;
             form.destroy({
                 success : _.bind(function() {
+                    // refresh forms list for childForm
+                    tools.loadForms(form.get("context"), false, true);
+
                     tools.swal("success", "modal.clear.deleted", "modal.clear.formDeleted");
                     this.hideSpinner();
                     this.resetCollection();
