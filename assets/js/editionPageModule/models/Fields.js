@@ -982,7 +982,8 @@ define([
                     template: fieldTemplate,
                     options: {
                         path: "positionPath"
-                    }
+                    },
+                    validators: ['required']
                 },
                 positionPath: {
                     type: 'Hidden',

@@ -111,7 +111,8 @@ define([
                 id: this.options.id,
                 model: this.model,
                 value: this.value,
-                path: this.model.get(this.options.schema.options.path)
+                path: this.model.get(this.options.schema.options.path),
+                key: this.key
             }));
             this.$el.i18n();
             this.setElement(this.$el);
