@@ -97,7 +97,6 @@ define([
 
             this.initGlobalChannel();
             this.initGridChannel();
-            this.initHomePageChannel();
 
             this.scrollSize = options.scrollSize || '100%';
             var context = $("#contextSwitcher .selected").text().toLowerCase();
@@ -116,12 +115,6 @@ define([
                 context,
                 AppConfig.topcontext,
                 readonly);
-        },
-
-        initHomePageChannel : function() {
-            this.homePageChannel = Backbone.Radio.channel('homepage');
-            this.homePageChannel.on('destroy:success', this.displayDeleteSuccessMessage, this);
-            this.homePageChannel.on('destroy:error', this.displayDeleteFailMessage, this);
         },
 
         initGlobalChannel : function() {
