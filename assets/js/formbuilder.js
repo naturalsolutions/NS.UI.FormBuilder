@@ -49,9 +49,6 @@ define([
             return;
         }
 
-        // start the bouzin
-        Backbone.history.start();
-
         if (auth.username) {
             $("header .user").text(auth.username);
             $("header .icons.last").removeClass("hidden");
@@ -60,10 +57,14 @@ define([
             $("header .lang").text(auth.userlanguage.toUpperCase());
         }
 
+        // start main view & router
         this.rootView = new MainView();
         this.router = new Router(
             this.rootView.getRegion('leftRegion'),
             this.rootView.getRegion('rightRegion'));
+
+        // start routing
+        Backbone.history.start();
 
         $(".logout").click(function(){
             var delete_cookie = function(name) {
