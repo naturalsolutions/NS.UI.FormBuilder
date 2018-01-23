@@ -2,13 +2,13 @@ define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
     '../editor/ChoicesEditor', '../editor/AutocompTreeEditor', '../editor/LanguagesEditor',
-    'app-config', './ExtraContextProperties/ExtraProperties',
+    '../editor/ChildFormEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, Translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
     ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
-    AppConfig, ExtraProperties,
+    ChildFormEditor, AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
 
     var fieldTemplate = _.template(FieldTemplate);
@@ -778,11 +778,12 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 childForm: {
-                    type: 'Select',
+                    type: ChildFormEditor,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.childForm'),
                     validators: ['required'],
-                    options: getFormsList(this)
+                    options: getFormsList(this),
+                    relatedNameProperty: "childFormName"
                 },
                 childFormName: {
                     type: 'Hidden',
@@ -890,11 +891,12 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 childForm: {
-                    type: 'Select',
+                    type: ChildFormEditor,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.childForm'),
                     validators: ['required'],
-                    options: getFormsList(this)
+                    options: getFormsList(this),
+                    relatedNameProperty: "childFormName"
                 },
                 childFormName: {
                     type: 'Hidden',
