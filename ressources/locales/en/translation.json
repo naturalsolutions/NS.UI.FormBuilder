@@ -514,6 +514,8 @@
     },
 
     "fetchOne" : {
+        "notFound" : "Not found",
+        "notFoundMsg" : "Form with provided id does not exist.",
         "error"    : "Error retrieving form !",
         "errorMsg" : "Unable to retrieve selected form from server. Try reloading the page?"
     },

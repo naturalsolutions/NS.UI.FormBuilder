@@ -163,8 +163,15 @@ define([
             this.loadingForm = true;
             var loadError = _.bind(function(err) {
                 this.hideSpinner();
-                tools.swal("error", "fetchOne.error", "fetchOne.errorMsg");
-                console.error("fetch error", err);
+                switch (err.status) {
+                    case 404:
+                        tools.swal("error", "fetchOne.notFound", "fetchOne.notFoundMsg");
+                        break;
+                    default:
+                        tools.swal("error", "fetchOne.error", "fetchOne.errorMsg");
+                        console.error("fetch error", err);
+                        break;
+                }
                 this.loadingForm = false;
                 this.back();
             }, this);

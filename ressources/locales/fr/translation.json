@@ -522,6 +522,8 @@
     },
 
     "fetchOne" : {
+        "notFound" : "Formulaire introuvable",
+        "notFoundMsg" : "Le formulaire avec l'id renseigné n'existe pas.",
         "error"    : "Erreur de récupération du formulaire !",
         "errorMsg" : "Impossible de récupérer le formulaire sélectionné depuis le serveur. Essayez de recharger la page?"
     },
