@@ -180,15 +180,7 @@ define([
                     url: AppConfig.config.options.URLOptions.forms + '/' + id,
                     dataType: 'json',
                     success: _.bind(function (data) {
-                        // it so happens that backend is happy with non-existing id
-                        // and sends us an empty data stuff, so this workaround says fuck
-                        // to user anyway. todo fix backend
-                        if (!data || !data['form']) {
-                            loadError("backend shoulda tell me there's a problem :/ it did not");
-                            return;
-                        }
-
-                        this.displayForm(data['form']);
+                        this.displayForm(data);
                     }, this),
                     error: _.bind(function (error) {
                         loadError(error);
