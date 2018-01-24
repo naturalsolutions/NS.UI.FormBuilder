@@ -620,16 +620,16 @@ define([
                     crossDomain: true,
 
                     //  Trigger event with ajax result on the formView
-                    success: _.bind(function (data) {
+                    success: _.bind(function (formData) {
                         // update form id (new form)
-                        that.id = data.form.id;
+                        that.id = formData.id;
                         Backbone.history.navigate(
                             Backbone.history.location.hash.replace("/new", "/" + that.id),
                             {trigger: false}
                         );
-                        if (data.form.schema) {
+                        if (formData.schema) {
                             // update field ids (new fields)
-                            $.each(data.form.schema, function (i, field) {
+                            $.each(formData.schema, function (i, field) {
                                 for (var i in that.fieldstodelete) {
                                     if (that.fieldstodelete[i] === field.id) return;
                                 }
