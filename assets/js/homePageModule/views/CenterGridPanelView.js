@@ -212,9 +212,10 @@ define([
         deleteForm: function(id) {
             this.showSpinner();
             var form = this.formCollection.get(id);
-            form.urlRoot = this.URLOptions.forms + "/" + form.context;
-            form.destroy({
-                success : _.bind(function() {
+            $.ajax({
+                type: 'DELETE',
+                url: this.URLOptions.forms + "/" + form.id,
+                success: _.bind(function () {
                     // refresh forms list for childForm
                     tools.loadForms(form.get("context"), false, true);
 
@@ -222,7 +223,8 @@ define([
                     this.hideSpinner();
                     this.resetCollection();
                 }, this),
-                error : _.bind(function() {
+                error: _.bind(function (err) {
+                    console.error(err);
                     tools.swal("error", "modal.clear.deleteError", "modal.clear.formDeletedError");
                     this.hideSpinner();
                     this.resetCollection();
