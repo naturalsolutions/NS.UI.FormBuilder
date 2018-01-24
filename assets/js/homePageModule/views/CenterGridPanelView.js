@@ -450,10 +450,10 @@ define([
                     }
                     this.hideSpinner();
                 }, this),
-                error: function() {
+                error: _.bind(function() {
                     tools.swal("error", "fetch.error", "fetch.errorMsg");
                     this.hideSpinner();
-                }
+                }, this)
             });
         },
 
