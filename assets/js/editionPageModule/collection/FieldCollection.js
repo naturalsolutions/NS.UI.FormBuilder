@@ -660,7 +660,6 @@ define([
                                     console.error("error deleting fields", xhr);
                                 }
                             });
-                            return;
                         }
 
                         that.showSpinner(true);
