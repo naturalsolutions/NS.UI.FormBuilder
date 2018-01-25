@@ -67,15 +67,9 @@ define([
             this.context = this.fieldCollection.context;
             this.formFilesBinaryList = {};
 
-            this.mainChannel = Backbone.Radio.channel('edition');
-            this.mainChannel.on('setTemplateList', this.setTemplateList, this);
-            this.mainChannel.on('unsetTemplateList', this.unsetTemplateList, this);
-
-
             this.formChannel = Backbone.Radio.channel('form');
             this.formChannel.on('editField', this.editField, this);
             this.formChannel.on('setSelected', this.setSelected, this);
-            this.formChannel.on('closeEdit', this.closeEdit, this);
 
             _.bindAll(this, 'template', 'clearSelected');
 
@@ -226,17 +220,6 @@ define([
             }
         },
 
-        setTemplateList : function(templateList) {
-            this.savedTemplateList = templateList;
-        },
-
-        unsetTemplateList : function() {
-            this.savedTemplateList = undefined;
-        },
-
-        /**
-         * save blob
-         */
         save: function() {
             this.clearSelected();
             var formValidation = this.form.validate();
