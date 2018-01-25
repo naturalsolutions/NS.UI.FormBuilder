@@ -207,8 +207,6 @@ define([
 
             //  Bind
             _.bindAll(this, 'clearAll', 'getNextPropertyValue', 'addElement', 'getJSON', 'getJSONFromModel', 'removeElement');
-
-            this.formChannel = Backbone.Radio.channel('form');
         },
 
         getNextPropertyValue: function(property, dflt) {
@@ -742,27 +740,6 @@ define([
             else {
                 tools.swal("error", "modal.save.error", "modal.save.errorMsg");
             }
-        },
-
-        saveAsTemplate : function() {
-
-            $.ajax({
-                data        : JSON.stringify(this.getJSON()),
-                type        : 'POST',
-                url         : this.templateURL,
-                contentType : 'application/json',
-                //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                //  The server is already configured to used it
-                crossDomain : true,
-
-                //  Trigger event with ajax result on the formView
-                success: _.bind(function(data) {
-                    this.formChannel.trigger('template:success');
-                }, this),
-                error: _.bind(function() {
-                    this.formChannel.trigger('fail:success');
-                }, this)
-            });
         },
 
         showSpinner : function(hide) {
