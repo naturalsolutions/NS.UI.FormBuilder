@@ -23,12 +23,10 @@ define([
     './staticInputs/ContextStaticInputs',
     'text!../templates/FieldTemplate.html'
 ], function ($, _, Backbone,
-             Fields, Radio, Translater, CheckboxEditor, AppConfig, tools,
+             Fields, Radio, translater, CheckboxEditor, AppConfig, tools,
              LanguagesEditor, CollectionExtention, ContextStaticInputs, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
-
-    var translater = Translater.getTranslater();
     var extention = CollectionExtention;
     var staticInputs = ContextStaticInputs;
 

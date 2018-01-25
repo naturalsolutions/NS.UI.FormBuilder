@@ -1,7 +1,6 @@
 define([
     'jquery', 'lodash', 'backbone', '../../Translater'
-], function($, _, Backbone,Translater) {
-    var translater = Translater.getTranslater();
+], function($, _, Backbone, translater) {
     return Backbone.Model.extend({
 
         /**

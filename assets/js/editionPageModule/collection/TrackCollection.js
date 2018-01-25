@@ -6,11 +6,9 @@ define([
     'jquery',
     '../../Translater',
     'text!../templates/FieldTemplate.html'
-], function ($, Translater, FieldTemplate) {
+], function ($, translater, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
-
-    var translater = Translater.getTranslater();
 
     return {
         extensionData: null,

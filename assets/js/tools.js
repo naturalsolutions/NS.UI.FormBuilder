@@ -1,8 +1,6 @@
 define([
     'jquery', './Translater', 'sweetalert', 'app-config'
 ], function($, translater, sweetalert, AppConfig) {
-    var translater = translater.getTranslater();
-
     return {
         /**
          * inlineSvg replaces svg image tags matching selector with inline svg (for css edition)

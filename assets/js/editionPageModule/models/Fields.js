@@ -5,7 +5,7 @@ define([
     '../editor/ChildFormEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
-    $, _, tools, Backbone, Translater,
+    $, _, tools, Backbone, translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
     ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
     ChildFormEditor, AppConfig, ExtraProperties,
@@ -14,7 +14,7 @@ define([
     var fieldTemplate = _.template(FieldTemplate);
     var fieldTemplateEditorOnly = _.template(FieldTemplateEditorOnly);
 
-    var models = {}, translater = Translater.getTranslater();
+    var models = {};
 
     // getFormsList tries to retreive cached forms from tools package and filters out current form
     var getFormsList = function(currentForm) {

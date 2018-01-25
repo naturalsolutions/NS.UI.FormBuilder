@@ -8,9 +8,8 @@ define([
     '../../../Translater',
     '../../editor/CheckboxEditor',
     'text!../../templates/FieldTemplate.html'
-], function ($, Backbone, Translater, CheckboxEditor, FieldTemplate) {
+], function ($, Backbone, translater, CheckboxEditor, FieldTemplate) {
 
-    var translater = Translater.getTranslater();
     var fieldTemplate = _.template(FieldTemplate);
 
     return {

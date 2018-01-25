@@ -10,9 +10,7 @@ define([
     'app-config',
     'backbone-forms'
 ], function($, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
-            FormPanelView, Fields, Translater, tools, AppConfig) {
-    var t = Translater.getTranslater();
-
+            FormPanelView, Fields, t, tools, AppConfig) {
     return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({

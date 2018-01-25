@@ -11,10 +11,9 @@ define([
     '../../Translater',
     'auth',
     'text!../templates/FieldTemplate.html'
-], function ($, Backbone, Fields, CheckboxEditor, Radio, Translater, auth, FieldTemplate) {
+], function ($, Backbone, Fields, CheckboxEditor, Radio, translater, auth, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
-    var translater = Translater.getTranslater();
     return {
         schemaExtention: {
             author : {

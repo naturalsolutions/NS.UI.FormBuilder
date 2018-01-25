@@ -1,10 +1,9 @@
 define([
     'jquery', 'lodash', 'marionette', 'auth', 'i18n', 'i18n-jquery', 'i18n-xhr'
 ], function($, _, Marionette, auth, i18n, i18njQuery, i18nXhr) {
-
-    var Translater = Marionette.Object.extend({
+    var t = {
         loaded: false,
-        initialize: function() {
+        init: function() {
             var lang = auth.userlanguage ||navigator.language ||
                 navigator.userLanguagenavigator.language ||
                 navigator.userLanguage || 'en';
@@ -27,7 +26,6 @@ define([
                 this.loaded = true;
             }, this));
         },
-
         isKeyValid: function(key) {
             return typeof key === "string" &&
                 key.indexOf(" ") === -1;
@@ -39,12 +37,8 @@ define([
 
             return $.t(key, opts);
         }
-    });
-
-    var translater = new Translater();
-
-    return {
-        getTranslater: function () { return translater; }
     };
 
+    t.init();
+    return t;
 });

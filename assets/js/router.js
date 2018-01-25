@@ -5,9 +5,7 @@ define([
     './Translater', "tools", "app-config"
 ], function($, Backbone, Marionette, HomePageLayout, EditionPageLayout,
             FieldCollection, FormModel,
-            Translater, tools, AppConfig) {
-
-    var translater = Translater.getTranslater();
+            translater, tools, AppConfig) {
 
     var fbController = {
         init: function() {

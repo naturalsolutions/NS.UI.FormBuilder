@@ -13,10 +13,8 @@ define([
     'app-config',
     'tools',
     'slimScroll'
-    ], function($, _, Backbone, Marionette, moment, GridView, Backgrid, Translater,
+    ], function($, _, Backbone, Marionette, moment, GridView, Backgrid, translater,
                 FormModel, Radio, sweetalert, AppConfig, tools) {
-
-    var translater = Translater.getTranslater();
 
     /**
      * Main view in the homepage layout

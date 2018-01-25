@@ -2,9 +2,7 @@ define([
     'jquery', 'lodash', 'text!../templates/GridRow.html',
     'backbone', 'backbone.radio', 'tools', '../../Translater',
     './loaders/ContextLoader', 'i18n'
-], function($, _, DefaultTemplate, Backbone, Radio, tools, Translater, ContextLoader) {
-
-    var translater = Translater.getTranslater();
+], function($, _, DefaultTemplate, Backbone, Radio, tools, translater, ContextLoader) {
 
     return Backbone.View.extend({
         events: {
