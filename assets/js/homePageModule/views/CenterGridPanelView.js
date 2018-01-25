@@ -95,7 +95,6 @@ define([
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
-            this.initGlobalChannel();
             this.initGridChannel();
 
             this.scrollSize = options.scrollSize || '100%';
@@ -115,11 +114,6 @@ define([
                 context,
                 AppConfig.topcontext,
                 readonly);
-        },
-
-        initGlobalChannel : function() {
-            this.globalChannel = Backbone.Radio.channel('global');
-            this.globalChannel.on('formLoaded', this.hideSpinner, this);
         },
 
         initGridChannel : function() {

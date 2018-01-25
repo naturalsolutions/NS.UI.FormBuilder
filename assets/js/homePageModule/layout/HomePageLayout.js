@@ -22,11 +22,11 @@ define([
             //  Create and render item views
             this.getRegion("leftPanel").show( new LeftPanelView({
                 URLOptions : this.URLOptions
-            }, Backbone.Radio.channel('global').readonly));
+            }));
 
             this.getRegion("centerPanel").show( new CenterGridPanelView({
                 URLOptions : this.URLOptions
-            }, Backbone.Radio.channel('global').readonly));
+            }));
         }
     });
 });
