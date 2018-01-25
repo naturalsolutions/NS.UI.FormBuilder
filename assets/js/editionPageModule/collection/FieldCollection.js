@@ -687,8 +687,12 @@ define([
                             default:
                                 if (xhr.responseText.indexOf("customerror::") > -1)
                                     this.displayFailMessage(xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
-                                else
+                                else if (xhr.responseText.indexOf('<!DOC') == -1) {
                                     this.displayFailMessage(xhr.responseText);
+                                } else {
+                                    this.displayFailMessage(xhr.status + " " + xhr.statusText);
+                                }
+
                                 break;
                         }
                     }, that)
