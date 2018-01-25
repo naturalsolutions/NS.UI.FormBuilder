@@ -134,7 +134,7 @@ define([
         refresh: function() {
             this.updateName();
             this.$el.find('.drop').empty();
-            this.collection.creadeFields();
+            this.collection.createFields();
 
             // init sortable section
             this.$el.find('.drop').sortable({

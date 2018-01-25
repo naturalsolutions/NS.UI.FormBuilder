@@ -516,7 +516,7 @@ define([
             });
         },
 
-        creadeFields: function() {
+        createFields: function() {
             var that = this;
             $(that.schema).each(function() {
                 that.createField(this, "");
