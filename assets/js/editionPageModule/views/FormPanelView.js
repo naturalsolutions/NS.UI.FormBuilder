@@ -111,8 +111,7 @@ define([
                 $container: this.$el.find(".drop"),
                 context: this.context,
                 columns: this.columns
-            }, Backbone.Radio.channel('global').readonly ||
-                $.inArray(newModel.attributes.name, staticInputs.getCompulsoryInputs()) != -1);
+            });
             if (vue !== null) {
                 vue.render();
                 this._view[id] = vue;
