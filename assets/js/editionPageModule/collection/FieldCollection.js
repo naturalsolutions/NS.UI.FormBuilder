@@ -552,17 +552,12 @@ define([
          * Save collection, send POST or PUT request to the back
          */
         save : function() {
-            // todo this looks quite ugly
-            // first and foremost - remove trigger-y mess
             var that = this;
             that.showSpinner();
 
             var hasDuplicates = function(array) {
                 return (new Set(array)).size !== array.length;
             };
-
-            if (!that.formChannel)
-                that.initFormChannel();
 
             var tmpForm = new Backbone.Form({
                 schema: that.getDefaultSchema(),
@@ -668,59 +663,51 @@ define([
 
                         // refresh forms list to update childForms options
                         tools.loadForms(that.context, false, true);
-
-                        // display success
-                        that.formChannel.trigger('save:success');
+                        that.displaySuccessMessage();
                     }, that),
                     error: _.bind(function (xhr) {
-                        if (xhr.status == 418)
-                        {
-                            if (xhr.responseText.indexOf("ERR:NAME") !== -1)
-                            {
-                                that.formChannel.trigger('save:fail', "modal.save.formSimilarName");
-                            }
-                            else if (xhr.responseText.indexOf("ERR:FRNAME") !== -1)
-                            {
-                                that.formChannel.trigger('save:fail', "modal.save.formSimilarFrName");
-                            }
-                            else if (xhr.responseText.indexOf("ERR:ENNAME") !== -1)
-                            {
-                                that.formChannel.trigger('save:fail', "modal.save.formSimilarEnName");
-                            }
-                            else
-                            {
-                                that.formChannel.trigger('save:fail', "modal.save.418");
-                            }
-                            $("#collectionName").css('color', "red");
-                        }
-                        else if (xhr.status == 508)
-                        {
-                            that.formChannel.trigger('save:fail', "modal.save.circularDependency");
-                        }
-                        else
-                        {
-                            if (xhr.responseText.indexOf("customerror") > -1)
-                                that.formChannel.trigger('save:fail', xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
-                            else
-                                that.formChannel.trigger('save:fail');
-                        }
                         that.showSpinner(true);
+                        switch (xhr.status) {
+                            case 418:
+                                var errLabel = tools.parseErrorLabel(xhr.responseText);
+                                switch (errLabel) {
+                                    case "NAME":
+                                        this.displayFailMessage("modal.save.formSimilarName");
+                                        break;
+                                    case "FRNAME":
+                                        this.displayFailMessage("modal.save.formSimilarFrName");
+                                        break;
+                                    case "ENNAME":
+                                        this.displayFailMessage("modal.save.formSimilarEnName");
+                                        break;
+                                    default:
+                                        this.displayFailMessage("modal.save.418", xhr.responseText);
+                                        break;
+                                }
+                                break;
+                            case 508:
+                                this.displayFailMessage("modal.save.circularDependency");
+                                break;
+                            default:
+                                if (xhr.responseText.indexOf("customerror::") > -1)
+                                    this.displayFailMessage(xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
+                                else
+                                    this.displayFailMessage(xhr.responseText);
+                                break;
+                        }
                     }, that)
                 });
             }
             else {
-                if (formValidation != null)
-                {
-                    that.formChannel.trigger('save:formIncomplete');
+                if (formValidation != null) {
                     $("#collectionName").css('color', "red");
+                    tools.swal("error", "modal.save.uncompleteFormerror", "modal.save.uncompleteForm");
                 }
-                else if (!fieldsValidation)
-                {
-                    that.formChannel.trigger('save:fieldIncomplete');
+                else if (!fieldsValidation) {
+                    tools.swal("error", "modal.save.uncompleteFielderror", "modal.save.uncompleteField");
                 }
-                else if (fieldNamesHasDuplicates)
-                {
-                    that.formChannel.trigger('save:hasDuplicateFieldNames');
+                else if (fieldNamesHasDuplicates) {
+                    tools.swal("error", "modal.save.hasDuplicateFieldNamesError", "modal.save.hasDuplicateFieldNames");
                     var savedNames = [];
                     $.each(formValues, function(index, value){
                         if (savedNames.indexOf(value.name) > -1){
@@ -738,6 +725,22 @@ define([
                     });
                 }
                 that.showSpinner(true);
+            }
+        },
+
+        displaySuccessMessage : function() {
+            this.dataUpdated = true;
+            this.pendingChanges = false;
+            tools.swal("success", "modal.save.success", "modal.save.successMsg");
+        },
+
+        displayFailMessage : function(textKey, textValue) {
+            if (textKey) {
+                tools.swal("error", "modal.save.error",
+                    translater.getValueFromKey(textKey) + (textValue ? " -> " + textValue : ""));
+            }
+            else {
+                tools.swal("error", "modal.save.error", "modal.save.errorMsg");
             }
         },
 

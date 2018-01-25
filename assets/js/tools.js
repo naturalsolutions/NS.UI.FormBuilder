@@ -270,6 +270,16 @@ define([
             }
 
             return this.loadForms(context, sync, refresh);
+        },
+
+        // parseCustomError returns <label> string from error of the form "this is a msg [ERR:<labal>]", or null
+        parseErrorLabel: function(err) {
+            var re = /\[ERR\:(.*)\]/g;
+            var match = re.exec(err);
+            if (match && match[1]) {
+                return match[1];
+            }
+            return null;
         }
     };
 });

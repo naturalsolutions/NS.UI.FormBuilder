@@ -12,7 +12,6 @@ define([
 ], function($, Marionette, FormPanelViewTpl, tools,
             Translater, AppConfig, ContextStaticInputs, FieldViews) {
 
-    var translater = Translater.getTranslater();
     var staticInputs = ContextStaticInputs;
 
     /**
@@ -41,7 +40,6 @@ define([
             this.readonly = readonly;
 
             _.bindAll(this, 'template', 'save');
-            this.initFormChannel();
         },
 
         updateCollection: function(collection) {
@@ -69,22 +67,6 @@ define([
         destroy: function() {
             // override & disable destroy mechanism
             // triggered by a new EditionPageLayout.render()
-        },
-
-        /**
-        * Init form channel
-        * This channel concerns only form functionnality like create a form to edit model
-        */
-        initFormChannel : function() {
-            this.formChannel = Backbone.Radio.channel('form');
-
-            //  This event is send from the router with the ajax request result
-            //  And we display message with sweet alert
-            this.formChannel.on('save:success', this.displaySucessMessage, this);
-            this.formChannel.on('save:fail', this.displayFailMessage);
-            this.formChannel.on('save:formIncomplete', this.displayIncompleteFormMessage);
-            this.formChannel.on('save:fieldIncomplete', this.displayIncompleteFieldMessage);
-            this.formChannel.on('save:hasDuplicateFieldNames', this.displayHasDuplicateFieldNames);
         },
 
         removeElement : function() {
@@ -196,9 +178,6 @@ define([
                 alwaysVisible : true
             });
             this.updateFieldCount();
-
-            //  Send an event to notify the render is done
-            this.formChannel.trigger('renderFinished');
         },
 
         onRender : function() {
@@ -214,34 +193,6 @@ define([
 
         save : function() {
             this.collection.save();
-        },
-
-        displaySucessMessage : function() {
-            this.collection.dataUpdated = true;
-            this.collection.pendingChanges = false;
-            tools.swal("success", "modal.save.success", "modal.save.successMsg");
-        },
-
-        displayFailMessage : function(textKey, textValue) {
-            if (textKey) {
-                tools.swal("error", "modal.save.error",
-                    translater.getValueFromKey(textKey) + (textValue ? textValue : ""));
-            }
-            else {
-                tools.swal("error", "modal.save.error", "modal.save.errorMsg");
-            }
-        },
-
-        displayIncompleteFormMessage: function() {
-            tools.swal("error", "modal.save.uncompleteFormerror", "modal.save.uncompleteForm");
-        },
-
-        displayIncompleteFieldMessage: function() {
-            tools.swal("error", "modal.save.uncompleteFielderror", "modal.save.uncompleteField");
-        },
-
-        displayHasDuplicateFieldNames: function() {
-            tools.swal("error", "modal.save.hasDuplicateFieldNamesError", "modal.save.hasDuplicateFieldNames");
         },
 
         updateName: function () {
