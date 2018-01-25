@@ -624,7 +624,8 @@ define([
                         // update form id (new form)
                         that.id = formData.id;
                         Backbone.history.navigate(
-                            Backbone.history.location.hash.replace("/new", "/" + that.id),
+                            // replace last part of hash with new form id
+                            Backbone.history.location.hash.replace(/\/[^\/]*$/, "/" + that.id),
                             {trigger: false}
                         );
                         if (formData.schema) {
