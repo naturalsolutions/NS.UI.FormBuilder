@@ -278,6 +278,11 @@ define([
                 return match[1];
             }
             return null;
+        },
+
+        //  replaceLastSlashItem replaces part after last "/" from provided src with provided id
+        replaceLastSlashItem: function(src, id) {
+            return src.replace(/\/[^\/]*$/, "/" + id);
         }
     };
 });

@@ -614,9 +614,9 @@ define([
                     success: _.bind(function (formData) {
                         // update form id (new form)
                         that.id = formData.id;
+                        // replace last part of hash location with new form id
                         Backbone.history.navigate(
-                            // replace last part of hash with new form id
-                            Backbone.history.location.hash.replace(/\/[^\/]*$/, "/" + that.id),
+                            tools.replaceLastSlashItem(Backbone.history.location.hash, that.id),
                             {trigger: false}
                         );
                         if (formData.schema) {
