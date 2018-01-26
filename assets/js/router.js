@@ -10,7 +10,6 @@ define([
     var fbController = {
         init: function() {
             this.spawnContexts();
-            this.firstHome = true;
             this.firstEdit = true;
 
             this.linkedFieldsList = this.getLinkedFieldsList();
@@ -31,8 +30,7 @@ define([
 
             // trick with this.loading, avoid double rendering:
             // on first call because it breaks click events on forms grid for some reason.
-            this.setContext(context, this.firstHome && this.firstEdit);
-            this.firstHome = undefined;
+            this.setContext(context);
         },
 
         edit: function(context, id) {
@@ -63,7 +61,7 @@ define([
             }
         },
 
-        setContext: function(context, skipRender) {
+        setContext: function(context) {
             if (this.homeContext === context) {
                 return;
             }
@@ -72,7 +70,7 @@ define([
             this.$contextSwitcher.find(".selected").text(context);
             this.$contextSwitcher.find(".hide").removeClass("hide");
             this.contexts[context].addClass("hide");
-            this.centerPanel.setContext(context, skipRender);
+            this.centerPanel.setContext(context);
         },
 
         setFieldCollection: function(context) {

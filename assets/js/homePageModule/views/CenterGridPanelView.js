@@ -369,39 +369,10 @@ define([
         },
 
         onRender: function() {
-            this.formCollection.reset();
+            // insert grid
+            $(this.el).find("#grid").html(this.grid.render().el);
 
-            // Fetch some countries from the url
-            this.formCollection.fetch({
-                reset: true,
-                timeout: 15000,
-                success : _.bind(function() {
-                    this.hideSpinner();
-
-                    // Insert rendered grid
-                    $(this.el).find("#grid").html(this.grid.render().el);
-
-                    // Update recently edited forms
-                    this.updateRecentlyEdited();
-
-                    //  Wait fetch end before display forms count and scrollbar got backgrid table
-                    this.$el.find('#formsCount').text(  $.t("formCount.form", { count: this.formCollection.length }) );
-
-                    $(".scroller").slimScroll({
-                        height       : this.scrollSize,
-                        color        : '#111',
-                        railVisible  : true,
-                        alwaysVisible: true
-                    });
-
-                    this.updateGridHeader();
-                }, this),
-                error : _.bind(function() {
-                    tools.swal("error", "fetch.error", "fetch.errorMsg");
-                    this.hideSpinner();
-                }, this)
-            });
-
+            // translate stuff
             this.$el.i18n();
         },
 
@@ -434,6 +405,7 @@ define([
 
         resetCollection : function(callback) {
             this.showSpinner();
+            this.formCollection.reset();
             this.formCollection.fetch({
                 reset : true,
                 success : _.bind(function() {
@@ -585,27 +557,17 @@ define([
             }];
 
             this.grid.columns.set(defaults);
-            this.updateGridHeader();
         },
 
-        setContext: function(context, avoidRendering) {
+        setContext: function(context) {
             context = context.toLowerCase();
             window.context = context;
             this.context = context;
             this.currentTemplate.params.context = context;
             this.updateTemplate();
-            this.formCollection.url = this.URLOptions.forms + '/' + this.context;
+            this.$el.html(this.template());
 
-            // update custom columns
-            this.resetGridColumns();
-            if (context !== "all") {
-                this.removeGridColumn('context');
-            }
-            switch(context) {
-                case "track":
-                    this.addGridColumn('activite', 'form.activite');
-                    break;
-            }
+            this.formCollection.url = this.URLOptions.forms + '/' + this.context;
 
             // retreive and populate custom search inputs
             this.gridChannel.trigger('contextChanged', context);
@@ -614,10 +576,23 @@ define([
             this.currentSelectedForm = -1;
             this.clearFooterAction();
 
-            // render
-            if (!avoidRendering) {
-                this.render();
-            }
+            // run search & update grid display
+            this.resetCollection(_.bind(function() {
+                // update custom columns
+                this.resetGridColumns();
+                if (context !== "all") {
+                    this.removeGridColumn('context');
+                }
+                switch(context) {
+                    case "track":
+                        this.addGridColumn('activite', 'form.activite');
+                        break;
+                }
+
+                // re-render grid
+                $(this.el).find("#grid").html(this.grid.render().el);
+                this.updateGridHeader();
+            }, this));
         },
 
         hideContextList : function() {
