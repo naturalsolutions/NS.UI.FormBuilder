@@ -505,9 +505,15 @@ define([
             this.isTemplate    = JSONUpdate["isTemplate"];
             this.fileList      = JSONUpdate["fileList"];
             this.originalID    = JSONUpdate["originalID"];
+            this.initialID     = JSONUpdate["initialID"];
+            this.state         = JSONUpdate["state"];
+            this.currentForm   = JSONUpdate["currentForm"];
             this.schema        = _.sortBy(JSONUpdate["schema"], function(el) {
                 return el.order;
             });
+
+            // set readonly if states != 1
+            this.readonly = this.state != 1;
 
             var that = this;
 

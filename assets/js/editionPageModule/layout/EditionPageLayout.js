@@ -15,9 +15,8 @@ define([
     return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
-                collection : this.fieldCollection.getAttributesValues(),
+                collection : this.fieldCollection,
                 formUrl: this.formUrl,
-                originalID: this.fieldCollection.originalID,
                 context: this.context,
                 fieldTypes: this.fieldTypes,
                 topcontext: AppConfig.topcontext,
@@ -88,6 +87,11 @@ define([
             if (this.context.toLowerCase() === 'track' && fieldCollection.originalID) {
                 this.formUrl =
                     AppConfig.trackFormURL.replace("#originalID#", fieldCollection.originalID);
+            }
+
+            if (this.fieldCollection.currentForm) {
+                this.fieldCollection.currentFormUrl =
+                    tools.replaceLastSlashItem(Backbone.history.location.hash, this.fieldCollection.currentForm);
             }
             this.initFieldTypes();
         },

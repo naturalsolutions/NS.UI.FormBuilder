@@ -20,6 +20,8 @@ define([
             propagate        : false,
             isTemplate       : false,
             context          : window.context || "",
+            state            : 1,
+            readonly         : false,
             schtroudel: "salamanca !",
 
             // display attributes
@@ -78,7 +80,9 @@ define([
                 isTemplate                 : this.get('isTemplate'),
                 obsolete                   : this.get('obsolete'),
                 propagate                  : this.get('propagate'),
-                context                    : this.get('context')
+                context                    : this.get('context'),
+                state                      : this.get('state'),
+                readonly                   : this.get('readonly')
             }
         }
     });

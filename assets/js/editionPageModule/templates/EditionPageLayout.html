@@ -1,16 +1,30 @@
 <div class="header">
     <div data-i18n="form.actions.back" class="action gray actionBack" id="exit">Retour</div>
-    <div class="formTitle"><%= collection.name %></div>
-    <% if (formUrl) {%>
-    <div class="formUrl">
+    <div class="formTitle">
+        <%= collection.name %>
+    </div>
+    <% if (collection.readonly) { %>
+    <div class="readonly">
+        <span>(</span>
+        <span data-i18n="schema.readonly"></span>
+        <span>-</span>
+        <div class="url">
+            <a href="<%= collection.currentFormUrl %>" data-i18n="form.currentVersion"></a>
+        </div>
+        <span>)</span>
+    </div>
+    <% } %>
+    <% if (formUrl) { %>
+    <div class="url extLink">
         <a href="<%= formUrl %>" target="_blank">
-            <%= context.toUpperCase() %> - <%= originalID %>
+            <%= context.toUpperCase() %>ID <%= collection.originalID %>
         </a>
     </div>
     <% } %>
     <img class="saveSpinner" src="assets/images/loader.gif" />
     <div data-i18n="form.actions.save" class="action actionSave" id="save">Tout sauvegarder</div>
 </div>
+
 <div class="content">
     <div id="settingFormPanel">
         <div class="row scroll">

@@ -97,6 +97,7 @@
         "importance" : "Importance",
         "minimal"    : "Minimum size must be less than the maximum size",
         "setting"    : "Form properties",
+        "currentVersion": "Current version",
         "new"        : "New form",
         "context"    : "Context",
         "activite"   : "Activity",

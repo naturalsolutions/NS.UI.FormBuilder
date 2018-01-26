@@ -96,6 +96,7 @@
         "importance"  : "Importance",
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
         "setting"     : "Caractéristiques du formulaire",
+        "currentVersion": "Version courante",
         "new"         : "Nouveau formulaire",
         "context"     : "Contexte",
         "activite"    : "Activité",

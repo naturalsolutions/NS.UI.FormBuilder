@@ -14,24 +14,6 @@
         color: white;
       }
 
-      &.formUrl {
-        margin-left: 10px;
-        a {
-          color: @orange;
-          opacity: .8;
-          &:hover {
-            opacity: 1;
-          }
-          &::after {
-            .reneco;
-            color: white;
-            content: "\e91f";
-            font-size: .8em;
-            margin-left: 3px;
-          }
-        }
-      }
-
       &.action {
         position: absolute;
         &.actionBack {
@@ -40,6 +22,36 @@
         &.actionSave {
           right: 25px;
         }
+      }
+    }
+
+    .readonly {
+      color: #ffffff7a;
+      span, div {
+        text-transform: lowercase;
+        display: inline-block;
+      }
+      .url {
+        margin-left: 2px;
+      }
+    }
+
+    .url {
+      margin-left: 10px;
+      a {
+        color: @orange;
+        opacity: .8;
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      &.extLink a::after {
+        .reneco;
+        color: white;
+        content: "\e91f";
+        font-size: .8em;
+        margin-left: 3px;
       }
     }
 
