@@ -17,6 +17,7 @@ define([
             return _.template(EditionPageLayoutTemplate) ({
                 collection : this.fieldCollection,
                 formUrl: this.formUrl,
+                formBaseUrl: this.formBaseUrl,
                 context: this.context,
                 fieldTypes: this.fieldTypes,
                 topcontext: AppConfig.topcontext,
@@ -89,9 +90,10 @@ define([
                     AppConfig.trackFormURL.replace("#originalID#", fieldCollection.originalID);
             }
 
+            this.formBaseUrl = tools.replaceLastSlashItem(Backbone.history.location.hash, '');
             if (this.fieldCollection.currentForm) {
                 this.fieldCollection.currentFormUrl =
-                    tools.replaceLastSlashItem(Backbone.history.location.hash, this.fieldCollection.currentForm);
+                    this.formBaseUrl + this.fieldCollection.currentForm;
             }
             this.initFieldTypes();
         },
@@ -278,26 +280,6 @@ define([
                 that.fieldCollection.pendingChanges = true;
             });
 
-            // Init linked field (childForm?)
-            $.ajax({
-                data: {},
-                type: 'GET',
-                url: this.URLOptions.childforms + "/" + form.id,
-                contentType: 'application/json',
-                crossDomain: true,
-                success: function (data) {
-                    data = JSON.parse(data);
-                    $(data).each(function () {
-                        $(".childFormsList").show();
-                        if ($("#childform" + this.id).length == 0)
-                            $(".childList").append("<div id='childform" + this.id + "'><a target=_blank href='#form/" + this.id + "'>" + this.name + "</a></div>");
-                    });
-                },
-                error: function (err) {
-                    console.log("error retreiving childforms: " + err);
-                }
-            });
-
             this.$el.find('#form').append(this.form.el);
             this.$el.find('.scroll').slimScroll({
                 height        : '100%',
@@ -351,6 +333,9 @@ define([
             if ($groupe.val() == 'null') $groupe.attr("disabled", true);
         },
 
+        /* ---------------------- */
+        /* Attached files section */
+        /* ---------------------- */
         triggerFileClick: function(){
             $(".attachedFiles input[type='file']").trigger("click");
         },

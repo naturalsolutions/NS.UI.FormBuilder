@@ -38,12 +38,23 @@
                 <div id="form" class="col-md-10 col-md-offset-1">
                     <!-- generated backbone form -->
                 </div>
-                <div class="col-md-10 col-md-offset-1 childFormsList" data-setting="field" style="display:none;">
-                    <span class="outerform" data-i18n="settings.actions.listOfParentForms">
-                        Liste des formulaires parents :
-                    </span>
-                    <div class="childList"></div>
+                <% if (collection.parentForms && collection.parentForms.length > 0) { %>
+                <div class="col-md-10 col-md-offset-1 parentForms">
+                    <div class="formField">
+                        <label data-i18n="settings.actions.listOfParentForms"></label>
+                        <div class="error-block" data-error=""></div>
+                        <div class="help-block"></div>
+                        <div class="links">
+                            <% for (var i in collection.parentForms) {
+                            f = collection.parentForms[i];
+                            url = formBaseUrl + f.id;
+                            %>
+                            <a href='<%= url %>'><%= f.name %></a>
+                            <% } %>
+                        </div>
+                    </div>
                 </div>
+                <% } %>
                 <% if (topcontext !== 'reneco') { %>
                 <div class="col-md-10 col-md-offset-1" data-setting="field">
                     <button id="saveTemplate" class="transparent reneco" data-i18n="settings.actions.saveAsType">

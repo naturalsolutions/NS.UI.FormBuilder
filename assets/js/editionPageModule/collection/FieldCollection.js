@@ -508,6 +508,7 @@ define([
             this.initialID     = JSONUpdate["initialID"];
             this.state         = JSONUpdate["state"];
             this.currentForm   = JSONUpdate["currentForm"];
+            this.parentForms   = JSONUpdate["parentForms"];
             this.schema        = _.sortBy(JSONUpdate["schema"], function(el) {
                 return el.order;
             });
