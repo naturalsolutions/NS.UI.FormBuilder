@@ -50,12 +50,16 @@ define([
             }
         },
 
-        getModeExtention : function (currentContext) {
+        getModeExtention : function (currentContext, callback) {
             var extentionMode = collectionExtensions[window.context];
             if (currentContext)
                 extentionMode = collectionExtensions[currentContext];
             if (!extentionMode)
                 return EmptyExtension;
+
+            if (callback && extentionMode.withCallback) {
+                extentionMode.withCallback(callback);
+            }
             return extentionMode;
         }
     };

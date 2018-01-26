@@ -173,17 +173,20 @@ define([
         },
 
         getTrackDatas: function (options) {
-            var that = this;
             if (!this.extensionData) {
                 $.ajax({
-                    data: JSON.stringify({'datas' : that.getExtractedDatas()}),
+                    data: JSON.stringify({'datas' : this.getExtractedDatas()}),
                     type: 'POST',
                     url: options.URLOptions.track + "/getData",
                     contentType: 'application/json',
                     crossDomain: true,
                     async: true,
                     success: _.bind(function (data) {
-                        that.extensionData = that.setSelectValues(data, that.schemaExtention);
+                        this.extensionData = this.setSelectValues(data, this.schemaExtention);
+                        if (this.callback) {
+                            this.callback(this.extensionData);
+                        }
+                        this.callback = null;
                     }, this),
                     error: _.bind(function (xhr) {
                         console.log("error ! " + xhr);
@@ -192,6 +195,16 @@ define([
             }
 
             return this.extensionData;
+        },
+
+        withCallback: function(callback) {
+            // we have data available, just apply the callback
+            if (this.extensionData) {
+                callback(this.extensionData);
+            } else {
+                // no data available yet, save for a brighter day
+                this.callback = callback;
+            }
         }
     };
 });

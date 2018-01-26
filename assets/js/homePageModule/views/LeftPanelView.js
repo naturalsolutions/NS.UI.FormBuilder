@@ -96,18 +96,19 @@ define([
             if (!context) {
                 return;
             }
-            var ext = CollectionExtention.getModeExtention(context);
-            if (!(ext && ext.extensionData)) {
-                return;
-            }
-            var data = ext.extensionData;
-            for (var i in data) {
-                var ext = data[i];
-                if (!ext["searchable"]) {
-                    continue;
+            CollectionExtention.getModeExtention(context, _.bind(function(extData) {
+                if (!extData) {
+                    return;
                 }
-                this.addCustomSearchInput(ext.type.toLowerCase(), i, ext.title, ext.options);
-            }
+
+                for (var i in extData) {
+                    var ext = extData[i];
+                    if (!ext["searchable"]) {
+                        continue;
+                    }
+                    this.addCustomSearchInput(ext.type.toLowerCase(), i, ext.title, ext.options);
+                }
+            }, this));
         },
 
         onRender : function(options) {
