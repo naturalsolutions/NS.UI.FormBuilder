@@ -55,6 +55,36 @@
                     </div>
                 </div>
                 <% } %>
+                <% if (collection.versions && collection.versions.length > 0) { %>
+                <div class="col-md-10 col-md-offset-1 versions">
+                    <div class="formField">
+                        <label data-i18n="form.history"></label>
+                        <div class="error-block" data-error=""></div>
+                        <div class="help-block"></div>
+                        <table>
+                            <%
+                            var timestamp = "newer";
+                            for (var i in collection.versions) {
+                                f = collection.versions[i];
+                                url = formBaseUrl + f.id;
+                                if (f.id === collection.id) {
+                                    timestamp = "this";
+                                } else if (timestamp === "this") {
+                                    timestamp = "older";
+                                }
+                            %>
+                            <tr data-id="<%= f.id %>" data-active="<%= f.state === 1 %>" data-timestamp="<%= timestamp %>">
+                                <td class="ts"></td>
+                                <td class="id"><%= f.id %></td>
+                                <td class="date">
+                                    <%= f.modificationDate %>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+                <% } %>
                 <% if (topcontext !== 'reneco') { %>
                 <div class="col-md-10 col-md-offset-1" data-setting="field">
                     <button id="saveTemplate" class="transparent reneco" data-i18n="settings.actions.saveAsType">

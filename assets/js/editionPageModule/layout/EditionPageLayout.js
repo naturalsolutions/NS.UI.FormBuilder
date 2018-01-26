@@ -41,6 +41,7 @@ define([
             'change .attachedFiles input[type="file"]': 'fileInputChanged',
             'click  .attachedFiles .remove'           : 'removeAttachedFile',
             'click  .attachedFiles .download'         : 'downloadAttachedFile',
+            'click  .versions tr'                     : 'displayVersion',
 
             'click .fieldTypes td'                    : 'appendToDrop',
             'keyup .rows'                             : 'gridKeypress',
@@ -189,14 +190,17 @@ define([
             this.$el.find("#gridRowActions").html($el).addClass("enabled");
         },
 
-        exit: function() {
+        exit: function(url) {
+            if (typeof(url) !== 'string') {
+                url = "#back/" +
+                    this.fieldCollection.context + "/" + this.fieldCollection.dataUpdated;
+            }
+
             var exit = _.bind(function() {
                 if (this.editing)
                     this.editing.view.trigger("close");
 
-                Backbone.history.navigate("#back/" +
-                    this.fieldCollection.context + "/" + this.fieldCollection.dataUpdated,
-                    {trigger: true});
+                Backbone.history.navigate(url, {trigger: true});
             }, this);
 
             if (!this.fieldCollection.pendingChanges || this.readonly) {
@@ -216,6 +220,10 @@ define([
                         }
                     }
                 }, null, exit);
+        },
+
+        displayVersion: function(e) {
+            this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
         },
 
         gridKeypress: function(e) {

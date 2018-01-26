@@ -371,6 +371,55 @@
           }
         }
 
+        .versions {
+          table {
+            width: 100%;
+
+            tr:hover {
+              cursor: pointer !important;
+              background: #d0d0d0;
+              td {
+                cursor: pointer !important;
+              }
+            }
+
+            tr[data-active="true"] {
+              td.ts::after {
+                content: "\e665";
+              }
+            }
+
+            tr[data-active="false"] {
+              opacity: .5;
+            }
+
+            tr[data-timestamp="this"] {
+              border: 1px solid black;
+            }
+
+            td {
+              padding: 1px;
+              &:last-of-type {
+                padding-right: 8px;
+              }
+
+              &.ts {
+                .reneco;
+                width: 25px;
+                text-align: center;
+              }
+              &.id {
+                width: 25px;
+                text-align: center;
+              }
+              &.date {
+                text-align: right;
+                font-family: monospace;
+              }
+            }
+          }
+        }
+
         #form, .attachedFiles {
           padding-left : 15px;
           padding-right: 20px;

@@ -98,6 +98,7 @@
         "minimal"    : "Minimum size must be less than the maximum size",
         "setting"    : "Form properties",
         "currentVersion": "Current version",
+        "history": "Versions history",
         "new"        : "New form",
         "context"    : "Context",
         "activite"   : "Activity",
