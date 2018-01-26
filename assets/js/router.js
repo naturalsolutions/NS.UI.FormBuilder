@@ -236,10 +236,12 @@ define([
 
         hideSpinner : function() {
             $('.spinner').removeClass("hijacked").addClass("end", 250);
+            this.fieldCollection.showSpinner(true);
         },
 
         showSpinner : function() {
             $('.spinner').addClass("hijacked").removeClass('end');
+            this.fieldCollection.showSpinner();
         }
     };
 
