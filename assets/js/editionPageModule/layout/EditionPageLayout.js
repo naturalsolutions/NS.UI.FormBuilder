@@ -65,7 +65,6 @@ define([
             this.fieldCollection.linkedFieldsList = options.linkedFieldsList;
             this.URLOptions = options.URLOptions;
             this.context = this.fieldCollection.context;
-            this.formFilesBinaryList = {};
 
             this.formChannel = Backbone.Radio.channel('form');
             this.formChannel.on('editField', this.editField, this);
@@ -301,6 +300,7 @@ define([
             tools.appendRequired(this.form.$el, form.schemaDefinition);
 
             // append files if any
+            this.formFilesBinaryList = {};
             if (form.fileList) {
                 $.each(form.fileList, function(index, value){
                     that.addAttachedFile(value.Pk_ID, value.name, value.filedata);
@@ -358,6 +358,8 @@ define([
             var that = this;
             var reader = new FileReader();
             reader.onload = function(){
+                // mark pending changes
+                that.fieldCollection.pendingChanges = true;
                 that.addAttachedFile(0, file.name, reader.result);
                 // clear input
                 input.value = '';
@@ -421,7 +423,7 @@ define([
                 .append($name)
                 .append($ctrlDownload)
                 .append($ctrlRemove);
-            $(".filesList").append($file);
+            this.$el.find(".filesList").append($file);
 
             // add to binary files
             var binFile = {
