@@ -216,22 +216,22 @@ define([
         },
 
         showLeftRegion: function() {
-            $('#leftSection').css('visibility', "visible");
+            this.homeRegion.$el.css('visibility', "visible");
             $('#mainRegion').animate({
                 marginLeft : '0%'
             }, 750, _.bind(function() {
-                $('#rightSection').css('visibility', "hidden");
+                this.editRegion.$el.css('visibility', "hidden");
             }, this));
             $(".headerWhiteArrow").css("width", "");
         },
 
         showRightRegion: function() {
-            $('#rightSection').css('visibility', "visible");
+            this.editRegion.$el.css('visibility', "visible");
             $('#mainRegion').animate({
                 marginLeft : '-100%'
-            }, 750, function() {
-                $('#leftSection').css('visibility', "hidden");
-            });
+            }, 750, _.bind(function() {
+                this.homeRegion.$el.css('visibility', "hidden");
+            }, this));
         },
 
         hideSpinner : function() {
