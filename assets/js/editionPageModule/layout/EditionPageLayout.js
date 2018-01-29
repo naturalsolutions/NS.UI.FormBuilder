@@ -21,7 +21,7 @@ define([
                 context: this.context,
                 fieldTypes: this.fieldTypes,
                 topcontext: AppConfig.topcontext,
-                readonly: AppConfig.readonlyMode
+                readonly: this.fieldCollection.readonly
             });
         },
 
@@ -29,7 +29,6 @@ define([
             return {
                 "data-context": this.context,
                 "data-topcontext": AppConfig.topcontext,
-                "data-readonly": AppConfig.readonlyMode,
                 "class": "edition"
             };
         },
@@ -76,7 +75,7 @@ define([
             this.formPanel = new FormPanelView({
                 fieldCollection : this.fieldCollection,
                 URLOptions : this.URLOptions
-            }, AppConfig.readonlyMode);
+            });
         },
 
         update: function(fieldCollection) {
@@ -95,6 +94,8 @@ define([
                 this.fieldCollection.currentFormUrl =
                     this.formBaseUrl + this.fieldCollection.currentForm;
             }
+
+            this.$el.attr("data-readonly", this.fieldCollection.readonly);
             this.initFieldTypes();
         },
 
@@ -158,10 +159,16 @@ define([
         closeEdit: function() {
             if (!this.editing) return;
 
-            this.editing.view.$el.find("input[name='name']").focus();
-            this.editing.view.$el.removeClass("editing");
-            this.editing.view.trigger("close");
+            var view = this.editing.view;
             this.editing = null;
+            view.$el.removeClass("editing");
+            view.trigger("close");
+            view.$el.find("input[name='name']").focus();
+
+            // clearSelected if readonly
+            if (this.fieldCollection.readonly) {
+                this.clearSelected();
+            }
 
             // re-enable panel
             $("#formPanel").removeClass("disabled");
@@ -202,7 +209,7 @@ define([
                 Backbone.history.navigate(url, {trigger: true});
             }, this);
 
-            if (!this.fieldCollection.pendingChanges || this.readonly) {
+            if (!this.fieldCollection.pendingChanges) {
                 exit();
                 return;
             }
@@ -249,9 +256,6 @@ define([
                 this.fieldCollection.save();
 
                 $(".formTitle").text(this.fieldCollection.name);
-
-                // disable "delete file" buttons"
-                $(".remove").addClass("disabled");
             } else {
                 tools.swal("error", 'modal.save.uncompleteFormerror', 'modal.save.uncompleteFormerror');
             }
@@ -307,6 +311,12 @@ define([
                 });
             }
 
+            // disable inputs, buttons & return
+            if (this.fieldCollection.readonly) {
+                this.form.$el.find("input, select, textarea, .remove").attr("disabled", true).addClass("disabled");
+                return
+            }
+
             // set custom double binding between #group and #typeIndividus
             // this is track specific - todo NotLikeThat
             var $groupe = $(this.form.el).find('select#groupe');
@@ -322,7 +332,7 @@ define([
                     $groupe.find('option[value="null"]').show();
                     $groupe.data('previous', $groupe.val());
                     $groupe.val('null').trigger("change");
-                    $groupe.attr("disabled", true);
+                    $groupe.attr("disabled", true).addClass("notallowed");
                 } else {
                     if ($groupe.find('option[value="null"]').is(':selected')) {
                         var prev = $groupe.data('previous');
@@ -330,7 +340,7 @@ define([
                         $groupe.val(val).trigger("change");
                     }
                     $groupe.find('option[value="null"]').hide();
-                    $groupe.attr("disabled", false);
+                    $groupe.attr("disabled", false).removeClass("notallowed");
                 }
             };
 
@@ -338,7 +348,7 @@ define([
             $typeIndividus.on('change', updateGroupe);
 
             // manually disable #group if set to null
-            if ($groupe.val() == 'null') $groupe.attr("disabled", true);
+            if ($groupe.val() == 'null') $groupe.attr("disabled", true).addClass("notallowed");
         },
 
         /* ---------------------- */
@@ -378,8 +388,11 @@ define([
             var $name = $("<td class='name'>").html(name);
             var $ctrlDownload = $("<td class='download'>");
             $ctrlDownload.attr('title', t.getValueFromKey("actions.download"));
-            var $ctrlRemove = $("<td class='remove'>");
-            $ctrlRemove.attr('title', t.getValueFromKey("actions.delete"));
+            var $ctrlRemove = $("<td>");
+            if (!this.fieldCollection.readonly) {
+                $ctrlRemove.addClass('remove');
+                $ctrlRemove.attr('title', t.getValueFromKey("actions.delete"));
+            }
             var $type = $("<td class='type'>");
             var typeClass = "default";
             switch (name.split(".").pop().toLowerCase()) {
@@ -493,6 +506,10 @@ define([
         },
 
         appendToDrop : function(e) {
+            if ($(e.target).attr("data-disabled") == "true") {
+                return;
+            }
+
             this.fieldCollection.pendingChanges = true;
             var fieldType = $(e.target).data("type");
             if (!Fields[fieldType]) {

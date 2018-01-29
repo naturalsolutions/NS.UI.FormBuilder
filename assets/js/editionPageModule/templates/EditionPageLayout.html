@@ -65,7 +65,7 @@
                 <% } %>
                 <% if (collection.versions && collection.versions.length > 0) { %>
                 <div class="col-md-10 col-md-offset-1 versions">
-                    <div class="formField">
+                    <div>
                         <label data-i18n="form.history"></label>
                         <div class="error-block" data-error=""></div>
                         <div class="help-block"></div>
@@ -103,7 +103,9 @@
                 field = fieldTypes[i]; %>
                 <td class="picto-<%= field.i18n %>"
                      data-type="<%= field.type %>"
-                     data-i18n="[title]fields.<%= field.i18n %>"></td>
+                     data-i18n="[title]fields.<%= field.i18n %>"
+                     data-disabled="<%= collection.readonly %>">
+                </td>
                 <% } %>
             </tr>
         </table>

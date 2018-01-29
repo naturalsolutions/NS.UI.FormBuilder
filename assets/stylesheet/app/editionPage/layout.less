@@ -1,4 +1,10 @@
 .edition {
+  &[data-readonly="true"] {
+    .header .formTitle {
+      color: lightgray;
+    }
+  }
+
   .header {
     width: 100%;
     padding: 15px 30px;
@@ -151,8 +157,12 @@
         background: black !important;
       }
 
-      input:disabled, select:disabled {
-        cursor: not-allowed;
+      input:disabled, select:disabled, textarea:disabled {
+        cursor: default;
+
+        &.notallowed {
+          cursor: not-allowed;
+        }
       }
 
       .checkBoxEditor {
@@ -200,6 +210,10 @@
 
       .properties {
         margin-bottom: 10px;
+        label {
+          color: #bbb;
+          margin: 0;
+        }
 
         .formField {
           margin: 10px 0 20px;
@@ -211,11 +225,6 @@
             margin-top: 2px;
           }
 
-          label {
-            color: #bbb;
-            margin: 0;
-          }
-
           .checkboxField {
             display: block;
           }
@@ -223,10 +232,12 @@
           input, select, textarea {
             display: block;
             width: 100%;
-          }
-
-          textarea {
             color: black;
+            background: none;
+
+            &:disabled {
+              color: gray;
+            }
           }
 
           input, select {
@@ -238,7 +249,6 @@
             background: none;
             padding: 2px 0 0;
             height: 22px;
-            color: black;
           }
 
           input {
@@ -282,9 +292,11 @@
         }
 
         .attachedFiles {
+          margin-top: 10px;
+          margin-bottom: 20px;
+
           label {
-            margin: 15px 0;
-            color: #bbb;
+            margin-bottom: 10px;
           }
 
           .disabled {
@@ -304,6 +316,7 @@
             background: none;
             color: #555;
             border: 2px solid @orange;
+            margin-bottom: 10px;
 
             &:hover {
               font-weight: bold;
@@ -311,7 +324,6 @@
           }
 
           .filesList {
-            margin-top: 10px;
             padding: 0 5px;
             .file {
               margin-bottom: 5px;
@@ -373,6 +385,8 @@
         }
 
         .versions {
+          margin-top: 10px;
+          margin-bottom: 20px;
           table {
             width: 100%;
 
@@ -499,7 +513,6 @@
       tr.fieldTypes {
         cursor: default;
         td {
-          cursor: pointer;
           position: relative;
           border: 1px solid transparent;
           width: 36px;
@@ -508,11 +521,16 @@
           color: white;
           padding: 7px;
 
-          &:hover {
+          &[data-disabled="false"]:hover {
+            cursor: pointer;
             color: @orange;
             background: @grid_bg;
             border: 1px solid @grid_gray;
             border-radius: 2px;
+          }
+
+          &[data-disabled="true"] {
+            opacity: .5;
           }
         }
       }
@@ -554,6 +572,12 @@
 
         option {
           color: black;
+        }
+
+        input, select, textarea {
+          &:disabled {
+            color: #ddd;
+          }
         }
 
         input, select {

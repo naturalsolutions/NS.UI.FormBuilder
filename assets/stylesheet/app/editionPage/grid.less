@@ -34,10 +34,13 @@
           color: #aaa !important;
 
           &.handle {
-            cursor: default;
             background: @grid_fg;
           }
         }
+      }
+
+      &[data-readonly="true"].handle {
+        cursor: default;
       }
 
       &.validationError {
@@ -190,6 +193,7 @@
 
           &[disabled] {
             cursor: default !important;
+            color: #ddd;
           }
 
           &:not([disabled]):focus, &:not([disabled]):hover {

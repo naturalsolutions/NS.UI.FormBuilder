@@ -181,6 +181,7 @@ define([
             this.options = options;
             this.model.view = this;
             this.static = this.model.get('compulsory');
+            this.readonly = this.static || this.collection.readonly;
             this.formChannel = Backbone.Radio.channel('form');
             this.validationErrors = null;
 
@@ -279,7 +280,9 @@ define([
             var formTemplate = this.template({
                 schema: this.schema,
                 columns: this.columns,
-                model: this.model
+                model: this.model,
+                static: this.static,
+                readonly: this.readonly
             });
             // feed this template to BackboneForm
             this.mainForm = new Backbone.Form({
@@ -295,7 +298,7 @@ define([
             this.$el.attr("id", $placeholder.attr("id"));
             this.$el.addClass($placeholder.attr("class"));
             this.$el.i18n();
-            if (this.static) {
+            if (this.readonly) {
                 this.$el.find("input, select").attr("disabled", true);
             }
             $placeholder.replaceWith(this.$el);
@@ -342,8 +345,13 @@ define([
             form.render();
             tools.appendRequired(form.$el, schema);
             form.$el.i18n();
-            // listen to this.events from created backbone form
-            this.delegateFormEvents(form);
+
+            if (this.readonly) {
+                form.$el.find("input, select, textarea").attr("disabled", true);
+            } else {
+                // listen to this.events from created backbone form
+                this.delegateFormEvents(form);
+            }
             return form;
         },
 

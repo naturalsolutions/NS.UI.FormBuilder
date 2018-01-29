@@ -1,4 +1,4 @@
-<tr class="editRow <% if (model.get('compulsory')) { %>static<% } %>" data-id="<%= model.get('id') %>" data-order="<%= model.get('order') %>">
+<tr class="editRow <% if (static) { %>static<% } %>" data-readonly="<%= readonly %>" data-id="<%= model.get('id') %>" data-order="<%= model.get('order') %>">
     <td class="handle type picto-<%= model.get('meta').type.toLowerCase() %>"></td>
     <% for (var i in columns) {
     var col = columns[i];

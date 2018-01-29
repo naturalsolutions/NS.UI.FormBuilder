@@ -136,6 +136,19 @@ define([
             this.$el.find('.drop').empty();
             this.collection.createFields();
 
+            this.$el.find('.drop').disableSelection();
+            this.$el.find('#scrollSection').slimScroll({
+                height        : 'calc(100% - 76px)',
+                railVisible   : true,
+                alwaysVisible : true
+            });
+            this.updateFieldCount();
+
+            // stop here if readonly
+            if (this.collection.readonly) {
+                return;
+            }
+
             // init sortable section
             this.$el.find('.drop').sortable({
                 axis: "y",
@@ -169,14 +182,6 @@ define([
                     }
                 }, this)
             });
-            this.$el.find('.drop').disableSelection();
-
-            this.$el.find('#scrollSection').slimScroll({
-                height        : 'calc(100% - 76px)',
-                railVisible   : true,
-                alwaysVisible : true
-            });
-            this.updateFieldCount();
         },
 
         onRender : function() {
