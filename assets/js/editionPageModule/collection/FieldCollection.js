@@ -741,7 +741,7 @@ define([
             var hidden = {'visibility': 'hidden'};
             var visible = {'visibility': 'visible'};
             $(".saveSpinner").css(hide? hidden: visible);
-            $("#save").css(hide? visible: hidden);
+            $(".header .action").css(hide? visible: hidden);
         }
     });
 
