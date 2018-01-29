@@ -372,13 +372,13 @@ define([
             }
 
             // prepare element todo table layout would be way simpler than bootstrap
-            var $file = $("<div class='file row'>");
-            var $name = $("<span class='name col-md-8'>").html(name);
-            var $ctrlDownload = $("<span class='download col-md-1'>");
+            var $file = $("<tr class='file row'>");
+            var $name = $("<td class='name'>").html(name);
+            var $ctrlDownload = $("<td class='download'>");
             $ctrlDownload.attr('title', t.getValueFromKey("actions.download"));
-            var $ctrlRemove = $("<span class='remove col-md-1'>");
+            var $ctrlRemove = $("<td class='remove'>");
             $ctrlRemove.attr('title', t.getValueFromKey("actions.delete"));
-            var $type = $("<span class='type col-md-1'>");
+            var $type = $("<td class='type'>");
             var typeClass = "default";
             switch (name.split(".").pop().toLowerCase()) {
                 case "doc":
