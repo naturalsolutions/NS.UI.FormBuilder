@@ -55,6 +55,14 @@
                     </div>
                 </div>
                 <% } %>
+                <% if (context === 'track') { %>
+                <div class="col-md-10 col-md-offset-1 attachedFiles">
+                    <input type="file" class="hide" accept="">
+                    <label data-i18n="settings.attachedFiles">attached files</label>
+                    <div data-i18n="settings.actions.addFile" class="action addBtn">add file</div>
+                    <table class="filesList"></table>
+                </div>
+                <% } %>
                 <% if (collection.versions && collection.versions.length > 0) { %>
                 <div class="col-md-10 col-md-offset-1 versions">
                     <div class="formField">
@@ -83,20 +91,6 @@
                             <% } %>
                         </table>
                     </div>
-                </div>
-                <% } %>
-                <% if (topcontext !== 'reneco') { %>
-                <div class="col-md-10 col-md-offset-1" data-setting="field">
-                    <button id="saveTemplate" class="transparent reneco" data-i18n="settings.actions.saveAsType">
-                        Enregistrer comme nouveau template
-                    </button>
-                </div>
-                <% } else if (context === 'track') { %>
-                <div class="col-md-10 col-md-offset-1 attachedFiles">
-                    <input type="file" class="hide" accept="">
-                    <label data-i18n="settings.attachedFiles">attached files</label>
-                    <div data-i18n="settings.actions.addFile" class="action addBtn">add file</div>
-                    <table class="filesList"></table>
                 </div>
                 <% } %>
             </div>
