@@ -641,6 +641,9 @@ define([
                             that.fieldstodelete = [];
                         }
 
+                        // refresh main grid
+                        Backbone.Radio.channel('grid').trigger('refresh');
+
                         // load new form
                         Backbone.history.navigate(
                             tools.replaceLastSlashItem(Backbone.history.location.hash, formData.id),
