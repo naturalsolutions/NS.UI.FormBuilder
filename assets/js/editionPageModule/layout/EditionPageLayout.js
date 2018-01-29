@@ -431,18 +431,7 @@ define([
                 "filedata": data
             };
 
-            if (pk) {
-                // already existing file
-                binFile.id = pk;
-                // disable remove button for existing files (not implemented in back)
-                $ctrlRemove.addClass("disabled");
-            } else {
-                // new file was added, scroll to bottom so we can see it
-                $("#settingFormPanel .scroll").slimScroll({
-                    scrollTo: "9999px"
-                });
-                binFile.id = -1;
-            }
+            binFile.id = pk? pk: -1;
             this.formFilesBinaryList[name] = binFile;
         },
 
