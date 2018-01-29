@@ -614,39 +614,13 @@ define([
                     type: PostOrPut,
                     url: url,
                     contentType: 'application/json',
+                    dataType: 'json',
                     //  If you run the server and the back separately but on the same server you need to use crossDomain option
                     //  The server is already configured to used it
                     crossDomain: true,
 
                     //  Trigger event with ajax result on the formView
                     success: _.bind(function (formData) {
-                        // update form id (new form)
-                        that.id = formData.id;
-                        // replace last part of hash location with new form id
-                        Backbone.history.navigate(
-                            tools.replaceLastSlashItem(Backbone.history.location.hash, that.id),
-                            {trigger: false}
-                        );
-                        if (formData.schema) {
-                            // update field ids (new fields)
-                            $.each(formData.schema, function (i, field) {
-                                for (var i in that.fieldstodelete) {
-                                    if (that.fieldstodelete[i] === field.id) return;
-                                }
-
-                                var curField = that.findWhere({
-                                    name: field.name
-                                });
-
-                                if (!curField) {
-                                    that.createField(field, field.type);
-                                } else {
-                                    curField.set('id', field.id);
-                                    curField.set('new', false);
-                                }
-                            });
-                        }
-
                         if (that.fieldstodelete && that.fieldstodelete.length > 0)
                         {
                             $.ajax({
@@ -663,7 +637,11 @@ define([
                             that.fieldstodelete = [];
                         }
 
-                        that.showSpinner(true);
+                        // load new form
+                        Backbone.history.navigate(
+                            tools.replaceLastSlashItem(Backbone.history.location.hash, formData.id),
+                            {trigger: true}
+                        );
 
                         // refresh forms list to update childForms options
                         tools.loadForms(that.context, false, true);
