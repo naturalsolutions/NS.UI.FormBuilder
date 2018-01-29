@@ -38,8 +38,10 @@ define([], function() {
                     // The app needs the following nodes to have a proper path to the server :
                     // ***********************************************************************
 
+                    form: '/FormbuilderWS/form',                            // use this to fetch a single form
+                    forms: '/FormbuilderWS/forms',                          // use this to fetch all forms for a context with appending /<context>
+
                     formAutocomplete: '/FormbuilderWS/autocomplete/forms',
-                    forms: '/FormbuilderWS/forms',
                     makeObsolete: '/FormbuilderWS/makeObsolete',
                     allforms: '/FormbuilderWS/forms/allforms',
                     formSaveURL: '/FormbuilderWS/forms',                    //  Get all form name for autocomplete, does not work if you are in client side mode only

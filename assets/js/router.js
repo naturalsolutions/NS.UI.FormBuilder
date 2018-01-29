@@ -180,7 +180,7 @@ define([
                 this.displayForm(newForm.toJSON());
             } else {
                 $.ajax({
-                    url: AppConfig.config.options.URLOptions.forms + '/' + id,
+                    url: AppConfig.config.options.URLOptions.form + '/' + id,
                     dataType: 'json',
                     success: _.bind(function (data) {
                         this.displayForm(data);
