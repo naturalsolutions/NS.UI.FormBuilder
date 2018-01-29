@@ -148,7 +148,9 @@ define([
             context : {
                 type        : "Hidden",
                 template    : fieldTemplate
-            }
+            },
+            originalID: {type: "Hidden"},
+            initialID: {type: "Hidden"}
         },
 
         getDefaultSchema : function (){
@@ -341,6 +343,8 @@ define([
                 isTemplate    : this.isTemplate || false,
                 context       : this.context,
                 fileList      : this.fileList || [],
+                originalID    : this.originalID,
+                initialID     : this.initialID,
                 //  form inputs
                 schema        : {},
             }, subModel = null;

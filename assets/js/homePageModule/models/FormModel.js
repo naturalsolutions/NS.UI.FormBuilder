@@ -21,6 +21,8 @@ define([
             isTemplate       : false,
             context          : window.context || "",
             state            : 1,
+            originalID       : null,
+            initialID        : null,
             readonly         : false,
             schtroudel: "salamanca !",
 
@@ -82,6 +84,8 @@ define([
                 propagate                  : this.get('propagate'),
                 context                    : this.get('context'),
                 state                      : this.get('state'),
+                originalID                 : this.get('originalID'),
+                initialID                  : this.get('initialID'),
                 readonly                   : this.get('readonly')
             }
         }
