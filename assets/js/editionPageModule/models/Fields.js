@@ -112,7 +112,8 @@ define([
             fieldClassDisplay: '',
             atBeginingOfLine: false,
             fieldSize: 12,
-            linkedFieldset: ''
+            linkedFieldset: '',
+            originalID: null
         },
 
         schema: {
@@ -231,7 +232,9 @@ define([
             linkedFieldset: {
                 title: translater.getValueFromKey('schema.linkedFieldset'),
                 template: fieldTemplate
-            }
+            },
+
+            originalID: {type: "Hidden"}
         },
 
         i18nFields: ["translations"],
