@@ -125,8 +125,8 @@ define([
 
             $("#fieldPropertiesPanel").addClass("display");
 
-            // notify view we're live in DOM
-            this.editing.view.trigger("open");
+            // notify view that its form was inserted in DOM
+            this.editing.view.trigger("open", form);
 
             var focusEl = form.$el.find("input:not(:hidden)")[0];
             if (focusEl) focusEl.focus();

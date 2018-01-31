@@ -26,9 +26,14 @@ define([
         // treeInserted is a callback for when tree is actually inserted in
         // DOM, operations made here are either no-op if tree is not in DOM,
         // or dysfunctionnal like the collapse tree feature.
-        treeInserted: function() {
+        treeInserted: function(form) {
             if (!this.treeSource.fancytree) {
                 // no tree, nothing to do
+                return;
+            }
+
+            // ensure the opened form element actually contains an AutocompTreeEditor
+            if (form.$el.find(".autocompTreeEditor").length == 0) {
                 return;
             }
 
