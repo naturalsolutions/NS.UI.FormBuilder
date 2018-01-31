@@ -402,16 +402,6 @@ define([
             }
         },
 
-        refreshSlimScroll: function() {
-            $(".scroller")
-                .slimScroll({
-                    height: '100%',
-                    color: '#111',
-                    railVisible: true,
-                    alwaysVisible: true
-                });
-        },
-
         resetCollection : function(callback) {
             this.showSpinner();
             this.formCollection.reset();
@@ -424,7 +414,16 @@ define([
                         callback();
                     }
                     this.hideSpinner();
-                    this.refreshSlimScroll();
+
+                    // re-init slimScroll
+                    $(".scroller")
+                        .slimScroll({destroy: true})
+                        .slimScroll({
+                            height: '100%',
+                            color: '#111',
+                            railVisible: true,
+                            alwaysVisible: true
+                        });
                 }, this),
                 error: _.bind(function() {
                     tools.swal("error", "fetch.error", "fetch.errorMsg");

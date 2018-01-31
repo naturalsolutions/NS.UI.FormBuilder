@@ -177,6 +177,15 @@ define([
                     }
                 }, this)
             });
+
+            // re-init slimscroll
+            this.$el.find('#scrollSection')
+                .slimScroll({destroy: true})
+                .slimScroll({
+                    height: 'calc(100% - 76px)',
+                    railVisible: true,
+                    alwaysVisible: true
+            });
         },
 
         onRender : function() {
@@ -188,12 +197,6 @@ define([
 
             // run i18next translation in the view context
             this.$el.i18n();
-
-            this.$el.find('#scrollSection').slimScroll({
-                height        : 'calc(100% - 76px)',
-                railVisible   : true,
-                alwaysVisible : true
-            });
         },
 
         save : function() {
