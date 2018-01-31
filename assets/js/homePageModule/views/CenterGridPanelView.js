@@ -95,7 +95,6 @@ define([
 
             this.initGridChannel();
 
-            this.scrollSize = options.scrollSize || '100%';
             var context = $("#contextSwitcher .selected").text().toLowerCase();
             this.context = context;
 
@@ -403,6 +402,16 @@ define([
             }
         },
 
+        refreshSlimScroll: function() {
+            $(".scroller")
+                .slimScroll({
+                    height: '100%',
+                    color: '#111',
+                    railVisible: true,
+                    alwaysVisible: true
+                });
+        },
+
         resetCollection : function(callback) {
             this.showSpinner();
             this.formCollection.reset();
@@ -415,6 +424,7 @@ define([
                         callback();
                     }
                     this.hideSpinner();
+                    this.refreshSlimScroll();
                 }, this),
                 error: _.bind(function() {
                     tools.swal("error", "fetch.error", "fetch.errorMsg");
