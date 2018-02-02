@@ -442,7 +442,7 @@ define([
         updateCollectionAfterSearch: function(searchData) {
             var filteredModels = this.formCollection.filter(_.bind(function(model) {
                 for (var name in searchData) {
-                    if (name !== 'keywords' && model.get(name) === undefined) {
+                    if (name !== 'keywords' && typeof(model.get(name)) !== 'string') {
                         console.warn("ignoring undefined search term \"" + name +"\" for model.");
                         continue;
                     }
@@ -455,7 +455,7 @@ define([
                         var found = false;
                         for (var i in translations) {
                             var t = translations[i];
-                            if (t.Keywords.toLowerCase().indexOf(searchVal) >= 0) {
+                            if (t && t.Keywords && t.Keywords.toLowerCase().indexOf(searchVal) >= 0) {
                                 found = true;
                                 break;
                             }
