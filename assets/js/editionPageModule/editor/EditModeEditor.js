@@ -29,17 +29,22 @@ define([
         updateValue: function(e) {
             this.dictValues[$(e.target).data("bit")] = e.target.checked;
             this.$el.find("label[for='" + e.target.id + "']").toggleClass("checked");
-            this.setValue(tools.binWeight.toValue(this.dictValues));
+            this.setValue(tools.binWeight.toValue(this.dictValues), true);
         },
 
         getValue: function() {
             return this.value;
         },
 
-        setValue: function(value) {
+        setValue: function(value, triggerChange) {
             this.value = value;
-            this.model.set(this.options.key, value, {silent: true});
+            if (triggerChange) {
+                if (this.model && this.model.view && this.model.view.setValue) {
+                    this.model.view.setValue(this.options.key, value);
+                } else if (triggerChange && this.model) {
+                    this.model.set(this.options.key, value, {trigger: true});
+                }
+            }
         }
-
     });
 });
