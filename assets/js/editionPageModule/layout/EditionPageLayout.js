@@ -461,6 +461,8 @@ define([
         },
 
         removeAttachedFile: function(el){
+            // mark pending changes
+            this.fieldCollection.pendingChanges = true;
             // check that control isn't disabled
             if ($(el.target).hasClass("disabled")) {
                 return;
