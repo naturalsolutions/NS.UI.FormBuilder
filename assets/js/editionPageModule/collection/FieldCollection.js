@@ -82,9 +82,6 @@ define([
                             targets: ["Name", "Description"]
                         }],
                         required: true
-                    },
-                    ar: {
-                        name: translater.getValueFromKey('languages.ar')
                     }
                 },
                 schema: {

@@ -140,9 +140,6 @@ define([
                             targets: ["Name"]
                         }],
                         required: true
-                    },
-                    ar: {
-                        name: translater.getValueFromKey('languages.ar')
                     }
                 },
                 schema: {
@@ -1451,7 +1448,7 @@ define([
                         template: fieldTemplate,
                         title: translater.getValueFromKey('editGrid.valuesList'),
                         languages: [
-                            "fr", "en", "ar"
+                            "fr", "en"
                         ]
                     }
                 });
