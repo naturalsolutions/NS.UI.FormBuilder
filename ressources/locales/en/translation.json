@@ -7,6 +7,10 @@
       "formContext"      : "Context"
     },
 
+    "header": {
+        "logout": "Logout"
+    },
+
     "editGrid": {
         "type": "Type",
         "name": "Name",

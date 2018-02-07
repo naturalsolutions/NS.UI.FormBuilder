@@ -11,7 +11,8 @@ define([
     './router',
     'app-config',
     'auth',
-    'tools'
+    'tools',
+    'i18n'
 ], function(Backbone, _, $, Marionette, Router, AppConfig, auth, tools) {
 
     var FormbuilderApp = new Marionette.Application();
@@ -87,6 +88,9 @@ define([
 
         // replace all <img src="*svg"> with inline <svg> tags
         tools.inlineSvg('img.svg');
+
+        // translate header
+        $("body > header").i18n();
     });
 
     return FormbuilderApp;

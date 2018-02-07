@@ -7,6 +7,10 @@
         "formContext"      : "Contexte"
     },
 
+    "header": {
+        "logout": "Déconnexion"
+    },
+
     "editGrid": {
         "type": "Type",
         "name": "Nom",
