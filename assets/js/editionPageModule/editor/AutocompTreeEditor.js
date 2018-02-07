@@ -99,15 +99,19 @@ define([
             // replace fancytreeactivate event with current
             this.$tree.off("fancytreeactivate").on("fancytreeactivate",
                 _.bind(function(event, data){
-                    var value = data.node.key;
-                    this.view.setValue(this.options.key, value);
-                    this.$el.find(".value").val(value);
+                    this.value = data.node.key;
+                    this.view.setValue(this.options.key, this.value);
+                    this.$el.find(".value").val(this.value);
 
                     var path = data.node.data.fullpath;
                     this.view.setValue(this.options.schema.options.path, path);
                     this.$el.find(".path").val(path).attr("title", path);
                 }, this)
             );
+        },
+
+        getValue: function() {
+            return this.value;
         },
 
         render: function() {

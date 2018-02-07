@@ -991,8 +991,7 @@ define([
                     type: 'Hidden',
                     editorAttrs: {disabled: true},
                     template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.positionPath'),
-                    validators: ['required']
+                    title: translater.getValueFromKey('schema.positionPath')
                 }
             });
 
