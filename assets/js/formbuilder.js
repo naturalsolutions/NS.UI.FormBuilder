@@ -84,6 +84,9 @@ define([
         $.each(AppConfig.contexts, function(ctx) {
             tools.loadForms(ctx);
         });
+
+        // replace all <img src="*svg"> with inline <svg> tags
+        tools.inlineSvg('img.svg');
     });
 
     return FormbuilderApp;
