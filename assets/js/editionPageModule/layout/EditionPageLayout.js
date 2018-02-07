@@ -49,7 +49,8 @@ define([
             'focus #settingFormPanel select'          : 'clearSelected',
             'click .btnDelete'                        : 'deleteField',
             'click .btnConvert'                       : 'convertField',
-            'click .btnOk'                            : 'closeEdit'
+            'click #fieldPropertiesPanel .btnOk'      : 'closeEdit',
+            'click #fieldPropertiesPanel h2'          : 'closeEdit'
         },
 
         regions : {
