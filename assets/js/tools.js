@@ -63,16 +63,19 @@ define([
          * it has "required" validator.
          */
         appendRequired: function($el, schema) {
+            var hasRequired = false;
             $.each(schema, function(index, value){
                 if (!value.validators) return;
                 for (var i in value.validators) {
                     var validator = value.validators[i];
                     if (validator == "required" || validator.type === "required") {
                         $el.find(".field-" + index + " label[for]").append("<span>*</span>");
+                        hasRequired = true;
                         return;
                     }
                 }
             });
+            return hasRequired;
         },
 
         /**

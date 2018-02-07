@@ -95,12 +95,16 @@ define([
                 }).render();
                 form.parentForm = this;
                 form.$el.attr("data-lang", lang);
-                tools.appendRequired(form.$el, schema);
+                var hasRequiredFields = tools.appendRequired(form.$el, schema);
                 this.forms[lang] = form;
                 this.$el.append(form.$el);
 
                 // <td> button for lang
                 form.$actionner = this.$el.find("td.lang[data-lang='" + lang + "']");
+                if (hasRequiredFields) {
+                    // also append required for tab header
+                    form.$actionner.find(".isRequired").empty().addClass("required");
+                }
                 // remove error class from actionner if no more error in form
                 form.$el.find("input, select, textarea").on("change", _.bind(function(e) {
                     var $el = $(e.delegateTarget);
