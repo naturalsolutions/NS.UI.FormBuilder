@@ -34,7 +34,7 @@ define([
         },
 
         events : {
-            'click #save': 'save',
+            'click .actionSave': 'save',
             'click #exit': 'exit',
             'click  .attachedFiles .addBtn'           : 'triggerFileClick',
             'change .attachedFiles input[type="file"]': 'fileInputChanged',
@@ -186,7 +186,7 @@ define([
         renderActions: function(model) {
             if (!model) {
                 // clear gridRowActions section
-                this.$el.find("#gridRowActions").empty().removeClass("enabled");
+                this.$el.find(".inputActions").empty();
                 return;
             }
 
@@ -194,7 +194,7 @@ define([
                 model: model
             }));
             $el.i18n();
-            this.$el.find("#gridRowActions").html($el).addClass("enabled");
+            this.$el.find(".inputActions").html($el);
         },
 
         exit: function(url) {

@@ -22,7 +22,7 @@
     </div>
     <% } %>
     <img class="saveSpinner" src="assets/images/loader.gif" />
-    <div data-i18n="form.actions.save" class="action actionSave" id="save">Tout sauvegarder</div>
+    <div data-i18n="form.actions.save" class="action actionSave">Tout sauvegarder</div>
 </div>
 
 <div class="content">
@@ -110,7 +110,10 @@
             </tr>
         </table>
         <div id="gridView"></div>
-        <div id="gridRowActions"></div>
+        <div id="gridRowActions">
+            <div class="inputActions"></div>
+            <div data-i18n="form.actions.save" class="action actionSave">Tout sauvegarder</div>
+        </div>
         <div id="gridTemperedGlass"></div>
         <div id="fieldPropertiesPanel">
             <div class="content">
