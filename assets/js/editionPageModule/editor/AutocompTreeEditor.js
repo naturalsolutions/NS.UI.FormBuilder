@@ -67,7 +67,9 @@ define([
         initTree: function(url) {
             this.treeSource = tools.getTree(url);
             if (this.treeSource.error) {
-                this.$tree.html("Error fetching provided url: " + this.treeSource.error.status + " (" + this.treeSource.error.statusText + ")")
+                this.$tree.html(
+                    "Error fetching provided url: " + this.treeSource.error.status + " (" + this.treeSource.error.statusText + ")<br>" +
+                    "Please reload the page");
                 return;
             }
             if (!this.treeSource.data) {

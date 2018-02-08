@@ -188,7 +188,7 @@ define([
                 url         : url,
                 contentType : 'application/json',
                 data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
-                timeout     : 20000,
+                timeout     : 30000,
                 success: _.bind(function (data) {
                     tree.data = data;
                     tree.loading = false;
@@ -240,7 +240,7 @@ define([
                 type        : 'GET',
                 url         : url,
                 contentType : 'application/json',
-                timeout     : 20000,
+                timeout     : 30000,
                 success: _.bind(function (data) {
                     forms.data = JSON.parse(data);
                     forms.loading = false;
