@@ -242,6 +242,7 @@ define([
 
         save: function() {
             this.clearSelected();
+            this.closeEdit();
             var formValidation = this.form.validate();
             if (formValidation === null) {
                 // filter new files only (deletion not implemented in back, todo)
