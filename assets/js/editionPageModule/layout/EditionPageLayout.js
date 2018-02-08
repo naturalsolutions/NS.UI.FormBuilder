@@ -582,7 +582,7 @@ define([
 
             tools.swalSelect("warning",
                 "settings.actions.convertTitle",
-                "settings.actions.convertValidate",
+                t.getValueFromKey("settings.actions.convertValidate", {field: toConvert.get('name')}),
                 "settings.actions.convertLabel",
                 toConvert.get("compatibleFields"),
                 {
