@@ -253,6 +253,7 @@ define([
                 var formData = this.form.getValue();
                 formData.fileList = Object.values(newFiles);
                 formData.id = this.fieldCollection.id;
+                formData.state = this.fieldCollection.state;
                 this.fieldCollection.updateCollectionAttributes(formData);
                 this.fieldCollection.save();
             } else {
