@@ -144,7 +144,6 @@ define([], function() {
         // available contexts + specific config item
         // if sub-element is not specified it will be taken from defaults above
         contexts: {
-            classic: {},
             ecoreleve: {
                 inputTypes: [
                     'Autocomplete',
