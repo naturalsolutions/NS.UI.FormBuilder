@@ -370,9 +370,9 @@
             "no"               : "Non, annuler",
             "obsolete"         : "Rendre obsolète",
             "deleted"          : "Champs supprimés !",
-            "formDeleted"      : "Votre formulaire a été vidé !",
+            "formDeleted"      : "Le formulaire a été passé en inactif",
             "deleteError"      : "Champ non supprimé !",
-            "formDeletedError" : "Votre formulaire n'a pas pu être vidé !",
+            "formDeletedError" : "Erreur pendant la suppression du formulaire",
             "fieldsdeleted"    : "Les champs du formulaire seront supprimés !",
             "loosingModifications" : "En quittant, vous perdrez vos modifications !"
         },

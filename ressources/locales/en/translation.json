@@ -363,9 +363,9 @@
             "no"               : "No, cancel",
             "obsolete"         : "Make it obsolete",
             "deleted"          : "Fields deleted",
-            "formDeleted"      : "Your form has been emptied !",
+            "formDeleted"      : "The form has been set inactive",
             "deleteError"      : "Fields not deleted !",
-            "formDeletedError" : "Your form could not be emptied !",
+            "formDeletedError" : "Error while setting form inactive",
             "fieldsdeleted"    : "Your form fields will be removed !",
             "loosingModifications" : "If you leave, you will loose your modifications !"
         },
