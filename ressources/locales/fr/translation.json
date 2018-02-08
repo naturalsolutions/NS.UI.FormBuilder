@@ -377,7 +377,7 @@
             "loosingModifications" : "En quittant, vous perdrez vos modifications !"
         },
         "exit" : {
-          "yes" : "Oui quitter"
+          "yes" : "Oui, quitter"
         },
         "import" : {
             "error"    : "Une erreur est survenue !",
@@ -410,7 +410,7 @@
             "formSimilarFrName" : "Un formulaire avec le même label Français existe déjà (id: {{ID}})",
             "formSimilarEnName" : "Un formulaire avec le même label Anglais existe déjà  (id: {{ID}})",
             "circularDependency" : "Une dépendance circulaire a été trouvée dans les sous-formulaires...",
-            "dupeFieldType" : "Incosistance de types pour le champ nommé \"{{FieldName}}\"\nIl doit être de type \"{{FieldType}}\", comme dans le formulaire #{{ID}}"
+            "dupeFieldType" : "Incosistance de types pour le champ nommé \"{{FieldName}}\"\nIl doit être du type \"{{FieldType}}\", comme dans le formulaire #{{ID}}"
         },
         "field" : {
             "error" : "Field can't be added !",

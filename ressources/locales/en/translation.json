@@ -370,7 +370,7 @@
             "loosingModifications" : "If you leave, you will loose your modifications !"
         },
         "exit" : {
-          "yes" : "Yes exit"
+          "yes" : "Yes, exit"
         },
         "import" : {
             "error"    : "An error occured !",
