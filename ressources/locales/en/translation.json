@@ -393,30 +393,24 @@
         "save" : {
             "success"    : "Form saved !",
             "successMsg" : "Your form was successfully saved on the server !",
-            "successMsgTmp" : "New values for the form parameters saved !",
-            "error"      : "An error occured !",
-            "errorMsg"   :" Your form wasn't saved. Consider making a export",
-            "errorMsgNoExport"   :" Your form wasn't saved. For some reason ...",
-            "title"      : "Protocol save",
-            "button"     : "Save",
-            "uncompleteFormerror" : "Wrong Form !",
-            "uncompleteForm" : "At least one information is either missing or incorrect in your form properties !",
-            "uncompleteFormProp" : "At least one required field of your form is empty or invalid !",
-            "uncompleteFielderror" : "Wrong Fields !",
-            "uncompleteForm" : "At least one information is either missing or incorrect in your field properties !",
-            "uncompleteFieldProp" : "At least one required field of your input is empty or invalid !",
-            "inputnamehasothertype" : "One of this form input already exists in another form with another type for this context as following : ",
-            "hasDuplicateFieldNamesError" : "Invalid form !",
-            "hasDuplicateFieldNames" : "Some of your fields have the same names",
-            "formSimilarName" : "A form with a similar name already exists !",
-            "formSimilarFrName" : "A form with a similar french displayed name already exists !",
-            "formSimilarEnName" : "A form with a similar english displayed name already exists !",
-            "circularDependency" : "A circular dependency has been found with one of the childforms !!",
-            "418" : "I'm a teapot !"
+
+            "formPropertiesError" : "Form properties errors",
+            "formPropertiesErrorMsg" : "Please fix errors in form properties",
+            "fieldsError" : "Fields errors",
+            "fieldsErrorMsg" : "Please fix errors in fields properties",
+
+            "serverError"      : "Error from server",
+            "notFound": "Didn't find form with provided previous ID (id: {{ID}})",
+            "formSimilarName" : "Another form with this name already exists (id: {{ID}})",
+            "formSimilarFrName" : "Another form with this French label already exists (id: {{ID}})",
+            "formSimilarEnName" : "Another form with this English label already exists (id: {{ID}})",
+            "circularDependency" : "A circular dependency has been found with one of the childforms",
+            "dupeFieldType" : "Types mismatch for field named \"{{FieldName}}\"\nIt must be of type \"{{FieldType}}\", as found in form #{{ID}}"
         },
         "field" : {
-            "error" : "Field can't be added !",
-            "errorMsg" : "An error occured during field addition !"
+            "error" : "Error interne !",
+            "errorMsg" : "Le champ sélectionné est introuvable",
+            "dupe": "Nom de champ dupliqué"
         },
         "configuration" : {
             "success"    : "Field saved !",

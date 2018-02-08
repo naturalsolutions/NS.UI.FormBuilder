@@ -1,5 +1,5 @@
 define([
-    'jquery', './Translater', 'sweetalert', 'app-config'
+    'jquery', './Translater', 'sweetalert', 'app-config', 'i18n'
 ], function($, translater, sweetalert, AppConfig) {
     return {
         /**
@@ -273,14 +273,23 @@ define([
             return this.loadForms(context, sync, refresh);
         },
 
-        // parseCustomError returns <label> string from error of the form "this is a msg [ERR:<labal>]", or null
-        parseErrorLabel: function(err) {
-            var re = /\[ERR\:(.*)\]/g;
-            var match = re.exec(err);
-            if (match && match[1]) {
-                return match[1];
+        // parseServerError tries to extract data in string of the form: "error message -- <json>"
+        parseServerError: function(err) {
+            var parts = err.split("--");
+            var ret = {
+                Message: parts[0],
+                Info: null
+            };
+            if (parts.length == 1) {
+                return ret;
             }
-            return null;
+            try {
+                ret.Info = JSON.parse(parts[1]);
+            } catch(e) {
+                console.warn("error JSON.parsing error data:", parts[1]);
+                ret.Info = parts[1];
+            }
+            return ret;
         },
 
         //  replaceLastSlashItem replaces part after last "/" from provided src with provided id

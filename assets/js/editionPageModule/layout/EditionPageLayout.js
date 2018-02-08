@@ -255,10 +255,8 @@ define([
                 formData.id = this.fieldCollection.id;
                 this.fieldCollection.updateCollectionAttributes(formData);
                 this.fieldCollection.save();
-
-                $(".formTitle").text(this.fieldCollection.name);
             } else {
-                tools.swal("error", 'modal.save.uncompleteFormerror', 'modal.save.uncompleteFormerror');
+                tools.swal("error", 'modal.save.formPropertiesError', 'modal.save.formPropertiesErrorMsg');
             }
         },
 

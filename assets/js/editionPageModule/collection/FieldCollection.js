@@ -560,162 +560,164 @@ define([
             var that = this;
             that.showSpinner();
 
-            var hasDuplicates = function(array) {
-                return (new Set(array)).size !== array.length;
-            };
+            var fieldsValid = true;
+            var formNames = {};
+            var dupeFields = {};
 
-            var tmpForm = new Backbone.Form({
-                schema: that.getDefaultSchema(),
-                data: that.getAttributesValues()
-            }).render();
-
-            var formValidation = tmpForm.validate();
-
-            var fieldsValidation = true;
-
-            var formValues = [];
-            var formNames = [];
-
+            // validate each field
             $.each(that.models, function (index, value) {
                 var fieldModel = that.get(value.id);
                 if (!fieldModel.get("compulsory")) {
                     var fieldErrors = fieldModel.view.validate();
                     if (fieldErrors) {
-                        fieldsValidation = false;
+                        fieldsValid = false;
                         fieldModel.view.setValidationErrors(fieldErrors);
                     }
                 }
 
-                formValues.push({
-                    id: value.get("id"),
-                    name: value.get("name")
-                });
-                formNames.push(value.get("name"));
-            });
+                var name = value.get("name");
 
-            var fieldNamesHasDuplicates = hasDuplicates(formNames);
-
-            if (formValidation != null && Object.keys(formValidation).length == 1 &&
-                formValidation.importance && $('input#importance').val() == 0)
-            {
-                formValidation = null;
-            }
-
-            if (formValidation === null && fieldsValidation && !fieldNamesHasDuplicates) {
-                $.each(that.models, function (index, value) {
-                    delete that.get(value.id).attributes.validated;
-                });
-
-                var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
-                var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
-                var dataToSend = JSON.stringify(that.getJSON(PostOrPut));
-
-                $.ajax({
-                    data: dataToSend,
-                    type: PostOrPut,
-                    url: url,
-                    contentType: 'application/json',
-                    dataType: 'json',
-                    //  If you run the server and the back separately but on the same server you need to use crossDomain option
-                    //  The server is already configured to used it
-                    crossDomain: true,
-
-                    //  Trigger event with ajax result on the formView
-                    success: _.bind(function (formData) {
-                        if (that.fieldstodelete && that.fieldstodelete.length > 0)
-                        {
-                            $.ajax({
-                                data: JSON.stringify({fieldstodelete:that.fieldstodelete}),
-                                type: 'DELETE',
-                                url: that.url + "/" + that.id + "/deletefields",
-                                contentType: 'application/json',
-                                crossDomain: true,
-                                success: function () {},
-                                error: function (xhr) {
-                                    console.error("error deleting fields", xhr);
-                                }
-                            });
-                            that.fieldstodelete = [];
-                        }
-
-                        // refresh main grid
-                        Backbone.Radio.channel('grid').trigger('refresh');
-
-                        // load new form
-                        Backbone.history.navigate(
-                            tools.replaceLastSlashItem(Backbone.history.location.hash, formData.id),
-                            {trigger: true}
-                        );
-
-                        // refresh forms list to update childForms options
-                        tools.loadForms(that.context, false, true);
-                        that.displaySuccessMessage();
-                    }, that),
-                    error: _.bind(function (xhr) {
-                        that.showSpinner(true);
-                        switch (xhr.status) {
-                            case 418:
-                                var errLabel = tools.parseErrorLabel(xhr.responseText);
-                                switch (errLabel) {
-                                    case "NAME":
-                                        this.displayFailMessage("modal.save.formSimilarName");
-                                        break;
-                                    case "FRNAME":
-                                        this.displayFailMessage("modal.save.formSimilarFrName");
-                                        break;
-                                    case "ENNAME":
-                                        this.displayFailMessage("modal.save.formSimilarEnName");
-                                        break;
-                                    default:
-                                        this.displayFailMessage("modal.save.418", xhr.responseText);
-                                        break;
-                                }
-                                break;
-                            case 508:
-                                this.displayFailMessage("modal.save.circularDependency");
-                                break;
-                            default:
-                                if (xhr.responseText.indexOf("customerror::") > -1)
-                                    this.displayFailMessage(xhr.responseText.split("::")[1], xhr.responseText.split("::")[2]);
-                                else if (xhr.responseText.indexOf('<!DOC') == -1) {
-                                    this.displayFailMessage(xhr.responseText);
-                                } else {
-                                    this.displayFailMessage(xhr.status + " " + xhr.statusText);
-                                }
-
-                                break;
-                        }
-                    }, that)
-                });
-            }
-            else {
-                if (formValidation != null) {
-                    $("#collectionName").css('color', "red");
-                    tools.swal("error", "modal.save.uncompleteFormerror", "modal.save.uncompleteForm");
-                }
-                else if (!fieldsValidation) {
-                    tools.swal("error", "modal.save.uncompleteFielderror", "modal.save.uncompleteField");
-                }
-                else if (fieldNamesHasDuplicates) {
-                    tools.swal("error", "modal.save.hasDuplicateFieldNamesError", "modal.save.hasDuplicateFieldNames");
-                    var savedNames = [];
-                    $.each(formValues, function(index, value){
-                        if (savedNames.indexOf(value.name) > -1){
-                            $.each(formValues, function(subindex, subvalue){
-                                if (subvalue.name == value.name)
-                                {
-                                    $("#dropField"+subvalue.id+" .field-label span").css("color", "red");
-                                }
-                            });
-                        }
-                        else
-                        {
-                            savedNames.push(value.name);
-                        }
+                // keep track of dupes inputs and their previous errors
+                if (formNames[name]) {
+                    if (!dupeFields[name]) {
+                        dupeFields[name] = [];
+                    }
+                    dupeFields[name].push(formNames[name]);
+                    dupeFields[name].push({
+                        model: fieldModel,
+                        errors: fieldErrors
                     });
                 }
-                that.showSpinner(true);
+                formNames[name] = {
+                    model: fieldModel,
+                    errors: fieldErrors
+                };
+            });
+
+            // notify dupe input names, along with other errors
+            if (Object.keys(dupeFields).length > 0) {
+                $.each(dupeFields, function (name, fields) {
+                    $.each(fields, function(_, field) {
+                        field.model.view.setValidationErrors($.extend(field.errors, {
+                            'name': {
+                                type: "duplicateName",
+                                message: translater.getValueFromKey("modal.field.dupe")
+                            }
+                        }));
+                    })
+                });
+                fieldsValid = false;
             }
+
+            if (!fieldsValid) {
+                that.showSpinner(true);
+                tools.swal("error", "modal.save.fieldsError", "modal.save.fieldsErrorMsg");
+                return;
+            }
+
+            // get through to saving
+            var PostOrPut = that.id > 0 ? 'PUT' : 'POST';
+            var url = that.id > 0 ? (that.url + '/' + that.id) : that.url;
+            var dataToSend = JSON.stringify(that.getJSON(PostOrPut));
+
+            $.ajax({
+                data: dataToSend,
+                type: PostOrPut,
+                url: url,
+                contentType: 'application/json',
+                dataType: 'json',
+                //  If you run the server and the back separately but on the same server you need to use crossDomain option
+                //  The server is already configured to used it
+                crossDomain: true,
+
+                //  Trigger event with ajax result on the formView
+                success: _.bind(function (formData) {
+                    if (that.fieldstodelete && that.fieldstodelete.length > 0)
+                    {
+                        $.ajax({
+                            data: JSON.stringify({fieldstodelete:that.fieldstodelete}),
+                            type: 'DELETE',
+                            url: that.url + "/" + that.id + "/deletefields",
+                            contentType: 'application/json',
+                            crossDomain: true,
+                            success: function () {},
+                            error: function (xhr) {
+                                console.error("error deleting fields", xhr);
+                            }
+                        });
+                        that.fieldstodelete = [];
+                    }
+
+                    // refresh main grid
+                    Backbone.Radio.channel('grid').trigger('refresh');
+
+                    // load new form
+                    Backbone.history.navigate(
+                        tools.replaceLastSlashItem(Backbone.history.location.hash, formData.id),
+                        {trigger: true}
+                    );
+
+                    // update form title
+                    $(".formTitle").text(that.name);
+
+                    // refresh forms list to update childForms options
+                    tools.loadForms(that.context, false, true);
+                    that.displaySuccessMessage();
+                }, that),
+                error: _.bind(function (xhr) {
+                    that.showSpinner(true);
+                    switch (xhr.status) {
+                        case 404:
+                        case 400:
+                            var errorDetails = tools.parseServerError(xhr.responseText);
+                            if (!errorDetails.Info || !errorDetails.Info.Error) {
+                                this.displayServerError(errorDetails.Message);
+                                break;
+                            }
+                            var errorKey = null;
+                            switch (errorDetails.Info.Error) {
+                                case "NAME":
+                                    errorKey = "modal.save.formSimilarName";
+                                    break;
+                                case "FRNAME":
+                                    errorKey = "modal.save.formSimilarFrName";
+                                    break;
+                                case "ENNAME":
+                                    errorKey = "modal.save.formSimilarEnName";
+                                    break;
+                                case "NOTFOUND":
+                                    errorKey = "modal.save.notFound";
+                                    break;
+                                case "FIELDTYPE":
+                                    errorKey = "modal.save.dupeFieldType";
+
+                                    break;
+                                default:
+                                    // generic error popup
+                                    this.displayServerError(errorDetails.Message);
+                                    break;
+                            }
+                            if (errorKey) {
+                                this.displayServerError(
+                                    translater.getValueFromKey(
+                                        errorKey, errorDetails.Info
+                                    )
+                                );
+                            }
+                            break;
+                        case 508:
+                            this.displayServerError("modal.save.circularDependency");
+                            break;
+                        default:
+                            if (xhr.responseText.indexOf('<!DOC') == -1) {
+                                this.displayServerError(xhr.responseText);
+                            } else {
+                                this.displayServerError(xhr.status + " " + xhr.statusText);
+                            }
+                            break;
+                    }
+                }, that)
+            });
         },
 
         displaySuccessMessage : function() {
@@ -724,13 +726,13 @@ define([
             tools.swal("success", "modal.save.success", "modal.save.successMsg");
         },
 
-        displayFailMessage : function(textKey, textValue) {
+        displayServerError : function(textKey, textValue) {
             if (textKey) {
-                tools.swal("error", "modal.save.error",
-                    translater.getValueFromKey(textKey) + (textValue ? " -> " + textValue : ""));
+                tools.swal("error", "modal.save.serverError",
+                    translater.getValueFromKey(textKey) + (textValue ? "\n\"" + textValue + "\"": ""));
             }
             else {
-                tools.swal("error", "modal.save.error", "modal.save.errorMsg");
+                tools.swal("error", "modal.save.serverError", "modal.save.serverErrorMsg");
             }
         },
 

@@ -397,32 +397,25 @@
             "json"     : "Exporter au format JSON"
         },
         "save" : {
-            "success"    : "Sauvé !",
-            "successMsg" : "Votre formulaire a été enregistré sur le serveur !",
-            "successMsgTmp" : "Nouveaux paramètres du formulaire enregistrés !",
-            "error"      : "Une erreur est survenue !",
-            "errorMsg"   : "Votre formulaire n'a pas été enregistré !\nPensez à faire un export",
-            "errorMsgNoExport"   : "Votre formulaire n'a pas été enregistré. Pour une raison quelconque ...",
-            "title"      : "Sauvegarde du protocol",
-            "button"     : "Sauvegarder",
-            "uncompleteFormerror" : "Formulaire incorrect !",
-            "uncompleteForm" : "Au moins une information manque ou est incorrecte dans les propriétés du formulaire !",
-            "uncompleteFormProp" : "Au moins un champ obligatoire des propriétés du formulaire est vide !",
-            "uncompleteFielderror" : "Champs incorrects !",
-            "uncompleteField" : "Au moins une information manque ou est incorrecte dans les propriétés de vos champs !",
-            "uncompleteFieldProp" : "Au moins un champ obligatoire des propriétés du champ est vide !",
-            "inputnamehasothertype" : "Un des champs de ce formulaire existe déjà dans un autre formulaire avec un autre type pour ce contexte comme suis : ",
-            "hasDuplicateFieldNamesError" : "Formulaire invalide !",
-            "hasDuplicateFieldNames" : "Certains de vos champs ont des noms identiques",
-            "formSimilarName" : "Un formulaire avec un nom similaire existe déjà !",
-            "formSimilarFrName" : "Un formulaire avec un nom d'affichage français similaire existe déjà !",
-            "formSimilarEnName" : "Un formulaire avec un nom d'affichage anglais similaire existe déjà !",
-            "circularDependency" : "Une dépendance circulaire a été détectée parmis vos childforms !!",
-            "418" : "Je suis une théière !"
+            "success"    : "OK",
+            "successMsg" : "Le formulaire a été correctement enregistré",
+
+            "formPropertiesError" : "Propriétés du formulaire",
+            "formPropertiesErrorMsg" : "Veuillez corriger les erreurs dans les propriétés du formulaire",
+            "fieldsError" : "Champs du formulaire",
+            "fieldsErrorMsg" : "Veuillez corriger les erreurs dans les champs du formulaire",
+
+            "serverError"      : "Erreur serveur",
+            "formSimilarName" : "Un formulaire avec le même nom existe déjà (id: {{ID}})",
+            "formSimilarFrName" : "Un formulaire avec le même label Français existe déjà (id: {{ID}})",
+            "formSimilarEnName" : "Un formulaire avec le même label Anglais existe déjà  (id: {{ID}})",
+            "circularDependency" : "Une dépendance circulaire a été trouvée dans les sous-formulaires...",
+            "dupeFieldType" : "Incosistance de types pour le champ nommé \"{{FieldName}}\"\nIl doit être de type \"{{FieldType}}\", comme dans le formulaire #{{ID}}"
         },
         "field" : {
-            "error"    : "Echec de l'ajout !",
-            "errorMsg" : "Une erreur est survenue lors de l'ajout du champ !"
+            "error" : "Field can't be added !",
+            "errorMsg" : "An error occured during field addition !",
+            "dupe": "Duplicate field name"
         },
         "configuration" : {
             "success"    : "Champ sauvegardé !",
