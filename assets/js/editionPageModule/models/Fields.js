@@ -699,7 +699,138 @@ define([
         section: 'tree'
     });
 
-    // todo
+    // This input type is Track Dependent
+    models.PositionField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                defaultPath: "",
+                webServiceURL: AppConfig.paths.positionWSPath,
+                defaultNode: "",
+                positionPath: ""
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
+
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                // todo: shouldn't it be defaultValue ??
+                // doesn't match behavior of ThesaurusField which uses defaultValue
+                defaultPath: {
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.defaultPath'),
+                    template: fieldTemplate
+                },
+                webServiceURL: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs: {
+                        disabled: function() {
+                            return AppConfig.topcontext.toLowerCase() === 'reneco';
+                        }
+                    }
+                },
+                defaultNode: {
+                    type: AutocompTreeEditor,
+                    title: translater.getValueFromKey('schema.defaultNode'),
+                    template: fieldTemplate,
+                    options: {
+                        path: "positionPath"
+                    },
+                    validators: ['required']
+                },
+                positionPath: {
+                    type: 'Hidden',
+                    editorAttrs: {disabled: true},
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.positionPath')
+                }
+            });
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'Position',
+        i18n: 'position',
+        section: 'reneco'
+    });
+
+    // obsolete / not implemented
+    models.ObjectPickerField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ObjectPicker");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                objectType: "Monitored Site",
+                wsUrl: "",
+                triggerAutocomplete: 0,
+                linkedLabel: ""
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ObjectPicker");
+
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                objectType: {
+                    type: 'Select',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.objectType'),
+                    options: ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
+                    validators: ['required']
+                },
+                wsUrl: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.wsUrl'),
+                    validators: ['required']
+                },
+                triggerAutocomplete: {
+                    type: 'Number',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.ACTrigger'),
+                    validators: [function checkValue(value) {
+                        if (value < 1) {
+                            return {
+                                type: 'Invalid number',
+                                message: translater.getValueFromKey('schema.ACTriggerMinValue')
+                            }
+                        }
+                    }]
+                },
+                linkedLabel: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.linkedLabel')
+                }
+            });
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'ObjectPicker',
+        i18n: 'objectpicker',
+        section: 'reneco'
+    });
+
+    // obsolete / not implemented
     models.AutocompleteTreeViewField = models.BaseField.extend({
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("AutocompleteTreeView");
@@ -804,72 +935,7 @@ define([
         section: 'other'
     });
 
-    // This input type is EcoReleve Dependent
-    models.ObjectPickerField = models.BaseField.extend({
-        defaults: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ObjectPicker");
-
-            var toret = _.extend({}, models.BaseField.prototype.defaults, {
-                objectType: "Monitored Site",
-                wsUrl: "",
-                triggerAutocomplete: 0,
-                linkedLabel: ""
-            });
-
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
-        },
-        schema: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ObjectPicker");
-
-            var toret = _.extend({}, models.BaseField.prototype.schema, {
-                objectType: {
-                    type: 'Select',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.objectType'),
-                    options: ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
-                    validators: ['required']
-                },
-                wsUrl: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.wsUrl'),
-                    validators: ['required']
-                },
-                triggerAutocomplete: {
-                    type: 'Number',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.ACTrigger'),
-                    validators: [function checkValue(value) {
-                        if (value < 1) {
-                            return {
-                                type: 'Invalid number',
-                                message: translater.getValueFromKey('schema.ACTriggerMinValue')
-                            }
-                        }
-                    }]
-                },
-                linkedLabel: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.linkedLabel')
-                }
-            });
-
-            return _.extend(toret, toret, extraschema);
-        },
-
-        initialize: function(options) {
-            models.BaseField.prototype.initialize.call(this, options);
-        }
-    }, {
-        type: 'ObjectPicker',
-        i18n: 'objectpicker',
-        section: 'reneco'
-    });
-
-    // This input type is EcoReleve Dependent
+    // ecorelevé-specific
     models.SubFormGridField = models.BaseField.extend({
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("SubFormGrid");
@@ -938,72 +1004,6 @@ define([
     }, {
         type: 'SubFormGrid',
         i18n: 'subFormGrid',
-        section: 'reneco'
-    });
-
-    // This input type is Track Dependent
-    models.PositionField = models.BaseField.extend({
-        defaults: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
-
-            var toret = _.extend({}, models.BaseField.prototype.defaults, {
-                defaultPath: "",
-                webServiceURL: AppConfig.paths.positionWSPath,
-                defaultNode: "",
-                positionPath: ""
-            });
-
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
-        },
-        schema: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
-
-            var toret = _.extend({}, models.BaseField.prototype.schema, {
-                // todo: shouldn't it be defaultValue ??
-                // doesn't match behavior of ThesaurusField which uses defaultValue
-                defaultPath: {
-                    type: 'Text',
-                    title: translater.getValueFromKey('schema.defaultPath'),
-                    template: fieldTemplate
-                },
-                webServiceURL: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs: {
-                      disabled: function() {
-                        return AppConfig.topcontext.toLowerCase() === 'reneco';
-                      }
-                    }
-                },
-                defaultNode: {
-                    type: AutocompTreeEditor,
-                    title: translater.getValueFromKey('schema.defaultNode'),
-                    template: fieldTemplate,
-                    options: {
-                        path: "positionPath"
-                    },
-                    validators: ['required']
-                },
-                positionPath: {
-                    type: 'Hidden',
-                    editorAttrs: {disabled: true},
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.positionPath')
-                }
-            });
-
-            return _.extend(toret, toret, extraschema);
-        },
-
-        initialize: function(options) {
-            models.BaseField.prototype.initialize.call(this, options);
-        }
-    }, {
-        type: 'Position',
-        i18n: 'position',
         section: 'reneco'
     });
 
@@ -1203,7 +1203,6 @@ define([
                 title: translater.getValueFromKey('schema.format')
             };
 
-            // TODO - UGLY : Abstract special input cases ?
             if (AppConfig.topcontext == "reneco" || window.context == "aygalades") {
                 formatFieldProps.type = 'Select';
                 delete formatFieldProps.editorAttrs;
@@ -1230,8 +1229,6 @@ define([
     //  ----------------------------------------------------
     //  Field herited by NumberField
     //  ----------------------------------------------------
-
-
     models.NumberField = models.TextField.extend({
 
         defaults: function() {
@@ -1373,11 +1370,6 @@ define([
             return _.extend({},
                 models.NumberField.prototype.schema.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
-
-            /* TODO KEEP AS EXAMPLE OF THE OLD WAY
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal");
-            return models.NumberField.prototype.schema();
-            */
         },
 
         initialize: function(options) {
@@ -1414,8 +1406,6 @@ define([
     //  ----------------------------------------------------
     //  Field herited by EnumerationField
     //  ----------------------------------------------------
-
-
     models.EnumerationField = models.BaseField.extend({
 
         defaults: function() {
