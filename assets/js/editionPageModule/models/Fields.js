@@ -923,6 +923,10 @@ define([
                 }
             });
 
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
+
             return _.extend(toret, toret, extraschema);
         },
 
@@ -995,6 +999,10 @@ define([
                     title: translater.getValueFromKey('schema.showLines')
                 }
             });
+
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
 
             return _.extend(toret, toret, extraschema);
         },
