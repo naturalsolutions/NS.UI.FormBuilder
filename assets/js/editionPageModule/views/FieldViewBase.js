@@ -262,16 +262,7 @@ define([
                 "modal.clear.textinput",
                 extraSwalOpts,
                 null,
-                function() {
-                    setTimeout(function () {
-                        tools.swal("warning",
-                            "modal.clear.title2",
-                            translater.getValueFromKey('modal.clear.textinput2'),
-                            extraSwalOpts,
-                            null,
-                            confirmCallback);
-                    }, 200);
-                }
+                confirmCallback
             );
         },
 

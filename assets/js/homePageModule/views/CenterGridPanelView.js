@@ -135,17 +135,7 @@ define([
                 });
             }
 
-            var swalOpts1 = {
-                buttons: {
-                    cancel: translater.getValueFromKey('modal.clear.no'),
-                    confirm: {
-                        text: translater.getValueFromKey('modal.clear.yes'),
-                        value: true,
-                        className: "danger"
-                    }
-                }
-            };
-            var swalOpts2 = {
+            var swalOpts = {
                 buttons: {
                     cancel: translater.getValueFromKey('modal.clear.no'),
                     obsolete: {
@@ -163,22 +153,16 @@ define([
             tools.swal("warning",
                 "modal.clear.title",
                 "modal.clear.text",
-                swalOpts1,
+                swalOpts,
                 null,
-                function() {
-                    tools.swal("warning",
-                        "modal.clear.title2",
-                        'modal.clear.text2',
-                        swalOpts2,
-                        null,
-                        _.bind(function(confirm) {
-                            if (confirm === 'obsolete') {
-                                this.makeObsolete(currentForm);
-                            } else if (confirm) {
-                                this.deleteForm(currentForm);
-                            }
-                        }, this));
-                });
+                _.bind(function(confirm) {
+                    if (confirm === 'obsolete') {
+                        this.makeObsolete(currentForm);
+                    } else if (confirm) {
+                        this.deleteForm(currentForm);
+                    }
+                }, this)
+            );
         },
 
         deleteForm: function(form) {
@@ -188,7 +172,7 @@ define([
                 url: this.URLOptions.forms + "/" + form.id,
                 success: _.bind(function () {
                     // refresh forms list for childForm
-                    tools.loadForms(form.get("context"), false, true);
+                    tools.loadForms(form.context, false, true);
 
                     tools.swal("success", "modal.clear.deleted", "modal.clear.formDeleted");
                     this.hideSpinner();
@@ -203,12 +187,12 @@ define([
             });
         },
 
-        makeObsolete : function(id) {
+        makeObsolete : function(form) {
             this.showSpinner();
             $.ajax({
                 data: {},
                 type: 'PUT',
-                url: this.URLOptions.makeObsolete + "/" + id,
+                url: this.URLOptions.makeObsolete + "/" + form.id,
                 contentType: 'application/json',
                 crossDomain: true,
                 success: _.bind(function (data) {

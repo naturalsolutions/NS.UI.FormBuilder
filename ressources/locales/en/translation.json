@@ -354,16 +354,13 @@
         "filename" : "File name",
         "clear" : {
             "title"            : "Are you sure ?",
-            "title2"           : "Are you REALLY sure ?",
-            "text"             : "The form will be deleted !",
-            "text2"            : "The form and all it's linked fields will be lost ! Consider making it obsolete instead.",
-            "textinput"        : "The input will be deleted !",
-            "textinput2"       : "After saving, the input will be forever lost !",
+            "text"             : "The form will be deleted. Consider making it inactive instead",
+            "textinput"        : "After saving, the input will be deleted.",
             "yes"              : "Yes, delete it",
             "no"               : "No, cancel",
-            "obsolete"         : "Make it obsolete",
-            "deleted"          : "Fields deleted",
-            "formDeleted"      : "The form has been set inactive",
+            "obsolete"         : "Make it inactive",
+            "deleted"          : "Form removed",
+            "formDeleted"      : "The form has been set inactive and removed from Formbuilder",
             "deleteError"      : "Fields not deleted !",
             "formDeletedError" : "Error while setting form inactive",
             "fieldsdeleted"    : "Your form fields will be removed !",
@@ -444,7 +441,7 @@
         },
         "makeObs" : {
             "success" : "Success !",
-            "successMsg" : "The form have been turned into obsolete"
+            "successMsg" : "The form have been set inactive"
         }
     },
 
