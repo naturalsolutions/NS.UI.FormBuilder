@@ -5,6 +5,7 @@ define([
     'marionette',
     'moment',
     'text!../templates/GridView.html',
+    'text!../templates/RowControls.html',
     'backgrid',
     '../../Translater',
     '../models/FormModel',
@@ -13,7 +14,7 @@ define([
     'app-config',
     'tools',
     'slimScroll'
-    ], function($, _, Backbone, Marionette, moment, GridView, Backgrid, translater,
+    ], function($, _, Backbone, Marionette, moment, GridView, RowControls, Backgrid, translater,
                 FormModel, Radio, sweetalert, AppConfig, tools) {
 
     /**
@@ -22,14 +23,7 @@ define([
      */
     var CenterGridPanelView = Backbone.Marionette.View.extend({
         events : {
-            'click #delete'        : 'deleteFormPopup',
-            'click #copy'          : 'duplicateForm',
-            'click #edit'          : "editForm",
-            'click .editForm'      : "editForm",
-            'click #editRow'       : "editForm",
-            'click #add'           : 'addForm',
-            'click #import'        : 'importForm',
-            'click #export'        : 'exportForm'
+            'click #add': 'addForm'
         },
 
         /**
@@ -86,15 +80,9 @@ define([
         },
 
         initialize : function(options, readonly) {
-            _.bindAll(this, 'displayFormInformation', 'updateGridWithSearch', 'deleteForm', 'deleteFormPopup');
-
+            _.bindAll(this, 'updateGridWithSearch', 'deleteForm', 'deleteFormPopup');
             this.URLOptions = options.URLOptions;
-
-            this.currentSelectedForm = -1;
-            this.clearFooterAction();
-
             this.initGridChannel();
-
             var context = $("#contextSwitcher .selected").text().toLowerCase();
             this.context = context;
 
@@ -116,12 +104,6 @@ define([
         initGridChannel : function() {
             this.gridChannel = Backbone.Radio.channel('grid');
 
-            // This event is receive when an user click on a grid's row
-            // When the event is received, the view displays some additionnal information for the selected element in the grid
-            //
-            // this event is send from this view in a grid callback
-            this.gridChannel.on('rowClicked', this.displayFormInformation);
-
             //  This event is send form the leftPanelView (see leftPanelView.js in views folder) when a user want to filter the grid via a form
             //  When the event is received we update grid data correspondig to the search
             this.gridChannel.on('search', this.updateGridWithSearch);
@@ -131,9 +113,8 @@ define([
             this.gridChannel.on('resetCollection', this.resetCollection, this);
         },
 
-        deleteFormPopup : function() {
-            var self = this;
-            var currentForm = self.formCollection.get(self.currentSelectedForm).toJSON();
+        deleteFormPopup : function(form) {
+            var currentForm = form.toJSON();
 
             // todo restore this feature (form weight)
             var weight;
@@ -142,7 +123,7 @@ define([
                 $.ajax({
                     data: {},
                     type: 'GET',
-                    url: this.URLOptions.trackFormWeight + "WFBID/" + self.currentSelectedForm,
+                    url: this.URLOptions.trackFormWeight + "WFBID/" + currentForm.id,
                     contentType: 'application/json',
                     crossDomain: true,
                     success: _.bind(function (data) {
@@ -190,19 +171,18 @@ define([
                         'modal.clear.text2',
                         swalOpts2,
                         null,
-                        function(confirm) {
+                        _.bind(function(confirm) {
                             if (confirm === 'obsolete') {
-                                self.makeObsolete(self.currentSelectedForm);
+                                this.makeObsolete(currentForm);
                             } else if (confirm) {
-                                self.deleteForm(self.currentSelectedForm);
+                                this.deleteForm(currentForm);
                             }
-                        });
+                        }, this));
                 });
         },
 
-        deleteForm: function(id) {
+        deleteForm: function(form) {
             this.showSpinner();
-            var form = this.formCollection.get(id);
             $.ajax({
                 type: 'DELETE',
                 url: this.URLOptions.forms + "/" + form.id,
@@ -242,83 +222,23 @@ define([
             });
         },
 
-        displayFormInformation : function(elementAndModel) {
-            var newSelctedRow = elementAndModel['model'].get('id');
-            var el      = elementAndModel['el'],
-                model   = elementAndModel['model'];
-
-            // remove rowControls from grid, to avoid duplicate cloning
-            $("#grid").find('#rowControls').remove();
-
-            if (this.currentSelectedForm == newSelctedRow) {
-                this.clearSelectedRow();
-            } else {
-                // clone controls to selected row
-                $('#rowControls').clone().appendTo($(el).find("td:last-of-type"));
-
-                $('tr.selected').removeClass('selected');
-                el.addClass('selected');
-
-                this.currentSelectedForm = newSelctedRow;
-            }
-        },
-
-        clearSelectedRow : function() {
-            //  context !== reneco
-            $('.formInformation').fadeOut(100, _.bind(function() {
-                $('.padding').slideUp(500);
-                $('.formInformation').remove()
-                $('tr.selected').removeClass('selected');
-            }, this));
-
-            this.currentSelectedForm = -1;
-            this.clearFooterAction();
-        },
-
-        clearFooterAction : function() {
-            $('tr.selected').removeClass('selected');
-        },
-
-        initClickableRow : function() {
-            var that = this;
-            var selectedForm = this.currentSelectedForm;
-            // By default grid not fired click event
-            // But we can't create a small clickable row to get the event
-            return Backgrid.Row.extend({
-                events: {
-                    "click": "onClick",
-                    "dblclick": "onDblClick"
-                },
-
-                onClick: function (e) {
-                    // dismiss click event if srcElement is a .control (delete / edit)
-                    if ($(e.originalEvent.srcElement).hasClass("control")) {
-                        return;
-                    }
-
-                    this.gridChannel = Backbone.Radio.channel('grid');
-                    this.gridChannel.trigger('rowClicked', {
-                        model   : this.model,
-                        el      : this.$el
-                    });
-                },
-                onDblClick: function(e) {
-                    if (that.currentSelectedForm == -1)
-                        this.onClick(e);
-                    that.editForm(this.model.get('context'));
-                }
-            });
-        },
-
         initGrid : function() {
             // only once
             if (this.grid) {
                 return;
             }
 
+            var that = this;
             this.grid = new Backgrid.Grid({
-                row: this.initClickableRow(),
-                collection : this.formCollection
+                collection : this.formCollection,
+                row: Backgrid.Row.extend({
+                    events: {
+                        "click": "editForm"
+                    },
+                    editForm: function(e) {
+                        that.editForm(this.model.get('context'), this.model.get('id'));
+                    }
+                })
             });
             this.resetGridColumns();
         },
@@ -490,24 +410,13 @@ define([
             this.hideSpinner();
         },
 
-        editForm : function(ctx, id) {
-            if (!ctx || typeof(ctx) !== 'string') {
-                // get currentSelectedForm's context
-                ctx = this.grid.collection.findWhere({id: this.currentSelectedForm}).get("context");
-            }
-
-            // if not provided use this.currentSelectedForm
-            if (!id) {
-                id = this.currentSelectedForm;
-            }
-
-            this.hideContextList();
-            Backbone.history.navigate('#form/' + ctx + "/" + id, {trigger: true});
+        addForm: function() {
+            this.editForm(this.context, 'new');
         },
 
-        addForm: function() {
+        editForm : function(ctx, id) {
             this.hideContextList();
-            Backbone.history.navigate('#form/' + this.context + '/new', {trigger: true});
+            Backbone.history.navigate('#form/' + ctx + "/" + id, {trigger: true});
         },
 
         addGridColumn: function(name, i18nKey, type) {
@@ -535,6 +444,7 @@ define([
             var dateSorter = function(model) {
                 return moment(model.get("modificationDate"), "DD/MM/YYYY - hh:mm:ss").unix();
             };
+            var that = this;
             var defaults = [{
                 name  : 'name',
                 label    : translater.getValueFromKey('grid.name') || 'Name',
@@ -560,9 +470,20 @@ define([
             }, {
                 name     : 'controls',
                 label    : '',
-                cell     : 'string',
                 editable : false,
-                sortable : false
+                sortable : false,
+                cell: Backgrid.Cell.extend({
+                    className: 'controls',
+                    render: function () {
+                        this.$el.html(RowControls);
+                        this.$el.find(".btnTrash").on("click", _.bind(function(e) {
+                            e.preventDefault();
+                            e.stopImmediatePropagation();
+                            that.deleteFormPopup(this.model);
+                        }, this));
+                        return this;
+                    }
+                })
             }];
 
             this.grid.columns.set(defaults);
@@ -580,10 +501,6 @@ define([
 
             // retreive and populate custom search inputs
             this.gridChannel.trigger('contextChanged', context);
-
-            // clear selection
-            this.currentSelectedForm = -1;
-            this.clearFooterAction();
 
             // run search & update grid display
             this.resetCollection(_.bind(function() {
