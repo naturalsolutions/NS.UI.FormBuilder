@@ -323,7 +323,7 @@
     "settings" : {
         "attachedFiles": "Attached files",
         "actions" : {
-            "addFile": "Add file",
+            "addFile": "Add file...",
             "saveAsType" : "Save as template",
             "applyTemplate" : "Apply",
             "chooseNewTemplate" : "Apply a template:",

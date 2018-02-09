@@ -331,7 +331,7 @@
     "settings" : {
         "attachedFiles": "Fichiers joints",
         "actions" : {
-            "addFile": "Ajouter un fichier",
+            "addFile": "Ajouter un fichier...",
             "saveAsType" : "Enregistrez comme nouveau template",
             "applyTemplate" : "Appliquer",
             "chooseNewTemplate" : "Appliquer un template :",
