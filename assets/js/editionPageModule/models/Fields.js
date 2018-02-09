@@ -1214,7 +1214,12 @@ define([
             if (AppConfig.topcontext == "reneco" || window.context == "aygalades") {
                 formatFieldProps.type = 'Select';
                 delete formatFieldProps.editorAttrs;
-                formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
+
+                if (this.get('context') && this.get('context').toLowerCase() == 'track') {
+                    formatFieldProps.options = ["DD/MM/YYYY"]
+                } else {
+                    formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
+                }
             }
 
 
