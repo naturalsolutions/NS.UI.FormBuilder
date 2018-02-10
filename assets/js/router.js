@@ -27,14 +27,12 @@ define([
             }
             this.backHash = Backbone.history.location.hash;
             this.showLeftRegion();
-
-            // trick with this.loading, avoid double rendering:
-            // on first call because it breaks click events on forms grid for some reason.
             this.setContext(context);
         },
 
         edit: function(context, id) {
             this.editMode = true;
+            this.$contextSwitcher.addClass("disabled");
 
             // update window.context, cause it's used somewhere for extraProperties I think
             // todo, remove the window.context mechanics at some point
@@ -61,16 +59,31 @@ define([
             }
         },
 
-        setContext: function(context) {
+        displayContext: function(context) {
+            // update contextSwitcher for display only, save real context
+            this.previousHomeContext = this.homeContext;
+            this.setContext(context, true);
+        },
+
+        setContext: function(context, displayOnly) {
             if (this.homeContext === context) {
                 return;
             }
             this.homeContext = context;
 
-            this.$contextSwitcher.find(".selected").text(context);
+            var $selected = this.$contextSwitcher.find(".selected");
+            $selected.text(context);
+            if (context == this.defaultContext) {
+                $selected.addClass("default");
+            } else {
+                $selected.removeClass("default");
+            }
             this.$contextSwitcher.find(".hide").removeClass("hide");
             this.contexts[context].addClass("hide");
-            this.centerPanel.setContext(context);
+
+            if (!displayOnly) {
+                this.centerPanel.setContext(context);
+            }
         },
 
         setFieldCollection: function(context) {
@@ -100,6 +113,10 @@ define([
                     var $el = $("<div class='context'>"+name+"</div>");
                     this.$contextSwitcher.append($el);
                     this.contexts[name] = $el;
+
+                    if (this.defaultContext == name) {
+                        $el.addClass("default");
+                    }
                 }
             }, this);
 
@@ -117,20 +134,16 @@ define([
             } else if (nbContexts > 1) {
                 // enable multi-context
                 this.$contextSwitcher.removeClass("single");
-                var that = this;
-
-                // Expand context switcher
-                this.$contextSwitcher.click(function(e) {
-                    // only allow context-switching on home page
-                    if (!that.editMode) {
-                        $(this).toggleClass("expand");
-                    }
-                });
 
                 // Swap contexts
-                this.$contextSwitcher.find(".context").click(function(e) {
-                    Backbone.history.navigate('#' + $(e.delegateTarget).text(), {trigger: true});
-                });
+                this.$contextSwitcher.find(".context").click(_.bind(
+                    function(e) {
+                        // temporarily disable contextswitcher to close it
+                        this.$contextSwitcher.addClass("disabled");
+
+                        // switch contexts
+                        Backbone.history.navigate('#' + $(e.delegateTarget).text(), {trigger: true});
+                    }, this));
             }
         },
 
@@ -184,6 +197,7 @@ define([
                     dataType: 'json',
                     success: _.bind(function (data) {
                         this.displayForm(data);
+                        this.displayContext(data.context);
                     }, this),
                     error: _.bind(function (error) {
                         loadError(error);
@@ -216,13 +230,18 @@ define([
         },
 
         showLeftRegion: function() {
+            if (this.previousHomeContext) {
+                this.setContext(this.previousHomeContext, true);
+                this.previousHomeContext = null;
+            }
+
             this.homeRegion.$el.css('visibility', "visible");
             $('#mainRegion').animate({
                 marginLeft : '0%'
             }, 750, _.bind(function() {
+                this.$contextSwitcher.removeClass("disabled");
                 this.editRegion.$el.css('visibility', "hidden");
             }, this));
-            $(".headerWhiteArrow").css("width", "");
         },
 
         showRightRegion: function() {
