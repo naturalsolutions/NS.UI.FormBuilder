@@ -7,8 +7,9 @@ define([
     'backbone',
     '../../../Translater',
     '../../editor/CheckboxEditor',
+    '../../editor/NumberEditor',
     'text!../../templates/FieldTemplate.html'
-], function ($, Backbone, translater, CheckboxEditor, FieldTemplate) {
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -36,7 +37,8 @@ define([
                 },
                 schema: {
                     minimumAppearance : {
-                        type        : 'Number',
+                        type        : NumberEditor,
+                        min: 0,
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.minAppearance'),
                         validators : [function checkValue(value, formValues) {

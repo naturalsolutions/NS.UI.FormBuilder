@@ -2,13 +2,13 @@ define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
     '../editor/ChoicesEditor', '../editor/AutocompTreeEditor', '../editor/LanguagesEditor',
-    '../editor/ChildFormEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
+    '../editor/ChildFormEditor', '../editor/NumberEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
     ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
-    ChildFormEditor, AppConfig, ExtraProperties,
+    ChildFormEditor, NumberEditor, AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
 
     var fieldTemplate = _.template(FieldTemplate);
@@ -540,7 +540,8 @@ define([
                     title: translater.getValueFromKey('schema.mime')
                 },
                 filesize: {
-                    type: 'Number',
+                    type: NumberEditor,
+                    min: 0,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.size')
                 },
@@ -601,7 +602,8 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultNode: {
-                    type: 'Number',
+                    type: NumberEditor,
+                    min: 0,
                     title: translater.getValueFromKey('schema.defaultNode'),
                     template: fieldTemplate
                 },
@@ -799,7 +801,8 @@ define([
                     validators: ['required']
                 },
                 triggerAutocomplete: {
-                    type: 'Number',
+                    type: NumberEditor,
+                    min: 1,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.ACTrigger'),
                     validators: [function checkValue(value) {
@@ -974,7 +977,8 @@ define([
                     title: ""
                 },
                 nbFixedCol: {
-                    type: 'Number',
+                    type: NumberEditor,
+                    min: 1,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.nbFixedCol'),
                     validators: [function checkValue(value) {
@@ -1060,9 +1064,11 @@ define([
                     title: translater.getValueFromKey('schema.min')
                 },
                 maxLength: {
-                    type: 'Number',
+                    type: NumberEditor,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.maxTextLength'),
+                    min: 1,
+                    max: 255,
                     validators: ['required',
                         function checkValue(value, formValues) {
                             if (value < 1 || value > 255) {
@@ -1120,7 +1126,9 @@ define([
                     ]
                 },
                 maxLength: {
-                    type: 'Number',
+                    type: NumberEditor,
+                    min: 1,
+                    max: 255,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.maxTextLength'),
                     validators: [function checkValue(value, formValues) {
@@ -1313,7 +1321,8 @@ define([
                 }]
             },
             precision: {
-                type: 'Number',
+                type: NumberEditor,
+                min: 0,
                 fieldClass: 'advanced',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.precision')
@@ -1330,7 +1339,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
             var schema = _.extend({}, _.pick(models.TextField.prototype.schema.call(this), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
 
-            schema.defaultValue.type = 'Number';
+            schema.defaultValue.type = NumberEditor;
             schema.defaultValue.validators = [function checkValue(value, formValues) {
                 if (value != null && value != "") {
                     if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
@@ -1348,6 +1357,7 @@ define([
 
                 return undefined;
             }];
+            schema.defaultValue.min = 1;
 
             var toret = _.extend({}, schema, {
                 pattern: {
