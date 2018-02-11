@@ -1,13 +1,13 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
-    '../editor/ChoicesEditor', '../editor/AutocompTreeEditor', '../editor/LanguagesEditor',
+    '../editor/ChoicesEditor', '../editor/TreeEditor', '../editor/LanguagesEditor',
     '../editor/ChildFormEditor', '../editor/NumberEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
-    ChoicesEditor, AutocompTreeEditor, LanguagesEditor,
+    ChoicesEditor, TreeEditor, LanguagesEditor,
     ChildFormEditor, NumberEditor, AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
 
@@ -690,7 +690,7 @@ define([
                     }
                 },
                 defaultNode: {
-                    type: AutocompTreeEditor,
+                    type: TreeEditor,
                     title: translater.getValueFromKey('schema.defaultNode'),
                     template: fieldTemplate,
                     options: {
@@ -755,7 +755,7 @@ define([
                     }
                 },
                 defaultNode: {
-                    type: AutocompTreeEditor,
+                    type: TreeEditor,
                     title: translater.getValueFromKey('schema.defaultNode'),
                     template: fieldTemplate,
                     options: {

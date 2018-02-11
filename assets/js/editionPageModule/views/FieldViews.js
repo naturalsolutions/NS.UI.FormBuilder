@@ -6,7 +6,7 @@ define([
     "./FieldViewBase"
 ], function($, _, Backbone, tools, BaseView) {
 
-    // TreeView does some prep work for underlying "AutocompTreeEditor" fields
+    // TreeView does some prep work for underlying "TreeEditor" fields
     var TreeView = BaseView.extend({
         events: _.extend(BaseView.prototype.events, {
             "change input[name='webServiceURL']": "urlChanged"
@@ -58,12 +58,12 @@ define([
         TextAreaFieldView: BaseView,
         TextFieldView: BaseView,
 
-        // these do not have a AutocompTreeEditor (see Fields.js)
+        // these do not have a TreeEditor (see Fields.js)
         // probably todo around the corner if we want to keep these generic treeviews
         AutocompleteTreeViewFieldView: BaseView,
         TreeViewFieldView: BaseView,
 
-        // actual Fields that hold a AutocompTree field (see Fields.js, defaultNode)
+        // actual Fields that hold a Tree field (see Fields.js, defaultNode)
         PositionFieldView: TreeView,
         ThesaurusFieldView: TreeView
     };

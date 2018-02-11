@@ -1,9 +1,9 @@
 define([
     'jquery', 'lodash', 'backbone', 'tools',
-    'text!./AutocompTreeEditor.html',
+    'text!./TreeEditor.html',
     'backbone-forms',
     'fancytree'
-], function($, _, Backbone, tools, AutocompTreeTemplate) {
+], function($, _, Backbone, tools, TreeEditor) {
     return Backbone.Form.editors.Text.extend({
         initialize: function(options) {
             this.options = options;
@@ -32,8 +32,8 @@ define([
                 return;
             }
 
-            // ensure the opened form element actually contains an AutocompTreeEditor
-            if (form.$el.find(".autocompTreeEditor").length == 0) {
+            // ensure the opened form element actually contains an TreeEditor
+            if (form.$el.find(".treeEditor").length == 0) {
                 return;
             }
 
@@ -82,7 +82,7 @@ define([
                     data = this.treeSource.data.d;
                 }
                 if (!data) {
-                    console.error("AutocompTreeEditor: unexpected tree data", this.treeSource.data);
+                    console.error("treeEditor: unexpected tree data", this.treeSource.data);
                     return;
                 }
 
@@ -118,7 +118,7 @@ define([
 
         render: function() {
             Backbone.Form.editors.Text.prototype.render.call(this);
-            this.$el = $(_.template(AutocompTreeTemplate)({
+            this.$el = $(_.template(TreeEditor)({
                 id: this.options.id,
                 model: this.model,
                 value: this.value,
@@ -133,7 +133,7 @@ define([
             var url = this.options.model[this.options.key];
             if (!url) url = this.options.schema.defaultUrl;
             if (!url) {
-                console.error("AutocompTreeEditor: couldn't find suitable fetch url");
+                console.error("TreeEditor: couldn't find suitable fetch url");
                 return this;
             }
 
