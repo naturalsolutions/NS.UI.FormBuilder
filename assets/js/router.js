@@ -157,6 +157,15 @@ define([
                 async: false,
                 success: _.bind(function(data) {
                     linkedFields = data;
+                    _.each(linkedFields, function(ctx) {
+                        // insert empty value at begining if user wants to unset a linked field option
+                        ctx.linkedFieldsList.unshift({
+                            "id": null,
+                            "key": "",
+                            "value": ""
+                        });
+                        ctx.tablesList.unshift("");
+                    })
                 }, this),
                 error: _.bind(function(xhr) {
                     console.error("error fetching linked fields at '",

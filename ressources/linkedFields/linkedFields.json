@@ -320,8 +320,8 @@
 	},
 	"ecollection":
 	{
-		"identifyingColumns":[""],
-		"linkedFieldsList":[{}],
-		"tablesList":[""]
+		"identifyingColumns":[],
+		"linkedFieldsList":[],
+		"tablesList":[]
 	}
 }
