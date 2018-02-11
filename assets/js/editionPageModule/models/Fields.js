@@ -59,6 +59,20 @@ define([
         });
     };
 
+    // boundTo is a validator that binds current property to another one.
+    // If current prop is null and boundProp from model isn't, this field will return erronous.
+    var boundTo = function(boundProp) {
+        return function(val, model) {
+            if (model && model[boundProp] && !val) {
+                return {
+                    type: "boundTo",
+                    message: translater.getValueFromKey("form.boundProp",
+                        {prop: translater.getValueFromKey("schema." + boundProp)})
+                }
+            }
+        };
+    };
+
     // Although isSQLPropertySetter is not really a validator(!),
     // it is intended to be plugged in the validators section of a specific "isSQL" property,
     // it will check, at validation time, if provided property from model is detected as
@@ -174,6 +188,7 @@ define([
                     if (!linkedTablesList) return;
                     apply(linkedTablesList);
                 },
+                validators: [boundTo("linkedField")]
             },
             linkedField: {
                 type: 'Select',
@@ -189,6 +204,7 @@ define([
                     });
                     apply(options);
                 },
+                validators: [boundTo("linkedFieldTable")]
             },
 
             editMode: {

@@ -98,6 +98,7 @@
         "count"      : "Field(s)",
         "find"       : "Find a form",
         "validation" : "This field is required",
+        "boundProp"  : "This field is required, it is bound to \"{{prop}}\"",
         "importance" : "Importance",
         "minimal"    : "Minimum size must be less than the maximum size",
         "setting"    : "Form properties",

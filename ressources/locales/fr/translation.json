@@ -97,6 +97,7 @@
         "count"       : "Champ(s)",
         "find"        : "Rechercher",
         "validation"  : "Ce champ est requis",
+        "boundProp"   : "Ce champ est requis, il est lié à \"{{prop}}\"",
         "importance"  : "Importance",
         "minimalSize" : "La taille minimale doit être inéfieur à la taille maximale",
         "setting"     : "Caractéristiques du formulaire",
