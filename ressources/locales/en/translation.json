@@ -397,12 +397,12 @@
             "fieldsErrorMsg" : "Please fix errors in fields properties",
 
             "serverError"      : "Error from server",
-            "notFound": "Didn't find form with provided previous ID (id: {{ID}})",
-            "formSimilarName" : "Another form with this name already exists (id: {{ID}})",
-            "formSimilarFrName" : "Another form with this French label already exists (id: {{ID}})",
-            "formSimilarEnName" : "Another form with this English label already exists (id: {{ID}})",
+            "notFound": "Didn't find form with provided previous ID (id: {{Context}}/{{ID}})",
+            "formSimilarName" : "Another form with this name already exists (id: {{Context}}/{{ID}})",
+            "formSimilarFrName" : "Another form with this French label already exists (id: {{Context}}/{{ID}})",
+            "formSimilarEnName" : "Another form with this English label already exists (id: {{Context}}/{{ID}})",
             "circularDependency" : "A circular dependency has been found with one of the childforms",
-            "dupeFieldType" : "Types mismatch for field named \"{{FieldName}}\"\nIt must be of type \"{{FieldType}}\", as found in form #{{ID}}"
+            "dupeFieldType" : "Types mismatch for field named \"{{FieldName}}\"\nIt must be of type \"{{FieldType}}\", as found in form {{Context}}/{{ID}}"
         },
         "field" : {
             "error" : "Error interne !",
