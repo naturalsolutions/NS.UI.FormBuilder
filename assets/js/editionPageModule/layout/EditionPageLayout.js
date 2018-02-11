@@ -278,6 +278,9 @@ define([
                 data  : datas
             }).render();
 
+            // disable autocomplete, spellcheck etc.
+            tools.disableInputAutoFeats(this.form.$el);
+
             // disable submit, it throws to an unwanted url redirection
             this.form.$el.on("submit", function(e) {
                 e.preventDefault();

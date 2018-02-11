@@ -289,6 +289,7 @@ define([
             this.$el.attr("id", $placeholder.attr("id"));
             this.$el.addClass($placeholder.attr("class"));
             this.$el.i18n();
+            tools.disableInputAutoFeats(this.$el);
             if (this.readonly) {
                 this.$el.find("input, select").attr("disabled", true);
             }
@@ -335,6 +336,8 @@ define([
             });
             form.render();
             tools.appendRequired(form.$el, schema);
+            // disable autocomplete, spellcheck etc.
+            tools.disableInputAutoFeats(form.$el);
             form.$el.i18n();
 
             if (this.readonly) {

@@ -295,6 +295,14 @@ define([
         //  replaceLastSlashItem replaces part after last "/" from provided src with provided id
         replaceLastSlashItem: function(src, id) {
             return src.replace(/\/[^\/]*$/, "/" + id);
+        },
+
+        disableInputAutoFeats: function($el) {
+            $el.find("textarea, input")
+                .attr("autocomplete", "off")
+                .attr("autocorrect", "off")
+                .attr("autocapitalize", "off")
+                .attr("spellcheck", "false");
         }
     };
 });
