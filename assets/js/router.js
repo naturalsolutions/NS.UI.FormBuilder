@@ -245,7 +245,7 @@ define([
             }
 
             this.homeRegion.$el.css('visibility', "visible");
-            $('#mainRegion').animate({
+            $('#mainRegion').stop(true).animate({
                 marginLeft : '0%'
             }, 750, _.bind(function() {
                 this.$contextSwitcher.removeClass("disabled");
@@ -255,7 +255,7 @@ define([
 
         showRightRegion: function() {
             this.editRegion.$el.css('visibility', "visible");
-            $('#mainRegion').animate({
+            $('#mainRegion').stop(true).animate({
                 marginLeft : '-100%'
             }, 750, _.bind(function() {
                 this.homeRegion.$el.css('visibility', "hidden");
