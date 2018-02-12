@@ -1357,7 +1357,7 @@ define([
 
             schema.defaultValue.type = NumberEditor;
             schema.defaultValue.validators = [function checkValue(value, formValues) {
-                if (value != null && value != "") {
+                if (value != null && (value != "" || typeof(value) == 'number') ) {
                     if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
                         return {
                             type: 'Invalid number',

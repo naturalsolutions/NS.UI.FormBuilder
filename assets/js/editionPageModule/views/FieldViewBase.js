@@ -282,6 +282,14 @@ define([
                 template: _.template(formTemplate)
             }).render();
 
+            this.mainForm.getValueBase = this.mainForm.getValue;
+            this.mainForm.getValue = _.bind(function(key) {
+                if (key) {
+                    return this.getValueBase(key);
+                }
+                return this.model.attributes;
+            }, this.mainForm);
+
             // do the voodoo for replacing element with currently rendered element
             // todo stop breaking DOM with this $.replaceWith, it (really) sux
             this.$el = $(this.mainForm.$el);
@@ -334,6 +342,13 @@ define([
                 model: this.model,
                 schema: schema
             });
+            form.getValueBase = form.getValue;
+            form.getValue = _.bind(function(key) {
+                if (key) {
+                    return this.getValueBase(key);
+                }
+                return this.model.attributes;
+            }, form);
             form.render();
             tools.appendRequired(form.$el, schema);
             // disable autocomplete, spellcheck etc.
