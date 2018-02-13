@@ -1415,6 +1415,7 @@ define([
             });
 
             toret = _.extend(toret, toret, extraschema);
+            delete(toret.isDefaultSQL);
 
             return toret;
         },
