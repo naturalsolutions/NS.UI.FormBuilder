@@ -149,12 +149,13 @@ define([
             this.setAcceptedValues(node);
         },
 
-        // setAcceptedValues visits current activeNode and updates model.acceptedValues accordingly
+        // setAcceptedValues visits current activeNode and children and updates model.acceptedValues accordingly
         setAcceptedValues: function(activeNode) {
             if (!this.model.acceptedValues) {
                 this.model.acceptedValues = [];
             }
             this.model.acceptedValues.length = 0;
+            this.model.acceptedValues.push(activeNode.data.value);
             activeNode.visit(_.bind(function(child) {
                 this.model.acceptedValues.push(child.data.value);
             }, this));
