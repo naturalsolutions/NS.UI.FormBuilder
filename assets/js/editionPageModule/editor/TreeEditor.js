@@ -64,6 +64,17 @@ define([
             }
         },
 
+        // setAcceptedValues visits current activeNode and updates model.acceptedValues accordingly
+        setAcceptedValues: function(activeNode) {
+            if (!this.model.acceptedValues) {
+                this.model.acceptedValues = [];
+            }
+            this.model.acceptedValues.length = 0;
+            activeNode.visit(_.bind(function(child) {
+                this.model.acceptedValues.push(child.data.value);
+            }, this));
+        },
+
         initTree: function(url) {
             this.treeSource = tools.getTree(url);
             if (this.treeSource.error) {
@@ -98,6 +109,13 @@ define([
                 this.treeSource.fancytree);
             this.$tree = this.treeSource.fancytree;
 
+            // init acceptedValues for model
+            var activeNode = this.model.get(this.options.key);
+            if (activeNode) {
+                activeNode = this.$tree.fancytree("getTree").getNodeByKey(activeNode);
+                this.setAcceptedValues(activeNode);
+            }
+
             // replace fancytreeactivate event with current
             this.$tree.off("fancytreeactivate").on("fancytreeactivate",
                 _.bind(function(event, data){
@@ -108,6 +126,9 @@ define([
                     var path = data.node.data.fullpath;
                     this.view.setValue(this.options.schema.options.path, path);
                     this.$el.find(".path").val(path).attr("title", path);
+
+                    // update acceptedValues
+                    this.setAcceptedValues(data.node);
                 }, this)
             );
         },

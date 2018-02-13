@@ -294,7 +294,8 @@
         "maxlength255"                 : "La longueur maximale est 255",
         "maxlength55"                  : "La longueur maximale est 55",
         "errorbetween0and5"            : "La valeur doit être comprise entre 0 et 5",
-        "trackType"                    : "Type Track"
+        "trackType"                    : "Type Track",
+        "isAcceptedValue"              : "Cette valeur doit faire partie du sous-arbre de \"{{prop}}\", ou être vide, ou être de la forme \"#valeur#\""
     },
 
     "clearProtocol" : "Vous êtes sur le point de purger le formulaire.<br />Les modifications non sauvegardées seront perdues.<br />Voulez vous continuer ?",

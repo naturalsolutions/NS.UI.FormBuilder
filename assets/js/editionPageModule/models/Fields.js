@@ -73,6 +73,33 @@ define([
         };
     };
 
+    // isAcceptedValue creates a validator that enforce value to match model's acceptedValues, if available.
+    // Check is skipped if value is of the form '#<val>#', or if it is not set.
+    var isAcceptedValue = function(model, propertyName) {
+        return function(val) {
+            if (!model.acceptedValues) {
+                return;
+            }
+            if (!val) {
+                return;
+            }
+            if (/^#.*#$/.exec(val)) {
+                return;
+            }
+
+            if (!_.includes(model.acceptedValues, val)) {
+                return {
+                    type: "isChildrenOf",
+                    message:
+                        translater.getValueFromKey(
+                            "schema.isAcceptedValue",
+                            { prop: translater.getValueFromKey(propertyName) }
+                        )
+                }
+            }
+       };
+    };
+
     // Although isSQLPropertySetter is not really a validator(!),
     // it is intended to be plugged in the validators section of a specific "isSQL" property,
     // it will check, at validation time, if provided property from model is detected as
@@ -674,11 +701,6 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Thesaurus");
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
-                defaultValue: {
-                    type: 'Text',
-                    title: translater.getValueFromKey('schema.default'),
-                    template: fieldTemplate
-                },
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
@@ -688,6 +710,14 @@ define([
                             return AppConfig.topcontext.toLowerCase() === 'reneco';
                         }
                     }
+                },
+                defaultPath: {
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.default'),
+                    template: fieldTemplate,
+                    validators: [
+                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'))
+                    ]
                 },
                 defaultNode: {
                     type: TreeEditor,
@@ -738,13 +768,6 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
-                // todo: shouldn't it be defaultValue ??
-                // doesn't match behavior of ThesaurusField which uses defaultValue
-                defaultPath: {
-                    type: 'Text',
-                    title: translater.getValueFromKey('schema.defaultPath'),
-                    template: fieldTemplate
-                },
                 webServiceURL: {
                     type: 'Text',
                     template: fieldTemplate,
@@ -754,6 +777,14 @@ define([
                             return AppConfig.topcontext.toLowerCase() === 'reneco';
                         }
                     }
+                },
+                defaultPath: {
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.defaultPath'),
+                    template: fieldTemplate,
+                    validators: [
+                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'))
+                    ]
                 },
                 defaultNode: {
                     type: TreeEditor,
