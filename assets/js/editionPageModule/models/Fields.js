@@ -59,7 +59,7 @@ define([
         });
     };
 
-    // boundTo is a validator that binds current property to another one.
+    // boundTo creates a validator that binds current property to another one.
     // If current prop is null and boundProp from model isn't, this field will return erronous.
     var boundTo = function(boundProp) {
         return function(val, model) {
@@ -100,31 +100,30 @@ define([
        };
     };
 
-    // Although isSQLPropertySetter is not really a validator(!),
-    // it is intended to be plugged in the validators section of a specific "isSQL" property,
-    // it will check, at validation time, if provided property from model is detected as
-    // being a SQL script, and set the current model's property holding this validator accordingly.
+    // isSQLPropertySetter creates a function that checks for model[srcProperty] and
+    // updates model[isSQLProperty] according to a set of rules.
     //
-    // * model is the parent base model
-    // * srcProperty is the attribute from model that needs to be checked
-    // * isSQLproperty is the current property to be set
+    // Although it doesn't validate anything, it is intended to be plugged in the validators section of any
+    // given field, preferably a hidden or read-only fields since it will be overriden at save time if used like that.
+    // Due to its form and parameters this setter could be created and called from anywhere, initializing it in
+    // the validators section of the isSQLProperty serves 2 purposes: readability and ensuring
+    // the property will be set between model modifications & validation/save.
     //
-    // property using this will hold a bool value,
-    // it should be hidden because it will be overriden at validate time.
-    //
-    // It is admitedly hacky, but seemed like a good way to avoid code duplication, kind of simply.
+    // model[srcProperty] must be textual
+    // model(isSQLProperty] must be boolean,
+    //   it will be set to true on validation if model[srcProperty] like 'select%from%' (case insensitive)
     var isSQLPropertySetter = function(model, srcProperty, isSQLProperty) {
+        if (model === window) return;
+        if (!model || !model.attributes ||
+            model.attributes[srcProperty] === undefined ||
+            model.attributes[isSQLProperty] === undefined ||
+            typeof(model.attributes[srcProperty]) !== "string" ||
+            typeof(model.attributes[isSQLProperty]) !== "boolean") {
+
+            console.log("looks like a bad usage of isSQLPropertySetter");
+            return function(){};
+        }
         return function() {
-            if (!model || !model.attributes ||
-                model.attributes[srcProperty] === undefined ||
-                model.attributes[isSQLProperty] === undefined ||
-                typeof(model.attributes[srcProperty]) !== "string" ||
-                typeof(model.attributes[isSQLProperty]) !== "boolean") {
-
-                console.log("looks like a bad usage of isSQLPropertySetter");
-                return;
-            }
-
             var sqlStuff = model.attributes[srcProperty].toLowerCase();
             model.attributes[isSQLProperty] =
                 sqlStuff.indexOf("select") >= 0 && sqlStuff.indexOf("from") > 0;
