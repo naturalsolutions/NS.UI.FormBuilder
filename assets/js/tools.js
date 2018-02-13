@@ -186,6 +186,7 @@ define([
             var ajaxOpts = {
                 type        : 'POST',
                 url         : url,
+                crossDomain : true,
                 contentType : 'application/json',
                 data        : JSON.stringify({StartNodeID:0, deprecated:0, lng:"Fr"}),
                 timeout     : 30000,
@@ -239,6 +240,7 @@ define([
             var ajaxOpts = {
                 type        : 'GET',
                 url         : url,
+                crossDomain : true,
                 contentType : 'application/json',
                 timeout     : 30000,
                 success: _.bind(function (data) {
