@@ -1,7 +1,7 @@
 define([
     'jquery', 'app-config'
 ], function($, AppConfig) {
-    if (AppConfig.authmode !== "portal") {
+    if (!AppConfig.portalAuth) {
         return {
             "username": AppConfig.username || "bob",
             "userlanguage": AppConfig.language || navigator.language || "fr"

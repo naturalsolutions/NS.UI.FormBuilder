@@ -10,12 +10,11 @@
 define([], function() {
 
     var AppConfiguration = {
-        readonlyMode: false,                           // Defines whether the app has to be displayed in Read Only mode or not
-        authmode: 'classic',                           // Authentication mode (portal or anything)
-        username: 'Utilisateur',                       // Username if authmode != portal
-        language: 'fr',                                // language if authmode != portal
+        portalAuth: false,                             // Authentification via NS portal?
+        username: 'Utilisateur',                       // Username if !portalAuth
+        language: 'fr',                                // language if !portalAuth
         portalURL: 'http://localhost/nsportal/front/', // Portal local URL
-        securityKey: '',                               // JWT security secret word key
+        securityKey: '',                               // JWT security secret word key (protip: just put anything there)
 
         // URL to track protocol, #originalID# will be replaced in code by actual Form.originalID
         trackFormURL: 'http://track/Intranet/TRACK/App_Pages/ViewForm_from_fb.aspx?iTPro_PK_Id=#originalID#&IsNew=True',
