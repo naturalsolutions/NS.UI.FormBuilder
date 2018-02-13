@@ -695,7 +695,8 @@ define([
                     template: fieldTemplate,
                     options: {
                         path: "fullpath"
-                    }
+                    },
+                    validators: ['required']
                 },
                 fullpath: {
                     type: 'Hidden',
