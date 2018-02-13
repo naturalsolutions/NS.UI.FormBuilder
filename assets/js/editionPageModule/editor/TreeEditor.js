@@ -43,10 +43,14 @@ define([
                 alwaysVisible: true
             });
 
-            var activeNode = this.model.get(this.options.key);
-            if (activeNode) {
+            var nodeId = this.model.get(this.options.key);
+            if (nodeId) {
                 // restore active node
-                activeNode = this.$tree.fancytree("getTree").getNodeByKey(activeNode);
+                var activeNode = this.getNodeByKey(nodeId);
+                if (!activeNode) {
+                    console.warn("did not find node by id, something might be wrong, node id: ", nodeId);
+                    return;
+                }
                 activeNode.setActive(true, {
                     noEvents: true
                 });
@@ -62,17 +66,6 @@ define([
                     previousActiveNode = previousActiveNode.parent;
                 }
             }
-        },
-
-        // setAcceptedValues visits current activeNode and updates model.acceptedValues accordingly
-        setAcceptedValues: function(activeNode) {
-            if (!this.model.acceptedValues) {
-                this.model.acceptedValues = [];
-            }
-            this.model.acceptedValues.length = 0;
-            activeNode.visit(_.bind(function(child) {
-                this.model.acceptedValues.push(child.data.value);
-            }, this));
         },
 
         initTree: function(url) {
@@ -119,18 +112,40 @@ define([
             // replace fancytreeactivate event with current
             this.$tree.off("fancytreeactivate").on("fancytreeactivate",
                 _.bind(function(event, data){
-                    this.value = data.node.key;
-                    this.view.setValue(this.options.key, this.value);
-                    this.$el.find(".value").val(this.value);
-
-                    var path = data.node.data.fullpath;
-                    this.view.setValue(this.options.schema.options.path, path);
-                    this.$el.find(".path").val(path).attr("title", path);
-
-                    // update acceptedValues
-                    this.setAcceptedValues(data.node);
+                    this.setActiveNode(data.node);
                 }, this)
             );
+        },
+
+        getNodeByKey: function(id) {
+            if (!this.$tree) {
+                return null;
+            }
+            return this.$tree.fancytree("getTree").getNodeByKey(id);
+        },
+
+        setActiveNode: function(node) {
+            this.value = node.key;
+            this.view.setValue(this.options.key, this.value);
+            this.$el.find(".value").val(this.value);
+
+            var path = node.data.fullpath;
+            this.view.setValue(this.options.schema.options.path, path);
+            this.$el.find(".path").val(path).attr("title", path);
+
+            // update acceptedValues
+            this.setAcceptedValues(node);
+        },
+
+        // setAcceptedValues visits current activeNode and updates model.acceptedValues accordingly
+        setAcceptedValues: function(activeNode) {
+            if (!this.model.acceptedValues) {
+                this.model.acceptedValues = [];
+            }
+            this.model.acceptedValues.length = 0;
+            activeNode.visit(_.bind(function(child) {
+                this.model.acceptedValues.push(child.data.value);
+            }, this));
         },
 
         getValue: function() {
