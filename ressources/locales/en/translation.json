@@ -30,7 +30,9 @@
         "valuesList": "Values list",
         "value": "Value",
         "urlChanged": "Webservice URL change",
-        "urlChangedMessage": "Please reload current form after saving to update nodes tree selector"
+        "urlChangedMessage": "Please reload current form after saving to update nodes tree selector",
+        "noNodeWithKey": "Invalid node id",
+        "noNodeWithKeyMessage": "Node with id \"{{id}}\" was not found in tree.\nPrevious value was restored."
     },
 
     "languages": {

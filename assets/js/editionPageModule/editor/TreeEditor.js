@@ -1,9 +1,10 @@
 define([
     'jquery', 'lodash', 'backbone', 'tools',
+    '../../Translater',
     'text!./TreeEditor.html',
     'backbone-forms',
     'fancytree'
-], function($, _, Backbone, tools, TreeEditor) {
+], function($, _, Backbone, tools, translater, TreeEditor) {
     return Backbone.Form.editors.Text.extend({
         initialize: function(options) {
             this.options = options;
@@ -23,6 +24,11 @@ define([
             Backbone.Form.editors.Text.prototype.initialize.call(this, options);
         },
 
+        events: {
+            "keypress input.value": "valueKeyPressed",
+            "change input.value": "valueChanged"
+        },
+
         // treeInserted is a callback for when tree is actually inserted in
         // DOM, operations made here are either no-op if tree is not in DOM,
         // or dysfunctionnal like the collapse tree feature.
@@ -36,6 +42,9 @@ define([
             if (form.$el.find(".treeEditor").length == 0) {
                 return;
             }
+
+            // enable value input only after we have a tree to work with
+            this.$el.find("input.value").attr("disabled", null);
 
             this.$tree.slimScroll({
                 height: "150px",
@@ -51,12 +60,8 @@ define([
                     console.warn("did not find node by id, something might be wrong, node id: ", nodeId);
                     return;
                 }
-                activeNode.setActive(true, {
-                    noEvents: true
-                });
-                this.$tree.slimScroll({
-                    scrollTo: activeNode.li.offsetTop - 50
-                });
+
+                this.setActiveNode(activeNode);
             } else {
                 // collapse tree & unselect active node
                 var previousActiveNode = this.$tree.fancytree("getActiveNode");
@@ -133,6 +138,13 @@ define([
             this.view.setValue(this.options.schema.options.path, path);
             this.$el.find(".path").val(path).attr("title", path);
 
+            node.setActive(true, {
+                noEvents: true
+            });
+            this.$tree.slimScroll({
+                scrollTo: node.li.offsetTop - 50
+            });
+
             // update acceptedValues
             this.setAcceptedValues(node);
         },
@@ -146,6 +158,28 @@ define([
             activeNode.visit(_.bind(function(child) {
                 this.model.acceptedValues.push(child.data.value);
             }, this));
+        },
+
+        valueKeyPressed: function(e) {
+            // trigger onchange event for input.value el on "enter" keypress
+            if (e.keyCode === 13) {
+                this.valueChanged(e);
+            }
+        },
+
+        valueChanged: function(e) {
+            var val = e.target.value;
+            var node = this.getNodeByKey(val);
+            if (!node) {
+                this.$el.find(".value").val(this.value);
+                tools.swal("error",
+                    "editGrid.noNodeWithKey",
+                    translater.getValueFromKey("editGrid.noNodeWithKeyMessage", {id: val}));
+                return;
+            }
+
+            // activate node
+            this.setActiveNode(node);
         },
 
         getValue: function() {

@@ -30,7 +30,9 @@
         "valuesList": "Liste de valeurs",
         "value": "Valeur",
         "urlChanged": "Changement de l'URL du service web",
-        "urlChangedMessage": "Veuillez recharger le formulaire courant après sauvegarde pour charger le nouveau sélecteur de noeud"
+        "urlChangedMessage": "Veuillez recharger le formulaire courant après sauvegarde pour charger le nouveau sélecteur de noeud",
+        "noNodeWithKey": "Identifiant de noeud invalide",
+        "noNodeWithKeyMessage": "Le noeud avec l'id \"{{id}}\" n'existe pas dans l'arbre.\nLa valeur précédente a été restaurée."
     },
 
     "languages": {
