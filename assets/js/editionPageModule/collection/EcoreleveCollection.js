@@ -5,75 +5,66 @@
 define([
     'jquery',
     'backbone',
-    '../models/fields',
+    '../models/Fields',
+    '../editor/CheckboxEditor',
     'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor) {
+    'auth',
+    'text!../templates/FieldTemplate.html'
+], function ($, Backbone, Fields, CheckboxEditor, Radio, translater, auth, FieldTemplate) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
-    var translater = Translater.getTranslater();
-
-    var EcoreleveExtention = {
+    var fieldTemplate = _.template(FieldTemplate);
+    return {
         schemaExtention: {
             author : {
                 type        : 'Hidden',
                 title       : translater.getValueFromKey('form.author'),
-                editorClass : 'form-control',
                 template    : fieldTemplate
+            },
+            isgrid : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.isgrid')
+            },
+            ishiddenprotocol : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.ishiddenprotocol')
+            },
+            hideprotocolname : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.hideprotocolname')
+            },
+            defaultforfieldactivity : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.defaultforfieldactivity')
             }
         },
 
-        propertiesDefaultValues : {
-            author : window.user
+        getExtractedDatas: function() {return {};},
+        getSchemaExtention: function(){
+            return this.schemaExtention;
         },
-
-        rulesList : function() {
-            return({});
-        },
-
-        getExtractedDatas: function(){
-            return({});
-        },
-
-        getSchemaExtention: function(options){
-            return({
-                author : {
-                    type        : 'Hidden',
-                    title       : translater.getValueFromKey('form.author'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                }
-            });
-        },
-
-        initializeExtention: function () {
-            return(true);
-        },
+        initializeExtention: function () {return true;},
 
         jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
-                originalForm.author = window.user;
+            if (originalForm) {
+                originalForm.author = auth.username;
             }
-            return(this.propertiesDefaultValues);
+            return {
+                author : auth.username,
+                isgrid : "",
+                ishiddenprotocol: "",
+                hideprotocolname: "",
+                defaultforfieldactivity: ""
+            };
         },
-
-        updateAttributesExtention: function () {
-            return(true);
-        }
+        updateAttributesExtention: function () {return true;}
     };
-
-    return EcoreleveExtention;
 });

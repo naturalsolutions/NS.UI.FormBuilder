@@ -4,37 +4,20 @@
 
 define([
     'jquery',
-    'backbone',
-    '../models/fields',
-    'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor) {
+    'text!../templates/FieldTemplate.html'
+], function ($, translater, FieldTemplate) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var fieldTemplate = _.template(FieldTemplate);
 
-    var translater = Translater.getTranslater();
-
-    var TrackExtention = {
-
-        extentionDatas: {},
-
+    return {
+        extensionData: null,
         schemaExtention: {
             activite : {
                 type        : "Select",
                 title       : translater.getValueFromKey('form.activite'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
+                searchable  : true,
                 options : [],
                 validators  : [{
                     type : 'required',
@@ -44,17 +27,25 @@ define([
             importance : {
                 type        : 'Number',
                 title       : translater.getValueFromKey('form.importance'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 validators  : [{
                     type : 'required'
-                }]
+                },
+                    function test(value) {
+                        if (value < 0 || value > 5) {
+                            return {
+                                type: 'Invalid value',
+                                message: translater.getValueFromKey('schema.errorbetween0and5')
+                            };
+                        }
+                    }
+                ]
             },
             typeIndividus : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.typeIndividus'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
+                searchable  : true,
                 options : [],
                 validators  : [{
                     type : 'required'
@@ -63,7 +54,6 @@ define([
             frequence : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.frequence'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [],
                 validators  : [{
@@ -73,14 +63,17 @@ define([
             groupe : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.groupe'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
-                options : []
+                searchable  : true,
+                options : [],
+                validators  : [{
+                    type : 'required'
+                }]
             },
             actif : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.actif.title'),
-                editorClass : 'form-control',
+                fieldClass  : "hidden",
                 template    : fieldTemplate,
                 options : [
                     {
@@ -91,15 +84,11 @@ define([
                         label : translater.getValueFromKey('form.actif.pasactif'),
                         val : 0
                     }
-                ],
-                validators  : [{
-                    type : 'required'
-                }]
+                ]
             },
             importapressortie : {
                 type        : 'Select',
                 title       : translater.getValueFromKey('form.importapressortie.title'),
-                editorClass : 'form-control',
                 template    : fieldTemplate,
                 options : [
                     {
@@ -127,28 +116,6 @@ define([
             importapressortie : ""
         },
 
-        txtUnder255: function(value){
-            if (value.length > 255) {
-                return {
-                    type : 'String too wide',
-                    message : translater.getValueFromKey('schema.maxlength255')
-                }
-            }
-        },
-
-        txtUnder55: function(value){
-            if (value.length > 50) {
-                return {
-                    type : 'String too wide',
-                    message : translater.getValueFromKey('schema.maxlength55')
-                }
-            }
-        },
-
-        rulesList : function() {
-            return({});
-        },
-
         getExtractedDatas: function(){
             return({
                 "Activite":"Activite",
@@ -159,124 +126,20 @@ define([
         },
 
         getSchemaExtention: function(options){
-            var toret = {
-                activite : {
-                    type        : "Select",
-                    title       : translater.getValueFromKey('form.activite'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required',
-                        message : translater.getValueFromKey('form.validation')
-                    }]
-                },
-                importance : {
-                    type        : 'Number',
-                    title       : translater.getValueFromKey('form.importance'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    validators  : [{
-                            type : 'required'
-                        },
-                        function test(value) {
-                            if (value < 0 || value > 5) {
-                                return {
-                                    type: 'Invalid value',
-                                    message: translater.getValueFromKey('schema.errorbetween0and5')
-                                };
-                            }
-                        }
-                    ]
-                },
-                typeIndividus : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.typeIndividus'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                },
-                frequence : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.frequence'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                },
-                groupe : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.groupe'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                },
-                actif : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.actif.title'),
-                    fieldClass  : "hidden",
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [
-                        {
-                            label : translater.getValueFromKey('form.actif.actif'),
-                            val : 1
-                        },
-                        {
-                            label : translater.getValueFromKey('form.actif.pasactif'),
-                            val : 0
-                        }
-                    ]
-                },
-                importapressortie : {
-                    type        : 'Select',
-                    title       : translater.getValueFromKey('form.importapressortie.title'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    options : [
-                        {
-                            label : translater.getValueFromKey('form.importapressortie.only'),
-                            val : 1
-                        },
-                        {
-                            label : translater.getValueFromKey('form.importapressortie.not'),
-                            val : 0
-                        }
-                    ],
-                    validators  : [{
-                        type : 'required'
-                    }]
-                }
-            };
-
-            if (options)
-            {
-                this.getTrackDatas(options, this.getExtractedDatas(), this.setSelectValues, toret);
-                return (toret);
+            if (this.extensionData) {
+                return this.extensionData;
             }
-            return (toret);
+            if (options) {
+                this.getTrackDatas(options);
+            }
+            return this.schemaExtention;
         },
 
         initializeExtention: function (options) {
-
-            this.getTrackDatas(options, this.getExtractedDatas(), this.setSelectValues, this.schemaExtention);
-
-            return(true);
+            this.getTrackDatas(options);
         },
 
-        jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
-
-            }
+        jsonExtention: function () {
             return(this.propertiesDefaultValues);
         },
 
@@ -291,12 +154,6 @@ define([
                 $.each(valuesArray, function(index, value){
                     valuesArray[index] = {label: value, val: value};
                 });
-
-                /* IGNORES NULL VALUES
-                if (valuesArray[valuesArray.length - 1].val == "null")
-                    valuesArray.pop();
-                    */
-
                 return(valuesArray);
             };
 
@@ -315,34 +172,39 @@ define([
             return (schema);
         },
 
-        getTrackDatas: function (options, datas, callback, schema) {
-            var that = this;
-            if ($.isEmptyObject(that.extentionDatas))
-            {
+        getTrackDatas: function (options) {
+            if (!this.extensionData) {
                 $.ajax({
-                    data: JSON.stringify({'datas' : datas}),
+                    data: JSON.stringify({'datas' : this.getExtractedDatas()}),
                     type: 'POST',
                     url: options.URLOptions.track + "/getData",
                     contentType: 'application/json',
                     crossDomain: true,
-                    async: false,
+                    async: true,
                     success: _.bind(function (data) {
-                        var schemaToRet = callback(data, schema);
-                        that.extentionDatas = data;
-                        return(schemaToRet);
+                        this.extensionData = this.setSelectValues(data, this.schemaExtention);
+                        if (this.callback) {
+                            this.callback(this.extensionData);
+                        }
+                        this.callback = null;
                     }, this),
-                    error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    error: _.bind(function (xhr) {
                         console.log("error ! " + xhr);
                     }, this)
                 });
             }
-            else
-            {
-                var schemaToRet = callback(that.extentionDatas, schema);
-                return (schemaToRet);
+
+            return this.extensionData;
+        },
+
+        withCallback: function(callback) {
+            // we have data available, just apply the callback
+            if (this.extensionData) {
+                callback(this.extensionData);
+            } else {
+                // no data available yet, save for a brighter day
+                this.callback = callback;
             }
         }
     };
-
-    return TrackExtention;
 });

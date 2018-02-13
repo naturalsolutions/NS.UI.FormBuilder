@@ -1,64 +1,35 @@
-
-define([
-    'jquery',
-    'backbone',
-    '../../models/fields',
-    'backbone.radio',
-    '../../../Translater',
-    '../../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config',
-    './ContextLoader'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig, ContextLoader) {
-
-    var translater = Translater.getTranslater();
-    var loader = ContextLoader;
-
-    /**
-    * Implement form object as a fields collection
-    */
-    var TrackLoader = {
-
-        initializeLoader: function (form, URLoptions) {
-            this.form = form;
-            this.options = URLoptions;
-
-            return(true);
-        },
-
-        loadFormDatas: function(){
-            if (this.form.fields.unity)
-            {
-                this.loadUnities();
+define(['jquery'], function ($) {
+    return {
+        loadFormData: function(form, urls, lang) {
+            if (form.fields.unity) {
+                if (lang !== 'fr') {
+                    // todo the way units are handled, language specific units cannot work:
+                    // localized value is stored in database, we cannot match translations
+                    console.warn("disregarding language for fetching units, not implemented (forced 'fr')");
+                    lang = 'fr';
+                }
+                this.loadUnits(form.fields.unity, urls.unities + "/track/" + lang);
             }
-            return(true);
         },
 
-        loadUnities: function(){
+        loadUnits: function(field, url) {
             $.ajax({
-                data        : "",
                 type        : 'GET',
-                url         : this.options.unities + "/" + window.context + "/fr",
+                url         : url,
                 contentType : 'application/json',
                 crossDomain : true,
-                success: _.bind(function(data) {
+                success: function(data) {
                     var jsondata = JSON.parse(data);
-                    var unityoptions = [];
-                    $.each(jsondata.unities, function(index, value){
-                        unityoptions.push(value);
+                    var units = [];
+                    $.each(jsondata.unities, function (index, value) {
+                        units.push(value);
                     });
-                    this.form.fields.unity.editor.setOptions(unityoptions);
-                }, this),
-                error: _.bind(function (xhr, ajaxOptions, thrownError) {
+                    field.editor.setOptions(units);
+                },
+                error: function (xhr) {
                     console.log(xhr);
-                }, this)
+                }
             });
-        },
-
-        getThisLoader : function(){
-            return (this);
         }
     };
-
-    return TrackLoader.getThisLoader();
 });

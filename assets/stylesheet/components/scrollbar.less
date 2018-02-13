@@ -3,6 +3,14 @@
 //  Override scroll bar style
 //
 
+.slimScrollDiv {
+    // slimScroll applies provided height param to child,
+    // it's not cool if we use "calc()", it needs to be 100% anyway.
+    & > :first-child {
+        height: 100% !important;
+    }
+}
+
 .slimScrollRail {
     display: block !important;
     background : #ddd;
@@ -13,20 +21,18 @@
         height: 80% !important
     }
     .slimScrollRail {
-        opacity: 1 !important;
         background: #000 !important;
-    }
-}
-
-#formPanel {
-    .slimScrollRail {
-        height : ~"calc(100% - 20px)" !important;
-        opacity: 1!important;
     }
 }
 
 .slimScrollBar {
     background: #fff !important;
+    transition: opacity ease 120ms;
+
+    &:hover {
+        cursor: pointer;
+        opacity: 0.65 !important;
+    }
 }
 
 #centerPanel {

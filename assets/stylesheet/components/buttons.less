@@ -1,9 +1,53 @@
-
 //
 //  Button style
 //
 
+@import url('./common.less');
+
 input[type="submit"].reneco { color : white; }
+
+[data-context="all"] {
+    .actions {
+        display: none !important;
+    }
+}
+
+[data-topcontext="reneco"] {
+    #import, #export {
+        display: none !important;
+    }
+}
+
+[data-readonly="true"] {
+    .actions, #rowControls, .action:not(.btnOk):not(.actionBack) {
+        display: none !important;
+    }
+}
+
+
+.action {
+    .exo;
+    box-sizing: content-box;
+    display: inline-block;
+    padding: 7px 30px;
+    border-radius: 20px;
+    .invertGradiant;
+    font-size: 13px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: white;
+
+    &.red {
+        .redGradiant;
+    }
+
+    &.gray {
+        background: @gray;
+    }
+    &:hover {
+        cursor: pointer;
+    }
+}
 
 button.reneco2 {
     line-height : initial !important;

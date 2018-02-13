@@ -1,0 +1,16 @@
+<div class="languagesEditor" id="<%= id %>">
+    <table><tr>
+        <%
+        var first = true;
+        for (var lang in languages) {
+            var options = languages[lang];
+            var langId = id + lang;
+            var required = options.required;
+        %>
+        <td class="lang" data-lang="<%= lang %>">
+            <label title="<%= options.name %>"><%= lang.toUpperCase() %></label>
+            <label class="isRequired">&nbsp;</label>
+        </td>
+        <% } %>
+    </tr></table>
+</div>

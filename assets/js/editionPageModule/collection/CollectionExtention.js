@@ -5,87 +5,62 @@
 define([
     'jquery',
     'backbone',
-    '../models/fields',
+    '../models/Fields',
     'backbone.radio',
     '../../Translater',
     '../editor/CheckboxEditor',
-    'pillbox-editor',
     'app-config',
-    './EcollectionCollection',
     './EcoreleveCollection',
     './TrackCollection',
-    './PositionCollection'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor, AppConfig,
-             EcollectionCollection, EcoreleveCollection, TrackCollection, PositionCollection) {
+], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig,
+             EcoreleveCollection, TrackCollection) {
 
-    var Extentions = {"track" : TrackCollection,
-                        "ecoreleve" : EcoreleveCollection,
-                        "ecollection" : EcollectionCollection,
-                        "position" : PositionCollection};
+    /**
+     * EmptyStatics is a dummy CollectionExtension object that does nothing.
+     * If need extension for a specific context, add "context" key to
+     * Extentions object, and make it implement this skeleton
+     */
+    var EmptyExtension = {
+        schemaExtention: function() {return {};},
+        propertiesDefaultValues: function() {return {};},
+        getSchemaExtention: function() {return {};},
+        initializeExtention: function() {return {};},
+        jsonExtention: function() {return {};}
+    };
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var collectionExtensions = {
+        "track" : TrackCollection,
+        "ecoreleve" : EcoreleveCollection
+    };
 
-    var translater = Translater.getTranslater();
+    return {
+        started: false,
+        schemaExtention: {},
+        propertiesDefaultValues : {},
 
-    var CollectionExtention = {
-
-        schemaExtention: {
-
-        },
-
-        propertiesDefaultValues : {
-
-        },
-
-        rulesList : function() {
-            return({});
-        },
-
-        getExtractedDatas: function(){
-            return({});
-        },
-
-        getSchemaExtention: function(options){
-            return({});
-        },
-
-        initializeExtention: function () {
-            return(true);
-        },
-
-        jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
-
+        initAllExtensions: function(options) {
+            if (this.started) {
+                return;
             }
-            return(this.propertiesDefaultValues);
+
+            this.started = true;
+            for (var i in collectionExtensions) {
+                var ext = collectionExtensions[i];
+                ext.initializeExtention(options);
+            }
         },
 
-        updateAttributesExtention: function () {
-            return(true);
-        },
-
-        setRulesExtention: function(){
-
-        },
-
-        getModeExtention : function (currentContext) {
-            var extentionMode = Extentions[window.context];
+        getModeExtention : function (currentContext, callback) {
+            var extentionMode = collectionExtensions[window.context];
             if (currentContext)
-                extentionMode = Extentions[currentContext];
+                extentionMode = collectionExtensions[currentContext];
             if (!extentionMode)
-                return this;
+                return EmptyExtension;
+
+            if (callback && extentionMode.withCallback) {
+                extentionMode.withCallback(callback);
+            }
             return extentionMode;
         }
     };
-
-    return CollectionExtention.getModeExtention();
 });

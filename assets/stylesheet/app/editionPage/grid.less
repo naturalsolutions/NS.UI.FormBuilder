@@ -1,0 +1,208 @@
+.grid {
+  height: 100%;
+  overflow: hidden;
+
+  table {
+    width: 100%;
+    table-layout: fixed;
+    text-align: center;
+
+    &.header tr td {
+      height: 50px;
+      min-height: 50px;
+      max-height: 50px;
+      background: @grid_bg;
+      border: none;
+      border-right: 1px solid @grid_fg;
+      padding: 5px;
+      font-weight: bold;
+    }
+
+    .rows td.type {
+      .reneco;
+      color: white;
+      font-size: 20px;
+    }
+
+    tr {
+      color: white;
+      &.static {
+        td {
+          background: @grid_fg;
+          border: 1px solid @grid_bg;
+          color: #aaa !important;
+
+          &.handle {
+            background: @grid_fg;
+          }
+        }
+      }
+
+      &[data-readonly="true"].handle {
+        cursor: default;
+      }
+
+      &.validationError {
+        td {
+          background: #803917;
+          &.handle {
+            background: url("../assets/images/handle.png") #803917 no-repeat 2px center;
+          }
+        }
+      }
+
+      &.selected {
+        td {
+          background: #151110;
+
+          &.handle {
+            background: url("../assets/images/handle.png") #151110 no-repeat 2px center;
+            font-weight: bold;
+            color: @orange;
+          }
+        }
+      }
+
+      td {
+        background: @grid_bg;
+        border: 1px solid @grid_fg;
+
+        overflow: hidden;
+        height: 60px;
+        padding: 5px 5px;
+        text-align: center;
+
+        &.handle {
+          background: url("../assets/images/handle.png") @grid_bg no-repeat 2px center;
+          cursor: move;
+        }
+
+        width: 10%;
+        max-width: 10%;
+        min-width: 10%;
+
+        &.type {
+          width: 50px;
+          max-width: 50px;
+          min-width: 50px;
+        }
+
+        &.editMode {
+          padding-top: 2px;
+          padding-bottom: 1px;
+          width: 18%;
+          max-width: 18%;
+          min-width: 18%;
+        }
+
+        &.options {
+          width: 28%;
+          max-width: 28%;
+          min-width: 28%;
+
+          &:hover {
+            cursor: default;
+          }
+
+          div {
+            display: inline-block;
+            width: 48%;
+            padding: 8px 0;
+            text-align: center;
+            font-weight: bold;
+
+            &::before {
+              .reneco;
+              font-size: 25px;
+              margin-right: 8px;
+            }
+
+            &.settings::before {
+              content: '\e657';
+              vertical-align: -6px;
+            }
+
+            &.languages::before {
+              content: '\e6a8';
+              vertical-align: -6px;
+            }
+
+            &:hover {
+              cursor: pointer;
+              color: @orange;
+            }
+          }
+        }
+
+        .checkboxField {
+          white-space: nowrap;
+          label {
+            overflow: hidden;
+          }
+        }
+
+        .editModeEditor {
+          position: relative;
+          padding: 4px 0 0 3px;
+
+          .checkboxField {
+            display: inline-block;
+            width: 48%;
+          }
+        }
+
+        .appearanceEditor {
+          .checkboxField {
+            margin-top: 5px;
+          }
+        }
+
+        input, select, option, div, span {
+          text-align: left;
+
+          &.error {
+            border-bottom: 3px dashed red !important;
+            &.settings, &.languages {
+              margin-top: 3px;
+            }
+          }
+        }
+
+        option {
+          color: black;
+        }
+
+        input, select {
+          height: 20px;
+        }
+
+        input, select {
+          &[disabled]:hover {
+            cursor: default !important;
+          }
+        }
+
+        input:not([type="checkbox"]), select {
+          border: none;
+          border-bottom: 1px solid #bbb;
+          background: none;
+          width: 100%;
+          color: white;
+          padding: 0;
+
+          &[disabled] {
+            cursor: default !important;
+            color: #ddd;
+          }
+
+          &:not([disabled]):focus, &:not([disabled]):hover {
+            border-bottom-color: white;
+            outline: none;
+            box-shadow: none;
+          }
+        }
+      }
+    }
+
+  }
+}

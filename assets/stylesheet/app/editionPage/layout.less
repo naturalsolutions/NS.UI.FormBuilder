@@ -1,0 +1,758 @@
+.edition {
+  &[data-readonly="true"] {
+    .header .formTitle {
+      color: lightgray;
+    }
+  }
+
+  .header {
+    width: 100%;
+    padding: 15px 30px;
+    text-align: center;
+    background: @grid_bg;
+
+    & > div {
+      display: inline-block;
+
+      &.formTitle {
+        .exo;
+        font-size: 23px;
+        color: white;
+      }
+
+      &.action {
+        position: absolute;
+        &.actionBack {
+          left: 25px;
+        }
+        &.actionSave {
+          right: 25px;
+        }
+      }
+    }
+
+    .readonly {
+      color: #ffffff7a;
+      span, div {
+        text-transform: lowercase;
+        display: inline-block;
+      }
+      .url {
+        margin-left: 2px;
+      }
+    }
+
+    .url {
+      margin-left: 10px;
+      a {
+        color: @orange;
+        opacity: .8;
+        &:hover {
+          opacity: 1;
+        }
+      }
+
+      &.extLink a::after {
+        .reneco;
+        color: white;
+        content: "\e91f";
+        font-size: 1.1em;
+        margin-left: 3px;
+      }
+    }
+
+    .saveSpinner {
+      position: absolute;
+      right: 25px;
+      width: 30px;
+      visibility: hidden;
+    }
+  }
+
+  .content {
+    #formPanel {
+      width: 75%;
+      float: left;
+      background: @grid_fg;
+
+      #gridTemperedGlass {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 100;
+        background: black;
+        opacity: 0;
+
+        display: none;
+      }
+
+      &.disabled {
+        #gridTemperedGlass {
+          display: block;
+          opacity: 0.42;
+        }
+      }
+
+      #gridView {
+        height: ~"calc(100% - 76px)";
+      }
+
+      #gridRowActions {
+        position: absolute;
+        bottom: 0;
+        width: 100%;
+        background: #2B2B2B;
+        height: 50px;
+
+        .actionSave {
+          position: absolute;
+          right: 20px;
+          top: 8px;
+        }
+
+        .fieldType {
+          float: left;
+          margin-top: 14px;
+          font-size: inherit;
+          color: white;
+          padding: 0;
+
+          .type {
+            color: @orange;
+            font-weight: bold;
+
+            &::before, &::after {
+              color: white;
+              margin: 0 3px;
+            }
+            &::before {
+              content: "\0000AB";
+            }
+            &::after {
+              content: "\0000BB";
+            }
+          }
+        }
+
+        .actions {
+          float: left;
+          color: white;
+          margin-top: 8px;
+          margin-left: 20px;
+
+          div {
+            display: inline-block;
+            margin-right: 15px;
+          }
+        }
+      }
+    }
+
+    #settingFormPanel {
+      float: left;
+      width: 25%;
+
+      .slimScrollRail, .slimScrollBar {
+        right: 0 !important;
+      }
+      .slimScrollBar {
+        background: black !important;
+      }
+
+      input:disabled, select:disabled, textarea:disabled {
+        cursor: default;
+
+        &.notallowed {
+          cursor: not-allowed;
+        }
+      }
+
+      .checkBoxEditor {
+        width: 49%;
+        display: inline-block;
+        label {
+          color: black !important;
+        }
+
+        .checkboxField {
+          height: auto;
+          margin: 10px 0;
+        }
+      }
+
+      .properties .formField {
+        input, select, textarea {
+          border-color: #bbb;
+
+          &:focus, &:hover {
+            &:not(:disabled) {
+              border-color: #888;
+            }
+          }
+        }
+      }
+    }
+
+    #settingFormPanel, #fieldPropertiesPanel {
+      overflow: hidden;
+      height: 100%;
+      padding-right: 0;
+      font-family: 'ProximaNovaLight', sans-serif;
+
+      .title {
+        padding: 20px;
+        h2 {
+          margin: 0 0 0 15px;
+          text-align: left;
+          font-weight: bold;
+          font-size: 20px;
+          color: @gray;
+        }
+      }
+
+      .properties {
+        margin-bottom: 10px;
+        label {
+          color: #bbb;
+          margin: 0;
+        }
+
+        .formField {
+          margin: 10px 0 20px;
+          &.hide {
+            display: none;
+          }
+
+          .editor {
+            margin-top: 2px;
+          }
+
+          .checkboxField {
+            display: block;
+          }
+
+          input, select, textarea {
+            display: block;
+            width: 100%;
+            color: black;
+            background: none;
+
+            &:disabled {
+              color: gray;
+            }
+          }
+
+          input, select {
+            border-top: none;
+            border-left: none;
+            border-right: none;
+            border-bottom-style: solid;
+            border-bottom-width: 1px;
+            background: none;
+            padding: 2px 0 0;
+            height: 22px;
+          }
+
+          input {
+            padding-left: 5px;
+            padding-right: 5px;
+          }
+
+          textarea {
+            resize: vertical;
+            height: 80px;
+            min-height: 30px;
+            margin-bottom: 10px;
+          }
+
+          .error-block {
+            color: red;
+            text-indent: 10px;
+          }
+
+          &.error {
+            input, select, textarea {
+              border-bottom: 3px dashed red !important;
+            }
+          }
+
+          .help-block[data-error] {
+            color: red;
+          }
+
+          &.checkBoxEditor {
+            .checkboxField {
+              padding-left: 0;
+              padding-right: 0;
+              margin: 10px 0 10px;
+            }
+
+            &>label:first-child {
+              display: none;
+            }
+          }
+        }
+
+        .attachedFiles {
+          margin-top: 10px;
+          margin-bottom: 20px;
+
+          label {
+            margin-bottom: 10px;
+            margin-top: 6px;
+          }
+
+          .disabled {
+            &, &:hover {
+              cursor: not-allowed !important;
+            }
+            opacity: .5 !important;
+          }
+
+          .filesList, .addBtn {
+            width: 100%;
+            box-sizing: border-box;
+          }
+
+          .addBtn {
+            text-align: center;
+            background: none;
+            color: #555;
+            border: 2px solid @orange;
+            margin-bottom: 10px;
+            padding: 6px 10px;
+            float: right;
+            max-width: 170px;
+            border-radius: 12px;
+            width: auto;
+
+            &:hover {
+              font-weight: bold;
+            }
+          }
+
+          .filesList {
+            padding: 0 5px;
+            .file {
+              margin-bottom: 5px;
+              .type, .download, .remove {
+                font-family: 'reneco', sans-serif;
+                font-size: 20px;
+                width: 28px;
+              }
+
+              .name {
+                margin-top: 5px;
+                color: black;
+                cursor: default;
+              }
+
+              .download, .remove {
+                cursor: pointer;
+                padding: 0;
+                margin: 0 5px;
+                text-align: center;
+              }
+
+              .download::before {
+                content: '\e64b';
+              }
+              .remove::before {
+                content: '\e681';
+              }
+              .type {
+                &.default::before {
+                  content: '\e675';
+                }
+                &.doc::before {
+                  content: '\e676';
+                }
+                &.xls::before {
+                  content: '\e6ac';
+                }
+                &.jpg::before {
+                  content: '\e6a9';
+                }
+                &.png::before {
+                  content: '\e6ab';
+                }
+                &.pdf::before {
+                  content: '\e6aa';
+                }
+              }
+            }
+          }
+        }
+
+        .links {
+          a {
+            color: black;
+            margin-left: 15px;
+            display: block;
+          }
+        }
+
+        .versions {
+          margin-top: 10px;
+          margin-bottom: 20px;
+          table {
+            width: 100%;
+
+            tr:hover {
+              cursor: pointer !important;
+              background: #d0d0d0;
+              td {
+                cursor: pointer !important;
+              }
+            }
+
+            tr[data-active="true"] {
+              td.ts::after {
+                content: "\e665";
+              }
+            }
+
+            tr[data-active="false"] {
+              opacity: .5;
+            }
+
+            tr[data-timestamp="this"] {
+              border: 1px solid black;
+            }
+
+            td {
+              padding: 1px;
+              &:last-of-type {
+                padding-right: 8px;
+              }
+
+              &.ts {
+                .reneco;
+                width: 25px;
+                text-align: center;
+              }
+              &.id {
+                width: 25px;
+                text-align: center;
+              }
+              &.date {
+                text-align: right;
+                font-family: monospace;
+              }
+            }
+          }
+        }
+
+        #form, .attachedFiles {
+          padding-left : 15px;
+          padding-right: 20px;
+
+          p[data-error] {
+            .exo;
+            font-size: 18px;
+            color: red;
+          }
+        }
+
+        .languagesEditor {
+          table {
+            width: 100%;
+            text-align: center;
+            border-collapse: separate;
+
+            td {
+              background: #eaeaea;
+              border: 1px solid #bbb;
+              border-bottom: none;
+              border-top-left-radius: 5px;
+              border-top-right-radius: 5px;
+              padding: 5px;
+
+              &.error {
+                label {
+                  border-bottom: 3px dashed red;
+                }
+              }
+
+              &, label {
+                cursor: pointer;
+
+                &:hover, &.active {
+                  background: white;
+                }
+              }
+            }
+          }
+
+          form {
+            display: none;
+            padding: 8px;
+            border-left: 1px solid #bbb;
+            border-right: 1px solid #bbb;
+            border-bottom: 1px solid #bbb;
+            border-bottom-left-radius: 5px;
+            border-bottom-right-radius: 5px;
+
+            &.active {
+              display: block;
+            }
+          }
+        }
+      }
+
+      .slimScrollDiv {
+        width: 100% !important;
+        .scroll {
+          position      : relative;
+          overflow      : hidden;
+          width: auto !important;
+          height: ~"calc(100%) !important";
+        }
+      }
+    }
+
+    #widgetPanel {
+      background: @grid_fg;
+      cursor: default;
+      margin: 8px 5px;
+      border-spacing: 5px 0;
+      border-collapse: separate;
+
+      tr.fieldTypes {
+        cursor: default;
+        td {
+          position: relative;
+          border: 1px solid transparent;
+          width: 36px;
+          text-align: center;
+          font-size: 20px;
+          color: white;
+          padding: 7px;
+
+          &[data-disabled="false"]:hover {
+            cursor: pointer;
+            color: @orange;
+            background: @grid_bg;
+            border: 1px solid @grid_gray;
+            border-radius: 2px;
+          }
+
+          &[data-disabled="true"] {
+            opacity: .5;
+          }
+        }
+      }
+    }
+
+    #fieldPropertiesPanel {
+      position: absolute;
+      z-index: 1000;
+      width: 30%;
+      height: 100%;
+      background: #271D1B;
+      color: white;
+      box-shadow: 1px 7px 12px 2px black;
+      padding-left: 20px;
+      top: 0;
+      right: 0;
+      text-align: center;
+
+      opacity: 0;
+      left: 100%;
+      &.display {
+        opacity: 1;
+        right: 0;
+        left: auto;
+      }
+
+      h2:hover {
+        cursor: pointer;
+      }
+
+      .properties {
+        padding-right: 25px;
+      }
+
+      .checkboxField label {
+        color: white !important;
+      }
+
+      .properties form .formField {
+        label {
+          color: #94827E;
+        }
+
+        option {
+          color: black;
+        }
+
+        input, select, textarea {
+          &:disabled {
+            color: #ddd;
+          }
+        }
+
+        input, select {
+          color: white;
+
+          &::placeholder {
+            color: #94827E;
+          }
+          border-bottom-color: #94827E;
+        }
+
+        .error-block {
+          color: @orange;
+        }
+
+        &.error {
+          input, select, textarea {
+            border-bottom-color: @orange !important;
+          }
+        }
+
+        .treeEditor {
+          .tree {
+            margin-top: 10px;
+            background: white;
+            &.loading {
+              height: 100%;
+              color: #222222;
+              text-align: center;
+              padding: 15px;
+              cursor: default;
+            }
+
+            .fancytree-container {
+              border: none;
+              outline: none;
+            }
+
+            // override default fancytree color to make it more visible
+            .fancytree-plain span.fancytree-active span.fancytree-title {
+              background-color: #cbe8f6;
+              border-color: #26a0da;
+            }
+          }
+
+          .slimScrollBar {
+            background: black !important;
+            transition: none;
+          }
+
+          .slimScrollRail {
+            opacity: 0.3 !important;
+            transition: none;
+          }
+
+          table {
+            border-spacing: 5px 1px;
+            border-collapse: separate;
+            td {
+              padding: 5px 0;
+            }
+          }
+        }
+
+        .editModeEditor, .appearanceEditor {
+          .checkboxField, input {
+            width: 49%;
+            display: inline-block;
+          }
+        }
+
+        .choicesEditor {
+          table {
+            table-layout: fixed;
+            width: 100%;
+            border-spacing: 5px;
+            border-collapse: separate;
+
+            th, td {
+              &:first-of-type, &:last-of-type {
+                width: 15px;
+                text-align: center;
+              }
+            }
+          }
+          .deleteOption {
+            font-family: 'reneco', sans-serif;
+            cursor: pointer;
+            color: #aaaaaa;
+
+            &:hover {
+              color: white;
+            }
+
+            &::after {
+              content: "\e681";
+            }
+          }
+
+          .center {
+            text-align: center;
+            margin-top: 12px;
+          }
+        }
+
+        .languagesEditor {
+          table {
+            td {
+              background: #4b3935;
+              border-color: #94827E;
+
+              &, label {
+                &:hover, &.active {
+                  background: #271D1B;
+                }
+              }
+            }
+          }
+
+          &.error label {
+            border-bottom-color: @orange !important;
+          }
+
+          form {
+            border-color: #94827E;
+          }
+        }
+      }
+
+      .content {
+        background: none;
+        margin-top: 20px;
+        height: ~"calc(100% - 65px)";
+        text-align: left;
+        padding-bottom: 25px;
+      }
+
+      h2 {
+        color: #806C6B;
+        margin: 20px 0;
+        font-size: 26px;
+        text-transform: uppercase;
+
+        &::before {
+          content: "<";
+          margin-right: 20px;
+        }
+      }
+
+      .btnOk {
+        padding-left: 40px;
+        padding-right: 40px;
+      }
+
+      input:not([type="checkbox"]), select {
+        border-color: #bbb;
+        &:not([disabled]):focus, &:not([disabled]):hover {
+          border-bottom-color: white;
+        }
+      }
+    }
+
+    @import url('grid.less');
+  }
+}

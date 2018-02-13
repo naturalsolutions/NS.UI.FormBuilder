@@ -1,9 +1,48 @@
 {
+    "reloadPage": "Reload page",
     "grid" : {
       "name"             : "Name",
-      "creationDate"     : "Creation date",
-      "modificationDate" : "Modfication date",
-      "formContext"      : "Form Context"
+      "creationDate"     : "Creation",
+      "modificationDate" : "Modfication",
+      "formContext"      : "Context"
+    },
+
+    "header": {
+        "logout": "Logout"
+    },
+
+    "editGrid": {
+        "type": "Type",
+        "name": "Name",
+        "defaultValue": "Default value",
+        "linkedField": "Linked field",
+        "linkedFieldTable": "Linked field table",
+        "linkedFieldset": "Parent fieldset",
+        "appearance": "Appearance",
+        "editMode": "Edit mode",
+        "options": "Options",
+        "optionsUnavailable": "Options unavailable for this field",
+        "languages": "Languages",
+        "settings": "Settings",
+        "selectedField": "Selected field type",
+        "manageLanguages": "Language settings",
+        "manageSettings": "Settings",
+        "valuesList": "Values list",
+        "value": "Value",
+        "urlChanged": "Webservice URL change",
+        "urlChangedMessage": "Please reload current form after saving to update nodes tree selector",
+        "noNodeWithKey": "Invalid node id",
+        "noNodeWithKeyMessage": "Node with id \"{{id}}\" was not found in tree.\nPrevious value was restored."
+    },
+
+    "languages": {
+        "title": "Languages",
+        "label": "Label",
+        "description": "Description",
+        "keywords": "Keywords",
+        "fr": "French",
+        "en": "English",
+        "ar": "Arabic"
     },
 
     "fields" : {
@@ -36,17 +75,23 @@
     },
 
     "search" : {
+        "search"   : "\ue65f Search",
         "name"     : "Name",
         "keywords" : "Keywords",
         "user"     : "User",
         "date" : {
             "from" : "From",
             "to"   : "To"
-        }
+        },
+        "edited" : "Recently edited forms"
     },
 
     "form" : {
         "author"     : "Author",
+        "isgrid"     : "Is a grid",
+        "ishiddenprotocol" : "Hidden Protocol",
+        "hideprotocolname" : "Hide Protocol name",
+        "defaultforfieldactivity" : "Default for fieldactivity",
         "name"       : "Protocol name",
         "tag"        : "Destination tag",
         "cancel"     : "Cancel",
@@ -55,9 +100,12 @@
         "count"      : "Field(s)",
         "find"       : "Find a form",
         "validation" : "This field is required",
+        "boundProp"  : "This field is required, it is bound to \"{{prop}}\"",
         "importance" : "Importance",
         "minimal"    : "Minimum size must be less than the maximum size",
-        "setting"    : "Form <br />properties",
+        "setting"    : "Form properties",
+        "currentVersion": "Current version",
+        "history": "Versions history",
         "new"        : "New form",
         "context"    : "Context",
         "activite"   : "Activity",
@@ -96,13 +144,15 @@
         "actions" : {
             "import" : "IMPORT",
             "export" : "EXPORT",
-            "save"   : "SAVE FORM",
+            "save"   : "SAVE ALL",
             "clear"  : "CLEAR ALL",
             "find"   : "FIND",
             "add"    : "ADD",
+            "search" : "SEARCH",
             "viewdetails" : "VIEW DETAILS",
             "edit"   : "EDIT",
-            "sizepreview" : "Input sizes preview"
+            "sizepreview" : "Input sizes preview",
+            "back"   : "BACK"
         }
     },
 
@@ -135,7 +185,9 @@
     "actions" : {
         "edit"      : "Edit",
         "delete"    : "Delete",
-        "clone"     : " Clone"
+        "clone"     : " Clone",
+        "download"  : "Download",
+        "convert"   : "Convert"
     },
 
     "schema" : {
@@ -188,8 +240,8 @@
         "decimal"           : "Allow decimal value",
         "fieldSizeEdit"     : "Field display size for Edit mode",
         "fieldSizeDisplay"  : "Field display size for Display mode",
-        "fieldSize"         : "Field display size (X/12)",
-        "fullpath"          : "Full path",
+        "fieldSize"         : "Field display size (/12 or pixels)",
+        "fullpath"          : "Path",
         "obsolete"          : "Inactive",
         "sizeValue" : {
             "small"  : "Small",
@@ -223,7 +275,7 @@
         "propagate"                      : "Propagated",
         "isBinaryWeight"                 : "Is Binary Weight",
         "preview"                        : "Show preview",
-        "atBeginingOfLine"               : "Is at the begining of the line",
+        "atBeginingOfLine"               : "begining of line",
         "sizeError"                      : "Field size must be from 1 to 12",
         "positionPath"                   : "Path of the position",
         "defaultPath"                    : "Default value",
@@ -236,35 +288,8 @@
         "maxlength255"                   : "Maximum length is 255",
         "maxlength55"                    : "Maximum length is 55",
         "errorbetween0and5"              : "Number must be from 0 to 5",
-        "trackType"                      : "Track type"
-    },
-
-    "tooltip" : {
-        "text"                 : "Text",
-        "number"               : "Numeric",
-        "date"                 : "Date",
-        "select"               : "Dropdown list",
-        "radio"                : "Radio button",
-        "checkbox"             : "Checkbox",
-        "hidden"               : "Hidden ",
-        "file"                 : "File",
-        "treeview"             : "Tree View",
-        "textarea"             : "Long text",
-        "pattern"              : " with regular expression",
-        "line"                 : "Horizontal line",
-        "autocomplete"         : "Auto complete",
-        "subform"              : "set",
-        "horizontalline"       : "Horizontal line",
-        "boolean"              : "Boolean",
-        "autocompletetreeview" : "A TreeView with searching functionality",
-        "numericrange"         : "Numeric field with range",
-        "thesaurus"            : "Hierarchical Selector",
-        "childform"            : "Child Form",
-        "objectpicker"         : "Object Picker",
-        "subformgrid"          : "SubForm Grid",
-        "imageFile"            : "Image File",
-        "decimal"              : "Decimal Numeric",
-        "position"             : "Position"
+        "trackType"                      : "Track type",
+        "isAcceptedValue"                : "This value must be part of sub-tree \"{{prop}}\", or be empty, or be of the form \"#value#\""
     },
 
     "clearProtocol" : "You're going to clear this form.<br />Unsaved modifications will be lost.<br />Do you continue ?",
@@ -300,7 +325,9 @@
     },
 
     "settings" : {
+        "attachedFiles": "Attached files",
         "actions" : {
+            "addFile": "Add file...",
             "saveAsType" : "Save as template",
             "applyTemplate" : "Apply",
             "chooseNewTemplate" : "Apply a template:",
@@ -312,11 +339,15 @@
             "chooseNewType" : "Choose a new input type:",
             "convertAction" : "Convert",
             "convertTitle" : "Conversion validation",
-            "convertValidate" : "The input will be converted without possible return !",
+            "convertValidate" : "Field conversion for \"{{field}}\"",
+            "convertLabel" : "Select new field type: ",
             "convertYes" : "Yes, convert",
-            "convertNo" : "Don't",
+            "convertNo" : "Cancel",
             "choosefile" : "Associate a file",
-            "browse" : "Browse"
+            "browse" : "Browse",
+            "noCompatibleFieldsTitle": "No conversion available",
+            "noCompatibleFields": "There is no compatible input type for \"{{type}}\" input in configuration.",
+            "addOption": "Add option"
         },
         "preField" : "Pre-configurated field",
         "linkedFilesList" : "List of associated files:"
@@ -327,22 +358,20 @@
         "filename" : "File name",
         "clear" : {
             "title"            : "Are you sure ?",
-            "title2"           : "Are you REALLY sure ?",
-            "text"             : "The form will be deleted !",
-            "text2"            : "The form and all it's linked fields will be lost !",
-            "textinput"        : "The input will be deleted !",
-            "textinput2"       : "After saving, the input will be forever lost !",
+            "text"             : "The form will be deleted. Consider making it inactive instead",
+            "textinput"        : "After saving, the input will be deleted.",
             "yes"              : "Yes, delete it",
             "no"               : "No, cancel",
-            "deleted"          : "Fields deleted",
-            "formDeleted"      : "Your form has been emptied !",
+            "obsolete"         : "Make it inactive",
+            "deleted"          : "Form removed",
+            "formDeleted"      : "The form has been set inactive and removed from Formbuilder",
             "deleteError"      : "Fields not deleted !",
-            "formDeletedError" : "Your form could not be emptied !",
+            "formDeletedError" : "Error while setting form inactive",
             "fieldsdeleted"    : "Your form fields will be removed !",
             "loosingModifications" : "If you leave, you will loose your modifications !"
         },
         "exit" : {
-          "yes" : "Yes exit"
+          "yes" : "Yes, exit"
         },
         "import" : {
             "error"    : "An error occured !",
@@ -365,30 +394,24 @@
         "save" : {
             "success"    : "Form saved !",
             "successMsg" : "Your form was successfully saved on the server !",
-            "successMsgTmp" : "New values for the form parameters saved !",
-            "error"      : "An error occured !",
-            "errorMsg"   :" Your form wasn't saved. Consider making a export",,
-            "errorMsgNoExport"   :" Your form wasn't saved. For some reason ...",
-            "title"      : "Protocol save",
-            "button"     : "Save",
-            "uncompleteFormerror" : "Wrong Form !",
-            "uncompleteForm" : "At least one information is either missing or incorrect in your form properties !",
-            "uncompleteFormProp" : "At least one required field of your form is empty or invalid !",
-            "uncompleteFielderror" : "Wrong Fields !",
-            "uncompleteForm" : "At least one information is either missing or incorrect in your field properties !",
-            "uncompleteFieldProp" : "At least one required field of your input is empty or invalid !",
-            "inputnamehasothertype" : "One of this form input already exist in another form with another type for this context as following : ",
-            "hasDuplicateFieldNamesError" : "Invalid form !",
-            "hasDuplicateFieldNames" : "Some of your fields have the same names",
-            "formSimilarName" : "A form with a similar name already exists !",
-            "formSimilarFrName" : "A form with a similar french displayed name already exists !",
-            "formSimilarEnName" : "A form with a similar english displayed name already exists !",
-            "circularDependency" : "A circular dependency has been found with one of the childforms !!",
-            "418" : "I'm a teapot !"
+
+            "formPropertiesError" : "Form properties errors",
+            "formPropertiesErrorMsg" : "Please fix errors in form properties",
+            "fieldsError" : "Fields errors",
+            "fieldsErrorMsg" : "Please fix errors in fields properties",
+
+            "serverError"      : "Error from server",
+            "notFound": "Didn't find form with provided previous ID (id: {{Context}}/{{ID}})",
+            "formSimilarName" : "Another form with this name already exists (id: {{Context}}/{{ID}})",
+            "formSimilarFrName" : "Another form with this French label already exists (id: {{Context}}/{{ID}})",
+            "formSimilarEnName" : "Another form with this English label already exists (id: {{Context}}/{{ID}})",
+            "circularDependency" : "A circular dependency has been found with one of the childforms",
+            "dupeFieldType" : "Types mismatch for field named \"{{FieldName}}\"\nIt must be of type \"{{FieldType}}\", as found in form {{Context}}/{{ID}}"
         },
         "field" : {
-            "error" : "Field can't be added !",
-            "errorMsg" : "An error occured during field addition !"
+            "error" : "Error interne !",
+            "errorMsg" : "Le champ sélectionné est introuvable",
+            "dupe": "Nom de champ dupliqué"
         },
         "configuration" : {
             "success"    : "Field saved !",
@@ -422,7 +445,7 @@
         },
         "makeObs" : {
             "success" : "Success !",
-            "successMsg" : "The form have been turned into obsolete"
+            "successMsg" : "The form have been set inactive"
         }
     },
 
@@ -482,12 +505,20 @@
         "general" : "General error",
         "message" : "One or more field are empty",
         "cookieCheck" : "Your identity could not be verified",
-        "serverAvailable" : "Thanks for reloging yourself"
+        "serverAvailable" : "Thanks for reloging yourself",
+        "serverDown": "Formbuilder server seems down"
     },
 
     "fetch" : {
         "error"    : "Error retrieving forms !",
-        "errorMsg" : "Unable to retrieve the list of forms from the server. Is the server down ?"
+        "errorMsg" : "Unable to retrieve the list of forms from the server. Try reloading the page?"
+    },
+
+    "fetchOne" : {
+        "notFound" : "Not found",
+        "notFoundMsg" : "Form with provided id does not exist.",
+        "error"    : "Error retrieving form !",
+        "errorMsg" : "Unable to retrieve selected form from server. Try reloading the page?"
     },
 
   "configuration" : {
@@ -509,12 +540,12 @@
   },
 
   "formCount" : {
-      "form": "__count__ Form",
-      "form_plural": "__count__ Forms"
+      "form": "{{count}} Form",
+      "form_plural": "{{count}} Forms"
   },
 
   "fieldCount" : {
-      "field": "__count__ Field",
-      "field_plural": "__count__ Fields"
+      "field": "{{count}} Field",
+      "field_plural": "{{count}} Fields"
   }
 }

@@ -7,45 +7,48 @@ define([
     'backbone',
     '../../../Translater',
     '../../editor/CheckboxEditor',
-    'app-config'
-], function ($, Backbone, Translater, CheckboxEditor, AppConfig) {
+    '../../editor/NumberEditor',
+    'text!../../templates/FieldTemplate.html'
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate) {
 
-    var translater = Translater.getTranslater();
+    var fieldTemplate = _.template(FieldTemplate);
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
-    var EcoreleveProperties = {
-
+    return {
         extraProperties: {
+            CheckBox:{
+                defaults: {
+                    defaultValue: ""
+                },
+                schema: {
+                    defaultValue : {
+                        type        : 'Text',
+                        title       : translater.getValueFromKey('schema.default'),
+                        editorClass : 'form-control',
+                        template    : fieldTemplate,
+                        editorAttrs : {
+
+                        }
+                    }
+                }
+            },
             ChildForm:{
                 defaults: {
                     minimumAppearance : 0
                 },
                 schema: {
                     minimumAppearance : {
-                        type        : 'Number',
-                        editorClass : 'form-control',
+                        type        : NumberEditor,
+                        min: 0,
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.minAppearance'),
                         validators : [function checkValue(value, formValues) {
                             if (value < 0) {
                                 return {
                                     type : 'Invalid number',
-                                    message : translater.getValueFromKey('schema.minValueError') || "La valeur ne peut pas être inférieure à 0"
+                                    message : translater.getValueFromKey('schema.minValueError') || "La valeur ne peut pas Ãªtre infÃ©rieure Ã  0"
                                 }
                             }
-                        }],
-                        editorAttrs : {
-                            placeholder : translater.getValueFromKey('placeholder.num.minAppearance')
-                        }
+                        }]
                     }
                 }
             },
@@ -56,6 +59,7 @@ define([
                 schema: {
                     iscollapsed : {
                         type        : CheckboxEditor,
+                        template    : fieldTemplate,
                         fieldClass  : "checkBoxEditor",
                         title       : translater.getValueFromKey('schema.iscollapsed')
                     }
@@ -70,14 +74,12 @@ define([
                     defaultValue: {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
-                        editorClass : 'form-control',
-                        template    : fieldTemplate,
-                        editorAttrs : {
-                            placeholder : translater.getValueFromKey('placeholder.valueSQL')
-                        }
+                        template    : fieldTemplate
                     },
                     isDefaultSQL: {
+                        // todo: isSQLPropertySetter? (Fields.js:63)
                         type        : CheckboxEditor,
+                        template    : fieldTemplate,
                         fieldClass  : "hidden",
                         title       : "isSQL"
                     }
@@ -90,7 +92,6 @@ define([
                 schema: {
                     linkedFieldIdentifyingColumn: {
                         type        : 'Text',
-                        editorClass : 'form-control',
                         fieldClass  : "hidden",
                         template    : fieldTemplate,
                         title       : translater.getValueFromKey('schema.linkedFieldIdentifyingColumn')
@@ -100,9 +101,7 @@ define([
         },
 
         exceptions: {
-            hide: {
-
-            }
+            hide: {}
         },
 
         getExtraPropertiesDefaults: function(inputType, avoid){
@@ -114,11 +113,11 @@ define([
                 if (index == inputType)
                 {
                     toret = _.extend(toret, value.defaults);
-                    return(toret);
+                    return toret;
                 }
             });
 
-            return(toret);
+            return toret;
         },
 
         getExtraPropertiesSchema: function(inputType, avoid){
@@ -130,22 +129,15 @@ define([
                 if (index == inputType)
                 {
                     toret = _.extend(toret, value.schema);
-                    return(toret);
+                    return toret;
                 }
             });
 
-            return(toret);
+            return toret;
         },
 
-        getHideExceptionForProperty: function(input, property)
-        {
-            return(this.exceptions.hide[input] && this.exceptions.hide[input][property]);
-        },
-
-        initializeStatics: function () {
-            return(true);
+        getHideExceptionForProperty: function(input, property) {
+            return this.exceptions.hide[input] && this.exceptions.hide[input][property];
         }
     };
-
-    return EcoreleveProperties;
 });

@@ -1,274 +1,436 @@
 define([
-    'jquery', 'underscore', 'backbone', '../../Translater', '../editor/CheckboxEditor', 'app-config',
-    '../../homePageModule/collection/FormCollection', './ExtraContextProperties/ExtraProperties'
-], function($, _, Backbone, Translater, CheckboxEditor, AppConfig, FormCollection, ExtraProperties) {
+    'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
+    '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
+    '../editor/ChoicesEditor', '../editor/TreeEditor', '../editor/LanguagesEditor',
+    '../editor/ChildFormEditor', '../editor/NumberEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
+    'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
+], function(
+    $, _, tools, Backbone, translater,
+    CheckboxEditor, EditModeEditor, AppearanceEditor,
+    ChoicesEditor, TreeEditor, LanguagesEditor,
+    ChildFormEditor, NumberEditor, AppConfig, ExtraProperties,
+    FieldTemplate, FieldTemplateEditorOnly) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
+    var fieldTemplate = _.template(FieldTemplate);
+    var fieldTemplateEditorOnly = _.template(FieldTemplateEditorOnly);
 
-    var models = {}, translater = Translater.getTranslater();
+    var models = {};
 
-    var Node = Backbone.Model.extend({
-        schema: {
-            title: {
-                type  : "Text",
-                title : translater.getValueFromKey('schema.title')
-            },
-            key: {
-                type  : 'Number',
-                title : translater.getValueFromKey('schema.key')
-            },
-            folder: {
-                type        : CheckboxEditor,
-                fieldClass : "checkBoxEditor",
-                title : translater.getValueFromKey('schema.readonly')
+    // getFormsList tries to retreive cached forms from tools package and filters out current form
+    var getFormsList = function(currentForm) {
+        var ctx = currentForm.collection.context;
+        var id = currentForm.collection.id;
+
+        // retreive cached forms list from tools thingy
+        var forms = tools.getForms(ctx);
+
+        // no data, attempt something
+        if (!forms.data) {
+            if (forms.error) {
+                // try to reload in background, need form re-opening
+                console.warn(forms.error, "there was an error retreiving forms, retrying in the background");
+                tools.loadForms(ctx, false, true);
+                return [];
+            } else if (forms.loading) {
+                // try fetching synchronously
+                forms = tools.getForms(ctx, true, true);
+                if (!forms.data) {
+                    // no luck
+                    return [];
+                }
+            } else {
+                // some weird state, sorry no understand
+                console.warn("getFormsList: unexpected state");
+                return [];
             }
-        },
-
-        initialize: function(options) {
         }
-    });
 
-    var getFormsList = function(context){
-        //TODO CHANGE THIS CRAP, LOAD FORMSLIST ON FORM LOADING AND NOT ON FIELD SETTINGS PANEL OPENING
-        if (this.getFormsListResult && context.collection.name == this.savedCollectionName)
-            return (this.getFormsListResult);
-        var toret = [];
-        if (AppConfig.config.options.URLOptions){
-            var formCollection = new FormCollection({
-                url : AppConfig.config.options.URLOptions.allforms + "/" + window.context
-            });
+        // map id -> val, name -> label for backbone-form Select input
+        var options = _.map(forms.data, function(form) {
+            return {
+                val: form.id,
+                label: form.name
+            }
+        });
 
-            formCollection.fetch({
-                async: false,
-                reset : true,
-                success : _.bind(function() {
-                    $.each(formCollection.models, function(index, value){
-                        if ((context.collection.name != value.attributes.name &&
-                            (!value.attributes.context || value.attributes.context == window.context)) &&
-                            !value.attributes.obsolete)
-                        {
-                            toret.push({"val" : value.attributes.id ,"label" : value.attributes.name});
-                        }
-                    });
-                }, this)
-            });
+        // filter-out current form
+        return _.filter(options, function(opt) {
+            return opt.val != id;
+        });
+    };
 
-            this.getFormsListResult = toret;
-            this.savedCollectionName = context.collection.name;
+    // boundTo creates a validator that binds current property to another one.
+    // If current prop is null and boundProp from model isn't, this field will return erronous.
+    var boundTo = function(boundProp) {
+        return function(val, model) {
+            if (model && model[boundProp] && !val) {
+                return {
+                    type: "boundTo",
+                    message: translater.getValueFromKey("form.boundProp",
+                        {prop: translater.getValueFromKey("schema." + boundProp)})
+                }
+            }
+        };
+    };
 
-            return(toret);
+    // isAcceptedValue creates a validator that enforce value to match model's acceptedValues, if available.
+    // Check is skipped if value is of the form '#<val>#', or if it is not set.
+    var isAcceptedValue = function(model, propertyName) {
+        return function(val) {
+            if (!model.acceptedValues) {
+                return;
+            }
+            if (!val) {
+                return;
+            }
+            if (/^#.*#$/.exec(val)) {
+                return;
+            }
+
+            if (!_.includes(model.acceptedValues, val)) {
+                return {
+                    type: "isChildrenOf",
+                    message:
+                        translater.getValueFromKey(
+                            "schema.isAcceptedValue",
+                            { prop: translater.getValueFromKey(propertyName) }
+                        )
+                }
+            }
+       };
+    };
+
+    // isSQLPropertySetter creates a function that checks for model[srcProperty] and
+    // updates model[isSQLProperty] according to a set of rules.
+    //
+    // Although it doesn't validate anything, it is intended to be plugged in the validators section of any
+    // given field, preferably a hidden or read-only fields since it will be overriden at save time if used like that.
+    // Due to its form and parameters this setter could be created and called from anywhere, initializing it in
+    // the validators section of the isSQLProperty serves 2 purposes: readability and ensuring
+    // the property will be set between model modifications & validation/save.
+    //
+    // model[srcProperty] must be textual
+    // model(isSQLProperty] must be boolean,
+    //   it will be set to true on validation if model[srcProperty] like 'select%from%' (case insensitive)
+    var isSQLPropertySetter = function(model, srcProperty, isSQLProperty) {
+        if (model === window) return;
+        if (!model || !model.attributes ||
+            model.attributes[srcProperty] === undefined ||
+            model.attributes[isSQLProperty] === undefined ||
+            typeof(model.attributes[srcProperty]) !== "string" ||
+            typeof(model.attributes[isSQLProperty]) !== "boolean") {
+
+            console.log("looks like a bad usage of isSQLPropertySetter");
+            return function(){};
         }
+        return function() {
+            var sqlStuff = model.attributes[srcProperty].toLowerCase();
+            model.attributes[isSQLProperty] =
+                sqlStuff.indexOf("select") >= 0 && sqlStuff.indexOf("from") > 0;
+        };
     };
 
     //  ----------------------------------------------------
     //  Field herited by BaseField
     //  ----------------------------------------------------
-
-    var reorderProperties = function(jsonobject){
-        var toOrder = {};
-        $.each(jsonobject, function(index, value){
-            if (value.after)
-            {
-                toOrder[index] = value;
-                delete jsonobject[index];
-            }
-        });
-
-        var toret = {};
-        $.each(jsonobject, function(index, value){
-            toret[index] = value;
-            $.each(toOrder, function(subindex, subvalue){
-               if(subvalue.after == index){
-                   toret[subindex] = subvalue;
-                   delete toOrder[subindex];
-               }
-            });
-        });
-
-        return toret;
-    };
-
     models.BaseField = Backbone.Model.extend({
 
         defaults: {
-            order       : 1,
-            name        : "",
-            labelFr     : "",
-            labelEn     : "",
-            required    : false,
+            order: 1,
+            name: "",
+            required: false,
+            translations: {},
 
-            // Linked fields values GONE
+            linkedFieldTable: '',
+            linkedField: '',
 
-            editMode    : {visible : true, editable : true, nullable : true, nullmean : false},
-            isDragged   : false,
-            showCssProperties   : false,
-            editorClass : '',
-            fieldClassEdit  : '',
-            fieldClassDisplay  : '',
-            atBeginingOfLine : false,
-            fieldSize   : 12,
-            linkedFieldset               : ''
+            editMode: 7,
+            isDragged: false,
+            showCssProperties: false,
+            editorClass: '',
+            fieldClassEdit: '',
+            fieldClassDisplay: '',
+            atBeginingOfLine: false,
+            fieldSize: 12,
+            linkedFieldset: '',
+            originalID: null
         },
 
-        schema : {
-            labelFr   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.label.fr'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators : ['required'],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.label.fr')
-                }
-            },
-            labelEn   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.label.en'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                validators : ['required'],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.label.en')
-                }
-            },
-            name   : {
-                type        : "Text",
-                title       : translater.getValueFromKey('schema.name'),
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                fieldClass  : 'marginBottom10',
-                validators : ['required'],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.name')
-                }
-            },
-
-            //  Linked field section
-            isLinkedField : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
-            },
-            linkedFieldTable : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedFieldTable'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
-            linkedField : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedField'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
-
-            editMode : {
-                type        : 'Object',
-                subSchema   : {
-                    visible : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.visible'),
-                        fieldClass: "checkBoxEditor"
+        schema: {
+            translations: {
+                type: LanguagesEditor,
+                title: "", // it's already in it's own panel, display empty title
+                template: fieldTemplateEditorOnly,
+                languages: {
+                    // todo some kind of conf value ?
+                    fr: {
+                        name: translater.getValueFromKey('languages.fr'),
+                        extraValidators: [{
+                            type : 'required',
+                            message : translater.getValueFromKey('form.validation'),
+                            targets: ["Name"]
+                        }],
+                        required: true
                     },
-                    editable : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.editable'),
-                        fieldClass: "checkBoxEditor"
-                    },
-                    nullable : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.nullable'),
-                        fieldClass: "checkBoxEditor"
-                    },
-                    nullmean : {
-                        type: CheckboxEditor,
-                        title: translater.getValueFromKey('schema.editMode.nullmean'),
-                        fieldClass: "checkBoxEditor"
+                    en: {
+                        name: translater.getValueFromKey('languages.en'),
+                        extraValidators: [{
+                            type : 'required',
+                            message : translater.getValueFromKey('form.validation'),
+                            targets: ["Name"]
+                        }],
+                        required: true
                     }
                 },
-                title       : translater.getValueFromKey('schema.editMode.editMode')
-            },
-
-            //  Css field section GONE
-
-            atBeginingOfLine : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.atBeginingOfLine') || "atBeginingOfLine"
-            },
-            fieldSize : {
-                type        : 'Number',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.fieldSize'),
-                validators : ['required',
-                    function checkValue(value, formValues) {
-                    if (value < 1 || value > 12) {
-                        return {
-                            type : 'Invalid number',
-                            message : translater.getValueFromKey('schema.sizeError')
-                        }
+                schema: {
+                    Name: {
+                        type        : "Text",
+                        title       : translater.getValueFromKey("languages.label"),
+                        template    : fieldTemplate
+                    },
+                    Help: {
+                        type        : "Text",
+                        title       : translater.getValueFromKey("schema.help"),
+                        template    : fieldTemplate
                     }
-                }]
+                }
             },
-            linkedFieldset : {
-                title       : translater.getValueFromKey('schema.linkedFieldset'),
-                editorClass : 'form-control',
-                template    : fieldTemplate
+            name: {
+                type: "Text",
+                title: translater.getValueFromKey('schema.name'),
+                template: fieldTemplate,
+                fieldClass: 'marginBottom10',
+                validators: ['required']
+            },
+
+            linkedFieldTable: {
+                type: 'Select',
+                title: translater.getValueFromKey('schema.linkedFieldTable'),
+                template: fieldTemplate,
+                options: function(apply, control) {
+                    // all the passing around of "linkedTablesList" ends up here
+                    // todo it could probably be avoided (bis)
+                    var linkedTablesList = control.model.get("linkedTablesList");
+                    if (!linkedTablesList) return;
+                    apply(linkedTablesList);
+                },
+                validators: [boundTo("linkedField")]
+            },
+            linkedField: {
+                type: 'Select',
+                title: translater.getValueFromKey('schema.linkedField'),
+                template: fieldTemplate,
+                options: function(apply, control) {
+                    // all the passing around of "linkedFieldsList" ends up here
+                    // todo it could probably be avoided
+                    var linkedFieldsList = control.model.get("linkedFieldsList");
+                    if (!linkedFieldsList) return;
+                    var options = _.map(linkedFieldsList, function(obj) {
+                        return obj.key;
+                    });
+                    apply(options);
+                },
+                validators: [boundTo("linkedFieldTable")]
+            },
+
+            editMode: {
+                type: EditModeEditor,
+                title: translater.getValueFromKey('schema.editMode.editMode'),
+                template: fieldTemplate
+            },
+
+            // appearance englobes values for atBeginingOfLine & fieldSize
+            // this is not completely ideal but works well with BaseView's
+            // mechanism that setValue's based on input name.
+            appearance: {
+                type: AppearanceEditor,
+                title: translater.getValueFromKey('editGrid.appearance'),
+                template: fieldTemplate
+            },
+
+            atBeginingOfLine: {
+                type: "Hidden"
+            },
+            fieldSize: {
+                type: "Hidden",
+                validators: ['required',
+                    _.bind(function checkValue(value) {
+                        // skip check for ecoreleve, fieldSize can be in pixels
+                        if (this.context == "ecoreleve") {
+                            return;
+                        }
+                        if (value < 1 || value > 12) {
+                            return {
+                                type: 'Invalid number',
+                                message: translater.getValueFromKey('schema.sizeError')
+                            }
+                        }
+                    }, this)]
+            },
+
+            linkedFieldset: {
+                title: translater.getValueFromKey('schema.linkedFieldset'),
+                template: fieldTemplate
+            },
+
+            originalID: {type: "Hidden"}
+        },
+
+        i18nFields: ["translations"],
+
+        /**
+         * languageSchema returns i18n related fields from this.schema()
+         **/
+        languagesSchema: function() {
+            if (this.languagesSchema_cache)
+                return this.languagesSchema_cache;
+
+            var schema = this.getSchema();
+            var languageProperties = _.pick(schema, _.bind(function(v, k) {
+                return _.includes(this.i18nFields, k);
+            }, this));
+            this.languagesSchema_cache = languageProperties;
+            return languageProperties;
+        },
+
+        /**
+         * extraSchema returns any field not present in excluded this.schema() or
+         * this.languages schema
+         */
+        extraSchema: function(excluded) {
+            if (this.extraSchema_cache)
+                return this.extraSchema_cache;
+
+            if (!excluded) excluded = [];
+            var keys = excluded.concat(this.i18nFields);
+            var schema = this.getSchema();
+            var extraProperties = _.pick(schema, function(v, k) {
+                return !_.includes(keys, k);
+            });
+            this.extraSchema_cache = extraProperties;
+            return extraProperties;
+        },
+
+        mainSchema: function(included) {
+            if (this.mainSchema_cache)
+                return this.mainSchema_cache;
+
+            if (!included) included = [];
+            var schema = this.getSchema();
+            var mainProperties = _.pick(schema, _.bind(function(v, k) {
+                return _.includes(included, k);
+            }, this));
+
+            this.mainSchema_cache = mainProperties;
+            return mainProperties;
+        },
+
+        /**
+         * getSchema returns this.schema or this.schema() depending on type
+         */
+        getSchema: function() {
+            if (typeof (this.schema) === 'function') {
+                return this.schema();
+            } else {
+                return this.schema;
             }
         },
 
-        initialize : function(options) {
-            if (AppConfig.appMode.topcontext != "reneco")
-            {
+        cacheCompatibleFields: function(context, src, dest) {
+            if (!this.prototype.compatibleFields) {
+                this.prototype.compatibleFields = {};
+            }
+
+            if (!this.prototype.compatibleFields[context]) {
+                this.prototype.compatibleFields[context] = {};
+            }
+
+            this.prototype.compatibleFields[context][src] = dest;
+        },
+
+        getCompatibleFields: function(ctx) {
+            var srcType = this.constructor.type;
+            var compatibleFieldPacks = tools.getContextConfig(ctx, "allowedConvert");
+
+            // do we have it in cache ?
+            if (this.prototype.compatibleFields &&
+                this.prototype.compatibleFields[ctx] &&
+                this.prototype.compatibleFields[ctx][srcType]) {
+
+                return this.prototype.compatibleFields[ctx][srcType];
+            }
+
+            // do the work
+            var pack;
+            for (var i in compatibleFieldPacks) {
+                pack = compatibleFieldPacks[i];
+
+                // search srcType in field pack
+                var idx = pack.indexOf(srcType);
+                if (idx > -1) {
+                    // found, copy array
+                    pack = pack.slice();
+                    // splice it (remove src type)
+                    pack.splice(idx, 1);
+                    break;
+                }
+
+                pack = null;
+            }
+
+            // cache value in prototype
+            this.cacheCompatibleFields(ctx, srcType, pack);
+
+            // assign value to model
+            return pack;
+        },
+
+        initialize: function(options) {
+            // set prototype
+            this.prototype = models.BaseField.prototype;
+
+            // set meta object for use in templates etc. will be ignored
+            var meta = {
+                i18n: this.constructor.i18n,
+                type: this.constructor.type
+            };
+            this.set("meta", meta);
+
+            // set compatible convert fields
+            this.set("compatibleFields", this.getCompatibleFields(options.context));
+
+            if (AppConfig.topcontext != "reneco") {
                 $.extend(this.schema, this.schema, {
-                    showCssProperties : {
-                        type        : CheckboxEditor,
-                        fieldClass  : "checkBoxEditor",
-                        title       : translater.getValueFromKey('schema.showCssProperties') || "showCssProperties"
+                    showCssProperties: {
+                        type: CheckboxEditor,
+                        template: fieldTemplate,
+                        fieldClass: "checkBoxEditor",
+                        title: translater.getValueFromKey('schema.showCssProperties') || "showCssProperties"
                     },
-                    editorClass : {
-                        type        : "Text",
-                        title       : translater.getValueFromKey('schema.editorClass'),
-                        editorClass : 'form-control',
-                        fieldClass  : 'marginTop20',
-                        template    : fieldTemplate
+                    editorClass: {
+                        type: "Text",
+                        title: translater.getValueFromKey('schema.editorClass'),
+                        fieldClass: 'marginTop20',
+                        template: fieldTemplate
                     },
-                    fieldClassEdit : {
-                        type        : "Text",
-                        title       : translater.getValueFromKey('schema.fieldClassEdit'),
-                        editorClass : 'form-control',
-                        template    : fieldTemplate
+                    fieldClassEdit: {
+                        type: "Text",
+                        title: translater.getValueFromKey('schema.fieldClassEdit'),
+                        template: fieldTemplate
                     },
-                    fieldClassDisplay : {
-                        type        : "Text",
-                        title       : translater.getValueFromKey('schema.fieldClassDisplay'),
-                        editorClass : 'form-control',
-                        template    : fieldTemplate
+                    fieldClassDisplay: {
+                        type: "Text",
+                        title: translater.getValueFromKey('schema.fieldClassDisplay'),
+                        template: fieldTemplate
                     }
                 });
 
                 $.extend(this.defaults, this.defaults, {
-                    isLinkedField                : false,
-                    linkedFieldTable             : '',
-                    linkedField                  : ''
+                    linkedFieldTable: '',
+                    linkedField: ''
                 });
             }
             _.bindAll(this, 'getJSON');
-        },
-
-        isAdvanced : function(index) {
-            return this.getSchemaProperty(index, 'advanced') === "advanced";
         },
 
         /**
@@ -276,18 +438,18 @@ define([
          *
          * @returns {object} field as json object
          */
-        getJSON : function() {
-            var jsonObject                  = {
-                    validators : []
+        getJSON: function() {
+            var jsonObject = {
+                    validators: []
                 },
-                schemaKeys                  = _.keys( typeof this.schema == "function" ? this.schema() : this.schema ),
-                schemaKeysWithoutValidator  = _.without(schemaKeys, 'required');
+                schemaKeys = _.keys(typeof this.schema == "function" ? this.schema() : this.schema),
+                schemaKeysWithoutValidator = _.without(schemaKeys, 'required');
 
             _.each(schemaKeysWithoutValidator, _.bind(function(el) {
                 jsonObject[el] = this.get(el);
             }, this));
 
-            jsonObject["id"]    = this.get("id");
+            jsonObject["id"] = this.get("id");
             jsonObject["order"] = this.get("order");
 
             if (this.get('editMode') & 4 != 4) {
@@ -296,50 +458,40 @@ define([
             if (this.get('editMode') & 2 != 2) {
                 jsonObject['validators'].push('readonly');
             }
-            return _.omit(jsonObject, ['isLinkedField', 'showCssProperties']);
+            return _.omit(jsonObject, ['showCssProperties']);
         }
 
     });
 
     models.BaseFieldExtended = models.BaseField.extend({
-        defaults : function() {
-            return _.extend( {}, models.BaseField.prototype.defaults, {
-                defaultValue : "",
-                isDefaultSQL : false,
-                help         : translater.getValueFromKey('placeholder.text')
+        defaults: function() {
+            return _.extend({}, models.BaseField.prototype.defaults, {
+                defaultValue: "",
+                isDefaultSQL: false
             });
         },
 
         schema: function() {
-            return _.extend( {}, models.BaseField.prototype.schema, {
+            return _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type        : 'Text',
-                    title       : translater.getValueFromKey('schema.default'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.default'),
+                    template: fieldTemplate
                 },
                 isDefaultSQL: {
-                    type        : CheckboxEditor,
-                    fieldClass  : "hidden",
-                    title       : "isSQL"
-                },
-                help: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.help')
-                    }
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "hidden",
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "defaultValue", "isDefaultSQL")
+                    ]
                 }
             })
         },
 
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
         }
     });
 
@@ -348,12 +500,11 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Autocomplete");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                defaultValue : "",
-                help         : translater.getValueFromKey('placeholder.autocomplete'),
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                defaultValue: "",
                 triggerlength: 2,
-                url          : "ressources/autocomplete/example.json",
-                isSQL        : false
+                url: "ressources/autocomplete/example.json",
+                isSQL: false
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -364,62 +515,45 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Autocomplete");
 
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type        : 'Text',
-                    title       : translater.getValueFromKey('schema.default'),
-                    fieldClass  : 'advanced',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
-                },
-                help: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.help')
-                    }
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.default'),
+                    fieldClass: 'advanced',
+                    template: fieldTemplate
                 },
                 triggerlength: {
-                    type        : (ExtraProperties.getPropertiesContext().getHideExceptionForProperty('AutocompleteField','triggerlength')?'Hidden':'Number'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.triggerlength'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.triggerlength')
-                    }
+                    type: (ExtraProperties.getPropertiesContext().getHideExceptionForProperty('AutocompleteField', 'triggerlength') ? 'Hidden' : 'Number'),
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.triggerlength')
                 },
                 url: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.url'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.url')
-                    }
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.url')
                 },
                 isSQL: {
-                    type        : CheckboxEditor,
-                    fieldClass  : "hidden",
-                    title       : "isSQL"
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "hidden",
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "url", "isSQL")
+                    ]
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
         }
 
     }, {
-        type   : "Autocomplete",
-        i18n   : 'autocomplete',
-        section : 'autocomplete'
+        type: "Autocomplete",
+        i18n: 'autocomplete',
+        section: 'autocomplete'
     });
 
     models.FileField = models.BaseField.extend({
@@ -428,10 +562,9 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("File");
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
-                mimeType     : "*",
-                filesize     : 200, //  specify max file size in ko,
-                help         : translater.getValueFromKey('placeholder.file'),
-                preview      : false
+                mimeType: "*",
+                filesize: 200, //  specify max file size in ko,
+                preview: false
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -442,51 +575,36 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("File");
 
-            var toret =  _.extend({}, models.BaseField.prototype.schema, {
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
                 mimeType: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.mime'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.mime')
-                    }
-                },
-                help: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.help')
-                    }
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.mime')
                 },
                 filesize: {
-                    type        : 'Number',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.size'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.fileSize')
-                    }
+                    type: NumberEditor,
+                    min: 0,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.size')
                 },
-                preview : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.preview') || "preview"
+                preview: {
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "checkBoxEditor",
+                    title: translater.getValueFromKey('schema.preview') || "preview"
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
-        type   : "File",
-        i18n   : 'file',
-        section : 'file'
+        type: "File",
+        i18n: 'file',
+        section: 'file'
     });
 
     models.TreeViewField = models.BaseField.extend({
@@ -494,7 +612,7 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("TreeView");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 node: [{
                     title: "Node 1",
                     key: "1"
@@ -510,7 +628,7 @@ define([
                         key: "4"
                     }]
                 }],
-                webServiceURL : '',
+                webServiceURL: '',
                 defaultNode: 0,
                 multipleSelection: true,
                 hierarchicSelection: false
@@ -524,47 +642,42 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("TreeView");
 
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultNode: {
-                    type  : 'Number',
-                    title : translater.getValueFromKey('schema.defaultNode'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.tree.default')
-                    }
+                    type: NumberEditor,
+                    min: 0,
+                    title: translater.getValueFromKey('schema.defaultNode'),
+                    template: fieldTemplate
                 },
                 multipleSelection: {
-                    type        : CheckboxEditor,
-                    fieldClass : "checkBoxEditor",
-                    title : translater.getValueFromKey('schema.multipleSelection'),
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "checkBoxEditor",
+                    title: translater.getValueFromKey('schema.multipleSelection'),
                 },
                 hierarchicSelection: {
-                    title : translater.getValueFromKey('schema.hierarchic'),
-                    type        : CheckboxEditor,
-                    fieldClass : "checkBoxEditor"
+                    title: translater.getValueFromKey('schema.hierarchic'),
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "checkBoxEditor"
                 },
-                webServiceURL : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.tree.url')
-                    }
+                webServiceURL: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.webServiceURL')
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'TreeView',
         i18n: 'tree',
-        section : 'tree'
+        section: 'tree'
     });
 
     models.ThesaurusField = models.BaseField.extend({
@@ -572,12 +685,12 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Thesaurus");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                    defaultValue : "",
-                    webServiceURL : AppConfig.paths.thesaurusWSPath,
-                    defaultNode: "",
-                    fullpath : ""
-                });
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                defaultValue: "",
+                webServiceURL: AppConfig.paths.thesaurusWSPath,
+                defaultNode: "",
+                fullpath: ""
+            });
 
             toret = _.extend(toret, toret, extraschema);
 
@@ -586,314 +699,52 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Thesaurus");
 
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
-                defaultValue: {
-                    type        : 'Text',
-                    title       : translater.getValueFromKey('schema.default'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                webServiceURL: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs: {
+                        disabled: function() {
+                            return AppConfig.topcontext.toLowerCase() === 'reneco';
+                        }
                     }
                 },
-                webServiceURL : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.node.url')
-                    }
+                defaultPath: {
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.default'),
+                    template: fieldTemplate,
+                    validators: [
+                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'))
+                    ]
                 },
                 defaultNode: {
-                    type  : 'Text',
-                    title : translater.getValueFromKey('schema.defaultNode'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.tree.default')
-                    }
+                    type: TreeEditor,
+                    title: translater.getValueFromKey('schema.defaultNode'),
+                    template: fieldTemplate,
+                    options: {
+                        path: "fullpath"
+                    },
+                    validators: ['required']
                 },
                 fullpath: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    editorAttrs : { disabled: true },
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.fullpath')
+                    type: 'Hidden',
+                    editorAttrs: {disabled: true},
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.fullpath')
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Thesaurus',
         i18n: 'thesaurus',
-        section : 'tree'
-    });
-
-    models.AutocompleteTreeViewField = models.BaseField.extend({
-        defaults: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("AutocompleteTreeView");
-
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                language    : { hasLanguage: true, lng: 'En' },
-                wsUrl       : 'ressources/thesaurus',
-                webservices : 'autocompleteTreeView.json',
-                startId     : '0',
-                defaultNode : ""
-            });
-
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
-        },
-        schema: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("AutocompleteTreeView");
-
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
-                wsUrl : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.wsUrl')
-                },
-                defaultNode: {
-                    type  : 'Text',
-                    title : translater.getValueFromKey('schema.defaultNode'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                },
-                webservices : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.ws')
-                },
-                language : {
-                    type        : 'Select',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.wslng'),
-                    options : ["fr", "en"]
-                },
-                fullpath: {
-                    type        : 'Hidden',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : ""
-                }
-            });
-
-            return reorderProperties(_.extend(toret, toret, extraschema));
-        },
-
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
-        }
-    }, {
-        type: 'AutocompleteTreeView',
-        i18n: 'autocomp',
-        section : 'tree'
-    });
-
-    models.ChildFormField = models.BaseField.extend({
-        defaults: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ChildForm");
-
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                childForm : "",
-                childFormName : "",
-                help : translater.getValueFromKey('placeholder.childform')
-            });
-
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
-        },
-        schema: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ChildForm");
-
-            var toret = _.extend( {}, models.BaseField.prototype.schema, {
-                childForm: {
-                    type        : 'Select',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.childForm'),
-                    validators  : ['required'],
-                    options     : getFormsList(this)
-                },
-                childFormName: {
-                    type        : 'Hidden',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : ""
-                },
-                help: {
-                    type        : 'Hidden',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : ""
-                }
-            });
-
-            return reorderProperties(_.extend(toret, toret, extraschema));
-        },
-
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
-        }
-    }, {
-        type   : 'ChildForm',
-        i18n   : 'childForm',
-        section : 'other'
-    });
-
-    // This input type is EcoReleve Dependent
-    models.ObjectPickerField = models.BaseField.extend({
-        defaults: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ObjectPicker");
-
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                objectType : "Monitored Site",
-                wsUrl : "",
-                triggerAutocomplete : 0,
-                linkedLabel : ""
-            });
-
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
-        },
-        schema: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ObjectPicker");
-
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
-                objectType: {
-                    type        : 'Select',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.objectType'),
-                    options     : ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
-                    validators : ['required']
-                },
-                wsUrl : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.wsUrl'),
-                    validators : ['required']
-                },
-                triggerAutocomplete: {
-                    type        : 'Number',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.ACTrigger'),
-                    validators : [function checkValue(value) {
-                        if (value < 1) {
-                            return {
-                                type : 'Invalid number',
-                                message : translater.getValueFromKey('schema.ACTriggerMinValue')
-                            }
-                        }
-                    }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.num.ACTrigger')
-                    }
-                },
-                linkedLabel : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.linkedLabel')
-                }
-            });
-
-            return reorderProperties(_.extend(toret, toret, extraschema));
-        },
-
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
-        }
-    }, {
-        type   : 'ObjectPicker',
-        i18n   : 'objectpicker',
-        section : 'reneco'
-    });
-
-    // This input type is EcoReleve Dependent
-    models.SubFormGridField = models.BaseField.extend({
-        defaults: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("SubFormGrid");
-
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                childForm : "",
-                childFormName : "",
-                nbFixedCol : "1",
-                delFirst : true,
-                showLines : true
-            });
-
-            toret = _.extend(toret, toret, extraschema);
-
-            return toret;
-        },
-        schema: function() {
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("SubFormGrid");
-
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
-                childForm: {
-                    type        : 'Select',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.childForm'),
-                    validators  : ['required'],
-                    options     : getFormsList(this)
-                },
-                childFormName: {
-                    type        : 'Hidden',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : ""
-                },
-                nbFixedCol: {
-                    type        : 'Number',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.nbFixedCol'),
-                    validators : [function checkValue(value) {
-                        if (value < 1) {
-                            return {
-                                type : 'Invalid number',
-                                message : translater.getValueFromKey('schema.nbFixedColMinValue')
-                            }
-                        }
-                    }]
-                },
-                delFirst : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.delFirst')
-                },
-                showLines : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.showLines')
-                }
-            });
-
-            return reorderProperties(_.extend(toret, toret, extraschema));
-        },
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
-        }
-    }, {
-        type   : 'SubFormGrid',
-        i18n   : 'subFormGrid',
-        section : 'reneco'
+        section: 'tree'
     });
 
     // This input type is Track Dependent
@@ -901,11 +752,11 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                defaultPath : "",
-                webServiceURL : AppConfig.paths.positionWSPath,
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                defaultPath: "",
+                webServiceURL: AppConfig.paths.positionWSPath,
                 defaultNode: "",
-                positionPath : ""
+                positionPath: ""
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -915,51 +766,304 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Position");
 
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
-                defaultPath : {
-                    type        : 'Text',
-                    title       : translater.getValueFromKey('schema.defaultPath'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                webServiceURL: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.webServiceURL'),
+                    editorAttrs: {
+                        disabled: function() {
+                            return AppConfig.topcontext.toLowerCase() === 'reneco';
+                        }
                     }
                 },
-                webServiceURL : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.webServiceURL'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.node.url')
-                    }
+                defaultPath: {
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.defaultPath'),
+                    template: fieldTemplate,
+                    validators: [
+                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'))
+                    ]
                 },
                 defaultNode: {
-                    type  : 'Text',
-                    title : translater.getValueFromKey('schema.defaultNode'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
+                    type: TreeEditor,
+                    title: translater.getValueFromKey('schema.defaultNode'),
+                    template: fieldTemplate,
+                    options: {
+                        path: "positionPath"
+                    },
+                    validators: ['required']
                 },
-                positionPath : {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    editorAttrs : { disabled: true },
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.positionPath'),
-                    validators : ['required']
+                positionPath: {
+                    type: 'Hidden',
+                    editorAttrs: {disabled: true},
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.positionPath')
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
-        type   : 'Position',
-        i18n   : 'position',
-        section : 'reneco'
+        type: 'Position',
+        i18n: 'position',
+        section: 'reneco'
+    });
+
+    // obsolete / not implemented
+    models.ObjectPickerField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ObjectPicker");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                objectType: "Monitored Site",
+                wsUrl: "",
+                triggerAutocomplete: 0,
+                linkedLabel: ""
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ObjectPicker");
+
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                objectType: {
+                    type: 'Select',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.objectType'),
+                    options: ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
+                    validators: ['required']
+                },
+                wsUrl: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.wsUrl'),
+                    validators: ['required']
+                },
+                triggerAutocomplete: {
+                    type: NumberEditor,
+                    min: 1,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.ACTrigger'),
+                    validators: [function checkValue(value) {
+                        if (value < 1) {
+                            return {
+                                type: 'Invalid number',
+                                message: translater.getValueFromKey('schema.ACTriggerMinValue')
+                            }
+                        }
+                    }]
+                },
+                linkedLabel: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.linkedLabel')
+                }
+            });
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'ObjectPicker',
+        i18n: 'objectpicker',
+        section: 'reneco'
+    });
+
+    // obsolete / not implemented
+    models.AutocompleteTreeViewField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("AutocompleteTreeView");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                language: {hasLanguage: true, lng: 'En'},
+                wsUrl: 'ressources/thesaurus',
+                webservices: 'autocompleteTreeView.json',
+                startId: '0',
+                defaultNode: ""
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("AutocompleteTreeView");
+
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                wsUrl: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.wsUrl')
+                },
+                defaultNode: {
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.defaultNode'),
+                    template: fieldTemplate
+                },
+                webservices: {
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.ws')
+                },
+                language: {
+                    type: 'Select',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.wslng'),
+                    options: ["fr", "en"]
+                },
+                fullpath: {
+                    type: 'Hidden',
+                    template: fieldTemplate,
+                    title: ""
+                }
+            });
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'AutocompleteTreeView',
+        i18n: 'autocomp',
+        section: 'tree'
+    });
+
+    models.ChildFormField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ChildForm");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                childForm: "",
+                childFormName: ""
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ChildForm");
+
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                childForm: {
+                    type: ChildFormEditor,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.childForm'),
+                    validators: ['required'],
+                    options: getFormsList(this),
+                    relatedNameProperty: "childFormName"
+                },
+                childFormName: {
+                    type: 'Hidden',
+                    template: fieldTemplate,
+                    title: ""
+                }
+            });
+
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'ChildForm',
+        i18n: 'childForm',
+        section: 'other'
+    });
+
+    // ecorelevé-specific
+    models.SubFormGridField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("SubFormGrid");
+
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                childForm: "",
+                childFormName: "",
+                nbFixedCol: "1",
+                delFirst: true,
+                showLines: true
+            });
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("SubFormGrid");
+
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
+                childForm: {
+                    type: ChildFormEditor,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.childForm'),
+                    validators: ['required'],
+                    options: getFormsList(this),
+                    relatedNameProperty: "childFormName"
+                },
+                childFormName: {
+                    type: 'Hidden',
+                    template: fieldTemplate,
+                    title: ""
+                },
+                nbFixedCol: {
+                    type: NumberEditor,
+                    min: 0,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.nbFixedCol'),
+                    validators: [function checkValue(value) {
+                        if (value < 0) {
+                            return {
+                                type: 'Invalid number',
+                                message: translater.getValueFromKey('schema.nbFixedColMinValue')
+                            }
+                        }
+                    }]
+                },
+                delFirst: {
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "checkBoxEditor",
+                    title: translater.getValueFromKey('schema.delFirst')
+                },
+                showLines: {
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "checkBoxEditor",
+                    title: translater.getValueFromKey('schema.showLines')
+                }
+            });
+
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
+
+            return _.extend(toret, toret, extraschema);
+        },
+        initialize: function(options) {
+            models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'SubFormGrid',
+        i18n: 'subFormGrid',
+        section: 'reneco'
     });
 
     //  ----------------------------------------------------
@@ -968,15 +1072,14 @@ define([
 
     models.TextField = models.BaseField.extend({
 
-        defaults : function() {
+        defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Text");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                defaultValue : "",
-                isDefaultSQL : false,
-                help         : translater.getValueFromKey('placeholder.text'),
-                minLength    : 1,
-                maxLength    : 255
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                defaultValue: "",
+                isDefaultSQL: false,
+                minLength: 1,
+                maxLength: 255
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -987,77 +1090,63 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Text");
 
-            var toret =  _.extend( {}, models.BaseField.prototype.schema, {
+            var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type        : 'Text',
-                    title       : translater.getValueFromKey('schema.default'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.default'),
+                    template: fieldTemplate
                 },
                 isDefaultSQL: {
-                    type        : CheckboxEditor,
-                    fieldClass  : "hidden",
-                    title       : "isSQL"
-                },
-                help: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.help')
-                    }
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "hidden",
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "defaultValue", "isDefaultSQL")
+                    ]
                 },
                 minLength: {
-                    type        : 'Hidden',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.min')
+                    type: 'Hidden',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.min')
                 },
                 maxLength: {
-                    type        : 'Number',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.maxTextLength'),
-                    validators : ['required',
+                    type: NumberEditor,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.maxTextLength'),
+                    min: 1,
+                    max: 255,
+                    validators: ['required',
                         function checkValue(value, formValues) {
                             if (value < 1 || value > 255) {
                                 return {
-                                    type : translater.getValueFromKey('schema.maxTextLengthError'),
-                                    message : translater.getValueFromKey('schema.maxTextLengthMin')
+                                    type: translater.getValueFromKey('schema.maxTextLengthError'),
+                                    message: translater.getValueFromKey('schema.maxTextLengthMin')
                                 }
                             }
                         }
-                    ],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('schema.maxlength255')
-                    }
+                    ]
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
-        type   : "Text",
-        i18n   : 'text',
-        section : 'text'
+        type: "Text",
+        i18n: 'text',
+        section: 'text'
     });
 
     models.TextAreaField = models.TextField.extend({
 
-        defaults : function() {
+        defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("TextArea");
 
-            var toret = _.extend( {}, models.TextField.prototype.defaults(), {
-
-            });
+            var toret = _.extend({}, models.TextField.prototype.defaults.call(this), {});
 
             toret = _.extend(toret, toret, extraschema);
 
@@ -1066,71 +1155,58 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("TextArea");
-            var schema =  _.extend( {}, models.TextField.prototype.schema(), {
+            var schema = _.extend({}, models.TextField.prototype.schema.call(this), {});
 
-            });
-
-            var toret =  _.extend( {}, schema, {
+            var toret = _.extend({}, schema, {
                 defaultValue: {
-                    type        : 'Text',
-                    title       : translater.getValueFromKey('schema.default'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.value')
-                    }
+                    type: 'Text',
+                    title: translater.getValueFromKey('schema.default'),
+                    template: fieldTemplate
                 },
                 isDefaultSQL: {
-                    type        : CheckboxEditor,
-                    fieldClass  : "hidden",
-                    title       : "isSQL"
-                },
-                help: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.help'),
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('placeholder.help')
-                    }
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "hidden",
+                    title: "isSQL",
+                    validators: [
+                        isSQLPropertySetter(this, "defaultValue", "isDefaultSQL")
+                    ]
                 },
                 maxLength: {
-                    type        : 'Number',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.maxTextLength'),
-                    validators : [function checkValue(value, formValues) {
+                    type: NumberEditor,
+                    min: 1,
+                    max: 255,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.maxTextLength'),
+                    validators: [function checkValue(value, formValues) {
                         if (value < 1 || value > 255) {
                             return {
-                                type : translater.getValueFromKey('schema.maxTextLengthError'),
-                                message : translater.getValueFromKey('schema.maxTextLengthMin')
+                                type: translater.getValueFromKey('schema.maxTextLengthError'),
+                                message: translater.getValueFromKey('schema.maxTextLengthMin')
                             }
                         }
-                    }],
-                    editorAttrs : {
-                        placeholder : translater.getValueFromKey('schema.maxlength255')
-                    }
+                    }]
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.TextField.prototype.initialize.call(this, options);
         }
 
     }, {
-        type   : 'TextArea',
-        i18n   : 'TextArea',
-        section : 'text'
+        type: 'TextArea',
+        i18n: 'TextArea',
+        section: 'text'
     });
 
     models.PatternField = models.TextField.extend({
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Pattern");
 
-            var toret = _.extend( {}, models.TextField.prototype.defaults(), {
+            var toret = _.extend({}, models.TextField.prototype.defaults.call(this), {
                 pattern: ""
             });
 
@@ -1142,26 +1218,25 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Pattern");
 
-            var toret =  _.extend( {}, models.TextField.prototype.schema(), {
+            var toret = _.extend({}, models.TextField.prototype.schema.call(this), {
                 pattern: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.pattern')
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.pattern')
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.TextField.prototype.initialize.call(this, options);
         }
 
     }, {
-        type   : "Pattern",
-        i18n   : 'mask',
-        section : 'other'
+        type: "Pattern",
+        i18n: 'mask',
+        section: 'other'
     });
 
     models.DateField = models.BaseFieldExtended.extend({
@@ -1169,13 +1244,11 @@ define([
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Date");
 
-            var toret = _.extend( {}, models.BaseFieldExtended.prototype.defaults(), {
-                format: (AppConfig.appMode.topcontext == "reneco" ? "DD/MM/YYYY" : ""),
-                help : translater.getValueFromKey('placeholder.date')
+            var toret = _.extend({}, models.BaseFieldExtended.prototype.defaults.call(this), {
+                format: (AppConfig.topcontext == "reneco" ? "DD/MM/YYYY" : "")
             });
 
-            if (AppConfig.appMode.topcontext == "reneco")
-            {
+            if (AppConfig.topcontext == "reneco") {
                 toret.fieldSize = 2;
             }
 
@@ -1188,60 +1261,55 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Date");
 
             var formatFieldProps = {
-                type        : 'Text',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.format'),
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.format')
-                }
+                type: 'Text',
+                template: fieldTemplate,
+                title: translater.getValueFromKey('schema.format')
             };
 
-            // TODO - UGLY : Abstract special input cases ?
-            if (AppConfig.appMode.topcontext == "reneco" || window.context == "aygalades")
-            {
+            if (AppConfig.topcontext == "reneco" || window.context == "aygalades") {
                 formatFieldProps.type = 'Select';
                 delete formatFieldProps.editorAttrs;
-                formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
+
+                if (this.get('context') && this.get('context').toLowerCase() == 'track') {
+                    formatFieldProps.options = ["DD/MM/YYYY"]
+                } else {
+                    formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
+                }
             }
 
 
-            var toret =  _.extend( {}, models.BaseFieldExtended.prototype.schema(), {
+            var toret = _.extend({}, models.BaseFieldExtended.prototype.schema.call(this), {
                 format: formatFieldProps
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        initialize: function() {
-            models.BaseFieldExtended.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.BaseFieldExtended.prototype.initialize.call(this, options);
         }
     }, {
-        type   : "Date",
-        i18n   : 'date',
-        section : 'numeric'
+        type: "Date",
+        i18n: 'date',
+        section: 'numeric'
     });
 
     //  ----------------------------------------------------
     //  Field herited by NumberField
     //  ----------------------------------------------------
-
-
     models.NumberField = models.TextField.extend({
 
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
 
             var baseSchema = _.pick(
-                models.TextField.prototype.defaults(), _.keys(models.BaseField.prototype.defaults, 'help')
+                models.TextField.prototype.defaults.call(this), _.keys(models.BaseField.prototype.defaults)
             );
-            baseSchema.help = translater.getValueFromKey('placeholder.numeric');
 
             var toret = _.extend( {}, baseSchema, {
                 minValue     : '',
                 maxValue     : '',
                 precision    : 1,
-                decimal      : true,
                 defaultValue : '',
                 unity        : []
             });
@@ -1252,20 +1320,13 @@ define([
         },
 
         baseSchema : {
-            decimal : {
-                type        : CheckboxEditor,
-                fieldClass : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.decimal')
-            },
-            defaultValue : _.pick(models.TextField.prototype.schema(), 'defaultValue')['defaultValue'],
+            defaultValue : _.pick(models.TextField.prototype.schema.call(this), 'defaultValue')['defaultValue'],
             minValue: {
-                type        : 'Text',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.min'),
-                validators : [function checkValue(value, formValues) {
-                    if (value != "")
-                    {
+                type: 'Text',
+                template: fieldTemplate,
+                title: translater.getValueFromKey('schema.min'),
+                validators: [function checkValue(value, formValues) {
+                    if (value != "") {
                         if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
                             return {
                                 type: 'Invalid number',
@@ -1281,178 +1342,147 @@ define([
                             }
                         }
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.num.min')
-                }
+                }]
             },
             maxValue: {
-                type        : 'Text',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.max'),
-                validators : [function checkValue(value, formValues) {
-                    if (value != "")
-                    {
-                        if (!$.isNumeric(value) && value.toString().substr(0,1) != '#')
-                        {
+                type: 'Text',
+                template: fieldTemplate,
+                title: translater.getValueFromKey('schema.max'),
+                validators: [function checkValue(value, formValues) {
+                    if (value != "") {
+                        if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
                             return {
-                                type : 'Invalid number',
-                                message : "La valeur saisie est d'un format incorrect"
+                                type: 'Invalid number',
+                                message: "La valeur saisie est d'un format incorrect"
                             }
                         }
                         value = parseFloat(value);
 
-                        if (value.toString().substr(0,1) != '#' && formValues['minValue'] != "" && value < formValues['minValue']) {
+                        if (value.toString().substr(0, 1) != '#' && formValues['minValue'] != "" && value < formValues['minValue']) {
                             return {
-                                type : 'Invalid number',
-                                message : "La valeur maximale est inférieure à la valeur minimale"
+                                type: 'Invalid number',
+                                message: "La valeur maximale est inférieure à la valeur minimale"
                             }
                         }
                     }
-                }],
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.num.max')
-                }
+                }]
             },
             precision: {
-                type        : 'Number',
-                editorClass : 'form-control',
-                fieldClass  : 'advanced',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.precision'),
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.num.precision')
-                }
+                type: NumberEditor,
+                min: 0,
+                fieldClass: 'advanced',
+                template: fieldTemplate,
+                title: translater.getValueFromKey('schema.precision')
             },
             unity: {
-                type        : 'Select',
-                title       : translater.getValueFromKey('schema.unity'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.num.unity')
-                },
-                options     : []
+                type: 'Select',
+                title: translater.getValueFromKey('schema.unity'),
+                template: fieldTemplate,
+                options: []
             }
         },
 
-        schema : function() {
+        schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend( {}, _.pick(models.TextField.prototype.schema(), _.keys(models.BaseField.prototype.schema), 'help'), this.baseSchema);
+            var schema = _.extend({}, _.pick(models.TextField.prototype.schema.call(this), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
 
-            schema.defaultValue.type = 'Number';
+            schema.defaultValue.type = NumberEditor;
             schema.defaultValue.validators = [function checkValue(value, formValues) {
-                if (value != null && value != "")
-                {
-                    if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0,1) != '#' && value > formValues['maxValue']) {
+                if (value != null && (value != "" || typeof(value) == 'number') ) {
+                    if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
                         return {
-                            type : 'Invalid number',
-                            message : "La valeur par défault est supérieur à la valeur maximale"
+                            type: 'Invalid number',
+                            message: "La valeur par défault est supérieur à la valeur maximale"
                         }
-                    } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0,1) != '#' && value < formValues['minValue']) {
+                    } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' && value < formValues['minValue']) {
                         return {
-                            type : 'Invalid number',
-                            message : "La valeur par défault est inférieure à la valeur minimale"
+                            type: 'Invalid number',
+                            message: "La valeur par défault est inférieure à la valeur minimale"
                         }
                     }
                 }
 
                 return undefined;
             }];
+            schema.defaultValue.min = 1;
 
-            var toret =  _.extend( {}, schema, {
+            var toret = _.extend({}, schema, {
                 pattern: {
-                    type        : 'Text',
-                    editorClass : 'form-control',
-                    template    : fieldTemplate,
-                    title       : translater.getValueFromKey('schema.pattern')
+                    type: 'Text',
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('schema.pattern')
                 }
             });
 
-            toret = reorderProperties(_.extend(toret, toret, extraschema));
+            toret = _.extend(toret, toret, extraschema);
 
             return toret;
         },
 
-        initialize: function() {
-            models.TextField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.TextField.prototype.initialize.call(this, options);
         }
     }, {
-        type   : 'Number',
-        i18n   : 'Number',
-        section : 'numeric'
+        type: 'Number',
+        i18n: 'number',
+        section: 'numeric'
     });
 
     models.DecimalField = models.NumberField.extend({
 
-        defaults : function() {
+        defaults: function() {
             return _.extend({},
-                models.NumberField.prototype.defaults(),
+                models.NumberField.prototype.defaults.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Decimal"));
         },
 
-        schema : function() {
-            return reorderProperties(_.extend({},
-                models.NumberField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal")));
+        schema: function() {
+            return _.extend({},
+                models.NumberField.prototype.schema.call(this),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+        },
 
-            /* TODO KEEP AS EXAMPLE OF THE OLD WAY
-            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal");
-            return models.NumberField.prototype.schema();
-            */
+        initialize: function(options) {
+            models.NumberField.prototype.initialize.call(this, options);
         }
 
     }, {
-        type   : 'Decimal',
-        i18n   : 'decimal',
-        section : 'numeric'
+        type: 'Decimal',
+        i18n: 'decimal',
+        section: 'numeric'
     });
 
     models.NumericRangeField = models.NumberField.extend({
 
-        defaults : function() {
+        defaults: function() {
             return _.extend({},
-                models.NumberField.prototype.defaults(),
+                models.NumberField.prototype.defaults.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("NumericRange"));
         },
 
-        schema : function() {
-            return reorderProperties(_.extend({},
-                models.NumberField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange")));
+        schema: function() {
+            return _.extend({},
+                models.NumberField.prototype.schema.call(this),
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("NumericRange"));
         }
 
     }, {
-        type   : 'NumericRange',
-        i18n   : 'numericrange',
-        section : 'numeric'
+        type: 'NumericRange',
+        i18n: 'numericrange',
+        section: 'numeric'
     });
 
 
     //  ----------------------------------------------------
     //  Field herited by EnumerationField
     //  ----------------------------------------------------
-
-
     models.EnumerationField = models.BaseField.extend({
 
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Enumeration");
 
-            var toret = _.extend( {}, models.BaseField.prototype.defaults, {
-                choices: [
-                    {
-                        id             : 1,
-                        isDefaultValue : false,
-                        fr             : 'Mon option',
-                        en             : "My first Option",
-                        value          : "1"
-                    }
-                ],
-                //  the default value refers to the default choice id
-                //  We used an array because we can have multiple default value
-                defaultValue: [1],
+            var toret = _.extend({}, models.BaseField.prototype.defaults, {
+                choices: [],
                 expanded: false
             });
 
@@ -1461,61 +1491,34 @@ define([
             return toret;
         },
 
-        getJSON : function() {
-            var json = models.BaseField.prototype.getJSON.apply(this, arguments);
+        getJSON: function(options) {
+            var json = models.BaseField.prototype.getJSON.call(this, options);
             json.choices = JSON.stringify(this.get('choices'));
 
             return json;
         },
 
         schema: function() {
-            return reorderProperties(_.extend( {}, models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration")));
+            return _.extend({}, models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"),
+                {
+                    choices: {
+                        type: ChoicesEditor,
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('editGrid.valuesList'),
+                        languages: [
+                            "fr", "en"
+                        ]
+                    }
+                });
         },
 
-        /**
-         * To manage Enumeration field values we used Backgrid.
-         * So we need to specify which columns use
-         */
-        columns : [
-            {
-                name     : 'isDefaultValue',
-                label    : '',
-                cell     : 'boolean'
-            },
-            {
-                name     : 'fr',
-                label    : 'fr',
-                cell     : 'string'
-            },
-            {
-                name     : 'en',
-                label    : 'en',
-                cell     : 'string'
-            },
-            {
-                name     : 'value',
-                label    : 'value',
-                cell     : 'string'
-            },
-            {
-                name     : 'action',
-                label    : '',
-                cell     : 'string',
-                editable : false
-            }
-        ],
-
-        /**
-         * Default value when we add a new row
-         */
-        columDefaults : {
-
-            isDefaultValue : false,
-            fr             : 'French label',
-            en             : 'English value',
-            value          : 'Value',
-            action         : ''
+        columnDefaults: {
+            isDefaultValue: false,
+            fr: '',
+            en: '',
+            ar: '',
+            value: ''
         },
 
         /**
@@ -1524,7 +1527,7 @@ define([
          * Get models.BaseField schema and add it on EnumerationField schema
          */
         initialize: function(options) {
-            models.BaseField.prototype.initialize.apply(this, arguments);
+            models.BaseField.prototype.initialize.call(this, options);
             if (typeof this.get('choices') === 'string') {
                 this.set('choices', JSON.parse(this.get('choices')));
             }
@@ -1533,36 +1536,36 @@ define([
 
     models.SelectField = models.EnumerationField.extend({
 
-        defaults : function() {
+        defaults: function() {
             return _.extend({},
-                models.EnumerationField.prototype.defaults(),
+                models.EnumerationField.prototype.defaults.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
         },
 
-        schema : function() {
-            return reorderProperties(_.extend({},
+        schema: function() {
+            return _.extend({},
                 models.EnumerationField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select")));
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
         },
 
-        subSchema : models.EnumerationField.prototype.subSchema,
+        subSchema: models.EnumerationField.prototype.subSchema,
 
-        initialize: function() {
-            models.EnumerationField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.EnumerationField.prototype.initialize.call(this, options);
         }
     }, {
-        type   : 'Select',
-        i18n   : 'select',
-        section : 'list'
+        type: 'Select',
+        i18n: 'select',
+        section: 'list'
     });
 
     models.CheckBoxField = models.EnumerationField.extend({
 
-        defaults : function() {
+        defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("CheckBox");
 
-            var toret = _.extend( {}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
-                isBinaryWeight : false
+            var toret = _.extend({}, models.EnumerationField.prototype.defaults.call(this), models.BaseField.prototype.defaults, {
+                isBinaryWeight: false
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -1573,176 +1576,57 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("CheckBox");
 
-            var toret =  _.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema, {
-                isBinaryWeight : {
-                    type        : CheckboxEditor,
-                    fieldClass  : "checkBoxEditor",
-                    title       : translater.getValueFromKey('schema.isBinaryWeight') || "isBinaryWeight"
+            var toret = _.extend({}, models.EnumerationField.prototype.schema.call(this), models.BaseField.prototype.schema, {
+                isBinaryWeight: {
+                    type: CheckboxEditor,
+                    template: fieldTemplate,
+                    fieldClass: "checkBoxEditor",
+                    title: translater.getValueFromKey('schema.isBinaryWeight') || "isBinaryWeight"
                 }
             });
 
-            return reorderProperties(_.extend(toret, toret, extraschema));
+            return _.extend(toret, toret, extraschema);
         },
 
-        subSchema : models.EnumerationField.prototype.subSchema,
+        subSchema: models.EnumerationField.prototype.subSchema,
 
-        initialize: function() {
-            models.EnumerationField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.EnumerationField.prototype.initialize.call(this, options);
         }
 
     }, {
-        type   : 'CheckBox',
-        i18n   : 'checkbox',
-        section : 'list'
+        type: 'CheckBox',
+        i18n: 'checkbox',
+        section: 'list'
     });
 
     models.RadioField = models.EnumerationField.extend({
 
-        defaults : function() {
+        defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Radio");
 
-            var toret = _.extend( {}, models.EnumerationField.prototype.defaults(), models.BaseField.prototype.defaults, {
-            });
+            var toret = _.extend({}, models.EnumerationField.prototype.defaults.call(this), models.BaseField.prototype.defaults, {});
 
             toret = _.extend(toret, toret, extraschema);
 
             return toret;
         },
 
-        schema : function() {
-            return reorderProperties(_.extend( {}, models.EnumerationField.prototype.schema(), models.BaseField.prototype.schema,
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio")));
+        schema: function() {
+            return _.extend({}, models.EnumerationField.prototype.schema.call(this), models.BaseField.prototype.schema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Radio"));
         },
 
-        subSchema : models.EnumerationField.prototype.subSchema,
+        subSchema: models.EnumerationField.prototype.subSchema,
 
-        initialize: function() {
-            models.EnumerationField.prototype.initialize.apply(this, arguments);
+        initialize: function(options) {
+            models.EnumerationField.prototype.initialize.call(this, options);
         }
     }, {
-        type   : 'Radio',
-        i18n   : 'radio',
-        section : 'list'
-    });
-
-
-    //  ----------------------------------------------------
-    //  Other Fields (might be deprecated)
-    //  ----------------------------------------------------
-
-
-    models.HiddenField = Backbone.Model.extend({
-        defaults: {
-            id          : 0,
-            order       : 1,
-            title       : translater.getValueFromKey('tooltip.hidden'),
-            name        : "Field",
-            value       : ""
-        },
-
-        schema: {
-            name   : {
-                type        : "Text",
-                title       : 'Name',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.name')
-                }
-            },
-            value: {
-                type        : 'Text',
-                editorClass : 'form-control',
-                template    : fieldTemplate,
-                title       : translater.getValueFromKey('schema.value'),
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.value')
-                }
-            },
-
-            //  Linked field section
-            isLinkedField : {
-                type        : CheckboxEditor,
-                fieldClass  : "checkBoxEditor",
-                title       : translater.getValueFromKey('schema.isLinkedField') || "isLinkedField"
-            },
-            linkedFieldTable : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedFieldTable'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            },
-            linkedField : {
-                type : 'Select',
-                title       : translater.getValueFromKey('schema.linkedField'),
-                template    : fieldTemplate,
-                editorClass : 'form-control',
-                options : []
-            }
-        }
-    }, {
-        type   : 'Hidden',
-        i18n   : 'hidden',
-        section : 'presentation'
-    });
-
-    models.HorizontalLineField = Backbone.Model.extend({}, {
-        type   : 'HorizontalLine',
-        section : 'presentation',
-        i18n   : 'presentation'
-    });
-
-    models.SubformField = Backbone.Model.extend({
-
-        defaults: {
-            id                : 0,
-            order             : 1,
-            fields            : [],
-            fieldsObject      : [],
-            legend            : 'Fieldset'
-        },
-
-        schema : {
-            legend   : {
-                type        : 'Text',
-                editorClass : 'form-control',
-                template    : fieldTemplate ,
-                title       : translater.getValueFromKey('schema.legend'),
-                editorAttrs : {
-                    placeholder : translater.getValueFromKey('placeholder.legend')
-                }
-            }
-        },
-
-        addField : function(field) {
-
-            //  Update field array
-            var arr = this.get('fields');
-
-            arr.push(field.get('name'));
-            this.set('fields', arr);
-
-            //  Send event to the subForm view
-            //  The subForm view will create subView corresponding to the field in parameter
-            this.trigger('fieldAdded', field);
-        },
-
-        removeField : function(field) {
-
-            var arr     = this.get('fields'),
-                index   = arr.indexOf(field);
-            arr.splice(index, 1);
-            this.set('fields', arr);
-            this.trigger('fieldRemoved');
-        }
-
-    }, {
-        type   : 'Subform',
-        i18n   : 'fieldset',
-        section : 'presentation'
+        type: 'Radio',
+        i18n: 'radio',
+        section: 'list'
     });
 
     return models;
-
 });

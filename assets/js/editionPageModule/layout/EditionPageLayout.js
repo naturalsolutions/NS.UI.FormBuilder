@@ -1,309 +1,621 @@
 define([
+    'jquery',
+    'backbone',
     'marionette',
     'text!../templates/EditionPageLayout.html',
+    'text!../templates/GridRowActions.html',
     '../views/FormPanelView',
-    '../views/WidgetPanelView',
-    '../views/SettingFieldPanelView',
-    '../views/SettingFormPanelView',
-    'backbone.radio',
+    '../models/Fields',
     '../../Translater',
-    'sweetalert'
-], function(Marionette, EditionPageLayoutTemplate, FormPanelView, WidgetPanelView, SettingFieldPanelView,
-            SettingFormPanelView, Radio, Translater, swal ) {
+    'tools',
+    'app-config',
+    'backbone-forms'
+], function($, Backbone, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
+            FormPanelView, Fields, t, tools, AppConfig) {
+    return Backbone.Marionette.View.extend({
+        template : function() {
+            return _.template(EditionPageLayoutTemplate) ({
+                collection : this.fieldCollection,
+                formUrl: this.formUrl,
+                formBaseUrl: this.formBaseUrl,
+                context: this.context,
+                fieldTypes: this.fieldTypes,
+                topcontext: AppConfig.topcontext,
+                readonly: this.fieldCollection.readonly
+            });
+        },
 
-    var translater = Translater.getTranslater();
+        attributes: function() {
+            return {
+                "data-context": this.context,
+                "data-topcontext": AppConfig.topcontext,
+                "class": "edition"
+            };
+        },
 
-    /**
-     * Main layout manages views in editionPageModule
-     * contains widgetPanelView, FormPanelView and settingPanelView
-     */
-    var EditionPageLayout =  Backbone.Marionette.LayoutView.extend({
-
-
-        /**
-         * edition page layout HTML template initialization
-         */
-        template: EditionPageLayoutTemplate,
-
-
-        /**
-         * jQuery event triggered by the layout
-         * @type {Object}
-         */
         events : {
-            'click #toggle.open'   : 'minimizeWidgetPanel',
-            'click #toggle.closed' : 'maximizeWidgetPanel'
+            'click .actionSave': 'save',
+            'click #exit': 'exit',
+            'click  .attachedFiles .addBtn'           : 'triggerFileClick',
+            'change .attachedFiles input[type="file"]': 'fileInputChanged',
+            'click  .attachedFiles .remove'           : 'removeAttachedFile',
+            'click  .attachedFiles .download'         : 'downloadAttachedFile',
+            'click  .versions tr'                     : 'displayVersion',
+
+            'click .fieldTypes td'                    : 'appendToDrop',
+            'keyup .rows'                             : 'gridKeypress',
+            'focus #settingFormPanel input'           : 'clearSelected',
+            'focus #settingFormPanel textarea'        : 'clearSelected',
+            'focus #settingFormPanel select'          : 'clearSelected',
+            'click .btnDelete'                        : 'deleteField',
+            'click .btnConvert'                       : 'convertField',
+            'click #fieldPropertiesPanel .btnOk'      : 'closeEdit',
+            'click #fieldPropertiesPanel h2'          : 'closeEdit'
         },
 
-
-        /**
-         * Layout regions, one for each view
-         */
         regions : {
-            leftPanel       : '#widgetPanel',
-            centerPanel     : '#formPanel',
-            settingFormPanel    : '#settingFormPanel',
-            settingFieldPanel    : '#settingFieldPanel'
+            centerPanel : '#gridView',
+            settingFormPanel : '#settingFormPanel'
         },
 
-
-        /**
-         * Layout constructor
-         *
-         * @param  {Object} options configuration parameters
-         */
         initialize : function(options) {
+            this.options = options;
+            this.linkedFieldsList = options.linkedFieldsList;
             this.fieldCollection = options.fieldCollection;
-            this.testCollection = options.fieldCollection;
+            this.fieldCollection.linkedFieldsList = options.linkedFieldsList;
             this.URLOptions = options.URLOptions;
+            this.context = this.fieldCollection.context;
 
-            this.initMainChannel();
-            this.initFormChannel();
-        },
-
-        /**
-         * Init form channel
-         */
-        initFormChannel : function() {
             this.formChannel = Backbone.Radio.channel('form');
+            this.formChannel.on('editField', this.editField, this);
+            this.formChannel.on('setSelected', this.setSelected, this);
 
-            //  Send by EditionPageController when user wants to edit field properties
-            this.formChannel.on('initFieldSetting', this.initFieldSetting, this);
+            _.bindAll(this, 'template', 'clearSelected');
 
-            //  edit form properties
-            this.formChannel.on('editForm', this.formSetting, this);
-
-            //  edit form properties
-            this.formChannel.on('exitingFormEditing', this.exitFormEdition, this);
+            this.update(this.fieldCollection);
+            this.formPanel = new FormPanelView({
+                fieldCollection : this.fieldCollection,
+                URLOptions : this.URLOptions
+            });
         },
 
-        /**
-         * Init main channel ONLY for this module and listen some events
-         */
-        initMainChannel : function() {
-            this.mainChannel = Backbone.Radio.channel('edition');
-
-            //  Event sent from setting view when backbone forms generation is finished
-            //  Run an animation for hide panel view and display setting view, I love jQuery !
-            // this.mainChannel.on('formCreated', this.displaySettingPanel, this);
-
-            //  Event sent from setting view when field changed are saved
-            //  and the data are correct
-            //  Run an animation for hide setting view and display panel view
-            this.mainChannel.on('formCommit', this.closeSettingPanelAndCommit, this);
-
-            //  Event receive from setting view panel when user save form changed attributes
-            //  Close setting panel and rest some components
-            this.mainChannel.on('editionDone', this.closeSettingPanelAndSuccess, this);
-
-            //  Event sent from setting view when modifications are cancelled
-            //  Run an animation for hide setting view and display panel view
-            this.mainChannel.on('formCancel', this.closeSettingPanelDefault, this);
-
-            this.mainChannel.on('setTemplateList', this.setTemplateList, this);
-
-            this.mainChannel.on('unsetTemplateList', this.unsetTemplateList, this);
-        },
-
-        /**
-         * Display setting panel view when user wants to edit field properties
-         *
-         * @param  {Object} Model to edit and some options send by editionPageController like pre configurated field and linked fields
-         */
-        initFieldSetting : function(options) {
-            if (this.settingFieldPanel == undefined)
-            {
-                this.addRegion('settingFieldPanel', '#settingFieldPanel');
-                this.settingFieldPanel =  this.getRegion('settingFieldPanel');
+        update: function(fieldCollection) {
+            this.fieldCollection = fieldCollection;
+            this.fieldCollection.dataUpdated = false;
+            this.fieldCollection.pendingChanges = false;
+            this.context = fieldCollection.context;
+            this.formUrl = false;
+            if (this.context.toLowerCase() === 'track' && fieldCollection.originalID) {
+                this.formUrl =
+                    AppConfig.trackFormURL.replace("#originalID#", fieldCollection.originalID);
             }
 
-            this.settingFieldPanel.show(new SettingFieldPanelView(options, this.savedTemplateList));
-        },
-
-        /**
-         * Display setting panel to edit form properties
-         *
-         * @param  {Object} formToEdit form to edit
-         */
-        formSetting : function(formToEdit) {
-            if (this.savedFTE)
-            {
-                if (this.savedFTE.name == formToEdit.name)
-                {
-                    return;
-                }
-                else
-                {
-                    delete this;
-                    return;
-                }
+            this.formBaseUrl = tools.replaceLastSlashItem(Backbone.history.location.hash, '');
+            if (this.fieldCollection.currentForm) {
+                this.fieldCollection.currentFormUrl =
+                    this.formBaseUrl + this.fieldCollection.currentForm;
             }
 
-            this.savedFTE = formToEdit;
+            this.$el.attr("data-readonly", this.fieldCollection.readonly);
+            this.initFieldTypes();
+        },
 
-            if (this.settingFormPanel == undefined) {
-                this.addRegion('settingFormPanel', '#settingFormPanel');
-                this.settingFormPanel = this.getRegion('settingFormPanel');
+        editField: function(model, panelTitle, form) {
+            this.setSelected(model);
+            this.editing = model;
+            model.view.$el.addClass("editing");
+
+            // disable formPanel while editing field
+            $("#formPanel").addClass("disabled");
+
+            // update panel title
+            $("#fieldPropertiesPanel").find("h2").attr("data-i18n", panelTitle).i18n();
+
+            // display panel
+            $("#fieldPropertiesPanel").show().css({width: $("td.options").outerWidth()});
+
+            // insert form with padding & slimscrollIt
+            var padding = 11 + $("#fieldPropertiesPanel h2").outerHeight();
+            this.$el.find("#fieldPropertiesPanel").find(".properties")
+                .html(form.$el)
+                .slimScroll({
+                    height: 'calc(100% - ' + padding + 'px)',
+                    railVisible: true,
+                    alwaysVisible : true
+                });
+
+            $("#fieldPropertiesPanel").addClass("display");
+
+            // notify view that its form was inserted in DOM
+            this.editing.view.trigger("open", form);
+
+            var focusEl = form.$el.find("input:not(:hidden)")[0];
+            if (focusEl) focusEl.focus();
+        },
+
+        setSelected: function(model, focus) {
+            if (this.selected === model) {
+                return;
+            } else if (this.selected && this.selected.view) {
+                this.selected.view.$el.removeClass("selected");
+            }
+
+            this.selected = model;
+            this.selected.view.$el.addClass("selected");
+            if (focus === true) {
+                this.selected.view.$el.find("input[name='name']").focus();
+            }
+            this.renderActions(this.selected);
+        },
+
+        clearSelected: function() {
+            if (!this.selected || this.editing) {
+                return;
+            }
+            this.selected.view.$el.removeClass("selected");
+            this.selected = null;
+            this.renderActions(null);
+        },
+
+        closeEdit: function() {
+            if (!this.editing) return;
+
+            var view = this.editing.view;
+            this.editing = null;
+            view.$el.removeClass("editing");
+            view.trigger("close");
+            view.$el.find("input[name='name']").focus();
+
+            // clearSelected if readonly
+            if (this.fieldCollection.readonly) {
+                this.clearSelected();
+            }
+
+            // re-enable panel
+            $("#formPanel").removeClass("disabled");
+            $("#fieldPropertiesPanel").removeClass("display").hide();
+        },
+
+        onRender : function() {
+            this.generateFormProperties();
+            this.getRegion('centerPanel').show(this.formPanel);
+            this.formPanel.refresh();
+            this.$el.i18n();
+        },
+
+        renderActions: function(model) {
+            if (!model) {
+                // clear gridRowActions section
+                this.$el.find(".inputActions").empty();
+                return;
+            }
+
+            var $el = $(_.template(GridRowActionsTemplate)({
+                model: model
+            }));
+            $el.i18n();
+            this.$el.find(".inputActions").html($el);
+        },
+
+        exit: function(url) {
+            if (typeof(url) !== 'string') {
+                url = "#back/" +
+                    this.fieldCollection.context + "/" + this.fieldCollection.dataUpdated;
+            }
+
+            var exit = _.bind(function() {
+                if (this.editing)
+                    this.editing.view.trigger("close");
+
+                Backbone.history.navigate(url, {trigger: true});
+            }, this);
+
+            if (!this.fieldCollection.pendingChanges) {
+                exit();
+                return;
+            }
+
+            // form was edited, display confirmation popup
+            tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications",
+                {
+                    buttons: {
+                        cancel: t.getValueFromKey('modal.clear.no'),
+                        confirm: {
+                            text: t.getValueFromKey('modal.exit.yes'),
+                            value: true,
+                            className: "danger"
+                        }
+                    }
+                }, null, exit);
+        },
+
+        displayVersion: function(e) {
+            this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
+        },
+
+        gridKeypress: function(e) {
+            if (e.keyCode === 27) {
+                this.clearSelected();
+                this.form.$el.find("#name").focus();
+            }
+        },
+
+        save: function() {
+            this.clearSelected();
+            this.closeEdit();
+            var formValidation = this.form.validate();
+            if (formValidation === null) {
+                // filter new files only (deletion not implemented in back, todo)
+                var newFiles = _.filter(this.formFilesBinaryList,
+                    function(el) {
+                        return !el.id || el.id === -1;
+                    });
+                newFiles = Object.values(newFiles);
+                var formData = this.form.getValue();
+                formData.fileList = Object.values(newFiles);
+                formData.id = this.fieldCollection.id;
+                formData.state = this.fieldCollection.state;
+                this.fieldCollection.updateCollectionAttributes(formData);
+                this.fieldCollection.save();
+            } else {
+                tools.swal("error", 'modal.save.formPropertiesError', 'modal.save.formPropertiesErrorMsg');
+            }
+        },
+
+        /* ----------------------- */
+        /* Form properties section */
+        /* ----------------------- */
+        generateFormProperties: function(form) {
+            if (!form) {
+                form = this.fieldCollection;
+            }
+            var that = this;
+            var datas = form.getAttributesValues(),
+                schemaDefinition = form.schemaDefinition;
+
+            this.form = new Backbone.Form({
+                schema: schemaDefinition,
+                data  : datas
+            }).render();
+
+            // disable autocomplete, spellcheck etc.
+            tools.disableInputAutoFeats(this.form.$el);
+
+            // disable submit, it throws to an unwanted url redirection
+            this.form.$el.on("submit", function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            });
+
+            // manually remove error on input change, to match behaviour of fields view
+            this.form.$el.find("input, select, textarea").on("change", function(e) {
+                var $errField = $(e.target).closest(".error");
+                $errField.removeClass("error");
+                $errField.find(".error-block").html(null);
+                that.fieldCollection.pendingChanges = true;
+            });
+
+            this.$el.find('#form').append(this.form.el);
+            this.$el.find('.scroll').slimScroll({
+                height        : '100%',
+                railVisible   : true,
+                alwaysVisible : true,
+                railColor     : "#111",
+                disableFadeOut: true
+            });
+
+            // append * to required
+            tools.appendRequired(this.form.$el, form.schemaDefinition);
+
+            // append files if any
+            this.formFilesBinaryList = {};
+            if (form.fileList) {
+                $.each(form.fileList, function(index, value){
+                    that.addAttachedFile(value.Pk_ID, value.name, value.filedata);
+                });
+            }
+
+            // disable inputs, buttons & return
+            if (this.fieldCollection.readonly) {
+                this.form.$el.find("input, select, textarea, .remove").attr("disabled", true).addClass("disabled");
+                return
+            }
+
+            // set custom double binding between #group and #typeIndividus
+            // this is track specific - todo NotLikeThat
+            var $groupe = $(this.form.el).find('select#groupe');
+            var $typeIndividus = $(this.form.el).find('select#typeIndividus');
+            var updateGroupe = function() {
+                if($typeIndividus.val().toLowerCase().indexOf("nouvel") !== -1) {
+                    if ($groupe.val() == 'null') {
+                        // skip if value is already null to avoid
+                        // losing $groupe.data('previous')
+                        return;
+                    }
+
+                    $groupe.find('option[value="null"]').show();
+                    $groupe.data('previous', $groupe.val());
+                    $groupe.val('null').trigger("change");
+                    $groupe.attr("disabled", true).addClass("notallowed");
+                } else {
+                    if ($groupe.find('option[value="null"]').is(':selected')) {
+                        var prev = $groupe.data('previous');
+                        var val = prev ? prev : [];
+                        $groupe.val(val).trigger("change");
+                    }
+                    $groupe.find('option[value="null"]').hide();
+                    $groupe.attr("disabled", false).removeClass("notallowed");
+                }
+            };
+
+            // trigger updateGroupe on typeIndividus change
+            $typeIndividus.on('change', updateGroupe);
+
+            // manually disable #group if set to null
+            if ($groupe.val() == 'null') $groupe.attr("disabled", true).addClass("notallowed");
+        },
+
+        /* ---------------------- */
+        /* Attached files section */
+        /* ---------------------- */
+        triggerFileClick: function(){
+            $(".attachedFiles input[type='file']").trigger("click");
+        },
+
+        fileInputChanged: function(){
+            var input = $('.attachedFiles input[type="file"]')[0];
+            var file = input.files[0];
+            if (!file) {
+                return;
             }
 
             var that = this;
+            var reader = new FileReader();
+            reader.onload = function(){
+                // mark pending changes
+                that.fieldCollection.pendingChanges = true;
+                that.addAttachedFile(0, file.name, reader.result);
+                // clear input
+                input.value = '';
 
-            if (that.testCollection)
-            {
-                if (that.testCollection.name.toLowerCase() == "new form" && that.testCollection.id != 0)
-                    that.testCollection.id = 0;
+            };
+            reader.readAsDataURL(file);
+        },
+
+        addAttachedFile: function(pk, name, data) {
+            if (this.formFilesBinaryList[name]) {
+                name = tools.dedupeFilename(name);
             }
 
-            var newformPanel = new SettingFormPanelView({
-                URLOptions : that.URLOptions,
-                formToEdit : that.testCollection || formToEdit
+            // prepare element todo table layout would be way simpler than bootstrap
+            var $file = $("<tr class='file row'>");
+            var $name = $("<td class='name'>").html(name);
+            var $ctrlDownload = $("<td class='download'>");
+            $ctrlDownload.attr('title', t.getValueFromKey("actions.download"));
+            var $ctrlRemove = $("<td>");
+            if (!this.fieldCollection.readonly) {
+                $ctrlRemove.addClass('remove');
+                $ctrlRemove.attr('title', t.getValueFromKey("actions.delete"));
+            }
+            var $type = $("<td class='type'>");
+            var typeClass = "default";
+            switch (name.split(".").pop().toLowerCase()) {
+                case "doc":
+                case "docx":
+                case "odt":
+                    typeClass = "doc";
+                    break;
+                case "xls":
+                case "xlsx":
+                case "ods":
+                    typeClass = "xls";
+                    break;
+                case "jpg":
+                case "svg":
+                case "bmp":
+                case "gif":
+                    typeClass = "jpg";
+                    break;
+                case "png":
+                    typeClass = "png";
+                    break;
+                case "pdf":
+                    typeClass = "pdf";
+                    break;
+                default:
+                    typeClass = "default";
+            }
+            $type.addClass(typeClass);
+
+            // trim extra chars in name
+            if (name.length > 25) {
+                var displayName = name.substring(0, 22) + '...';
+                $name.html(displayName);
+                $name.attr("title", name);
+            }
+
+            // insert in DOM
+            $file.data("name", name)
+                .append($type)
+                .append($name)
+                .append($ctrlDownload)
+                .append($ctrlRemove);
+            this.$el.find(".filesList").append($file);
+
+            // add to binary files
+            var binFile = {
+                "name": name,
+                "filedata": data
+            };
+
+            binFile.id = pk? pk: -1;
+            this.formFilesBinaryList[name] = binFile;
+        },
+
+        downloadAttachedFile : function(el){
+            var name = $(el.target).parent().data("name");
+            var data = this.formFilesBinaryList[name].filedata;
+            data = "data:application/octet-stream;" + data.split(";")[1];
+            var a = document.createElement("a");
+            a.href = data;
+            a.download = name;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        },
+
+        removeAttachedFile: function(el){
+            // mark pending changes
+            this.fieldCollection.pendingChanges = true;
+            // check that control isn't disabled
+            if ($(el.target).hasClass("disabled")) {
+                return;
+            }
+            var $file = $(el.target).parent();
+            var name = $file.data("name");
+            delete this.formFilesBinaryList[name];
+            $file.remove();
+        },
+
+        /* -------------- */
+        /* Fieldtypes bar */
+        /* -------------- */
+        initFieldTypes : function() {
+            var context = this.context;
+
+            // no soup for you
+            if (!AppConfig.contexts[context] || context == "all") {
+                return;
+            }
+
+            // insert each field found from specific context in config
+            var fieldTypes = [];
+            $.each(tools.getContextConfig(context, "inputTypes"), function (i, fieldType) {
+                var field = Fields[fieldType];
+                if (!field) {
+                    // try appending "Field" suffix
+                    fieldType += "Field";
+                    field = Fields[fieldType];
+                    if (!field) {
+                        console.warn('initFieldTypes: field "' + fieldType + '" from config does not exist');
+                        return;
+                    }
+                }
+                fieldTypes.push({
+                    type: fieldType,
+                    i18n             : fieldType.replace('Field', '').toLowerCase(),
+                    doubleColumn     : field.doubleColumn !== undefined,
+                    fontAwesomeClass : field.fontAwesomeClass
+                });
             });
-
-            that.settingFormPanel.show(newformPanel);
-
-            if (that.formPanel)
-                delete that.formPanel;
-
-            that.formPanel = newformPanel;
-
-            delete that.testCollection;
+            this.fieldTypes = fieldTypes;
         },
 
-        /**
-         * Remove and re-add new region
-         */
-        clearFormSettingView : function() {
-            //  Destroy view and his html content
-            this.$el.find('#settingFormPanel').html('');
-            this.settingFormPanel.currentView.destroy();
+        appendToDrop : function(e) {
+            if ($(e.target).attr("data-disabled") == "true") {
+                return;
+            }
 
-            //  Re add new region
-            this.addRegion('settingFormPanel', '#settingFormPanel');
-            this.settingFormPanel = this.getRegion('settingFormPanel');
+            this.fieldCollection.pendingChanges = true;
+            var fieldType = $(e.target).data("type");
+            if (!Fields[fieldType]) {
+                tools.swal('error', 'modal.field.error', 'modal.field.errorMsg');
+                return;
+            }
+            var model = this.fieldCollection.addElement(fieldType);
+
+            // there is an occasional bug where the "add" event triggered by
+            // fieldCollection.add(obj), that should be listened by FormPanel, does
+            // not occur. This hack tries to workaround this faulty behavior
+            if (model.view === undefined) {
+                this.formPanel.addElement(model);
+            }
+            this.setSelected(model, true);
         },
 
+        deleteField: function(noSwal) {
+            if (!this.selected) {
+                return;
+            }
 
-        /**
-         * Show the setting view
-         */
-        displaySettingPanel : function() {
-            if ($('#widgetPanel').hasClass('col-md-1')) {
-                //$('#formPanel').switchClass('col-md-8 col-md-offset-3', 'col-md-6 col-md-offset-6', 500);
+            var goDelete = _.bind(function() {
+                var sibling = model.view.$el.next();
+                if (sibling.length == 0 || sibling.hasClass("static")) {
+                    sibling = model.view.$el.prev();
+                }
+                var siblingId = sibling.data("id");
+
+                this.fieldCollection.pendingChanges = true;
+                this.fieldCollection.removeElement(model);
+                this.clearSelected();
+
+                // select sibling if available
+                if (siblingId && !sibling.hasClass("static")) {
+                    this.setSelected(this.fieldCollection.findWhere({id: siblingId}), true);
+                }
+            }, this);
+
+            var model = this.selected;
+            if (model.get('new') || (noSwal === true)) {
+                // no confirmation if element is new, or asked with noSwal arg
+                goDelete();
             } else {
-                //$('#formPanel').switchClass('col-md-6 col-md-offset-6', 'col-md-6 col-md-offset-6', 500);
+                // pass to BaseView.removeView, which needs to be rewritten
+                // todo but not now
+                model.view.removeView(goDelete);
             }
         },
 
+        convertField: function() {
+            var toConvert = this.selected;
 
-        /**
-         * Render callbacks
-         * Display ItemView like settingPanel
-         */
-        onRender : function() {
-            this.centerPanel.show(new FormPanelView({
-                fieldCollection : this.fieldCollection,
-                URLOptions : this.URLOptions
-            }, Backbone.Radio.channel('global').readonly));
-
-            if (!Backbone.Radio.channel('global').readonly)
-                this.leftPanel.show( new WidgetPanelView({}));
-        },
-
-        onDestroy : function() {
-
-            delete this.formChannel;
-            delete this.mainChannel;
-            delete this.settingFieldPanel;
-            delete this.settingFormPanel;
-            delete this;
-        },
-
-        exitFormEdition : function() {
-            this.destroy();
-        },
-
-        /**
-         * Animate widget panel to put it in small size
-         */
-        minimizeWidgetPanel : function() {
-            /*
-            $('#formPanel').switchClass('col-md-8', 'col-md-11', 300);
-            $('#widgetPanel').switchClass('col-md-4', 'col-md-1', 300);
-            $('#widgetPanel #features').fadeOut(200);
-            $('#widgetPanel #smallFeatures').fadeIn(200);
-            $('#toggle').switchClass('open', 'closed');
-            */
-        },
-
-
-        /**
-        * Animate widget panel to put it in large size
-         */
-        maximizeWidgetPanel : function() {
-            /*
-            $('#formPanel').switchClass('col-md-11', 'col-md-8', 300);
-            $('#widgetPanel').switchClass('col-md-1', 'col-md-4', 300, function() {
-                $('#widgetPanel #features').fadeIn(200);
-                $('#widgetPanel #smallFeatures').fadeOut(200);
-                $('#toggle').switchClass('closed', 'open');
-            });
-            */
-        },
-
-
-        /**
-        * Close setting panel
-        */
-        closeSettingPanel : function() {
-            if ($('#widgetPanel').hasClass('col-md-1')) {
-                $('#formPanel').switchClass('col-md-6', 'col-md-8', 500);
-            } else {
-                //$('#formPanel').switchClass('col-md-6 col-md-offset-6', 'col-md-6 col-md-offset-6', 500);
-                $('#widgetPanel').animate({
-                    marginRight : 0
-                }, 500, _.bind(function() {
-                    this.clearFormSettingView();
-                }, this))
+            var selectOptions = toConvert.get("compatibleFields");
+            if (!selectOptions || selectOptions.length === 0) {
+                tools.swal("warning",
+                    "settings.actions.noCompatibleFieldsTitle",
+                    t.getValueFromKey(
+                        "settings.actions.noCompatibleFields",
+                        {
+                            type: t.getValueFromKey("fields." + toConvert.get("meta").i18n.toLowerCase())
+                        }
+                    )
+                );
+                return;
             }
 
-            if ($('#settingFieldPanel').hasClass('col-md-3')) {
-                $('#settingFieldPanel').switchClass('col-md-3', 'col-md-0', 500);
-                $('#widgetPanel').show();
-            }
-        },
+            tools.swalSelect("warning",
+                "settings.actions.convertTitle",
+                t.getValueFromKey("settings.actions.convertValidate", {field: toConvert.get('name')}),
+                "settings.actions.convertLabel",
+                toConvert.get("compatibleFields"),
+                {
+                    buttons: {
+                        cancel: t.getValueFromKey('settings.actions.convertNo'),
+                        confirm: {
+                            text: t.getValueFromKey('settings.actions.convertYes'),
+                            value: true,
+                            className: "danger"
+                        }
+                    }
+                }, _.bind(function(targetFieldType) {
+                    this.fieldCollection.pendingChanges = true;
 
+                    if (!toConvert.get('new')) {
+                        // notify field convertion only if field already exists
+                        toConvert.set("converted", toConvert.get("id"));
+                    }
+                    this.deleteField(true);
 
-        /**
-         * Callback launch when setting panel needs to be closed
-         */
-        closeSettingPanelDefault : function(form) {
+                    // model.id needs to be deleted.
+                    // Otherwise backbone somehow retreives existing
+                    // item on new Field(props) instead of actually creating a new object.
+                    delete(toConvert.attributes.id);
 
-            if (form)
-            {
-
-            }
-            this.closeSettingPanel();
-        },
-
-        closeSettingPanelAndSuccess : function(form) {
-
-            this.closeSettingPanelDefault(form);
-        },
-
-        closeSettingPanelAndCommit : function(form) {
-
-            this.closeSettingPanelDefault(form);
-        },
-
-        setTemplateList : function(templateList) {
-            this.savedTemplateList = templateList;
-        },
-
-        unsetTemplateList : function() {
-            this.savedTemplateList = undefined;
+                    // insert and select new element
+                    var model = this.fieldCollection.addElement(targetFieldType, toConvert.attributes);
+                    model.set('new', toConvert.get('new'));
+                    this.setSelected(model, true);
+                }, this));
         }
     });
-
-    return EditionPageLayout;
-
 });
