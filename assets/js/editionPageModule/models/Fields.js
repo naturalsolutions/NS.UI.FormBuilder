@@ -1317,6 +1317,26 @@ define([
         },
 
         baseSchema : {
+            defaultValue: {
+                type: 'Text',
+                title: translater.getValueFromKey('schema.default'),
+                template: fieldTemplate,
+                validators: [function checkValue(value, formValues) {
+                    if (value != null && (value != "" || typeof(value) == 'number') ) {
+                        if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
+                            return {
+                                type: 'Invalid number',
+                                message: "La valeur par défault est supérieur à la valeur maximale"
+                            }
+                        } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' && value < formValues['minValue']) {
+                            return {
+                                type: 'Invalid number',
+                                message: "La valeur par défault est inférieure à la valeur minimale"
+                            }
+                        }
+                    }
+                }]
+            },
             minValue: {
                 type: 'Text',
                 template: fieldTemplate,
@@ -1381,27 +1401,6 @@ define([
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
             var schema = _.extend({}, models.BaseField.prototype.schema, this.baseSchema);
-
-            schema.defaultValue.type = NumberEditor;
-            schema.defaultValue.validators = [function checkValue(value, formValues) {
-                if (value != null && (value != "" || typeof(value) == 'number') ) {
-                    if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
-                        return {
-                            type: 'Invalid number',
-                            message: "La valeur par défault est supérieur à la valeur maximale"
-                        }
-                    } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' && value < formValues['minValue']) {
-                        return {
-                            type: 'Invalid number',
-                            message: "La valeur par défault est inférieure à la valeur minimale"
-                        }
-                    }
-                }
-
-                return undefined;
-            }];
-            schema.defaultValue.min = 1;
-
             var toret = _.extend({}, schema, {
                 pattern: {
                     type: 'Text',
