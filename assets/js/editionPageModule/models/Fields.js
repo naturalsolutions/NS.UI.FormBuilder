@@ -994,11 +994,11 @@ define([
                 },
                 nbFixedCol: {
                     type: NumberEditor,
-                    min: 1,
+                    min: 0,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.nbFixedCol'),
                     validators: [function checkValue(value) {
-                        if (value < 1) {
+                        if (value < 0) {
                             return {
                                 type: 'Invalid number',
                                 message: translater.getValueFromKey('schema.nbFixedColMinValue')
