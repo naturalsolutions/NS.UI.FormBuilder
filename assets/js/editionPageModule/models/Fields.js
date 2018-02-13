@@ -1297,13 +1297,13 @@ define([
     //  ----------------------------------------------------
     //  Field herited by NumberField
     //  ----------------------------------------------------
-    models.NumberField = models.TextField.extend({
+    models.NumberField = models.BaseField.extend({
 
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
 
             var baseSchema = _.pick(
-                models.TextField.prototype.defaults.call(this), _.keys(models.BaseField.prototype.defaults)
+                models.BaseField.prototype.defaults.call(this), _.keys(models.BaseField.prototype.defaults)
             );
 
             var toret = _.extend( {}, baseSchema, {
@@ -1320,7 +1320,7 @@ define([
         },
 
         baseSchema : {
-            defaultValue : _.pick(models.TextField.prototype.schema.call(this), 'defaultValue')['defaultValue'],
+            defaultValue : _.pick(models.BaseField.prototype.schema.call(this), 'defaultValue')['defaultValue'],
             minValue: {
                 type: 'Text',
                 template: fieldTemplate,
@@ -1384,7 +1384,7 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend({}, _.pick(models.TextField.prototype.schema.call(this), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
+            var schema = _.extend({}, _.pick(models.BaseField.prototype.schema.call(this), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
 
             schema.defaultValue.type = NumberEditor;
             schema.defaultValue.validators = [function checkValue(value, formValues) {
@@ -1421,7 +1421,7 @@ define([
         },
 
         initialize: function(options) {
-            models.TextField.prototype.initialize.call(this, options);
+            models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
         type: 'Number',
