@@ -1301,10 +1301,7 @@ define([
 
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
-
-            var baseSchema = _.pick(
-                models.BaseField.prototype.defaults.call(this), _.keys(models.BaseField.prototype.defaults)
-            );
+            var baseSchema = models.BaseField.prototype.defaults;
 
             var toret = _.extend( {}, baseSchema, {
                 minValue     : '',
@@ -1320,7 +1317,6 @@ define([
         },
 
         baseSchema : {
-            defaultValue : _.pick(models.BaseField.prototype.schema.call(this), 'defaultValue')['defaultValue'],
             minValue: {
                 type: 'Text',
                 template: fieldTemplate,
@@ -1384,7 +1380,7 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend({}, _.pick(models.BaseField.prototype.schema.call(this), _.keys(models.BaseField.prototype.schema)), this.baseSchema);
+            var schema = _.extend({}, models.BaseField.prototype.schema, this.baseSchema);
 
             schema.defaultValue.type = NumberEditor;
             schema.defaultValue.validators = [function checkValue(value, formValues) {
