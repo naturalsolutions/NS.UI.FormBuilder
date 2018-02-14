@@ -75,7 +75,7 @@ define([
 
     // isAcceptedValue creates a validator that enforce value to match model's acceptedValues, if available.
     // Check is skipped if value is of the form '#<val>#', or if it is not set.
-    var isAcceptedValue = function(model, propertyName) {
+    var isAcceptedValue = function(model, propertyName, pathIdPropName) {
         return function(val) {
             if (!model.acceptedValues) {
                 return;
@@ -87,7 +87,16 @@ define([
                 return;
             }
 
-            if (!_.includes(model.acceptedValues, val)) {
+            if (!pathIdPropName) {
+                pathIdPropName = "defaultPathId"
+            }
+
+            var matchingNode = _.find(model.acceptedValues, function(node) {
+                // you could add toLowerCase stuff here to make it more flexible, maybe
+                return node.value == val;
+            });
+
+            if (!matchingNode) {
                 return {
                     type: "isChildrenOf",
                     message:
@@ -97,6 +106,9 @@ define([
                         )
                 }
             }
+
+            // extra bonus: set defaultPathId referencing the nodeID of defaultValue
+            model.attributes[pathIdPropName] = matchingNode.key;
        };
     };
 
@@ -715,7 +727,7 @@ define([
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate,
                     validators: [
-                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'))
+                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'), 'defaultPathId')
                     ]
                 },
                 defaultNode: {
@@ -726,6 +738,10 @@ define([
                         path: "fullpath"
                     },
                     validators: ['required']
+                },
+                defaultPathId: {
+                    // will be set by defaultPath validator: isAcceptedValue
+                    type: 'Hidden'
                 },
                 fullpath: {
                     type: 'Hidden',
@@ -782,7 +798,7 @@ define([
                     title: translater.getValueFromKey('schema.defaultPath'),
                     template: fieldTemplate,
                     validators: [
-                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'))
+                        isAcceptedValue(this, translater.getValueFromKey('schema.defaultNode'), 'defaultPathId')
                     ]
                 },
                 defaultNode: {
@@ -793,6 +809,10 @@ define([
                         path: "positionPath"
                     },
                     validators: ['required']
+                },
+                defaultPathId: {
+                    // will be set by defaultPath validator: isAcceptedValue
+                    type: 'Hidden'
                 },
                 positionPath: {
                     type: 'Hidden',

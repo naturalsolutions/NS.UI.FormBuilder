@@ -155,9 +155,15 @@ define([
                 this.model.acceptedValues = [];
             }
             this.model.acceptedValues.length = 0;
-            this.model.acceptedValues.push(activeNode.data.value);
+            this.model.acceptedValues.push({
+                value: activeNode.data.value,
+                key: activeNode.key
+            });
             activeNode.visit(_.bind(function(child) {
-                this.model.acceptedValues.push(child.data.value);
+                this.model.acceptedValues.push({
+                    value: child.data.value,
+                    key: child.key
+                });
             }, this));
         },
 
