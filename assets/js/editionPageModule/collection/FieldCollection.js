@@ -273,10 +273,6 @@ define([
             var subModel = model.getJSON();
             // delete meta field for backend usage
             delete subModel.meta;
-            // delete other stuff we put here for convenience
-            // todo: just filter stuff according to schema, it'll avoid saving shit to DB (lazysry)
-            delete subModel.required;
-            delete subModel.readonly;
 
             switch (model.constructor.type) {
                 case 'CheckBox':
