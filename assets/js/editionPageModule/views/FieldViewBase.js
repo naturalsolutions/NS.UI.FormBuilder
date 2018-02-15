@@ -50,8 +50,9 @@ define([
             this.setValue(field, value, error);
         },
 
-        setValue: function(field, value, forcedError) {
-            this.options.collection.pendingChanges = true;
+        setValue: function(field, value, forcedError, skipChanges) {
+            if (!skipChanges)
+                this.options.collection.pendingChanges = true;
 
             // remove validation error for modified field
             if (this.validationErrors && this.validationErrors[field] && !forcedError) {

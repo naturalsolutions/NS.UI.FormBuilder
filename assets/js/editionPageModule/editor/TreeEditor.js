@@ -61,7 +61,7 @@ define([
                     return;
                 }
 
-                this.setActiveNode(activeNode);
+                this.setActiveNode(activeNode, true);
             } else {
                 // collapse tree & unselect active node
                 var previousActiveNode = this.$tree.fancytree("getActiveNode");
@@ -108,10 +108,13 @@ define([
             this.$tree = this.treeSource.fancytree;
 
             // init acceptedValues for model
-            var activeNode = this.model.get(this.options.key);
-            if (activeNode) {
-                activeNode = this.$tree.fancytree("getTree").getNodeByKey(activeNode);
-                this.setAcceptedValues(activeNode);
+            var nodeId = this.model.get(this.options.key);
+            if (nodeId) {
+                // restore active node
+                var activeNode = this.getNodeByKey(nodeId);
+                if (activeNode) {
+                    this.setAcceptedValues(activeNode);
+                }
             }
 
             // replace fancytreeactivate event with current
@@ -129,13 +132,13 @@ define([
             return this.$tree.fancytree("getTree").getNodeByKey(id);
         },
 
-        setActiveNode: function(node) {
+        setActiveNode: function(node, noPendingChanges) {
             this.value = node.key;
-            this.view.setValue(this.options.key, this.value);
+            this.view.setValue(this.options.key, this.value, null, noPendingChanges);
             this.$el.find(".value").val(this.value);
 
             var path = node.data.fullpath;
-            this.view.setValue(this.options.schema.options.path, path);
+            this.view.setValue(this.options.schema.options.path, path, null, noPendingChanges);
             this.$el.find(".path").val(path).attr("title", path);
 
             node.setActive(true, {
