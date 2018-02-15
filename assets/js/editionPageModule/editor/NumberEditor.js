@@ -14,8 +14,8 @@ define([
             this.$el = $(_.template(NumberTemplate)({
                 id          : this.options.id,
                 name        : this.options.key,
-                min         : this.options.schema.min || null,
-                max         : this.options.schema.max || null,
+                min         : typeof(this.options.schema.min) == 'number'? this.options.schema.min: null,
+                max         : typeof(this.options.schema.max) == 'number'? this.options.schema.max: null,
                 editorClass : this.options.schema.editorClass || '',
                 value       : this.value,
             }));

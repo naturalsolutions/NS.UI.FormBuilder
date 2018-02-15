@@ -5,8 +5,9 @@
 define([
     'jquery',
     '../../Translater',
+    '../editor/NumberEditor',
     'text!../templates/FieldTemplate.html'
-], function ($, translater, FieldTemplate) {
+], function ($, translater, NumberEditor, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -25,9 +26,11 @@ define([
                 }]
             },
             importance : {
-                type        : 'Number',
+                type        : NumberEditor,
                 title       : translater.getValueFromKey('form.importance'),
                 template    : fieldTemplate,
+                min: 0,
+                max: 5,
                 validators  : [{
                     type : 'required'
                 },
