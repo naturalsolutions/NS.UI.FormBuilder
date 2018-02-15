@@ -521,7 +521,12 @@ define([
             var that = this;
 
             $.each(extention.jsonExtention(), function(index, value){
-                that[index] = JSONUpdate[index] || value || "";
+                // 0 matter
+                if (typeof(JSONUpdate[index]) === 'number') {
+                    that[index] = JSONUpdate[index];
+                } else {
+                    that[index] = JSONUpdate[index] || value || "";
+                }
             });
         },
 
