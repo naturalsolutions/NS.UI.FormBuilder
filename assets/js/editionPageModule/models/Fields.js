@@ -1075,12 +1075,12 @@ define([
                         }
                     }]
                 },
-                delFirst: {
-                    type: CheckboxEditor,
-                    template: fieldTemplate,
-                    fieldClass: "checkBoxEditor",
-                    title: translater.getValueFromKey('schema.delFirst')
-                },
+                // delFirst: {
+                //     type: CheckboxEditor,
+                //     template: fieldTemplate,
+                //     fieldClass: "checkBoxEditor",
+                //     title: translater.getValueFromKey('schema.delFirst')
+                // },
                 showLines: {
                     type: CheckboxEditor,
                     template: fieldTemplate,
