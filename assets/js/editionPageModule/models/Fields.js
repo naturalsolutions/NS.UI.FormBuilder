@@ -237,10 +237,28 @@ define([
                     // todo it could probably be avoided
                     var linkedFieldsList = control.model.get("linkedFieldsList");
                     if (!linkedFieldsList) return;
-                    var options = _.map(linkedFieldsList, function(obj) {
-                        return obj.key;
-                    });
-                    apply(options);
+
+                    if(this.context == 'ecoreleve'){
+                        //filtering linkedfields according to the selected linkedTable
+                        var linkedTableFieldEditor = control.form.getEditor('linkedFieldTable');
+                        $(linkedTableFieldEditor.$el).on('change', function(e){
+                            var linkedTableValue = linkedTableFieldEditor.getValue();
+                            var linkedFieldsListForTable = _.filter(linkedFieldsList, function(obj) {
+                                if(obj.table == linkedTableValue){
+                                    return obj;
+                                }
+                            });
+                            var options = _.map(linkedFieldsListForTable, function(obj) {
+                                return obj.key;
+                            });
+                            apply(options);
+                        });
+                    } else {
+                        var options = _.map(linkedFieldsList, function(obj) {
+                            return obj.key;
+                        });
+                        apply(options);
+                    }
                 },
                 validators: [boundTo("linkedFieldTable")]
             },
