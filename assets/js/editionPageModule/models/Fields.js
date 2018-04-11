@@ -239,9 +239,7 @@ define([
                     if (!linkedFieldsList) return;
 
                     if(this.context == 'ecoreleve'){
-                        //filtering linkedfields according to the selected linkedTable
-                        var linkedTableFieldEditor = control.form.getEditor('linkedFieldTable');
-                        $(linkedTableFieldEditor.$el).on('change', function(e){
+                        var onChange = function(e){
                             var linkedTableValue = linkedTableFieldEditor.getValue();
                             var linkedFieldsListForTable = _.filter(linkedFieldsList, function(obj) {
                                 if(obj.table == linkedTableValue){
@@ -252,7 +250,15 @@ define([
                                 return obj.key;
                             });
                             apply(options);
-                        });
+                        }
+                        //filtering linkedfields according to the selected linkedTable
+                        var linkedTableFieldEditor = control.form.getEditor('linkedFieldTable');
+                        
+                        $(linkedTableFieldEditor.$el).on('change', onChange);
+
+                        if(linkedTableFieldEditor.getValue()){
+                            onChange(null);
+                        }
                     } else {
                         var options = _.map(linkedFieldsList, function(obj) {
                             return obj.key;
