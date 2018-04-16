@@ -1367,12 +1367,15 @@ define([
                 template: fieldTemplate,
                 validators: [function checkValue(value, formValues) {
                     if (value != null && (value != "" || typeof(value) == 'number') ) {
-                        if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
+                        var numberValue = Number(value)
+                        var numberFormMax = Number(formValues['maxValue'])
+                        var numberFormMin = Number(formValues['minValue'])
+                        if ( (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' ) && numberValue && numberFormMax &&  numberValue > numberFormMax ) {
                             return {
                                 type: 'Invalid number',
                                 message: "La valeur par défault est supérieur à la valeur maximale"
                             }
-                        } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' && value < formValues['minValue']) {
+                        } else if ( (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' ) && numberValue && numberFormMax && numberValue < numberFormMin) {
                             return {
                                 type: 'Invalid number',
                                 message: "La valeur par défault est inférieure à la valeur minimale"
