@@ -237,10 +237,34 @@ define([
                     // todo it could probably be avoided
                     var linkedFieldsList = control.model.get("linkedFieldsList");
                     if (!linkedFieldsList) return;
-                    var options = _.map(linkedFieldsList, function(obj) {
-                        return obj.key;
-                    });
-                    apply(options);
+
+                    if(this.context == 'ecoreleve'){
+                        var onChange = function(e){
+                            var linkedTableValue = linkedTableFieldEditor.getValue();
+                            var linkedFieldsListForTable = _.filter(linkedFieldsList, function(obj) {
+                                if(obj.table == linkedTableValue){
+                                    return obj;
+                                }
+                            });
+                            var options = _.map(linkedFieldsListForTable, function(obj) {
+                                return obj.key;
+                            });
+                            apply(options);
+                        }
+                        //filtering linkedfields according to the selected linkedTable
+                        var linkedTableFieldEditor = control.form.getEditor('linkedFieldTable');
+                        
+                        $(linkedTableFieldEditor.$el).on('change', onChange);
+
+                        if(linkedTableFieldEditor.getValue()){
+                            onChange(null);
+                        }
+                    } else {
+                        var options = _.map(linkedFieldsList, function(obj) {
+                            return obj.key;
+                        });
+                        apply(options);
+                    }
                 },
                 validators: [boundTo("linkedFieldTable")]
             },
@@ -1057,12 +1081,12 @@ define([
                         }
                     }]
                 },
-                delFirst: {
-                    type: CheckboxEditor,
-                    template: fieldTemplate,
-                    fieldClass: "checkBoxEditor",
-                    title: translater.getValueFromKey('schema.delFirst')
-                },
+                // delFirst: {
+                //     type: CheckboxEditor,
+                //     template: fieldTemplate,
+                //     fieldClass: "checkBoxEditor",
+                //     title: translater.getValueFromKey('schema.delFirst')
+                // },
                 showLines: {
                     type: CheckboxEditor,
                     template: fieldTemplate,

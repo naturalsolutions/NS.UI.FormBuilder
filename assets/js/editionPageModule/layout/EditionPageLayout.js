@@ -273,7 +273,22 @@ define([
             var datas = form.getAttributesValues(),
                 schemaDefinition = form.schemaDefinition;
 
-            this.form = new Backbone.Form({
+            //Extend Backbone Form to implement middleware form, can be usefull
+            var NsForm = Backbone.Form.extend({
+                beforeRender: function(){
+                    //pass
+                },
+                render: function(){
+                    Backbone.Form.prototype.render.call(this);
+                    this.afterRender();
+                    return this;
+                },
+                afterRender: function(){
+                    //pass
+                }
+            });
+
+            this.form = new NsForm({
                 schema: schemaDefinition,
                 data  : datas
             }).render();

@@ -9,7 +9,7 @@ define([
             'click #trash'          : 'removeView',
             'click .settings'       : 'editSettings',
             'click .languages'      : 'editLanguages',
-            'change input'          : 'inputChanged',
+            'change input, textarea'          : 'inputChanged',
             'change select'         : 'selectChanged',
             'focus input, select'   : 'focusField',
         },
