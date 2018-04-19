@@ -193,7 +193,10 @@ define([
         },
 
         getValue: function() {
-            return this.value;
+            if( this.model.get('type') == 'Position' )
+                return this.model.get('positionPath');
+            if( this.model.get('type') == 'Thesaurus')
+                return this.model.get('fullpath');
         },
 
         render: function() {
