@@ -96,7 +96,7 @@ define([
             var matchingNode = _.find(model.acceptedValues, function(node) {
                 // you could add toLowerCase stuff here to make it more flexible, maybe
                 // return  node.key == val;
-                return node.value == val;
+                return node.path == val;
             });
 
             if (!matchingNode) {
