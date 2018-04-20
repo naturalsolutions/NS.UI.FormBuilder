@@ -83,6 +83,8 @@ define([
             if (!val) {
                 return;
             }
+
+            //TODO: check if val in tparameters.tpar_name
             if (/^#.*#$/.exec(val)) {
                 return;
             }
@@ -93,7 +95,8 @@ define([
 
             var matchingNode = _.find(model.acceptedValues, function(node) {
                 // you could add toLowerCase stuff here to make it more flexible, maybe
-                return  node.key == val;
+                // return  node.key == val;
+                return node.value == val;
             });
 
             if (!matchingNode) {
