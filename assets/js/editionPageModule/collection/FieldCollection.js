@@ -572,9 +572,21 @@ define([
             // validate each field
             $.each(that.models, function (index, value) {
                 var fieldModel = that.get(value.id);
+                console.log("**************", that, that.models, fieldModel);
                 if (!fieldModel.get("compulsory")) {
+
                     var fieldErrors = fieldModel.view.validate();
-                    if (fieldErrors) {
+
+                    //TODO : For now thats the only existing case ... might need to be more generic for future cases
+                    if (fieldModel.attributes.meta.type.toLowerCase() == "thesaurus"
+                        && fieldModel.attributes.defaultPath
+                        && fieldModel.attributes.defaultPath.length > 0
+                        && fieldErrors.defaultNode)
+                    {
+                        delete fieldErrors.defaultNode;
+                    }
+
+                    if (fieldErrors && Object.keys(fieldErrors).length > 0) {
                         fieldsValid = false;
                         fieldModel.view.setValidationErrors(fieldErrors);
                     }

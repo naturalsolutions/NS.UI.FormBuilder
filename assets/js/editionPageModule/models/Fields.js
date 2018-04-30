@@ -1515,18 +1515,23 @@ define([
         },
 
         schema: function() {
+            var baseSchema = {
+                choices: {
+                    type: ChoicesEditor,
+                    template: fieldTemplate,
+                    title: translater.getValueFromKey('editGrid.valuesList'),
+                    languages: [
+                        "fr", "en"
+                    ]
+                }
+            };
+
+            if (this.get('context') == "ecoreleve")
+                delete baseSchema.choices;
+
             return _.extend({}, models.BaseField.prototype.schema,
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Enumeration"),
-                {
-                    choices: {
-                        type: ChoicesEditor,
-                        template: fieldTemplate,
-                        title: translater.getValueFromKey('editGrid.valuesList'),
-                        languages: [
-                            "fr", "en"
-                        ]
-                    }
-                });
+                baseSchema);
         },
 
         columnDefaults: {
