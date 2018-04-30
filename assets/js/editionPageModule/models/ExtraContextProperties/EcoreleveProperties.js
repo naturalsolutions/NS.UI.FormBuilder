@@ -68,7 +68,7 @@ define([
             Select:{
                 defaults: {
                     defaultValue : "",
-                    isDefaultSQL : false
+                    sqlQuery : 'null'
                 },
                 schema: {
                     defaultValue: {
@@ -76,12 +76,17 @@ define([
                         title       : translater.getValueFromKey('schema.default'),
                         template    : fieldTemplate
                     },
-                    isDefaultSQL: {
+                    sqlQuery: {
                         // todo: isSQLPropertySetter? (Fields.js:63)
-                        type        : CheckboxEditor,
+                        type        : 'TextArea',
                         template    : fieldTemplate,
-                        fieldClass  : "hidden",
-                        title       : "isSQL"
+                        // fieldClass  : "hidden",
+                        title       : 'SQL Query',
+                        validators: [{
+                            type: 'regexp',
+                            regexp: /\bselect\b[\s\S]*?\bfrom\b/im,
+                            message: 'Must be formatted like : SELECT ... FROM'
+                        }]
                     }
                 }
             },

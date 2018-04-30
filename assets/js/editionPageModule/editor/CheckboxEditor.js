@@ -27,7 +27,7 @@ define([
                 var handlers = this.options.schema.handlers;
                 for (var i in handlers) {
                     this.$el.find("input").on("change", _.bind(function(e) {
-                        handlers[i](e.target.checked);
+                        handlers[i](e.target.checked, this);
                     }, this));
                 }
             }

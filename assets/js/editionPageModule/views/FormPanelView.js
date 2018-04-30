@@ -132,6 +132,7 @@ define([
         },
 
         refresh: function() {
+            console.log("refresh")
             this.updateName();
             this.$el.find('.drop').empty();
             this.collection.createFields();
@@ -141,9 +142,18 @@ define([
 
             // stop here if readonly
             if (this.collection.readonly) {
+                // re-init slimscroll
+                this.$el.find('#scrollSection')
+                .slimScroll({destroy: true})
+                .slimScroll({
+                    height: 'calc(100% - 76px)',
+                    railVisible: true,
+                    alwaysVisible: true
+            });
                 return;
             }
 
+            console.log("refresh2")
             // init sortable section
             this.$el.find('.drop').sortable({
                 axis: "y",

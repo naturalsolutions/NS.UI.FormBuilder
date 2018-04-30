@@ -133,7 +133,7 @@ define([
         },
 
         setActiveNode: function(node, noPendingChanges) {
-            this.value = node.key;
+            this.value = node.key; 
             this.view.setValue(this.options.key, this.value, null, noPendingChanges);
             this.$el.find(".value").val(this.value);
 
@@ -159,11 +159,13 @@ define([
             }
             this.model.acceptedValues.length = 0;
             this.model.acceptedValues.push({
+                path : activeNode.data.fullpath,
                 value: activeNode.data.value,
                 key: activeNode.key
             });
             activeNode.visit(_.bind(function(child) {
                 this.model.acceptedValues.push({
+                    path : child.data.fullpath,
                     value: child.data.value,
                     key: child.key
                 });
@@ -194,7 +196,7 @@ define([
 
         getValue: function() {
             return this.value;
-        },
+       },
 
         render: function() {
             Backbone.Form.editors.Text.prototype.render.call(this);

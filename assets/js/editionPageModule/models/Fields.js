@@ -83,6 +83,8 @@ define([
             if (!val) {
                 return;
             }
+
+            //TODO: check if val in tparameters.tpar_name
             if (/^#.*#$/.exec(val)) {
                 return;
             }
@@ -93,7 +95,8 @@ define([
 
             var matchingNode = _.find(model.acceptedValues, function(node) {
                 // you could add toLowerCase stuff here to make it more flexible, maybe
-                return node.value == val;
+                // return  node.key == val;
+                return node.path == val;
             });
 
             if (!matchingNode) {
@@ -237,10 +240,34 @@ define([
                     // todo it could probably be avoided
                     var linkedFieldsList = control.model.get("linkedFieldsList");
                     if (!linkedFieldsList) return;
-                    var options = _.map(linkedFieldsList, function(obj) {
-                        return obj.key;
-                    });
-                    apply(options);
+
+                    if(this.context == 'ecoreleve'){
+                        var onChange = function(e){
+                            var linkedTableValue = linkedTableFieldEditor.getValue();
+                            var linkedFieldsListForTable = _.filter(linkedFieldsList, function(obj) {
+                                if(obj.table == linkedTableValue){
+                                    return obj;
+                                }
+                            });
+                            var options = _.map(linkedFieldsListForTable, function(obj) {
+                                return obj.key;
+                            });
+                            apply(options);
+                        }
+                        //filtering linkedfields according to the selected linkedTable
+                        var linkedTableFieldEditor = control.form.getEditor('linkedFieldTable');
+                        
+                        $(linkedTableFieldEditor.$el).on('change', onChange);
+
+                        if(linkedTableFieldEditor.getValue()){
+                            onChange(null);
+                        }
+                    } else {
+                        var options = _.map(linkedFieldsList, function(obj) {
+                            return obj.key;
+                        });
+                        apply(options);
+                    }
                 },
                 validators: [boundTo("linkedFieldTable")]
             },
@@ -1057,12 +1084,12 @@ define([
                         }
                     }]
                 },
-                delFirst: {
-                    type: CheckboxEditor,
-                    template: fieldTemplate,
-                    fieldClass: "checkBoxEditor",
-                    title: translater.getValueFromKey('schema.delFirst')
-                },
+                // delFirst: {
+                //     type: CheckboxEditor,
+                //     template: fieldTemplate,
+                //     fieldClass: "checkBoxEditor",
+                //     title: translater.getValueFromKey('schema.delFirst')
+                // },
                 showLines: {
                     type: CheckboxEditor,
                     template: fieldTemplate,
@@ -1343,12 +1370,15 @@ define([
                 template: fieldTemplate,
                 validators: [function checkValue(value, formValues) {
                     if (value != null && (value != "" || typeof(value) == 'number') ) {
-                        if (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' && value > formValues['maxValue']) {
+                        var numberValue = Number(value)
+                        var numberFormMax = Number(formValues['maxValue'])
+                        var numberFormMin = Number(formValues['minValue'])
+                        if ( (formValues['maxValue'] != "" && formValues['maxValue'].substr(0, 1) != '#' ) && numberValue && numberFormMax &&  numberValue > numberFormMax ) {
                             return {
                                 type: 'Invalid number',
                                 message: "La valeur par défault est supérieur à la valeur maximale"
                             }
-                        } else if (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' && value < formValues['minValue']) {
+                        } else if ( (formValues['minValue'] != "" && formValues['minValue'].substr(0, 1) != '#' ) && numberValue && numberFormMax && numberValue < numberFormMin) {
                             return {
                                 type: 'Invalid number',
                                 message: "La valeur par défault est inférieure à la valeur minimale"
