@@ -58,13 +58,6 @@ define([
             var schema = this.get('schema');
             _.map(schema, function(el) {
                 el.validators = [];
-                if (el.readonly) {
-                    el.validators.push('readonly')
-                }
-                if (el.required) {
-                    el.validators.push('required')
-                }
-
                 return el;
             });
             this.set('schema', schema);

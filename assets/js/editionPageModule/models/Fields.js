@@ -153,7 +153,6 @@ define([
         defaults: {
             order: 1,
             name: "",
-            required: false,
             translations: {},
 
             linkedFieldTable: '',
@@ -491,12 +490,6 @@ define([
             jsonObject["id"] = this.get("id");
             jsonObject["order"] = this.get("order");
 
-            if (this.get('editMode') & 4 != 4) {
-                jsonObject['validators'].push('required');
-            }
-            if (this.get('editMode') & 2 != 2) {
-                jsonObject['validators'].push('readonly');
-            }
             return _.omit(jsonObject, ['showCssProperties']);
         }
 
