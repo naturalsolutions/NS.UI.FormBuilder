@@ -24,7 +24,6 @@ define([
             originalID       : null,
             initialID        : null,
             readonly         : false,
-            schtroudel: "salamanca !",
 
             // display attributes
             creationDateDisplay : "",
