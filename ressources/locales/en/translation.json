@@ -45,6 +45,15 @@
         "ar": "Arabic"
     },
 
+    "DataEntrySource": {
+        "Manual": "Manual",
+        "Import": "Import",
+        "Scale": "Scale",
+        "Tablet": "Tablet",
+        "CameraTrap": "Camera Trap",
+        "SDCard": "SD Card"
+    },
+
     "fields" : {
         "text"                 : "Text",
         "number"               : "Numeric",
