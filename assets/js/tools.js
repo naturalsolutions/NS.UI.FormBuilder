@@ -82,6 +82,40 @@ define([
          * binWeight exposes two functions for transposing a 4bits binary weight into
          * custom dict {visible, editable, nullable, nullmean}. And vice-versa!
          */
+        binWeightSource: {
+            items: [
+                "Manual", "Import", "Scale", "Tablet", "Camera_Trap", "SD_Card"
+            ],
+            toValueSource: function(dict) {
+                var i = 0;
+                i += dict.Manual ? 1: 0;
+                i += dict.Import ? 2: 0;
+                i += dict.Scale ? 4: 0;
+                i += dict.Tablet ? 8: 0;
+                i += dict.Camera_Trap ? 16: 0;
+                i += dict.SD_Card ? 32: 0;
+                return i;
+            },
+            toDictSource: function(value) {
+                var dict = {};
+                dict.SD_Card = (value >= 32);
+                value %= 32;
+                dict.Camera_Trap = (value >= 16);
+                value %= 16;
+                dict.Tablet = (value >= 8);
+                value %= 8;
+                dict.Scale = (value >= 4);
+                value %= 4;
+                dict.Import = (value >= 2);
+                value %= 2;
+                dict.Manual = (value >= 1);
+                return dict;
+            }
+        },
+
+                /**
+         * binWeightSource for the data entry source part
+         */
         binWeight: {
             items: [
                 "visible", "editable", "nullable", "nullmean"
