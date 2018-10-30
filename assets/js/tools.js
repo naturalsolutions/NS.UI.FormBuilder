@@ -88,27 +88,27 @@ define([
             ],
             toValueSource: function(dict) {
                 var i = 0;
-                i += dict.Manual ? 1: 0;
-                i += dict.Import ? 2: 0;
-                i += dict.Scale ? 4: 0;
-                i += dict.Tablet ? 8: 0;
-                i += dict.Camera_Trap ? 16: 0;
-                i += dict.SD_Card ? 32: 0;
+                i += dict.Scale  ? 1: 0;
+                i += dict.Tablet ? 2: 0;
+                i += dict.Camera_Trap ? 4: 0;
+                i += dict.SD_Card ? 8: 0;
+                i += dict.Manual ? 16: 0;
+                i += dict.Import ? 32: 0;
                 return i;
             },
             toDictSource: function(value) {
                 var dict = {};
-                dict.SD_Card = (value >= 32);
+                dict.Import = (value >= 32);
                 value %= 32;
-                dict.Camera_Trap = (value >= 16);
+                dict.Manual = (value >= 16);
                 value %= 16;
-                dict.Tablet = (value >= 8);
+                dict.SD_Card = (value >= 8);
                 value %= 8;
-                dict.Scale = (value >= 4);
+                dict.Camera_Trap = (value >= 4);
                 value %= 4;
-                dict.Import = (value >= 2);
+                dict.Tablet = (value >= 2);
                 value %= 2;
-                dict.Manual = (value >= 1);
+                dict.Scale = (value >= 1);
                 return dict;
             }
         },
