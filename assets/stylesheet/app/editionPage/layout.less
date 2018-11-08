@@ -156,10 +156,16 @@
       float: left;
       width: 25%;
       label[for="DataEntrySource"]{
-        display: none;
+        margin-top: 10px !important;
       }
       #DataEntrySource{
-        margin: 10px 0px;
+        margin: 0px 0px 10px 0px;
+        display: flex;
+        flex-wrap: wrap;
+        .checkboxField{
+          width: calc(100%/3);
+          margin: 0px;
+        }
         td{
           border: none !important;
         }
@@ -168,8 +174,8 @@
           padding: 0px;
         }
         form.active{
-          display: flex;
-          flex-wrap: wrap;
+          /* display: flex;
+          flex-wrap: wrap; */
           border: none !important;
           padding: 0px;
           .formField{
