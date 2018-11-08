@@ -70,6 +70,9 @@
   }
 
   .content {
+    .help-block{
+      margin: 0px !important;
+    }
     #formPanel {
       width: 75%;
       float: left;
@@ -152,7 +155,40 @@
     #settingFormPanel {
       float: left;
       width: 25%;
-
+      label[for="DataEntrySource"]{
+        display: none;
+      }
+      #DataEntrySource{
+        margin: 10px 0px;
+        td{
+          border: none !important;
+        }
+        td.lang{
+          text-align: left;
+          padding: 0px;
+        }
+        form.active{
+          display: flex;
+          flex-wrap: wrap;
+          border: none !important;
+          padding: 0px;
+          .formField{
+            width: calc(100%/3);
+            margin: 0px;
+            .checkboxField{
+              margin: 0px;
+            }
+          }
+        }
+      }
+      .field-activite, .field-importance, .field-typeIndividus, .field-frequence, .field-groupe, .field-importapressortie{
+        width: 45%!important;
+        display: inline-block;
+        margin: 0px 0px 10px 0px !important;
+      }
+      .field-activite, .field-typeIndividus, .field-groupe {
+        margin-right: 5% !important;
+      }
       .slimScrollRail, .slimScrollBar {
         right: 0 !important;
       }
@@ -201,7 +237,7 @@
       font-family: 'ProximaNovaLight', sans-serif;
 
       .title {
-        padding: 20px;
+        padding: 10px 0px;
         h2 {
           margin: 0 0 0 15px;
           text-align: left;
@@ -219,7 +255,7 @@
         }
 
         .formField {
-          margin: 10px 0 20px;
+          margin: 5px 0 10px;
           &.hide {
             display: none;
           }
@@ -295,9 +331,10 @@
         }
 
         .attachedFiles {
-          margin-top: 10px;
-          margin-bottom: 20px;
-
+          margin-top: 5px;
+          margin-bottom: 5px;
+          margin-left: 4%;
+          padding-left: 0 !important;
           label {
             margin-bottom: 10px;
             margin-top: 6px;
@@ -317,14 +354,14 @@
 
           .addBtn {
             text-align: center;
-            background: none;
-            color: #555;
-            border: 2px solid @orange;
+            background: linear-gradient(-90deg,#de7710,#e0411a);
+            color: #fff;
+            border: none;//2px solid @orange
             margin-bottom: 10px;
             padding: 6px 10px;
             float: right;
             max-width: 170px;
-            border-radius: 12px;
+            border-radius: 25px;
             width: auto;
 
             &:hover {
@@ -394,8 +431,10 @@
         }
 
         .versions {
-          margin-top: 10px;
-          margin-bottom: 20px;
+          margin-top: 5px;
+          margin-bottom: 5px;
+          margin-left: 4%;
+          padding-left: 0;
           table {
             width: 100%;
 
@@ -508,6 +547,21 @@
           overflow      : hidden;
           width: auto !important;
           height: ~"calc(100%) !important";
+          margin: 0px;
+          .title, .properties{
+            margin: 0px;
+            #form{
+              padding: 0px;
+              margin-left: 4% !important;
+            }
+            .attachedFiles{
+              display: flex;
+              flex-direction: column;
+            }
+            .checkboxField{
+              margin: 0px;
+            }
+          }
         }
       }
     }
