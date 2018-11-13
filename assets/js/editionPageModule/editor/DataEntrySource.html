@@ -1,0 +1,12 @@
+<div class="DataEntrySource" id="<%= id %>">
+    <% for (var i in items) {
+        var bit = items[i];
+        var bitId = id + bit;
+        var checked = values[bit] ? "checked": null;
+    %>
+    <div class="checkboxField">
+        <input data-bit="<%= bit %>" id="<%= bitId %>" type="checkbox" <%= checked %> />
+        <label class="<%= checked %>" for="<%= bitId %>" data-i18n="schema.DataEntrySource.<%= bit %>"><%= bit %></label>
+    </div>
+    <% } %>
+</div>

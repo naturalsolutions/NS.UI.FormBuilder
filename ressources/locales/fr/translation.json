@@ -44,6 +44,15 @@
         "en": "Anglais",
         "ar": "Arabe"
     },
+    
+    "DataEntrySource": {
+        "Manual": "Manuel",
+        "Import": "Import",
+        "Scale": "Échelle",
+        "Tablet": "Tablette",
+        "CameraTrap": "Camera Trap",
+        "SDCard": "Carte SD"
+    },
 
     "fields" : {
         "text"                 : "Texte",
