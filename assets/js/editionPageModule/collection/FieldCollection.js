@@ -190,7 +190,8 @@ define([
                 }
             },
             originalID: {type: "Hidden"},
-            initialID: {type: "Hidden"}
+            initialID: {type: "Hidden"},
+            onBlur: {type: "Hidden"}
         },
 
         getDefaultSchema : function (){
@@ -223,19 +224,20 @@ define([
 
             var opt = options || {};
 
-            this.url           = opt.url            || "";
-            this.templateURL   = opt.templateURL    || "";
+            this.url             = opt.url             || "";
+            this.templateURL     = opt.templateURL     || "";
             this.DataEntrySource = opt.DataEntrySource || 0
-            this.id              = opt.id             || 0;
-            this.name            = opt.name           || 'My form';
-            this.tag             = opt.tag            || "";
-            this.translations    = opt.translations   || {};
-            this.obsolete        = opt.obsolete       || false;
-            this.propagate       = opt.propagate      || false;
-            this.context         = opt.context        || "";
-            this.isTemplate      = opt.isTemplate     || false;
-            this.fileList        = opt.fileList       || [];
-            this.originalID      = opt.originalID     || 0;
+            this.id              = opt.id              || 0;
+            this.name            = opt.name            || 'My form';
+            this.tag             = opt.tag             || "";
+            this.translations    = opt.translations    || {};
+            this.onBlur          = opt.onBlur      || {};
+            this.obsolete        = opt.obsolete        || false;
+            this.propagate       = opt.propagate       || false;
+            this.context         = opt.context         || "";
+            this.isTemplate      = opt.isTemplate      || false;
+            this.fileList        = opt.fileList        || [];
+            this.originalID      = opt.originalID      || 0;
 
             this.fieldstodelete  = [];
 
@@ -378,6 +380,7 @@ define([
                 name          : this.name,
                 translations  : this.translations,
                 DataEntrySource : this.DataEntrySource,
+                onBlur        : sessionStorage.getItem('onBlur'),
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
                 propagate     : this.propagate,

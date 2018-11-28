@@ -7,11 +7,12 @@ define([
     '../views/FormPanelView',
     '../models/Fields',
     '../../Translater',
+    '../../onblur-editor',
     'tools',
     'app-config',
     'backbone-forms'
 ], function($, Backbone, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
-            FormPanelView, Fields, t, tools, AppConfig) {
+            FormPanelView, Fields, t, onBlurEditor, tools, AppConfig) {
     return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
@@ -36,21 +37,22 @@ define([
         events : {
             'click .actionSave': 'save',
             'click #exit': 'exit',
-            'click  .attachedFiles .addBtn'           : 'triggerFileClick',
-            'change .attachedFiles input[type="file"]': 'fileInputChanged',
-            'click  .attachedFiles .remove'           : 'removeAttachedFile',
-            'click  .attachedFiles .download'         : 'downloadAttachedFile',
-            'click  .versions tr'                     : 'displayVersion',
+            'click  .attachedFiles .addBtn'             : 'triggerFileClick',
+            'change .attachedFiles input[type="file"]'  : 'fileInputChanged',
+            'click  .attachedFiles .remove'             : 'removeAttachedFile',
+            'click  .attachedFiles .download'           : 'downloadAttachedFile',
+            'click  .versions tr'                       : 'displayVersion',
 
-            'click .fieldTypes td'                    : 'appendToDrop',
-            'keyup .rows'                             : 'gridKeypress',
-            'focus #settingFormPanel input'           : 'clearSelected',
-            'focus #settingFormPanel textarea'        : 'clearSelected',
-            'focus #settingFormPanel select'          : 'clearSelected',
-            'click .btnDelete'                        : 'deleteField',
-            'click .btnConvert'                       : 'convertField',
-            'click #fieldPropertiesPanel .btnOk'      : 'closeEdit',
-            'click #fieldPropertiesPanel h2'          : 'closeEdit'
+            'click .fieldTypes td'                      : 'appendToDrop',
+            'keyup .rows'                               : 'gridKeypress',
+            'focus #settingFormPanel input'             : 'clearSelected',
+            'focus #settingFormPanel textarea'          : 'clearSelected',
+            'focus #settingFormPanel select'            : 'clearSelected',
+            'click .btnDelete'                          : 'deleteField',
+            'click .btnConvert'                         : 'convertField',
+            'click #fieldPropertiesPanel .btnOk'        : 'closeEdit',
+            'click #fieldPropertiesPanel .js-btn-onblur': 'onBlur',
+            'click #fieldPropertiesPanel h2'            : 'closeEdit'
         },
 
         regions : {
@@ -174,6 +176,20 @@ define([
             // re-enable panel
             $("#formPanel").removeClass("disabled");
             $("#fieldPropertiesPanel").removeClass("display").hide();
+        },
+
+        onBlur: function(){
+            var el = document.createElement('div');
+            el.className = 'onblur-editor onblur-editor-modal';
+            document.getElementsByTagName('body')[0].append(el);
+            var vm = onBlurEditor.init(el);
+            vm.$on('test', function(msg) {
+                // sessionStorage.clear();
+                sessionStorage.setItem("onBlur",msg);
+                console.log('tu as choisi: ' + msg);
+                vm.$el.remove();
+                vm.$destroy();
+            });
         },
 
         onRender : function() {
