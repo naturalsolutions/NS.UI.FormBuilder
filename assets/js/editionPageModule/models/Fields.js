@@ -80,24 +80,51 @@ define([
             if (!model.acceptedValues) {
                 return;
             }
-            if (!val) {
-                return;
+            if (!val) { // when val in ['',null,undefined,0]
+                return; 
             }
+            
+            // if (/^#.*#$/.exec(val)) {
+            //     return;
+            // }
+
 
             //TODO: check if val in tparameters.tpar_name
-            if (/^#.*#$/.exec(val)) {
-                return;
+            // exec return null if no match if match then [0] = varchar match [1],... [n] groups matched
+            // so if we match #value# we have [1] = value
+            var resMatch = /^#(.*)#$/.exec(val);
+            if (resMatch) {  
+                var nodeId = new Number(resMatch[1])
+                if ( isNaN(nodeId) ) {
+                    return;
+                }
             }
+
+            
 
             if (!pathIdPropName) {
                 pathIdPropName = "defaultPathId"
             }
+            
+            if( resMatch ) {       
+                var matchingNode = _.find(model.acceptedValues, function(node) {
+                    // you could add toLowerCase stuff here to make it more flexible, maybe
+                    // return  node.key == val;
+                    return node.key == resMatch[1];
+                });
+            } 
+            else {            
+                var matchingNode = _.find(model.acceptedValues, function(node) {
+                    // you could add toLowerCase stuff here to make it more flexible, maybe
+                    // return  node.key == val;
+                    return node.path == val;
+                });
+            }
 
-            var matchingNode = _.find(model.acceptedValues, function(node) {
-                // you could add toLowerCase stuff here to make it more flexible, maybe
-                // return  node.key == val;
-                return node.path == val;
-            });
+
+
+
+
 
             if (!matchingNode) {
                 return {
@@ -109,6 +136,7 @@ define([
                         )
                 }
             }
+
 
             // extra bonus: set defaultPathId referencing the nodeID of defaultValue
             model.attributes[pathIdPropName] = matchingNode.key;
@@ -1581,15 +1609,27 @@ define([
     models.SelectField = models.EnumerationField.extend({
 
         defaults: function() {
-            return _.extend({},
-                models.EnumerationField.prototype.defaults.call(this),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select");
+            var toret = _.extend({}, models.EnumerationField.prototype.defaults.call(this), models.BaseField.prototype.defaults, {});
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+            // return _.extend({},
+            //     models.EnumerationField.prototype.defaults.call(this),
+            //     ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
         },
 
         schema: function() {
-            return _.extend({},
-                models.EnumerationField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select");
+
+            var toret =  _.extend({}, models.EnumerationField.prototype.schema.call(this), models.BaseField.prototype.schema,
+            ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
+
+            return _.extend(toret, toret, extraschema);
+            // return _.extend({},
+            //     models.EnumerationField.prototype.schema(),
+            //     ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
         },
 
         subSchema: models.EnumerationField.prototype.subSchema,
