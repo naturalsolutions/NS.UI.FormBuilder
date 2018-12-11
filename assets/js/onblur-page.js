@@ -1,6 +1,6 @@
 define([
     'vue',
-    'text!./editionPageModule/templates/OnBlurEditor.html'
+    'text!./editionPageModule/templates/OnBlurPage.html'
 ], function(Vue, tpl) {
     return {
         init: function(el) {
@@ -16,7 +16,7 @@ define([
                     onBtnClick: function(name) {
                         this.id = "test"
                         this.message = name;
-                        this.$emit('test', name);
+                        this.$emit('complete', name);
                     }
                 },
                 mounted: function() {

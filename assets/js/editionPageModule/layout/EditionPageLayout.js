@@ -7,12 +7,11 @@ define([
     '../views/FormPanelView',
     '../models/Fields',
     '../../Translater',
-    '../../onblur-editor',
     'tools',
     'app-config',
     'backbone-forms'
 ], function($, Backbone, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
-            FormPanelView, Fields, t, onBlurEditor, tools, AppConfig) {
+            FormPanelView, Fields, t, tools, AppConfig) {
     return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
@@ -51,7 +50,6 @@ define([
             'click .btnDelete'                          : 'deleteField',
             'click .btnConvert'                         : 'convertField',
             'click #fieldPropertiesPanel .btnOk'        : 'closeEdit',
-            'click #fieldPropertiesPanel .js-btn-onblur': 'onBlur',
             'click #fieldPropertiesPanel h2'            : 'closeEdit'
         },
 
@@ -176,20 +174,6 @@ define([
             // re-enable panel
             $("#formPanel").removeClass("disabled");
             $("#fieldPropertiesPanel").removeClass("display").hide();
-        },
-
-        onBlur: function(){
-            var el = document.createElement('div');
-            el.className = 'onblur-editor onblur-editor-modal';
-            document.getElementsByTagName('body')[0].append(el);
-            var vm = onBlurEditor.init(el);
-            vm.$on('test', function(msg) {
-                // sessionStorage.clear();
-                sessionStorage.setItem("onBlur",msg);
-                console.log('tu as choisi: ' + msg);
-                vm.$el.remove();
-                vm.$destroy();
-            });
         },
 
         onRender : function() {

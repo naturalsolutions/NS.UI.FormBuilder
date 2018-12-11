@@ -2,13 +2,13 @@ define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
     '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
     '../editor/ChoicesEditor', '../editor/TreeEditor', '../editor/LanguagesEditor',
-    '../editor/ChildFormEditor', '../editor/NumberEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
+    '../editor/ChildFormEditor', '../editor/NumberEditor', '../editor/OnBlurEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, translater,
     CheckboxEditor, EditModeEditor, AppearanceEditor,
     ChoicesEditor, TreeEditor, LanguagesEditor,
-    ChildFormEditor, NumberEditor, AppConfig, ExtraProperties,
+    ChildFormEditor, NumberEditor, OnBlurEditor, AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
 
     var fieldTemplate = _.template(FieldTemplate);
@@ -167,7 +167,8 @@ define([
             atBeginingOfLine: false,
             fieldSize: 12,
             linkedFieldset: '',
-            originalID: null
+            originalID: null,
+            onBlur: ''
         },
 
         schema: {
@@ -215,6 +216,11 @@ define([
                 template: fieldTemplate,
                 fieldClass: 'marginBottom10',
                 validators: ['required']
+            },
+            onBlur: {
+                type: OnBlurEditor,
+                title: "on Blur",
+                template: fieldTemplate
             },
 
             linkedFieldTable: {
@@ -1173,6 +1179,7 @@ define([
         },
 
         initialize: function(options) {
+            console.log('TextField initialize');
             models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
