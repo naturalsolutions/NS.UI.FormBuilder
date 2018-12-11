@@ -87,13 +87,13 @@ define([
                 "Manual", "Import", "Scale", "Tablet", "Camera_Trap", "SD_Card"
             ],
             toValueSource: function(dict) {
-                var i = 0;
+                var i = 32;
                 i += dict.Scale  ? 1: 0;
                 i += dict.Tablet ? 2: 0;
                 i += dict.Camera_Trap ? 4: 0;
                 i += dict.SD_Card ? 8: 0;
                 i += dict.Manual ? 16: 0;
-                i += dict.Import ? 32: 0;
+                // i += dict.Import ? 32: 32;
                 return i;
             },
             toDictSource: function(value) {
@@ -339,6 +339,10 @@ define([
                 .attr("autocorrect", "off")
                 .attr("autocapitalize", "off")
                 .attr("spellcheck", "false");
+
+            $el.find("#DataEntrySourceImport")
+                .attr("disabled", "disabled")
+            
         }
     };
 });

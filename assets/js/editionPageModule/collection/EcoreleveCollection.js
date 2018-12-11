@@ -57,6 +57,18 @@ define([
                 fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.ishiddenprotocol')
             },
+            hideprotocolname : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.hideprotocolname')
+            },
+            defaultforfieldactivity : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.defaultforfieldactivity')
+            },
             nbFixedCol: {
                 type: customNumberEditor,
                 min: 0,
