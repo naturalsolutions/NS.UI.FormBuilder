@@ -92,11 +92,19 @@ define([
             //TODO: check if val in tparameters.tpar_name
             // exec return null if no match if match then [0] = varchar match [1],... [n] groups matched
             // so if we match #value# we have [1] = value
+            // if value matched is not a INT we raise an error value betwwen ## MUST an INT ( this int match node of children)
             var resMatch = /^#(.*)#$/.exec(val);
             if (resMatch) {  
                 var nodeId = new Number(resMatch[1])
                 if ( isNaN(nodeId) ) {
-                    return;
+                    return {
+                        type: "isChildrenOf",
+                        message:
+                            translater.getValueFromKey(
+                                "schema.isAcceptedValue",
+                                { prop: translater.getValueFromKey(propertyName) }
+                            )
+                    }
                 }
             }
 
@@ -108,8 +116,7 @@ define([
             
             if( resMatch ) {       
                 var matchingNode = _.find(model.acceptedValues, function(node) {
-                    // you could add toLowerCase stuff here to make it more flexible, maybe
-                    // return  node.key == val;
+                    //node.key is a string 
                     return node.key == resMatch[1];
                 });
             } 
@@ -140,6 +147,7 @@ define([
 
             // extra bonus: set defaultPathId referencing the nodeID of defaultValue
             model.attributes[pathIdPropName] = matchingNode.key;
+            model.attributes['defaultPath'] = matchingNode.path;
        };
     };
 
@@ -1371,7 +1379,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
             var baseSchema = models.BaseField.prototype.defaults;
 
-            var toret = _.extend( {}, baseSchema, {
+             var toret = _.extend( {}, baseSchema, {
                 minValue     : '',
                 maxValue     : '',
                 precision    : 1,
@@ -1471,14 +1479,24 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend({}, models.BaseField.prototype.schema, this.baseSchema);
-            var toret = _.extend({}, schema, {
-                pattern: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.pattern')
-                }
-            });
+            var tmpBaseSchema = this.baseSchema;
+            if (this.get('context') == "ecoreleve") {
+                delete tmpBaseSchema.unity;
+            }
+
+            var schema = _.extend({}, models.BaseField.prototype.schema, tmpBaseSchema);
+            if (this.get('context') == "ecoreleve") {
+                var toret = _.extend({},schema)
+            }
+            else {
+                var toret = _.extend({}, schema, {
+                    pattern: {
+                        type: 'Text',
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('schema.pattern')
+                    }
+                });
+            }
 
             toret = _.extend(toret, toret, extraschema);
             delete(toret.isDefaultSQL);
@@ -1504,9 +1522,24 @@ define([
         },
 
         schema: function() {
+
+            var tmpModelSchema = models.NumberField.prototype.schema.call(this);
+            /*
+            if (this.get('context') == "ecoreleve") {
+                delete tmpModelSchema.pattern;
+                delete tmpModelSchema.unity;
+            }
+*/
+
+            return _.extend({},
+                tmpModelSchema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+
+            /*
             return _.extend({},
                 models.NumberField.prototype.schema.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+                */
         },
 
         initialize: function(options) {
