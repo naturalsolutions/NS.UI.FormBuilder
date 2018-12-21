@@ -37,6 +37,7 @@ define([
         started: false,
         schemaExtention: {},
         propertiesDefaultValues : {},
+        parameters: {},
 
         initAllExtensions: function(options) {
             if (this.started) {
