@@ -19,12 +19,13 @@ define([
     'app-config',
     'tools',
     '../editor/LanguagesEditor',
+    '../editor/DataEntrySource',
     './CollectionExtention',
     './staticInputs/ContextStaticInputs',
     'text!../templates/FieldTemplate.html'
 ], function ($, _, Backbone,
              Fields, Radio, translater, CheckboxEditor, AppConfig, tools,
-             LanguagesEditor, CollectionExtention, ContextStaticInputs, FieldTemplate) {
+             LanguagesEditor,DataEntrySource, CollectionExtention, ContextStaticInputs, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
     var extention = CollectionExtention;
@@ -146,6 +147,48 @@ define([
                 type        : "Hidden",
                 template    : fieldTemplate
             },
+            DataEntrySource: {
+                type: DataEntrySource,
+                title: "Data Entry Source",
+                schema: {
+                    Manual : {
+                        type        : DataEntrySource,
+                        template    : fieldTemplate,
+                        fieldClass  : "form-group DataEntrySource",
+                        title       : translater.getValueFromKey('DataEntrySource.Manual'),
+                    },
+                    Import : {
+                        type        : DataEntrySource,
+                        template    : fieldTemplate,
+                        fieldClass  : "form-group DataEntrySource",
+                        title       : translater.getValueFromKey('DataEntrySource.Import'),
+                    },
+                    Scale : {
+                        type        : DataEntrySource,
+                        template    : fieldTemplate,
+                        fieldClass  : "form-group DataEntrySource",
+                        title       : translater.getValueFromKey('DataEntrySource.Scale'),
+                    },
+                    Tablet : {
+                        type        : DataEntrySource,
+                        template    : fieldTemplate,
+                        fieldClass  : "form-group DataEntrySource",
+                        title       : translater.getValueFromKey('DataEntrySource.Tablet'),
+                    },
+                    CameraTrap : {
+                        type        : DataEntrySource,
+                        template    : fieldTemplate,
+                        fieldClass  : "form-group DataEntrySource",
+                        title       : translater.getValueFromKey('DataEntrySource.CameraTrap'),
+                    },
+                    SDCard : {
+                        type        : DataEntrySource,
+                        template    : fieldTemplate,
+                        fieldClass  : "form-group DataEntrySource",
+                        title       : translater.getValueFromKey('DataEntrySource.SDCard'),
+                    },
+                }
+            },
             originalID: {type: "Hidden"},
             initialID: {type: "Hidden"}
         },
@@ -182,7 +225,7 @@ define([
 
             this.url           = opt.url            || "";
             this.templateURL   = opt.templateURL    || "";
-
+            this.DataEntrySource = opt.DataEntrySource || 0
             this.id              = opt.id             || 0;
             this.name            = opt.name           || 'My form';
             this.tag             = opt.tag            || "";
@@ -334,6 +377,7 @@ define([
                 //  form properties
                 name          : this.name,
                 translations  : this.translations,
+                DataEntrySource : this.DataEntrySource,
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
                 propagate     : this.propagate,
@@ -500,6 +544,7 @@ define([
             this.id            = JSONUpdate['id'] !== undefined ? JSONUpdate['id'] : this.id;
             this.name          = JSONUpdate["name"];
             this.translations  = JSONUpdate["translations"];
+            this.DataEntrySource = JSONUpdate["DataEntrySource"];
             this.tag           = JSONUpdate["tag"];
             this.obsolete      = JSONUpdate["obsolete"];
             this.propagate     = JSONUpdate["propagate"];
@@ -581,9 +626,11 @@ define([
                     if (fieldModel.attributes.meta.type.toLowerCase() == "thesaurus"
                         && fieldModel.attributes.defaultPath
                         && fieldModel.attributes.defaultPath.length > 0
-                        && fieldErrors.defaultNode)
+                        && ( ! fieldErrors || fieldErrors.defaultNode)) 
                     {
-                        delete fieldErrors.defaultNode;
+                        if( fieldErrors && fieldErrors.defaultNode) {
+                            delete fieldErrors.defaultNode;
+                        }
                     }
 
                     if (fieldErrors && Object.keys(fieldErrors).length > 0) {

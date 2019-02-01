@@ -132,7 +132,7 @@ define([
         },
 
         refresh: function() {
-            console.log("refresh")
+            // console.log("refresh")
             this.updateName();
             this.$el.find('.drop').empty();
             this.collection.createFields();
@@ -153,7 +153,7 @@ define([
                 return;
             }
 
-            console.log("refresh2")
+            // console.log("refresh2")
             // init sortable section
             this.$el.find('.drop').sortable({
                 axis: "y",

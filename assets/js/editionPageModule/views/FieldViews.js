@@ -54,6 +54,7 @@ define([
         PatternFieldView: BaseView,
         RadioFieldView: BaseView,
         SelectFieldView: BaseView,
+        StateBoxFieldView : BaseView,
         SubFormGridFieldView: BaseView,
         TextAreaFieldView: BaseView,
         TextFieldView: BaseView,

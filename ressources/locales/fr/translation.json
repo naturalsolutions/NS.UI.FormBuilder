@@ -44,6 +44,15 @@
         "en": "Anglais",
         "ar": "Arabe"
     },
+    
+    "DataEntrySource": {
+        "Manual": "Manuel",
+        "Import": "Import",
+        "Scale": "Échelle",
+        "Tablet": "Tablette",
+        "CameraTrap": "Camera Trap",
+        "SDCard": "Carte SD"
+    },
 
     "fields" : {
         "text"                 : "Texte",
@@ -68,6 +77,7 @@
         "numericrange"         : "Curseur",
         "childform"            : "Formulaire fils",
         "objectpicker"         : "Selecteur d'objet",
+        "subformgrid"          : "Formulaire fils en grille",
         "imageFile"            : "Fichier Image",
         "decimal"              : "Numérique Décimal",
         "position"             : "Position"
