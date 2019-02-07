@@ -117,11 +117,12 @@
         }
 
         .recentlyEdited {
+            overflow-y: auto !important;
             div {
-                padding: 8px 0;
+                padding: 4px 0;
                 border-bottom: 1px solid #dddddd;
                 font-size: 14px;
-                text-transform: uppercase;
+                /* text-transform: uppercase; */
 
                 &.modified::before, &.created::before {
                     font-family: reneco, sans-serif;
