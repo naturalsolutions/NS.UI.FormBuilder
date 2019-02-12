@@ -121,10 +121,10 @@ define([
 
         getExtractedDatas: function(){
             return({
-                "Activite":"Activite",
-                "Groupe":"Groupe",
-                "TypeIndividus":"TypeIndividus",
-                "Frequence":"Frequence"
+                "Activite":"TProtocole:Activite",
+                "Groupe":"TProtocole:Groupe",
+                "TypeIndividus":"TProtocole:TypeIndividus",
+                "Frequence":"TProtocole:Frequence"
             });
         },
 

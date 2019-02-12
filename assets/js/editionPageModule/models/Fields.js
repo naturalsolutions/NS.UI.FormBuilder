@@ -1142,6 +1142,35 @@ define([
         section: 'reneco'
     });
 
+  // track-specific
+    models.PresentationField = models.BaseField.extend({
+        defaults: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Presentation");
+            var toret = models.BaseField.prototype.defaults;
+            toret = _.extend(toret, toret, extraschema);
+            return toret;
+        },
+        schema: function() {
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Presentation");
+
+            var toret = models.BaseField.prototype.schema;
+
+          // remove linked fields
+          delete(toret.linkedFieldTable);
+          delete(toret.linkedField);
+
+          return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+          models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'Presentation',
+        i18n: 'presentation',
+        section: 'reneco'
+    });
+
     //  ----------------------------------------------------
     //  Field herited by TextField
     //  ----------------------------------------------------

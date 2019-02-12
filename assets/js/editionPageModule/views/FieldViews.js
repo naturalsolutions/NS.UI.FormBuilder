@@ -52,6 +52,7 @@ define([
         NumericRangeFieldView: BaseView,
         ObjectPickerFieldView: BaseView,
         PatternFieldView: BaseView,
+        PresentationFieldView: BaseView,
         RadioFieldView: BaseView,
         SelectFieldView: BaseView,
         StateBoxFieldView : BaseView,
