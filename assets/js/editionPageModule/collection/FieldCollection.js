@@ -625,7 +625,6 @@ define([
                     if (fieldModel.attributes.meta.type.toLowerCase() == "thesaurus"
                         && fieldModel.attributes.defaultPath
                         && fieldModel.attributes.defaultPath.length > 0
-                        && fieldErrors
                         && ( ! fieldErrors || fieldErrors.defaultNode)) 
                     {
                         if( fieldErrors && fieldErrors.defaultNode) {
