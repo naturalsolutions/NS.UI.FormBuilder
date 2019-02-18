@@ -620,12 +620,13 @@ define([
                 if (!fieldModel.get("compulsory")) {
 
                     var fieldErrors = fieldModel.view.validate();
+					var pathCases = ["thesaurus", "position"];
 
                     //TODO : For now thats the only existing case ... might need to be more generic for future cases
-                    if (fieldModel.attributes.meta.type.toLowerCase() == "thesaurus"
+                    if (pathCases.indexOf(fieldModel.attributes.meta.type.toLowerCase()) !== -1
                         && fieldModel.attributes.defaultPath
                         && fieldModel.attributes.defaultPath.length > 0
-                        && ( !fieldErrors || fieldErrors.defaultPath )) 
+                        && ( !fieldErrors || fieldErrors.defaultPath ))
                     {
                         if( fieldErrors && fieldErrors.defaultPath) {
                             delete fieldErrors.defaultPath;
