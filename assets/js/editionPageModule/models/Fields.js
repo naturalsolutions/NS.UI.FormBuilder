@@ -1144,22 +1144,21 @@ define([
 
   // track-specific
     models.PresentationField = models.BaseField.extend({
-        defaults: function() {
+        defaults: function(){
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Presentation");
             var toret = models.BaseField.prototype.defaults;
             toret = _.extend(toret, toret, extraschema);
             return toret;
         },
-        schema: function() {
+        schema: function(){
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Presentation");
+            var toret = _.extend({}, models.BaseField.prototype.schema, {});
 
-            var toret = models.BaseField.prototype.schema;
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
 
-          // remove linked fields
-          delete(toret.linkedFieldTable);
-          delete(toret.linkedField);
-
-          return _.extend(toret, toret, extraschema);
+            return _.extend(toret, toret, extraschema);
         },
 
         initialize: function(options) {
