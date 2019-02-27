@@ -12,8 +12,9 @@
 }
 
 .slimScrollRail {
-    display: block !important;
+    //display: block !important;
     background : #ddd;
+    display: none !important; //test
 }
 
 #settingPanel {
@@ -28,7 +29,7 @@
 .slimScrollBar {
     background: #fff !important;
     transition: opacity ease 120ms;
-
+    display: none !important; //test
     &:hover {
         cursor: pointer;
         opacity: 0.65 !important;
@@ -44,3 +45,20 @@
         opacity: 1 !important;
     }
 }
+
+/* CUSTOM SCROLL BAR */
+::-webkit-scrollbar-thumb {
+    background: #fa8f23;
+    width: 10px;
+    border: 2px solid #8f8f8f;
+    margin: 5px;
+    border-radius: 25px;
+  }
+  ::-webkit-scrollbar{
+    background: #8f8f8f;
+    width: 12px;
+    height: 15px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 25px;
+  }
