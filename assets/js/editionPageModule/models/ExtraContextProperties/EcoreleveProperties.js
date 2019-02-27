@@ -23,7 +23,6 @@ define([
                     defaultValue : {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
-                        editorClass : 'form-control',
                         template    : fieldTemplate,
                         editorAttrs : {
 

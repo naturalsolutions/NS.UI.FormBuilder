@@ -80,24 +80,58 @@ define([
             if (!model.acceptedValues) {
                 return;
             }
-            if (!val) {
-                return;
+            if (!val) { // when val in ['',null,undefined,0]
+                return; 
             }
+            
+            // if (/^#.*#$/.exec(val)) {
+            //     return;
+            // }
+
 
             //TODO: check if val in tparameters.tpar_name
-            if (/^#.*#$/.exec(val)) {
-                return;
+            // exec return null if no match if match then [0] = varchar match [1],... [n] groups matched
+            // so if we match #value# we have [1] = value
+            // if value matched is not a INT we raise an error value betwwen ## MUST an INT ( this int match node of children)
+            var resMatch = /^#(.*)#$/.exec(val);
+            if (resMatch) {  
+                var nodeId = new Number(resMatch[1])
+                if ( isNaN(nodeId) ) {
+                    return {
+                        type: "isChildrenOf",
+                        message:
+                            translater.getValueFromKey(
+                                "schema.isAcceptedValue",
+                                { prop: translater.getValueFromKey(propertyName) }
+                            )
+                    }
+                }
             }
+
+            
 
             if (!pathIdPropName) {
                 pathIdPropName = "defaultPathId"
             }
+            
+            if( resMatch ) {       
+                var matchingNode = _.find(model.acceptedValues, function(node) {
+                    //node.key is a string 
+                    return node.key == resMatch[1];
+                });
+            } 
+            else {            
+                var matchingNode = _.find(model.acceptedValues, function(node) {
+                    // you could add toLowerCase stuff here to make it more flexible, maybe
+                    // return  node.key == val;
+                    return node.path == val;
+                });
+            }
 
-            var matchingNode = _.find(model.acceptedValues, function(node) {
-                // you could add toLowerCase stuff here to make it more flexible, maybe
-                // return  node.key == val;
-                return node.path == val;
-            });
+
+
+
+
 
             if (!matchingNode) {
                 return {
@@ -110,8 +144,10 @@ define([
                 }
             }
 
+
             // extra bonus: set defaultPathId referencing the nodeID of defaultValue
             model.attributes[pathIdPropName] = matchingNode.key;
+            model.attributes['defaultPath'] = matchingNode.path;
        };
     };
 
@@ -1112,6 +1148,34 @@ define([
         section: 'reneco'
     });
 
+  // track-specific
+    models.PresentationField = models.BaseField.extend({
+        defaults: function(){
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Presentation");
+            var toret = models.BaseField.prototype.defaults;
+            toret = _.extend(toret, toret, extraschema);
+            return toret;
+        },
+        schema: function(){
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Presentation");
+            var toret = _.extend({}, models.BaseField.prototype.schema, {});
+
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+          models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'Presentation',
+        i18n: 'presentation',
+        section: 'reneco'
+    });
+
     //  ----------------------------------------------------
     //  Field herited by TextField
     //  ----------------------------------------------------
@@ -1349,7 +1413,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Number");
             var baseSchema = models.BaseField.prototype.defaults;
 
-            var toret = _.extend( {}, baseSchema, {
+             var toret = _.extend( {}, baseSchema, {
                 minValue     : '',
                 maxValue     : '',
                 precision    : 1,
@@ -1449,14 +1513,24 @@ define([
 
         schema: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Number");
-            var schema = _.extend({}, models.BaseField.prototype.schema, this.baseSchema);
-            var toret = _.extend({}, schema, {
-                pattern: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.pattern')
-                }
-            });
+            var tmpBaseSchema = this.baseSchema;
+            if (this.get('context') == "ecoreleve") {
+                delete tmpBaseSchema.unity;
+            }
+
+            var schema = _.extend({}, models.BaseField.prototype.schema, tmpBaseSchema);
+            if (this.get('context') == "ecoreleve") {
+                var toret = _.extend({},schema)
+            }
+            else {
+                var toret = _.extend({}, schema, {
+                    pattern: {
+                        type: 'Text',
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('schema.pattern')
+                    }
+                });
+            }
 
             toret = _.extend(toret, toret, extraschema);
             delete(toret.isDefaultSQL);
@@ -1482,9 +1556,24 @@ define([
         },
 
         schema: function() {
+
+            var tmpModelSchema = models.NumberField.prototype.schema.call(this);
+            /*
+            if (this.get('context') == "ecoreleve") {
+                delete tmpModelSchema.pattern;
+                delete tmpModelSchema.unity;
+            }
+*/
+
+            return _.extend({},
+                tmpModelSchema,
+                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+
+            /*
             return _.extend({},
                 models.NumberField.prototype.schema.call(this),
                 ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Decimal"));
+                */
         },
 
         initialize: function(options) {
@@ -1587,15 +1676,27 @@ define([
     models.SelectField = models.EnumerationField.extend({
 
         defaults: function() {
-            return _.extend({},
-                models.EnumerationField.prototype.defaults.call(this),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select");
+            var toret = _.extend({}, models.EnumerationField.prototype.defaults.call(this), models.BaseField.prototype.defaults, {});
+
+            toret = _.extend(toret, toret, extraschema);
+
+            return toret;
+            // return _.extend({},
+            //     models.EnumerationField.prototype.defaults.call(this),
+            //     ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Select"));
         },
 
         schema: function() {
-            return _.extend({},
-                models.EnumerationField.prototype.schema(),
-                ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select");
+
+            var toret =  _.extend({}, models.EnumerationField.prototype.schema.call(this), models.BaseField.prototype.schema,
+            ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
+
+            return _.extend(toret, toret, extraschema);
+            // return _.extend({},
+            //     models.EnumerationField.prototype.schema(),
+            //     ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Select"));
         },
 
         subSchema: models.EnumerationField.prototype.subSchema,

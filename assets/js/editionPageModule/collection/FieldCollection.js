@@ -618,18 +618,20 @@ define([
             // validate each field
             $.each(that.models, function (index, value) {
                 var fieldModel = that.get(value.id);
-                console.log("**************", that, that.models, fieldModel);
                 if (!fieldModel.get("compulsory")) {
 
                     var fieldErrors = fieldModel.view.validate();
+					var pathCases = ["thesaurus", "position"];
 
                     //TODO : For now thats the only existing case ... might need to be more generic for future cases
-                    if (fieldModel.attributes.meta.type.toLowerCase() == "thesaurus"
+                    if (pathCases.indexOf(fieldModel.attributes.meta.type.toLowerCase()) !== -1
                         && fieldModel.attributes.defaultPath
                         && fieldModel.attributes.defaultPath.length > 0
-                        && fieldErrors.defaultNode)
+                        && ( !fieldErrors || fieldErrors.defaultPath ))
                     {
-                        delete fieldErrors.defaultNode;
+                        if( fieldErrors && fieldErrors.defaultPath) {
+                            delete fieldErrors.defaultPath;
+                        }
                     }
 
                     if (fieldErrors && Object.keys(fieldErrors).length > 0) {

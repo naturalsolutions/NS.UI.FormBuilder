@@ -77,6 +77,8 @@
         "numericrange"         : "Curseur",
         "childform"            : "Formulaire fils",
         "objectpicker"         : "Selecteur d'objet",
+        "subformgrid"          : "Formulaire fils en grille",
+        "presentation"         : "Présentation",
         "imageFile"            : "Fichier Image",
         "decimal"              : "Numérique Décimal",
         "position"             : "Position"
