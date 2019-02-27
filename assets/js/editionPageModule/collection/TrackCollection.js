@@ -119,12 +119,15 @@ define([
             importapressortie : ""
         },
 
+        parameters: {},
+
         getExtractedDatas: function(){
             return({
                 "Activite":"TProtocole:Activite",
                 "Groupe":"TProtocole:Groupe",
                 "TypeIndividus":"TProtocole:TypeIndividus",
-                "Frequence":"TProtocole:Frequence"
+                "Frequence":"TProtocole:Frequence",
+                "Parameters":"TParameters:Name"
             });
         },
 
@@ -162,13 +165,33 @@ define([
 
             if (datas)
             {
+                var that = this;
                 $.each(JSON.parse(datas), function(index, value)
                 {
                     var values = [];
                     for(var ind in value)
                         values.push(ind);
 
-                    schema[index.substr(0,1).toLowerCase()+index.substr(1)].options = getJSONForSelectOptions(values.sort());
+                    var valtoset = getJSONForSelectOptions(values.sort());
+
+                    if (schema[index.substr(0,1).toLowerCase()+index.substr(1)])
+                        schema[index.substr(0,1).toLowerCase()+index.substr(1)].options = valtoset;
+                    else
+                    {
+                        var isParameter = false;
+                        if(index.toLowerCase() == "parameters")
+                            isParameter = true;
+
+                        var arrayToSet = [];
+                        $.each(valtoset, function(index, value){
+                            if(value.val)
+                                value = value.val;
+                            arrayToSet.push((isParameter?"#":"")+value+(isParameter?"#":""));
+                        })
+
+                    that[index.substr(0,1).toLowerCase()+index.substr(1)] = arrayToSet;
+
+                    }
                 });
             }
 

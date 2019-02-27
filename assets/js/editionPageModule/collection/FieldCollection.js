@@ -496,6 +496,7 @@ define([
             if (nameType.indexOf("Field") === -1) {
                 nameType += "Field";
             }
+            field['extention'] = extention;
             return this.addField(new Fields[nameType](field));
         },
 

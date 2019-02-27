@@ -1,12 +1,12 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
-    '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
+    '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor', '../editor/AutoCompleteEditor',
     '../editor/ChoicesEditor', '../editor/TreeEditor', '../editor/LanguagesEditor',
     '../editor/ChildFormEditor', '../editor/NumberEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, translater,
-    CheckboxEditor, EditModeEditor, AppearanceEditor,
+    CheckboxEditor, EditModeEditor, AppearanceEditor, AutoCompleteEditor,
     ChoicesEditor, TreeEditor, LanguagesEditor,
     ChildFormEditor, NumberEditor, AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
@@ -460,6 +460,11 @@ define([
         },
 
         initialize: function(options) {
+
+            //set parameters
+            if (options.extention && options.extention.parameters)
+                this.parameters = options.extention.parameters;
+            
             // set prototype
             this.prototype = models.BaseField.prototype;
 
@@ -542,9 +547,10 @@ define([
         schema: function() {
             return _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
-                    template: fieldTemplate
+                    template: fieldTemplate,
+                    //jeremy
                 },
                 isDefaultSQL: {
                     type: CheckboxEditor,
@@ -1445,7 +1451,7 @@ define([
                 }]
             },
             minValue: {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.min'),
                 validators: [function checkValue(value, formValues) {
@@ -1468,7 +1474,7 @@ define([
                 }]
             },
             maxValue: {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.max'),
                 validators: [function checkValue(value, formValues) {
