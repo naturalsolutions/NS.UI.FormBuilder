@@ -36,21 +36,21 @@ define([
         events : {
             'click .actionSave': 'save',
             'click #exit': 'exit',
-            'click  .attachedFiles .addBtn'           : 'triggerFileClick',
-            'change .attachedFiles input[type="file"]': 'fileInputChanged',
-            'click  .attachedFiles .remove'           : 'removeAttachedFile',
-            'click  .attachedFiles .download'         : 'downloadAttachedFile',
-            'click  .versions tr'                     : 'displayVersion',
+            'click  .attachedFiles .addBtn'             : 'triggerFileClick',
+            'change .attachedFiles input[type="file"]'  : 'fileInputChanged',
+            'click  .attachedFiles .remove'             : 'removeAttachedFile',
+            'click  .attachedFiles .download'           : 'downloadAttachedFile',
+            'click  .versions tr'                       : 'displayVersion',
 
-            'click .fieldTypes td'                    : 'appendToDrop',
-            'keyup .rows'                             : 'gridKeypress',
-            'focus #settingFormPanel input'           : 'clearSelected',
-            'focus #settingFormPanel textarea'        : 'clearSelected',
-            'focus #settingFormPanel select'          : 'clearSelected',
-            'click .btnDelete'                        : 'deleteField',
-            'click .btnConvert'                       : 'convertField',
-            'click #fieldPropertiesPanel .btnOk'      : 'closeEdit',
-            'click #fieldPropertiesPanel h2'          : 'closeEdit'
+            'click .fieldTypes td'                      : 'appendToDrop',
+            'keyup .rows'                               : 'gridKeypress',
+            'focus #settingFormPanel input'             : 'clearSelected',
+            'focus #settingFormPanel textarea'          : 'clearSelected',
+            'focus #settingFormPanel select'            : 'clearSelected',
+            'click .btnDelete'                          : 'deleteField',
+            'click .btnConvert'                         : 'convertField',
+            'click #fieldPropertiesPanel .btnOk'        : 'closeEdit',
+            'click #fieldPropertiesPanel h2'            : 'closeEdit'
         },
 
         regions : {

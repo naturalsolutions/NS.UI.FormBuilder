@@ -23,7 +23,8 @@ require.config({
         slimScroll                          : '../../node_modules/jquery-slimScroll/jquery.slimscroll.min',
         'lodash'                            : '../../node_modules/lodash/index',
         'text'                              : '../../node_modules/text/text',
-        'tools'                             : './tools'
+        'tools'                             : './tools',
+        'vue'                               : '../../node_modules/vue/dist/vue',
     },
 
     map: {

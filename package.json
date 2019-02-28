@@ -42,6 +42,7 @@
     "moment": "2.18.1",
     "requirejs": "2.3.5",
     "sweetalert": "2.1.0",
-    "text": "requirejs/text"
+    "text": "requirejs/text",
+    "vue": "^2.5.17"
   }
 }
