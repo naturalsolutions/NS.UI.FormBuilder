@@ -591,7 +591,7 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     fieldClass: 'advanced',
                     template: fieldTemplate
@@ -785,7 +785,7 @@ define([
                     }
                 },
                 defaultPath: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate,
                     validators: [
@@ -856,7 +856,7 @@ define([
                     }
                 },
                 defaultPath: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.defaultPath'),
                     template: fieldTemplate,
                     validators: [
@@ -1202,7 +1202,7 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate
                 },
@@ -1269,7 +1269,7 @@ define([
 
             var toret = _.extend({}, schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate
                 },
@@ -1371,7 +1371,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Date");
 
             var formatFieldProps = {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.format')
             };
@@ -1451,7 +1451,7 @@ define([
                 }]
             },
             minValue: {
-                type: AutoCompleteEditor,
+                type: 'Text',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.min'),
                 validators: [function checkValue(value, formValues) {
@@ -1474,7 +1474,7 @@ define([
                 }]
             },
             maxValue: {
-                type: AutoCompleteEditor,
+                type: 'Text',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.max'),
                 validators: [function checkValue(value, formValues) {
