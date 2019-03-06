@@ -1371,7 +1371,7 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Date");
 
             var formatFieldProps = {
-                type: AutoCompleteEditor,
+                type: 'Text',
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.format')
             };
@@ -1451,7 +1451,7 @@ define([
                 }]
             },
             minValue: {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.min'),
                 validators: [function checkValue(value, formValues) {
@@ -1474,7 +1474,7 @@ define([
                 }]
             },
             maxValue: {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.max'),
                 validators: [function checkValue(value, formValues) {
