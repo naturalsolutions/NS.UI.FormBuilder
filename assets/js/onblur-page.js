@@ -9,7 +9,7 @@ define([
                 el: el,
                 data: function() {
                     return {
-                        message: 'vincent'
+                        message: 'OnBlur'
                     }
                 },
                 methods: {
