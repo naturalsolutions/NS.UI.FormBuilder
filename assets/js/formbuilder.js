@@ -33,6 +33,13 @@ define([
         }
     });
     FormbuilderApp.on('start', function() {
+
+        //Si on est sur la version dev, alors on change la couleur et le texte formbuilder pour pouvoir différencier de la vrai app
+        if(window.location.pathname.split('/')[1] == "formbuilderdev"){
+            $('.reneco.reneco-formbuildersmall').text('DevMode')
+            $('header').css('background-color','#7a6def')
+        }
+
         if (auth.error) {
             var redirectHome = function() {
                 window.location.href = AppConfig.portalURL;
