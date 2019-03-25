@@ -5,75 +5,108 @@
 define([
     'jquery',
     'backbone',
-    '../models/fields',
+    '../models/Fields',
+    '../editor/CheckboxEditor',
+    '../editor/NumberEditor',
     'backbone.radio',
     '../../Translater',
-    '../editor/CheckboxEditor',
-    'pillbox-editor',
-    'app-config'
-], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, PillboxEditor) {
+    'auth',
+    'text!../templates/FieldTemplate.html'
+], function ($, Backbone, Fields, CheckboxEditor, NumberEditor, Radio, translater, auth, FieldTemplate) {
 
-    var fieldTemplate = _.template('\
-        <div class="form-group field-<%= key %>">\
-            <label class="control-label" for="<%= editorId %>"><%= title %></label>\
-            <div data-editor >\
-                <p class="help-block" data-error></p>\
-                <p class="help-block"><%= help %></p>\
-            </div>\
-        </div>\
-    ');
-
-    var translater = Translater.getTranslater();
-
-    var EcoreleveExtention = {
+    var fieldTemplate = _.template(FieldTemplate);
+    var customNumberEditor = NumberEditor.extend({
+        render: function(){
+            NumberEditor.prototype.render.call(this);
+            this.$el.append('<br/>');
+            if(this.form.data.isgrid){
+                this.form.afterRender = function(){
+                    var nbFixedColEditor = this.getEditor('nbFixedCol');
+                    nbFixedColEditor.$el.parent().parent().removeClass('hidden');
+                };
+            }
+            return this;
+        }
+    });
+    return {
         schemaExtention: {
             author : {
                 type        : 'Hidden',
                 title       : translater.getValueFromKey('form.author'),
-                editorClass : 'form-control',
                 template    : fieldTemplate
-            }
+            },
+            isgrid : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.isgrid'),
+                handlers: [function(value, input){
+                    //handlers are called on input change
+                    var nbFixedColEditor = input.form.getEditor('nbFixedCol');
+                    if(input.getValue()){
+                        nbFixedColEditor.$el.parent().parent().removeClass('hidden');
+                    } else{
+                        nbFixedColEditor.$el.parent().parent().addClass('hidden');
+                        nbFixedColEditor.setValue('');
+                    }
+                }]
+            },
+            ishiddenprotocol : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.ishiddenprotocol')
+            },
+            hideprotocolname : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.hideprotocolname')
+            },
+            defaultforfieldactivity : {
+                type        : CheckboxEditor,
+                template    : fieldTemplate,
+                fieldClass  : "checkBoxEditor form-group",
+                title       : translater.getValueFromKey('form.defaultforfieldactivity')
+            },
+            nbFixedCol: {
+                type: customNumberEditor,
+                min: 0,
+                template: fieldTemplate,
+                fieldClass: 'hidden',
+                title: translater.getValueFromKey('schema.nbFixedCol'),
+                validators: [function checkValue(value) {
+                    if (value < 0) {
+                        return {
+                            type: 'Invalid number',
+                            message: translater.getValueFromKey('schema.nbFixedColMinValue')
+                        };
+                    }
+                }]
+            },
         },
 
-        propertiesDefaultValues : {
-            author : window.user
+        getExtractedDatas: function() {return {};},
+        getSchemaExtention: function(){
+            return this.schemaExtention;
         },
-
-        rulesList : function() {
-            return({});
-        },
-
-        getExtractedDatas: function(){
-            return({});
-        },
-
-        getSchemaExtention: function(options){
-            return({
-                author : {
-                    type        : 'Hidden',
-                    title       : translater.getValueFromKey('form.author'),
-                    editorClass : 'form-control',
-                    template    : fieldTemplate
-                }
-            });
-        },
-
         initializeExtention: function () {
-            return(true);
+            return true;
         },
 
         jsonExtention: function (originalForm) {
-            if (originalForm)
-            {
-                originalForm.author = window.user;
+            if (originalForm) {
+                originalForm.author = auth.username;
             }
-            return(this.propertiesDefaultValues);
+            return {
+                author : auth.username,
+                isgrid : "",
+                ishiddenprotocol: "",
+                hideprotocolname: "",
+                defaultforfieldactivity: "",
+                nbFixedCol: ""
+            };
         },
-
-        updateAttributesExtention: function () {
-            return(true);
-        }
+        updateAttributesExtention: function () {return true;}
     };
-
-    return EcoreleveExtention;
 });

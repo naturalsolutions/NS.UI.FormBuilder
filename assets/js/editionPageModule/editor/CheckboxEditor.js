@@ -1,30 +1,37 @@
-define(['jquery', 'underscore', 'backbone', 'backbone-forms'], function($, _, Backbone, Form) {
-
-    var CheckboxEditor = Backbone.Form.editors.Base.extend({
-        tagName: 'input',
-
+define([
+    'jquery', 'lodash', 'backbone',
+    'text!./CheckboxEditor.html',
+    'backbone-forms'
+], function($, _, Backbone, CheckboxTemplate) {
+    return Backbone.Form.editors.Base.extend({
         initialize: function(options) {
             this.options = options;
-
             this.options.schema = this.options.schema === undefined ? _.pick(options, 'editorClass', 'fieldClass', 'iconClass', 'title') : this.options.schema;
-
             Backbone.Form.editors.Base.prototype.initialize.call(this, options);
-            this.template = this.constructor.template;
         },
 
         render: function() {
-            //  Set default value and verifying type
             this.value = (typeof this.value == 'boolean') ? this.value : false;
-            this.setElement(
-                this.template({
-                    id          : this.options.id,
-                    editorClass : this.options.schema.editorClass || '',
-                    fieldClass  : this.options.schema.fieldClass || 'form-group',
-                    iconClass   : this.options.iconClass || '',
-                    value       : this.value,
-                    title       : this.schema.title == undefined ? this.key : this.schema.title
-                })
-            );
+            this.$el = $(_.template(CheckboxTemplate)({
+                id          : this.options.id,
+                name        : this.options.key,
+                editorClass : this.options.schema.editorClass || '',
+                fieldClass  : this.options.schema.fieldClass || 'form-group',
+                iconClass   : this.options.iconClass || '',
+                value       : this.value,
+                title       : this.schema.title == undefined ? this.key : this.schema.title
+            }));
+
+            // subscribe handlers from schema on input change
+            if (this.options.schema.handlers) {
+                var handlers = this.options.schema.handlers;
+                for (var i in handlers) {
+                    this.$el.find("input").on("change", _.bind(function(e) {
+                        handlers[i](e.target.checked, this);
+                    }, this));
+                }
+            }
+            this.setElement(this.$el);
             return this;
         },
 
@@ -35,15 +42,5 @@ define(['jquery', 'underscore', 'backbone', 'backbone-forms'], function($, _, Ba
         setValue: function(value) {
             this.$el.find('input').prop('checked', value);
         }
-
-    }, {
-        template: _.template(
-            '<div class="checkboxField">' +
-                '<input type="checkbox" id="<%= id %>" name="<%= id %>" class="<%= editorClass %>" <% if(value){%>checked<%}%> />' +
-                '<label for="<%= id %>" class="<%= iconClass %>">' +
-                    '&nbsp;<%= title %></label>' +
-            '</div>')
     });
-
-    return CheckboxEditor;
 });

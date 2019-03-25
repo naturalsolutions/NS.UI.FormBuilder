@@ -3,64 +3,39 @@
  */
 
 define([
-    'jquery',
-    'backbone',
-    '../../../Translater',
-    'app-config',
-    './TrackStatics',
-    './EcoreleveStatics',
-    './EcollectionStatics',
-    './PositionStatics'
-], function ($, Backbone, Translater, AppConfig,
-             TrackStatics, EcoreleveStatics, EcollectionStatics, PositionStatics) {
+    './TrackStatics'
+], function (TrackStatics) {
 
-    var staticInputs = {"track" : TrackStatics,
-                        "ecoreleve" : EcoreleveStatics,
-                        "ecollection" : EcollectionStatics,
-                        "postiion" : PositionStatics};
+    /**
+     * EmptyStatics is a dummy StaticInput object that does nothing.
+     * If need static inputs for a specific context, add "context" key to
+     * staticInputs object, and make it implement this skeleton
+     */
+    var EmptyStatics = {
+        getStaticInputs: function() {return {};},
+        getCompulsoryInputs: function() {return [];},
+        applyRules: function(form, json) {return json;},
+        initializeStatics: function() {return true;}
+    };
 
-    var translater = Translater.getTranslater();
+    var staticInputs = {
+        "track" : TrackStatics
+    };
 
     var ContextStaticInputs = {
-
-        staticInputs: {
-
-        },
-
-        compulsoryInputs: [
-
-        ],
-
-        getStaticInputs: function(form){
-            return({
-            });
-        },
-
-        getCompulsoryInputs: function(){
-            return({
-            });
-        },
-
-        applyRules: function(form, json)
-        {
-            var toret = json;
-
-            return toret;
-        },
-
-        initializeStatics: function () {
-            return(true);
-        },
-
         getStaticMode : function (currentContext) {
+            if (!currentContext) {
+                console.warn("getStaticMode without context", window.context);
+            }
+
             var staticMode = staticInputs[window.context];
             if (currentContext)
                 staticMode = staticInputs[currentContext];
             if (!staticMode)
-                return this;
+                staticMode = EmptyStatics;
             return staticMode;
         }
     };
 
-    return ContextStaticInputs.getStaticMode();
+    return ContextStaticInputs;
 });

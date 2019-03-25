@@ -169,7 +169,8 @@
 								"labelEn":"Release_Ring_Position",
 								"labelFr":"Release_Ring_Position",
 								"order":1,
-								"value":"Release_Ring_Position"
+								"value":"Release_Ring_Position",
+								"table":"Individual"
 							},
 							{
 								"id":2,
@@ -177,7 +178,8 @@
 								"labelEn":"Release_Ring_Color",
 								"labelFr":"Release_Ring_Color",
 								"order":2,
-								"value":"Release_Ring_Color"
+								"value":"Release_Ring_Color",
+								"table":"Individual"
 							},
 							{
 								"id":3,
@@ -185,7 +187,8 @@
 								"labelEn":"Release_Ring_Code",
 								"labelFr":"Release_Ring_Code",
 								"order":3,
-								"value":"Release_Ring_Code"
+								"value":"Release_Ring_Code",
+								"table":"Individual"
 							},
 							{
 								"id":4,
@@ -193,7 +196,8 @@
 								"labelEn":"Breeding_Ring_Position",
 								"labelFr":"Breeding_Ring_Position",
 								"order":4,
-								"value":"Breeding_Ring_Position"
+								"value":"Breeding_Ring_Position",
+								"table":"Individual"
 							},
 							{
 								"id":5,
@@ -201,7 +205,8 @@
 								"labelEn":"Breeding_Ring_Color",
 								"labelFr":"Breeding_Ring_Color",
 								"order":5,
-								"value":"Breeding_Ring_Color"
+								"value":"Breeding_Ring_Color",
+								"table":"Individual"
 							},
 							{
 								"id":6,
@@ -209,7 +214,8 @@
 								"labelEn":"Breeding_Ring_Code",
 								"labelFr":"Breeding_Ring_Code",
 								"order":6,
-								"value":"Breeding_Ring_Code"
+								"value":"Breeding_Ring_Code",
+								"table":"Individual"
 							},
 							{
 								"id":7,
@@ -217,7 +223,8 @@
 								"labelEn":"Chip_Code",
 								"labelFr":"Chip_Code",
 								"order":7,
-								"value":"Chip_Code"
+								"value":"Chip_Code",
+								"table":"Individual"
 							},
 							{
 								"id":8,
@@ -225,7 +232,8 @@
 								"labelEn":"Mark_Color_1",
 								"labelFr":"Mark_Color_1",
 								"order":8,
-								"value":"Mark_Color_1"
+								"value":"Mark_Color_1",
+								"table":"Individual"
 							},
 							{
 								"id":9,
@@ -233,7 +241,8 @@
 								"labelEn":"Mark_Position_1",
 								"labelFr":"Mark_Position_1",
 								"order":9,
-								"value":"Mark_Position_1"
+								"value":"Mark_Position_1",
+								"table":"Individual"
 							},
 							{
 								"id":10,
@@ -241,7 +250,8 @@
 								"labelEn":"Mark_Color_2",
 								"labelFr":"Mark_Color_2",
 								"order":10,
-								"value":"Mark_Color_2"
+								"value":"Mark_Color_2",
+								"table":"Individual"
 							},
 							{
 								"id":11,
@@ -249,7 +259,8 @@
 								"labelEn":"Mark_Position_2",
 								"labelFr":"Mark_Position_2",
 								"order":11,
-								"value":"Mark_Position_2"
+								"value":"Mark_Position_2",
+								"table":"Individual"
 							},
 							{
 								"id":12,
@@ -257,7 +268,8 @@
 								"labelEn":"Origin",
 								"labelFr":"Origin",
 								"order":12,
-								"value":"Origin"
+								"value":"Origin",
+								"table":"Individual"
 							},
 							{
 								"id":13,
@@ -265,7 +277,8 @@
 								"labelEn":"Mark_code_1",
 								"labelFr":"Mark_code_1",
 								"order":13,
-								"value":"Mark_code_1"
+								"value":"Mark_code_1",
+								"table":"Individual"
 							},
 							{
 								"id":14,
@@ -273,7 +286,8 @@
 								"labelEn":"Mark_code_2",
 								"labelFr":"Mark_code_2",
 								"order":14,
-								"value":"Mark_code_2"
+								"value":"Mark_code_2",
+								"table":"Individual"
 							},
 							{
 								"id":15,
@@ -281,7 +295,8 @@
 								"labelEn":"Monitoring_Status",
 								"labelFr":"Monitoring_Status",
 								"order":15,
-								"value":"Monitoring_Status"
+								"value":"Monitoring_Status",
+								"table":"Individual"
 							},
 							{
 								"id":16,
@@ -289,7 +304,8 @@
 								"labelEn":"Survey_type",
 								"labelFr":"Survey_type",
 								"order":16,
-								"value":"Survey_type"
+								"value":"Survey_type",
+								"table":"Individual"
 							},
 							{
 								"id":17,
@@ -297,7 +313,8 @@
 								"labelEn":"Sex",
 								"labelFr":"Sex",
 								"order":17,
-								"value":"Sex"
+								"value":"Sex",
+								"table":"Individual"
 							},
 							{
 								"id":18,
@@ -305,23 +322,34 @@
 								"labelEn":"Death_date",
 								"labelFr":"Death_date",
 								"order":18,
-								"value":"Death_date"
+								"value":"Death_date",
+								"table":"Individual"
 							},
 							{
 								"id":19,
+								"key":"Species",
+								"labelEn":"Species",
+								"labelFr":"Species",
+								"order":19,
+								"value":"Species",
+								"table":"Individual"
+							},
+							{
+								"id":20,
 								"key":"Status",
 								"labelEn":"Status",
 								"labelFr":"Status",
-								"order":19,
-								"value":"Status"
+								"order":20,
+								"value":"Status",
+								"table":"Sensor"
 							}],
 		"tablesList":["Individual",
 						"Sensor"]
 	},
 	"ecollection":
 	{
-		"identifyingColumns":[""],
-		"linkedFieldsList":[{}],
-		"tablesList":[""]
+		"identifyingColumns":[],
+		"linkedFieldsList":[],
+		"tablesList":[]
 	}
 }

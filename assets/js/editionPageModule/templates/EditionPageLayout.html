@@ -1,15 +1,126 @@
-<div class="row">
-
-    <div id="settingFormPanel" class="col-md-3">
+<div class="header">
+    <div data-i18n="form.actions.back" class="action gray actionBack" id="exit">Retour</div>
+    <div class="formTitle">
+        <%= collection.name %>
     </div>
-
-    <div id="formPanel" class="col-md-8 col-md-offset-3">
+    <% if (collection.readonly) { %>
+    <div class="readonly">
+        <span>(</span>
+        <span data-i18n="schema.readonly"></span>
+        <span>-</span>
+        <div class="url">
+            <a href="<%= collection.currentFormUrl %>" data-i18n="form.currentVersion"></a>
+        </div>
+        <span>)</span>
     </div>
-
-    <div id="widgetPanel" class="col-md-1">
+    <% } %>
+    <% if (formUrl) { %>
+    <div class="url extLink">
+        <a href="<%= formUrl %>" target="_blank">
+            <%= context.toUpperCase() %>ID <%= collection.originalID %>
+        </a>
     </div>
+    <% } %>
+    <img class="saveSpinner" src="assets/images/loader.gif" />
+    <div data-i18n="form.actions.save" class="action actionSave">Tout sauvegarder</div>
+</div>
 
-    <div id="settingFieldPanel" class="col-md-0">
+<div class="content">
+    <div id="settingFormPanel">
+        <div class="row scroll">
+            <div class="row title">
+                <h2 class="col-md-10 col-md-offset-1" data-i18n="form.setting">
+                    Caractéristiques du formulaire
+                </h2>
+            </div>
+            <div class="row properties">
+                <div class="general-error col-md-10 col-md-offset-1"></div>
+                <div id="form" class="col-md-11">
+                    <!-- generated backbone form -->
+                </div>
+                <% if (collection.parentForms && collection.parentForms.length > 0) { %>
+                <div class="col-md-10 col-md-offset-1 parentForms">
+                    <div class="formField">
+                        <label data-i18n="settings.actions.listOfParentForms"></label>
+                        <div class="error-block" data-error=""></div>
+                        <div class="help-block"></div>
+                        <div class="links">
+                            <% for (var i in collection.parentForms) {
+                            f = collection.parentForms[i];
+                            url = formBaseUrl + f.id;
+                            %>
+                            <a href='<%= url %>'><%= f.name %></a>
+                            <% } %>
+                        </div>
+                    </div>
+                </div>
+                <% } %>
+                <% if (context === 'track') { %>
+                <div class="col-md-10 col-md-offset-1 attachedFiles">
+                    <input type="file" class="hide" accept="">
+                    <label data-i18n="settings.attachedFiles">attached files</label>
+                    <div data-i18n="settings.actions.addFile" class="action addBtn">add file</div>
+                    <table class="filesList"></table>
+                </div>
+                <% } %>
+                <% if (collection.versions && collection.versions.length > 0) { %>
+                <div class="col-md-11 col-md-offset-1 versions">
+                    <div>
+                        <label data-i18n="form.history"></label>
+                        <div class="error-block" data-error=""></div>
+                        <div class="help-block"></div>
+                        <table>
+                            <%
+                            var timestamp = "newer";
+                            for (var i in collection.versions) {
+                                f = collection.versions[i];
+                                url = formBaseUrl + f.id;
+                                if (f.id === collection.id) {
+                                    timestamp = "this";
+                                } else if (timestamp === "this") {
+                                    timestamp = "older";
+                                }
+                            %>
+                            <tr data-id="<%= f.id %>" data-active="<%= f.state === 1 %>" data-timestamp="<%= timestamp %>">
+                                <td class="ts"></td>
+                                <td class="id"><%= f.id %></td>
+                                <td class="date">
+                                    <%= f.modificationDate %>
+                                </td>
+                            </tr>
+                            <% } %>
+                        </table>
+                    </div>
+                </div>
+                <% } %>
+            </div>
+        </div>
     </div>
-
+    <div id="formPanel">
+        <table id="widgetPanel">
+            <tr class="fieldTypes">
+                <% for (var i in fieldTypes) {
+                field = fieldTypes[i]; %>
+                <td class="picto-<%= field.i18n %>"
+                     data-type="<%= field.type %>"
+                     data-i18n="[title]fields.<%= field.i18n %>"
+                     data-disabled="<%= collection.readonly %>">
+                </td>
+                <% } %>
+            </tr>
+        </table>
+        <div id="gridView"></div>
+        <div id="gridRowActions">
+            <div class="inputActions"></div>
+            <div data-i18n="form.actions.save" class="action actionSave">Tout sauvegarder</div>
+        </div>
+        <div id="gridTemperedGlass"></div>
+        <div id="fieldPropertiesPanel">
+            <div class="content">
+                <h2></h2>
+                <div class="properties"></div>
+            </div>
+            <div class="action btnOk">OK</div>
+        </div>
+    </div>
 </div>

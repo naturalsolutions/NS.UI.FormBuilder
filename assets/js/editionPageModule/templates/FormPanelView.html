@@ -1,0 +1,21 @@
+<div class="grid" data-context="<%= context %>" data-topcontext="<%= topcontext %>">
+    <table class="header">
+        <tbody>
+            <tr>
+                <!-- first last column are always displayed -->
+                <td class="type" data-i18n="editGrid.type">type</td>
+                <% for (var i in columns) {
+                    var col = columns[i];
+                %>
+                <td class="<%= col %>" data-i18n="editGrid.<%= col %>"><%= col %></td>
+                <% } %>
+                <td class="options" data-i18n="editGrid.options">options</td>
+            </tr>
+        </tbody>
+    </table>
+    <div id="scrollSection">
+        <table>
+            <tbody class="drop rows"></tbody>
+        </table>
+    </div>
+</div>

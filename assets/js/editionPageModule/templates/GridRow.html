@@ -1,0 +1,19 @@
+<tr class="editRow <% if (static) { %>static<% } %>" data-readonly="<%= readonly %>" data-id="<%= model.get('id') %>" data-order="<%= model.get('order') %>">
+    <td class="handle type picto-<%= model.get('meta').type.toLowerCase() %>"></td>
+    <% for (var i in columns) {
+    var col = columns[i];
+    if (!schema[col]) { %>
+    <td class="<%= col %> unavailable"></td>
+    <% } else { %>
+    <td class="formField <%= col %>" data-editors="<%= col %>"></td>
+    <% }
+    } %>
+    <td class="options">
+        <% if (model.get('compulsory')) { %>
+        <span data-i18n="editGrid.optionsUnavailable"></span>
+        <% } else { %>
+        <div class="languages" data-i18n="editGrid.languages"></div>
+        <div class="settings" data-i18n="editGrid.settings"></div>
+        <% } %>
+    </td>
+</tr>

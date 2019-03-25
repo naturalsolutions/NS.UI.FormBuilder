@@ -1,18 +1,24 @@
+@import url('../../components/common.less');
+
 #centerPanel, #gridPanel {
-    background : #333;
+    background : @grid_bg;
     height: 100%;
 
-    &>div:first-child { height: 100%; }
+    &>div:first-child {
+        &, &>section {
+            height: 100%;
+        }
+    }
 
     .head {
-        border-bottom  : 1px #75797b solid;
-        margin-bottom  : 20px;
+        border-bottom: 1px #75797b solid; /* nope */
         height         : 71px;
         overflow       : hidden;
 
         h1 {
             .exo;
-            color          : #ffffff;
+            display: inline-block;
+            color          : #ffffff; /* nope */
             padding-left   : 30px;
             margin-top     : 0;
             height         : 70px;
@@ -22,116 +28,122 @@
             margin-bottom  : 0;
         }
 
-        .col-md-6:last-child {
-            height     : 100%;
-            line-height: 67px;
-            text-align : right;
+        .actions {
+            display: block;
+            position: absolute;
+            right: 18px;
+            top: 20px;
 
-            button {
-                margin-top: 17.5px;
-                &#add {
-                    margin-left: 15px;
-                    margin-right: 28px;
-                }
+            .action {
+                display: inline-block;
+                margin: 0 10px;
             }
-        }
-
-        .col-md-1 {
-          height: 70px;
-          line-height: 95px;
         }
     }
 
     #grid, #grid2 {
         height: 80%;
-        margin-right: 30px;
         table {
-            width: 100%;
-            table-layout:fixed;
-            thead {
+            width: 98%;
+            margin-left: 2%;
+            table-layout: fixed;
 
-                tr {
+            th:first-of-type, td:first-of-type {
+                padding-left: 15px;
+            }
 
+            tr th, tr td {
+                // name
+                &:first-of-type {
+                    width:50%;
+                }
 
-                    th {
-                        .exo;
-                        text-transform : uppercase;
-                        padding-bottom : 15px;
-                        font-weight    : 100;
+                // controls
+                &:last-of-type {
+                    width: 60px;
+                }
+            }
 
-                        &:first-child {
-                            @media screen and (min-width: 1200px) {
-                                width : 50%;
-                            }
-                            // padding-left: 20px;
-                        }
+            thead tr th {
+                .exo;
+                text-transform : capitalize;
+                padding-bottom : 15px;
 
-                        a {
-                            color : #8c8f90 !important;
-                            font-size : 14px;
+                a {
+                    font-size : 16px;
+                    font-weight : bold;
+                    color : @row_header;
 
-                            &:hover {
-                                text-decoration: none !important;
-                                cursor: pointer;
-                            }
-
-                        }
+                    &:hover {
+                        text-decoration: none !important;
+                        cursor: pointer;
                     }
                 }
             }
 
-            tbody {
+            tbody tr {
+                border-bottom: 1px @border_color solid;
 
-                tr {
-                    border-bottom: 1px #555 solid;
+                &:hover {
+                    cursor: pointer;
+                    background : @row_hover_bg;
+                }
 
-                    &.clone {
-                        background : #D9BF3D;
-                    }
-
-                    &.focused {
-                        background: #555;
-                    }
-
-
-                    &.selected {
-                        background : #d1d2d4 !important;
-                        color : #111 !important;
-                        td {
-                            color : #111 !important;
-                        }
-                    }
-
-                    &:not(.formInformation), &:not(.selected) {
-                        &:hover {
-                            cursor: pointer;
-                            background : #444;
-                        }
-                    }
+                &.selected, &.selected:hover {
+                    background : @search_bg;
+                    color : @orange;
 
                     td {
-                        .exo;
-                        padding-top    : 7px;
-                        padding-bottom : 7px;
-                        color          : #8c8f90;
+                        color : @orange;
+                        font-weight: bold;
+                        padding-top: 9px;
+                        padding-bottom: 9px;
+                    }
+                }
 
-                        white-space:nowrap;
-                        overflow:hidden;
-                        text-overflow:ellipsis;
+                td {
+                    .exo;
+                    padding : 4px 0;
+                    color : @td_color;
 
-                        &:first-child {
-                            // padding-left: 20px;
-                            text-transform : uppercase;
-                            width:50%;
+                    white-space: nowrap;
+                    overflow:hidden;
+                    text-overflow:ellipsis;
+
+                    transition: all ease 120ms;
+
+                    /* &:first-of-type {
+                        text-transform : uppercase;
+                    } */
+
+                    &.controls {
+                        padding: 0;
+
+                        div.btnTrash {
+                            background: #702029;
+                            display: inline-block;
+                            width: 25px;
+                            height: 24px;
+                            border-radius: 6px;
+                            border: 1px solid #5d5d5d;
+                            color: white;
+                            text-align: center;
+                            margin: auto;
+                            font-size: 14px;
+                            padding-top: 4px;
+
+                            &:hover {
+                                background: #B2313D;
+                                border-color: #8e8e8e;
+                            }
                         }
                     }
-
                 }
             }
         }
 
         .formInformation {
-            background     : #222 !important;
+            background     : @grid_bg;
             width          : ~'calc(100% - 30px)';
             position       : absolute;
             margin-left    : 0 !important;
@@ -216,44 +228,60 @@
     }
 
     .scrollSection {
-        height: ~'calc(100% - 233px)';
+        height: 100%;
         overflow: hidden;
+
         &.resized {
-            height: 4%;
+            height: 74px;
+            border-bottom: 2px solid @border_color;
+            padding: 25px 0 47px;
         }
+
+        height: calc(~"100% - 74px - 71px");
+
         .col-md-12:first-child {
+            padding: 0 0 0 16px;
             height: 100%;
         }
+
         #scrollSection {
-            height   : 85%;
+            height   : 100%;
             position : relative;
             overflow : hidden;
         }
+
         .ps-scrollbar-y-rail {
             background : black;
             height     : 550px !important;
             overflow   : hidden;
         }
-
     }
 
     #scrollSection2 {
         height: auto;
         #grid2 {
             table {
-                thead {
-                    //visibility: hidden;
-                }
                 tbody {
                     display : none;
                 }
             }
         }
     }
+
+    #formsCount:after {
+        content: ' ';
+        white-space: pre;
+    }
+
+    .spinner {
+        display: inline-block;
+        line-height: normal;
+        margin-left: 30px;
+        height: 25px;
+    }
 }
 
 #contentDeleteForm {
-
     img {
         height:20px;
     }

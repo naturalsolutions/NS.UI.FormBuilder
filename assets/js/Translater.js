@@ -1,27 +1,44 @@
 define([
-    'jquery', 'underscore', 'marionette', 'i18n'
-], function($, _, Marionette, Radio) {
+    'jquery', 'lodash', 'marionette', 'auth', 'i18n', 'i18n-jquery', 'i18n-xhr'
+], function($, _, Marionette, auth, i18n, i18njQuery, i18nXhr) {
+    var t = {
+        loaded: false,
+        init: function() {
+            var lang = auth.userlanguage ||navigator.language ||
+                navigator.userLanguagenavigator.language ||
+                navigator.userLanguage || 'en';
 
-    var Translater = Marionette.Object.extend({
-
-        initialize: function(options) {
-            this.url = 'ressources/locales/__lng__/__ns__.json';
-            this.initi18n();
+            i18n.use(i18nXhr);
+            i18n.init({
+                lng : lang,
+                fallbackLng: 'fr',
+                async: false,
+                getAsync: false,
+                backend: {
+                    loadPath: 'ressources/locales/{{lng}}/{{ns}}.json'
+                }
+            }, _.bind(function() {
+                i18njQuery.init(i18n, $, {
+                    tName: 't',
+                    handleName: 'i18n',
+                    selector: 'data-i18n'
+                });
+                this.loaded = true;
+            }, this));
+        },
+        isKeyValid: function(key) {
+            return typeof key === "string" &&
+                key.indexOf(" ") === -1;
         },
 
-        initi18n : function() {
-            i18n.init({ resGetPath: this.url, getAsync : false, lng : navigator.language || navigator.userLanguagenavigator.language || navigator.userLanguage});
-        },
+        getValueFromKey : function(key, opts) {
+            if (!this.isKeyValid(key))
+                return key;
 
-        getValueFromKey : function(key) {
-            return $.t(key);
+            return $.t(key, opts);
         }
-    });
-
-    var translater = new Translater();
-
-    return {
-        getTranslater: function (options) { return translater; }
     };
 
+    t.init();
+    return t;
 });

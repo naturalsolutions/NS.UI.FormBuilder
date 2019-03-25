@@ -2,19 +2,11 @@
  * Created by David on 22/12/2015.
  */
 
-define([
-    'jquery',
-    'backbone',
-    '../../../Translater',
-    'app-config'
-], function ($, Backbone, Translater, AppConfig) {
-
-    var translater = Translater.getTranslater();
-
+define(['jquery'], function ($) {
     var TrackStatics = {
-
         staticInputs: {
             "Individual": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Individu",
                 "labelEn": "Individual",
@@ -37,6 +29,7 @@ define([
                 "type": "Autocomplete"
             },
             "Egg": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Oeuf",
                 "labelEn": "Egg",
@@ -59,6 +52,7 @@ define([
                 "type": "Autocomplete"
             },
             "UserReadonly": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Utilisateur",
                 "labelEn": "User",
@@ -80,6 +74,7 @@ define([
                 "type": "Text"
             },
             "eventDate": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "Date de saisie",
                 "labelEn": "Event date",
@@ -102,6 +97,7 @@ define([
                 "type": "Date"
             },
             "TSai_PK_ID": {
+                "id": 0,
                 "validators": [],
                 "labelFr": "TSai_PK_ID",
                 "labelEn": "TSai_PK_ID",
@@ -132,21 +128,20 @@ define([
             "TSai_PK_ID"
         ],
 
-        getStaticInputs: function(){
+        getStaticInputs: function() {
             var toret = TrackStatics.staticInputs;
             $.each(toret, function(index, value){
                 if (!value.id)
                     value.id = 0;
             });
-            return(toret);
+            return toret;
         },
 
-        getCompulsoryInputs: function(){
-            return(TrackStatics.compulsoryInputs);
+        getCompulsoryInputs: function() {
+            return TrackStatics.compulsoryInputs;
         },
 
-        applyRules: function(form, json)
-        {
+        applyRules: function(form, json) {
             var savedSchema = json.schema;
             var toret = json;
             var toadd = [];
@@ -167,14 +162,14 @@ define([
             $.each(toadd, function(index, value){
                 if (index + 1 != savedSchema[value].order)
                     savedSchema[value].order -= 1;
-                toret.schema[Object.keys(toret.schema).length + 1] = (savedSchema[value]);
+                toret.schema[value] = savedSchema[value];
             });
 
             return toret;
         },
 
         initializeStatics: function () {
-            return(true);
+            return true;
         }
     };
 
