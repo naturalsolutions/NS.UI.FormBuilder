@@ -253,11 +253,6 @@ define([
                 fieldClass: 'marginBottom10',
                 validators: ['required']
             },
-            onBlur: {
-                type: OnBlurEditor,
-                title: "on Blur",
-                template: fieldTemplate
-            },
 
             linkedFieldTable: {
                 type: 'Select',
