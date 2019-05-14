@@ -89,6 +89,17 @@ define([
                     }
                 }
             },
+            ObjectPicker: {
+                defaults: {
+                },
+                schema: {      
+                    name: {
+                        type        : 'Select',
+                        options     : ['FK_Individual','FK_MonitoredSite','FK_Sensor'],
+                        template    : fieldTemplate
+                    }
+                }
+            },
             all:{
                 defaults: {
                     linkedFieldIdentifyingColumn: ""

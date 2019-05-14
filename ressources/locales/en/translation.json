@@ -100,7 +100,7 @@
         "author"     : "Author",
         "isgrid"     : "Is a grid",
         "ishiddenprotocol" : "Hidden Protocol",
-        "hideprotocolname" : "Hide Protocol name",
+        "hideprotocolname" : "Hide Sub Protocol name",
         "defaultforfieldactivity" : "Default for fieldactivity",
         "name"       : "Protocol name",
         "tag"        : "Destination tag",
