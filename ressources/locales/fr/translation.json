@@ -99,7 +99,7 @@
         "author"      : "Auteur",
         "isgrid"      : "Est en grille",
         "ishiddenprotocol" : "Protocole caché",
-        "hideprotocolname" : "Cacher le nom du Protocole",
+        "hideprotocolname" : "Cacher le nom du sous Protocole",
         "defaultforfieldactivity" : "Par défaut pour la fieldactivity",
         "name"        : "Nom du protocole",
         "tag"         : "Tag de destination",
