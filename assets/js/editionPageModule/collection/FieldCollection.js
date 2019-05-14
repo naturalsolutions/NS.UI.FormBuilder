@@ -190,7 +190,8 @@ define([
                 }
             },
             originalID: {type: "Hidden"},
-            initialID: {type: "Hidden"}
+            initialID: {type: "Hidden"},
+            onBlur: {type: "Hidden"}
         },
 
         getDefaultSchema : function (){
@@ -223,19 +224,20 @@ define([
 
             var opt = options || {};
 
-            this.url           = opt.url            || "";
-            this.templateURL   = opt.templateURL    || "";
+            this.url             = opt.url             || "";
+            this.templateURL     = opt.templateURL     || "";
             this.DataEntrySource = opt.DataEntrySource || 0
-            this.id              = opt.id             || 0;
-            this.name            = opt.name           || 'My form';
-            this.tag             = opt.tag            || "";
-            this.translations    = opt.translations   || {};
-            this.obsolete        = opt.obsolete       || false;
-            this.propagate       = opt.propagate      || false;
-            this.context         = opt.context        || "";
-            this.isTemplate      = opt.isTemplate     || false;
-            this.fileList        = opt.fileList       || [];
-            this.originalID      = opt.originalID     || 0;
+            this.id              = opt.id              || 0;
+            this.name            = opt.name            || 'My form';
+            this.tag             = opt.tag             || "";
+            this.translations    = opt.translations    || {};
+            this.onBlur          = opt.onBlur      || {};
+            this.obsolete        = opt.obsolete        || false;
+            this.propagate       = opt.propagate       || false;
+            this.context         = opt.context         || "";
+            this.isTemplate      = opt.isTemplate      || false;
+            this.fileList        = opt.fileList        || [];
+            this.originalID      = opt.originalID      || 0;
 
             this.fieldstodelete  = [];
 
@@ -378,6 +380,7 @@ define([
                 name          : this.name,
                 translations  : this.translations,
                 DataEntrySource : this.DataEntrySource,
+                onBlur        : sessionStorage.getItem('onBlur'),
                 tag           : this.tag || "",
                 obsolete      : this.obsolete,
                 propagate     : this.propagate,
@@ -496,6 +499,7 @@ define([
             if (nameType.indexOf("Field") === -1) {
                 nameType += "Field";
             }
+            field['extention'] = extention;
             return this.addField(new Fields[nameType](field));
         },
 
@@ -617,19 +621,19 @@ define([
             // validate each field
             $.each(that.models, function (index, value) {
                 var fieldModel = that.get(value.id);
-                console.log("**************", that, that.models, fieldModel);
                 if (!fieldModel.get("compulsory")) {
 
                     var fieldErrors = fieldModel.view.validate();
+					var pathCases = ["thesaurus", "position"];
 
                     //TODO : For now thats the only existing case ... might need to be more generic for future cases
-                    if (fieldModel.attributes.meta.type.toLowerCase() == "thesaurus"
+                    if (pathCases.indexOf(fieldModel.attributes.meta.type.toLowerCase()) !== -1
                         && fieldModel.attributes.defaultPath
                         && fieldModel.attributes.defaultPath.length > 0
-                        && ( ! fieldErrors || fieldErrors.defaultNode)) 
+                        && ( !fieldErrors || fieldErrors.defaultPath ))
                     {
-                        if( fieldErrors && fieldErrors.defaultNode) {
-                            delete fieldErrors.defaultNode;
+                        if( fieldErrors && fieldErrors.defaultPath) {
+                            delete fieldErrors.defaultPath;
                         }
                     }
 

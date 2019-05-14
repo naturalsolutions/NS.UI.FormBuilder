@@ -78,6 +78,7 @@
         "childform"            : "Child Form",
         "objectpicker"         : "Object Picker",
         "subformgrid"          : "SubForm Grid",
+        "presentation"         : "Presentation",
         "imageFile"            : "Image File",
         "decimal"              : "Decimal Numeric",
         "position"             : "Position"

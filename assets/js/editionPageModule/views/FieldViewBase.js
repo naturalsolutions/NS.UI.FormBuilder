@@ -11,7 +11,7 @@ define([
             'click .languages'      : 'editLanguages',
             'change input, textarea'          : 'inputChanged',
             'change select'         : 'selectChanged',
-            'focus input, select'   : 'focusField',
+            'focus input, select'   : 'focusField'
         },
 
         template: _.template(DefaultTemplate),

@@ -132,7 +132,7 @@ define([], function() {
                 'Position'
             ],
             allowedConvert: [
-                ['Text', 'TextArea', 'Date', 'Pattern'],
+                ['Text', 'TextArea', 'Date', 'Pattern', 'Presentation'],
                 ['Number', 'Decimal', 'NumericRange'],
                 ['Select', 'CheckBox', 'Radio']
             ],
@@ -171,7 +171,8 @@ define([], function() {
                     'CheckBox',
                     'ChildForm',
                     'Thesaurus',
-                    'Position'
+                    'Position',
+					'Presentation'
                 ]
             },
             ecollection: {

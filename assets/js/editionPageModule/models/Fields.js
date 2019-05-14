@@ -1,14 +1,14 @@
 define([
     'jquery', 'lodash', 'tools', 'backbone', '../../Translater',
-    '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor',
+    '../editor/CheckboxEditor', '../editor/EditModeEditor', '../editor/AppearanceEditor', '../editor/AutoCompleteEditor',
     '../editor/ChoicesEditor', '../editor/TreeEditor', '../editor/LanguagesEditor',
-    '../editor/ChildFormEditor', '../editor/NumberEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
+    '../editor/ChildFormEditor', '../editor/NumberEditor', '../editor/OnBlurEditor', 'app-config', './ExtraContextProperties/ExtraProperties',
     'text!../templates/FieldTemplate.html', 'text!../templates/FieldTemplateEditorOnly.html'
 ], function(
     $, _, tools, Backbone, translater,
-    CheckboxEditor, EditModeEditor, AppearanceEditor,
+    CheckboxEditor, EditModeEditor, AppearanceEditor, AutoCompleteEditor,
     ChoicesEditor, TreeEditor, LanguagesEditor,
-    ChildFormEditor, NumberEditor, AppConfig, ExtraProperties,
+    ChildFormEditor, NumberEditor, OnBlurEditor, AppConfig, ExtraProperties,
     FieldTemplate, FieldTemplateEditorOnly) {
 
     var fieldTemplate = _.template(FieldTemplate);
@@ -203,7 +203,8 @@ define([
             atBeginingOfLine: false,
             fieldSize: 12,
             linkedFieldset: '',
-            originalID: null
+            originalID: null,
+            onBlur: ''
         },
 
         schema: {
@@ -251,6 +252,11 @@ define([
                 template: fieldTemplate,
                 fieldClass: 'marginBottom10',
                 validators: ['required']
+            },
+            onBlur: {
+                type: OnBlurEditor,
+                title: "on Blur",
+                template: fieldTemplate
             },
 
             linkedFieldTable: {
@@ -460,6 +466,11 @@ define([
         },
 
         initialize: function(options) {
+
+            //set parameters
+            if (options.extention && options.extention.parameters)
+                this.parameters = options.extention.parameters;
+            
             // set prototype
             this.prototype = models.BaseField.prototype;
 
@@ -542,9 +553,10 @@ define([
         schema: function() {
             return _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
-                    template: fieldTemplate
+                    template: fieldTemplate,
+                    //jeremy
                 },
                 isDefaultSQL: {
                     type: CheckboxEditor,
@@ -585,7 +597,7 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     fieldClass: 'advanced',
                     template: fieldTemplate
@@ -779,7 +791,7 @@ define([
                     }
                 },
                 defaultPath: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate,
                     validators: [
@@ -850,7 +862,7 @@ define([
                     }
                 },
                 defaultPath: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.defaultPath'),
                     template: fieldTemplate,
                     validators: [
@@ -1142,6 +1154,34 @@ define([
         section: 'reneco'
     });
 
+  // track-specific
+    models.PresentationField = models.BaseField.extend({
+        defaults: function(){
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Presentation");
+            var toret = models.BaseField.prototype.defaults;
+            toret = _.extend(toret, toret, extraschema);
+            return toret;
+        },
+        schema: function(){
+            var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("Presentation");
+            var toret = _.extend({}, models.BaseField.prototype.schema, {});
+
+            // remove linked fields
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
+
+            return _.extend(toret, toret, extraschema);
+        },
+
+        initialize: function(options) {
+          models.BaseField.prototype.initialize.call(this, options);
+        }
+    }, {
+        type: 'Presentation',
+        i18n: 'presentation',
+        section: 'reneco'
+    });
+
     //  ----------------------------------------------------
     //  Field herited by TextField
     //  ----------------------------------------------------
@@ -1168,7 +1208,7 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate
                 },
@@ -1209,6 +1249,7 @@ define([
         },
 
         initialize: function(options) {
+            console.log('TextField initialize');
             models.BaseField.prototype.initialize.call(this, options);
         }
     }, {
@@ -1235,7 +1276,7 @@ define([
 
             var toret = _.extend({}, schema, {
                 defaultValue: {
-                    type: 'Text',
+                    type: AutoCompleteEditor,
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate
                 },
@@ -1417,7 +1458,7 @@ define([
                 }]
             },
             minValue: {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.min'),
                 validators: [function checkValue(value, formValues) {
@@ -1440,7 +1481,7 @@ define([
                 }]
             },
             maxValue: {
-                type: 'Text',
+                type: AutoCompleteEditor,
                 template: fieldTemplate,
                 title: translater.getValueFromKey('schema.max'),
                 validators: [function checkValue(value, formValues) {
