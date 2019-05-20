@@ -43,6 +43,7 @@ define([
                 handlers: [function(value, input){
                     //handlers are called on input change
                     var nbFixedColEditor = input.form.getEditor('nbFixedCol');
+                    console.log("Flag 02");
                     if(input.getValue()){
                         nbFixedColEditor.$el.parent().parent().removeClass('hidden');
                     } else{

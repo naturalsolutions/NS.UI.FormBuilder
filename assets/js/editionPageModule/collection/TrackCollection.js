@@ -136,12 +136,14 @@ define([
                 return this.extensionData;
             }
             if (options) {
-                this.getTrackDatas(options);
+                console.log("getSchemaExtention track !");
+                //this.getTrackDatas(options);
             }
             return this.schemaExtention;
         },
 
         initializeExtention: function (options) {
+            console.log("init track ext !");
             this.getTrackDatas(options);
         },
 

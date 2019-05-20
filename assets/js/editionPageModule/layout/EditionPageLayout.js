@@ -251,6 +251,7 @@ define([
                         return !el.id || el.id === -1;
                     });
                 newFiles = Object.values(newFiles);
+                console.log("Flag 00");
                 var formData = this.form.getValue();
                 formData.fileList = Object.values(newFiles);
                 formData.id = this.fieldCollection.id;

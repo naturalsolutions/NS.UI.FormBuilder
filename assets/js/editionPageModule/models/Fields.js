@@ -284,6 +284,7 @@ define([
 
                     if(this.context == 'ecoreleve'){
                         var onChange = function(e){
+                            console.log("Flag 04");
                             var linkedTableValue = linkedTableFieldEditor.getValue();
                             var linkedFieldsListForTable = _.filter(linkedFieldsList, function(obj) {
                                 if(obj.table == linkedTableValue){
@@ -300,6 +301,7 @@ define([
                         
                         $(linkedTableFieldEditor.$el).on('change', onChange);
 
+                        console.log("Flag 03");
                         if(linkedTableFieldEditor.getValue()){
                             onChange(null);
                         }

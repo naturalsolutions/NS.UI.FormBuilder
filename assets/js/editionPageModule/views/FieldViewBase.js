@@ -32,6 +32,7 @@ define([
             var error;
 
             if (field) {
+                console.log("Flag 01");
                 value = field.editor.getValue();
                 error = field.editor.$el.find(".error").length > 0;
                 field = field.key;
