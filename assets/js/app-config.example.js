@@ -23,7 +23,7 @@ define([], function() {
             // Path to the thesaurus Web Services
             thesaurusWSPath: 'http://localhost/ThesaurusCore/api/thesaurus/fastInitForCompleteTree',
             // POST(@lng, @StartNodeId)
-            positionWSPath: 'http://localhost/positionCore/api/PositionAction/GetTree'
+            positionWSPath: 'http://localhost/positionCore/api/PositionAction'
         },
 
         config: {
@@ -189,7 +189,7 @@ define([], function() {
                     'ChildForm'
                 ]
             },
-            position: {
+            positionTypes: {
                 inputTypes: [
                     'Autocomplete',
                     'Text',
@@ -199,10 +199,28 @@ define([], function() {
                     'Decimal',
                     'CheckBox',
                     'Select',
-                    'File',
-                    'ChildForm',
                     'Thesaurus'
                 ]
+            },positionEvents: {
+                inputTypes: [
+                    'Autocomplete',
+                    'Text',
+                    'TextArea',
+                    'Date',
+                    'Number',
+                    'Decimal',
+                    'CheckBox',
+                    'Select',
+                    'Thesaurus'
+                ],
+				editColumns: [
+                "name",
+                "defaultValue",
+                "linkedFieldTable",
+                "linkedField",
+                "appearance",
+                "editMode"
+				]
             }
         }
     };
