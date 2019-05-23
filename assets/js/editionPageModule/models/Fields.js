@@ -791,7 +791,7 @@ define([
                     }
                 },
                 defaultPath: {
-                    type: AutoCompleteEditor,
+                    type: 'Text',
                     title: translater.getValueFromKey('schema.default'),
                     template: fieldTemplate,
                     validators: [
