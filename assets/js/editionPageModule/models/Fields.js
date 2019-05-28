@@ -925,7 +925,8 @@ define([
                     validators: ['required']
                 },
                 wsUrl: {
-                    type: 'Text',
+                    type: 'Select',
+                    options: ["autocomplete/Individual", "autocomplete/monitoredSites", "autocomplete/Sensor"],
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.wsUrl'),
                     validators: ['required']
