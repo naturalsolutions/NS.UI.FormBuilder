@@ -1,11 +1,4 @@
 node_modules/
 web.config
-libs/*
-!libs/autocompleteTreeview
-bower_components
 compressed/
-build/formbuilder.min.js
-/nbproject/private/
-nbproject/
 assets/js/app-config.js
-.idea/
