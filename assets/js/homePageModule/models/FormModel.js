@@ -51,6 +51,7 @@ define([
 
             if (this.defaults.context = "" && window.context)
                 this.defaults.context = window.context;
+            this.set('context',window.context);
         },
 
         toJSON : function() {
