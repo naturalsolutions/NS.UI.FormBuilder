@@ -8,8 +8,9 @@ define([
     '../../../Translater',
     '../../editor/CheckboxEditor',
     '../../editor/NumberEditor',
-    'text!../../templates/FieldTemplate.html'
-], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate) {
+    'text!../../templates/FieldTemplate.html',
+    'app-config'
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate,AppConfig) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -86,6 +87,35 @@ define([
                             regexp: /\bselect\b[\s\S]*?\bfrom\b/im,
                             message: 'Must be formatted like : SELECT ... FROM'
                         }]
+                    }
+                }
+            },
+            SubFormGrid: {
+                defaults: {
+                },
+                schema: {      
+                    name: {
+                        type        : 'Select',
+                        options     : function(apply) {
+                            var toret = []
+                            $.ajax({
+                                url: AppConfig.config.options.URLOptions.allforms + '/' + context,
+                                type: 'GET',
+                                contentType: 'application/json',
+                                crossDomain: true,
+                                async: false,
+                                success: function(data) {
+                                    var datas = JSON.parse(data);
+                                    toret =  datas.map(function(item){return item.name });
+                                },
+                                error: function(xhr) {
+                                    alert("Error when fetch protocols list please refresh")
+                                }
+
+                            });
+                            return apply(toret);                       
+                        },
+                        template    : fieldTemplate
                     }
                 }
             },
