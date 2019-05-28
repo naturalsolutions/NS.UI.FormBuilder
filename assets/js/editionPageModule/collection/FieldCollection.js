@@ -22,14 +22,32 @@ define([
     '../editor/DataEntrySource',
     './CollectionExtention',
     './staticInputs/ContextStaticInputs',
+    './mandatoryInputs/ContextMandatoryInputs',
     'text!../templates/FieldTemplate.html'
 ], function ($, _, Backbone,
              Fields, Radio, translater, CheckboxEditor, AppConfig, tools,
-             LanguagesEditor,DataEntrySource, CollectionExtention, ContextStaticInputs, FieldTemplate) {
+             LanguagesEditor,DataEntrySource, CollectionExtention, ContextStaticInputs,ContextMandatoryInputs, FieldTemplate) {
 
     var fieldTemplate = _.template(FieldTemplate);
     var extention = CollectionExtention;
     var staticInputs = ContextStaticInputs;
+    var mandatoryInputs = ContextMandatoryInputs;
+
+    var setExtention = function(extentionToSet){
+        var context = extentionToSet || window.context || $("#contextSwitcher .selected").text();
+        extention = CollectionExtention.getModeExtention(context.toLowerCase());
+    };
+
+    var setStatics = function(staticsToSet){
+        var context = staticsToSet ||  window.context || $("#contextSwitcher .selected").text();
+        staticInputs = ContextStaticInputs.getStaticMode(context.toLowerCase());
+    };
+
+    /* will init mandatoryInputs with context */
+    var setMandatory = function(mandatoryToSet) {
+        var context = mandatoryToSet ||  window.context || $("#contextSwitcher .selected").text();
+        mandatoryInputs = ContextMandatoryInputs.getMandatoryMode(context.toLowerCase());
+    }
 
     /**
     * Implement form object as a fields collection
@@ -213,6 +231,7 @@ define([
             var that = this;
             setExtention(options.context);
             setStatics(options.context);
+            setMandatory(options.context);
 
             that.options = options;
 
@@ -478,6 +497,13 @@ define([
             // is this a static field? (compulsory)
             field.set('compulsory', staticInputs.getCompulsoryInputs().indexOf(field.get('name')) > -1);
 
+            var mandatoryInputsConf = mandatoryInputs.getMandatoryInputs();
+
+            if ( ! this.isEmpty(mandatoryInputs) ) {
+                field.set('mandatory', mandatoryInputsConf["inputsList"].indexOf(field.get('name')) > -1);
+            }
+
+
             if (!field.get('id')) {
                 field.set('id', this.getNextPropertyValue('id', 1));
                 field.set('new', true);
@@ -516,6 +542,74 @@ define([
             }
         },
 
+        isEmpty : function (obj) {
+            for(var prop in obj) {
+              if(obj.hasOwnProperty(prop)) {
+                return false;
+              }
+            }
+          
+            return JSON.stringify(obj) === JSON.stringify({});
+        },
+
+        /**
+         * Will add or merge mandatory inputs into JSON data
+         * 
+         * @param {object} JSONUpdate JSON data 
+         */
+
+        addOrMergeMandatoryInputs : function(JSONUpdate) {
+            var objSchemaInputs = JSONUpdate.schema;
+            var schemaMandatoryObj = mandatoryInputs.getMandatoryInputs();
+            var listInputs = schemaMandatoryObj.inputsList;
+           
+            /* Case new form => schema is empty */
+            if( this.isEmpty(objSchemaInputs) ) { // schema is empty we will just add mandatory input
+
+                for( var i = 0 ; i < listInputs.length ; i++ ) {
+                    var key = listInputs [ i ];
+                    var objTemp =  schemaMandatoryObj.inputsConf [ key ] ;
+                    objTemp.disabledFields = schemaMandatoryObj.inputsDisabledFields [ key ];
+                    JSONUpdate.schema[ i ] =  schemaMandatoryObj.inputsConf [ key ] ;
+                }
+            } 
+            else {
+                /* When form exist 2 cases :
+                    input not in form we add it
+                    input in form we have to merge conf
+                */
+               var listSchemaInputs = Object.values(objSchemaInputs); //convert to Array
+               var maxIndex = listSchemaInputs.length;
+               for( var i = 0 ; i < listInputs.length ; i++ ) {
+                   var key = listInputs [ i ];
+                   var inputExist = listSchemaInputs.filter( function(item) {
+                       return item.name === key;
+                   })
+                   if (inputExist.length > 1 ) {
+                       console.error("Conf problem we have more than one inputs we same name")
+                       console.error("input found : ", inputExist)
+                   }
+                   if ( inputExist.length ) {// input exist in form we have to merge
+                    var confMandatory  = schemaMandatoryObj.inputsConf [ key ];
+                    for ( var keyConf in confMandatory ) { //erase conf with value we want
+                        inputExist [ 0 ] [ keyConf ] = confMandatory  [ keyConf ];
+                    }
+                    inputExist [ 0 ] . disabledFields = schemaMandatoryObj.inputsDisabledFields [ key ]; //add list disabled Field for front
+                   }
+                   else {
+                    var objTemp = schemaMandatoryObj.inputsConf [ key ] ;
+                    objTemp.order = maxIndex;
+                    objTemp.disabledFields = schemaMandatoryObj.inputsDisabledFields [ key ];
+                    JSONUpdate.schema[maxIndex] =  objTemp
+                    maxIndex += 1;
+                   }
+               }
+
+            }
+
+            return JSONUpdate;
+        },
+
         /**
          * Update collection : create field from JSON data
          *
@@ -525,6 +619,10 @@ define([
             this.reset();
             this.JSONUpdate = JSONUpdate;
             //  Update form attribute
+            if (JSONUpdate.context === 'ecoreleve' ) { 
+                JSONUpdate = this.addOrMergeMandatoryInputs(JSONUpdate);
+            }
+          
             this.updateCollectionAttributes(JSONUpdate);
         },
 
@@ -812,15 +910,6 @@ define([
         }
     });
 
-    var setExtention = function(extentionToSet){
-        var context = extentionToSet || window.context || $("#contextSwitcher .selected").text();
-        extention = CollectionExtention.getModeExtention(context.toLowerCase());
-    };
-
-    var setStatics = function(staticsToSet){
-        var context = staticsToSet ||  window.context || $("#contextSwitcher .selected").text();
-        staticInputs = ContextStaticInputs.getStaticMode(context.toLowerCase());
-    };
 
     return Form;
 });
