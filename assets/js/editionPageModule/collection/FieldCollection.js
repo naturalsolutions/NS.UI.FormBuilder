@@ -497,10 +497,12 @@ define([
             // is this a static field? (compulsory)
             field.set('compulsory', staticInputs.getCompulsoryInputs().indexOf(field.get('name')) > -1);
 
-            var mandatoryInputsConf = mandatoryInputs.getMandatoryInputs();
-
-            if ( ! this.isEmpty(mandatoryInputs) ) {
-                field.set('mandatory', mandatoryInputsConf["inputsList"].indexOf(field.get('name')) > -1);
+            if( this.context == 'ecoreleve') {
+                var mandatoryInputsConf = mandatoryInputs.getMandatoryInputs();
+    
+                if ( ! this.isEmpty(mandatoryInputs) ) {
+                    field.set('mandatory', mandatoryInputsConf["inputsList"].indexOf(field.get('name')) > -1);
+                }
             }
 
 
@@ -616,7 +618,12 @@ define([
          * @param  {object} JSONUpdate JSON data
          */
         updateWithJSON : function(JSONUpdate) {
+
             this.reset();
+            setExtention(JSONUpdate.context);
+            setStatics(JSONUpdate.context);
+            setMandatory(JSONUpdate.context);
+
             this.JSONUpdate = JSONUpdate;
             //  Update form attribute
             if (JSONUpdate.context === 'ecoreleve' ) { 

@@ -8,8 +8,13 @@ define([
      * staticInputs object, and make it implement this skeleton
      */
     var EmptyMandatory = {
-        getMandatoryInputs: function() {return {};},
-        initializeMandatory: function() {return true;}
+        getMandatoryInputs: function() {return  this.mandatoryInputsWithConf; },
+        initializeMandatory: function() {return true;},
+        mandatoryInputsWithConf: {
+            inputsList: [],
+            inputsConf : {},
+            inputsDisabledFields : {}
+        }
     };
 
     var MandatoryInputs = {
