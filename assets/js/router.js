@@ -197,6 +197,7 @@ define([
             if (id === 'new') {
                 var newForm = new FormModel({
                     id: 0,
+                    context: this.editContext,
                     name: translater.getValueFromKey('modal.newForm.title')
                 });
                 this.displayForm(newForm.toJSON());
@@ -216,6 +217,7 @@ define([
         },
 
         displayForm: function(jsonForm) {
+            this.setContext(jsonForm.context,true)
             this.fieldCollection.updateWithJSON(jsonForm);
             this.editPageLayout.update(this.fieldCollection);
             if (this.firstEdit) {
