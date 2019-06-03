@@ -52,19 +52,20 @@ define([
                     }
                 }
             },
-            Thesaurus:{
-                defaults: {
-                    iscollapsed : false
-                },
-                schema: {
-                    iscollapsed : {
-                        type        : CheckboxEditor,
-                        template    : fieldTemplate,
-                        fieldClass  : "checkBoxEditor",
-                        title       : translater.getValueFromKey('schema.iscollapsed')
-                    }
-                }
-            },
+            // NO MORE NEED FOR NOW ===> iscollapsed ?
+            // Thesaurus:{ 
+            //     defaults: {
+            //         iscollapsed : false
+            //     },
+            //     schema: {
+            //         iscollapsed : {
+            //             type        : CheckboxEditor,
+            //             template    : fieldTemplate,
+            //             fieldClass  : "checkBoxEditor",
+            //             title       : translater.getValueFromKey('schema.iscollapsed')
+            //         }
+            //     }
+            // },
             Select:{
                 defaults: {
                     defaultValue : "",
