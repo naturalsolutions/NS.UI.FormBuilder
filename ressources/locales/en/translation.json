@@ -296,7 +296,9 @@
         "minAppearance"                  : "Minimum of appearances",
         "minValueError"                  : "Minimal value is 0",
         "maxlength255"                   : "Maximum length is 255",
+        "maxlength250"                   : "Maximum length is 250",
         "maxlength55"                    : "Maximum length is 55",
+        "nospaceallowed"                 : "Spaces are not allowed!<BR>Replace it with underscore",
         "errorbetween0and5"              : "Number must be from 0 to 5",
         "trackType"                      : "Track type",
         "isAcceptedValue"                : "This value must be part of sub-tree \"{{prop}}\", or be empty, or be of the form \"#value#\""
