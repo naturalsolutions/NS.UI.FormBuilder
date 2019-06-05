@@ -8,9 +8,10 @@ define([
     '../../../Translater',
     '../../editor/CheckboxEditor',
     '../../editor/NumberEditor',
+    '../../editor/ObjectPickerEditor',
     'text!../../templates/FieldTemplate.html',
     'app-config'
-], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate,AppConfig) {
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, ObjectPickerEditor, FieldTemplate,AppConfig) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -116,7 +117,8 @@ define([
                             });
                             return apply(toret);                       
                         },
-                        template    : fieldTemplate
+                        // template    : fieldTemplate,
+                        // relatedNameProperty: "childFormName"
                     }
                 }
             },
@@ -125,8 +127,25 @@ define([
                 },
                 schema: {      
                     name: {
-                        type        : 'Select',
-                        options     : ['FK_Individual','FK_MonitoredSite','FK_Sensor'],
+                        type        : ObjectPickerEditor,
+                        options: [
+                            {
+                                val: 'FK_Individual',
+                                label: 'FK_Individual',
+                                wsUrl: 'autocomplete/Individual'
+                            },
+                            {
+                                val: 'FK_MonitoredSite',
+                                label: 'FK_MonitoredSite',
+                                wsUrl: 'autocomplete/monitoredSites'
+                            },
+                            {
+                                val: 'FK_Sensor',
+                                label: 'FK_Sensor',
+                                wsUrl: 'autocomplete/Sensor'
+                            }
+
+                        ],
                         template    : fieldTemplate
                     }
                 }
