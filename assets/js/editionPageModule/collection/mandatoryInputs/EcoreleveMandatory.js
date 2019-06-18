@@ -17,7 +17,7 @@ define(['jquery'], function ($) {
             ],
             inputsConf : {
                 "Comments": {
-                    "id": 0,
+                    "id": 1,
                     "translations" : {
                         "fr" : {
                             "Help": "",
@@ -31,8 +31,7 @@ define(['jquery'], function ($) {
                         }
                     },
                     "name": "Comments",
-                    "type": "TextArea",
-                    "lol" : "yoloooo"
+                    "type": "TextArea"
                 }
             },
             inputsDisabledFields : {
