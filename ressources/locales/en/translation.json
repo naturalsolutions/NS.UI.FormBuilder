@@ -442,7 +442,10 @@
           "text"             : "Write new form name",
           "inputPlaceholder" : "New form name",
           "error"            : "Form name can't be empty",
-          "cancelButtonText" : "Cancel"
+          "cancelButtonText" : "Cancel",
+          "ecoreleve" : {
+              "title" : "Protocol name"
+          }
         },
         "template" : {
           "success"    : "Saved !",

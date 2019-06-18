@@ -195,10 +195,16 @@ define([
             }, this);
 
             if (id === 'new') {
+                var defaultContext = '.';
+                if (this.editContext == 'ecoreleve') {
+                    defaultContext += this.editContext;
+                    defaultContext += '.'
+                }
+
                 var newForm = new FormModel({
                     id: 0,
                     context: this.editContext,
-                    name: translater.getValueFromKey('modal.newForm.title')
+                    name: translater.getValueFromKey('modal.newForm'+defaultContext+'title')
                 });
                 this.displayForm(newForm.toJSON());
             } else {

@@ -448,7 +448,10 @@
             "text"             : "Saisir le nom du nouveau formulaire",
             "inputPlaceholder" : "Nom du nouveau formulaire",
             "error"            : "Le nom ne peut pas être vide",
-            "cancelButtonText" : "Annuler"
+            "cancelButtonText" : "Annuler",
+            "ecoreleve" : {
+                "title" : "Nom du protocole"
+            }
         },
         "template" : {
           "success"    : "Sauvé !",
