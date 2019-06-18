@@ -8,9 +8,11 @@ define([
     '../../../Translater',
     '../../editor/CheckboxEditor',
     '../../editor/NumberEditor',
+    '../../editor/ObjectPickerEditor',
+    '../../editor/ChildFormEditor',
     'text!../../templates/FieldTemplate.html',
     'app-config'
-], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate,AppConfig) {
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, ObjectPickerEditor, ChildFormEditor, FieldTemplate,AppConfig) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
@@ -36,6 +38,40 @@ define([
                     minimumAppearance : 0
                 },
                 schema: {
+                    name: {
+                        type        : ChildFormEditor,// 'Select',
+                        options     : function(apply) {
+                            var toret = []
+                            $.ajax({
+                                url: AppConfig.config.options.URLOptions.allforms + '/' + context,
+                                type: 'GET',
+                                contentType: 'application/json',
+                                crossDomain: true,
+                                async: false,
+                                success: function(data) {
+                                    var datas = JSON.parse(data);
+                                    for( var i = 0 ; i < datas.length ; i ++) {
+                                        toret[i] = {
+                                            id : datas[i].id,
+                                            val: datas[i].name,
+                                            label: datas[i].name
+                                        }
+                                    }
+                                },
+                                error: function(xhr) {
+                                    alert("Error when fetch protocols list please refresh")
+                                }
+
+                            });
+                            return apply(toret);                       
+                        },
+                    },
+                childForm : { //we need the property but no render
+                    type: 'Hidden',
+                },
+                childFormName : { //we need the property but no render
+                    type: 'Hidden'
+                },
                     minimumAppearance : {
                         type        : NumberEditor,
                         min: 0,
@@ -52,19 +88,20 @@ define([
                     }
                 }
             },
-            Thesaurus:{
-                defaults: {
-                    iscollapsed : false
-                },
-                schema: {
-                    iscollapsed : {
-                        type        : CheckboxEditor,
-                        template    : fieldTemplate,
-                        fieldClass  : "checkBoxEditor",
-                        title       : translater.getValueFromKey('schema.iscollapsed')
-                    }
-                }
-            },
+            // NO MORE NEED FOR NOW ===> iscollapsed ?
+            // Thesaurus:{ 
+            //     defaults: {
+            //         iscollapsed : false
+            //     },
+            //     schema: {
+            //         iscollapsed : {
+            //             type        : CheckboxEditor,
+            //             template    : fieldTemplate,
+            //             fieldClass  : "checkBoxEditor",
+            //             title       : translater.getValueFromKey('schema.iscollapsed')
+            //         }
+            //     }
+            // },
             Select:{
                 defaults: {
                     defaultValue : "",
@@ -95,7 +132,7 @@ define([
                 },
                 schema: {      
                     name: {
-                        type        : 'Select',
+                        type        : ChildFormEditor,// 'Select',
                         options     : function(apply) {
                             var toret = []
                             $.ajax({
@@ -106,7 +143,13 @@ define([
                                 async: false,
                                 success: function(data) {
                                     var datas = JSON.parse(data);
-                                    toret =  datas.map(function(item){return item.name });
+                                    for( var i = 0 ; i < datas.length ; i ++) {
+                                        toret[i] = {
+                                            id : datas[i].id,
+                                            val: datas[i].name,
+                                            label: datas[i].name
+                                        }
+                                    }
                                 },
                                 error: function(xhr) {
                                     alert("Error when fetch protocols list please refresh")
@@ -115,17 +158,39 @@ define([
                             });
                             return apply(toret);                       
                         },
-                        template    : fieldTemplate
-                    }
+                    },
+                childForm : { //we need the property but no render
+                    type: 'Hidden',
+                },
+                childFormName : { //we need the property but no render
+                    type: 'Hidden'
                 }
-            },
+            }
+        },
             ObjectPicker: {
                 defaults: {
                 },
                 schema: {      
                     name: {
-                        type        : 'Select',
-                        options     : ['FK_Individual','FK_MonitoredSite','FK_Sensor'],
+                        type        : ObjectPickerEditor,
+                        options: [
+                            {
+                                val: 'FK_Individual',
+                                label: 'FK_Individual',
+                                wsUrl: 'autocomplete/Individual'
+                            },
+                            {
+                                val: 'FK_MonitoredSite',
+                                label: 'FK_MonitoredSite',
+                                wsUrl: 'autocomplete/monitoredSites'
+                            },
+                            {
+                                val: 'FK_Sensor',
+                                label: 'FK_Sensor',
+                                wsUrl: 'autocomplete/Sensor'
+                            }
+
+                        ],
                         template    : fieldTemplate
                     }
                 }
