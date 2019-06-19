@@ -10,19 +10,31 @@ define([
     '../../editor/NumberEditor',
     '../../editor/ObjectPickerEditor',
     '../../editor/ChildFormEditor',
+    '../../editor/CustomTextEditor',
     'text!../../templates/FieldTemplate.html',
     'app-config'
-], function ($, Backbone, translater, CheckboxEditor, NumberEditor, ObjectPickerEditor, ChildFormEditor, FieldTemplate,AppConfig) {
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, ObjectPickerEditor, ChildFormEditor,CustomTextEditor, FieldTemplate,AppConfig) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
     return {
         extraProperties: {
+
+            AutocompleteField: {
+                schema:{
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
             CheckBox:{
                 defaults: {
                     defaultValue: ""
                 },
                 schema: {
+                    name: {
+                        type : CustomTextEditor
+                    },
                     defaultValue : {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
@@ -88,26 +100,65 @@ define([
                     }
                 }
             },
-            // NO MORE NEED FOR NOW ===> iscollapsed ?
-            // Thesaurus:{ 
-            //     defaults: {
-            //         iscollapsed : false
-            //     },
-            //     schema: {
-            //         iscollapsed : {
-            //             type        : CheckboxEditor,
-            //             template    : fieldTemplate,
-            //             fieldClass  : "checkBoxEditor",
-            //             title       : translater.getValueFromKey('schema.iscollapsed')
-            //         }
-            //     }
-            // },
+            Date: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            Decimal: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+
+            Number: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            ObjectPicker: {
+                defaults: {
+                },
+                schema: {      
+                    name: {
+                        type        : ObjectPickerEditor,
+                        options: [
+                            {
+                                val: 'FK_Individual',
+                                label: 'FK_Individual',
+                                wsUrl: 'autocomplete/Individual'
+                            },
+                            {
+                                val: 'FK_MonitoredSite',
+                                label: 'FK_MonitoredSite',
+                                wsUrl: 'autocomplete/monitoredSites'
+                            },
+                            {
+                                val: 'FK_Sensor',
+                                label: 'FK_Sensor',
+                                wsUrl: 'autocomplete/Sensor'
+                            }
+
+                        ],
+                        template    : fieldTemplate
+                    }
+                }
+            },
             Select:{
                 defaults: {
                     defaultValue : "",
                     sqlQuery : 'null'
                 },
                 schema: {
+                    name: {
+                        type : CustomTextEditor
+                    },
                     defaultValue: {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
@@ -166,32 +217,26 @@ define([
                     type: 'Hidden'
                 }
             }
-        },
-            ObjectPicker: {
-                defaults: {
-                },
-                schema: {      
+            },
+            // NO MORE NEED FOR NOW ===> iscollapsed ?
+            Text: {
+                schema: {
                     name: {
-                        type        : ObjectPickerEditor,
-                        options: [
-                            {
-                                val: 'FK_Individual',
-                                label: 'FK_Individual',
-                                wsUrl: 'autocomplete/Individual'
-                            },
-                            {
-                                val: 'FK_MonitoredSite',
-                                label: 'FK_MonitoredSite',
-                                wsUrl: 'autocomplete/monitoredSites'
-                            },
-                            {
-                                val: 'FK_Sensor',
-                                label: 'FK_Sensor',
-                                wsUrl: 'autocomplete/Sensor'
-                            }
-
-                        ],
-                        template    : fieldTemplate
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            TextArea: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            Thesaurus:{ 
+                schema: {
+                    name: {
+                        type : CustomTextEditor
                     }
                 }
             },
