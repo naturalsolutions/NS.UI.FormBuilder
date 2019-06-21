@@ -51,6 +51,7 @@ define([
 
             if (this.defaults.context = "" && window.context)
                 this.defaults.context = window.context;
+            // this.set('context',window.context); REMOVE IT BUG FOR ALL CONTEXT need to know why
         },
 
         toJSON : function() {

@@ -13,11 +13,17 @@ define([
             Backbone.Form.editors.Text.prototype.initialize.call(this, options);
         },
 
+        getValue: function() {
+            console.log("getValue ACE");
+            return this.$el.find("input").val();
+        },
+
         render: function() {
             Backbone.Form.editors.Text.prototype.render.call(this);
             this.$el = $(_.template(AutocompleteTemplate)({
                 id: this.options.id,
-                model: this.model
+                model: this.model,
+                value: this.value
             })); 
 
             var that = this;

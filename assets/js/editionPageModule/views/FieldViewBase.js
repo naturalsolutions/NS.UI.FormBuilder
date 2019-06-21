@@ -182,10 +182,11 @@ define([
             this.options = options;
             this.model.view = this;
             this.static = this.model.get('compulsory');
+            this.mandatory = this.model.get('mandatory');
             this.readonly = this.static || this.collection.readonly;
             this.formChannel = Backbone.Radio.channel('form');
             this.validationErrors = null;
-
+            
             // BaseView is splitted into several subviews
             // We'll keep track of them in this object for displaying validation errors
             this.$elements = {};
@@ -301,6 +302,18 @@ define([
             tools.disableInputAutoFeats(this.$el);
             if (this.readonly) {
                 this.$el.find("input, select").attr("disabled", true);
+            }
+            if (this.mandatory) { // TODO should be in template 
+                var fieldToDisabled = this.model.get('disabledFields');
+                if (!fieldToDisabled ) {
+                    ;
+                }
+                else {
+                    for( var i = 0 ; i < fieldToDisabled.length ; i++) {
+                        var tdElem = this.$el.find('td.formField.'+fieldToDisabled[0]) [0];
+                        tdElem.querySelector('select, input').setAttribute('disabled',"disabled");
+                    }
+                }
             }
             $placeholder.replaceWith(this.$el);
             this.$elements.main = this.$el;

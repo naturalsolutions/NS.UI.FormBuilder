@@ -100,7 +100,7 @@
         "author"      : "Auteur",
         "isgrid"      : "Est en grille",
         "ishiddenprotocol" : "Protocole caché",
-        "hideprotocolname" : "Cacher le nom du Protocole",
+        "hideprotocolname" : "Cacher le nom du sous Protocole",
         "defaultforfieldactivity" : "Par défaut pour la fieldactivity",
         "name"        : "Nom du protocole",
         "tag"         : "Tag de destination",
@@ -305,7 +305,9 @@
         "minAppearance"                : "Minimum d'apparitions",
         "minValueError"                : "La valeur minimale est 0",
         "maxlength255"                 : "La longueur maximale est 255",
+        "maxlength250"                 : "La longueur maximale est 250",
         "maxlength55"                  : "La longueur maximale est 55",
+        "nospaceallowed"               : "Les espaces ne sont pas autorisés!<BR>Remplacez les par des tirets du bas (underscore)",
         "errorbetween0and5"            : "La valeur doit être comprise entre 0 et 5",
         "trackType"                    : "Type Track",
         "isAcceptedValue"              : "Cette valeur doit faire partie du sous-arbre de \"{{prop}}\", ou être vide, ou être de la forme \"#valeur#\""
@@ -446,7 +448,10 @@
             "text"             : "Saisir le nom du nouveau formulaire",
             "inputPlaceholder" : "Nom du nouveau formulaire",
             "error"            : "Le nom ne peut pas être vide",
-            "cancelButtonText" : "Annuler"
+            "cancelButtonText" : "Annuler",
+            "ecoreleve" : {
+                "title" : "Nom du protocole"
+            }
         },
         "template" : {
           "success"    : "Sauvé !",

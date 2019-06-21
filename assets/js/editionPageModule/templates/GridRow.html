@@ -4,12 +4,14 @@
     var col = columns[i];
     if (!schema[col]) { %>
     <td class="<%= col %> unavailable"></td>
+    <% } else if( model.get('mandatory') && (model.get('disabledFields').indexOf(col) > -1) ) { %>
+        <td class="formField <%= col %>" data-editors="<%= col %>" disabled="disabled"></td>
     <% } else { %>
     <td class="formField <%= col %>" data-editors="<%= col %>"></td>
     <% }
     } %>
     <td class="options">
-        <% if (model.get('compulsory')) { %>
+        <% if ( model.get('compulsory') || model.get('mandatory') ) { %>
         <span data-i18n="editGrid.optionsUnavailable"></span>
         <% } else { %>
         <div class="languages" data-i18n="editGrid.languages"></div>
