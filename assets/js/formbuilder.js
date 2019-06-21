@@ -84,10 +84,14 @@ define([
             setTimeout(function(){window.location.replace(AppConfig.portalURL);},200)
         });
 
+        /* TODO position needs to specify GetTree now, so the loop has been removed ...
         // preload trees
         $.each(AppConfig.paths, function(key, url){
             tools.loadTree(url);
         });
+        */
+        tools.loadTree(AppConfig.paths.thesaurusWSPath);
+        tools.loadTree(AppConfig.paths.positionWSPath + "/GetTree")
 
         // preload form names
         $.each(AppConfig.contexts, function(ctx) {

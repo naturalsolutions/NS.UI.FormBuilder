@@ -7,22 +7,21 @@ define([
     './TrackProperties',
     './EcoreleveProperties',
     './EcollectionProperties',
-    './PositionProperties'
-    ,'./ReproProperties'
-], function ($
-    ,TrackProperties
-    ,EcoreleveProperties
-    ,EcollectionProperties
-    ,PositionProperties
-    ,ReproProperties
-    ) {
+    './PositionEventsProperties',
+    './PositionTypesProperties',
+    './PositionProperties',
+    './ReproProperties'
+], function ($, TrackProperties, EcoreleveProperties, EcollectionProperties, PositionEventsProperties, PositionTypesProperties, 
+              PositionProperties, ReproProperties) {
 
     var contextExtraProperties = {
-        "track" : TrackProperties
-        ,"ecoreleve" : EcoreleveProperties
-        ,"ecollection" : EcollectionProperties
-        ,"position" : PositionProperties
-        ,"repro" : ReproProperties
+        "track" : TrackProperties,
+        "ecoreleve" : EcoreleveProperties,
+        "ecollection" : EcollectionProperties,
+        "positionevents" : PositionEventsProperties,
+        "positiontypes" : PositionTypesProperties,
+        "position" : PositionProperties,
+        "repro" : ReproProperties
     };
 
     return {

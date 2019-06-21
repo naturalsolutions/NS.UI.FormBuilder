@@ -226,6 +226,7 @@ define([
         */
         initialize: function (models, options) {
             // init all extentions, allows some pre-fetching at app startup (done only once)
+
             CollectionExtention.initAllExtensions(options);
 
             var that = this;
@@ -245,12 +246,12 @@ define([
 
             this.url             = opt.url             || "";
             this.templateURL     = opt.templateURL     || "";
-            this.DataEntrySource = opt.DataEntrySource || 0
+            this.DataEntrySource = opt.DataEntrySource || 0;
             this.id              = opt.id              || 0;
             this.name            = opt.name            || 'My form';
             this.tag             = opt.tag             || "";
             this.translations    = opt.translations    || {};
-            this.onBlur          = opt.onBlur      || {};
+            this.onBlur          = opt.onBlur          || {};
             this.obsolete        = opt.obsolete        || false;
             this.propagate       = opt.propagate       || false;
             this.context         = opt.context         || "";

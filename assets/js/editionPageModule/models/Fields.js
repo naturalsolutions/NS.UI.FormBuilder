@@ -833,7 +833,7 @@ define([
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 defaultPath: "",
-                webServiceURL: AppConfig.paths.positionWSPath,
+                webServiceURL: AppConfig.paths.positionWSPath + "/GetTree",
                 defaultNode: "",
                 positionPath: ""
             });
