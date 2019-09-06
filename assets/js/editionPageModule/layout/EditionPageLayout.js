@@ -230,11 +230,12 @@ define([
         },
 
         displayVersion: function(e) {
-            // Si les champs sont en readonly, donc ancienne version, alors on peut changer sans créer d'alert 
-            if (this.fieldCollection.readonly){
+
+            // Si aucun champs n'a changé, c'est qu'on ne pouvait pas l'éditer donc on soit on était sur une anciene version soit on a rien modifié a la derniere
+            if (!this.fieldCollection.pendingChanges){
                 Backbone.history.navigate(this.formBaseUrl + $(e.currentTarget).attr("data-id"), {trigger: true});
             }
-            // Sinon, on est sur la version actuelle et possible changement donc on alert
+            // Sinon, on est sur la version actuelle et on a édité un champs
             else{
                 this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
             }
