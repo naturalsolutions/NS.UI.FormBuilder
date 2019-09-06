@@ -230,7 +230,14 @@ define([
         },
 
         displayVersion: function(e) {
-            this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
+            // Si les champs sont en readonly, donc ancienne version, alors on peut changer sans créer d'alert 
+            if (this.fieldCollection.readonly){
+                Backbone.history.navigate(this.formBaseUrl + $(e.currentTarget).attr("data-id"), {trigger: true});
+            }
+            // Sinon, on est sur la version actuelle et possible changement donc on alert
+            else{
+                this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
+            }
         },
 
         gridKeypress: function(e) {
