@@ -79,6 +79,7 @@
         "objectpicker"         : "Object Picker",
         "subformgrid"          : "SubForm Grid",
         "presentation"         : "Presentation",
+        "droplist"             : "Drop List",
         "imageFile"            : "Image File",
         "decimal"              : "Decimal Numeric",
         "position"             : "Position"
@@ -311,6 +312,7 @@
         "file"         : "File selector fields",
         "tree"         : "Fields with tree selector",
         "presentation" : "Presentation field",
+        "droplist"     : "Drop List field",
         "text"         : "Text fields",
         "numeric"      : "Numeric fields",
         "list"         : "List fields",

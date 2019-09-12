@@ -87,12 +87,14 @@ define([], function() {
                 "ChildForm",
                 "Date",
                 "Decimal",
+                "DropList",
                 "File",
                 "Number",
                 "NumericRange",
                 "ObjectPicker",
                 "Pattern",
                 "Position",
+                "Presentation",
                 "Radio",
                 "Select",
                 "SubFormGrid",
@@ -134,7 +136,8 @@ define([], function() {
             allowedConvert: [
                 ['Text', 'TextArea', 'Date', 'Pattern', 'Presentation'],
                 ['Number', 'Decimal', 'NumericRange'],
-                ['Select', 'CheckBox', 'Radio']
+                ['Select', 'CheckBox', 'Radio'],
+                ['Thesaurus', 'DropList']
             ],
             thesaurusStartId: 0,
             positionStartId: 0
@@ -172,7 +175,8 @@ define([], function() {
                     'ChildForm',
                     'Thesaurus',
                     'Position',
-					'Presentation'
+			          		'Presentation',
+                    'DropList'
                 ]
             },
             ecollection: {

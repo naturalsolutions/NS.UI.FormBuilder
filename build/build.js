@@ -164,6 +164,7 @@
         'views/modals/importProtocol',
         'views/modals/saveProtocol',
         'views/fieldViews/ThesaurusFieldView',
+        'views/fieldViews/DropListFieldView',
         'views/fieldViews/AutocompleteTreeViewFieldView'
     ]
 

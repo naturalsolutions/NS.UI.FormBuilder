@@ -827,6 +827,12 @@ define([
     });
 
     // This input type is Track Dependent
+    models.DropListField = models.ThesaurusField.extend({}, {
+        type: 'DropList',
+        i18n: 'droplist',
+        section: 'reneco'
+    });
+
     models.PositionField = models.BaseField.extend({
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
