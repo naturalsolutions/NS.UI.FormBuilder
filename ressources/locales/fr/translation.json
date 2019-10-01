@@ -163,6 +163,9 @@
             "edit"   : "EDITER",
             "sizepreview" : "Input sizes preview",
             "back"   : "RETOUR"
+        },
+        "fieldactivityController" : {
+            "title" : "Est présent dans les champs d'activités"
         }
     },
 

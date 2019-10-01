@@ -5,13 +5,14 @@ define([
     'text!../templates/EditionPageLayout.html',
     'text!../templates/GridRowActions.html',
     '../views/FormPanelView',
+    '../views/FieldActivityControllerView',
     '../models/Fields',
     '../../Translater',
     'tools',
     'app-config',
     'backbone-forms'
 ], function($, Backbone, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
-            FormPanelView, Fields, t, tools, AppConfig) {
+            FormPanelView,FieldActivityControllerView, Fields, t, tools, AppConfig) {
     return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
@@ -52,10 +53,10 @@ define([
             'click #fieldPropertiesPanel .btnOk'        : 'closeEdit',
             'click #fieldPropertiesPanel h2'            : 'closeEdit'
         },
-
         regions : {
             centerPanel : '#gridView',
-            settingFormPanel : '#settingFormPanel'
+            settingFormPanel : '#settingFormPanel',
+            test : '#fieldActivityController'
         },
 
         initialize : function(options) {
@@ -77,10 +78,17 @@ define([
                 fieldCollection : this.fieldCollection,
                 URLOptions : this.URLOptions
             });
-        },
+        }, 
 
         update: function(fieldCollection) {
             this.fieldCollection = fieldCollection;
+            if (this.FieldActivityControllerView) {
+                this.FieldActivityControllerView.remove();
+            }
+            if ( typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 ) {  
+
+                this.FieldActivityControllerView = new FieldActivityControllerView({'nameProtoFB': this.fieldCollection.name })
+            }
             this.fieldCollection.dataUpdated = false;
             this.fieldCollection.pendingChanges = false;
             this.context = fieldCollection.context;
@@ -180,6 +188,15 @@ define([
             this.generateFormProperties();
             this.getRegion('centerPanel').show(this.formPanel);
             this.formPanel.refresh();
+            if ( !(typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 )) {  
+                if( this.FieldActivityControllerView) {
+                    this.FieldActivityControllerView.remove()
+                    delete this.FieldActivityControllerView
+                }
+            }
+             if ( 'FieldActivityControllerView' in this && this.FieldActivityControllerView ) {
+                this.showChildView('test', this.FieldActivityControllerView )
+            }
             this.$el.i18n();
         },
 

@@ -163,6 +163,9 @@
             "edit"   : "EDIT",
             "sizepreview" : "Input sizes preview",
             "back"   : "BACK"
+        },
+        "fieldactivityController" : {
+            "title" : "Is in Fieldactivity"
         }
     },
 

@@ -1,0 +1,44 @@
+<!-- titre -->
+<label data-i18n="form.fieldactivityController.title"></label>
+<!-- select -->
+<input type="text" id="fieldActivityListInput" list="fieldActivityList">  
+<datalist id="fieldActivityList">  
+<% for (var i = 0; i < fieldActivityCollection.length; i++) { %>
+    <option value="<%= fieldActivityCollection[i].ID %>"><%= fieldActivityCollection[i].Name %></option>
+<% } %>
+</datalist>  
+
+<!-- div -->
+<% for (var i = 0; i < fieldActivityProtocoleTypeToDisplay.length; i++) { %>
+<div id="js_FieldActivityContainer_<%= i %>" class='fieldActivityContainer hideList'>
+    <div>
+        <button type="button" class="js_toggleDisplayList" value="id_<%= i %>">
+            >
+        </button>
+        <span id="TitlefieldActivity">
+                <%=  fieldActivityProtocoleTypeToDisplay[i]['FieldActivity']['Name'] %>
+        </span id="TitlefieldActivity">
+    </div>
+    <div id="fieldActivityList_<%= i %>">
+        <ul id="fieldActivitySortable_<%= i %>">
+            <% for (var j = 0; j < fieldActivityProtocoleTypeToDisplay[i]['Protocols'].length; j++) { %>
+                <li class="ui-state-default handleFieldActivity">
+                    <%=  fieldActivityProtocoleTypeToDisplay[i]['Protocols'][j]['Name'] %>
+                </li>
+            <% } %>
+        </ul>
+    </div>
+    <div>
+        <button class="js_remove_proto css_remove_proto" value= "<%=fieldActivityProtocoleTypeToDisplay[i]['FieldActivity_ProtocoleType']['ID'] %>">
+            X
+        </button>
+    </div>
+</div>
+<br>
+<% } %>
+
+<!-- composants-->
+
+
+
+
