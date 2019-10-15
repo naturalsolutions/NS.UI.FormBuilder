@@ -730,7 +730,7 @@ define([
                 if (!fieldModel.get("compulsory")) {
 
                     var fieldErrors = fieldModel.view.validate();
-					var pathCases = ["thesaurus", "position"];
+					var pathCases = ["thesaurus", "position", "droplist"];
 
                     //TODO : For now thats the only existing case ... might need to be more generic for future cases
                     if (pathCases.indexOf(fieldModel.attributes.meta.type.toLowerCase()) !== -1
