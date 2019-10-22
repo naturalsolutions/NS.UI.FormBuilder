@@ -13,7 +13,7 @@ grunt
 Configuration
 -------------
 
-main config file: `assets/app-config.js`
+main config file: `assets/js/app-config.js`
 
   * portalAuth : if set to true, use portalURL for authentification, leave to false if not sure
   * portalURL : "http://path/to/your/portal/"
