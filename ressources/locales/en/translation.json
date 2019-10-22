@@ -197,6 +197,7 @@
         "delete"    : "Delete",
         "clone"     : " Clone",
         "download"  : "Download",
+        "preview"  : "Preview",
         "convert"   : "Convert"
     },
 
@@ -456,6 +457,10 @@
         "makeObs" : {
             "success" : "Success !",
             "successMsg" : "The form have been set inactive"
+        },
+        "preview" : {
+            "preview" : "Preview",
+            "previewMsgError" : "Unable to show this type of file"
         }
     },
 
