@@ -6,7 +6,7 @@ Installation
 ```
 npm install -g yarn
 yarn install
-cp assets/app-config.example.js assets/app-config.js
+cp assets/js/app-config.example.js assets/js/app-config.js
 grunt
 ```
 
@@ -32,3 +32,8 @@ Context options
 Available input types
 ---------------------
 See app-config.example.js
+
+Possible Error ( a mieux afficher dans le readme)
+---------------------
+grunt[10388]: c:\ws\src\node_contextify.cc:635: Assertion `args[1]->IsString()' failed.
+solution : npm install natives
