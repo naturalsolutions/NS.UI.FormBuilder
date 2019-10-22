@@ -33,7 +33,7 @@ Available input types
 ---------------------
 See app-config.example.js
 
-Possible Error ( a mieux afficher dans le readme)
+Possible Error
 ---------------------
 
 ### grunt[10388]: c:\ws\src\node_contextify.cc:635: Assertion `args[1]->IsString()' failed.
