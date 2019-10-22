@@ -35,8 +35,9 @@ See app-config.example.js
 
 Possible Error ( a mieux afficher dans le readme)
 ---------------------
-grunt[10388]: c:\ws\src\node_contextify.cc:635: Assertion `args[1]->IsString()' failed.
-solution : npm install natives
 
-Uncaught Error: Script error for "vue", needed by: onblur-page
-solution : npm install
+### grunt[10388]: c:\ws\src\node_contextify.cc:635: Assertion `args[1]->IsString()' failed.
+npm install natives
+
+### Uncaught Error: Script error for "vue", needed by: onblur-page
+npm install
