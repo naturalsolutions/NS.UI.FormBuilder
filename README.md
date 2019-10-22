@@ -33,6 +33,11 @@ Available input types
 ---------------------
 See app-config.example.js
 
+Lancer IIS
+---------------------
+* Clic droit sur "Default Web_Site" -> ajouter une application
+* Alias -> "Fomrbuilder" | Chemin d'accès physique -> ".../NS.UI.Formbuilder/"
+
 Possible Error
 ---------------------
 
