@@ -6,14 +6,14 @@ Installation
 ```
 npm install -g yarn
 yarn install
-cp assets/app-config.example.js assets/app-config.js
+cp assets/js/app-config.example.js assets/js/app-config.js
 grunt
 ```
 
 Configuration
 -------------
 
-main config file: `assets/app-config.js`
+main config file: `assets/js/app-config.js`
 
   * portalAuth : if set to true, use portalURL for authentification, leave to false if not sure
   * portalURL : "http://path/to/your/portal/"
@@ -32,3 +32,17 @@ Context options
 Available input types
 ---------------------
 See app-config.example.js
+
+Lancer IIS
+---------------------
+* Clic droit sur "Default Web_Site" -> ajouter une application
+* Alias -> "Fomrbuilder" | Chemin d'accès physique -> ".../NS.UI.Formbuilder/"
+
+Possible Error
+---------------------
+
+### grunt[10388]: c:\ws\src\node_contextify.cc:635: Assertion `args[1]->IsString()' failed.
+npm install natives
+
+### Uncaught Error: Script error for "vue", needed by: onblur-page
+npm install
