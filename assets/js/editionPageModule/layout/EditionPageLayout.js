@@ -40,6 +40,7 @@ define([
             'change .attachedFiles input[type="file"]'  : 'fileInputChanged',
             'click  .attachedFiles .remove'             : 'removeAttachedFile',
             'click  .attachedFiles .download'           : 'downloadAttachedFile',
+            'click  .attachedFiles .preview'            : 'showAttachedFile',
             'click  .versions tr'                       : 'displayVersion',
 
             'click .fieldTypes td'                      : 'appendToDrop',
@@ -409,9 +410,11 @@ define([
 
             // prepare element todo table layout would be way simpler than bootstrap
             var $file = $("<tr class='file row'>");
-            var $name = $("<td class='name'>").html(name);
+            var $name = $("<td class='name'>").html(' '+name);
             var $ctrlDownload = $("<td class='download'>");
             $ctrlDownload.attr('title', t.getValueFromKey("actions.download"));
+            var $ctrlPreview = $("<td class='preview'>");
+            $ctrlPreview.attr('title', t.getValueFromKey("actions.preview"));
             var $ctrlRemove = $("<td>");
             if (!this.fieldCollection.readonly) {
                 $ctrlRemove.addClass('remove');
@@ -458,6 +461,7 @@ define([
             $file.data("name", name)
                 .append($type)
                 .append($name)
+                .append($ctrlPreview)
                 .append($ctrlDownload)
                 .append($ctrlRemove);
             this.$el.find(".filesList").append($file);
@@ -482,6 +486,44 @@ define([
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        },
+
+        showAttachedFile : function(el){
+
+            var name = $(el.target).parent().data(`name`);
+            var extension = name.split('.')[1]
+            var data = this.formFilesBinaryList[name].filedata;
+
+            var ListImgExtension = ['jpg','jpeg','png', 'bmp','gif','svg']
+
+            //Si l'extension du fichier est dans la liste de type de fichier qui sont une image alors c'est une image qu'on affichera dans une modale, magie magie
+            if(ListImgExtension.indexOf(extension) > -1){
+                data = `data:application/octet-stream;` + data.split(`;`)[1];
+                var i = document.createElement(`img`);
+                i.setAttribute('width','100%')
+                i.src = data
+                tools.swal(``, `modal.preview.preview`, ` `);
+                e = document.getElementsByClassName('swal-text')[0]
+                e.appendChild(i)
+            }
+
+            //Si l'extension est pdf
+            else if(extension == 'pdf'){
+                let pdfWindow = window.open(``)
+                pdfWindow.document.write(`<iframe width='100%' height='100%' src='data:application/pdf;base64; ` + encodeURI(data)+`'></iframe>`)
+            }
+
+            //Si l'extension peut etre docx
+            else if(extension == 'docx'){
+                console.log(data)
+                let pdfWindow = window.open(``)
+                pdfWindow.document.write(`<iframe width='100%' height='100%' src='https://view.officeapps.live.com/op/embed.aspx?src=` + name+`'></iframe>`)
+            }
+
+            //Si l'extension n'est ni pdf ni img on dit qu'on sait pas quoi en faire
+            else{
+                tools.swal(`error`, `modal.preview.preview`, `modal.preview.previewMsgError`);
+            }
         },
 
         removeAttachedFile: function(el){

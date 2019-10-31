@@ -380,7 +380,7 @@
             padding: 0 5px;
             .file {
               margin-bottom: 5px;
-              .type, .download, .remove {
+              .type, .download, .remove, .preview {
                 font-family: 'reneco', sans-serif;
                 font-size: 20px;
                 width: 28px;
@@ -392,11 +392,15 @@
                 cursor: default;
               }
 
-              .download, .remove {
+              .download, .remove, .preview {
                 cursor: pointer;
                 padding: 0;
                 margin: 0 5px;
                 text-align: center;
+              }
+
+              .preview::before {
+                content: '\e677';
               }
 
               .download::before {

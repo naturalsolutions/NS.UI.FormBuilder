@@ -198,6 +198,7 @@
         "delete"    : "Supprimer",
         "clone"     : " Dupliquer",
         "download"  : "Télécharger",
+        "preview"  : "Prévisualisation",
         "convert"   : "Convertir"
     },
 
@@ -469,6 +470,10 @@
         "makeObs" : {
             "success" : "Succès !",
             "successMsg" : "Le formulaire a été passé en obsolète"
+        },
+        "preview" : {
+            "preview" : "Prévisualisation",
+            "previewMsgError" : "Impossible d'afficher ce type de fichier"
         }
     },
 
