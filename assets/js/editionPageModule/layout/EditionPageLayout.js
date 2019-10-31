@@ -198,11 +198,14 @@ define([
         },
 
         exit: function(url) {
+
+            //Si ce n'est pas un url (donc quand on clic sur exit et non sur un changement de versions) alors on créer un url pour faire une simulation de précédent
             if (typeof(url) !== 'string') {
                 url = "#back/" +
                     this.fieldCollection.context + "/" + this.fieldCollection.dataUpdated;
             }
 
+            //On modifie la variable exit pour que quand elle est appelé a nouveau, cette fois si dans tous les cas elle navigera sur le nouvel url
             var exit = _.bind(function() {
                 if (this.editing)
                     this.editing.view.trigger("close");
@@ -210,12 +213,13 @@ define([
                 Backbone.history.navigate(url, {trigger: true});
             }, this);
 
+            //Si aucun changement n'a été fait sur le formulaire, alors on refait la fonction (qui a été modifié précédement)
             if (!this.fieldCollection.pendingChanges) {
                 exit();
                 return;
             }
 
-            // form was edited, display confirmation popup
+            // Si on accède ici, c'est que le formulaire a changé, et donc si on click sur yes, alors on exit avec le nouvel url de créé
             tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications",
                 {
                     buttons: {
@@ -230,6 +234,7 @@ define([
         },
 
         displayVersion: function(e) {
+                //On part sur la fonction exit mais qui a comme paramettre l'url pour une autre version
                 this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
         },
 
