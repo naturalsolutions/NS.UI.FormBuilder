@@ -35,10 +35,10 @@ define([
     FormbuilderApp.on('start', function() {
 
         //Si on est sur la version dev, alors on change la couleur et le texte formbuilder pour pouvoir différencier de la vrai app
-        if(window.location.pathname.split('/')[1] == "formbuilderdev"){
-            $('.reneco.reneco-formbuildersmall').text('DevMode')
-            $('header').css('background-color','#6dc6ef')
-            $('#contextSwitcher').css('background-color','#9de3ff70')
+        if(window.location.pathname.split('/')[1].length > 11){
+            $('a.title').text('(DevMode)'+$('a.title').text())
+            $('header').css('background-color','rgb(189, 33, 0);')
+            $('#contextSwitcher').css('background-color','rgb(154, 34, 8);')
         }
 
         if (auth.error) {
