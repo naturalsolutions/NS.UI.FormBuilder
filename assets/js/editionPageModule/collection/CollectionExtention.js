@@ -12,8 +12,11 @@ define([
     'app-config',
     './EcoreleveCollection',
     './TrackCollection',
+    './PositionTypesCollection',
+    './PositionEventsCollection'
 ], function ($, Backbone, Fields, Radio, Translater, CheckboxEditor, AppConfig,
-             EcoreleveCollection, TrackCollection) {
+             EcoreleveCollection, TrackCollection, PositionTypesCollection,
+             PositionEventsCollection) {
 
     /**
      * EmptyStatics is a dummy CollectionExtension object that does nothing.
@@ -30,7 +33,9 @@ define([
 
     var collectionExtensions = {
         "track" : TrackCollection,
-        "ecoreleve" : EcoreleveCollection
+        "ecoreleve" : EcoreleveCollection,
+        "positiontypes": PositionTypesCollection,
+        "positionevents": PositionEventsCollection
     };
 
     return {

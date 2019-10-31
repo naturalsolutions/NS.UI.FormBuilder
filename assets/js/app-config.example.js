@@ -23,7 +23,7 @@ define([], function() {
             // Path to the thesaurus Web Services
             thesaurusWSPath: 'http://localhost/ThesaurusCore/api/thesaurus/fastInitForCompleteTree',
             // POST(@lng, @StartNodeId)
-            positionWSPath: 'http://localhost/positionCore/api/PositionAction/GetTree'
+            positionWSPath: 'http://localhost/positionCore/api/PositionAction'
         },
 
         config: {
@@ -87,12 +87,14 @@ define([], function() {
                 "ChildForm",
                 "Date",
                 "Decimal",
+                "DropList",
                 "File",
                 "Number",
                 "NumericRange",
                 "ObjectPicker",
                 "Pattern",
                 "Position",
+                "Presentation",
                 "Radio",
                 "Select",
                 "SubFormGrid",
@@ -134,7 +136,8 @@ define([], function() {
             allowedConvert: [
                 ['Text', 'TextArea', 'Date', 'Pattern', 'Presentation'],
                 ['Number', 'Decimal', 'NumericRange'],
-                ['Select', 'CheckBox', 'Radio']
+                ['Select', 'CheckBox', 'Radio'],
+                ['Thesaurus', 'DropList']
             ],
             thesaurusStartId: 0,
             positionStartId: 0
@@ -172,7 +175,8 @@ define([], function() {
                     'ChildForm',
                     'Thesaurus',
                     'Position',
-					'Presentation'
+			          		'Presentation',
+                    'DropList'
                 ]
             },
             ecollection: {
@@ -189,7 +193,7 @@ define([], function() {
                     'ChildForm'
                 ]
             },
-            position: {
+            positionTypes: {
                 inputTypes: [
                     'Autocomplete',
                     'Text',
@@ -199,10 +203,28 @@ define([], function() {
                     'Decimal',
                     'CheckBox',
                     'Select',
-                    'File',
-                    'ChildForm',
                     'Thesaurus'
                 ]
+            },positionEvents: {
+                inputTypes: [
+                    'Autocomplete',
+                    'Text',
+                    'TextArea',
+                    'Date',
+                    'Number',
+                    'Decimal',
+                    'CheckBox',
+                    'Select',
+                    'Thesaurus'
+                ],
+				editColumns: [
+                "name",
+                "defaultValue",
+                "linkedFieldTable",
+                "linkedField",
+                "appearance",
+                "editMode"
+				]
             }
         }
     };

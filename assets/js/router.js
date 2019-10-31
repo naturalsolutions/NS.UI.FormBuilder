@@ -96,7 +96,8 @@ define([
                     name         : 'New form',
                     url          : AppConfig.config.options.URLOptions['formSaveURL'] + "/" + context,
                     context      : context,
-                    URLOptions   : AppConfig.config.options.URLOptions
+                    URLOptions   : AppConfig.config.options.URLOptions,
+                    paths        : AppConfig.paths
                 });
             this.fieldCollection.linkedFieldsList = this.linkedFieldsList;
             this.editPageLayout.fieldCollection = this.fieldCollection;
@@ -195,9 +196,16 @@ define([
             }, this);
 
             if (id === 'new') {
+                var defaultContext = '.';
+                if (this.editContext == 'ecoreleve') {
+                    defaultContext += this.editContext;
+                    defaultContext += '.'
+                }
+
                 var newForm = new FormModel({
                     id: 0,
-                    name: translater.getValueFromKey('modal.newForm.title')
+                    context: this.editContext,
+                    name: translater.getValueFromKey('modal.newForm'+defaultContext+'title')
                 });
                 this.displayForm(newForm.toJSON());
             } else {
@@ -216,6 +224,7 @@ define([
         },
 
         displayForm: function(jsonForm) {
+            this.setContext(jsonForm.context,true)
             this.fieldCollection.updateWithJSON(jsonForm);
             this.editPageLayout.update(this.fieldCollection);
             if (this.firstEdit) {
@@ -277,17 +286,20 @@ define([
         initialize: function(homeRegion, editRegion) {
             // init home page region & layout
             this.controller.homePageLayout = new HomePageLayout({
-                URLOptions : AppConfig.config.options.URLOptions
+                URLOptions : AppConfig.config.options.URLOptions,
+                paths      : AppConfig.paths
             });
             this.controller.homeRegion = homeRegion;
 
             // init edition page region & layout
             this.controller.URLOptions = AppConfig.config.options.URLOptions;
+            this.controller.paths = AppConfig.paths;
             this.controller.fieldCollection = new FieldCollection({}, {
                 name         : 'New form',
                 url          : this.controller.URLOptions['formSaveURL'],
                 context      : "all",
-                URLOptions   : this.controller.URLOptions
+                URLOptions   : this.controller.URLOptions,
+                paths        : this.controller.paths
             });
             this.controller.editPageLayout = new EditionPageLayout({
                 fieldCollection: this.controller.fieldCollection,

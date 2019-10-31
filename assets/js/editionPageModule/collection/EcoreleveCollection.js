@@ -30,6 +30,31 @@ define([
     });
     return {
         schemaExtention: {
+            name : {
+                type        : "Text",
+                title       : translater.getValueFromKey('form.name'),
+                template    : fieldTemplate,
+                validators  : [{
+                    type : 'required',
+                    message : translater.getValueFromKey('form.validationspe')
+                },
+                function noSpaceAllowed(value) {
+                    if( value.indexOf(' ') > -1 ) {
+                        return {
+                            type : "No space allowed",
+                            message : translater.getValueFromKey('schema.nospaceallowed')
+                        }
+                    }
+                },
+                function test(value) {
+                    if (value.length > 250) {
+                        return {
+                            type: 'String too wide',
+                            message: translater.getValueFromKey('schema.maxlength250')
+                        };
+                    }
+                }]
+            },
             author : {
                 type        : 'Hidden',
                 title       : translater.getValueFromKey('form.author'),

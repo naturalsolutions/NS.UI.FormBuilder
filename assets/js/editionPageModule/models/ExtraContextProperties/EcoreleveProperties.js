@@ -8,18 +8,33 @@ define([
     '../../../Translater',
     '../../editor/CheckboxEditor',
     '../../editor/NumberEditor',
-    'text!../../templates/FieldTemplate.html'
-], function ($, Backbone, translater, CheckboxEditor, NumberEditor, FieldTemplate) {
+    '../../editor/ObjectPickerEditor',
+    '../../editor/ChildFormEditor',
+    '../../editor/CustomTextEditor',
+    'text!../../templates/FieldTemplate.html',
+    'app-config'
+], function ($, Backbone, translater, CheckboxEditor, NumberEditor, ObjectPickerEditor, ChildFormEditor,CustomTextEditor, FieldTemplate,AppConfig) {
 
     var fieldTemplate = _.template(FieldTemplate);
 
     return {
         extraProperties: {
+
+            AutocompleteField: {
+                schema:{
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
             CheckBox:{
                 defaults: {
                     defaultValue: ""
                 },
                 schema: {
+                    name: {
+                        type : CustomTextEditor
+                    },
                     defaultValue : {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
@@ -35,6 +50,40 @@ define([
                     minimumAppearance : 0
                 },
                 schema: {
+                    name: {
+                        type        : ChildFormEditor,// 'Select',
+                        options     : function(apply) {
+                            var toret = []
+                            $.ajax({
+                                url: AppConfig.config.options.URLOptions.allforms + '/' + context,
+                                type: 'GET',
+                                contentType: 'application/json',
+                                crossDomain: true,
+                                async: false,
+                                success: function(data) {
+                                    var datas = JSON.parse(data);
+                                    for( var i = 0 ; i < datas.length ; i ++) {
+                                        toret[i] = {
+                                            id : datas[i].id,
+                                            val: datas[i].name,
+                                            label: datas[i].name
+                                        }
+                                    }
+                                },
+                                error: function(xhr) {
+                                    alert("Error when fetch protocols list please refresh")
+                                }
+
+                            });
+                            return apply(toret);                       
+                        },
+                    },
+                childForm : { //we need the property but no render
+                    type: 'Hidden',
+                },
+                childFormName : { //we need the property but no render
+                    type: 'Hidden'
+                },
                     minimumAppearance : {
                         type        : NumberEditor,
                         min: 0,
@@ -51,16 +100,53 @@ define([
                     }
                 }
             },
-            Thesaurus:{
-                defaults: {
-                    iscollapsed : false
-                },
+            Date: {
                 schema: {
-                    iscollapsed : {
-                        type        : CheckboxEditor,
-                        template    : fieldTemplate,
-                        fieldClass  : "checkBoxEditor",
-                        title       : translater.getValueFromKey('schema.iscollapsed')
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            Decimal: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+
+            Number: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            ObjectPicker: {
+                defaults: {
+                },
+                schema: {      
+                    name: {
+                        type        : ObjectPickerEditor,
+                        options: [
+                            {
+                                val: 'FK_Individual',
+                                label: 'FK_Individual',
+                                wsUrl: 'autocomplete/Individual'
+                            },
+                            {
+                                val: 'FK_MonitoredSite',
+                                label: 'FK_MonitoredSite',
+                                wsUrl: 'autocomplete/monitoredSites'
+                            },
+                            {
+                                val: 'FK_Sensor',
+                                label: 'FK_Sensor',
+                                wsUrl: 'autocomplete/Sensor'
+                            }
+
+                        ],
+                        template    : fieldTemplate
                     }
                 }
             },
@@ -70,6 +156,9 @@ define([
                     sqlQuery : 'null'
                 },
                 schema: {
+                    name: {
+                        type : CustomTextEditor
+                    },
                     defaultValue: {
                         type        : 'Text',
                         title       : translater.getValueFromKey('schema.default'),
@@ -86,6 +175,68 @@ define([
                             regexp: /\bselect\b[\s\S]*?\bfrom\b/im,
                             message: 'Must be formatted like : SELECT ... FROM'
                         }]
+                    }
+                }
+            },
+            SubFormGrid: {
+                defaults: {
+                },
+                schema: {      
+                    name: {
+                        type        : ChildFormEditor,// 'Select',
+                        options     : function(apply) {
+                            var toret = []
+                            $.ajax({
+                                url: AppConfig.config.options.URLOptions.allforms + '/' + context,
+                                type: 'GET',
+                                contentType: 'application/json',
+                                crossDomain: true,
+                                async: false,
+                                success: function(data) {
+                                    var datas = JSON.parse(data);
+                                    for( var i = 0 ; i < datas.length ; i ++) {
+                                        toret[i] = {
+                                            id : datas[i].id,
+                                            val: datas[i].name,
+                                            label: datas[i].name
+                                        }
+                                    }
+                                },
+                                error: function(xhr) {
+                                    alert("Error when fetch protocols list please refresh")
+                                }
+
+                            });
+                            return apply(toret);                       
+                        },
+                    },
+                childForm : { //we need the property but no render
+                    type: 'Hidden',
+                },
+                childFormName : { //we need the property but no render
+                    type: 'Hidden'
+                }
+            }
+            },
+            // NO MORE NEED FOR NOW ===> iscollapsed ?
+            Text: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            TextArea: {
+                schema: {
+                    name: {
+                        type : CustomTextEditor
+                    }
+                }
+            },
+            Thesaurus:{ 
+                schema: {
+                    name: {
+                        type : CustomTextEditor
                     }
                 }
             },

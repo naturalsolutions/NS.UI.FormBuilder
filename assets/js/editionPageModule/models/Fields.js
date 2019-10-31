@@ -827,13 +827,19 @@ define([
     });
 
     // This input type is Track Dependent
+    models.DropListField = models.ThesaurusField.extend({}, {
+        type: 'DropList',
+        i18n: 'droplist',
+        section: 'reneco'
+    });
+
     models.PositionField = models.BaseField.extend({
         defaults: function() {
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("Position");
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
                 defaultPath: "",
-                webServiceURL: AppConfig.paths.positionWSPath,
+                webServiceURL: AppConfig.paths.positionWSPath + "/GetTree",
                 defaultNode: "",
                 positionPath: ""
             });
@@ -903,10 +909,12 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesDefaults("ObjectPicker");
 
             var toret = _.extend({}, models.BaseField.prototype.defaults, {
-                objectType: "Monitored Site",
+                objectType : "",
+                childForm : "",
+                childFormName: -1,
                 wsUrl: "",
-                triggerAutocomplete: 0,
-                linkedLabel: ""
+                triggerAutocomplete: 1
+                // linkedLabel: ""
             });
 
             toret = _.extend(toret, toret, extraschema);
@@ -917,22 +925,30 @@ define([
             var extraschema = ExtraProperties.getPropertiesContext().getExtraPropertiesSchema("ObjectPicker");
 
             var toret = _.extend({}, models.BaseField.prototype.schema, {
-                objectType: {
-                    type: 'Select',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.objectType'),
-                    options: ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
-                    validators: ['required']
-                },
-                wsUrl: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.wsUrl'),
-                    validators: ['required']
-                },
+                // objectType: {
+                //     type: ObjectPickerEditor,
+                //     template: fieldTemplate,
+                //     title: translater.getValueFromKey('schema.objectType'),
+                //     options: ["Individual", "Non Identified Individual", "Monitored Site", "Sensor"],
+                //     validators: ['required'],
+                // },
+                // wsUrl: {
+                //     type: 'Select',
+                //     options: ["autocomplete/Individual", "autocomplete/monitoredSites", "autocomplete/Sensor"],
+                //     template: fieldTemplate,
+                //     title: translater.getValueFromKey('schema.wsUrl'),
+                //     validators: ['required']
+                // },
+                // linkedLabel: {
+                //     type: 'Text',
+                //     template: fieldTemplate,
+                //     title: translater.getValueFromKey('schema.linkedLabel')
+                // }
                 triggerAutocomplete: {
                     type: NumberEditor,
                     min: 1,
+                    value: 1,
+                    options:1,
                     template: fieldTemplate,
                     title: translater.getValueFromKey('schema.ACTrigger'),
                     validators: [function checkValue(value) {
@@ -943,13 +959,12 @@ define([
                             }
                         }
                     }]
-                },
-                linkedLabel: {
-                    type: 'Text',
-                    template: fieldTemplate,
-                    title: translater.getValueFromKey('schema.linkedLabel')
                 }
             });
+
+
+            delete(toret.linkedFieldTable);
+            delete(toret.linkedField);
 
             return _.extend(toret, toret, extraschema);
         },
