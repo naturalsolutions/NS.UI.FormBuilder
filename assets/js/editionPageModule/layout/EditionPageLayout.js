@@ -230,15 +230,7 @@ define([
         },
 
         displayVersion: function(e) {
-
-            // Si aucun champs n'a changé, c'est qu'on ne pouvait pas l'éditer donc on soit on était sur une anciene version soit on a rien modifié sur la dernière et donc on navigate sans alert
-            if (!this.fieldCollection.pendingChanges){
-                Backbone.history.navigate(this.formBaseUrl + $(e.currentTarget).attr("data-id"), {trigger: true});
-            }
-            // Sinon, on est sur la version actuelle et on a édité un champs et donc on alert
-            else{
                 this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
-            }
         },
 
         gridKeypress: function(e) {

@@ -54,7 +54,7 @@ define([
 
         setValue: function(value) {
             this.value = value;
-            this.model.view.setValue(this.options.key, value);
+            this.model.view.setValue(this.options.key, value, undefined, true);
             this.model.set(this.options.key, value, {trigger: true});
         }
     });
