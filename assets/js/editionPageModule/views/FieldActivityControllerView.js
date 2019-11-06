@@ -8,6 +8,7 @@ define([
     return Backbone.View.extend({
 
         tagName : 'div',
+        className : 'fieldsActivity',
         template: _.template(Template),
 
         events : {

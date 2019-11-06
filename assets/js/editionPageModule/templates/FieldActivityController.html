@@ -1,7 +1,7 @@
 <!-- titre -->
 <label data-i18n="form.fieldactivityController.title"></label>
 <!-- select -->
-<input type="text" id="fieldActivityListInput" list="fieldActivityList">  
+<input type="text" id="fieldActivityListInput" list="fieldActivityList" placeholder="Select FieldActivity">  
 <datalist id="fieldActivityList">  
 <% for (var i = 0; i < fieldActivityCollection.length; i++) { %>
     <option value="<%= fieldActivityCollection[i].ID %>"><%= fieldActivityCollection[i].Name %></option>
@@ -13,7 +13,7 @@
 <div id="js_FieldActivityContainer_<%= i %>" class='fieldActivityContainer hideList'>
     <div>
         <button type="button" class="js_toggleDisplayList" value="id_<%= i %>">
-            >
+            <i class="renenco reneco-play"></i>
         </button>
         <span id="TitlefieldActivity">
                 <%=  fieldActivityProtocoleTypeToDisplay[i]['FieldActivity']['Name'] %>
