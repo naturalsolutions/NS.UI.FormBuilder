@@ -16,6 +16,15 @@ define([
 ], function(Backbone, _, $, Marionette, Router, AppConfig, auth, tools) {
 
     var FormbuilderApp = new Marionette.Application();
+    // HEADER STENCIL
+    function initHeader() {
+        var header = document.getElementsByTagName('reneco-header')[0];
+        //TODO set user when we know it
+        header.user = {
+            nickname: 'User name'
+        };
+    };
+    
     var MainView = Marionette.View.extend({
         el: "#mainRegion",
         template: _.template(
@@ -72,8 +81,13 @@ define([
             this.rootView.getRegion('leftRegion'),
             this.rootView.getRegion('rightRegion'));
 
+        
+
         // start routing
         Backbone.history.start();
+
+        // Reneco header
+        initHeader();
 
         $(".logout").click(function(){
             var delete_cookie = function(name) {
@@ -98,7 +112,7 @@ define([
         tools.inlineSvg('img.svg');
 
         // translate header
-        $("body > header").i18n();
+        //$("body > header").i18n();
     });
 
     return FormbuilderApp;

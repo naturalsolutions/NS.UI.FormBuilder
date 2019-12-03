@@ -14,36 +14,78 @@
 
     <!-- require js -->
     <script data-main="assets/js/config" type="text/javascript" src='node_modules/requirejs/require.js'></script>
+
+    <!-- Header -->
+    <script type="module" src="./node_modules/@ionic/core/dist/ionic/ionic.esm.js"></script>
+    <script nomodule="" src="./node_modules/@ionic/core/dist/ionic/ionic.js"></script>
+    <link rel="stylesheet" href="./node_modules/@ionic/core/css/ionic.bundle.css"/>
+    <link rel="stylesheet" href="assets/stylesheet/variables.css">
+    <script type="module" src="./node_modules/@naturalsolutions/reneco-stencil/dist/reneco-stencil/reneco-stencil.esm.js"></script>
+    <script nomodule="" src="./node_modules/@naturalsolutions/reneco-stencil/dist/reneco-stencil/reneco-stencil.js"></script>
 </head>
 <body>
-    <header>
-        <a href="" class="title">
-            <span class="reneco reneco-formbuildersmall"></span>&nbsp; FormBuilder
-        </a>
-        <span class="pipe">&#124;</span>
-        <div id="contextSwitcher" class="formbuilderMode title single">
-            <div class="selected">all</div>
-            <img class="headerWhiteArrow" src="assets/images/down_arrow_white.png"/>
-        </div>
-        <div class="pull-right">
-            <a href="#" class="logout">
-                <span data-i18n="header.logout"></span>
-                <img class="svg" title="Logout" alt="Logout" src="assets/images/logout.svg"/>
-            </a>
-        </div>
-        <div class="pull-right">
-            <div class="icons hidden">
-            </div>
-            <div class="icons last hidden">
-                <span class="reneco reneco-user"></span>
-            </div>
-            <span class="user"></span>
-            <span class="pipe">&#124;</span>
-            <span class="lang"></span>
-        </div>
-    </header>
+
+        <reneco-header></reneco-header>
+ 
 
     <div class="container-fluid">
         <div id="mainRegion" class="row"></div>
     </div>
+
+    <script>
+        var header = document.getElementsByTagName('reneco-header')[0];
+        console.log(header);
+		header.options = {
+			appTitle: "FormBuilder",
+			appIcon: "FOR-formbuildersmall", //ne pas mettre "reneco-"
+            langCode: 'fr',
+            menu: {
+				items: [{
+					label: {
+						en: "All apps",
+						fr: "Toutes les app"
+					},
+					icon: 'reneco-reneco-apps',
+					link: '#'
+				}, {
+					label: {
+						en: "eCollection",
+						fr: "eCollection"
+					},
+					icon: 'reneco-ECOL-ecollectionsmall',
+					link: ''
+				}, {
+					label: {
+						en: "EcoRelevé",
+						fr: "EcoRelevé"
+					},
+					icon: 'reneco-ECO-ecorelevesmall',
+					link: ''
+				}, {
+					label: {
+						en: "Position_events",
+						fr: "Evènements de position"
+					},
+					icon: 'reneco-POS-positionssmall',
+					link: ''
+				}, {
+					label: {
+						en: "Position_types",
+						fr: "Type de position"
+					},
+					icon: 'reneco-POS-positionssmall',
+					link: ''
+				}, {
+					label: {
+						en: "Track",
+						fr: "Track"
+					},
+					icon: 'reneco-TRACK-adulte',
+					link: ''
+				}
+				]
+			}
+		};
+    </script>
+
 </body></html>
