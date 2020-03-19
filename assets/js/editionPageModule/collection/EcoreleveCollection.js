@@ -55,6 +55,9 @@ define([
                     }
                 }]
             },
+            DataEntrySource: {
+                type: "Hidden"
+            },
             author : {
                 type        : 'Hidden',
                 title       : translater.getValueFromKey('form.author'),
