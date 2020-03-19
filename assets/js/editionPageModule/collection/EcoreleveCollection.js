@@ -92,7 +92,7 @@ define([
                 title       : translater.getValueFromKey('form.hideprotocolname')
             },
             defaultforfieldactivity : {
-                type        : CheckboxEditor,
+                type        : "Hidden",
                 template    : fieldTemplate,
                 fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.defaultforfieldactivity')
