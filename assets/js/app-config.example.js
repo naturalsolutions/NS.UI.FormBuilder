@@ -18,7 +18,7 @@ define([], function() {
 
         // URL to track protocol, #originalID# will be replaced in code by actual Form.originalID
         trackFormURL: 'http://track/Intranet/TRACK/App_Pages/ViewForm_from_fb.aspx?iTPro_PK_Id=#originalID#&IsNew=True',
-
+        ecoReleveURL: 'http://localhost/ecoReleve-Core-Referentiel/',
         paths: {
             // Path to the thesaurus Web Services
             thesaurusWSPath: 'http://localhost/ThesaurusCore/api/thesaurus/fastInitForCompleteTree',
