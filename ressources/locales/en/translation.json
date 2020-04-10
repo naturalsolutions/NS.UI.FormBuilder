@@ -421,7 +421,11 @@
             "formSimilarFrName" : "Another form with this French label already exists (id: {{Context}}/{{ID}})",
             "formSimilarEnName" : "Another form with this English label already exists (id: {{Context}}/{{ID}})",
             "circularDependency" : "A circular dependency has been found with one of the childforms",
-            "dupeFieldType" : "Types mismatch for field named \"{{FieldName}}\"\nIt must be of type \"{{FieldType}}\", as found in form {{Context}}/{{ID}}"
+            "dupeFieldType" : "Types mismatch for field named \"{{FieldName}}\"\nIt must be of type \"{{FieldType}}\", as found in form {{Context}}/{{ID}}",
+            "fieldActivitiesSuccessStatus": "Success",
+            "fieldActivitiesSuccessMsg": "FieldActivities configuration have been saved",
+            "fieldActivitiesErrorStatus" : "Error",
+            "fieldActivitiesErrorMsg" : "Something goes wrong when trying to save fieldActivities"
         },
         "field" : {
             "error" : "Error interne !",
@@ -529,7 +533,10 @@
 
     "fetch" : {
         "error"    : "Error retrieving forms !",
-        "errorMsg" : "Unable to retrieve the list of forms from the server. Try reloading the page?"
+        "errorMsg" : "Unable to retrieve the list of forms from the server. Try reloading the page?",
+        "ecoreleve" : {
+            "fieldActivity": "Error retrieving data for fieldActivity"
+        }
     },
 
     "fetchOne" : {
@@ -539,31 +546,34 @@
         "errorMsg" : "Unable to retrieve selected form from server. Try reloading the page?"
     },
 
-  "configuration" : {
-      "save" : {
-        "success"    : "Saved !",
-        "successMsg" : "Your field has been saved",
-        "fail"       : "Fail !",
-        "failMsg"    : "Your couldn't be saved",
-        "samename"   : "Your Field can't have the same name than another field of the form",
-        "loadsuccess": "Successful loading !",
-        "loadsuccessMsg": "Your template has been loaded"
-      },
-      "cancel" : {
-        "yousure" : "Really ?",
-        "unsavedchanges" : "You've made changes!",
-        "yescancel" : "Yes, cancel!",
-        "stay" : "No, continue."
-      }
-  },
+    "configuration" : {
+        "save" : {
+            "success"    : "Saved !",
+            "successMsg" : "Your field has been saved",
+            "fail"       : "Fail !",
+            "failMsg"    : "Your couldn't be saved",
+            "samename"   : "Your Field can't have the same name than another field of the form",
+            "loadsuccess": "Successful loading !",
+            "loadsuccessMsg": "Your template has been loaded",
+            "noChanges" : {
+                "fieldActivities" :  "No changes have been found for fieldActivities"
+            }
+        },
+        "cancel" : {
+            "yousure" : "Really ?",
+            "unsavedchanges" : "You've made changes!",
+            "yescancel" : "Yes, cancel!",
+            "stay" : "No, continue."
+        }
+    },
 
-  "formCount" : {
-      "form": "{{count}} Form",
-      "form_plural": "{{count}} Forms"
-  },
+    "formCount" : {
+        "form": "{{count}} Form",
+        "form_plural": "{{count}} Forms"
+    },
 
-  "fieldCount" : {
-      "field": "{{count}} Field",
-      "field_plural": "{{count}} Fields"
-  }
+    "fieldCount" : {
+        "field": "{{count}} Field",
+        "field_plural": "{{count}} Fields"
+    }
 }

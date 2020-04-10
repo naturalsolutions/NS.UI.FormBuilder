@@ -1,267 +1,338 @@
 define([
-    'jquery', 'lodash', 'text!../templates/FieldActivityController.html',
-    'backbone', 'backbone.radio', 'tools', '../../Translater',
-    './loaders/ContextLoader', 'i18n'
-], function($, _, Template, Backbone, Radio, tools, translater, ContextLoader) {
+    '../models/M_ProtocoleType',
+    '../models/M_FieldActivity',
+    'app-config',
+    'jquery',
+    'lodash',
+    'text!../templates/FieldActivityController.html',
+    'backbone',
+    'tools'
+    ],
+    function(
+        protocoleTypeModel,
+        fieldActivityModel,
+        AppConfig,
+        $,
+        _,
+        Template,
+        Backbone,
+        tools
+        ) {
 
-    
-    return Backbone.View.extend({
+        return Backbone.View.extend({
 
-        tagName : 'div',
-        className : 'fieldsActivity',
-        template: _.template(Template),
+            tagName : 'div',
+            className : 'fieldsActivity',
+            template: _.template(Template),
 
-        events : {
-            'change #fieldActivityListInput': 'StoreIdFieldActivity',
-            'click button.js_remove_proto' : 'removeProtocol',
-            'click button.js_toggleDisplayList' : 'showHideProtocole'
-        },
+            events : {
+                'change #fieldActivityListInput': 'addProtocoleToFieldActivity',
+                'click button.js_remove_proto' : 'removeProtocol',
+                'click button.js_toggleDisplayList' : 'showHideProtocole',
+                'click button.js_reload' : 'reload',
+                'click button.js_save' : 'save'
+            },
 
-        initialize : function(options) {
+            initialize : function(options) {
+                this.options = options;
+                this.errorFetching = true;
+                this.ListId = [];
+                this.fieldActivityProtocoleTypeToDisplay = []
+                this.MyProto = {}
+                this.nameProtoFB = options.nameProtoFB
+                this.listFieldActiviesWhereProtoIn = []
+                this.protoID = null;
+                this.initCollections();
+                this.fetchAllCollections();
+            },
 
-            this.ListId = [];
-            this.fieldActivityCollectionREF = [];
-            this.fieldActivityProtocoleTypeCollectionREF = [];
-            this.protocolTypeCollectionREF = []
-            this.fieldActivityProtocoleTypeToDisplay = []
-            this.fieldActivityProtocoleTypeToDelete = []
-            this.MyProto = {}
-            this.nameProtoFB = options.nameProtoFB 
-            this.fetchAllDatas();
+            reload: function() {
+                this.initialize(this.options)
+            },
 
-
-
-        },
-
-        fetchAllDatas : function() {
-            var _this = this;
-            this.fetchFieldActivityCollection()
-            .done( function(data) {
-                _this.fieldActivityCollectionREF = data
-                _this.render();
-            })
-            .fail(function(error){
-                console.log('sniffffff',error)
-            });
-
-            this.fetchFieldActivityProtocoleTypeCollection()
-            .done( function(data) {
-                _this.fieldActivityProtocoleTypeCollectionREF = data
-                
-                _this.filterFieldActivityProtocoleTypeCollection()
-
-                _this.render();
-            })
-            .fail(function(error){
-                console.log('sniffffff',error)
-            });
-
-            this.fetchProtocoleTypeCollection()
-            .done( function(data) {
-                _this.ProtocolTypeCollectionREF = data
-                _this.findMyProto()
-            })
-            .fail(function(error){
-                console.log('sniffffff',error)
-            });
-
-        },
-        findMyProto: function() {
-
-            for( var i = 0 ; i < this.ProtocolTypeCollectionREF.length; i++)  {
-                var curProto = this.ProtocolTypeCollectionREF[i]
-                if (curProto == this.nameProtoFB) {
-                    return this.ProtocolTypeCollectionREF[i]
-                }
-
-            }
-
-            return {}
-        },
-
-        fetchProtocoleTypeCollection : function() {
-            return  $.ajax({
-                url: 'http://localhost/ecoReleve-Core/formbuilder/ProtocoleType',
-                type: 'GET',
-                contentType: 'application/json',
-                crossDomain: true,
-                async: false
-            });
-        },
-
-        fetchFieldActivityProtocoleTypeCollection: function() {
-            return  $.ajax({
-                url: 'http://localhost/ecoReleve-Core/formbuilder/FieldActivity_ProtocoleType',
-                type: 'GET',
-                contentType: 'application/json',
-                crossDomain: true,
-                async: false
-            });
-        },
-
-        filterFieldActivityProtocoleTypeCollection: function(){
-            
-            for (var i = 0; i < this.fieldActivityProtocoleTypeCollectionREF.length; i++){
-
-                var curFieldActivityProtocoleType = this.fieldActivityProtocoleTypeCollectionREF[i]
-                for(var j =0; j < curFieldActivityProtocoleType.Protocols.length; j++){
-                    var protocol = curFieldActivityProtocoleType.Protocols[j];
-                    if (protocol.Name == this.nameProtoFB) {          
-                        curFieldActivityProtocoleType["FieldActivity_ProtocoleType"] = protocol["FieldActivity_ProtocoleType"]
-                        this.fieldActivityProtocoleTypeToDisplay.push(curFieldActivityProtocoleType)
-                    }
-                }
-            }
-       
-        },
-
-        fetchFieldActivityCollection: function(){
-           return  $.ajax({
-                url: 'http://localhost/ecoReleve-Core/formbuilder/FieldActivity',
-                type: 'GET',
-                contentType: 'application/json',
-                crossDomain: true,
-                async: false
-            });
-        },
-
-         removeProtocol : function(event) {
-            
-            var selectedId = parseInt(event.currentTarget.value)
-
-            if(!this.fieldActivityProtocoleTypeToDelete.includes(selectedId)){
-                this.fieldActivityProtocoleTypeToDelete.push(selectedId)
-            }
-
-            this.DeleteFieldActivity(selectedId);
-
-        },
-
-        showHideProtocole : function(event) {
-            var valueBtn = event.currentTarget.value
-            var val = valueBtn.replace('id_','')
-            var elemContainer = this.$el.find('#js_FieldActivityContainer_'+String(val))
-
-            if (elemContainer.hasClass('hideList')) {
-                elemContainer.removeClass('hideList')
-                elemContainer.addClass('displayList')
-            }
-            else if (elemContainer.hasClass('displayList') ) {
-                elemContainer.removeClass('displayList')
-                elemContainer.addClass('hideList')
-            }
-
-
-            // debugger
-            // if(event.currentTarget.parentElement.parentElement.children['fieldActivity_div'].classList.contains('hideList')){
-            //     event.currentTarget.value = '<'
-            //     event.currentTarget.parentElement.parentElement.children['fieldActivity_div'].classList.remove('hideList')
-            //     return;
-
-            // }
-            // else{
-            //     event.currentTarget.value = '>'
-            //     event.currentTarget.parentElement.parentElement.children['fieldActivity_div'].classList.add('hideList')
-            // }
-
-        },
-
-        StoreIdFieldActivity : function(event) {
-
-            console.log(event)
-
-            var selectedId = parseInt(event.currentTarget.value)
-
-            if(!this.ListId.includes(selectedId)){
-                this.ListId.push(selectedId)
-                this.addNewFieldActivity(selectedId)
-            }
-
-        },
-
-        DeleteFieldActivity : function(selectedId) {
-            
-            var isPresent = false
-            for (var i = 0 ; i < this.fieldActivityProtocoleTypeToDisplay.length  && !isPresent; i++) {
-        
-                var protocols = this.fieldActivityProtocoleTypeToDisplay[i].Protocols
-                for (var j = 0 ; j < protocols.length && !isPresent; j++) {
-                    
-                    if(selectedId == protocols[j].FieldActivity_ProtocoleType.ID){
-                        isPresent = true
-                        this.fieldActivityProtocoleTypeToDisplay.splice(i,1)
-                    }
-
-                }
-            }
-
-            this.render();
-
-        },
-
-        addNewFieldActivity : function(selectedID) {
-            for (var i = 0 ; i < this.fieldActivityProtocoleTypeCollectionREF.length ; i++) {
-                var obj = {
-
-                }
-                var fieldActivity = this.fieldActivityProtocoleTypeCollectionREF[i].FieldActivity
-                // var protocols = this.fieldActivityProtocoleTypeCollectionREF[i].Protocols
-                var protocols = _.cloneDeep(this.fieldActivityProtocoleTypeCollectionREF[i].Protocols)
-
-                if  ( fieldActivity.ID == selectedID ) {
-                    protocols.push( {
-                        'FieldActivity_ProtocoleType' : { 'ID': -1 },
-                        'ID': -10000,
-                        'Name' : 'lenomduproto'
-                    })
-                    this.fieldActivityProtocoleTypeToDisplay.push({
-                        'FieldActivity_ProtocoleType' : { 'ID': -1 },
-                        'FieldActivity' : fieldActivity,
-                        'Protocols' : protocols,
-                    })
-                }
-            }
-
-            this.render();
-        },
-        addSortable: function() {
-
-
-
-            for( var i = 0 ; i <this.fieldActivityProtocoleTypeToDisplay.length ; i++) {
-                //ajoute le sortable
-
-                this.$el.find('#fieldActivitySortable_'+String(i)).sortable({
-                    axis: "y",
-                    classes: {
-                        "ui-sortable": "highlight"
-                      },
-                    cursor: 'grab'
+            initCollections: function() {
+                var protocoleTypes = Backbone.Collection.extend({
+                    model: protocoleTypeModel,
+                    url : AppConfig.ecoReleveURL + 'ProtocoleType'
                 });
-                //desactive la selection
 
-                this.$el.find('#fieldActivitySortable_'+String(i)).disableSelection();
+                var fieldActivities = Backbone.Collection.extend({
+                    model: fieldActivityModel,
+                    url : AppConfig.ecoReleveURL + 'FieldActivity'
+                })
+
+                this.protocoleTypesCollection = new protocoleTypes();
+                this.fieldActivitiesCollection = new fieldActivities();
+            },
+
+            buildJSONPatch : function() {
+                var toRet = []
+
+                for( var i=0; i < this.fieldActivitiesCollection.length; i++) {
+                    var curModelOrigin = this.fieldActivitiesCollection.models[i];
+                    var curFieldActivityId = curModelOrigin.get('ID');
+                    var arrayProtoOrigin  = curModelOrigin.get('Protocoles')
+                    var existInDisplay = false;
+                    var arrayProtoDisplay = []
+                    for (var j=0; j < this.fieldActivityProtocoleTypeToDisplay.length; j++) {
+                        var curModelDisplay = this.fieldActivityProtocoleTypeToDisplay[j];
+                        if (curFieldActivityId == curModelDisplay.get('ID')) {
+                            existInDisplay = true;
+                            arrayProtoDisplay = curModelDisplay.get('Protocoles')
+                            break;
+                        }
+                    }
+                    var protoWasPresentInOrigin = false
+
+                    for (var k=0; k < arrayProtoOrigin.length; k++){
+                        if(arrayProtoOrigin[k]['ID'] == this.protoID) {
+                            protoWasPresentInOrigin=true;
+                            break;
+                        }
+                    }
+
+                    if (!existInDisplay && protoWasPresentInOrigin) {
+                        toRet.push({
+                            "op": "remove",
+                            "path": "/"+String(curFieldActivityId)+"/Protocoles/"+String(this.protoID)
+                        })
+                    }
+                    if (existInDisplay && protoWasPresentInOrigin) {
+                        for (var l=0; l < arrayProtoDisplay.length; l++){
+                            if(arrayProtoDisplay[l]['ID'] != arrayProtoOrigin[l]['ID']) {
+                                toRet.push({
+                                    "op": "replace",
+                                    "path": "/"+String(curFieldActivityId)+"/Protocoles/"+String(arrayProtoDisplay[l]['ID'])+"/Order",
+                                    "value": arrayProtoDisplay[l]['Order']
+                                })
+                            }
+                        }
+                    }
+                    if (existInDisplay && !protoWasPresentInOrigin) {
+                        arrayProtoOrigin.push({ID:this.protoID, Order: arrayProtoOrigin.length+1}) //add temporary new proto in fielactivity collection origin
+                        for (var l=0; l < arrayProtoDisplay.length; l++){
+                            if(arrayProtoDisplay[l]['ID']==this.protoID) {
+                                toRet.push({
+                                    "op": "add",
+                                    "path": "/"+String(curFieldActivityId)+"/Protocoles/",
+                                    "value": {ID : this.protoID , Order : arrayProtoDisplay[l]['Order'] }
+                                })
+                            }
+                            else if(arrayProtoDisplay[l]['ID'] != arrayProtoOrigin[l]['ID']) {
+                                toRet.push({
+                                    "op": "replace",
+                                    "path": "/"+String(curFieldActivityId)+"/Protocoles/"+String(arrayProtoDisplay[l]['ID'])+"/Order",
+                                    "value": arrayProtoDisplay[l]['Order']
+                                })
+                            }
+                        }
+                        arrayProtoOrigin.pop()//remove temporary proto
+                    }
+                }
+
+                return toRet;
+            },
+
+            save: function() {
+                var data = this.buildJSONPatch()
+                var _this = this;
+
+                if (data.length == 0) {
+                    tools.swal(
+                        "warning",
+                        "configuration.save.noChanges.fieldActivities"
+                        );
+                }
+                else {
+                    $.ajax({
+                        data: JSON.stringify(data),
+                        type: 'PATCH',
+                        url:  AppConfig.ecoReleveURL + 'FieldActivity',
+                        contentType: 'application/json',
+                        crossDomain: true,
+                        async: false,
+                        success: function(data) {
+                            tools.swal(
+                                "success",
+                                "modal.save.fieldActivitiesSuccessStatus",
+                                "modal.save.fieldActivitiesSuccessMsg"
+                                )
+                            _this.reload()
+                        },
+                        error: function(a,b,c,d,e) {
+                            tools.swal(
+                                "error",
+                                "modal.save.fieldActivitiesErrorStatus",
+                                "modal.save.fieldActivitiesErrorMsg"
+                                )
+                        }
+                    });
+                }
+            },
+
+            fetchAllCollections : function(){
+                var _this = this;
+                $.when(
+                this.protocoleTypesCollection.fetch(),
+                this.fieldActivitiesCollection.fetch()
+                ).done(function(protocolTypesResp, fieldActivitiesResp) {
+                    _this.errorFetching = false
+                    var tmp = _this.findAndStoreCurrentProtocoleType()
+                    if (tmp === undefined) {
+                        _this.protoID = null;
+                    }
+                    else {
+                        _this.protoID = tmp.get('ID');
+                    }
+
+                    var listIdFieldActiviesToDisplay = _this.findFieldActivitiesWhereProto()
+                    _this.buildFieldActivityToDisplay(listIdFieldActiviesToDisplay)
+                    _this.render()
+                }).fail(function(a,b,c,d,e) {
+                    _this.errorFetching = true
+                    _this.render()
+                    tools.swal(
+                        "error",
+                        "fetch.ecoreleve.fieldActivity"
+                        );
+                })
+            },
+
+            buildFieldActivityToDisplay: function(listId) {
+
+                var _this = this;
+                this.listFieldActiviesWhereProtoIn = []
+                this.fieldActivityProtocoleTypeToDisplay = []
+                for(var i=0; i < listId.length; i++) {
+                    this.listFieldActiviesWhereProtoIn.push(listId[i])
+                    var tmpItem = this.fieldActivitiesCollection.get(listId[i])
+                    this.fieldActivityProtocoleTypeToDisplay.push(new fieldActivityModel(_.cloneDeep(tmpItem.toJSON())))
+                }
+
+            },
+
+            findAndStoreCurrentProtocoleType : function() {
+                return this.protocoleTypesCollection.findWhere({ Name : this.nameProtoFB })
+            },
+
+            findFieldActivitiesWhereProto :  function() {
+
+                var curProto = this.protocoleTypesCollection.get(this.protoID)
+                var listIdFieldActivities = curProto.get('FieldActivities').map(function(item) { return item['ID']})
+
+                return listIdFieldActivities
+            },
+
+            removeProtocol : function(event) {
+
+                var fieldActivityID = parseInt(event.currentTarget.value)
+                this.deleteFieldActivity(fieldActivityID);
+
+            },
+
+            showHideProtocole : function(event) {
+                var valueBtn = event.currentTarget.value
+                var val = valueBtn.replace('id_','')
+                var elemContainer = this.$el.find('#js_FieldActivityContainer_'+String(val))
+
+                if (elemContainer.hasClass('hideList')) {
+                    elemContainer.removeClass('hideList')
+                    elemContainer.addClass('displayList')
+                }
+                else if (elemContainer.hasClass('displayList') ) {
+                    elemContainer.removeClass('displayList')
+                    elemContainer.addClass('hideList')
+                }
+            },
+
+            addProtocoleToFieldActivity : function(event) {
+                var fieldActivityID = parseInt(event.currentTarget.value);
+                this.addNewFieldActivity(fieldActivityID);
+            },
+
+            deleteFieldActivity : function(selectedId) {
+
+                for (var i = 0 ; i < this.fieldActivityProtocoleTypeToDisplay.length; i++) {
+                    if(selectedId == this.fieldActivityProtocoleTypeToDisplay[i].get('ID')) {
+                        this.fieldActivityProtocoleTypeToDisplay.splice(i,1);
+                        break;
+                    }
+                }
+                var indexFAinList = this.listFieldActiviesWhereProtoIn.indexOf(selectedId);
+                if (indexFAinList > -1 ) {
+                    this.listFieldActiviesWhereProtoIn.splice(indexFAinList,1)
+                }
+                this.render();
+            },
+
+            addNewFieldActivity : function(selectedID) {
+                var tmpItem = this.fieldActivitiesCollection.get(selectedID)
+                var curFieldActivity = new fieldActivityModel(_.cloneDeep(tmpItem.toJSON()))
+                var refArrayProto = curFieldActivity.get('Protocoles')
+                var itemToAdd = {
+                    ID: this.protoID,
+                    Name: this.nameProtoFB,
+                    Order : refArrayProto[refArrayProto.length-1].Order + 1
+                }
+                refArrayProto.push(itemToAdd)
+                this.listFieldActiviesWhereProtoIn.push(selectedID)
+                this.fieldActivityProtocoleTypeToDisplay.push(curFieldActivity)
+                this.render();
+            },
+
+            addSortable: function() {
+                var _this = this;
+
+                for( var i = 0 ; i < this.fieldActivityProtocoleTypeToDisplay.length ; i++) {
+                    //ajoute le sortable
+
+                    this.$el.find('#fieldActivitySortable_'+String(i)).sortable({
+                        axis: "y",
+                        classes: {
+                            "ui-sortable": "highlight"
+                        },
+                        cursor: 'grab',
+                        update : function(event,ui) {
+                            var parentUL = event.target;
+                            var indexFieldActivity = Number(parentUL.id.split('_')[1]);
+                            var arrayLI = Array.from(parentUL.children);
+                            var newOrderProtocoles = arrayLI.map(function(item,index){
+                                return {
+                                    ID: item.value,
+                                    Name: item.innerText,
+                                    Order : index + 1
+                                }
+                            });
+                            _this.fieldActivityProtocoleTypeToDisplay[indexFieldActivity].set(
+                                'Protocoles',
+                                newOrderProtocoles,
+                                {silent:true}
+                                );
+                        }
+                    });
+                    //desactive la selection
+
+                    this.$el.find('#fieldActivitySortable_'+String(i)).disableSelection();
+                }
+
+            },
+
+            render: function() {
+                this.$el.html(this.template(this.serialize())).i18n();
+
+                this.addSortable();
+                return this;
+
+            },
+
+            serialize : function() {
+                return {
+                    errorFetching : this.errorFetching,
+                    fieldActivitiesCollection: this.fieldActivitiesCollection,
+                    listFieldActiviesWhereProtoIn: this.listFieldActiviesWhereProtoIn,
+                    fieldActivityProtocoleTypeToDisplay: this.fieldActivityProtocoleTypeToDisplay
+                };
             }
 
-
-                
-        },
-
-        render: function() {
-            this.$el.html(this.template(this.serialize())).i18n();
-
-            this.addSortable();
-            return this;
-
-        },
-
-        serialize : function() {
-            return {
-              fieldActivityCollection: this.fieldActivityCollectionREF,
-              fieldActivityProtocoleTypeToDisplay: this.fieldActivityProtocoleTypeToDisplay
-            };
-          }
-
-
-    });
+        });
 });

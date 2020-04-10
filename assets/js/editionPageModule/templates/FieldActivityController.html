@@ -1,43 +1,59 @@
-<!-- titre -->
-<label data-i18n="form.fieldactivityController.title"></label>
-<!-- select -->
-<input type="text" id="fieldActivityListInput" list="fieldActivityList" placeholder="Select FieldActivity">  
-<datalist id="fieldActivityList">  
-<% for (var i = 0; i < fieldActivityCollection.length; i++) { %>
-    <option value="<%= fieldActivityCollection[i].ID %>"><%= fieldActivityCollection[i].Name %></option>
-<% } %>
-</datalist>  
+<% if (errorFetching) { %>
+    <button type="button" class="js_reload btn btn-warning">
+        <i class="renenco reneco-syncing">Please reload fieldActivity components</i>
+    </button>
+<% } else  { %>
+    <!-- titre -->
+    <label data-i18n="form.fieldactivityController.title"></label>
+    <!-- select -->
+    <input type="text" id="fieldActivityListInput" list="fieldActivityList" placeholder="Select FieldActivity">  
+    <datalist id="fieldActivityList">
+    <% for (var i = 0; i < fieldActivitiesCollection.length; i++) {
+        var tmpIDFA = fieldActivitiesCollection.models[i].get('ID')
+        var tmpNameFA = fieldActivitiesCollection.models[i].get('Name')
+        %>
+        <% if ( listFieldActiviesWhereProtoIn.includes(tmpIDFA) ) { %>
+            <option value="<%= tmpIDFA %>" disabled><%= tmpNameFA  %></option>
+        <% } else {%>
+            <option value="<%= tmpIDFA %>"><%= tmpNameFA  %></option>
+        <%}%>
+    <% } %>
+    </datalist>
 
-<!-- div -->
-<% for (var i = 0; i < fieldActivityProtocoleTypeToDisplay.length; i++) { %>
-<div id="js_FieldActivityContainer_<%= i %>" class='fieldActivityContainer hideList'>
+    <!-- div -->
+    <% for (var i = 0; i < fieldActivityProtocoleTypeToDisplay.length; i++) { %>
+    <div id="js_FieldActivityContainer_<%= i %>" class='fieldActivityContainer hideList'>
+        <div>
+            <button type="button" class="js_toggleDisplayList" value="id_<%= i %>">
+                <i class="renenco reneco-play"></i>
+            </button>
+            <span id="TitlefieldActivity">
+                    <%=  fieldActivityProtocoleTypeToDisplay[i].get('Name') %>
+            </span id="TitlefieldActivity">
+        </div>
+        <div id="fieldActivityList_<%= i %>">
+            <ul id="fieldActivitySortable_<%= i %>" value=<%= i %> >
+                <% for (var j = 0; j < fieldActivityProtocoleTypeToDisplay[i].get('Protocoles').length; j++) { %>
+                    <li value="<%=fieldActivityProtocoleTypeToDisplay[i].get('Protocoles')[j]['ID']%>"" class="ui-state-default handleFieldActivity">
+                        <%=  fieldActivityProtocoleTypeToDisplay[i].get('Protocoles')[j]['Name'] %>
+                    </li>
+                <% } %>
+            </ul>
+        </div>
+        <div>
+            <button class="js_remove_proto css_remove_proto" value= "<%=fieldActivityProtocoleTypeToDisplay[i].get('ID')%>">
+                X
+            </button>
+        </div>
+    </div>
+    <% } %>
+    <!-- composants-->
     <div>
-        <button type="button" class="js_toggleDisplayList" value="id_<%= i %>">
-            <i class="renenco reneco-play"></i>
-        </button>
-        <span id="TitlefieldActivity">
-                <%=  fieldActivityProtocoleTypeToDisplay[i]['FieldActivity']['Name'] %>
-        </span id="TitlefieldActivity">
-    </div>
-    <div id="fieldActivityList_<%= i %>">
-        <ul id="fieldActivitySortable_<%= i %>">
-            <% for (var j = 0; j < fieldActivityProtocoleTypeToDisplay[i]['Protocols'].length; j++) { %>
-                <li class="ui-state-default handleFieldActivity">
-                    <%=  fieldActivityProtocoleTypeToDisplay[i]['Protocols'][j]['Name'] %>
-                </li>
-            <% } %>
-        </ul>
-    </div>
-    <div>
-        <button class="js_remove_proto css_remove_proto" value= "<%=fieldActivityProtocoleTypeToDisplay[i]['FieldActivity_ProtocoleType']['ID'] %>">
-            X
+        <button class="js_save action">
+            save FieldActivities
         </button>
     </div>
-</div>
-<br>
 <% } %>
-
-<!-- composants-->
 
 
 
