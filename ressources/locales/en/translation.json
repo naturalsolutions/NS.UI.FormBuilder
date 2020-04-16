@@ -459,7 +459,13 @@
         "editionField" : {
             "fieldEditAlert" : "Field edition warning",
             "defaultValueEdit" : "Beware, by editing the 'default value' property, you may want to update the data(s) stored in your database(s) linked to this value",
-            "propagationactivated" : "Make sure your rules have been properly setted up before saving with propagation activated !"
+            "propagationactivated" : "Make sure your rules have been properly setted up before saving with propagation activated !",
+            "objectPicker" : {
+                "title" : "No object picker selected",
+                "text" : "You first need to add an object picker",
+                "deleteTitle" : "You are about to delete an object picker",
+                "deleteConsequence" : "All linked fields and linked fields table will be deleted as well"
+            }
         },
         "makeObs" : {
             "success" : "Success !",
