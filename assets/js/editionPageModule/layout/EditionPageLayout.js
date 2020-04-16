@@ -588,13 +588,42 @@ define([
             }, this);
 
             var model = this.selected;
+            function myalert() {
+                for ( var i=0;i <= model.collection.models.length-1 ;i++ ){
+                    model.collection.models[i].set("linkedField","");
+                    model.collection.models[i].set("linkedFieldTable","");
+                }
+                goDelete()
+            }
+            function objectPickerAlert() {
+                tools.swal("warning",
+                "modal.editionField.objectPicker.deleteTitle",
+                "modal.editionField.objectPicker.deleteConsequence",
+                {
+                    buttons: {
+                        cancel: "cancel",
+                        confirm: {
+                            text: "confirm",
+                            value: true,
+                            className: "danger"
+                        }
+                    }
+                }, null, myalert);
+            }
             if (model.get('new') || (noSwal === true)) {
-                // no confirmation if element is new, or asked with noSwal arg
-                goDelete();
+                if(this.context === 'ecoreleve' && this.selected.constructor.type === 'ObjectPicker'){
+                    objectPickerAlert()
+                } else{
+                    goDelete();
+                }
             } else {
+                if(this.context === 'ecoreleve' && this.selected.constructor.type === 'ObjectPicker'){
+                    objectPickerAlert()
+                } else{
                 // pass to BaseView.removeView, which needs to be rewritten
                 // todo but not now
                 model.view.removeView(goDelete);
+                }
             }
         },
 
