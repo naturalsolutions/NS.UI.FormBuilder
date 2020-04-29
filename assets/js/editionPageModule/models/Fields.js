@@ -1310,6 +1310,14 @@ define([
                 }
             });
 
+            if (this.get('context') && this.get('context').toLowerCase() == 'ecoreleve') {
+                if (this.get('name') == 'Comments') {
+                    // remove linked fields
+                    delete(toret.linkedFieldTable);
+                    delete(toret.linkedField);
+                }
+            }
+
             return _.extend(toret, toret, extraschema);
         },
 
@@ -1393,7 +1401,10 @@ define([
 
                 if (this.get('context') && this.get('context').toLowerCase() == 'track') {
                     formatFieldProps.options = ["DD/MM/YYYY"]
-                } else {
+                } else if (this.get('context') && this.get('context').toLowerCase() == 'ecoreleve') {
+                    formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "YYYY"]
+                }
+                else {
                     formatFieldProps.options = ["DD/MM/YYYY", "HH:mm:ss", "DD/MM/YYYY HH:mm:ss"]
                 }
             }
