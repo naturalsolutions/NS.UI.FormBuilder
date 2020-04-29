@@ -15,7 +15,15 @@
         <span data-i18n="editGrid.optionsUnavailable"></span>
         <% } else { %>
         <div class="languages" data-i18n="editGrid.languages"></div>
-        <div class="settings" data-i18n="editGrid.settings"></div>
+            <%
+                var addDisabledClass = '';
+                var listTypeSettingsDisabled = ['CheckBox','ChildForm','ObjectPicker','Text','TextArea'];
+                var curType = model.constructor.type;
+                if ( model.get('context') == 'ecoreleve' && ( listTypeSettingsDisabled.indexOf(curType) > -1 )) {
+                    addDisabledClass= ' disabled';
+                }
+            %>
+            <div class="settings <%= addDisabledClass %>" data-i18n="editGrid.settings"></div>
         <% } %>
     </td>
 </tr>
