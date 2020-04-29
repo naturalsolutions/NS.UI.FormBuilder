@@ -237,6 +237,9 @@ define([
                 schema: {
                     name: {
                         type : CustomTextEditor
+                    },
+                    webServiceURL : {
+                        type : 'Hidden'
                     }
                 }
             },
