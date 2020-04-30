@@ -278,7 +278,18 @@ define([
                     if (!linkedFieldsList) return;
 
                     if(this.context == 'ecoreleve'){
+
                         var onChange = function(e){
+                            var tmpCollections = control.model.collection
+                            if (tmpCollections.objectPickerIsDef == 0) {
+
+                                tools.swal("warning",
+                                    "modal.editionField.objectPicker.title",
+                                    "modal.editionField.objectPicker.text",
+                                );
+                                //TODO ne pas stocker la valeur
+                                return
+                            }
                             var linkedTableValue = linkedTableFieldEditor.getValue();
                             var linkedFieldsListForTable = _.filter(linkedFieldsList, function(obj) {
                                 if(obj.table == linkedTableValue){
@@ -1398,7 +1409,7 @@ define([
             if (AppConfig.topcontext == "reneco" || window.context == "aygalades") {
                 formatFieldProps.type = 'Select';
                 delete formatFieldProps.editorAttrs;
-
+                // ici pour formats de dates
                 if (this.get('context') && this.get('context').toLowerCase() == 'track') {
                     formatFieldProps.options = ["DD/MM/YYYY"]
                 } else if (this.get('context') && this.get('context').toLowerCase() == 'ecoreleve') {
