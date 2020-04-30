@@ -13,7 +13,9 @@ define([], function() {
         portalAuth: false,                             // Authentification via NS portal?
         username: 'Utilisateur',                       // Username if !portalAuth
         language: 'fr',                                // language if !portalAuth
-        portalURL: 'http://localhost/nsportal/front/', // Portal local URL
+        portalFrontUrl: 'http://localhost/nsportal/', // Portal local Front URL
+        portalApiUrl: 'http://localhost/portal/', // Portal local Back URL
+        client_id: 'client_id',
         securityKey: '',                               // JWT security secret word key (protip: just put anything there)
 
         // URL to track protocol, #originalID# will be replaced in code by actual Form.originalID
@@ -64,12 +66,12 @@ define([], function() {
                     // Still don't know what those nodes are used for :
                     // ************************************************
 
-                    autocompleteURL: 'ressources/autocomplete/',                  //  Allow to get some topic for autocomplete functionnalities
-                    translationURL: 'ressources/locales/__lng__/__ns__.json',     //  Allows to get translation ressources (use i18nnext : http://i18next.com/ )
-                    keywordAutocomplete: 'ressources/autocomplete/keywords.json', //  Get form keywords autocomplete values
-                    usersAutocomplete: 'ressources/autocomplete/users.json',
-                    linkedFields: 'ressources/linkedFields/linkedFields.json',    //  Allow to get linked fields list
-                    templateUrl: 'ressources/templates/templates.json'            //  URL for form templates
+                    autocompleteURL: '/ressources/autocomplete/',                  //  Allow to get some topic for autocomplete functionnalities
+                    translationURL: '/ressources/locales/__lng__/__ns__.json',     //  Allows to get translation /ressources (use i18nnext : http://i18next.com/ )
+                    keywordAutocomplete: '/ressources/autocomplete/keywords.json', //  Get form keywords autocomplete values
+                    usersAutocomplete: '/ressources/autocomplete/users.json',
+                    linkedFields: '/ressources/linkedFields/linkedFields.json',    //  Allow to get linked fields list
+                    templateUrl: '/ressources/templates/templates.json'            //  URL for form templates
                 },
 
                 //  Wich parent HTML element for the application

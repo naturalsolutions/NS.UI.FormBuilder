@@ -25,6 +25,7 @@ require.config({
         'text'                              : '../../node_modules/text/text',
         'tools'                             : './tools',
         'vue'                               : '../../node_modules/vue/dist/vue',
+        'oauth2'                            : './oauth2',
     },
 
     map: {
