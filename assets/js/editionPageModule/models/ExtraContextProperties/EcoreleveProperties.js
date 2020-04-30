@@ -340,6 +340,10 @@ define([
                     name: {
                         type : CustomTextEditor
                     },
+                    defaultPath: {
+                        type: 'Text',
+                        template: fieldTemplate
+                    },
                     webServiceURL : {
                         type : 'Hidden'
                     }
