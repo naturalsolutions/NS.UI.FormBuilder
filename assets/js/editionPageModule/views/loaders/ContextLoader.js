@@ -6,15 +6,17 @@ define([
     './TrackLoader',
     './EcoreleveLoader',
     './EcollectionLoader',
-    './PositionLoader',
+    './PositionEventsLoader',
+    './PositionTypesLoader',
     'auth'
-], function (TrackLoader, EcoreleveLoader, EcollectionLoader, PositionLoader, auth) {
+], function (TrackLoader, EcoreleveLoader, EcollectionLoader, PositionEventsLoader, PositionTypesLoader, auth) {
 
     var Loaders = {
         "track" : TrackLoader,
         "ecoreleve" : EcoreleveLoader,
         "ecollection" : EcollectionLoader,
-        "position" : PositionLoader
+        "positionevents" : PositionEventsLoader,
+        "positiontypes" : PositionTypesLoader
     };
 
     return {

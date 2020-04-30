@@ -79,6 +79,7 @@
         "objectpicker"         : "Selecteur d'objet",
         "subformgrid"          : "Formulaire fils en grille",
         "presentation"         : "Présentation",
+        "droplist"             : "Liste de valeurs",
         "imageFile"            : "Fichier Image",
         "decimal"              : "Numérique Décimal",
         "position"             : "Position"
@@ -200,6 +201,7 @@
         "delete"    : "Supprimer",
         "clone"     : " Dupliquer",
         "download"  : "Télécharger",
+        "preview"  : "Prévisualisation",
         "convert"   : "Convertir"
     },
 
@@ -323,6 +325,7 @@
         "numeric"      : "Champ numérique",
         "list"         : "Listes",
         "presentation" : "Champ de présentation",
+        "droplist"     : "Champ list de valeur",
         "autocomplete" : "Champ avec autocomplétion",
         "tree"         : "Arbres de selection",
         "file"         : "Selecteurs de fichier",
@@ -480,6 +483,10 @@
         "makeObs" : {
             "success" : "Succès !",
             "successMsg" : "Le formulaire a été passé en obsolète"
+        },
+        "preview" : {
+            "preview" : "Prévisualisation",
+            "previewMsgError" : "Impossible d'afficher ce type de fichier"
         }
     },
 

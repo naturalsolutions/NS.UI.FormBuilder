@@ -79,6 +79,7 @@
         "objectpicker"         : "Object Picker",
         "subformgrid"          : "SubForm Grid",
         "presentation"         : "Presentation",
+        "droplist"             : "Drop List",
         "imageFile"            : "Image File",
         "decimal"              : "Decimal Numeric",
         "position"             : "Position"
@@ -200,6 +201,7 @@
         "delete"    : "Delete",
         "clone"     : " Clone",
         "download"  : "Download",
+        "preview"  : "Preview",
         "convert"   : "Convert"
     },
 
@@ -314,6 +316,7 @@
         "file"         : "File selector fields",
         "tree"         : "Fields with tree selector",
         "presentation" : "Presentation field",
+        "droplist"     : "Drop List field",
         "text"         : "Text fields",
         "numeric"      : "Numeric fields",
         "list"         : "List fields",
@@ -474,6 +477,10 @@
         "makeObs" : {
             "success" : "Success !",
             "successMsg" : "The form have been set inactive"
+        },
+        "preview" : {
+            "preview" : "Preview",
+            "previewMsgError" : "Unable to show this type of file"
         }
     },
 

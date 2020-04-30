@@ -8,7 +8,9 @@ define([
 
     return  Marionette.View.extend({
         initialize : function(options) {
+            console.log("********* initialize", options)
             this.URLOptions = options.URLOptions;
+            this.paths = options.paths;
         },
 
         template: HomePageLayoutTemplate,

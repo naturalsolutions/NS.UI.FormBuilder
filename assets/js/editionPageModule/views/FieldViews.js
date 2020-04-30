@@ -67,6 +67,7 @@ define([
 
         // actual Fields that hold a Tree field (see Fields.js, defaultNode)
         PositionFieldView: TreeView,
-        ThesaurusFieldView: TreeView
+        ThesaurusFieldView: TreeView,
+        DropListFieldView: TreeView
     };
 });

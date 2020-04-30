@@ -41,6 +41,7 @@ define([
             'change .attachedFiles input[type="file"]'  : 'fileInputChanged',
             'click  .attachedFiles .remove'             : 'removeAttachedFile',
             'click  .attachedFiles .download'           : 'downloadAttachedFile',
+            'click  .attachedFiles .preview'            : 'showAttachedFile',
             'click  .versions tr'                       : 'displayVersion',
 
             'click .fieldTypes td'                      : 'appendToDrop',
@@ -211,11 +212,14 @@ define([
         },
 
         exit: function(url) {
+
+            //Si ce n'est pas un url (donc quand on clic sur exit et non sur un changement de versions) alors on créer un url pour faire une simulation de précédent
             if (typeof(url) !== 'string') {
                 url = "#back/" +
                     this.fieldCollection.context + "/" + this.fieldCollection.dataUpdated;
             }
 
+            //On modifie la variable exit pour que quand elle est appelé a nouveau, cette fois si dans tous les cas elle navigera sur le nouvel url
             var exit = _.bind(function() {
                 if (this.editing)
                     this.editing.view.trigger("close");
@@ -223,12 +227,13 @@ define([
                 Backbone.history.navigate(url, {trigger: true});
             }, this);
 
+            //Si aucun changement n'a été fait sur le formulaire, alors on refait la fonction (qui a été modifié précédement)
             if (!this.fieldCollection.pendingChanges) {
                 exit();
                 return;
             }
 
-            // form was edited, display confirmation popup
+            // Si on accède ici, c'est que le formulaire a changé, et donc si on click sur yes, alors on exit avec le nouvel url de créé
             tools.swal("warning", "modal.clear.title", "modal.clear.loosingModifications",
                 {
                     buttons: {
@@ -243,7 +248,8 @@ define([
         },
 
         displayVersion: function(e) {
-            this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
+                //On part sur la fonction exit mais qui a comme paramettre l'url pour une autre version
+                this.exit(this.formBaseUrl + $(e.currentTarget).attr("data-id"));
         },
 
         gridKeypress: function(e) {
@@ -417,9 +423,11 @@ define([
 
             // prepare element todo table layout would be way simpler than bootstrap
             var $file = $("<tr class='file row'>");
-            var $name = $("<td class='name'>").html(name);
+            var $name = $("<td class='name'>").html(' '+name);
             var $ctrlDownload = $("<td class='download'>");
             $ctrlDownload.attr('title', t.getValueFromKey("actions.download"));
+            var $ctrlPreview = $("<td class='preview'>");
+            $ctrlPreview.attr('title', t.getValueFromKey("actions.preview"));
             var $ctrlRemove = $("<td>");
             if (!this.fieldCollection.readonly) {
                 $ctrlRemove.addClass('remove');
@@ -466,6 +474,7 @@ define([
             $file.data("name", name)
                 .append($type)
                 .append($name)
+                .append($ctrlPreview)
                 .append($ctrlDownload)
                 .append($ctrlRemove);
             this.$el.find(".filesList").append($file);
@@ -490,6 +499,44 @@ define([
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
+        },
+
+        showAttachedFile : function(el){
+
+            var name = $(el.target).parent().data(`name`);
+            var extension = name.split('.')[1]
+            var data = this.formFilesBinaryList[name].filedata;
+
+            var ListImgExtension = ['jpg','jpeg','png', 'bmp','gif','svg']
+
+            //Si l'extension du fichier est dans la liste de type de fichier qui sont une image alors c'est une image qu'on affichera dans une modale, magie magie
+            if(ListImgExtension.indexOf(extension) > -1){
+                data = `data:application/octet-stream;` + data.split(`;`)[1];
+                var i = document.createElement(`img`);
+                i.setAttribute('width','100%')
+                i.src = data
+                tools.swal(``, `modal.preview.preview`, ` `);
+                e = document.getElementsByClassName('swal-text')[0]
+                e.appendChild(i)
+            }
+
+            //Si l'extension est pdf
+            else if(extension == 'pdf'){
+                let pdfWindow = window.open(``)
+                pdfWindow.document.write(`<iframe width='100%' height='100%' src='data:application/pdf;base64; ` + encodeURI(data)+`'></iframe>`)
+            }
+
+            //Si l'extension peut etre docx
+            else if(extension == 'docx'){
+                console.log(data)
+                let pdfWindow = window.open(``)
+                pdfWindow.document.write(`<iframe width='100%' height='100%' src='https://view.officeapps.live.com/op/embed.aspx?src=` + name+`'></iframe>`)
+            }
+
+            //Si l'extension n'est ni pdf ni img on dit qu'on sait pas quoi en faire
+            else{
+                tools.swal(`error`, `modal.preview.preview`, `modal.preview.previewMsgError`);
+            }
         },
 
         removeAttachedFile: function(el){
