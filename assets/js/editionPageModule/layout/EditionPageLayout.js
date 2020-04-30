@@ -187,7 +187,7 @@ define([
             this.getRegion('centerPanel').show(this.formPanel);
             this.formPanel.refresh();
             if ( (typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 && this.context == 'ecoreleve')  ) {
-                if (this.fieldCollection.parentForms && this.fieldCollection.parentForms.length == 0) {
+                if (this.fieldCollection.parentForms && this.fieldCollection.parentForms.length == 0 && !this.fieldCollection.ishiddenprotocol) {
                     this.FieldActivityControllerView = new FieldActivityControllerView({'nameProtoFB': this.fieldCollection.name })
                 }
             }
