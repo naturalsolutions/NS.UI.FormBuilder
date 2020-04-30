@@ -79,6 +79,12 @@ define([
                     }
                 }]
             },
+            propagate : {
+                type :"Hidden"
+            },
+            obsolete : {
+                type :"Hidden"
+            },
             ishiddenprotocol : {
                 type        : CheckboxEditor,
                 template    : fieldTemplate,
