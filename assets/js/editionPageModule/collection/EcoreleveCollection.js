@@ -55,6 +55,9 @@ define([
                     }
                 }]
             },
+            DataEntrySource: {
+                type: "Hidden"
+            },
             author : {
                 type        : 'Hidden',
                 title       : translater.getValueFromKey('form.author'),
@@ -76,6 +79,12 @@ define([
                     }
                 }]
             },
+            propagate : {
+                type :"Hidden"
+            },
+            obsolete : {
+                type :"Hidden"
+            },
             ishiddenprotocol : {
                 type        : CheckboxEditor,
                 template    : fieldTemplate,
@@ -89,7 +98,7 @@ define([
                 title       : translater.getValueFromKey('form.hideprotocolname')
             },
             defaultforfieldactivity : {
-                type        : CheckboxEditor,
+                type        : "Hidden",
                 template    : fieldTemplate,
                 fieldClass  : "checkBoxEditor form-group",
                 title       : translater.getValueFromKey('form.defaultforfieldactivity')
@@ -129,8 +138,10 @@ define([
                 ishiddenprotocol: "",
                 hideprotocolname: "",
                 defaultforfieldactivity: "",
-                nbFixedCol: ""
-            };
+                nbFixedCol: "",
+                propagate: "0",
+                obsolete: "0"
+                };
         },
         updateAttributesExtention: function () {return true;}
     };

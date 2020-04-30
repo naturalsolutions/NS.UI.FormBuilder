@@ -244,20 +244,21 @@ define([
 
             var opt = options || {};
 
-            this.url             = opt.url             || "";
-            this.templateURL     = opt.templateURL     || "";
-            this.DataEntrySource = opt.DataEntrySource || 0;
-            this.id              = opt.id              || 0;
-            this.name            = opt.name            || 'My form';
-            this.tag             = opt.tag             || "";
-            this.translations    = opt.translations    || {};
-            this.onBlur          = opt.onBlur          || {};
-            this.obsolete        = opt.obsolete        || false;
-            this.propagate       = opt.propagate       || false;
-            this.context         = opt.context         || "";
-            this.isTemplate      = opt.isTemplate      || false;
-            this.fileList        = opt.fileList        || [];
-            this.originalID      = opt.originalID      || 0;
+            this.url                = opt.url               || "";
+            this.templateURL        = opt.templateURL       || "";
+            this.DataEntrySource    = opt.DataEntrySource   || 0
+            this.id                 = opt.id                || 0;
+            this.name               = opt.name              || 'My form';
+            this.tag                = opt.tag               || "";
+            this.translations       = opt.translations      || {};
+            this.onBlur             = opt.onBlur            || {};
+            this.obsolete           = opt.obsolete          || false;
+            this.propagate          = opt.propagate         || false;
+            this.context            = opt.context           || "";
+            this.isTemplate         = opt.isTemplate        || false;
+            this.fileList           = opt.fileList          || [];
+            this.originalID         = opt.originalID        || 0;
+            this.objectPickerIsDef  = opt.objectPickerIsDef || 0;
 
             this.fieldstodelete  = [];
 
@@ -517,6 +518,9 @@ define([
 
         addElement: function (nameType, properties) {
             var field = properties || {};
+            if (nameType === "ObjectPickerField") {
+                this.objectPickerIsDef += 1;
+            }
             if (field['order'] === undefined)
                 field['order'] = this.getNextPropertyValue('order', 0);
             var ctxLinkedFields = this.linkedFieldsList[this.context];
@@ -533,9 +537,13 @@ define([
         },
 
         removeElement : function(model) {
+            if (model.constructor.type === "ObjectPicker") {
+                this.objectPickerIsDef -= 1;
+            }
             if (!model) return;
 
             var id = model.get("id");
+            this.remove()
 
             // remove dom element by hand cause it's faster than re-rendering
             model.view.$el.remove();
@@ -543,6 +551,7 @@ define([
             if (!model.get('new')) {
                 this.fieldstodelete.push(id);
             }
+
         },
 
         isEmpty : function (obj) {

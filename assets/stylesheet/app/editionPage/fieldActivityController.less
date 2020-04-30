@@ -1,0 +1,96 @@
+.fieldActivityContainer {
+    width: 49%;
+    height: fit-content;
+    margin-bottom: 10px;
+    &.hideList {
+        display: flex;
+        ul, li {
+            display: none;
+        }
+        div:first-child{
+            border: solid 1px #000;
+            border-top-left-radius: 25px;
+            border-bottom-left-radius: 25px;
+            width: 100%;
+            font-size: 12px;
+        }
+        div:last-child{
+            width: 22px;
+            border-top-right-radius: 25px;
+            border-bottom-right-radius: 25px;
+            border: solid 1px #DE7904;
+            color: #DE7904;
+            font-size: 11px;
+            margin-left: 2px;
+        }
+        
+    }
+    
+    &.displayList {
+        background-color: #342623 !important;
+        color: white;
+        border-radius: 16px 0 0 0;
+        ul, li {
+            display: block;
+        }
+        div:last-child{
+            display: none;
+        }
+        ul{
+            padding: 0px;
+            margin: 0px;
+        }
+        li{
+            border-bottom: solid 1px #473732;
+            padding-left: 30px;
+            position: relative;
+            background-color: #342623;
+            &:before{
+                content: '\e607';
+                position: absolute;
+                font-family: 'reneco' !important;
+                font-size: 11px;
+                color: #5f4c46;
+                top: 3px;
+                left: 14px;
+            }
+            &:hover{
+                cursor: move;
+            }
+        }
+        .js_toggleDisplayList i{
+            transform: rotate(90deg);
+        }
+    }
+
+    button{
+        background-color: none !important;
+        background: none !important;
+        border: none !important;
+        -webkit-appearance: none;
+        height: 24px;
+        outline: none;
+        i{
+            transition: transform 0.5s ease;
+            font-family: 'reneco' !important;
+            font-style: normal;
+            font-size: 8px;
+            display: block;
+        }
+    }
+}
+#fieldActivityController{
+    .fieldsActivity{
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    input{
+        width: 100%;
+        border: none;
+        border-bottom: solid 1px #000;
+        border-radius: 0px !important;
+        margin-bottom: 10px;
+    }
+}

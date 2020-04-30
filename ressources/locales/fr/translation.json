@@ -164,6 +164,9 @@
             "edit"   : "EDITER",
             "sizepreview" : "Input sizes preview",
             "back"   : "RETOUR"
+        },
+        "fieldactivityController" : {
+            "title" : "Est présent dans les champs d'activités"
         }
     },
 
@@ -427,7 +430,11 @@
             "formSimilarFrName" : "Un formulaire avec le même label Français existe déjà (id: {{Context}}/{{ID}})",
             "formSimilarEnName" : "Un formulaire avec le même label Anglais existe déjà  (id: {{Context}}/{{ID}})",
             "circularDependency" : "Une dépendance circulaire a été trouvée dans les sous-formulaires...",
-            "dupeFieldType" : "Incosistance de types pour le champ nommé \"{{FieldName}}\"\nIl doit être du type \"{{FieldType}}\", comme dans le formulaire {{Context}}/{{ID}}"
+            "dupeFieldType" : "Incosistance de types pour le champ nommé \"{{FieldName}}\"\nIl doit être du type \"{{FieldType}}\", comme dans le formulaire {{Context}}/{{ID}}",
+            "fieldActivitiesSuccessStatus": "Succés",
+            "fieldActivitiesSuccessMsg": "L'enregistrement de la configuration des fieldActivities a réussi",
+            "fieldActivitiesErrorStatus" : "Erreur",
+            "fieldActivitiesErrorMsg" : "L'enregistrement de la configuration des fieldActivities a échoué"
         },
         "field" : {
             "error" : "Field can't be added !",
@@ -465,7 +472,13 @@
         "editionField" : {
             "fieldEditAlert" : "Alerte d'édition de champ",
             "defaultValueEdit" : "Attention, en éditant la propriété 'valeur par défaut', vous pourriez avoir envie de mettre a jour les données de bases de données liées à cette valeur",
-            "propagationactivated" : "Assurez vous que vos règles ont bien été configurées avant de sauvegarder avec la propagation activée !"
+            "propagationactivated" : "Assurez vous que vos règles ont bien été configurées avant de sauvegarder avec la propagation activée !",
+            "objectPicker" : {
+                "title": "Pas de Selecteur d'objet sélectionné",
+                "text": "Vous devez ajouter un Selecteur d'objet.", 
+                "deleteTitle": "Vous êtes sur le point de supprimer un selecteur d'objet",
+                "deleteConsequence" : "Tous les champs liés et tables de champs liés seront également supprimés"
+            }
         },
         "makeObs" : {
             "success" : "Succès !",
@@ -540,8 +553,11 @@
     },
 
     "fetch" : {
-      "error"    : "Erreur de récupération des formulaires !",
-      "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur. Essayez de recharger la page?"
+        "error"    : "Erreur de récupération des formulaires !",
+        "errorMsg" : "Impossible de récupérer la liste des formulaires depuis le serveur. Essayez de recharger la page?",
+        "ecoreleve" : {
+        "fieldActivity": "Impossible de récupérer les données pour les fieldactivities"
+        }
     },
 
     "fetchOne" : {
@@ -552,30 +568,33 @@
     },
 
     "configuration" : {
-      "save" : {
+        "save" : {
         "success"    : "Sauvé !",
         "successMsg" : "Votre champ a bien été sauvgeardé",
         "fail"       : "Echec !",
         "failMsg"    : "Votre champ n'a pas pu être sauvegardé",
         "samename"   : "Votre champ ne peut avoir le même nom qu'un autre champ du formulaire",
         "loadsuccess": "Chargement réussi !",
-        "loadsuccessMsg": "Le template a bien été chargé"
-      },
-      "cancel" : {
+        "loadsuccessMsg": "Le template a bien été chargé",
+        "noChanges" : {
+            "fieldActivities" :  "Aucun changement détecté pour les fieldActivities"
+            }
+        },
+        "cancel" : {
         "yousure" : "Vraiment ?",
         "unsavedchanges" : "Vous avez effectué des changements !",
         "yescancel" : "Oui, quitter !",
         "stay" : "No, continue."
-      }
+        }
     },
 
     "formCount" : {
-      "form": "{{count}} Formulaire",
-      "form_plural": "{{count}} Formulaires"
+        "form": "{{count}} Formulaire",
+        "form_plural": "{{count}} Formulaires"
     },
 
     "fieldCount" : {
-      "field": "{{count}} Champ",
-      "field_plural": "{{count}} Champs"
+        "field": "{{count}} Champ",
+        "field_plural": "{{count}} Champs"
     }
 }

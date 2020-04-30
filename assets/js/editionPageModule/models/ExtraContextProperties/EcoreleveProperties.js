@@ -75,7 +75,7 @@ define([
                                 }
 
                             });
-                            return apply(toret);                       
+                            return apply(toret);
                         },
                     },
                 childForm : { //we need the property but no render
@@ -111,6 +111,52 @@ define([
                 schema: {
                     name: {
                         type : CustomTextEditor
+                    },
+                    minValue: {
+                        type: 'Text',
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('schema.min'),
+                        validators: [function checkValue(value, formValues) {
+                            if (value != "") {
+                                if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur saisie est d'un format incorrect"
+                                    }
+                                }
+                                value = parseFloat(value);
+        
+                                if (value.toString().substr(0, 1) != '#' && formValues['maxValue'] != "" && value > formValues['maxValue']) {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur maximale est inférieure à la valeur minimale"
+                                    }
+                                }
+                            }
+                        }]
+                    },
+                    maxValue: {
+                        type: 'Text',
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('schema.max'),
+                        validators: [function checkValue(value, formValues) {
+                            if (value != "") {
+                                if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur saisie est d'un format incorrect"
+                                    }
+                                }
+                                value = parseFloat(value);
+        
+                                if (value.toString().substr(0, 1) != '#' && formValues['minValue'] != "" && value < formValues['minValue']) {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur maximale est inférieure à la valeur minimale"
+                                    }
+                                }
+                            }
+                        }]
                     }
                 }
             },
@@ -119,13 +165,59 @@ define([
                 schema: {
                     name: {
                         type : CustomTextEditor
+                    },
+                    minValue: {
+                        type: 'Text',
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('schema.min'),
+                        validators: [function checkValue(value, formValues) {
+                            if (value != "") {
+                                if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur saisie est d'un format incorrect"
+                                    }
+                                }
+                                value = parseFloat(value);
+        
+                                if (value.toString().substr(0, 1) != '#' && formValues['maxValue'] != "" && value > formValues['maxValue']) {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur maximale est inférieure à la valeur minimale"
+                                    }
+                                }
+                            }
+                        }]
+                    },
+                    maxValue: {
+                        type: 'Text',
+                        template: fieldTemplate,
+                        title: translater.getValueFromKey('schema.max'),
+                        validators: [function checkValue(value, formValues) {
+                            if (value != "") {
+                                if (!$.isNumeric(value) && value.toString().substr(0, 1) != '#') {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur saisie est d'un format incorrect"
+                                    }
+                                }
+                                value = parseFloat(value);
+        
+                                if (value.toString().substr(0, 1) != '#' && formValues['minValue'] != "" && value < formValues['minValue']) {
+                                    return {
+                                        type: 'Invalid number',
+                                        message: "La valeur maximale est inférieure à la valeur minimale"
+                                    }
+                                }
+                            }
+                        }]
                     }
                 }
             },
             ObjectPicker: {
                 defaults: {
                 },
-                schema: {      
+                schema: {
                     name: {
                         type        : ObjectPickerEditor,
                         options: [
@@ -181,7 +273,7 @@ define([
             SubFormGrid: {
                 defaults: {
                 },
-                schema: {      
+                schema: {
                     name: {
                         type        : ChildFormEditor,// 'Select',
                         options     : function(apply) {
@@ -223,6 +315,11 @@ define([
                 schema: {
                     name: {
                         type : CustomTextEditor
+                    },
+                    defaultValue: {
+                        type        : 'Text',
+                        title       : '',
+                        template    : fieldTemplate
                     }
                 }
             },
@@ -230,19 +327,31 @@ define([
                 schema: {
                     name: {
                         type : CustomTextEditor
+                    },
+                    defaultValue: {
+                        type        : 'Text',
+                        title       : '',
+                        template    : fieldTemplate
                     }
                 }
             },
-            Thesaurus:{ 
+            Thesaurus:{
                 schema: {
                     name: {
                         type : CustomTextEditor
+                    },
+                    defaultPath: {
+                        type: 'Text',
+                        template: fieldTemplate
+                    },
+                    webServiceURL : {
+                        type : 'Hidden'
                     }
                 }
             },
             all:{
                 defaults: {
-                    linkedFieldIdentifyingColumn: ""
+                    linkedFieldIdentifyingColumn: "",
                 },
                 schema: {
                     linkedFieldIdentifyingColumn: {

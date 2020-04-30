@@ -5,13 +5,14 @@ define([
     'text!../templates/EditionPageLayout.html',
     'text!../templates/GridRowActions.html',
     '../views/FormPanelView',
+    '../views/FieldActivityControllerView',
     '../models/Fields',
     '../../Translater',
     'tools',
     'app-config',
     'backbone-forms'
 ], function($, Backbone, Marionette, EditionPageLayoutTemplate, GridRowActionsTemplate,
-            FormPanelView, Fields, t, tools, AppConfig) {
+            FormPanelView,FieldActivityControllerView, Fields, t, tools, AppConfig) {
     return Backbone.Marionette.View.extend({
         template : function() {
             return _.template(EditionPageLayoutTemplate) ({
@@ -53,10 +54,10 @@ define([
             'click #fieldPropertiesPanel .btnOk'        : 'closeEdit',
             'click #fieldPropertiesPanel h2'            : 'closeEdit'
         },
-
         regions : {
             centerPanel : '#gridView',
-            settingFormPanel : '#settingFormPanel'
+            settingFormPanel : '#settingFormPanel',
+            test : '#fieldActivityController'
         },
 
         initialize : function(options) {
@@ -78,10 +79,14 @@ define([
                 fieldCollection : this.fieldCollection,
                 URLOptions : this.URLOptions
             });
-        },
+        }, 
 
         update: function(fieldCollection) {
             this.fieldCollection = fieldCollection;
+            if (this.FieldActivityControllerView) {
+                this.FieldActivityControllerView.remove();
+                delete this.FieldActivityControllerView
+            }
             this.fieldCollection.dataUpdated = false;
             this.fieldCollection.pendingChanges = false;
             this.context = fieldCollection.context;
@@ -181,6 +186,14 @@ define([
             this.generateFormProperties();
             this.getRegion('centerPanel').show(this.formPanel);
             this.formPanel.refresh();
+            if ( (typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 && this.context == 'ecoreleve')  ) {
+                if (this.fieldCollection.parentForms && this.fieldCollection.parentForms.length == 0 && !this.fieldCollection.ishiddenprotocol) {
+                    this.FieldActivityControllerView = new FieldActivityControllerView({'nameProtoFB': this.fieldCollection.name })
+                }
+            }
+             if ( 'FieldActivityControllerView' in this && this.FieldActivityControllerView ) {
+                this.showChildView('test', this.FieldActivityControllerView )
+            }
             this.$el.i18n();
         },
 
@@ -618,13 +631,42 @@ define([
             }, this);
 
             var model = this.selected;
+            function myalert() {
+                for ( var i=0;i <= model.collection.models.length-1 ;i++ ){
+                    model.collection.models[i].set("linkedField","");
+                    model.collection.models[i].set("linkedFieldTable","");
+                }
+                goDelete()
+            }
+            function objectPickerAlert() {
+                tools.swal("warning",
+                "modal.editionField.objectPicker.deleteTitle",
+                "modal.editionField.objectPicker.deleteConsequence",
+                {
+                    buttons: {
+                        cancel: "cancel",
+                        confirm: {
+                            text: "confirm",
+                            value: true,
+                            className: "danger"
+                        }
+                    }
+                }, null, myalert);
+            }
             if (model.get('new') || (noSwal === true)) {
-                // no confirmation if element is new, or asked with noSwal arg
-                goDelete();
+                if(this.context === 'ecoreleve' && this.selected.constructor.type === 'ObjectPicker'){
+                    objectPickerAlert()
+                } else{
+                    goDelete();
+                }
             } else {
+                if(this.context === 'ecoreleve' && this.selected.constructor.type === 'ObjectPicker'){
+                    objectPickerAlert()
+                } else{
                 // pass to BaseView.removeView, which needs to be rewritten
                 // todo but not now
                 model.view.removeView(goDelete);
+                }
             }
         },
 
