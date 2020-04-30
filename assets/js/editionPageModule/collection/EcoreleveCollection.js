@@ -138,8 +138,10 @@ define([
                 ishiddenprotocol: "",
                 hideprotocolname: "",
                 defaultforfieldactivity: "",
-                nbFixedCol: ""
-            };
+                nbFixedCol: "",
+                propagate: "0",
+                obsolete: "0"
+                };
         },
         updateAttributesExtention: function () {return true;}
     };
