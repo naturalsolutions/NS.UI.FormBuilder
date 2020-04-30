@@ -84,10 +84,7 @@ define([
             this.fieldCollection = fieldCollection;
             if (this.FieldActivityControllerView) {
                 this.FieldActivityControllerView.remove();
-            }
-            if ( typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 ) {  
-
-                this.FieldActivityControllerView = new FieldActivityControllerView({'nameProtoFB': this.fieldCollection.name })
+                delete this.FieldActivityControllerView
             }
             this.fieldCollection.dataUpdated = false;
             this.fieldCollection.pendingChanges = false;
@@ -188,10 +185,9 @@ define([
             this.generateFormProperties();
             this.getRegion('centerPanel').show(this.formPanel);
             this.formPanel.refresh();
-            if ( !(typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 )) {  
-                if( this.FieldActivityControllerView) {
-                    this.FieldActivityControllerView.remove()
-                    delete this.FieldActivityControllerView
+            if ( (typeof(this.fieldCollection.id) === 'number' &&  this.fieldCollection.id >= 1 && this.context == 'ecoreleve')  ) {
+                if (this.fieldCollection.parentForms && this.fieldCollection.parentForms.length == 0) {
+                    this.FieldActivityControllerView = new FieldActivityControllerView({'nameProtoFB': this.fieldCollection.name })
                 }
             }
              if ( 'FieldActivityControllerView' in this && this.FieldActivityControllerView ) {
