@@ -58,4 +58,5 @@ define([
             this.model.set(this.options.key, value, {trigger: true});
         }
     });
+	
 });
